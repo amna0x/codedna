@@ -14,8 +14,8 @@ and a platform website with a plugin catalogue. Only the analysis core exists
 today; see [docs/ROADMAP.md](docs/ROADMAP.md) and decisions D-017 – D-020 in
 [docs/DECISIONS.md](docs/DECISIONS.md).
 
-**Status:** Milestones 0–3 done; Milestone 4 tooling done (waiting for real
-study data).
+**Status:** Milestones 0–3 done; Milestone 4 and 5 tooling done — waiting for
+real study data, so **no research results exist yet**.
 Today CodeDNA can:
 
 - report changes between two commits: files, line ranges, and the Java
@@ -96,6 +96,7 @@ codedna history import   --db FILE RESULTS [RESULTS ...] [--source NAME]
 codedna history collect  --repo PATH --db FILE --output-dir DIR --allow-build [--max-commits N]
 codedna history status   --db FILE
 codedna history evaluate --db FILE [--repo PATH] [--rankers ...] [--no-structural] [--dataset-csv F]
+codedna history experiment --db FILE [--repo PATH] [--model M] [--calibration none|platt|isotonic] [--budget F] [--risk-target F]
 ```
 
 - `analyze --level method` (default) adds a `java` object to every changed
@@ -130,6 +131,12 @@ codedna history evaluate --db FILE [--repo PATH] [--rankers ...] [--no-structura
   history, logistic regression, gradient boosting) on a chronological
   60/20/20 split. ML needs scikit-learn (`pip install -e ".[ml]"`; included
   in `.[dev]`).
+- `history experiment` is the Milestone 5 study: train on the oldest 60 %,
+  calibrate on the next 20 %, then compare retest-all (B0), dependency (B4),
+  change-only ML (B6), uncalibrated ML (B7), calibrated ML (B8) and
+  calibrated ML with risk target + fallback (B9) on the latest 20 %, plus
+  calibration quality, budget/risk sweeps and feature ablations. The report
+  includes a dataset hash, seed and package versions for reproducibility.
 
 `BASE_REV`/`HEAD_REV` can be full or short SHAs, branches, tags or expressions
 like `HEAD~1`. They are resolved to full SHAs in the output.
@@ -266,7 +273,8 @@ backend/codedna/          Python package
   selection/              retest-all / dependency / coverage baselines, compare
   plugins/                language-plugin interface, registry, built-in Java plugin
   test_history/           SQLite history store, mining, result collection, features
-  models/                 ranking baselines, ML models, metrics, evaluation
+  models/                 ranking baselines, ML models, metrics, evaluation, experiment
+  calibration/            Platt / isotonic calibration, Brier, ECE, reliability
 backend/tests/            pytest suite (temporary Git repos, no network)
 examples/                 sample Java/Maven project
 scripts/                  helper scripts (demo repo builder)

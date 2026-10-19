@@ -20,6 +20,9 @@ Usage:
     codedna history status   --db FILE
     codedna history evaluate --db FILE [--repo PATH] [--rankers NAME ...]
                              [--no-structural] [--dataset-csv FILE] [--seed N] [--output FILE]
+    codedna history experiment --db FILE [--repo PATH] [--model NAME] [--calibration METHOD]
+                             [--budget F] [--risk-target F] [--no-structural] [--no-sweeps]
+                             [--no-ablations] [--seed N] [--output FILE]
 """
 
 from __future__ import annotations
@@ -213,7 +216,36 @@ def build_parser() -> argparse.ArgumentParser:
     evaluate.add_argument("--dataset-csv", help="Also write the feature dataset to this CSV file.")
     evaluate.add_argument("--seed", type=int, default=0, help="Random seed (default: 0).")
     evaluate.add_argument("--output", help="Write JSON to this file instead of standard output.")
+
+    experiment = history_commands.add_parser(
+        "experiment",
+        help="Calibration, risk-aware selection and fallback experiment (Milestone 5).",
+        description="Train on the oldest 60%% of commits, calibrate on the next 20%%, and "
+                    "compare policies B0, B4, B6-B9 on the latest 20%%.")
+    experiment.add_argument("--db", required=True, help="SQLite history database.")
+    experiment.add_argument("--repo", help="Repository path (default: the one recorded by mine).")
+    experiment.add_argument("--model", choices=ML_MODELS, default="gradient_boosting",
+                            help="Failure model (default: gradient_boosting).")
+    experiment.add_argument("--calibration", choices=("none", "platt", "isotonic"),
+                            default="isotonic", help="Calibration for B8/B9 (default: isotonic).")
+    experiment.add_argument("--budget", type=_fraction, default=0.5,
+                            help="Time budget as a fraction of estimated total (default: 0.5).")
+    experiment.add_argument("--risk-target", type=_fraction, default=0.05,
+                            help="Max estimated skip risk for B9 (default: 0.05).")
+    experiment.add_argument("--no-structural", action="store_true",
+                            help="Skip graph-based features (faster; B4 not evaluated).")
+    experiment.add_argument("--no-sweeps", action="store_true", help="Skip risk-coverage sweeps.")
+    experiment.add_argument("--no-ablations", action="store_true", help="Skip feature ablations.")
+    experiment.add_argument("--seed", type=int, default=0, help="Random seed (default: 0).")
+    experiment.add_argument("--output", help="Write JSON to this file instead of standard output.")
     return parser
+
+
+def _fraction(value: str) -> float:
+    number = float(value)
+    if not 0.0 <= number <= 1.0:
+        raise argparse.ArgumentTypeError("must be between 0 and 1")
+    return number
 
 
 def _add_change_args(parser: argparse.ArgumentParser) -> None:
@@ -317,12 +349,14 @@ def _run_history(args: argparse.Namespace) -> int:
     from codedna.test_history.mining import mine_history
     from codedna.test_history.store import HistoryStore
 
+    from codedna.models.experiment import run_experiment
+
     command = args.history_command
     if command == "collect" and not args.allow_build:
         print("error: history collect runs every commit's build (project code executes); "
               "re-run with --allow-build if you trust this project", file=sys.stderr)
         return EXIT_ANALYSIS_ERROR
-    if command in ("import", "status", "evaluate") and not Path(args.db).is_file():
+    if command in ("import", "status", "evaluate", "experiment") and not Path(args.db).is_file():
         print(f"error: history database not found: {args.db} (run 'history mine' first)",
               file=sys.stderr)
         return EXIT_ANALYSIS_ERROR
@@ -345,6 +379,11 @@ def _run_history(args: argparse.Namespace) -> int:
         if command == "status":
             return _write_json(store.summary(), None)
         dataset = build_dataset(store, args.repo, structural=not args.no_structural)
+        if command == "experiment":
+            return _write_json(run_experiment(
+                dataset, model=args.model, calibration=args.calibration, budget=args.budget,
+                risk_target=args.risk_target, seed=args.seed, sweeps=not args.no_sweeps,
+                ablations=not args.no_ablations), args.output)
         if args.dataset_csv:
             dataset.to_csv(args.dataset_csv)
         return _write_json(evaluate(dataset, rankers=args.rankers, seed=args.seed), args.output)

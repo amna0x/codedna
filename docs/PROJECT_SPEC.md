@@ -169,6 +169,15 @@ Single commit pairs only; aggregate evaluation over a history is
   `mean_ttff`, `mean_recall_at_25pct_time`, `mean_recall_at_50pct_time`,
   `evaluated_commits`, and for ML `pr_auc`, `brier`, `positive_rate`),
   `warnings`. `--dataset-csv` writes the rows.
+- `history experiment`: `config`, `reproducibility` (`dataset_sha256`,
+  `rows`, `commits`, first/last commit, `seed`, `python`, `packages`),
+  `calibration` (`methods.{none,platt,isotonic}` → `brier`, `ece`,
+  `reliability[]`), `policies.{B0…B9}` (`mean_selection_ratio`,
+  `mean_time_ratio`, `failing_test_recall`, `missed_failures`,
+  `commit_safety_rate`, `fallback_rate`, `mean_estimated_skip_risk`,
+  `observed_miss_rate`), `risk_coverage` (budget and risk-target sweeps),
+  `ablations` (`pr_auc`, `brier`, recall and safety at the budget per feature
+  group removed), `warnings`.
 
 ## Non-goals
 

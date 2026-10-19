@@ -102,10 +102,20 @@ Product track, alongside:
 - ⏳ Physically move Java code into a separate `codedna-java` package
   (Milestone 7)
 
-## Milestone 5 — Research contribution ⏳
+## Milestone 5 — Research contribution 🔄 (tooling done)
 
-Calibration, risk policies, fallback to broader/full suite, risk–cost
-experiments, ablations, reproducible results (B6–B9).
+- ✅ Calibration: none / Platt / isotonic fitted on the validation split;
+  Brier, ECE, reliability bins (D-025)
+- ✅ Risk-aware selection: risk-per-second greedy under a time budget,
+  estimated skip risk, risk target, uncertainty fallback with reasons (D-026)
+- ✅ `history experiment`: B0, B4, B6, B7, B8, B9 on the test split;
+  budget and risk-target sweeps (risk–coverage); feature-group ablations;
+  reproducibility block (dataset SHA-256, seed, versions) (D-027)
+- ✅ Tests on synthetic data only — **no research numbers exist yet**
+- ⏳ Run on real study data (blocked on the study project, see Milestone 4),
+  store reports in `experiments/results/`, write up RQ1–RQ5 honestly,
+  including null or negative results
+- ⏳ Cross-project / multiple-seed runs for robustness
 
 ## Milestone 6 — CodeDNA IDE and FYP demo ⏳
 

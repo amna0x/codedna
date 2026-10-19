@@ -368,3 +368,39 @@ separately installable `codedna-java` distribution waits for the plugin
 catalogue (Milestone 7), to avoid packaging work before it is needed.
 `analyze` still decides "is Java" by file suffix, which matches the plugin's
 `handles()`.
+
+## D-025 — Calibration methods and where they are fitted
+
+Platt scaling (logistic regression on the log-odds of the raw score) and
+isotonic regression, both from scikit-learn, plus "none" as the control.
+Calibrators are fitted **only on the validation split** (the 20 % after
+training, D-023) and evaluated on the test split, so calibration never sees
+test data. Quality is reported as Brier score, Expected Calibration Error
+(10 equal-width bins) and reliability-diagram bins. With few failures in the
+validation split isotonic regression can overfit; Platt is the safer default
+for small data, isotonic for larger — the experiment reports both.
+
+## D-026 — Risk-aware selection and fallback rules
+
+- Order candidates by `p / estimated cost` (cost = historical mean duration;
+  tests without history get the median), always keep changed test classes.
+- Time budget = fraction of the *estimated* total time.
+- Estimated skip risk = `1 − Π(1 − p)` over skipped tests, i.e. the chance at
+  least one skipped test fails, **assuming independent failures**; the
+  experiment compares it with the observed miss rate rather than trusting it.
+- Fallback (B9): broaden beyond the budget until skip risk ≤ target; go
+  straight to retest-all when non-Java files changed or more than half of
+  the candidate tests have no history. Every decision lists its reasons.
+- No guarantee of catching all regressions is claimed.
+
+## D-027 — Experiment protocol for Milestone 5
+
+`history experiment` trains one model on train (B7), calibrates on
+validation (B8/B9), trains a change-features-only model (B6), and compares
+B0, B4, B6–B9 on test commits using real outcomes and durations. B4 here is
+the `dep_reachable` / `test_file_changed` feature proxy for static
+dependency selection. Sweeps: budget 10–100 % for B8, risk target
+0.01–0.3 for B9. Ablations retrain without the change, structural or history
+feature group. Every report carries a dataset SHA-256, seed and package
+versions; results for the thesis go to `experiments/results/` together with
+the database version and the exact command.

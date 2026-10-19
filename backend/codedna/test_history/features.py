@@ -29,8 +29,8 @@ from codedna.test_history.store import HistoryStore
 RECENT_WINDOW = 5
 NEVER = 10_000  # "commits since last failure" when the test never failed
 
-CHANGE_FEATURES = ["files_changed", "java_files_changed", "test_files_changed",
-                   "lines_added", "lines_deleted"]
+CHANGE_FEATURES = ["files_changed", "java_files_changed", "non_java_files_changed",
+                   "test_files_changed", "lines_added", "lines_deleted"]
 TEST_FEATURES = ["test_file_changed"]
 STRUCTURAL_FEATURES = ["dep_reachable", "dep_distance", "dep_confirmed"]
 HISTORY_FEATURES = ["past_runs", "past_failures", "failure_rate", "recent_failures",
@@ -104,6 +104,7 @@ def build_dataset(store: HistoryStore, repo_path: str | Path | None = None, *,
         change = {
             "files_changed": len(files),
             "java_files_changed": sum(p.endswith(".java") for p in paths),
+            "non_java_files_changed": sum(not p.endswith(".java") for p in paths),
             "test_files_changed": sum(_is_test_path(p) for p in paths),
             "lines_added": sum(f.added or 0 for f in files),
             "lines_deleted": sum(f.deleted or 0 for f in files),

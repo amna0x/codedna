@@ -82,7 +82,12 @@ backend/codedna/
 └── models/
     ├── metrics.py         APFD, APFDc, recall@budget, time to first failure
     ├── rankers.py         B1/B2/B3/B5 baselines, logistic regression, boosting
-    └── evaluate.py        chronological split and evaluation report
+    ├── evaluate.py        chronological split and evaluation report
+    └── experiment.py      Milestone 5 experiment: B0/B4/B6–B9, sweeps, ablations
+calibration/
+    ├── calibrators.py     none / Platt / isotonic
+    └── metrics.py         Brier, ECE, reliability bins
+selection/risk.py          risk-per-second selection, skip risk, fallback
 git_analysis/blobs.py      ls-tree + cat-file --batch readers, git archive export
 ```
 
@@ -237,7 +242,31 @@ history import / collect ──► test_results ┴─► build_dataset ─► r
 - `evaluate` fits ML models on the train split only, reports validation and
   test splits, and adds warnings for small splits or few failures.
 
+### Milestone 5: calibration, risk and fallback
+
+```
+train split ──► failure model ──► raw p ──► calibrator (fitted on validation)
+                                                   │ calibrated p
+test commit rows ──────────────────────────────────▼
+           decide(rows, p, RiskPolicy) ──► selected / skipped, estimated skip risk,
+                                            fallback flag + reasons
+```
+
+- `decide` orders by p / estimated cost (historical mean duration), always
+  keeps changed tests, fills the time budget, then — with a risk target and
+  fallback — broadens until the estimated skip risk `1 − Π(1 − p)` is at or
+  below the target; unfamiliar commits (non-Java changes, mostly
+  history-less tests) go straight to retest-all.
+- `run_experiment` measures every policy on the test split with *real*
+  durations and outcomes and reports estimated skip risk next to the observed
+  miss rate, so the risk estimate itself is evaluated.
+
 ## Known limitations (current)
+
+- Skip risk assumes independent test failures; correlated failures make it
+  optimistic or pessimistic — measured, not assumed, by the experiment.
+- B4 in `history experiment` uses the `dep_reachable` feature (class-level
+  static reachability), a proxy of `codedna select --strategy dependency`.
 
 - History/ML: no real study data yet; first-parent history only; commits
   whose build fails produce no rows (and `collect` retries them); author

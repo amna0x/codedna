@@ -48,8 +48,14 @@ failures compared with ordinary ML selection?
 Implemented so far: B0 and B4 (`codedna select`/`compare`, plus a
 coverage-based variant), B1/B2/B3/B5 and two hybrid ML rankers without
 calibration (B7: logistic regression, gradient boosting) in
-`codedna history evaluate`. Not yet implemented: B6 (the same models
-restricted to change features) and B8/B9 (Milestone 5).
+`codedna history evaluate`. `codedna history experiment` adds B6 (same
+model, change features only), B7/B8 (uncalibrated / calibrated, time budget)
+and B9 (calibrated + risk target + fallback), with B0 and a feature-based B4
+for reference. Mapping to research questions: RQ1 → ablations and PR-AUC;
+RQ2 → budget sweep (time ratio vs recall/safety); RQ3 → calibration section
+(Brier, ECE, reliability) and estimated skip risk vs observed miss rate;
+RQ4 → B8 vs B9 and the risk-target sweep; RQ5 → `without_structural`
+ablation.
 
 ## Metrics
 
