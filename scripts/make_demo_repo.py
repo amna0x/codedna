@@ -45,6 +45,11 @@ def main() -> int:
         return 1
 
     shutil.copytree(SAMPLE, dest, ignore=shutil.ignore_patterns("target"))
+    # A Windows checkout may have CRLF line endings; use LF so the edits below
+    # change only the intended lines.
+    for copied in dest.rglob("*"):
+        if copied.suffix in (".java", ".xml"):
+            write(copied, copied.read_text(encoding="utf-8"))
     write(dest / "README.md", "# Demo shop\n\nSample project for CodeDNA.\n")
     git(dest, "init", "--quiet")
     git(dest, "add", "--all")
