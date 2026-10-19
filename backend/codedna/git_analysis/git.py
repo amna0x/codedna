@@ -45,15 +45,27 @@ def run_git(repo: Path, *args: str) -> str:
 
     Raises GitCommandError if git is missing or exits with a non-zero code.
     """
+    return _run(repo, args).decode("utf-8", errors="replace").replace("\r\n", "\n")
+
+
+def run_git_bytes(repo: Path, *args: str, stdin: bytes | None = None) -> bytes:
+    """Like :func:`run_git` but return raw bytes (e.g. file contents from ``git show``).
+
+    Raw bytes keep line endings exactly as stored, so line numbers match the
+    ones Git reports in diffs. ``stdin`` is fed to commands that read input,
+    such as ``git cat-file --batch``.
+    """
+    return _run(repo, args, stdin)
+
+
+def _run(repo: Path, args: tuple[str, ...], stdin: bytes | None = None) -> bytes:
     command = ["git", *_SAFE_CONFIG, *args]
     try:
         completed = subprocess.run(
             command,
             cwd=repo,
+            input=stdin,
             capture_output=True,
-            text=True,
-            encoding="utf-8",
-            errors="replace",
             check=False,
         )
     except FileNotFoundError as exc:
@@ -62,7 +74,8 @@ def run_git(repo: Path, *args: str) -> str:
         raise GitCommandError(f"could not run git: {exc}") from exc
 
     if completed.returncode != 0:
-        message = completed.stderr.strip() or f"exit code {completed.returncode}"
+        stderr = completed.stderr.decode("utf-8", errors="replace").strip()
+        message = stderr or f"exit code {completed.returncode}"
         raise GitCommandError(f"git {' '.join(args)} failed: {message}")
     return completed.stdout
 

@@ -5,7 +5,7 @@ Intelligent Regression Test Selection for Continuous Integration
 
 **Type:** Software Engineering Final Year Project (Path A — no security scope)
 **Team:** 2–3 BSCS students · **Duration:** 6–9 months
-**Analysed language:** Java (Maven, JUnit 5) · **Implementation:** Python 3.11+
+**Analysed language:** Java only (Maven, JUnit 5; see DECISIONS.md D-013) · **Implementation:** Python 3.11+
 
 ## Problem
 
@@ -35,18 +35,21 @@ is likely to affect and *how risky* it is to skip the others.
 
 ## Current scope (implemented)
 
-`codedna analyze --repo PATH --base REV --head REV` prints JSON describing every
-file changed between two commits: status (added / modified / deleted / renamed /
-copied / type_changed), old path for renames, whether it is a Java file, binary
-detection, and changed line ranges on both sides of the diff.
+`codedna analyze --repo PATH --base REV --head REV [--level method|file]`
+prints JSON describing every file changed between two commits: status (added /
+modified / deleted / renamed / copied / type_changed), old path for renames,
+whether it is a Java file, binary detection, and changed line ranges on both
+sides of the diff. At the default `--level method`, every Java file also lists
+the classes, methods, constructors, fields and other declarations those lines
+touch.
 
-### JSON output contract (v0, file level)
+### JSON output contract (v1)
 
 | Field | Meaning |
 |-------|---------|
 | `repository` | Absolute path of the repository top level |
 | `base_commit`, `head_commit` | Full 40-char SHAs the revisions resolved to |
-| `analysis_level` | `"file"` for now; later `"method"` |
+| `analysis_level` | `"method"` (default) or `"file"` (`--level file`) |
 | `changed_files[].path` | Path in the head commit (or the deleted path) |
 | `changed_files[].status` | `added`, `modified`, `deleted`, `renamed`, `copied`, `type_changed` |
 | `changed_files[].old_path` | Previous path for renames/copies, else `null` |
@@ -55,10 +58,58 @@ detection, and changed line ranges on both sides of the diff.
 | `changed_files[].is_binary` | `true` if Git reports a binary diff |
 | `changed_files[].changed_lines` | Inclusive `[start, end]` ranges in the **head** file (added/modified lines) |
 | `changed_files[].removed_lines` | Inclusive `[start, end]` ranges in the **base** file (deleted/replaced lines) |
+| `changed_files[].java` | Declaration mapping (below) for Java files at method level; `null` for non-Java files or `--level file` |
 | `warnings` | Human-readable notes about things that could not be analysed |
+
+`changed_files[].java` (method level):
+
+| Field | Meaning |
+|-------|---------|
+| `package` | Package of the head version (base version for deleted files), `null` for the default package or when unparsed |
+| `declarations[].id` | `pkg.Type`, `pkg.Outer.Inner`, `pkg.Type#method(T1,T2)`, `pkg.Type#<init>(T1)` (constructor), `pkg.Type#field`, `pkg.Type#<clinit>[n]` / `#<init-block>[n]` (initializers). Parameter types as written in the source, not resolved |
+| `declarations[].kind` | `class`, `interface`, `enum`, `record`, `annotation_type`, `method`, `constructor`, `field`, `enum_constant`, `annotation_element`, `initializer` |
+| `declarations[].change` | `added` (ID only in head), `deleted` (ID only in base), `modified` (in both) |
+| `declarations[].code_changed` | `false` when only comments/formatting differ (non-comment tokens identical); `null` if not comparable |
+| `declarations[].parent` | ID of the enclosing type, `null` for top-level types |
+| `declarations[].head_lines`, `base_lines` | Extent `[start, end]` of the declaration in each version, `null` where it does not exist |
+| `declarations[].changed_lines`, `removed_lines` | The file's head/base ranges that fall in this declaration |
+| `declarations[].parts` | Types only: which parts of the type itself changed (`annotation`, `modifiers`, `header`, `body`, `comment`); members are reported as their own entries |
+| `outside_declarations[]` | Changed lines outside every type: `side` (`head`/`base`), `lines`, `parts` (`package`, `import`, `comment`, ...), `code_changed` |
+| `unresolved[]` | Lines that were **not** mapped: `side`, `lines`, `reason` (syntax error, binary file, non-`.java` side, unsupported syntax). Each also produces a top-level warning |
+
+A line is attributed to the innermost declaration containing it; methods,
+constructors, fields and initializers are leaves (code in anonymous/local
+classes belongs to the enclosing member). Blank lines between members or
+outside types are ignored. Full rules: DECISIONS.md D-008/D-009.
 
 Exit codes: `0` success, `1` analysis error (bad repo, bad commit, Git
 failure), `2` invalid command-line usage.
+
+### `codedna graph` JSON (v1)
+
+| Field | Meaning |
+|-------|---------|
+| `repository`, `commit` | Repository path and analysed commit SHA |
+| `stats` | Node counts by kind, edge counts by kind × confidence, `resolved_references`, `unresolved_references`, `external_references`, `unresolved_rate` |
+| `nodes[]` | `id` (`package:p`, `file:path`, `type:p.T`, `member:p.T#m(int)`), `kind`, `label`, `file`, `lines`, `package`, `parent`, `role` (`test`/`main` by path convention), `has_syntax_errors`, `versions` (merged graphs only) |
+| `edges[]` | `source`, `target`, `kind` (`contains`, `extends`, `implements`, `uses`, `imports`, `static_access`), `confidence` (`confirmed`/`heuristic`), `evidence[]` (`file`, `line`, `confidence`, `note`; at most 10), `evidence_count` |
+| `unresolved[]` | `source` type, `name` as written, first `file`/`line`, `reason`, `count` — never turned into edges |
+| `warnings` | Duplicate type IDs, files with syntax errors |
+
+### `codedna impact` JSON (v1)
+
+| Field | Meaning |
+|-------|---------|
+| `seeds[]` | Changed types: `node`, `file`, `in_head` (false if deleted), `reasons` |
+| `impacted[]` | `node`, `kind`, `file`, `role`, `distance` (hops), `confidence`, `seed`, `path[]` (`dependent`, `depends_on`, `kind`, `confidence`, `evidence` as `file:line`) |
+| `impacted_files[]` | Files of seeds (`reason: changed`) and of impacted types |
+| `candidate_tests[]` | Test classes (path convention) existing in HEAD that are changed or impacted |
+| `ignored_changes[]` | Comment/formatting-only changes that produced no seed |
+| `unanalysed_changes[]` | Non-Java changed files (impact unknown) |
+| `graph_stats`, `warnings` | Stats of the merged graph; analysis warnings |
+
+"Impacted" means *reachable through dependency edges*, not "behaves
+differently". Rules: DECISIONS.md D-010 – D-012.
 
 ## Non-goals
 

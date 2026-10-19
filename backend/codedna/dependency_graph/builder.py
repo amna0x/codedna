@@ -1,0 +1,350 @@
+"""Build the code graph of one commit.
+
+All ``.java`` files of the commit are read straight from Git's object store
+(``git ls-tree`` + ``git cat-file --batch``): nothing is checked out, built or
+executed. Each file is parsed twice with Tree-sitter — once for declarations
+(``java_analysis.parser``) and once for type references (``references``) —
+and then every reference is resolved against the types declared in the
+repository.
+
+Name resolution follows a simplified version of Java's rules (JLS §6.4/§7.5);
+see docs/DECISIONS.md D-010 for exactly what is and is not handled.
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from pathlib import Path, PurePosixPath
+
+from codedna.dependency_graph.model import (
+    CONFIRMED,
+    HEURISTIC,
+    CodeGraph,
+    Evidence,
+    Node,
+    UnresolvedReference,
+)
+from codedna.dependency_graph.references import FileFacts, extract_references
+from codedna.git_analysis.git import (
+    GitCommandError,
+    resolve_commit,
+    resolve_repository,
+    run_git,
+    run_git_bytes,
+)
+from codedna.java_analysis.parser import TYPE_NODES, JavaParseResult, parse_java
+
+_TYPE_KINDS = frozenset(TYPE_NODES.values())
+
+# java.lang is imported implicitly into every compilation unit, so these
+# names refer to the JDK unless a repository type shadows them (checked first).
+_JAVA_LANG = frozenset({
+    "AutoCloseable", "Boolean", "Byte", "CharSequence", "Character", "Class", "ClassCastException",
+    "Cloneable", "Comparable", "Deprecated", "Double", "Enum", "Error", "Exception", "Float",
+    "FunctionalInterface", "IllegalArgumentException", "IllegalStateException",
+    "IndexOutOfBoundsException", "Integer", "Iterable", "Long", "Math", "NullPointerException",
+    "Number", "Object", "Override", "Record", "Runnable", "RuntimeException", "SafeVarargs",
+    "Short", "String", "StringBuilder", "SuppressWarnings", "System", "Thread", "Throwable",
+    "UnsupportedOperationException", "Void", "ArithmeticException", "InterruptedException",
+})
+
+# Parsed files keyed by Git blob SHA, so identical files in two commits are
+# parsed only once.
+ParseCache = dict[str, tuple[JavaParseResult, FileFacts]]
+
+
+@dataclass
+class _Resolution:
+    status: str  # "repo" | "external" | "unresolved" | "skip"
+    target: str | None = None
+    confidence: str = CONFIRMED
+    note: str = ""
+
+
+def build_graph(repo_path: str | Path, revision: str, *, include_members: bool = True,
+                cache: ParseCache | None = None) -> CodeGraph:
+    """Build the code graph for ``revision`` of the repository at ``repo_path``."""
+    repo = resolve_repository(repo_path)
+    commit = resolve_commit(repo, revision)
+    return build_graph_for_commit(repo, commit, include_members=include_members, cache=cache)
+
+
+def build_graph_for_commit(repo: Path, commit: str, *, include_members: bool = True,
+                           cache: ParseCache | None = None) -> CodeGraph:
+    cache = {} if cache is None else cache
+    files = _list_java_files(repo, commit)
+    _parse_missing(repo, files, cache)
+
+    graph = CodeGraph(repository=str(repo), commit=commit)
+    parsed = {path: cache[blob] for path, blob in files}
+    _add_structure(graph, parsed, include_members)
+    _Resolver(graph, parsed).add_dependency_edges()
+    return graph
+
+
+# --- reading files from Git ---------------------------------------------------
+
+
+def _list_java_files(repo: Path, commit: str) -> list[tuple[str, str]]:
+    """Return ``(path, blob_sha)`` for every regular ``.java`` file in ``commit``."""
+    output = run_git(repo, "ls-tree", "-r", "-z", "--full-tree", commit)
+    files = []
+    for entry in output.split("\0"):
+        if not entry:
+            continue
+        meta, path = entry.split("\t", 1)
+        mode, object_type, blob = meta.split()
+        # Skip symlinks (120000) and submodules (commit objects).
+        if object_type == "blob" and mode != "120000" and path.endswith(".java"):
+            files.append((path, blob))
+    return sorted(files)
+
+
+def _parse_missing(repo: Path, files: list[tuple[str, str]], cache: ParseCache) -> None:
+    missing = sorted({blob for _, blob in files if blob not in cache})
+    if not missing:
+        return
+    contents = _read_blobs(repo, missing)
+    for blob in missing:
+        source = contents[blob]
+        cache[blob] = (parse_java(source), extract_references(source))
+
+
+def _read_blobs(repo: Path, blobs: list[str]) -> dict[str, bytes]:
+    """Read many blobs with a single ``git cat-file --batch`` call."""
+    output = run_git_bytes(repo, "cat-file", "--batch",
+                           stdin="".join(f"{blob}\n" for blob in blobs).encode("ascii"))
+    contents: dict[str, bytes] = {}
+    position = 0
+    for blob in blobs:
+        header_end = output.index(b"\n", position)
+        header = output[position:header_end].decode("ascii", errors="replace").split()
+        if len(header) != 3 or header[0] != blob:
+            raise GitCommandError(f"unexpected git cat-file output for {blob}: {header}")
+        size = int(header[2])
+        start = header_end + 1
+        contents[blob] = output[start:start + size]
+        position = start + size + 1  # content is followed by a newline
+    return contents
+
+
+# --- structural nodes and "contains" edges ------------------------------------
+
+
+def file_role(path: str) -> str:
+    """Classify a file as test or main code by Maven/JUnit path conventions."""
+    pure = PurePosixPath(path)
+    if "src/test/" in f"/{path}" or pure.stem.endswith(("Test", "Tests", "IT", "TestCase")) \
+            or pure.stem.startswith("Test"):
+        return "test"
+    return "main"
+
+
+def _add_structure(graph: CodeGraph, parsed: dict[str, tuple[JavaParseResult, FileFacts]],
+                   include_members: bool) -> None:
+    declared_in: dict[str, list[str]] = {}
+    for path, (result, _facts) in parsed.items():
+        package = result.package or ""
+        package_id = f"package:{package}"
+        graph.add_node(Node(id=package_id, kind="package",
+                            label=package or "(default package)", package=package))
+        file_id = f"file:{path}"
+        role = file_role(path)
+        graph.add_node(Node(
+            id=file_id, kind="file", label=PurePosixPath(path).name, file=path,
+            lines=[1, result.line_count], package=package, parent=package_id, role=role,
+            has_syntax_errors=result.has_syntax_errors,
+        ))
+        graph.add_edge(package_id, file_id, "contains")
+        if result.has_syntax_errors:
+            graph.warnings.append(
+                f"syntax errors in {path} (lines {result.syntax_errors[:5]}); "
+                "its edges are marked heuristic")
+
+        for declaration in result.declarations:
+            is_type = declaration.kind in _TYPE_KINDS
+            if not is_type and not include_members:
+                continue
+            node_id = f"{'type' if is_type else 'member'}:{declaration.id}"
+            parent_id = f"type:{declaration.parent}" if declaration.parent else file_id
+            if is_type:
+                declared_in.setdefault(declaration.id, []).append(path)
+                if node_id in graph.nodes:
+                    continue  # duplicate FQN; reported below
+            graph.add_node(Node(
+                id=node_id, kind=declaration.kind, label=declaration.name, file=path,
+                lines=[declaration.start_line, declaration.end_line], package=package,
+                parent=parent_id, role=role if is_type else None,
+            ))
+            graph.add_edge(parent_id, node_id, "contains")
+
+    for type_id, paths in sorted(declared_in.items()):
+        if len(paths) > 1:
+            graph.warnings.append(
+                f"type {type_id} is declared in {len(paths)} files ({', '.join(paths)}); "
+                "references to it are marked heuristic")
+
+
+# --- resolving references into dependency edges -------------------------------
+
+
+class _Resolver:
+    def __init__(self, graph: CodeGraph, parsed: dict[str, tuple[JavaParseResult, FileFacts]]):
+        self.graph = graph
+        self.parsed = parsed
+        self.all_types: dict[str, list[str]] = {}  # type ID -> files declaring it
+        self.top_level: set[str] = set()
+        self.packages: set[str] = set()
+        for path, (result, _facts) in parsed.items():
+            self.packages.add(result.package or "")
+            for declaration in result.declarations:
+                if declaration.kind in _TYPE_KINDS:
+                    self.all_types.setdefault(declaration.id, []).append(path)
+                    if declaration.parent is None:
+                        self.top_level.add(declaration.id)
+
+    def add_dependency_edges(self) -> None:
+        for path, (result, facts) in self.parsed.items():
+            context = _FileContext(path, result, facts)
+            self._add_import_edges(context)
+            for reference in facts.references:
+                self._add_reference(context, reference.owner, reference.name,
+                                    reference.line, reference.kind)
+
+    # Import declarations ------------------------------------------------------
+
+    def _add_import_edges(self, context: _FileContext) -> None:
+        top_types = [d.id for d in context.result.declarations
+                     if d.kind in _TYPE_KINDS and d.parent is None]
+        for imported in context.facts.imports:
+            if imported.wildcard and not imported.static:
+                continue  # `import a.b.*` names a package, used only for resolution
+            # `import static a.Y.z` and `import static a.Y.*` both depend on type a.Y.
+            type_name = imported.name.rsplit(".", 1)[0] if imported.static and not imported.wildcard \
+                else imported.name
+            if type_name not in self.all_types:
+                self.graph.external_reference_count += 1
+                continue
+            confidence = self._confidence_for(type_name, context, CONFIRMED)
+            for owner in top_types:
+                if owner != type_name:
+                    self.graph.add_edge(
+                        f"type:{owner}", f"type:{type_name}", "imports",
+                        Evidence(context.path, imported.line, confidence,
+                                 "static import" if imported.static else "import"))
+
+    # Type references -----------------------------------------------------------
+
+    def _add_reference(self, context: _FileContext, owner: str, name: str, line: int,
+                       kind: str) -> None:
+        if kind == "static_access":
+            resolution = self._resolve_simple(name, context, owner)
+            if resolution.status != "repo" or resolution.target == owner:
+                return  # probably a variable or external class; not evidence of anything
+            confidence = HEURISTIC
+            note = f"{name}.<member> assumed to be a static access on a type"
+        else:
+            resolution = self._resolve(name, context, owner)
+            if resolution.status == "skip":
+                return
+            if resolution.status == "external":
+                self.graph.external_reference_count += 1
+                return
+            if resolution.status == "unresolved":
+                self.graph.add_unresolved(UnresolvedReference(
+                    f"type:{owner}", name, context.path, line, resolution.note))
+                return
+            if resolution.target == owner:
+                return
+            confidence, note = resolution.confidence, resolution.note
+
+        confidence = self._confidence_for(resolution.target, context, confidence)
+        self.graph.add_edge(f"type:{owner}", f"type:{resolution.target}", kind,
+                            Evidence(context.path, line, confidence, note))
+
+    def _confidence_for(self, target: str, context: _FileContext, confidence: str) -> str:
+        if len(self.all_types.get(target, ())) > 1 or context.result.has_syntax_errors:
+            return HEURISTIC
+        return confidence
+
+    def _resolve(self, name: str, context: _FileContext, owner: str) -> _Resolution:
+        if "." not in name:
+            return self._resolve_simple(name, context, owner)
+        if name in self.all_types:
+            return _Resolution("repo", name, CONFIRMED, "fully qualified name")
+
+        first, rest = name.split(".", 1)
+        head = self._resolve_simple(first, context, owner)
+        if head.status == "repo":
+            candidate = f"{head.target}.{rest}"
+            if candidate in self.all_types:
+                return _Resolution("repo", candidate, head.confidence, head.note)
+            return _Resolution("unresolved", note=f"member type {rest} not found in {head.target}")
+        if head.status == "external":
+            return head
+        # A package-qualified name: external unless it points into a repository package.
+        package = name.rsplit(".", 1)[0]
+        if first[:1].islower() and not any(
+                p == package or p.startswith(f"{package}.") or package.startswith(f"{p}.")
+                for p in self.packages if p):
+            return _Resolution("external")
+        return _Resolution("unresolved", note="qualified name not declared in repository")
+
+    def _resolve_simple(self, name: str, context: _FileContext, owner: str) -> _Resolution:
+        if name in context.facts.type_parameters:
+            return _Resolution("skip")
+
+        # 1. The type itself, enclosing types, and their member types.
+        scope = owner
+        while scope:
+            if scope.rsplit(".", 1)[-1] == name and scope in self.all_types:
+                return _Resolution("repo", scope, CONFIRMED, "enclosing type")
+            member = f"{scope}.{name}"
+            if member in self.all_types:
+                return _Resolution("repo", member, CONFIRMED, "member type in scope")
+            scope = scope.rsplit(".", 1)[0] if "." in scope else ""
+            if scope == (context.package or ""):
+                break  # reached the package; not a type
+
+        # 2. Single-type imports.
+        imported = context.single_imports.get(name)
+        if imported is not None:
+            if imported in self.all_types:
+                return _Resolution("repo", imported, CONFIRMED, "single-type import")
+            return _Resolution("external")
+
+        # 3. Top-level types of the same package (including this file).
+        same_package = f"{context.package}.{name}" if context.package else name
+        if same_package in self.top_level:
+            return _Resolution("repo", same_package, CONFIRMED, "same package")
+
+        # 4. java.lang (implicitly imported).
+        if name in _JAVA_LANG:
+            return _Resolution("external")
+
+        # 5. On-demand (wildcard) imports.
+        candidates = [f"{p}.{name}" for p in context.wildcard_imports
+                      if f"{p}.{name}" in self.all_types]
+        if len(candidates) == 1:
+            return _Resolution("repo", candidates[0], HEURISTIC,
+                               "wildcard import; assumes no same-named library type")
+        if len(candidates) > 1:
+            return _Resolution("unresolved", note=f"ambiguous wildcard imports: {candidates}")
+        if context.wildcard_imports:
+            return _Resolution(
+                "unresolved",
+                note="not declared in repository; may come from a wildcard-imported library")
+        return _Resolution("unresolved", note="not declared in repository (likely JDK or library)")
+
+
+class _FileContext:
+    def __init__(self, path: str, result: JavaParseResult, facts: FileFacts):
+        self.path = path
+        self.result = result
+        self.facts = facts
+        self.package = result.package
+        self.single_imports = {
+            i.name.rsplit(".", 1)[-1]: i.name
+            for i in facts.imports if not i.static and not i.wildcard
+        }
+        self.wildcard_imports = [i.name for i in facts.imports if i.wildcard and not i.static]

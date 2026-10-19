@@ -8,9 +8,12 @@ version = "0.1.0"
 description = "Change-impact analysis and regression test selection for Java projects (FYP prototype)."
 readme = "README.md"
 requires-python = ">=3.11"
-# Milestone 0/1 uses only the standard library. Add runtime dependencies
-# only when a milestone needs them, and record why in docs/DECISIONS.md.
-dependencies = []
+# Add runtime dependencies only when a milestone needs them, and record why
+# in docs/DECISIONS.md. Tree-sitter: Java parsing for method-level mapping (D-008).
+dependencies = [
+    "tree-sitter>=0.25,<0.27",
+    "tree-sitter-java>=0.23.5,<0.24",
+]
 
 [project.optional-dependencies]
 dev = ["pytest>=8"]
