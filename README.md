@@ -8,6 +8,12 @@ Given a Git repository and two commits, CodeDNA will eventually work out which
 code changed, what it may affect, which regression tests matter, and how risky
 it is to skip the rest — and explain every decision.
 
+**Where it is heading:** a platform — the Python analysis core, downloadable
+language plugins (Java first), the **CodeDNA IDE** built on Eclipse Theia,
+and a platform website with a plugin catalogue. Only the analysis core exists
+today; see [docs/ROADMAP.md](docs/ROADMAP.md) and decisions D-017 – D-020 in
+[docs/DECISIONS.md](docs/DECISIONS.md).
+
 **Status:** Milestones 0–3 done.
 Today CodeDNA can:
 
@@ -281,9 +287,9 @@ CODEDNA_STARTER.md        original project brief
 
 ## Scope
 
-Java only (Maven/JUnit), per the FYP brief: method mapping, graph and test
-mapping are Java-specific. Other files are reported, not analysed — see
-docs/DECISIONS.md D-013. Software engineering only: no vulnerability detection
+Java only for now (Maven/JUnit): it is the first language plugin, and other
+languages come later through the plugin interface (D-013, D-018). Other files
+are reported, not analysed. Software engineering only: no vulnerability detection
 or security scoring.
 CodeDNA does not claim novelty for established techniques, and reports no
 performance numbers until experiments have actually been run.

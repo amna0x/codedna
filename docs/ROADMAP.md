@@ -2,6 +2,17 @@
 
 Status legend: ✅ done · 🔄 in progress · ⏳ not started
 
+CodeDNA has two tracks (D-017):
+
+- **Research track (priority):** Java change-impact analysis, test
+  selection and calibrated risk — Milestones 0–5. This is what the FYP is
+  evaluated on.
+- **Product track:** the CodeDNA IDE (built on Eclipse Theia), language
+  plugins, and a platform website with a plugin catalogue — Milestones 6–7
+  and the plugin refactor in Milestone 4. It must not delay Milestones 4–5.
+
+Java stays the only supported language until Milestone 5 is complete.
+
 ## Milestone 0 — Repository bootstrap ✅
 
 - ✅ Python package + `pyproject.toml`, editable install
@@ -69,12 +80,44 @@ Status legend: ✅ done · 🔄 in progress · ⏳ not started
 History mining, historical test results and durations, features, simple
 historical baselines (B2, B3, B5), logistic regression, gradient boosting.
 
+Product track, alongside (small, no behaviour change):
+
+- ⏳ Define the language-plugin interface and registry (D-018)
+- ⏳ Move the existing Java code behind it as the first plugin; the full test
+  suite must pass unchanged
+- ⏳ Choose the study project / datasets (DATASET_PLAN.md)
+
 ## Milestone 5 — Research contribution ⏳
 
 Calibration, risk policies, fallback to broader/full suite, risk–cost
 experiments, ablations, reproducible results (B6–B9).
 
-## Milestone 6 — Visualization and FYP demo ⏳
+## Milestone 6 — CodeDNA IDE and FYP demo ⏳
 
-React + TypeScript + Vite + Cytoscape.js dashboard over the analysis JSON.
-May start in parallel once the graph JSON format is stable.
+Replaces the standalone React dashboard: the same views live inside the IDE.
+May start in parallel (Student C) once the analysis JSON formats are stable.
+
+- ⏳ Local API (FastAPI) exposing analyze / graph / impact / tests / select /
+  compare and, later, risk scores (D-019)
+- ⏳ CodeDNA IDE built on Eclipse Theia, branded, desktop (Electron) build
+  (D-019); Java editing through existing open-source Java extensions
+- ⏳ CodeDNA panels: changed methods, impacted classes with explanation paths,
+  recommended tests with risk, "run selected tests", Cytoscape.js graph view
+  (confirmed / heuristic / unresolved styling)
+- ⏳ GitHub PR demonstration and final experimental report
+
+## Milestone 7 — Platform website and plugin distribution ⏳
+
+- ⏳ Static platform website: project info, IDE downloads, documentation,
+  plugin catalogue (D-020)
+- ⏳ Plugin catalogue index (versioned JSON) shared by the website and the IDE
+- ⏳ In-app plugin manager: browse, install, update, remove — official
+  catalogue only, checksums verified, versions pinned (D-020)
+- ⏳ Package the Java plugin through the catalogue
+
+## Later (only if Milestones 4–7 are on track)
+
+- ⏳ Second language plugin (e.g. Python or JavaScript) to show the plugin
+  interface generalises
+- ⏳ File-level history fallback (co-change) for languages without a plugin,
+  always labelled heuristic

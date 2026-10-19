@@ -5,7 +5,27 @@ Intelligent Regression Test Selection for Continuous Integration
 
 **Type:** Software Engineering Final Year Project (Path A — no security scope)
 **Team:** 2–3 BSCS students · **Duration:** 6–9 months
-**Analysed language:** Java only (Maven, JUnit 5; see DECISIONS.md D-013) · **Implementation:** Python 3.11+
+**Analysed language:** Java (Maven, JUnit 5) — the first language plugin; more
+languages later through plugins (D-013, D-018) · **Implementation:** Python 3.11+
+core; TypeScript IDE (Eclipse Theia) and static website
+
+## Product vision (D-017)
+
+CodeDNA is delivered as a platform:
+
+1. **Analysis core** (Python) — change extraction, code graph, impact,
+   test selection, history/ML risk estimation, calibration; CLI + local API.
+2. **Language plugins** — one per language behind a common interface (D-018).
+   Java is the first and, until Milestone 5 is complete, the only one.
+3. **CodeDNA IDE** — a branded IDE built on Eclipse Theia with CodeDNA
+   panels: changed methods, impacted code, recommended tests with risk,
+   run-selected-tests, interactive code graph (D-019).
+4. **Platform website** — downloads, documentation and a plugin catalogue;
+   plugins can also be installed from inside the IDE (D-020).
+
+The research contribution (calibrated, explainable regression test selection
+for Java) remains the priority and the basis of the evaluation; items 2–4 are
+the product around it.
 
 ## Problem
 
@@ -30,7 +50,8 @@ is likely to affect and *how risky* it is to skip the others.
 6. A ranked, budgeted test selection, with fallback to a broader or full suite
    when confidence is insufficient.
 7. A human-readable explanation of each decision.
-8. An interactive graph view built from the same analysis data.
+8. An interactive graph view built from the same analysis data, inside the
+   CodeDNA IDE.
 9. Evaluation against established baselines (see RESEARCH_PLAN.md).
 
 ## Current scope (implemented)
@@ -139,6 +160,11 @@ Milestone 4.
 - Vulnerability detection, penetration testing, security scoring.
 - Using an LLM as the core regression-test predictor.
 - Microservices, Kubernetes, authentication, multi-tenant hosting.
+- Writing a text editor / IDE from scratch (the IDE is built on Eclipse Theia).
+- User accounts, payments, ratings or third-party uploads on the website.
+- Installing plugins from anywhere other than the official catalogue.
+- Additional language plugins before the Java research track (Milestone 5)
+  is complete.
 - Claiming novelty for established techniques (changed-file detection,
   dependency graphs, affected-test selection, ML prioritisation,
   history-based ranking).

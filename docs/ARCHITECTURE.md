@@ -239,6 +239,30 @@ ground-truth `results.json` of HEAD: `failing_tests`, `caught`, `missed`,
   are reported as changes.
 - Merge commits are compared as two trees (`base..head`), not per-parent.
 
+## Target product architecture (D-017 – D-020)
+
+```
+ CodeDNA IDE (Eclipse Theia, TypeScript)        Platform website (static)
+   CodeDNA panels + graph view                    downloads, docs, catalogue page
+   plugin manager ───────────────┐                         │
+        │ HTTP/JSON (127.0.0.1)  │ reads                   │ renders
+        ▼                        ▼                         ▼
+ Local API (FastAPI)         Plugin catalogue index (versioned JSON + SHA-256)
+        │                              │ install (pinned, checksum-verified)
+        ▼                              ▼
+ Analysis core (Python) ◄──── Language plugins (entry points "codedna.languages")
+   git_analysis, graph model,     codedna-java (first; parse, resolve,
+   impact, selection, history,    discover tests, run tests, coverage)
+   ML, calibration, CLI           [future: other languages]
+```
+
+- The core never imports language-specific code directly once the plugin
+  refactor lands; it asks the registry for the plugin that handles a file.
+- The IDE and website contain no analysis logic; they display core JSON.
+- Planned locations: `backend/codedna/plugins/` (interface + registry),
+  `ide/` (Theia application), `website/` (static site + catalogue index).
+  Each is created when its first implementation lands.
+
 ## Planned module boundaries
 
 Modules are created when their first implementation lands (see AGENTS.md).

@@ -229,3 +229,91 @@ Milestone 1 parser, giving member IDs that match `analyze` output exactly.
 
 Measured safety comes from `compare` against real full-suite runs, never from
 these rules alone.
+
+## D-017 — Product direction: platform, own IDE, website (Java first)
+
+Decided by the team on 2026-10-20. CodeDNA becomes a **platform**: an analysis
+core, downloadable **language plugins**, the **CodeDNA IDE**, and a
+**platform website** from which users download the IDE and plugins (plugins
+can also be installed from inside the IDE).
+
+Priorities and limits:
+
+- Java remains the only analysed language until Milestone 5 is complete;
+  D-013 still holds for *what is analysed*, but the architecture now
+  anticipates more languages through plugins.
+- The research contribution (Milestones 4–5) has priority; product work runs
+  alongside (mainly Student C) and must not delay it.
+- The title, brief and examiners' expectations describe a research tool. The
+  wider scope **needs supervisor approval** before the final proposal, and the
+  report must state clearly which parts are research and which are product.
+
+## D-018 — Language-plugin interface
+
+The core (Git changes, graph model, impact traversal, selection, history, ML,
+calibration, CLI/API) stays language-neutral. Everything language-specific
+moves behind one interface, provided by each plugin:
+
+| Capability | Java plugin today |
+|------------|-------------------|
+| `file_patterns` / `applies_to(path)` | `*.java` |
+| `parse(source) -> declarations` | `java_analysis.parser` |
+| `extract_references(source)` + `resolve(...) -> edges/unresolved` | `dependency_graph.references` / `builder` |
+| `discover_tests(commit) -> tests` | `test_mapping.discovery` |
+| `run_tests(...)` / `import_coverage(...)` (opt-in, D-014) | `test_mapping.maven` |
+
+Plugins are ordinary Python packages (e.g. `codedna-java`) registered under
+the entry-point group `codedna.languages`, discovered with
+`importlib.metadata.entry_points`. The plugin API is versioned
+(`api_version`); the core refuses plugins with an incompatible major version.
+Every plugin must emit the shared graph schema (node IDs, edge kinds,
+confirmed/heuristic labels, unresolved list) — that is what keeps the IDE,
+selection and ML language-neutral.
+
+Refactor plan: first add the interface and registry in
+`backend/codedna/plugins/`, then move the Java code behind it **without
+behaviour change** (the existing test suite is the check). The Java plugin
+stays in this repository until the catalogue (Milestone 7) exists.
+Files no installed plugin handles are reported as `unanalysed_changes`, as
+today.
+
+## D-019 — CodeDNA IDE built on Eclipse Theia, talking to a local API
+
+Writing an editor from scratch is out of reach for an FYP, so "our own IDE"
+means a **branded IDE built on an existing open-source IDE framework**.
+
+- **Chosen: Eclipse Theia.** It is designed for building custom IDE products,
+  runs as a desktop app (Electron) or in a browser, and supports VS Code
+  extensions, so Java editing can use existing open-source Java extensions.
+- Rejected: a fork of VS Code (Code - OSS) — heavy to build and to keep up to
+  date; Electron + Monaco from scratch — file tree, terminal, debugging and
+  Java support would all have to be rebuilt.
+- The IDE talks to the Python core through a **local API** (FastAPI, from the
+  brief's stack) on `127.0.0.1` only, returning the same JSON as the CLI. No
+  accounts or authentication (brief: no auth infrastructure).
+- CodeDNA features appear as IDE panels/views (TypeScript, Cytoscape.js for
+  the graph). The Milestone 6 React dashboard is replaced by these panels.
+
+*To verify before starting Milestone 6:* current Theia version, its licence
+(and the licences of any bundled Java extensions) for redistribution, Node.js
+requirements, and build size/time on student laptops.
+
+## D-020 — Platform website and plugin distribution
+
+- **Website:** a static site (e.g. GitHub Pages) — no server, no accounts, no
+  payments. It hosts IDE downloads, docs and the plugin catalogue page.
+- **Catalogue:** one versioned JSON index (plugin id, name, versions,
+  supported core/plugin API versions, download URL, SHA-256 checksum,
+  licence, source repository). The website renders it; the IDE reads it.
+  Plugin files are published as GitHub Release assets.
+- **In-app installation** (and the website) must follow these rules, because
+  plugins are code that runs with the user's permissions:
+  - install only from the official catalogue URL, never arbitrary URLs;
+  - verify the SHA-256 checksum before installing (pip hash-checking mode);
+  - pin exact versions; updates are explicit, never silent;
+  - show the plugin's licence and source link before installing;
+  - plugins are installed into CodeDNA's own Python environment, not the
+    user's system Python.
+
+These are ordinary distribution-hygiene rules, not security research, so the
+project stays within Path A. Code signing can be added later if time allows.

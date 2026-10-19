@@ -4,6 +4,11 @@ CodeDNA is a university Final Year Project (Path A: software engineering only).
 It analyses Java code changes, estimates their impact, and selects regression
 tests while estimating the risk of skipping the rest.
 
+It is delivered as a platform (D-017): a Python analysis core, language
+plugins (Java first), the CodeDNA IDE built on Eclipse Theia, and a platform
+website with a plugin catalogue. **The Java research track (Milestones 4–5)
+has priority**; product work must not delay it.
+
 Full brief: [CODEDNA_STARTER.md](CODEDNA_STARTER.md). Current plan:
 [docs/ROADMAP.md](docs/ROADMAP.md).
 
@@ -35,6 +40,17 @@ Full brief: [CODEDNA_STARTER.md](CODEDNA_STARTER.md). Current plan:
   The only exception is `codedna run-tests`, which builds a project only when
   the user passes `--allow-build` (D-014) — never pass it on their behalf.
 
+## Platform rules
+
+- Keep the core language-neutral. Language-specific code belongs behind the
+  plugin interface (D-018); plugins must emit the shared graph schema.
+- Do not add a second language plugin before Milestone 5 is complete.
+- The IDE and website only display core JSON; no analysis logic in
+  TypeScript. The local API listens on 127.0.0.1 only and has no accounts.
+- Plugin installation (website or in-app) uses the official catalogue only,
+  verifies SHA-256 checksums and pins versions (D-020). Never add code that
+  installs from arbitrary URLs.
+
 ## Before claiming completion
 
 - Run the test suite: `python -m pytest`.
@@ -62,6 +78,6 @@ Full brief: [CODEDNA_STARTER.md](CODEDNA_STARTER.md). Current plan:
 | `scripts/` | Developer helper scripts |
 | `docs/` | Specification, architecture, research and decision records |
 
-New top-level directories (`adapters/`, `experiments/`, `frontend/`) and new
-packages under `backend/codedna/` are created only when their first real
-implementation lands.
+New top-level directories (`experiments/`, `ide/`, `website/`) and new
+packages under `backend/codedna/` (e.g. `plugins/`) are created only when
+their first real implementation lands.
