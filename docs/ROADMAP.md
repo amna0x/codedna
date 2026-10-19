@@ -46,13 +46,25 @@ Status legend: ✅ done · 🔄 in progress · ⏳ not started
 - ⏳ Manual precision check of extracted edges on a real project (needed for
   the "graph correctness" metric)
 
-## Milestone 3 — Test mapping ⏳ (next)
+## Milestone 3 — Test mapping ✅
 
-JUnit test discovery, Maven test execution (in a sandboxed, user-approved
-way), JaCoCo coverage import, test↔code mapping, dependency-only baseline (B4)
-vs retest-all (B0).
+- ✅ Static JUnit 4/5 discovery (`codedna tests`): direct, `@Nested` and
+  inherited test methods, Surefire default-include check, TestNG flagged
+- ✅ Maven execution only with `--allow-build`, on a `git archive` export;
+  JaCoCo attached from the command line (D-014)
+- ✅ Surefire + JaCoCo XML parsers; per-test-class coverage map onto graph IDs
+  (D-015)
+- ✅ Baselines: retest-all (B0), dependency-only (B4), coverage-based
+  (Ekstazi-style, method level); non-Java fallback (D-016)
+- ✅ `codedna compare`: selection ratio, estimated time, failures caught/missed
+  against a full HEAD run
+- ✅ Offline tests with a fake `mvn`; real Maven/JaCoCo end-to-end test in CI
+- ⚠️ Real Maven flow not yet run on the development laptop (Maven missing)
+- ⏳ Multi-module Maven, Gradle, custom Surefire includes
+- ⏳ Evaluate B0/B4/coverage over many commits of a real project (needs
+  Milestone 4 history tooling)
 
-## Milestone 4 — History and predictive ranking ⏳
+## Milestone 4 — History and predictive ranking ⏳ (next)
 
 History mining, historical test results and durations, features, simple
 historical baselines (B2, B3, B5), logistic regression, gradient boosting.

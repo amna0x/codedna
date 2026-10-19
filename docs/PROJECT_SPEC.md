@@ -111,6 +111,29 @@ failure), `2` invalid command-line usage.
 "Impacted" means *reachable through dependency edges*, not "behaves
 differently". Rules: DECISIONS.md D-010 – D-012.
 
+### Test mapping and selection JSON (v1)
+
+- `codedna tests`: `tests[]` with `id` (top-level class = graph type ID),
+  `file`, `framework` (`junit5`/`junit4`/`unknown`), `methods`,
+  `inherited_from`, `in_test_sources`, `matches_surefire_defaults`,
+  `runs_by_default`; `warnings`.
+- `results.json` (`run-tests`): `commit`, `tool`, `commands`, `exit_codes`,
+  `duration_seconds`, `per_test_coverage`, `tests[]` (`id`, `status`
+  `passed`/`failed`/`error`/`skipped`, `time`, `cases[]`), `failing_tests`,
+  `warnings`.
+- `coverage-map.json`: `commit`, `tool: "jacoco"`, `tests{id: {files{path:
+  ranges}, types[], members[]}}`, `warnings`.
+- `codedna select`: `strategy`, `total_tests`, `selected[]` (`test`,
+  `reasons[]`), `selected_count`, `skipped[]`, `selection_ratio`,
+  `estimated_time` (`selected_seconds`, `all_seconds`, `saved_ratio`,
+  `tests_without_duration`) or `null`, `warnings`.
+- `codedna compare`: `ground_truth` (`commit`, `failing_tests`),
+  `strategies[]` (`strategy`, `selected`, `total`, `selection_ratio`,
+  `estimated_time`, `failing_tests`, `caught`, `missed`, `safe`), `warnings`.
+
+Single commit pairs only; aggregate evaluation over a history comes with
+Milestone 4.
+
 ## Non-goals
 
 - Vulnerability detection, penetration testing, security scoring.

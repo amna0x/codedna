@@ -18,7 +18,7 @@ Dependency graph builder      ← implemented (type level)   codedna.dependency_
 Change-impact analyzer        ← implemented                codedna.impact_analysis
         │
         ▼
-Candidate test generator      ← Milestone 3                 codedna.test_mapping
+Candidate test generator      ← implemented (baselines)    codedna.test_mapping, .selection
         │
         ▼
 History + feature generator   ← Milestone 4                 codedna.test_history
@@ -61,8 +61,16 @@ backend/codedna/
 │   ├── model.py           Node / Edge / Evidence / CodeGraph, merge_graphs()
 │   ├── references.py      Tree-sitter walk: imports + type names per type
 │   └── builder.py         read commit from Git, build nodes, resolve names
-└── impact_analysis/
-    └── impact.py          seeds from analyze, reverse BFS, explanation paths
+├── impact_analysis/
+│   └── impact.py          seeds from analyze, reverse BFS, explanation paths
+├── test_mapping/
+│   ├── discovery.py       static JUnit 4/5 test-class discovery
+│   ├── reports.py         Surefire + JaCoCo XML parsers
+│   ├── results.py         results.json / coverage-map.json models
+│   └── maven.py           opt-in Maven runner, per-test JaCoCo, coverage mapping
+└── selection/
+    └── baselines.py       all / dependency / coverage strategies, compare
+git_analysis/blobs.py      ls-tree + cat-file --batch readers, git archive export
 ```
 
 ### `git_analysis.git`
@@ -158,6 +166,38 @@ references — the "unresolved-edge rate" metric of the research plan.
 4. `candidate_tests`: top-level test types that still exist in HEAD and are
    changed or impacted — class-level dependency-only selection (B4 preview).
 
+### `test_mapping`
+
+- **Discovery** (`discovery.py`): Tree-sitter scan for methods annotated
+  `@Test`, `@ParameterizedTest`, `@RepeatedTest`, `@TestFactory`,
+  `@TestTemplate`; `@Nested` classes fold into their top-level class;
+  inherited test methods are found through the graph's `extends` edges.
+  A test class is *in the universe* only if Surefire's default includes
+  would run it (`src/test/java`, `Test*`/`*Test`/`*Tests`/`*TestCase`).
+- **Runner** (`maven.py`, D-014): refuses without `allow_build`; exports the
+  commit with `git archive` (tar `data` filter) into `OUTPUT/checkout`; runs
+  `mvn -B --no-transfer-progress test -Dmaven.test.failure.ignore=true`
+  (a non-zero exit therefore means a build failure, recorded as a warning).
+  Logs, copied Surefire/JaCoCo XML, `results.json` and `coverage-map.json`
+  stay in `OUTPUT`; the checkout is deleted unless `--keep-checkout`.
+- **Per-test coverage** (D-015): for each test class, delete
+  `target/jacoco.exec` and old reports, run `jacoco:prepare-agent test
+  jacoco:report -Dtest=<Class>,<Class>$*`, parse `jacoco.xml`, and map covered
+  lines onto declarations (innermost declaration per line) of the same
+  commit → `files`, `types`, `members` per test class.
+
+### `selection`
+
+`select_tests` (D-016): universe = discovered tests Surefire runs by default
+in HEAD. Changed test files are always selected. Non-Java changes → retest-all
+unless `non_java="ignore"`. `dependency` = `impact.candidate_tests`.
+`coverage` = tests covering a changed member (by ID) or changed type, tests
+covering the parent type of an *added* member, tests covering a file whose
+imports changed or whose changes are unresolved, and every test without
+coverage data. `compare_strategies` evaluates each strategy against a
+ground-truth `results.json` of HEAD: `failing_tests`, `caught`, `missed`,
+`safe` (nothing missed), selection ratio, estimated time.
+
 ## Known limitations (current)
 
 - Declaration IDs are syntactic: parameter types are not resolved
@@ -179,7 +219,16 @@ references — the "unresolved-edge rate" metric of the research plan.
   misclassified (e.g. `Testimony.java` counts as a test).
 - Reflection, dependency injection, generated code and resources create no
   edges, so dependents reached only that way are not found.
-- Non-Java changes (build files, resources) are reported but not analysed.
+- Non-Java changes (build files, resources) are reported but not analysed;
+  selection falls back to retest-all for them by default.
+- `run-tests`: single-module Maven with root `pom.xml` only; no Gradle,
+  TestNG, multi-module builds or custom Surefire includes. Per-test coverage
+  costs one Maven start-up per test class.
+- Coverage-based selection only sees code executed at BASE; reflection,
+  resources and static initialisation order are not tracked, so it can miss
+  failures (the `compare` command measures this rather than assuming).
+- Estimated time sums Surefire class times; build start-up and compilation
+  are excluded.
 - Rename detection uses Git's default 50 % similarity heuristic; a heavily
   edited move appears as `deleted` + `added`.
 - One `git diff` subprocess per changed file — slow for diffs with thousands

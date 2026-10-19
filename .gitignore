@@ -19,6 +19,10 @@ target/
 .env.*
 !.env.example
 
+# CodeDNA run output (logs, checkouts, results)
+codedna-runs/
+runs/
+
 # Experiment data (keep code, not downloaded/private data)
 experiments/datasets/raw/
 experiments/datasets/private/

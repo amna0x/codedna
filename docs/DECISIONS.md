@@ -177,3 +177,55 @@ language-specific and would multiply the work. Non-Java changes are therefore
 listed as `unanalysed_changes` with a warning rather than silently ignored.
 Supporting another language later means adding a parser + resolver that emit
 the same graph schema. *Needs human review if the team wants to change scope.*
+
+## D-014 — Running builds is opt-in and isolated
+
+Running a project's tests executes its code and Maven plugins, which the brief
+forbids doing automatically. So:
+
+- `run-tests` refuses to start unless `--allow-build` is given, and prints a
+  warning when it does start. All other commands never build or execute.
+- The commit is exported with `git archive` into the output directory (tar
+  extraction with the `data` filter rejects absolute paths, `..` and unsafe
+  links). The user's working tree, index and `pom.xml` are never modified.
+- JaCoCo is attached on the command line
+  (`org.jacoco:jacoco-maven-plugin:0.8.12:prepare-agent ... :report`), so no
+  build file is edited. Test class names passed to `-Dtest` must match a
+  Java-name pattern.
+- `-Dmaven.test.failure.ignore=true` lets failing tests produce reports; a
+  non-zero exit is then a build failure and is recorded as a warning.
+
+This is *isolation from the user's files*, not a security sandbox: the build
+can still access the network and the user's account. Only run it on projects
+you trust; use a container/VM for third-party projects (DATASET_PLAN.md).
+
+The Maven adapter lives in `backend/codedna/test_mapping/maven.py` rather than
+the brief's top-level `adapters/java_maven/`, because it is ordinary Python
+imported by the CLI; a separate top-level folder would need its own packaging
+for no benefit yet.
+
+## D-015 — Per-test coverage by one Maven run per test class
+
+JaCoCo records one execution data file per JVM, not per test. The simplest
+exact way to get per-test-class coverage is to run each class separately with
+a fresh `jacoco.exec`. Cost: roughly *test classes × Maven start-up*, which is
+fine for the sample project and small/medium study subjects but slow for big
+suites. Alternatives for later: a JUnit listener that dumps JaCoCo sessions
+between classes (one JVM), or Ekstazi-style class-file dependencies.
+
+Covered lines are mapped onto declarations of the **same commit** with the
+Milestone 1 parser, giving member IDs that match `analyze` output exactly.
+
+## D-016 — Selection rules chosen for safety
+
+- Changed or new test classes are always selected.
+- In `coverage`, tests without coverage data are selected (unknown ≠ safe).
+- A new member selects tests that cover its class (overloads/overrides can
+  change behaviour of existing calls).
+- Non-Java changes trigger retest-all by default (`--non-java ignore` to
+  override, which is recorded as a warning).
+- Only test classes that Surefire runs by default form the universe; others
+  are listed in warnings.
+
+Measured safety comes from `compare` against real full-suite runs, never from
+these rules alone.

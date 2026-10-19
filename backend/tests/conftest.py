@@ -9,6 +9,20 @@ from pathlib import Path
 import pytest
 
 
+def pytest_addoption(parser):
+    parser.addoption("--run-maven", action="store_true",
+                     help="also run tests marked 'maven' (need Maven, a JDK and internet)")
+
+
+def pytest_collection_modifyitems(config, items):
+    if config.getoption("--run-maven"):
+        return
+    skip = pytest.mark.skip(reason="needs real Maven; run with --run-maven")
+    for item in items:
+        if "maven" in item.keywords:
+            item.add_marker(skip)
+
+
 @pytest.fixture(autouse=True)
 def isolated_git_config(monkeypatch, tmp_path_factory):
     """Ignore the developer's global/system Git config so tests are reproducible.

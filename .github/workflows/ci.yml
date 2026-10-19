@@ -42,3 +42,22 @@ jobs:
       - name: Build and test
         working-directory: examples/sample-java-project
         run: mvn --batch-mode --no-transfer-progress verify
+
+  maven-integration:
+    name: CodeDNA + real Maven/JaCoCo (integration)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+          cache-dependency-path: examples/sample-java-project/pom.xml
+      - name: Install CodeDNA
+        run: python -m pip install -e ".[dev]"
+      - name: Run Maven integration tests
+        run: python -m pytest -m maven --run-maven -v

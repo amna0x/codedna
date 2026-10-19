@@ -8,7 +8,7 @@ Given a Git repository and two commits, CodeDNA will eventually work out which
 code changed, what it may affect, which regression tests matter, and how risky
 it is to skip the rest — and explain every decision.
 
-**Status:** Milestones 0, 1 and 2 done.
+**Status:** Milestones 0–3 done.
 Today CodeDNA can:
 
 - report changes between two commits: files, line ranges, and the Java
@@ -16,10 +16,16 @@ Today CodeDNA can:
 - export a **code dependency graph** of any commit, with every edge labelled
   `confirmed` or `heuristic` and unresolved names listed separately (`graph`);
 - list types **potentially impacted** by a change, each with an explanation
-  path, plus the test classes that depend on them (`impact`).
+  path, plus the test classes that depend on them (`impact`);
+- discover JUnit 4/5 test classes statically (`tests`);
+- run a commit's Maven test suite in an isolated export, optionally with
+  **per-test JaCoCo coverage** (`run-tests`, only with `--allow-build`);
+- select tests with three baselines — retest-all, dependency-only and
+  coverage-based — and compare them against a full run (`select`, `compare`).
 
-Code is parsed with Tree-sitter, never built or executed. Test execution,
-history mining and ML are not implemented yet — see
+Analysis commands parse code with Tree-sitter and never build or execute it;
+only `run-tests` executes the project, and only when you pass `--allow-build`.
+History mining and ML are not implemented yet — see
 [docs/ROADMAP.md](docs/ROADMAP.md).
 
 ## Prerequisites
@@ -28,8 +34,8 @@ history mining and ML are not implemented yet — see
 |------|---------|-----------|
 | Python | 3.11 or newer | CodeDNA itself |
 | Git | 2.24 or newer | Change extraction |
-| Java (JDK) | 17 | Sample project (optional for now) |
-| Maven | 3.9+ | Sample project build (optional for now; required from Milestone 3) |
+| Java (JDK) | 17 | `run-tests` and the sample project |
+| Maven | 3.9+ | `run-tests` (everything else works without it) |
 
 ## Setup
 
@@ -59,12 +65,24 @@ that, analysis and tests run fully offline.
 python -m pytest
 ```
 
+One end-to-end test runs real Maven + JaCoCo on the sample project. It is
+skipped by default because it needs Maven, a JDK and internet access (Maven
+downloads plugins); CI runs it. To run it locally:
+
+```bash
+python -m pytest -m maven --run-maven
+```
+
 ## Usage
 
 ```bash
 codedna analyze --repo PATH --base BASE_REV --head HEAD_REV [--level method|file] [--output FILE]
 codedna graph   --repo PATH [--rev REV] [--no-members] [--output FILE]
 codedna impact  --repo PATH --base BASE_REV --head HEAD_REV [--max-depth N] [--confirmed-only] [--output FILE]
+codedna tests   --repo PATH [--rev REV] [--output FILE]
+codedna run-tests --repo PATH [--rev REV] --output-dir DIR --allow-build [--per-test-coverage] [--mvn PATH] [--timeout S]
+codedna select  --repo PATH --base BASE_REV --head HEAD_REV --strategy all|dependency|coverage [--coverage-map F] [--durations F] [--non-java retest-all|ignore]
+codedna compare --repo PATH --base BASE_REV --head HEAD_REV --ground-truth F [--coverage-map F] [--non-java retest-all|ignore]
 ```
 
 - `analyze --level method` (default) adds a `java` object to every changed
@@ -75,6 +93,21 @@ codedna impact  --repo PATH --base BASE_REV --head HEAD_REV [--max-depth N] [--c
 - `impact` follows dependency edges backwards from the changed types.
   `--max-depth` limits the number of hops; `--confirmed-only` ignores
   heuristic edges.
+- `tests` lists JUnit test classes and whether Surefire runs them by default.
+- `run-tests` **executes the project's code and build plugins**, so it refuses
+  to start without `--allow-build`. It exports the commit with `git archive`
+  into `DIR/checkout` (your working tree and `pom.xml` are never touched),
+  runs `mvn test`, and writes `DIR/results.json`. `--per-test-coverage` runs
+  every test class separately under JaCoCo and also writes
+  `DIR/coverage-map.json` (slow: one Maven run per test class).
+- `select` picks tests for a change: `all` (retest-all), `dependency` (static
+  graph) or `coverage` (needs a coverage map recorded at BASE). Changed tests
+  are always selected; a changed non-Java file falls back to retest-all unless
+  `--non-java ignore`. `--durations` adds a time estimate.
+- `compare` runs all strategies against a full run of HEAD (`--ground-truth`)
+  and reports selection ratio, estimated time, and failing tests caught/missed.
+  Files and run directories are both accepted for `--coverage-map`,
+  `--durations` and `--ground-truth`.
 
 `BASE_REV`/`HEAD_REV` can be full or short SHAs, branches, tags or expressions
 like `HEAD~1`. They are resolved to full SHAs in the output.
@@ -173,6 +206,21 @@ variable named `Rounding` would look the same, so CodeDNA does not claim it.
 CodeDNA never guesses. Full field list:
 [docs/PROJECT_SPEC.md](docs/PROJECT_SPEC.md).
 
+## Demo: test selection with real Maven
+
+Needs Maven and a JDK. Using the demo repository from above:
+
+```bash
+codedna run-tests --repo ../codedna-demo --rev <BASE_SHA> --output-dir ../runs/base --per-test-coverage --allow-build
+codedna run-tests --repo ../codedna-demo --rev <HEAD_SHA> --output-dir ../runs/head --allow-build
+codedna compare --repo ../codedna-demo --base <BASE_SHA> --head <HEAD_SHA> --ground-truth ../runs/head --coverage-map ../runs/base --non-java ignore
+```
+
+The demo change also edits `README.md`; without `--non-java ignore` every
+strategy falls back to retest-all. No output is shown here because this has
+not yet been run on the development laptop (no Maven); CI runs the same flow
+in `test_maven_integration.py`.
+
 ## Sample Java project
 
 `examples/sample-java-project` is a tiny Maven + JUnit 5 project
@@ -192,11 +240,13 @@ backend/codedna/          Python package
   java_analysis/          Tree-sitter Java parser + line-to-declaration mapping
   dependency_graph/       code graph model, reference extraction, name resolution
   impact_analysis/        reverse-dependency traversal with explanation paths
+  test_mapping/           JUnit discovery, Maven runner, Surefire/JaCoCo parsers
+  selection/              retest-all / dependency / coverage baselines, compare
 backend/tests/            pytest suite (temporary Git repos, no network)
 examples/                 sample Java/Maven project
 scripts/                  helper scripts (demo repo builder)
 docs/                     spec, architecture, roadmap, research, decisions
-.github/workflows/ci.yml  tests on Ubuntu + Windows, Maven build of sample
+.github/workflows/ci.yml  tests on Ubuntu + Windows, Maven build, real-Maven integration
 AGENTS.md                 rules for contributors and AI coding agents
 CODEDNA_STARTER.md        original project brief
 ```
@@ -211,8 +261,12 @@ CODEDNA_STARTER.md        original project brief
 - Whitespace-only edits count as changes.
 - Name resolution is a simplified subset of Java's rules: no inherited member
   types, no method-call resolution; unresolvable names are listed, not guessed.
-- Tests are recognised by path convention (`src/test/`, `*Test.java`), and
-  candidate tests are class-level and dependency-only (no coverage yet).
+- Graph roles use path conventions; `tests`/`select` use JUnit annotations
+  plus Surefire's *default* includes — custom Surefire configuration is not
+  read.
+- Selection is at test-class level. `run-tests` supports single-module Maven
+  projects with `pom.xml` at the root; no Gradle, TestNG or multi-module yet.
+- Per-test coverage costs one Maven run per test class.
 - Only Java is analysed; other changed files are listed as `unanalysed_changes`.
 - See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md#known-limitations-current).
 

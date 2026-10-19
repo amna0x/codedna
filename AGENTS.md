@@ -32,6 +32,8 @@ Full brief: [CODEDNA_STARTER.md](CODEDNA_STARTER.md). Current plan:
 - Do not change unrelated modules.
 - Call Git with argument lists through `codedna.git_analysis.git.run_git`;
   never use `shell=True`, and never run scripts from analysed repositories.
+  The only exception is `codedna run-tests`, which builds a project only when
+  the user passes `--allow-build` (D-014) — never pass it on their behalf.
 
 ## Before claiming completion
 

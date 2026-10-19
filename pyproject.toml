@@ -28,3 +28,4 @@ include = ["codedna*"]
 [tool.pytest.ini_options]
 testpaths = ["backend/tests"]
 addopts = "-ra"
+markers = ["maven: end-to-end tests that run real Maven (enable with --run-maven)"]
