@@ -122,8 +122,11 @@ Product track, alongside:
 Replaces the standalone React dashboard: the same views live inside the IDE.
 May start in parallel (Student C) once the analysis JSON formats are stable.
 
-- ⏳ Local API (FastAPI) exposing analyze / graph / impact / tests / select /
-  compare and, later, risk scores (D-019)
+- ✅ Local API (FastAPI): `codedna serve`; analyze / graph / impact / tests /
+  select / compare / run-tests / plugins / capabilities; loopback only,
+  session token, Host check, build opt-in (D-019, D-028)
+- ⏳ API: per-commit risk scores for the Tests view (needs a trained model
+  stored per repository), progress for long runs, run only selected tests
 - ⏳ CodeDNA IDE built on Eclipse Theia, branded, desktop (Electron) build
   (D-019); Java editing through existing open-source Java extensions
 - ⏳ CodeDNA panels: changed methods, impacted classes with explanation paths,

@@ -88,6 +88,9 @@ calibration/
     ├── calibrators.py     none / Platt / isotonic
     └── metrics.py         Brier, ECE, reliability bins
 selection/risk.py          risk-per-second selection, skip risk, fallback
+api/
+    ├── app.py             FastAPI app: endpoints, token + Host checks, build opt-in
+    └── server.py          `codedna serve` (loopback-only, prints URL + token)
 git_analysis/blobs.py      ls-tree + cat-file --batch readers, git archive export
 ```
 
@@ -261,7 +264,34 @@ test commit rows ─────────────────────
   durations and outcomes and reports estimated skip risk next to the observed
   miss rate, so the risk estimate itself is evaluated.
 
+### `api` (local API for the IDE, D-028)
+
+`codedna serve` prints one JSON line (`url`, `token`, `allow_build`) and runs
+uvicorn on a loopback address. Every endpoint except `GET /api/health` needs
+the `X-CodeDNA-Token` header; requests whose `Host` is not a loopback name
+get 403; no CORS headers are sent. Endpoints mirror the CLI and return the
+same JSON:
+
+| Method + path | CLI equivalent |
+|---------------|----------------|
+| `GET /api/health` | — (no token) |
+| `GET /api/plugins`, `GET /api/capabilities` | `plugins` |
+| `POST /api/analyze` | `analyze` |
+| `POST /api/graph` | `graph` |
+| `POST /api/impact` | `impact` |
+| `POST /api/tests` | `tests` |
+| `POST /api/select` | `select` |
+| `POST /api/compare` | `compare` |
+| `POST /api/run-tests` | `run-tests` — needs `serve --allow-build` **and** `"allow_build": true` |
+
+Errors are JSON: 400 `{"error": ...}` for analysis errors, 401 bad token,
+403 host/build not allowed, 422 invalid request body.
+
 ## Known limitations (current)
+
+- API: synchronous requests (a test run blocks that request until done); no
+  progress events yet; Starlette's test client warns that `httpx` support is
+  deprecated in favour of a successor package — revisit when upgrading.
 
 - Skip risk assumes independent test failures; correlated failures make it
   optimistic or pessimistic — measured, not assumed, by the experiment.

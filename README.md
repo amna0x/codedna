@@ -91,6 +91,7 @@ codedna run-tests --repo PATH [--rev REV] --output-dir DIR --allow-build [--per-
 codedna select  --repo PATH --base BASE_REV --head HEAD_REV --strategy all|dependency|coverage [--coverage-map F] [--durations F] [--non-java retest-all|ignore]
 codedna compare --repo PATH --base BASE_REV --head HEAD_REV --ground-truth F [--coverage-map F] [--non-java retest-all|ignore]
 codedna plugins
+codedna serve   [--host 127.0.0.1] [--port 8765] [--allow-build]
 codedna history mine     --repo PATH --db FILE [--rev REV] [--max-commits N]
 codedna history import   --db FILE RESULTS [RESULTS ...] [--source NAME]
 codedna history collect  --repo PATH --db FILE --output-dir DIR --allow-build [--max-commits N]
@@ -123,6 +124,15 @@ codedna history experiment --db FILE [--repo PATH] [--model M] [--calibration no
   Files and run directories are both accepted for `--coverage-map`,
   `--durations` and `--ground-truth`.
 - `plugins` lists installed language plugins (Java is built in).
+- `serve` starts the **local API for the CodeDNA IDE** (needs
+  `pip install -e ".[api]"`, included in `.[dev]`). It listens on loopback
+  only and prints one JSON line with the URL and a session token
+  (`CODEDNA_API_TOKEN` overrides it); every request except
+  `/api/health` needs the `X-CodeDNA-Token` header. Endpoints mirror the CLI
+  (`/api/analyze`, `/api/graph`, `/api/impact`, `/api/tests`, `/api/select`,
+  `/api/compare`, `/api/run-tests`); `/api/run-tests` additionally needs
+  `--allow-build` on the server and `"allow_build": true` in the request.
+  Interactive docs: `http://127.0.0.1:8765/docs`.
 - `history` builds a per-repository SQLite database: `mine` stores the
   first-parent commits, `import` stores `results.json` files, `collect`
   runs the full suite of each mined commit (**executes project code**, needs
@@ -275,6 +285,7 @@ backend/codedna/          Python package
   test_history/           SQLite history store, mining, result collection, features
   models/                 ranking baselines, ML models, metrics, evaluation, experiment
   calibration/            Platt / isotonic calibration, Brier, ECE, reliability
+  api/                    local FastAPI server for the CodeDNA IDE
 backend/tests/            pytest suite (temporary Git repos, no network)
 examples/                 sample Java/Maven project
 scripts/                  helper scripts (demo repo builder)

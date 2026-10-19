@@ -404,3 +404,28 @@ dependency selection. Sweeps: budget 10–100 % for B8, risk target
 feature group. Every report carries a dataset SHA-256, seed and package
 versions; results for the thesis go to `experiments/results/` together with
 the database version and the exact command.
+
+## D-028 — Local API: FastAPI on loopback with a session token
+
+The IDE needs the core's results over a stable interface; FastAPI (from the
+brief's stack) gives typed request models (Pydantic), JSON errors and
+OpenAPI docs the TypeScript side can be generated from. It is an optional
+extra (`[api]`: `fastapi`, `uvicorn`; tests also use `httpx`).
+
+A server on localhost can be reached by any local process and, indirectly,
+by web pages in the user's browser, so:
+
+- `codedna serve` refuses non-loopback addresses;
+- a random per-session token (32 bytes, `secrets.token_urlsafe`) is
+  required in `X-CodeDNA-Token` on every endpoint except `/api/health`,
+  compared in constant time; the IDE can supply its own via
+  `CODEDNA_API_TOKEN` (environment, not a command-line argument visible in
+  process lists);
+- requests whose `Host` header is not `127.0.0.1`, `localhost` or `[::1]`
+  are rejected (DNS-rebinding defence); no CORS headers are sent, so
+  browsers cannot attach the custom header cross-site;
+- `/api/run-tests` executes project code, so it needs the server started
+  with `--allow-build` **and** `"allow_build": true` in the request.
+
+No user accounts or remote access — consistent with the brief's "no
+authentication infrastructure" and Path A scope.

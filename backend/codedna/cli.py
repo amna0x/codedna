@@ -13,6 +13,7 @@ Usage:
     codedna compare --repo PATH --base SHA --head SHA --ground-truth FILE
                     [--coverage-map FILE] [--non-java retest-all|ignore]
     codedna plugins
+    codedna serve   [--host 127.0.0.1] [--port 8765] [--allow-build]
     codedna history mine     --repo PATH --db FILE [--rev REV] [--max-commits N]
     codedna history import   --db FILE RESULTS [RESULTS ...] [--source NAME]
     codedna history collect  --repo PATH --db FILE --output-dir DIR --allow-build
@@ -29,6 +30,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -170,6 +172,22 @@ def build_parser() -> argparse.ArgumentParser:
 
     subcommands.add_parser("plugins", help="List installed language plugins.")
 
+    serve = subcommands.add_parser(
+        "serve",
+        help="Start the local API for the CodeDNA IDE (loopback only).",
+        description=(
+            "Start the local HTTP API. Prints one JSON line with the URL and the session token "
+            "(taken from CODEDNA_API_TOKEN if set). Requests need the X-CodeDNA-Token header. "
+            "Needs the [api] extra."
+        ),
+    )
+    serve.add_argument("--host", default="127.0.0.1",
+                       help="Loopback address to listen on (default: 127.0.0.1).")
+    serve.add_argument("--port", type=_non_negative_int, default=8765,
+                       help="Port (default: 8765).")
+    serve.add_argument("--allow-build", action="store_true",
+                       help="Allow /api/run-tests (executes project code on request).")
+
     history = subcommands.add_parser(
         "history", help="Mine commit history, store test results, evaluate test ordering.")
     history_commands = history.add_subparsers(dest="history_command", required=True)
@@ -294,6 +312,15 @@ def main(argv: list[str] | None = None) -> int:
             return _run_tests(args)
         elif args.command == "plugins":
             return _write_json(load_plugins().describe(), None)
+        elif args.command == "serve":
+            try:
+                from codedna.api.server import serve
+            except ImportError:
+                print('error: the API needs extra packages: pip install -e ".[api]"',
+                      file=sys.stderr)
+                return EXIT_ANALYSIS_ERROR
+            return serve(args.host, args.port, token=os.environ.get("CODEDNA_API_TOKEN"),
+                         allow_build=args.allow_build)
         elif args.command == "history":
             return _run_history(args)
         elif args.command == "select":

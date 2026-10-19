@@ -179,6 +179,16 @@ Single commit pairs only; aggregate evaluation over a history is
   `ablations` (`pr_auc`, `brier`, recall and safety at the budget per feature
   group removed), `warnings`.
 
+### Local API (Milestone 6, D-028)
+
+`codedna serve` → loopback HTTP API returning exactly the JSON documented
+above for the matching CLI command. Request bodies are JSON with the same
+parameter names as the CLI options (`repo`, `base`, `head`, `rev`,
+`strategy`, `coverage_map`, `durations`, `ground_truth`, `non_java`,
+`max_depth`, `confirmed_only`, `include_members`, `output_dir`,
+`allow_build`, `per_test_coverage`, `timeout`). `/api/run-tests` returns
+`{"results": <results.json>, "coverage_map": <coverage-map.json or null>}`.
+
 ## Non-goals
 
 - Vulnerability detection, penetration testing, security scoring.
