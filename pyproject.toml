@@ -16,7 +16,9 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8"]
+# scikit-learn: failure-prediction models for Milestone 4 (D-022).
+ml = ["scikit-learn>=1.4"]
+dev = ["pytest>=8", "scikit-learn>=1.4"]
 
 [project.scripts]
 codedna = "codedna.cli:main"

@@ -25,11 +25,11 @@ from codedna.dependency_graph import (
     HEURISTIC,
     CodeGraph,
     Edge,
-    build_graph_for_commit,
     merge_graphs,
 )
 from codedna.java_analysis import analyze_changes
 from codedna.java_analysis.parser import TYPE_NODES
+from codedna.plugins import load_plugins
 
 _TYPE_KINDS = frozenset(TYPE_NODES.values())
 
@@ -88,9 +88,10 @@ def compute_impact(repo_path: str | Path, base: str, head: str, *,
     changes = analyze_changes(repo_path, base, head)
     repo = Path(changes.repository)
     cache: dict = {}
+    java = load_plugins().get("java")  # only language analysed so far (D-013)
     graph = merge_graphs(
-        build_graph_for_commit(repo, changes.base_commit, cache=cache),
-        build_graph_for_commit(repo, changes.head_commit, cache=cache),
+        java.build_graph(repo, changes.base_commit, cache=cache),
+        java.build_graph(repo, changes.head_commit, cache=cache),
     )
 
     seeds, ignored, unanalysed = _collect_seeds(changes, graph)

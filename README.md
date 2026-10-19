@@ -14,7 +14,8 @@ and a platform website with a plugin catalogue. Only the analysis core exists
 today; see [docs/ROADMAP.md](docs/ROADMAP.md) and decisions D-017 – D-020 in
 [docs/DECISIONS.md](docs/DECISIONS.md).
 
-**Status:** Milestones 0–3 done.
+**Status:** Milestones 0–3 done; Milestone 4 tooling done (waiting for real
+study data).
 Today CodeDNA can:
 
 - report changes between two commits: files, line ranges, and the Java
@@ -89,6 +90,12 @@ codedna tests   --repo PATH [--rev REV] [--output FILE]
 codedna run-tests --repo PATH [--rev REV] --output-dir DIR --allow-build [--per-test-coverage] [--mvn PATH] [--timeout S]
 codedna select  --repo PATH --base BASE_REV --head HEAD_REV --strategy all|dependency|coverage [--coverage-map F] [--durations F] [--non-java retest-all|ignore]
 codedna compare --repo PATH --base BASE_REV --head HEAD_REV --ground-truth F [--coverage-map F] [--non-java retest-all|ignore]
+codedna plugins
+codedna history mine     --repo PATH --db FILE [--rev REV] [--max-commits N]
+codedna history import   --db FILE RESULTS [RESULTS ...] [--source NAME]
+codedna history collect  --repo PATH --db FILE --output-dir DIR --allow-build [--max-commits N]
+codedna history status   --db FILE
+codedna history evaluate --db FILE [--repo PATH] [--rankers ...] [--no-structural] [--dataset-csv F]
 ```
 
 - `analyze --level method` (default) adds a `java` object to every changed
@@ -114,6 +121,15 @@ codedna compare --repo PATH --base BASE_REV --head HEAD_REV --ground-truth F [--
   and reports selection ratio, estimated time, and failing tests caught/missed.
   Files and run directories are both accepted for `--coverage-map`,
   `--durations` and `--ground-truth`.
+- `plugins` lists installed language plugins (Java is built in).
+- `history` builds a per-repository SQLite database: `mine` stores the
+  first-parent commits, `import` stores `results.json` files, `collect`
+  runs the full suite of each mined commit (**executes project code**, needs
+  `--allow-build`, slow), and `evaluate` builds leakage-free features and
+  compares orderings (random, shortest-first, recent failures, failure
+  history, logistic regression, gradient boosting) on a chronological
+  60/20/20 split. ML needs scikit-learn (`pip install -e ".[ml]"`; included
+  in `.[dev]`).
 
 `BASE_REV`/`HEAD_REV` can be full or short SHAs, branches, tags or expressions
 like `HEAD~1`. They are resolved to full SHAs in the output.
@@ -248,6 +264,9 @@ backend/codedna/          Python package
   impact_analysis/        reverse-dependency traversal with explanation paths
   test_mapping/           JUnit discovery, Maven runner, Surefire/JaCoCo parsers
   selection/              retest-all / dependency / coverage baselines, compare
+  plugins/                language-plugin interface, registry, built-in Java plugin
+  test_history/           SQLite history store, mining, result collection, features
+  models/                 ranking baselines, ML models, metrics, evaluation
 backend/tests/            pytest suite (temporary Git repos, no network)
 examples/                 sample Java/Maven project
 scripts/                  helper scripts (demo repo builder)

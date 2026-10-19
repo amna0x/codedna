@@ -317,3 +317,54 @@ requirements, and build size/time on student laptops.
 
 These are ordinary distribution-hygiene rules, not security research, so the
 project stays within Path A. Code signing can be added later if time allows.
+
+## D-021 — SQLite (standard library) for history and results
+
+One database file per studied repository, via Python's built-in `sqlite3`:
+no server, works on every laptop, easy to copy alongside an experiment.
+Tables: `commits` (first-parent, `seq` = chronological index),
+`changed_files` (numstat, renames as delete + add), `test_results` (per
+commit, test class and source; a failure in any source wins when merged),
+`meta`. No author names or e-mails are stored. PostgreSQL only if a real need
+appears.
+
+## D-022 — scikit-learn for the first models
+
+Logistic regression (standardised features, balanced class weights) and
+`HistGradientBoostingClassifier` (balanced class weights) from scikit-learn
+cover the brief's "logistic regression baseline" and "gradient-boosted
+model" without adding XGBoost or LightGBM; switch only if experiments show a
+clear benefit. scikit-learn is an optional extra (`pip install -e ".[ml]"`,
+also in `dev`) so analysis-only users do not need it. Fixed `random_state`
+for reproducibility. No LLMs are used for prediction.
+
+## D-023 — Feature, leakage and evaluation protocol
+
+- Unit of prediction: (commit, test class) for commits with stored results;
+  label = failed or error at that commit; skipped tests are excluded.
+- History features use only results of *earlier* commits: the per-test state
+  is updated after a commit's rows are emitted. The test's duration at the
+  commit itself is used only as evaluation cost (APFDc, budgets).
+- Features: change size (files, Java files, test files, lines ±), test file
+  changed, structural (`impact`: reachable, distance, confirmed-only path),
+  history (past runs/failures, failure rate, failures in last 5 runs, failed
+  last run, commits since last failure, mean/last duration, co-failures with
+  the files changed now).
+- Split: chronological by commit, 60 % train / 20 % validation / 20 % test
+  (validation reserved for calibration in Milestone 5). No shuffling.
+- Metrics per commit with ≥ 1 failing test, averaged: APFD, APFDc, recall at
+  25 % and 50 % of total time, time to first failure; per split: PR-AUC and
+  Brier score for ML models.
+- Fewer than 10 failing commits → warning; results are not to be reported as
+  findings until enough real failures exist.
+
+## D-024 — Plugin refactor, step 1
+
+The `LanguagePlugin` protocol, the registry and a built-in `JavaPlugin` are in
+`backend/codedna/plugins/`. The Java code itself stays in `java_analysis`,
+`dependency_graph`, `test_mapping` for now; `JavaPlugin` is the entry point
+the core uses (impact, selection, history collection). Moving it into a
+separately installable `codedna-java` distribution waits for the plugin
+catalogue (Milestone 7), to avoid packaging work before it is needed.
+`analyze` still decides "is Java" by file suffix, which matches the plugin's
+`handles()`.

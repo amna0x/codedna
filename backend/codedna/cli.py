@@ -12,6 +12,14 @@ Usage:
                     [--coverage-map FILE] [--durations FILE] [--non-java retest-all|ignore]
     codedna compare --repo PATH --base SHA --head SHA --ground-truth FILE
                     [--coverage-map FILE] [--non-java retest-all|ignore]
+    codedna plugins
+    codedna history mine     --repo PATH --db FILE [--rev REV] [--max-commits N]
+    codedna history import   --db FILE RESULTS [RESULTS ...] [--source NAME]
+    codedna history collect  --repo PATH --db FILE --output-dir DIR --allow-build
+                             [--max-commits N] [--mvn PATH] [--timeout SECONDS]
+    codedna history status   --db FILE
+    codedna history evaluate --db FILE [--repo PATH] [--rankers NAME ...]
+                             [--no-structural] [--dataset-csv FILE] [--seed N] [--output FILE]
 """
 
 from __future__ import annotations
@@ -26,6 +34,8 @@ from codedna.dependency_graph import build_graph
 from codedna.git_analysis import CodeDNAGitError, extract_changes
 from codedna.impact_analysis import compute_impact
 from codedna.java_analysis import analyze_changes
+from codedna.models.rankers import BASELINES, ML_MODELS
+from codedna.plugins import load_plugins
 from codedna.selection import STRATEGIES, SelectionError, compare_strategies, select_tests
 from codedna.test_mapping.discovery import discover_tests
 from codedna.test_mapping.maven import run_maven_tests
@@ -154,6 +164,55 @@ def build_parser() -> argparse.ArgumentParser:
                          help="coverage-map.json (or its run directory) recorded at BASE.")
     _add_non_java_arg(compare)
     compare.add_argument("--output", help="Write JSON to this file instead of standard output.")
+
+    subcommands.add_parser("plugins", help="List installed language plugins.")
+
+    history = subcommands.add_parser(
+        "history", help="Mine commit history, store test results, evaluate test ordering.")
+    history_commands = history.add_subparsers(dest="history_command", required=True)
+
+    mine = history_commands.add_parser("mine", help="Store the first-parent commit history.")
+    mine.add_argument("--repo", required=True, help="Path to a local Git repository.")
+    mine.add_argument("--db", required=True, help="SQLite history database (created if missing).")
+    mine.add_argument("--rev", default="HEAD", help="Newest commit to mine (default: HEAD).")
+    mine.add_argument("--max-commits", type=_non_negative_int,
+                      help="Only the most recent N first-parent commits.")
+
+    import_ = history_commands.add_parser("import", help="Store results.json files.")
+    import_.add_argument("--db", required=True, help="SQLite history database.")
+    import_.add_argument("results", nargs="+", help="results.json files or run directories.")
+    import_.add_argument("--source", default="import", help="Label for where results came from.")
+
+    collect = history_commands.add_parser(
+        "collect",
+        help="Run the full suite of every mined commit without results (needs --allow-build).",
+        description="Runs each commit's Maven build: this EXECUTES project code, once per "
+                    "commit, and may take hours. Only use it on projects you trust.")
+    collect.add_argument("--repo", required=True, help="Path to a local Git repository.")
+    collect.add_argument("--db", required=True, help="SQLite history database.")
+    collect.add_argument("--output-dir", required=True, help="Directory for per-commit runs.")
+    collect.add_argument("--allow-build", action="store_true",
+                         help="Confirm that the project's code and build may be executed.")
+    collect.add_argument("--max-commits", type=_non_negative_int,
+                         help="Collect at most N commits in this invocation.")
+    collect.add_argument("--mvn", help="Path to the Maven executable (default: mvn on PATH).")
+    collect.add_argument("--timeout", type=_non_negative_int, default=1800,
+                         help="Timeout per Maven invocation in seconds (default: 1800).")
+
+    status = history_commands.add_parser("status", help="Summarise a history database.")
+    status.add_argument("--db", required=True, help="SQLite history database.")
+
+    evaluate = history_commands.add_parser(
+        "evaluate", help="Build features and compare orderings on a chronological split.")
+    evaluate.add_argument("--db", required=True, help="SQLite history database.")
+    evaluate.add_argument("--repo", help="Repository path (default: the one recorded by mine).")
+    evaluate.add_argument("--rankers", nargs="+", choices=BASELINES + ML_MODELS,
+                          help="Rankers to evaluate (default: all).")
+    evaluate.add_argument("--no-structural", action="store_true",
+                          help="Skip graph-based features (much faster).")
+    evaluate.add_argument("--dataset-csv", help="Also write the feature dataset to this CSV file.")
+    evaluate.add_argument("--seed", type=int, default=0, help="Random seed (default: 0).")
+    evaluate.add_argument("--output", help="Write JSON to this file instead of standard output.")
     return parser
 
 
@@ -201,6 +260,10 @@ def main(argv: list[str] | None = None) -> int:
             report = discover_tests(args.repo, args.rev)
         elif args.command == "run-tests":
             return _run_tests(args)
+        elif args.command == "plugins":
+            return _write_json(load_plugins().describe(), None)
+        elif args.command == "history":
+            return _run_history(args)
         elif args.command == "select":
             coverage = _json_file(args.coverage_map, COVERAGE_MAP_FILE)
             durations = _json_file(args.durations, RESULTS_FILE)
@@ -216,7 +279,8 @@ def main(argv: list[str] | None = None) -> int:
                 load_results(_json_file(args.ground_truth, RESULTS_FILE)),
                 coverage_map=load_coverage_map(coverage) if coverage else None,
                 non_java=args.non_java), args.output)
-    except (CodeDNAGitError, SelectionError, ReportError, OSError, ValueError, KeyError) as exc:
+    except (CodeDNAGitError, SelectionError, ReportError, OSError, ValueError, KeyError,
+            RuntimeError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return EXIT_ANALYSIS_ERROR
     return _write_json(report.to_dict(), args.output)
@@ -244,6 +308,46 @@ def _run_tests(args: argparse.Namespace) -> int:
         "warnings": run.warnings,
     }
     return _write_json(summary, None)
+
+
+def _run_history(args: argparse.Namespace) -> int:
+    from codedna.models.evaluate import evaluate
+    from codedna.test_history.collection import collect_results, import_results
+    from codedna.test_history.features import build_dataset
+    from codedna.test_history.mining import mine_history
+    from codedna.test_history.store import HistoryStore
+
+    command = args.history_command
+    if command == "collect" and not args.allow_build:
+        print("error: history collect runs every commit's build (project code executes); "
+              "re-run with --allow-build if you trust this project", file=sys.stderr)
+        return EXIT_ANALYSIS_ERROR
+    if command in ("import", "status", "evaluate") and not Path(args.db).is_file():
+        print(f"error: history database not found: {args.db} (run 'history mine' first)",
+              file=sys.stderr)
+        return EXIT_ANALYSIS_ERROR
+
+    with HistoryStore(args.db) as store:
+        if command == "mine":
+            commits = mine_history(args.repo, store, revision=args.rev,
+                                   max_commits=args.max_commits)
+            return _write_json({"mined_commits": len(commits), **store.summary()}, None)
+        if command == "import":
+            return _write_json({**import_results(store, args.results, args.source),
+                                **store.summary()}, None)
+        if command == "collect":
+            print("warning: running the Maven build of each commit (project code will execute)",
+                  file=sys.stderr)
+            return _write_json(collect_results(
+                args.repo, store, args.output_dir, allow_build=True,
+                max_commits=args.max_commits, maven_command=[args.mvn] if args.mvn else None,
+                timeout=args.timeout), None)
+        if command == "status":
+            return _write_json(store.summary(), None)
+        dataset = build_dataset(store, args.repo, structural=not args.no_structural)
+        if args.dataset_csv:
+            dataset.to_csv(args.dataset_csv)
+        return _write_json(evaluate(dataset, rankers=args.rankers, seed=args.seed), args.output)
 
 
 def _write_json(data: dict, output: str | None) -> int:

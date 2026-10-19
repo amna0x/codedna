@@ -75,17 +75,32 @@ Java stays the only supported language until Milestone 5 is complete.
 - ⏳ Evaluate B0/B4/coverage over many commits of a real project (needs
   Milestone 4 history tooling)
 
-## Milestone 4 — History and predictive ranking ⏳ (next)
+## Milestone 4 — History and predictive ranking 🔄 (tooling done)
 
-History mining, historical test results and durations, features, simple
-historical baselines (B2, B3, B5), logistic regression, gradient boosting.
+- ✅ SQLite history store (D-021); `history mine` (first-parent, numstat),
+  `history import` (results.json), `history collect --allow-build` (full
+  suite per commit), `history status`
+- ✅ Leakage-free (commit, test) features: change size, test changed,
+  structural (impact distance / confirmed path), history (failures, recency,
+  durations, co-failures) (D-023)
+- ✅ Baselines B1 random, B2 shortest-first, B3 recent failures, B5 failure
+  history; logistic regression and gradient boosting (D-022)
+- ✅ `history evaluate`: chronological 60/20/20 split; APFD, APFDc,
+  recall at 25 %/50 % time, time to first failure, PR-AUC, Brier;
+  `--dataset-csv` export
+- ✅ Tests on synthetic histories only — **no research numbers exist yet**
+- ⏳ **Choose the study project / datasets** (DATASET_PLAN.md) and collect or
+  import real results — blocks every real evaluation
+- ⏳ Run `history evaluate` on real data and record results under
+  `experiments/results/` with dataset versions and commands
 
-Product track, alongside (small, no behaviour change):
+Product track, alongside:
 
-- ⏳ Define the language-plugin interface and registry (D-018)
-- ⏳ Move the existing Java code behind it as the first plugin; the full test
-  suite must pass unchanged
-- ⏳ Choose the study project / datasets (DATASET_PLAN.md)
+- ✅ Language-plugin interface, registry (`codedna.languages` entry points)
+  and built-in Java plugin; core impact/selection/collection go through it;
+  `codedna plugins` (D-018, D-024)
+- ⏳ Physically move Java code into a separate `codedna-java` package
+  (Milestone 7)
 
 ## Milestone 5 — Research contribution ⏳
 

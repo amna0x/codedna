@@ -30,7 +30,7 @@ from codedna.git_analysis.git import resolve_commit, resolve_repository
 from codedna.impact_analysis import compute_impact
 from codedna.java_analysis import analyze_changes
 from codedna.java_analysis.parser import TYPE_NODES
-from codedna.test_mapping.discovery import discover_tests_for_commit
+from codedna.plugins import load_plugins
 from codedna.test_mapping.results import CoverageMap, TestRunResult
 
 STRATEGIES = ("all", "dependency", "coverage")
@@ -80,7 +80,7 @@ def select_tests(repo_path: str | Path, base: str, head: str, strategy: str, *,
     repo = resolve_repository(repo_path)
     base_sha, head_sha = resolve_commit(repo, base), resolve_commit(repo, head)
 
-    discovery = discover_tests_for_commit(repo, head_sha)
+    discovery = load_plugins().get("java").discover_tests(repo, head_sha)
     universe = sorted(t.id for t in discovery.tests if t.runs_by_default)
     test_files = {t.id: t.file for t in discovery.tests}
     changes = analyze_changes(repo, base_sha, head_sha)

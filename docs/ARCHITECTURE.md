@@ -68,8 +68,21 @@ backend/codedna/
 │   ├── reports.py         Surefire + JaCoCo XML parsers
 │   ├── results.py         results.json / coverage-map.json models
 │   └── maven.py           opt-in Maven runner, per-test JaCoCo, coverage mapping
-└── selection/
-    └── baselines.py       all / dependency / coverage strategies, compare
+├── selection/
+│   └── baselines.py       all / dependency / coverage strategies, compare
+├── plugins/
+│   ├── base.py            LanguagePlugin protocol, PLUGIN_API_VERSION
+│   ├── registry.py        built-in + entry-point plugins, compatibility checks
+│   └── java.py            built-in Java plugin (wraps the modules above)
+├── test_history/
+│   ├── store.py           SQLite: commits, changed_files, test_results
+│   ├── mining.py          first-parent history + numstat
+│   ├── collection.py      import results.json / opt-in per-commit runs
+│   └── features.py        leakage-free (commit, test) rows
+└── models/
+    ├── metrics.py         APFD, APFDc, recall@budget, time to first failure
+    ├── rankers.py         B1/B2/B3/B5 baselines, logistic regression, boosting
+    └── evaluate.py        chronological split and evaluation report
 git_analysis/blobs.py      ls-tree + cat-file --batch readers, git archive export
 ```
 
@@ -198,7 +211,38 @@ coverage data. `compare_strategies` evaluates each strategy against a
 ground-truth `results.json` of HEAD: `failing_tests`, `caught`, `missed`,
 `safe` (nothing missed), selection ratio, estimated time.
 
+### `plugins`
+
+`load_plugins()` registers the built-in `JavaPlugin` and every factory in the
+`codedna.languages` entry-point group; plugins whose API major version differs
+from `PLUGIN_API_VERSION`, that fail to import, or that do not implement the
+protocol are skipped and listed in `problems`. `impact`, `selection` and
+history collection obtain the Java implementation through the registry
+(D-024).
+
+### `test_history` and `models` (Milestone 4)
+
+```
+history mine ──► commits + changed_files ─┐
+history import / collect ──► test_results ┴─► build_dataset ─► rows (commit, test,
+                                                                 label, duration, features)
+                                              ─► chronological split ─► rankers ─► metrics
+```
+
+- `build_dataset` walks commits with results oldest first and emits one row
+  per test that ran (skipped tests excluded) *before* adding that commit's
+  outcomes to the per-test history state — the leakage guard (D-023).
+- Structural features call `compute_impact(parent, commit)`; `--no-structural`
+  skips them (they dominate run time).
+- `evaluate` fits ML models on the train split only, reports validation and
+  test splits, and adds warnings for small splits or few failures.
+
 ## Known limitations (current)
+
+- History/ML: no real study data yet; first-parent history only; commits
+  whose build fails produce no rows (and `collect` retries them); author
+  features deliberately omitted (privacy); structural features recompute two
+  graphs per commit (slow on large histories).
 
 - Declaration IDs are syntactic: parameter types are not resolved
   (`List<String>` vs `java.util.List<String>` give different IDs), so an

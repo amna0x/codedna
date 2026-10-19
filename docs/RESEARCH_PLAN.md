@@ -45,6 +45,12 @@ failures compared with ordinary ML selection?
 | B8 | Hybrid ML, calibrated |
 | B9 | Hybrid ML, calibrated + fallback |
 
+Implemented so far: B0 and B4 (`codedna select`/`compare`, plus a
+coverage-based variant), B1/B2/B3/B5 and two hybrid ML rankers without
+calibration (B7: logistic regression, gradient boosting) in
+`codedna history evaluate`. Not yet implemented: B6 (the same models
+restricted to change features) and B8/B9 (Milestone 5).
+
 ## Metrics
 
 - **Failure detection:** failing-test recall, missed failing tests,

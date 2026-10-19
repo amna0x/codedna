@@ -152,8 +152,23 @@ differently". Rules: DECISIONS.md D-010 – D-012.
   `strategies[]` (`strategy`, `selected`, `total`, `selection_ratio`,
   `estimated_time`, `failing_tests`, `caught`, `missed`, `safe`), `warnings`.
 
-Single commit pairs only; aggregate evaluation over a history comes with
-Milestone 4.
+Single commit pairs only; aggregate evaluation over a history is
+`history evaluate` (below).
+
+### History and evaluation (Milestone 4)
+
+- `codedna plugins`: `api_version`, `plugins[]` (`name`, `display_name`,
+  `version`, `api_version`, `file_suffixes`), `problems[]`.
+- `history mine|import|status`: store summary — `commits`,
+  `commits_with_results`, `commits_with_failures`, `test_classes`.
+- `history collect`: `collected`, `remaining`, `runs[]` (`commit`, `seq`,
+  `tests`, `failing`, `build_failed`, `duration_seconds`).
+- `history evaluate`: `protocol` (`splits`, `split_fractions`, `seed`,
+  `features`, `rows`), `results.{validation,test}` (`commits`,
+  `commits_with_failures`, `rankers.{name}` with `mean_apfd`, `mean_apfdc`,
+  `mean_ttff`, `mean_recall_at_25pct_time`, `mean_recall_at_50pct_time`,
+  `evaluated_commits`, and for ML `pr_auc`, `brier`, `positive_rate`),
+  `warnings`. `--dataset-csv` writes the rows.
 
 ## Non-goals
 
