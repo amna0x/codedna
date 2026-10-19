@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+build/
+dist/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Java / Maven
+target/
+*.class
+
+# Secrets and local config
+.env
+.env.*
+!.env.example
+
+# Experiment data (keep code, not downloaded/private data)
+experiments/datasets/raw/
+experiments/datasets/private/
+*.sqlite
+*.db
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Frontend (later)
+node_modules/
