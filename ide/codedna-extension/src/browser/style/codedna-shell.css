@@ -1,31 +1,28 @@
 /*
- * CodeDNA IDE shell: floating glass panels over an aurora wallpaper.
- * Design language shared with FreshOptimizer (void background, frosted glass,
- * 18 px cards, 1 px top highlight, accent sheen), applied with the
- * apple-design rules: material weight encodes hierarchy, content stays
- * legible, press feedback is instant, and reduced transparency / motion /
- * more contrast are honoured.
+ * CodeDNA IDE shell (active only with the CodeDNA Dark theme, D-031).
  *
- * Only active with the CodeDNA Dark theme (body.theia-dark + .codedna-shell,
- * set by CodeDnaShellContribution).
+ * Calm, neutral graphite. Panels float as solid cards with small gaps; no
+ * glows, gradients, wallpaper or blur. Typography is Geist / Geist Mono.
+ * Motion follows Emil Kowalski's rules: only transform/opacity/colour, short
+ * custom ease-out curves, no animation on keyboard-driven actions, hover
+ * effects only on real pointers, reduced motion honoured.
  */
 
 body.codedna-shell {
-  --cd-void: #07090d;
-  --cd-accent-rgb: 45 212 191;
-  --cd-alt-rgb: 99 102 241;
-  --cd-glass: rgb(18 21 28 / 0.72);
-  --cd-glass-strong: rgb(18 21 28 / 0.86);
-  --cd-line: rgb(255 255 255 / 0.06);
-  --cd-gap: 5px;
-  --cd-card-radius: 16px;
-  background:
-    radial-gradient(60% 45% at 12% 8%, rgb(var(--cd-accent-rgb) / 0.16), transparent 70%),
-    radial-gradient(55% 40% at 88% 22%, rgb(var(--cd-alt-rgb) / 0.20), transparent 70%),
-    radial-gradient(70% 50% at 55% 105%, rgb(var(--cd-accent-rgb) / 0.10), transparent 70%),
-    var(--cd-void);
-  font-family: "Inter Variable", Inter, "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
-  font-feature-settings: "cv11", "ss01";
+  --cd-canvas: #0c0c0d;
+  --cd-surface: #151516;
+  --cd-editor: #121213;
+  --cd-line: rgb(255 255 255 / 0.07);
+  --cd-text: #ecece8;
+  --cd-muted: #9c9c96;
+  --cd-gap: 4px;
+  --cd-card-radius: 12px;
+  --cd-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --theia-ui-font-family: "Geist Variable", "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+  --theia-code-font-family: "Geist Mono Variable", "Cascadia Code", Consolas, monospace;
+  background: var(--cd-canvas);
+  font-family: var(--theia-ui-font-family);
+  font-feature-settings: "ss01";
   -webkit-font-smoothing: antialiased;
 }
 
@@ -34,12 +31,12 @@ body.codedna-shell #theia-top-panel,
 body.codedna-shell .theia-app-sidebar-container,
 body.codedna-shell .theia-app-sides,
 body.codedna-shell #theia-statusBar {
-  background: transparent;
+  background: var(--cd-canvas);
 }
 
-/* --- floating glass cards --------------------------------------------------
- * A transparent border creates the gap; Lumino's layout measures borders, so
- * contents are inset correctly. The inset shadow draws the hairline edge. */
+/* --- floating panels ----------------------------------------------------------
+ * A transparent border creates the gap; Lumino measures borders, so contents
+ * are inset correctly. The inset shadow draws a hairline edge. */
 
 body.codedna-shell #theia-left-content-panel > .lm-BoxPanel,
 body.codedna-shell #theia-right-content-panel > .lm-BoxPanel,
@@ -49,167 +46,112 @@ body.codedna-shell #theia-bottom-content-panel {
   border: var(--cd-gap) solid transparent;
   background-clip: padding-box;
   border-radius: calc(var(--cd-card-radius) + var(--cd-gap));
-  background-color: var(--cd-glass);
+  background-color: var(--cd-surface);
   box-shadow: inset 0 0 0 1px var(--cd-line);
-  backdrop-filter: blur(24px) saturate(140%);
   overflow: hidden;
 }
 
-/* The editor area is the main stage: slightly heavier material. */
-body.codedna-shell #theia-main-content-panel { background-color: var(--cd-glass-strong); }
-
-/* Accent sheen in the top-right corner + light catching the top edge. */
-body.codedna-shell #theia-main-content-panel::before,
-body.codedna-shell #theia-left-content-panel > .lm-BoxPanel::before,
-body.codedna-shell #theia-right-content-panel > .lm-BoxPanel::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  border-radius: var(--cd-card-radius);
-  background:
-    linear-gradient(90deg, transparent 8%, rgb(255 255 255 / 0.10), transparent 92%) top / 100% 1px no-repeat,
-    radial-gradient(circle at top right, rgb(var(--cd-accent-rgb) / 0.06), transparent 55%);
-  z-index: 0;
-}
+body.codedna-shell #theia-main-content-panel { background-color: var(--cd-editor); }
 
 body.codedna-shell .theia-side-panel,
-body.codedna-shell .theia-sidepanel-toolbar,
-body.codedna-shell .theia-editor,
-body.codedna-shell .monaco-editor,
-body.codedna-shell .monaco-editor .margin,
-body.codedna-shell .monaco-editor-background {
+body.codedna-shell .theia-sidepanel-toolbar {
   background: transparent !important;
 }
 
-body.codedna-shell .theia-sidepanel-toolbar {
-  border-bottom: 1px solid var(--cd-line);
-}
+body.codedna-shell .theia-sidepanel-toolbar { border-bottom: 1px solid var(--cd-line); }
 
+/* Panel titles in sentence case, not shouted. */
 body.codedna-shell .theia-sidepanel-toolbar .theia-sidepanel-title {
-  font-size: 11px;
+  text-transform: none;
+  font-size: 12.5px;
   font-weight: 600;
-  letter-spacing: 0.14em;
-  color: #8f94a6;
+  letter-spacing: 0;
+  color: var(--cd-text);
 }
 
-/* --- icon rail ---------------------------------------------------------------
- * Like FreshOptimizer's sidebar: quiet icons, the active one sits in an accent
- * pill with a short accent bar on the outer edge. */
+/* --- icon rail ----------------------------------------------------------------- */
 
 body.codedna-shell .lm-TabBar.theia-app-sides .lm-TabBar-tab {
-  margin: 3px 6px;
-  border-radius: 12px;
-  border: 1px solid transparent;
-  transition: background-color 150ms ease, color 150ms ease, transform 100ms ease-out;
+  margin: 2px 6px;
+  border-radius: 10px;
+  transition: background-color 150ms ease, color 150ms ease, transform 160ms var(--cd-ease-out);
 }
 
-body.codedna-shell .lm-TabBar.theia-app-sides .lm-TabBar-tab:hover {
-  background: rgb(255 255 255 / 0.04);
+@media (hover: hover) and (pointer: fine) {
+  body.codedna-shell .lm-TabBar.theia-app-sides .lm-TabBar-tab:hover { background: rgb(255 255 255 / 0.05); }
 }
 
-body.codedna-shell .lm-TabBar.theia-app-sides .lm-TabBar-tab:active {
-  transform: scale(0.94);
-}
+body.codedna-shell .lm-TabBar.theia-app-sides .lm-TabBar-tab:active { transform: scale(0.95); }
 
 body.codedna-shell .lm-TabBar.theia-app-sides .lm-TabBar-tab.lm-mod-current,
 body.codedna-shell .lm-TabBar.theia-app-sides .lm-TabBar-tab.theia-mod-active {
-  background: rgb(var(--cd-accent-rgb) / 0.12);
-  border-color: rgb(var(--cd-accent-rgb) / 0.18);
+  background: rgb(255 255 255 / 0.08);
   box-shadow: none;
 }
 
-body.codedna-shell .lm-TabBar.theia-app-left .lm-TabBar-tab.lm-mod-current::before {
-  content: "";
-  position: absolute;
-  left: -7px;
-  top: 50%;
-  width: 3px;
-  height: 20px;
-  margin-top: -10px;
-  border-radius: 999px;
-  background: linear-gradient(180deg, rgb(94 234 212), rgb(var(--cd-alt-rgb)));
-}
-
+body.codedna-shell .lm-TabBar.theia-app-left .lm-TabBar-tab.lm-mod-current::before,
 body.codedna-shell .lm-TabBar.theia-app-right .lm-TabBar-tab.lm-mod-current::before {
   content: "";
   position: absolute;
-  right: -7px;
   top: 50%;
-  width: 3px;
-  height: 20px;
-  margin-top: -10px;
+  width: 2px;
+  height: 16px;
+  margin-top: -8px;
   border-radius: 999px;
-  background: linear-gradient(180deg, rgb(94 234 212), rgb(var(--cd-alt-rgb)));
+  background: var(--cd-text);
 }
 
-/* --- editor tabs as pills ------------------------------------------------------ */
+body.codedna-shell .lm-TabBar.theia-app-left .lm-TabBar-tab.lm-mod-current::before { left: -6px; }
+body.codedna-shell .lm-TabBar.theia-app-right .lm-TabBar-tab.lm-mod-current::before { right: -6px; }
+
+/* --- editor tabs ----------------------------------------------------------------- */
 
 body.codedna-shell .lm-TabBar.theia-app-centers {
-  padding: 6px 6px 0;
+  padding: 4px 4px 0;
+  background: var(--cd-surface);
   border-bottom: 1px solid var(--cd-line);
 }
 
 body.codedna-shell .lm-TabBar.theia-app-centers .lm-TabBar-tab {
-  border-radius: 10px 10px 0 0;
+  border-radius: 8px 8px 0 0;
   margin-right: 2px;
   border: none !important;
-  transition: background-color 120ms ease;
+  transition: background-color 120ms ease, color 120ms ease;
 }
 
 body.codedna-shell .lm-TabBar.theia-app-centers .lm-TabBar-tab.lm-mod-current {
-  box-shadow: inset 0 -2px 0 rgb(var(--cd-accent-rgb) / 0.9);
+  box-shadow: inset 0 -1px 0 var(--cd-editor);
 }
 
-/* --- title bar and status bar ------------------------------------------------- */
+/* --- title and status bar -------------------------------------------------------- */
 
-body.codedna-shell .lm-MenuBar-item {
-  border-radius: 8px;
-  margin: 0 1px;
-}
+body.codedna-shell .lm-MenuBar-item { border-radius: 6px; margin: 0 1px; }
 
 body.codedna-shell #theia-statusBar {
   border-top: none;
   font-size: 11.5px;
-  letter-spacing: 0.01em;
 }
 
-body.codedna-shell #theia-statusBar .element {
-  border-radius: 6px;
-}
+body.codedna-shell #theia-statusBar .element { border-radius: 6px; }
 
-/* --- overlays: menus, quick input, hovers float as heavier glass ------------- */
+/* --- overlays: solid, with a soft shadow for depth ------------------------------- */
 
 body.codedna-shell .lm-Menu,
 body.codedna-shell .quick-input-widget,
 body.codedna-shell .monaco-editor .suggest-widget,
 body.codedna-shell .monaco-hover,
 body.codedna-shell .theia-notification-list-item-container {
-  border-radius: 12px !important;
-  backdrop-filter: blur(24px) saturate(150%);
-  box-shadow: 0 1px 0 0 rgb(255 255 255 / 0.04) inset, 0 20px 50px -20px rgb(0 0 0 / 0.8) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 0 0 1px var(--cd-line), 0 16px 40px -12px rgb(0 0 0 / 0.7) !important;
 }
-
-/* --- scrollbars ---------------------------------------------------------------- */
 
 body.codedna-shell ::-webkit-scrollbar { width: 8px; height: 8px; }
 body.codedna-shell ::-webkit-scrollbar-thumb { border-radius: 999px; }
 
 /* --- accessibility --------------------------------------------------------------- */
 
-@media (prefers-reduced-transparency: reduce) {
-  body.codedna-shell {
-    --cd-glass: rgb(18 21 28);
-    --cd-glass-strong: rgb(14 17 23);
-  }
-  body.codedna-shell #theia-left-content-panel > .lm-BoxPanel,
-  body.codedna-shell #theia-right-content-panel > .lm-BoxPanel,
-  body.codedna-shell #theia-main-content-panel,
-  body.codedna-shell #theia-bottom-content-panel { backdrop-filter: none; }
-}
-
 @media (prefers-contrast: more) {
-  body.codedna-shell { --cd-line: rgb(255 255 255 / 0.35); }
+  body.codedna-shell { --cd-line: rgb(255 255 255 / 0.35); --cd-muted: #d6d6d0; }
 }
 
 @media (prefers-reduced-motion: reduce) {

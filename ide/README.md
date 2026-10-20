@@ -4,14 +4,17 @@ A desktop IDE built on [Eclipse Theia](https://theia-ide.org) 1.76.0
 (Electron 42) with CodeDNA views. Theia provides the editor, file explorer,
 terminal and preferences; the `codedna-extension` package adds:
 
-- **Changed code** (left panel, `Ctrl+Alt+D`): changed classes and methods
-  between two commits, and the classes that may be affected, each with the
-  dependency path explaining why (heuristic links are labelled as such).
-  Click a row to open the file at that line.
-- **Recommended tests** (right panel, `Ctrl+Alt+T`): test classes to run for
-  a change (static dependency selection or all), with the reasons per test.
-  Failure-risk scores are not shown until a model has been trained on the
-  repository's history — the view says so instead of inventing numbers.
+- **Changes** (left panel, `Ctrl+Alt+D`): what changed in your code
+  (New / Changed / Removed) and which other classes might be affected, each
+  with a one-line reason ("Direct" or "Likely" link). Click a row to open
+  the file at that line.
+- **Tests to run** (right panel, `Ctrl+Alt+T`): the test classes your change
+  can affect (or all tests), each with the reason in plain words, and which
+  ones are safe to skip. Failure-risk scores are not shown until CodeDNA has
+  learned from the project's test history — nothing is invented.
+
+Both views share one **Compare** choice: *My last commit* (default), *My
+last 5 commits*, or *Choose commits…* for any two commits or branches.
 
 ```
 Theia frontend (views, React)  ── JSON-RPC ──▶  Theia backend (Node)
@@ -43,8 +46,10 @@ npm start
 ```
 
 Open a folder that is a Git repository with Java code (e.g. a repository made
-by `python scripts/make_demo_repo.py ../codedna-demo`), then open
-**View → Changed code** / **Recommended tests**.
+by `python scripts/make_demo_repo.py ../codedna-demo`), then press
+`Ctrl+Alt+D` (**Changes**) and `Ctrl+Alt+T` (**Tests to run**).
+If panels look narrow from an earlier session, run **View → Reset Workbench
+Layout** (command palette).
 
 ### Troubleshooting
 

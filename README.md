@@ -263,8 +263,8 @@ in `test_maven_integration.py`.
 ## CodeDNA IDE
 
 `ide/` contains the desktop IDE (Eclipse Theia 1.76 + Electron) with the
-**Changed code** and **Recommended tests** views and the CodeDNA Dark glass
-theme. See [ide/README.md](ide/README.md) for prerequisites and
+**Changes** and **Tests to run** views, written so newcomers can use them,
+and the calm CodeDNA Dark theme. See [ide/README.md](ide/README.md) for prerequisites and
 `npm install && npm run build && npm start`.
 
 ![CodeDNA IDE](docs/ide-screenshot.png)

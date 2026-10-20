@@ -11,11 +11,13 @@
     "src"
   ],
   "dependencies": {
+    "@fontsource-variable/geist": "^5.3.0",
+    "@fontsource-variable/geist-mono": "^5.3.0",
     "@theia/core": "1.76.0",
     "@theia/editor": "1.76.0",
     "@theia/filesystem": "1.76.0",
-    "@theia/workspace": "1.76.0",
-    "@theia/monaco": "1.76.0"
+    "@theia/monaco": "1.76.0",
+    "@theia/workspace": "1.76.0"
   },
   "devDependencies": {
     "@types/react": "^19.3.0",

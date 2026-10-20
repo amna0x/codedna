@@ -132,8 +132,9 @@ May start in parallel (Student C) once the analysis JSON formats are stable.
 - ✅ "Changed code" and "Recommended tests" views talking to the core through
   a Theia backend service that starts `codedna serve` (token stays in the
   backend); verified end to end on the demo repository
-- ✅ CodeDNA Dark theme + glass shell (FreshOptimizer design language,
-  apple-design rules) as the default theme (D-030)
+- ✅ CodeDNA Dark theme as the default (D-030), revised for newcomers:
+  calm neutral look, plain-language "Changes" / "Tests to run" views,
+  shared "Compare" picker, friendly errors, first-run guide (D-031)
 - ⏳ Java language support in the editor (VS Code extension host + a Java
   extension), graph view (Cytoscape.js), run selected tests from the IDE,
   risk scores in the Tests view, uncommitted-change analysis, installers

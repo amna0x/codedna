@@ -43,7 +43,10 @@
         },
         "preferences": {
           "workbench.colorTheme": "codedna-dark",
-          "workbench.iconTheme": "theia-file-icons"
+          "workbench.iconTheme": "theia-file-icons",
+          "editor.fontFamily": "'Geist Mono Variable', 'Cascadia Code', Consolas, monospace",
+          "editor.fontSize": 13.5,
+          "editor.lineHeight": 21
         }
       }
     }

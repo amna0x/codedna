@@ -6,181 +6,200 @@ import { MonacoThemingService } from '@theia/monaco/lib/browser/monaco-theming-s
 export const CODEDNA_THEME_ID = 'codedna-dark';
 
 /**
- * CodeDNA Dark: deep "void" background, translucent glass surfaces, teal →
- * indigo accent. Sibling of FreshOptimizer's design language, with its own
- * accent. Surfaces are semi-transparent so the shell wallpaper
- * (style/codedna-shell.css) shows through, like frosted glass.
+ * CodeDNA Dark (D-031): neutral graphite surfaces, warm off-white text, no
+ * accent hue. Colour is reserved for meaning — new (green), changed (amber),
+ * removed / error (red) — so nothing on screen competes with the code or with
+ * those signals. No glows, gradients or translucency.
  */
+const C = {
+    canvas: '#0C0C0D',     // gaps between panels
+    surface: '#151516',    // side panels
+    editor: '#121213',     // main stage
+    raised: '#1C1C1E',     // menus, popovers, inputs
+    line: '#FFFFFF12',
+    lineSoft: '#FFFFFF0A',
+    text: '#ECECE8',
+    muted: '#9C9C96',
+    faint: '#66665F',
+    ink: '#111112',        // text on the light primary button
+    green: '#86B38A',
+    amber: '#D8A657',
+    red: '#D8675F',
+    selection: '#ECECE826'
+};
+
 const COLORS: Record<string, string> = {
-    'foreground': '#E6E8EE',
-    'descriptionForeground': '#8F94A6',
-    'focusBorder': '#2DD4BF80',
-    'widget.border': '#FFFFFF10',
-    'widget.shadow': '#00000080',
-    'selection.background': '#2DD4BF40',
-    'icon.foreground': '#C9CEDA',
+    'foreground': C.text,
+    'descriptionForeground': C.muted,
+    'focusBorder': '#ECECE880',
+    'widget.border': C.line,
+    'widget.shadow': '#00000066',
+    'selection.background': C.selection,
+    'icon.foreground': '#C8C8C2',
 
-    'editor.background': '#0C0F15D9',
-    'editor.foreground': '#E6E8EE',
-    'editorLineNumber.foreground': '#454C5E',
-    'editorLineNumber.activeForeground': '#C9CEDA',
-    'editor.lineHighlightBackground': '#FFFFFF07',
+    'editor.background': C.editor,
+    'editor.foreground': C.text,
+    'editorLineNumber.foreground': '#4A4A46',
+    'editorLineNumber.activeForeground': '#C8C8C2',
+    'editor.lineHighlightBackground': '#FFFFFF06',
     'editor.lineHighlightBorder': '#00000000',
-    'editor.selectionBackground': '#2DD4BF33',
-    'editor.inactiveSelectionBackground': '#2DD4BF1A',
-    'editor.findMatchBackground': '#6366F166',
-    'editor.findMatchHighlightBackground': '#6366F133',
-    'editorCursor.foreground': '#5EEAD4',
+    'editor.selectionBackground': '#ECECE829',
+    'editor.inactiveSelectionBackground': '#ECECE814',
+    'editor.findMatchBackground': '#D8A65766',
+    'editor.findMatchHighlightBackground': '#D8A65730',
+    'editorCursor.foreground': C.text,
     'editorIndentGuide.background1': '#FFFFFF0A',
-    'editorIndentGuide.activeBackground1': '#FFFFFF24',
-    'editorWhitespace.foreground': '#FFFFFF12',
-    'editorGutter.background': '#00000000',
-    'editorWidget.background': '#151922F2',
-    'editorWidget.border': '#FFFFFF14',
-    'editorHoverWidget.background': '#151922F2',
-    'editorHoverWidget.border': '#FFFFFF14',
-    'editorSuggestWidget.background': '#151922F2',
-    'editorSuggestWidget.border': '#FFFFFF14',
-    'editorSuggestWidget.selectedBackground': '#2DD4BF26',
-    'editorWarning.foreground': '#FFB020',
-    'editorError.foreground': '#FF5C6C',
-    'editorInfo.foreground': '#67E8F9',
-    'minimap.background': '#00000000',
+    'editorIndentGuide.activeBackground1': '#FFFFFF22',
+    'editorWhitespace.foreground': '#FFFFFF10',
+    'editorWidget.background': C.raised,
+    'editorWidget.border': C.line,
+    'editorHoverWidget.background': C.raised,
+    'editorHoverWidget.border': C.line,
+    'editorSuggestWidget.background': C.raised,
+    'editorSuggestWidget.border': C.line,
+    'editorSuggestWidget.selectedBackground': '#FFFFFF14',
+    'editorWarning.foreground': C.amber,
+    'editorError.foreground': C.red,
+    'editorInfo.foreground': '#B9B9B2',
+    'minimap.background': C.editor,
 
-    'sideBar.background': '#12151CB8',
-    'sideBar.foreground': '#C9CEDA',
+    'sideBar.background': C.surface,
+    'sideBar.foreground': '#D6D6D0',
     'sideBar.border': '#00000000',
-    'sideBarTitle.foreground': '#8F94A6',
+    'sideBarTitle.foreground': C.muted,
     'sideBarSectionHeader.background': '#00000000',
-    'sideBarSectionHeader.foreground': '#8F94A6',
-    'sideBarSectionHeader.border': '#FFFFFF0A',
+    'sideBarSectionHeader.foreground': C.muted,
+    'sideBarSectionHeader.border': C.lineSoft,
 
-    'activityBar.background': '#00000000',
-    'activityBar.foreground': '#E6E8EE',
-    'activityBar.inactiveForeground': '#6B7183',
-    'activityBar.activeBorder': '#2DD4BF',
+    'activityBar.background': C.canvas,
+    'activityBar.foreground': C.text,
+    'activityBar.inactiveForeground': C.faint,
+    'activityBar.activeBorder': C.text,
     'activityBar.border': '#00000000',
-    'activityBarBadge.background': '#2DD4BF',
-    'activityBarBadge.foreground': '#04120F',
+    'activityBarBadge.background': C.text,
+    'activityBarBadge.foreground': C.ink,
 
-    'titleBar.activeBackground': '#00000000',
-    'titleBar.inactiveBackground': '#00000000',
-    'titleBar.activeForeground': '#C9CEDA',
-    'titleBar.inactiveForeground': '#6B7183',
+    'titleBar.activeBackground': C.canvas,
+    'titleBar.inactiveBackground': C.canvas,
+    'titleBar.activeForeground': '#C8C8C2',
+    'titleBar.inactiveForeground': C.faint,
     'titleBar.border': '#00000000',
     'menubar.selectionBackground': '#FFFFFF10',
-    'menubar.selectionForeground': '#E6E8EE',
-    'menu.background': '#151922F5',
-    'menu.foreground': '#E6E8EE',
-    'menu.border': '#FFFFFF14',
-    'menu.selectionBackground': '#2DD4BF26',
-    'menu.selectionForeground': '#E6E8EE',
-    'menu.separatorBackground': '#FFFFFF10',
+    'menubar.selectionForeground': C.text,
+    'menu.background': C.raised,
+    'menu.foreground': C.text,
+    'menu.border': C.line,
+    'menu.selectionBackground': '#FFFFFF14',
+    'menu.selectionForeground': C.text,
+    'menu.separatorBackground': C.line,
 
-    'tab.activeBackground': '#FFFFFF10',
-    'tab.unfocusedActiveBackground': '#FFFFFF0A',
+    'tab.activeBackground': C.editor,
+    'tab.unfocusedActiveBackground': C.editor,
     'tab.inactiveBackground': '#00000000',
-    'tab.activeForeground': '#E6E8EE',
-    'tab.inactiveForeground': '#8F94A6',
+    'tab.activeForeground': C.text,
+    'tab.inactiveForeground': C.muted,
     'tab.hoverBackground': '#FFFFFF08',
     'tab.border': '#00000000',
     'tab.activeBorder': '#00000000',
     'tab.activeBorderTop': '#00000000',
     'tab.unfocusedActiveBorderTop': '#00000000',
-    'editorGroupHeader.tabsBackground': '#00000000',
+    'editorGroupHeader.tabsBackground': C.surface,
     'editorGroupHeader.tabsBorder': '#00000000',
-    'editorGroup.border': '#FFFFFF0A',
-    'breadcrumb.background': '#00000000',
-    'breadcrumb.foreground': '#8F94A6',
+    'editorGroup.border': C.lineSoft,
+    'breadcrumb.background': C.editor,
+    'breadcrumb.foreground': C.muted,
 
-    'panel.background': '#12151CB8',
+    'panel.background': C.surface,
     'panel.border': '#00000000',
-    'panelTitle.activeForeground': '#E6E8EE',
-    'panelTitle.inactiveForeground': '#8F94A6',
-    'panelTitle.activeBorder': '#2DD4BF',
+    'panelTitle.activeForeground': C.text,
+    'panelTitle.inactiveForeground': C.muted,
+    'panelTitle.activeBorder': C.text,
 
-    'statusBar.background': '#00000000',
-    'statusBar.foreground': '#8F94A6',
+    'statusBar.background': C.canvas,
+    'statusBar.foreground': C.muted,
     'statusBar.border': '#00000000',
-    'statusBar.noFolderBackground': '#00000000',
-    'statusBar.debuggingBackground': '#6366F1',
+    'statusBar.noFolderBackground': C.canvas,
+    'statusBar.debuggingBackground': '#3A3A36',
     'statusBarItem.hoverBackground': '#FFFFFF10',
-    'statusBarItem.remoteBackground': '#00000000',
+    'statusBarItem.remoteBackground': C.canvas,
 
-    'list.hoverBackground': '#FFFFFF0A',
-    'list.activeSelectionBackground': '#2DD4BF26',
-    'list.activeSelectionForeground': '#E6E8EE',
-    'list.inactiveSelectionBackground': '#FFFFFF0D',
-    'list.focusOutline': '#2DD4BF66',
-    'list.highlightForeground': '#5EEAD4',
-    'tree.indentGuidesStroke': '#FFFFFF14',
+    'list.hoverBackground': '#FFFFFF08',
+    'list.activeSelectionBackground': '#FFFFFF14',
+    'list.activeSelectionForeground': C.text,
+    'list.inactiveSelectionBackground': '#FFFFFF0C',
+    'list.focusOutline': '#ECECE866',
+    'list.highlightForeground': C.text,
+    'tree.indentGuidesStroke': '#FFFFFF12',
 
-    'input.background': '#00000040',
-    'input.border': '#FFFFFF14',
-    'input.foreground': '#E6E8EE',
-    'input.placeholderForeground': '#6B7183',
-    'inputOption.activeBorder': '#2DD4BF',
-    'inputValidation.errorBackground': '#FF5C6C1A',
-    'inputValidation.errorBorder': '#FF5C6C66',
-    'inputValidation.warningBackground': '#FFB0201A',
-    'inputValidation.warningBorder': '#FFB02066',
-    'dropdown.background': '#151922',
-    'dropdown.border': '#FFFFFF14',
-    'dropdown.foreground': '#E6E8EE',
-    'checkbox.background': '#00000040',
+    'input.background': C.raised,
+    'input.border': C.line,
+    'input.foreground': C.text,
+    'input.placeholderForeground': C.faint,
+    'inputOption.activeBorder': '#ECECE899',
+    'inputValidation.errorBackground': '#D8675F1A',
+    'inputValidation.errorBorder': '#D8675F66',
+    'inputValidation.warningBackground': '#D8A6571A',
+    'inputValidation.warningBorder': '#D8A65766',
+    'dropdown.background': C.raised,
+    'dropdown.border': C.line,
+    'dropdown.foreground': C.text,
+    'checkbox.background': C.raised,
     'checkbox.border': '#FFFFFF24',
 
-    'button.background': '#2DD4BF',
-    'button.foreground': '#04120F',
-    'button.hoverBackground': '#5EEAD4',
+    'button.background': C.text,
+    'button.foreground': C.ink,
+    'button.hoverBackground': '#FFFFFF',
     'button.secondaryBackground': '#FFFFFF10',
-    'button.secondaryForeground': '#E6E8EE',
+    'button.secondaryForeground': C.text,
     'button.secondaryHoverBackground': '#FFFFFF1A',
 
-    'quickInput.background': '#151922F5',
-    'quickInputList.focusBackground': '#2DD4BF26',
-    'pickerGroup.foreground': '#5EEAD4',
-    'pickerGroup.border': '#FFFFFF14',
-    'notifications.background': '#151922F5',
-    'notifications.border': '#FFFFFF14',
-    'notificationCenterHeader.background': '#1A1F29',
+    'quickInput.background': C.raised,
+    'quickInputList.focusBackground': '#FFFFFF14',
+    'pickerGroup.foreground': C.muted,
+    'pickerGroup.border': C.line,
+    'notifications.background': C.raised,
+    'notifications.border': C.line,
+    'notificationCenterHeader.background': '#202022',
 
     'scrollbar.shadow': '#00000000',
-    'scrollbarSlider.background': '#FFFFFF14',
-    'scrollbarSlider.hoverBackground': '#2DD4BF59',
-    'scrollbarSlider.activeBackground': '#2DD4BF80',
+    'scrollbarSlider.background': '#FFFFFF12',
+    'scrollbarSlider.hoverBackground': '#FFFFFF24',
+    'scrollbarSlider.activeBackground': '#FFFFFF33',
 
-    'terminal.background': '#00000000',
-    'terminal.foreground': '#C9CEDA',
-    'terminalCursor.foreground': '#5EEAD4',
+    'terminal.background': C.surface,
+    'terminal.foreground': '#D6D6D0',
+    'terminalCursor.foreground': C.text,
 
-    'gitDecoration.addedResourceForeground': '#34D399',
-    'gitDecoration.untrackedResourceForeground': '#34D399',
-    'gitDecoration.modifiedResourceForeground': '#FFB020',
-    'gitDecoration.deletedResourceForeground': '#FF5C6C',
+    'gitDecoration.addedResourceForeground': C.green,
+    'gitDecoration.untrackedResourceForeground': C.green,
+    'gitDecoration.modifiedResourceForeground': C.amber,
+    'gitDecoration.deletedResourceForeground': C.red,
 
-    'badge.background': '#2DD4BF33',
-    'badge.foreground': '#5EEAD4',
-    'progressBar.background': '#2DD4BF',
-    'textLink.foreground': '#5EEAD4',
-    'textLink.activeForeground': '#99F6E4',
+    'badge.background': '#FFFFFF1A',
+    'badge.foreground': C.text,
+    'progressBar.background': C.text,
+    'textLink.foreground': C.text,
+    'textLink.activeForeground': '#FFFFFF',
     'textCodeBlock.background': '#FFFFFF0D',
-    'textPreformat.foreground': '#99F6E4',
-    'welcomePage.tileBackground': '#12151CB8'
+    'textPreformat.foreground': '#D6D6D0',
+    'welcomePage.tileBackground': C.surface
 };
 
+/** Muted, warm syntax colours: readable for hours, nothing neon. */
 const TOKEN_COLORS = [
-    { scope: ['comment', 'punctuation.definition.comment'], settings: { foreground: '#5C6478', fontStyle: 'italic' } },
-    { scope: ['keyword', 'storage.type', 'storage.modifier'], settings: { foreground: '#8B9CFF' } },
-    { scope: ['string', 'string.quoted'], settings: { foreground: '#7EE7C7' } },
-    { scope: ['constant.numeric', 'constant.language'], settings: { foreground: '#FFB86B' } },
-    { scope: ['entity.name.type', 'entity.name.class', 'support.type', 'support.class'], settings: { foreground: '#67E8F9' } },
-    { scope: ['entity.name.function', 'support.function', 'meta.method-call'], settings: { foreground: '#A5B4FC' } },
-    { scope: ['variable.parameter'], settings: { foreground: '#E6E8EE', fontStyle: 'italic' } },
-    { scope: ['variable', 'meta.definition.variable'], settings: { foreground: '#E6E8EE' } },
-    { scope: ['storage.type.annotation', 'meta.annotation', 'punctuation.definition.annotation'], settings: { foreground: '#F0ABFC' } },
-    { scope: ['punctuation', 'meta.brace'], settings: { foreground: '#9AA1B2' } },
-    { scope: ['invalid'], settings: { foreground: '#FF5C6C' } }
+    { scope: ['comment', 'punctuation.definition.comment'], settings: { foreground: '#6E6E67', fontStyle: 'italic' } },
+    { scope: ['keyword', 'storage.type', 'storage.modifier'], settings: { foreground: '#CF8E6D' } },
+    { scope: ['string', 'string.quoted'], settings: { foreground: '#A9C08F' } },
+    { scope: ['constant.numeric', 'constant.language'], settings: { foreground: '#D7B46A' } },
+    { scope: ['entity.name.type', 'entity.name.class', 'support.type', 'support.class'], settings: { foreground: '#D9C9A3' } },
+    { scope: ['entity.name.function', 'support.function', 'meta.method-call'], settings: { foreground: '#E6E1D6' } },
+    { scope: ['variable.parameter'], settings: { foreground: '#ECECE8', fontStyle: 'italic' } },
+    { scope: ['variable', 'meta.definition.variable'], settings: { foreground: '#ECECE8' } },
+    { scope: ['storage.type.annotation', 'meta.annotation', 'punctuation.definition.annotation'], settings: { foreground: '#BFA6A0' } },
+    { scope: ['entity.name.tag'], settings: { foreground: '#CF8E6D' } },
+    { scope: ['entity.other.attribute-name'], settings: { foreground: '#D9C9A3' } },
+    { scope: ['punctuation', 'meta.brace'], settings: { foreground: '#8E8E87' } },
+    { scope: ['invalid'], settings: { foreground: '#D8675F' } }
 ];
 
 @injectable()
@@ -190,18 +209,32 @@ export class CodeDnaThemeContribution implements FrontendApplicationContribution
     @inject(ThemeService) protected readonly themes: ThemeService;
 
     initialize(): void {
-        this.theming.registerParsedTheme({
-            id: CODEDNA_THEME_ID,
-            label: 'CodeDNA Dark',
-            uiTheme: 'vs-dark',
-            description: 'Glass surfaces on a deep background with a teal accent.',
-            json: { type: 'dark', colors: COLORS, tokenColors: TOKEN_COLORS }
-        });
-        // The glass shell styles (codedna-shell.css) apply only with this theme,
-        // so other themes keep Theia's normal, opaque layout.
+        this.register();
+        // The shell styles (codedna-shell.css) apply only with this theme, so
+        // other themes keep Theia's normal layout.
         const sync = () => document.body.classList.toggle(
             'codedna-shell', this.themes.getCurrentTheme().id === CODEDNA_THEME_ID);
         this.themes.onDidColorThemeChange(sync);
         sync();
+    }
+
+    /**
+     * Theia restores parsed themes from an IndexedDB cache asynchronously at
+     * start-up, which would bring back an older version of this theme after an
+     * update. Registering again once the app has started wins over the cache
+     * and refreshes it.
+     */
+    onStart(): void {
+        this.register();
+    }
+
+    protected register(): void {
+        this.theming.registerParsedTheme({
+            id: CODEDNA_THEME_ID,
+            label: 'CodeDNA Dark',
+            uiTheme: 'vs-dark',
+            description: 'Calm graphite surfaces; colour only where it carries meaning.',
+            json: { type: 'dark', colors: COLORS, tokenColors: TOKEN_COLORS }
+        });
     }
 }

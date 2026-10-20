@@ -1,17 +1,29 @@
 import { ContainerModule } from '@theia/core/shared/inversify';
 import { FrontendApplicationContribution, WidgetFactory, bindViewContribution } from '@theia/core/lib/browser';
+import { ApplicationShellOptions } from '@theia/core/lib/browser/shell/application-shell';
 import { ServiceConnectionProvider } from '@theia/core/lib/browser/messaging/service-connection-provider';
 import { CODEDNA_SERVICE_PATH, CodeDnaService } from '../common/codedna-protocol';
 import { ChangeViewWidget } from './change-view-widget';
 import { ChangeViewContribution, TestsViewContribution } from './codedna-contributions';
+import { CodeDnaComparison } from './comparison';
 import { CodeDnaWorkspace } from './codedna-workspace';
 import { TestsViewWidget } from './tests-view-widget';
 import { CodeDnaThemeContribution } from './theme/codedna-theme';
+// Geist / Geist Mono (SIL OFL 1.1), bundled so the UI looks the same on every machine.
+import '@fontsource-variable/geist';
+import '@fontsource-variable/geist-mono';
 // tsc does not copy CSS into lib/, so the bundle imports it from src (Theia convention).
 import '../../src/browser/style/codedna.css';
 import '../../src/browser/style/codedna-shell.css';
 
-export default new ContainerModule(bind => {
+export default new ContainerModule((bind, _unbind, _isBound, rebind) => {
+    // Side panels start a little wider (Theia default: 19 % of the window) so
+    // explanations read as sentences instead of narrow columns.
+    rebind(ApplicationShellOptions).toConstantValue({
+        leftPanel: { initialSizeRatio: 0.24 },
+        rightPanel: { initialSizeRatio: 0.24 }
+    });
+
     bind(CodeDnaThemeContribution).toSelf().inSingletonScope();
     bind(FrontendApplicationContribution).toService(CodeDnaThemeContribution);
 
@@ -19,6 +31,7 @@ export default new ContainerModule(bind => {
         ServiceConnectionProvider.createProxy<CodeDnaService>(ctx.container, CODEDNA_SERVICE_PATH)
     ).inSingletonScope();
     bind(CodeDnaWorkspace).toSelf().inSingletonScope();
+    bind(CodeDnaComparison).toSelf().inSingletonScope();
 
     bind(ChangeViewWidget).toSelf();
     bind(WidgetFactory).toDynamicValue(ctx => ({

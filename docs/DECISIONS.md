@@ -477,3 +477,37 @@ IDE/assistant UIs, the team's FreshOptimizer app, and the apple-design rules.
   `prefers-reduced-motion` → no press/scale/progress animation,
   `prefers-contrast: more` → strong borders and full-contrast text. Other
   themes keep Theia's normal layout; the views stay readable in them.
+
+## D-031 — Newcomer-friendly wording and a calmer look (revises D-030)
+
+Decided by the team on 2026-10-20: anyone, including beginners, should be
+able to use CodeDNA, and the teal/indigo glow look read as generic "AI".
+**The analysis and its results are unchanged** — only presentation.
+
+- **Look:** neutral graphite surfaces, warm off-white text, no accent hue,
+  no glows, gradients, wallpaper or blur. Colour only carries meaning:
+  green = new, amber = changed / "likely", red = removed / error. Primary
+  buttons are plain off-white with dark text. Muted, warm syntax colours.
+  Panels still float as solid cards with small gaps.
+- **Type:** Geist and Geist Mono (SIL OFL 1.1, bundled via
+  `@fontsource-variable/*`) instead of Inter / system fonts; sentence-case
+  headings, no uppercase micro-labels.
+- **Wording:** views renamed "Changes" and "Tests to run"; a "Compare"
+  picker (My last commit / My last 5 commits / Choose commits…) instead of
+  raw Base/Head boxes, shared by both views; "Show changes" and "Suggest
+  tests"; New / Changed / Removed and Direct / Likely instead of
+  added/modified/deleted and confirmed/heuristic (a "Likely" link is still
+  never presented as certain); a one-sentence summary on top; the core's
+  reasons and warnings rephrased as sentences (unknown messages shown
+  as-is); errors say what to do, with the raw details one click away; a
+  three-step first-run guide.
+- **Motion** (Emil Kowalski's rules): 160 ms press scale with a strong
+  ease-out, transitions on specific properties only, results fade in with a
+  30 ms stagger, hover effects only for real pointers, no animation on
+  keyboard actions, reduced motion → opacity only.
+- **Layout:** names get a full row (chip + details underneath) and wrap
+  after dots instead of mid-word; side panels start at 24 % width for new
+  users (Theia default 19 %).
+- **Theme cache:** Theia restores parsed themes from IndexedDB after
+  extensions register theirs, which would bring back an old version of the
+  theme after an update; the theme is registered again on start-up.
