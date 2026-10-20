@@ -91,6 +91,14 @@ def resolve_repository(path: str | Path) -> Path:
     try:
         top_level = run_git(candidate, "rev-parse", "--show-toplevel").strip()
     except GitCommandError as exc:
+        # Bare repositories (no working tree, e.g. the ones shipped with
+        # RTPTorrent) are fine: all analysis reads Git objects, never files.
+        try:
+            bare = run_git(candidate, "rev-parse", "--is-bare-repository").strip() == "true"
+        except GitCommandError:
+            bare = False
+        if bare:
+            return candidate.resolve()
         raise InvalidRepositoryError(f"not a Git repository: {candidate}") from exc
     return Path(top_level).resolve()
 

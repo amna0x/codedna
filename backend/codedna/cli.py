@@ -19,6 +19,8 @@ Usage:
     codedna history collect  --repo PATH --db FILE --output-dir DIR --allow-build
                              [--max-commits N] [--mvn PATH] [--timeout SECONDS]
     codedna history status   --db FILE
+    codedna history import-rtptorrent --dataset DIR (--project NAME --db FILE | --list)
+                             [--max-commits N]
     codedna history evaluate --db FILE [--repo PATH] [--rankers NAME ...]
                              [--no-structural] [--dataset-csv FILE] [--seed N] [--output FILE]
     codedna history experiment --db FILE [--repo PATH] [--model NAME] [--calibration METHOD]
@@ -220,6 +222,20 @@ def build_parser() -> argparse.ArgumentParser:
     collect.add_argument("--timeout", type=_non_negative_int, default=1800,
                          help="Timeout per Maven invocation in seconds (default: 1800).")
 
+    rtp = history_commands.add_parser(
+        "import-rtptorrent",
+        help="Import one RTPTorrent project (real CI test results; nothing is built).",
+        description="Read an extracted RTPTorrent v1.1 folder (Mattis et al., MSR 2020, CC BY 4.0) "
+                    "and store one project's tested commits, changed files and per-job test-class "
+                    "results in a history database.")
+    rtp.add_argument("--dataset", required=True,
+                     help="The extracted rtp-torrent folder (or its parent).")
+    rtp.add_argument("--project", help="Project folder name, e.g. brettwooldridge@HikariCP.")
+    rtp.add_argument("--db", help="SQLite history database to create or replace.")
+    rtp.add_argument("--max-commits", type=_non_negative_int,
+                     help="Keep only the most recent N tested commits.")
+    rtp.add_argument("--list", action="store_true", help="List the projects in the dataset.")
+
     status = history_commands.add_parser("status", help="Summarise a history database.")
     status.add_argument("--db", required=True, help="SQLite history database.")
 
@@ -379,6 +395,8 @@ def _run_history(args: argparse.Namespace) -> int:
     from codedna.models.experiment import run_experiment
 
     command = args.history_command
+    if command == "import-rtptorrent":
+        return _import_rtptorrent(args)
     if command == "collect" and not args.allow_build:
         print("error: history collect runs every commit's build (project code executes); "
               "re-run with --allow-build if you trust this project", file=sys.stderr)
@@ -414,6 +432,20 @@ def _run_history(args: argparse.Namespace) -> int:
         if args.dataset_csv:
             dataset.to_csv(args.dataset_csv)
         return _write_json(evaluate(dataset, rankers=args.rankers, seed=args.seed), args.output)
+
+
+def _import_rtptorrent(args: argparse.Namespace) -> int:
+    from codedna.test_history.rtptorrent import import_rtptorrent, list_projects
+    from codedna.test_history.store import HistoryStore
+
+    if args.list:
+        return _write_json({"projects": list_projects(args.dataset)}, None)
+    if not args.project or not args.db:
+        print("error: --project and --db are required (or use --list)", file=sys.stderr)
+        return EXIT_ANALYSIS_ERROR
+    with HistoryStore(args.db) as store:
+        report = import_rtptorrent(args.dataset, args.project, store, max_commits=args.max_commits)
+        return _write_json({**report.to_dict(), **store.summary()}, None)
 
 
 def _write_json(data: dict, output: str | None) -> int:

@@ -511,3 +511,45 @@ able to use CodeDNA, and the teal/indigo glow look read as generic "AI".
 - **Theme cache:** Theia restores parsed themes from IndexedDB after
   extensions register theirs, which would bring back an old version of the
   theme after an update; the theme is registered again on start-up.
+
+## D-032 — RTPTorrent as the primary study dataset, imported without builds
+
+Approved by the team on 2026-10-21 (supervisor confirmation still
+recommended). RTPTorrent **v1.1** (Zenodo record 4046180, published
+2020-09-23, CC BY 4.0, `rtp-torrent-v11.zip`, md5
+`1f7fa822b0cf155bd007a94d1a24a336`; v1.1 replaced the `deeplearning4j`
+repository with a complete fork). Cite Mattis et al., MSR 2020,
+doi:10.1145/3379597.3387458.
+
+Why: real CI outcomes at test-class level (CodeDNA's selection granularity),
+linked to commits, with bare Git repositories included — every CodeDNA
+feature (changes, graph, impact) can be computed **without building or
+executing third-party code**.
+
+Import rules (`history import-rtptorrent`, `test_history/rtptorrent.py`):
+
+- Column names from the dataset's readme and files:
+  `tr_all_built_commits.csv` = `tr_job_id, git_commit_id` (n:m);
+  `<project>.csv` = `travisJobId, testName, index, duration, count,
+  failures, errors, skipped`.
+- Tested commit of a job = the single tip of its built commits
+  (`git merge-base --independent`); jobs with commits missing from the
+  repository, several tips, or no built-commit row are skipped and counted.
+- History order = order of the first job that tested each commit (Travis job
+  ids increase over time); change base = first-parent ancestor just before the
+  whole push, so multi-commit pushes are fully covered.
+- One result row per (commit, test class, job) with source `travis:<job>`;
+  failed if failures + errors > 0, skipped if every method skipped; negative
+  durations clamped to 0 and counted. Failures in any job win (D-021).
+- A job may run the same class several times (e.g. once per Maven module);
+  those runs are **merged first** (counts and durations summed), so a
+  failure in any run counts. Without this, HikariCP's import lost failures
+  in 63 (job, class) pairs and showed 101 instead of 123 failing commits.
+- The core accepts **bare repositories** (`resolve_repository`), since all
+  analysis reads Git objects.
+
+Known limitations: RTPTorrent ends in 2016; its projects use Maven, Gradle and
+Buck, so `run-tests` cannot reproduce them — we only use the recorded
+outcomes. Jobs of one build ran concurrently; CodeDNA aggregates per commit
+and orders commits by their first job, which never lets a later build inform
+an earlier one.

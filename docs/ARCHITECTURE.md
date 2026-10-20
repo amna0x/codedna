@@ -78,6 +78,7 @@ backend/codedna/
 │   ├── store.py           SQLite: commits, changed_files, test_results
 │   ├── mining.py          first-parent history + numstat
 │   ├── collection.py      import results.json / opt-in per-commit runs
+│   ├── rtptorrent.py      RTPTorrent importer (real CI results, no builds)
 │   └── features.py        leakage-free (commit, test) rows
 └── models/
     ├── metrics.py         APFD, APFDc, recall@budget, time to first failure

@@ -97,6 +97,7 @@ codedna history import   --db FILE RESULTS [RESULTS ...] [--source NAME]
 codedna history collect  --repo PATH --db FILE --output-dir DIR --allow-build [--max-commits N]
 codedna history status   --db FILE
 codedna history evaluate --db FILE [--repo PATH] [--rankers ...] [--no-structural] [--dataset-csv F]
+codedna history import-rtptorrent --dataset DIR (--list | --project NAME --db FILE) [--max-commits N]
 codedna history experiment --db FILE [--repo PATH] [--model M] [--calibration none|platt|isotonic] [--budget F] [--risk-target F]
 ```
 
@@ -141,6 +142,10 @@ codedna history experiment --db FILE [--repo PATH] [--model M] [--calibration no
   history, logistic regression, gradient boosting) on a chronological
   60/20/20 split. ML needs scikit-learn (`pip install -e ".[ml]"`; included
   in `.[dev]`).
+- `history import-rtptorrent` fills a history database from the
+  [RTPTorrent](https://zenodo.org/records/4046180) dataset (real Travis CI
+  test results for 20 Java projects, CC BY 4.0; Mattis et al., MSR 2020)
+  without building anything; `--list` shows the projects.
 - `history experiment` is the Milestone 5 study: train on the oldest 60 %,
   calibrate on the next 20 %, then compare retest-all (B0), dependency (B4),
   change-only ML (B6), uncalibrated ML (B7), calibrated ML (B8) and

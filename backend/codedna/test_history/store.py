@@ -139,6 +139,11 @@ class HistoryStore:
             self.db.execute("INSERT OR REPLACE INTO test_results VALUES (?, ?, ?, ?, ?)",
                             (sha, test_id, status, time, source))
 
+    def add_results(self, rows: list[tuple[str, str, str, float, str]]) -> None:
+        """Insert many (sha, test_id, status, time, source) rows in one transaction."""
+        with self.db:
+            self.db.executemany("INSERT OR REPLACE INTO test_results VALUES (?, ?, ?, ?, ?)", rows)
+
     def results(self, sha: str) -> list[ResultRecord]:
         """Results of one commit; with several sources, a failure in any source wins."""
         rows = self.db.execute(

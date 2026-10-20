@@ -89,8 +89,13 @@ Java stays the only supported language until Milestone 5 is complete.
   recall at 25 %/50 % time, time to first failure, PR-AUC, Brier;
   `--dataset-csv` export
 - ✅ Tests on synthetic histories only — **no research numbers exist yet**
-- ⏳ **Choose the study project / datasets** (DATASET_PLAN.md) and collect or
-  import real results — blocks every real evaluation
+- ✅ Study dataset chosen: RTPTorrent v1.1 (D-032), downloaded and verified;
+  Defects4J and Commons CSV remain secondary options (DATASET_PLAN.md)
+- ✅ `history import-rtptorrent`: imports one project's tested commits,
+  changed files and per-job test-class results; bare-repository support;
+  HikariCP imported (1,427 tested commits, 123 with failures)
+- ⏳ Import the chosen projects and run `history evaluate` /
+  `history experiment` on them; store reports in `experiments/results/`
 - ⏳ Run `history evaluate` on real data and record results under
   `experiments/results/` with dataset versions and commands
 
