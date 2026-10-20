@@ -1,0 +1,37 @@
+{
+  "name": "codedna-extension",
+  "version": "0.1.0",
+  "private": true,
+  "description": "CodeDNA views for the Theia-based CodeDNA IDE (Changed code, Recommended tests).",
+  "keywords": [
+    "theia-extension"
+  ],
+  "files": [
+    "lib",
+    "src"
+  ],
+  "dependencies": {
+    "@theia/core": "1.76.0",
+    "@theia/editor": "1.76.0",
+    "@theia/filesystem": "1.76.0",
+    "@theia/workspace": "1.76.0",
+    "@theia/monaco": "1.76.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "rimraf": "^5.0.0",
+    "typescript": "~5.4.5"
+  },
+  "scripts": {
+    "prepare": "npm run clean && npm run build",
+    "clean": "rimraf lib",
+    "build": "tsc",
+    "watch": "tsc -w"
+  },
+  "theiaExtensions": [
+    {
+      "frontend": "lib/browser/codedna-frontend-module",
+      "backend": "lib/node/codedna-backend-module"
+    }
+  ]
+}

@@ -127,11 +127,16 @@ May start in parallel (Student C) once the analysis JSON formats are stable.
   session token, Host check, build opt-in (D-019, D-028)
 - ⏳ API: per-commit risk scores for the Tests view (needs a trained model
   stored per repository), progress for long runs, run only selected tests
-- ⏳ CodeDNA IDE built on Eclipse Theia, branded, desktop (Electron) build
-  (D-019); Java editing through existing open-source Java extensions
-- ⏳ CodeDNA panels: changed methods, impacted classes with explanation paths,
-  recommended tests with risk, "run selected tests", Cytoscape.js graph view
-  (confirmed / heuristic / unresolved styling)
+- ✅ CodeDNA IDE skeleton: Theia 1.76.0 + Electron 42 desktop app in `ide/`
+  (D-029); builds and runs on Windows; extension compiled in CI
+- ✅ "Changed code" and "Recommended tests" views talking to the core through
+  a Theia backend service that starts `codedna serve` (token stays in the
+  backend); verified end to end on the demo repository
+- ✅ CodeDNA Dark theme + glass shell (FreshOptimizer design language,
+  apple-design rules) as the default theme (D-030)
+- ⏳ Java language support in the editor (VS Code extension host + a Java
+  extension), graph view (Cytoscape.js), run selected tests from the IDE,
+  risk scores in the Tests view, uncommitted-change analysis, installers
 - ⏳ GitHub PR demonstration and final experimental report
 
 ## Milestone 7 — Platform website and plugin distribution ⏳

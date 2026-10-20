@@ -1,0 +1,23 @@
+{
+  "private": true,
+  "name": "codedna-ide",
+  "version": "0.1.0",
+  "description": "CodeDNA IDE: an Eclipse Theia desktop app with CodeDNA change-impact and test-selection views.",
+  "engines": {
+    "node": ">=22",
+    "npm": ">=10"
+  },
+  "workspaces": [
+    "codedna-extension",
+    "electron-app"
+  ],
+  "scripts": {
+    "build:extension": "npm run build --workspace codedna-extension",
+    "build": "npm run build:extension && npm run bundle --workspace electron-app",
+    "start": "npm run start --workspace electron-app",
+    "postinstall": "theia check:theia-version"
+  },
+  "devDependencies": {
+    "@theia/cli": "1.76.0"
+  }
+}

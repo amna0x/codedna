@@ -1,0 +1,10 @@
+node_modules/
+lib/
+src-gen/
+gen-webpack.config.js
+gen-webpack.node.config.js
+dist/
+plugins/
+.browser_modules/
+*.tsbuildinfo
+gen-esbuild.*.mjs

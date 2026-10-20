@@ -260,6 +260,15 @@ strategy falls back to retest-all. No output is shown here because this has
 not yet been run on the development laptop (no Maven); CI runs the same flow
 in `test_maven_integration.py`.
 
+## CodeDNA IDE
+
+`ide/` contains the desktop IDE (Eclipse Theia 1.76 + Electron) with the
+**Changed code** and **Recommended tests** views and the CodeDNA Dark glass
+theme. See [ide/README.md](ide/README.md) for prerequisites and
+`npm install && npm run build && npm start`.
+
+![CodeDNA IDE](docs/ide-screenshot.png)
+
 ## Sample Java project
 
 `examples/sample-java-project` is a tiny Maven + JUnit 5 project
@@ -286,6 +295,7 @@ backend/codedna/          Python package
   models/                 ranking baselines, ML models, metrics, evaluation, experiment
   calibration/            Platt / isotonic calibration, Brier, ECE, reliability
   api/                    local FastAPI server for the CodeDNA IDE
+ide/                      CodeDNA IDE (Theia + Electron, TypeScript)
 backend/tests/            pytest suite (temporary Git repos, no network)
 examples/                 sample Java/Maven project
 scripts/                  helper scripts (demo repo builder)

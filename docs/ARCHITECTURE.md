@@ -287,7 +287,27 @@ same JSON:
 Errors are JSON: 400 `{"error": ...}` for analysis errors, 401 bad token,
 403 host/build not allowed, 422 invalid request body.
 
+### `ide/` — CodeDNA IDE (Theia 1.76, Electron)
+
+```
+codedna-extension/src
+├── common/codedna-protocol.ts      service interface + JSON types (from PROJECT_SPEC)
+├── node/codedna-service-impl.ts    starts `codedna serve`, proxies with the token
+├── node/codedna-backend-module.ts  RPC binding at /services/codedna
+└── browser/
+    ├── change-view-widget.tsx      "Changed code" (analyze + impact)
+    ├── tests-view-widget.tsx       "Recommended tests" (select)
+    ├── codedna-workspace.ts        repo path = first workspace root; open file at line
+    ├── theme/codedna-theme.ts      CodeDNA Dark colour theme + shell class toggle
+    └── style/codedna(.|-shell).css view and shell styling (D-030)
+electron-app/package.json           product config: Theia packages, default theme
+```
+
 ## Known limitations (current)
+
+- IDE: compares commits only (no uncommitted changes yet); opens test files by
+  the `src/test/java` convention; no Java language server, graph view,
+  test running or risk scores yet; tested on Windows only.
 
 - API: synchronous requests (a test run blocks that request until done); no
   progress events yet; Starlette's test client warns that `httpx` support is

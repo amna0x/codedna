@@ -429,3 +429,51 @@ by web pages in the user's browser, so:
 
 No user accounts or remote access — consistent with the brief's "no
 authentication infrastructure" and Path A scope.
+
+## D-029 — IDE skeleton: Theia 1.76.0, Electron, backend proxy
+
+Verified on 2026-10-19 (npm registry): `@theia/core`, `@theia/electron`,
+`@theia/cli` **1.76.0**, licence **EPL-2.0 OR GPL-2.0-only WITH
+Classpath-exception-2.0**; Electron **42.8.1** (peer dependency). Theia's
+contributor docs recommend Node ≥ 24 for developing Theia itself; the app
+builds and runs with Node 22.21 here. Windows needs Visual Studio Build Tools
+("Desktop development with C++") for native modules (node-pty, keytar,
+drivelist, ffmpeg). All Theia packages are pinned to the exact version.
+
+*Licence note (needs human review):* EPL-2.0 is weak copyleft — using and
+redistributing unmodified Theia packages is fine, but modified EPL files must
+stay available under EPL. CodeDNA itself has no licence file yet; choose one
+before publishing the IDE or website.
+
+Layout: `ide/` npm workspace with `codedna-extension` (Theia extension,
+TypeScript/React) and `electron-app` (the product). The extension's backend
+module starts `codedna serve` on a free loopback port with a random token in
+`CODEDNA_API_TOKEN` and proxies the views' JSON-RPC calls to it, so the token
+never reaches the renderer and no CORS is needed. The executable is `codedna`
+on PATH or `CODEDNA_EXECUTABLE`. Views only analyse; no build is triggered.
+
+Build note: if `NODE_USE_SYSTEM_CA=1` is set and the Windows store lacks
+ISRG Root X2, Node rejects `artifacts.electronjs.org` (Let's Encrypt "Root
+YE" chain); build with that variable unset.
+
+## D-030 — Visual design: CodeDNA Dark + glass shell
+
+Requested by the team (2026-10-20): reference shots of dark, translucent
+IDE/assistant UIs, the team's FreshOptimizer app, and the apple-design rules.
+
+- A registered Theia colour theme `codedna-dark` (default via the app's
+  `preferences` config, because Theia's built-in preference default would
+  otherwise win) with translucent surfaces, a teal → indigo accent and a calm
+  syntax palette.
+- A shell stylesheet, active only with that theme, that turns the side
+  panels, editor and bottom panel into floating glass cards over an aurora
+  wallpaper (gaps via transparent borders that Lumino's layout measures),
+  an icon rail with an accent pill + bar, pill tabs, heavier glass for menus
+  and overlays.
+- FreshOptimizer's vocabulary in the views: inset cards, uppercase
+  micro-labels, tinted chips, accent-gradient primary buttons with
+  press-scale; heuristic links always dashed + warning colour.
+- Accessibility: `prefers-reduced-transparency` → solid surfaces,
+  `prefers-reduced-motion` → no press/scale/progress animation,
+  `prefers-contrast: more` → strong borders and full-contrast text. Other
+  themes keep Theia's normal layout; the views stay readable in them.

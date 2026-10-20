@@ -1,0 +1,359 @@
+/*
+ * CodeDNA views (Changed code, Recommended tests).
+ *
+ * Visual language shared with FreshOptimizer: inset glass cards, uppercase
+ * micro-labels, tinted chips, an accent-gradient primary button. Rules from
+ * the apple-design skill: hierarchy from weight + size + spacing, size-specific
+ * tracking (tight headings, open micro-labels), instant press feedback,
+ * colour only where it carries meaning, and reduced motion / transparency /
+ * more contrast honoured. Colours fall back to Theia theme tokens, so the
+ * views stay readable in any theme; CodeDNA Dark adds the glass.
+ */
+
+.codedna-view {
+  --cd-accent: var(--theia-button-background);
+  --cd-accent-rgb: 45 212 191;
+  --cd-alt-rgb: 99 102 241;
+  --cd-muted: var(--theia-descriptionForeground);
+  --cd-line: var(--theia-widget-border, rgb(255 255 255 / 0.08));
+  --cd-inset: rgb(0 0 0 / 0.22);
+  --cd-radius: 12px;
+  --cd-added: var(--theia-gitDecoration-addedResourceForeground, #34d399);
+  --cd-modified: var(--theia-gitDecoration-modifiedResourceForeground, #ffb020);
+  --cd-deleted: var(--theia-gitDecoration-deletedResourceForeground, #ff5c6c);
+  --cd-heuristic: var(--theia-editorWarning-foreground, #ffb020);
+  position: relative;
+  height: 100%;
+  box-sizing: border-box;
+  overflow-y: auto;
+  padding: 14px 14px 20px;
+  font-family: "Inter Variable", Inter, "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--theia-foreground);
+}
+
+body:not(.codedna-shell) .codedna-view { --cd-inset: var(--theia-editorWidget-background); }
+
+/* --- header --------------------------------------------------------------- */
+
+.codedna-view h2 {
+  margin: 0 0 2px;
+  font-size: 15px;
+  font-weight: 650;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.codedna-view .cd-subtitle {
+  margin: 0 0 14px;
+  color: var(--cd-muted);
+}
+
+/* --- controls --------------------------------------------------------------- */
+
+.codedna-view .cd-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(84px, 1fr));
+  gap: 8px;
+  align-items: end;
+  margin-bottom: 8px;
+}
+
+.codedna-view label.cd-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cd-muted);
+}
+
+/* Dropdowns carry longer labels: give them the full row. */
+.codedna-view label.cd-field:has(select) { grid-column: 1 / -1; }
+
+.codedna-view input,
+.codedna-view select {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  height: 30px;
+  padding: 0 9px;
+  border-radius: 9px;
+  border: 1px solid var(--cd-line);
+  background: var(--cd-inset);
+  color: var(--theia-input-foreground, var(--theia-foreground));
+  font: inherit;
+  font-size: 12.5px;
+  letter-spacing: 0;
+  text-transform: none;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.codedna-view input { font-family: var(--theia-code-font-family, "JetBrains Mono", Consolas, monospace); }
+
+.codedna-view input:focus,
+.codedna-view select:focus {
+  outline: none;
+  border-color: rgb(var(--cd-accent-rgb) / 0.6);
+  box-shadow: 0 0 0 3px rgb(var(--cd-accent-rgb) / 0.15);
+}
+
+.codedna-view .cd-button {
+  grid-column: 1 / -1;
+  height: 32px;
+  border: none;
+  border-radius: 10px;
+  font: inherit;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+  color: var(--theia-button-foreground);
+  background-color: var(--cd-accent);
+  cursor: pointer;
+  transition: transform 100ms ease-out, filter 120ms ease, box-shadow 120ms ease;
+}
+
+body.codedna-shell .codedna-view .cd-button {
+  color: #04120f;
+  background-image: linear-gradient(135deg, rgb(94 234 212), rgb(var(--cd-accent-rgb)) 45%, rgb(129 140 248));
+  box-shadow: 0 0 18px rgb(var(--cd-accent-rgb) / 0.22), inset 0 1px 0 rgb(255 255 255 / 0.35);
+}
+
+.codedna-view .cd-button:hover { filter: brightness(1.06); }
+/* Feedback on press, instantly. */
+.codedna-view .cd-button:active { transform: scale(0.97); transition-duration: 60ms; }
+.codedna-view .cd-button:disabled { opacity: 0.55; cursor: default; transform: none; filter: none; }
+.codedna-view .cd-button:focus-visible { outline: 2px solid rgb(var(--cd-accent-rgb)); outline-offset: 2px; }
+
+.codedna-view .cd-hint { margin: 0 0 14px; color: var(--cd-muted); font-size: 11.5px; }
+
+/* --- stats -------------------------------------------------------------------- */
+
+.codedna-view .cd-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(68px, 1fr));
+  gap: 6px;
+  margin: 14px 0;
+}
+
+.codedna-view .cd-stat {
+  position: relative;
+  overflow: hidden;
+  padding: 9px 10px 8px;
+  border-radius: var(--cd-radius);
+  border: 1px solid var(--cd-line);
+  background: var(--cd-inset);
+}
+
+body.codedna-shell .codedna-view .cd-stat::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at top right, rgb(var(--cd-accent-rgb) / 0.10), transparent 60%);
+}
+
+.codedna-view .cd-stat-value {
+  display: block;
+  font-size: 19px;
+  font-weight: 650;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.codedna-view .cd-stat-value .cd-meta { font-size: 12px; letter-spacing: 0; }
+
+.codedna-view .cd-stat-label {
+  display: block;
+  margin-top: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cd-muted);
+}
+
+/* --- sections ------------------------------------------------------------------- */
+
+.codedna-view section { margin-bottom: 16px; }
+
+.codedna-view h3 {
+  margin: 0 0 7px;
+  font-size: 10.5px;
+  font-weight: 650;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--cd-muted);
+}
+
+.codedna-view .cd-file {
+  margin-bottom: 6px;
+  overflow: hidden;
+  border-radius: var(--cd-radius);
+  border: 1px solid var(--cd-line);
+  background: var(--cd-inset);
+}
+
+.codedna-view .cd-file-header {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 8px;
+  align-items: baseline;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--cd-line);
+}
+
+.codedna-view .cd-file-header > .cd-badge { grid-row: span 2; align-self: start; margin-top: 1px; }
+.codedna-view .cd-file-name { font-weight: 600; overflow-wrap: anywhere; }
+.codedna-view .cd-file-header .cd-meta { grid-column: 2; overflow-wrap: anywhere; }
+
+.codedna-view .cd-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 8px;
+  row-gap: 1px;
+  align-items: baseline;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 6px 10px;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 100ms ease;
+}
+
+.codedna-view .cd-row + .cd-row { border-top: 1px solid rgb(255 255 255 / 0.03); }
+.codedna-view .cd-row:hover { background: rgb(255 255 255 / 0.04); }
+.codedna-view .cd-row:active { background: rgb(var(--cd-accent-rgb) / 0.10); }
+.codedna-view .cd-row:focus-visible { outline: 2px solid rgb(var(--cd-accent-rgb) / 0.7); outline-offset: -2px; }
+.codedna-view .cd-row:disabled { cursor: default; }
+.codedna-view .cd-row.cd-static { cursor: default; }
+.codedna-view .cd-row.cd-static:hover { background: transparent; }
+.codedna-view .cd-row > .cd-badge { grid-row: span 2; align-self: start; margin-top: 1px; }
+.codedna-view .cd-row > .cd-meta { grid-column: 2; }
+
+.codedna-view .cd-id {
+  font-family: var(--theia-code-font-family, "JetBrains Mono", Consolas, monospace);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.codedna-view .cd-meta { color: var(--cd-muted); font-size: 11.5px; }
+
+.codedna-view .cd-reasons {
+  margin: 0 0 4px;
+  padding: 0 10px 6px 30px;
+  color: var(--cd-muted);
+  font-size: 11.5px;
+}
+
+.codedna-view .cd-reasons li { margin: 1px 0; }
+
+/* --- chips ------------------------------------------------------------------------ */
+
+.codedna-view .cd-badge {
+  display: inline-flex;
+  align-items: center;
+  height: 17px;
+  padding: 0 7px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, currentColor 35%, transparent);
+  background: color-mix(in srgb, currentColor 12%, transparent);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.codedna-view .cd-added { color: var(--cd-added); }
+.codedna-view .cd-modified { color: var(--cd-modified); }
+.codedna-view .cd-deleted,
+.codedna-view .cd-renamed { color: var(--cd-deleted); }
+.codedna-view .cd-muted { color: var(--cd-muted); }
+.codedna-view .cd-confirmed { color: rgb(var(--cd-accent-rgb)); }
+/* Heuristic links are never drawn as proven: dashed outline + warning colour. */
+.codedna-view .cd-heuristic { color: var(--cd-heuristic); border-style: dashed; }
+
+/* --- notices and empty / loading states ----------------------------------------------- */
+
+.codedna-view .cd-notice {
+  position: relative;
+  margin-bottom: 12px;
+  padding: 9px 11px 9px 14px;
+  border-radius: var(--cd-radius);
+  border: 1px solid var(--cd-line);
+  background: var(--cd-inset);
+  font-size: 12px;
+}
+
+.codedna-view .cd-notice::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 9px;
+  bottom: 9px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: rgb(var(--cd-accent-rgb) / 0.7);
+}
+
+.codedna-view .cd-notice.cd-warning::before { background: var(--cd-heuristic); }
+.codedna-view .cd-notice.cd-error::before { background: var(--cd-deleted); }
+.codedna-view .cd-notice.cd-error { border-color: color-mix(in srgb, var(--cd-deleted) 40%, transparent); }
+.codedna-view .cd-notice strong { font-weight: 650; }
+.codedna-view .cd-notice ul { margin: 4px 0 0; padding-left: 16px; }
+.codedna-view .cd-notice code {
+  padding: 0 4px;
+  border-radius: 4px;
+  background: rgb(255 255 255 / 0.06);
+  font-family: var(--theia-code-font-family, "JetBrains Mono", Consolas, monospace);
+  font-size: 11px;
+}
+
+.codedna-view .cd-empty {
+  padding: 18px 8px;
+  border-radius: var(--cd-radius);
+  border: 1px dashed var(--cd-line);
+  text-align: center;
+  color: var(--cd-muted);
+}
+
+.codedna-view .cd-progress {
+  height: 2px;
+  margin: 0 0 12px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, rgb(var(--cd-accent-rgb)), rgb(var(--cd-alt-rgb)), transparent);
+  background-size: 200% 100%;
+  animation: cd-progress 1.2s linear infinite;
+}
+
+@keyframes cd-progress { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+
+/* --- accessibility preferences ---------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .codedna-view .cd-button { transition: none; }
+  .codedna-view .cd-button:active { transform: none; filter: brightness(0.92); }
+  .codedna-view .cd-progress { animation: none; opacity: 0.7; }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .codedna-view { --cd-inset: var(--theia-editorWidget-background, #151922); }
+}
+
+@media (prefers-contrast: more) {
+  .codedna-view { --cd-line: rgb(255 255 255 / 0.4); }
+  .codedna-view .cd-muted,
+  .codedna-view .cd-meta,
+  .codedna-view .cd-reasons,
+  .codedna-view .cd-stat-label { color: var(--theia-foreground); }
+}
