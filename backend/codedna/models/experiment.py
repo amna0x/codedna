@@ -15,12 +15,18 @@ On the chronological split (D-023):
   B7   full model, uncalibrated, budget
   B8   full model, calibrated, budget
   B9   full model, calibrated, budget + risk target + fallback
+  B9r  as B9, but only the risk-target fallback (no unfamiliar-change rule)
+  B9n  as B8 plus only the unfamiliar-change rule (non-Java files changed or
+       mostly history-less tests → retest all), no risk target
   ===  ==============================================================
+
+  B9r and B9n separate the two fallback triggers, so the effect of the
+  calibrated risk estimate is not confused with the simple rule.
 
   measured by selection ratio, real-time ratio, failing-test recall,
   missed failures, commit safety rate, fallback rate, and — for policies
   with probabilities — mean estimated skip risk vs observed miss rate;
-* ``risk_coverage`` sweeps the budget (B8) and the risk target (B9);
+* ``risk_coverage`` sweeps the budget (B8) and the risk target (B9, B9r);
 * ``ablations`` retrains without each feature group — RQ1/RQ5.
 
 Nothing is assumed: every number comes from the stored history.
@@ -117,6 +123,9 @@ def run_experiment(dataset: Dataset, *, model: str = "gradient_boosting",
         policies["B8_ml_calibrated"] = _ml_policy(probabilities, budget_policy)
         policies["B9_calibrated_fallback"] = _ml_policy(
             probabilities, RiskPolicy(budget=budget, risk_target=risk_target, fallback=True))
+        policies["B9r_risk_target_only"] = _ml_policy(probabilities, _risk_only(budget, risk_target))
+        policies["B9n_unfamiliar_rule_only"] = _ml_policy(
+            probabilities, RiskPolicy(budget=budget, risk_target=None, fallback=True))
     report["policies"] = {name: _measure(test_commits, fn) for name, fn in policies.items()}
 
     if sweeps and full is not None:
@@ -128,11 +137,21 @@ def run_experiment(dataset: Dataset, *, model: str = "gradient_boosting",
                 {"risk_target": t, **_summary(_measure(test_commits, _ml_policy(
                     probabilities, RiskPolicy(budget=budget, risk_target=t, fallback=True))))}
                 for t in RISK_SWEEP],
+            "B9r_risk_target_sweep": [
+                {"risk_target": t, **_summary(_measure(test_commits, _ml_policy(
+                    probabilities, _risk_only(budget, t))))}
+                for t in RISK_SWEEP],
         }
     if ablations and full is not None:
         report["ablations"] = _ablations(model, dataset.feature_names, train, test_commits,
                                          budget, seed, warnings)
     return report
+
+
+def _risk_only(budget: float, risk_target: float) -> RiskPolicy:
+    """Fallback driven only by the estimated skip risk (unfamiliar-change rule off)."""
+    return RiskPolicy(budget=budget, risk_target=risk_target, fallback=True,
+                      non_java_fallback=False, max_unknown_test_share=1.0)
 
 
 # --- models ---------------------------------------------------------------------------

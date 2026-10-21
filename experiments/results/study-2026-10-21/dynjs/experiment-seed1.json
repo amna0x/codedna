@@ -1,0 +1,518 @@
+{
+  "config": {
+    "model": "gradient_boosting",
+    "calibration": "isotonic",
+    "budget": 0.5,
+    "risk_target": 0.05,
+    "seed": 1,
+    "splits": {
+      "train": 225,
+      "validation": 75,
+      "test": 75
+    }
+  },
+  "reproducibility": {
+    "dataset_sha256": "a596efbe9877271c53a7f038c325705db183a5094b6ecadd49df3b0d456b385f",
+    "rows": 26553,
+    "commits": 375,
+    "first_commit": "1853e71ab192a43433d8be723cd6d7161ecd6db4",
+    "last_commit": "4bc6715eff8768f8cd92c6a167d621bbfc1e1a91",
+    "seed": 1,
+    "python": "3.12.0",
+    "packages": {
+      "codedna": "0.1.0",
+      "scikit-learn": "1.9.1",
+      "numpy": "2.5.4"
+    }
+  },
+  "warnings": [],
+  "note": "computed from the stored history only; no numbers are assumed",
+  "calibration": {
+    "test_rows": 5605,
+    "test_failure_rate": 0.0002,
+    "methods": {
+      "none": {
+        "brier": 0.4537,
+        "ece": 0.4654,
+        "reliability": [
+          {
+            "bin": [
+              0.0,
+              0.1
+            ],
+            "count": 2921,
+            "mean_predicted": 0.0013,
+            "observed_rate": 0.0003
+          },
+          {
+            "bin": [
+              0.1,
+              0.2
+            ],
+            "count": 2,
+            "mean_predicted": 0.1098,
+            "observed_rate": 0.0
+          },
+          {
+            "bin": [
+              0.2,
+              0.3
+            ],
+            "count": 6,
+            "mean_predicted": 0.2866,
+            "observed_rate": 0.0
+          },
+          {
+            "bin": [
+              0.3,
+              0.4
+            ],
+            "count": 1,
+            "mean_predicted": 0.3575,
+            "observed_rate": 0.0
+          },
+          {
+            "bin": [
+              0.4,
+              0.5
+            ],
+            "count": 13,
+            "mean_predicted": 0.4192,
+            "observed_rate": 0.0
+          },
+          {
+            "bin": [
+              0.5,
+              0.6
+            ],
+            "count": 12,
+            "mean_predicted": 0.5552,
+            "observed_rate": 0.0
+          },
+          {
+            "bin": [
+              0.6,
+              0.7
+            ],
+            "count": 16,
+            "mean_predicted": 0.6925,
+            "observed_rate": 0.0
+          },
+          {
+            "bin": [
+              0.7,
+              0.8
+            ],
+            "count": 4,
+            "mean_predicted": 0.7761,
+            "observed_rate": 0.0
+          },
+          {
+            "bin": [
+              0.8,
+              0.9
+            ],
+            "count": 17,
+            "mean_predicted": 0.822,
+            "observed_rate": 0.0
+          },
+          {
+            "bin": [
+              0.9,
+              1.0
+            ],
+            "count": 2613,
+            "mean_predicted": 0.9808,
+            "observed_rate": 0.0
+          }
+        ]
+      },
+      "platt": {
+        "brier": 0.0007,
+        "ece": 0.0216,
+        "reliability": [
+          {
+            "bin": [
+              0.0,
+              0.1
+            ],
+            "count": 5605,
+            "mean_predicted": 0.0218,
+            "observed_rate": 0.0002
+          }
+        ]
+      },
+      "isotonic": {
+        "brier": 0.001,
+        "ece": 0.0251,
+        "reliability": [
+          {
+            "bin": [
+              0.0,
+              0.1
+            ],
+            "count": 5605,
+            "mean_predicted": 0.0253,
+            "observed_rate": 0.0002
+          }
+        ]
+      }
+    }
+  },
+  "policies": {
+    "B0_retest_all": {
+      "commits": 75,
+      "commits_with_failures": 1,
+      "mean_selection_ratio": 1.0,
+      "mean_time_ratio": 1.0,
+      "failing_test_recall": 1.0,
+      "missed_failures": 0,
+      "commit_safety_rate": 1.0,
+      "fallback_rate": 0.0,
+      "mean_estimated_skip_risk": null,
+      "observed_miss_rate": 0.0
+    },
+    "B4_dependency": {
+      "commits": 75,
+      "commits_with_failures": 1,
+      "mean_selection_ratio": 0.7219,
+      "mean_time_ratio": 0.7474,
+      "failing_test_recall": 1.0,
+      "missed_failures": 0,
+      "commit_safety_rate": 1.0,
+      "fallback_rate": 0.0,
+      "mean_estimated_skip_risk": null,
+      "observed_miss_rate": 0.0
+    },
+    "B6_change_only_ml": {
+      "commits": 75,
+      "commits_with_failures": 1,
+      "mean_selection_ratio": 0.9562,
+      "mean_time_ratio": 0.4869,
+      "failing_test_recall": 1.0,
+      "missed_failures": 0,
+      "commit_safety_rate": 1.0,
+      "fallback_rate": 0.0,
+      "mean_estimated_skip_risk": 0.0702,
+      "observed_miss_rate": 0.0
+    },
+    "B7_ml_uncalibrated": {
+      "commits": 75,
+      "commits_with_failures": 1,
+      "mean_selection_ratio": 0.9264,
+      "mean_time_ratio": 0.509,
+      "failing_test_recall": 1.0,
+      "missed_failures": 0,
+      "commit_safety_rate": 1.0,
+      "fallback_rate": 0.0,
+      "mean_estimated_skip_risk": 0.9895,
+      "observed_miss_rate": 0.0
+    },
+    "B8_ml_calibrated": {
+      "commits": 75,
+      "commits_with_failures": 1,
+      "mean_selection_ratio": 0.9562,
+      "mean_time_ratio": 0.5043,
+      "failing_test_recall": 1.0,
+      "missed_failures": 0,
+      "commit_safety_rate": 1.0,
+      "fallback_rate": 0.0,
+      "mean_estimated_skip_risk": 0.087,
+      "observed_miss_rate": 0.0
+    },
+    "B9_calibrated_fallback": {
+      "commits": 75,
+      "commits_with_failures": 1,
+      "mean_selection_ratio": 0.9891,
+      "mean_time_ratio": 0.7765,
+      "failing_test_recall": 1.0,
+      "missed_failures": 0,
+      "commit_safety_rate": 1.0,
+      "fallback_rate": 1.0,
+      "mean_estimated_skip_risk": 0.0231,
+      "observed_miss_rate": 0.0
+    },
+    "B9r_risk_target_only": {
+      "commits": 75,
+      "commits_with_failures": 1,
+      "mean_selection_ratio": 0.9804,
+      "mean_time_ratio": 0.565,
+      "failing_test_recall": 1.0,
+      "missed_failures": 0,
+      "commit_safety_rate": 1.0,
+      "fallback_rate": 1.0,
+      "mean_estimated_skip_risk": 0.0439,
+      "observed_miss_rate": 0.0
+    },
+    "B9n_unfamiliar_rule_only": {
+      "commits": 75,
+      "commits_with_failures": 1,
+      "mean_selection_ratio": 0.9822,
+      "mean_time_ratio": 0.7483,
+      "failing_test_recall": 1.0,
+      "missed_failures": 0,
+      "commit_safety_rate": 1.0,
+      "fallback_rate": 0.4933,
+      "mean_estimated_skip_risk": 0.0372,
+      "observed_miss_rate": 0.0
+    }
+  },
+  "risk_coverage": {
+    "B8_budget_sweep": [
+      {
+        "budget": 0.1,
+        "mean_time_ratio": 0.1251,
+        "mean_selection_ratio": 0.6233,
+        "failing_test_recall": 1.0,
+        "commit_safety_rate": 1.0,
+        "fallback_rate": 0.0,
+        "mean_estimated_skip_risk": 0.5059,
+        "observed_miss_rate": 0.0
+      },
+      {
+        "budget": 0.2,
+        "mean_time_ratio": 0.2323,
+        "mean_selection_ratio": 0.8033,
+        "failing_test_recall": 1.0,
+        "commit_safety_rate": 1.0,
+        "fallback_rate": 0.0,
+        "mean_estimated_skip_risk": 0.3311,
+        "observed_miss_rate": 0.0
+      },
+      {
+        "budget": 0.3,
+        "mean_time_ratio": 0.3435,
+        "mean_selection_ratio": 0.8842,
+        "failing_test_recall": 1.0,
+        "commit_safety_rate": 1.0,
+        "fallback_rate": 0.0,
+        "mean_estimated_skip_risk": 0.2047,
+        "observed_miss_rate": 0.0
+      },
+      {
+        "budget": 0.4,
+        "mean_time_ratio": 0.4481,
+        "mean_selection_ratio": 0.9322,
+        "failing_test_recall": 1.0,
+        "commit_safety_rate": 1.0,
+        "fallback_rate": 0.0,
+        "mean_estimated_skip_risk": 0.1204,
+        "observed_miss_rate": 0.0
+      },
+      {
+        "budget": 0.5,
+        "mean_time_ratio": 0.5043,
+        "mean_selection_ratio": 0.9562,
+        "failing_test_recall": 1.0,
+        "commit_safety_rate": 1.0,
+        "fallback_rate": 0.0,
+        "mean_estimated_skip_risk": 0.087,
+        "observed_miss_rate": 0.0
+      },
+      {
+        "budget": 0.6,
+        "mean_time_ratio": 0.5527,
+        "mean_selection_ratio": 0.9692,
+        "failing_test_recall": 1.0,
+        "commit_safety_rate": 1.0,
+        "fallback_rate": 0.0,
+        "mean_estimated_skip_risk": 0.0595,
+        "observed_miss_rate": 0.0
+      },
+      {
+        "budget": 0.7,
+        "mean_time_ratio": 0.5946,
+        "mean_selection_ratio": 0.9765,
+        "failing_test_recall": 1.0,
+        "commit_safety_rate": 1.0,
+        "fallback_rate": 0.0,
+        "mean_estimated_skip_risk": 0.0494,
+        "observed_miss_rate": 0.0
+      },
+      {
+        "budget": 0.8,
+        "mean_time_ratio": 0.595,
+        "mean_selection_ratio": 0.98,
+        "failing_test_recall": 1.0,
+        "commit_safety_rate": 1.0,
+        "fallback_rate": 0.0,
+        "mean_estimated_skip_risk": 0.0464,
+        "observed_miss_rate": 0.0
+      },
+      {
+        "budget": 0.9,
+        "mean_time_ratio": 0.6797,
+        "mean_selection_ratio": 0.985,
+        "failing_test_recall": 1.0,
+        "commit_safety_rate": 1.0,
+        "fallback_rate": 0.0,
+        "mean_estimated_skip_risk": 0.0321,
+        "observed_miss_rate": 0.0
+      },
+      {
+        "budget": 1.0,
+        "mean_time_ratio": 1.0,
+        "mean_selection_ratio": 1.0,
+        "failing_test_recall": 1.0,
+        "commit_safety_rate": 1.0,
+        "fallback_rate": 0.0,
+        "mean_estimated_skip_risk": 0.0,
+        "observed_miss_rate": 0.0
+      }
+    ],
+    "B9_risk_target_sweep": [
+      {
+        "risk_target": 0.01,
+        "mean_time_ratio": 0.9983,
+        "mean_selection_ratio": 0.9998,
+        "failing_test_recall": 1.0,
+        "commit_safety_rate": 1.0,
+        "fallback_rate": 1.0,
+        "mean_estimated_skip_risk": 0.0,
+        "observed_miss_rate": 0.0
+      },
+      {
+        "risk_target": 0.02,
+        "mean_time_ratio": 0.9787,
+        "mean_selection_ratio": 0.997,
+        "failing_test_recall": 1.0,
+        "commit_safety_rate": 1.0,
+        "fallback_rate": 1.0,
+        "mean_estimated_skip_risk": 0.0022,
+        "observed_miss_rate": 0.0
+      },
+      {
+        "risk_target": 0.05,
+        "mean_time_ratio": 0.7765,
+        "mean_selection_ratio": 0.9891,
+        "failing_test_recall": 1.0,
+        "commit_safety_rate": 1.0,
+        "fallback_rate": 1.0,
+        "mean_estimated_skip_risk": 0.0231,
+        "observed_miss_rate": 0.0
+      },
+      {
+        "risk_target": 0.1,
+        "mean_time_ratio": 0.749,
+        "mean_selection_ratio": 0.9824,
+        "failing_test_recall": 1.0,
+        "commit_safety_rate": 1.0,
+        "fallback_rate": 0.5067,
+        "mean_estimated_skip_risk": 0.0367,
+        "observed_miss_rate": 0.0
+      },
+      {
+        "risk_target": 0.2,
+        "mean_time_ratio": 0.7483,
+        "mean_selection_ratio": 0.9822,
+        "failing_test_recall": 1.0,
+        "commit_safety_rate": 1.0,
+        "fallback_rate": 0.4933,
+        "mean_estimated_skip_risk": 0.0372,
+        "observed_miss_rate": 0.0
+      },
+      {
+        "risk_target": 0.3,
+        "mean_time_ratio": 0.7483,
+        "mean_selection_ratio": 0.9822,
+        "failing_test_recall": 1.0,
+        "commit_safety_rate": 1.0,
+        "fallback_rate": 0.4933,
+        "mean_estimated_skip_risk": 0.0372,
+        "observed_miss_rate": 0.0
+      }
+    ],
+    "B9r_risk_target_sweep": [
+      {
+        "risk_target": 0.01,
+        "mean_time_ratio": 0.9948,
+        "mean_selection_ratio": 0.9993,
+        "failing_test_recall": 1.0,
+        "commit_safety_rate": 1.0,
+        "fallback_rate": 1.0,
+        "mean_estimated_skip_risk": 0.0,
+        "observed_miss_rate": 0.0
+      },
+      {
+        "risk_target": 0.02,
+        "mean_time_ratio": 0.9707,
+        "mean_selection_ratio": 0.9957,
+        "failing_test_recall": 1.0,
+        "commit_safety_rate": 1.0,
+        "fallback_rate": 1.0,
+        "mean_estimated_skip_risk": 0.0028,
+        "observed_miss_rate": 0.0
+      },
+      {
+        "risk_target": 0.05,
+        "mean_time_ratio": 0.565,
+        "mean_selection_ratio": 0.9804,
+        "failing_test_recall": 1.0,
+        "commit_safety_rate": 1.0,
+        "fallback_rate": 1.0,
+        "mean_estimated_skip_risk": 0.0439,
+        "observed_miss_rate": 0.0
+      },
+      {
+        "risk_target": 0.1,
+        "mean_time_ratio": 0.5115,
+        "mean_selection_ratio": 0.9667,
+        "failing_test_recall": 1.0,
+        "commit_safety_rate": 1.0,
+        "fallback_rate": 0.0933,
+        "mean_estimated_skip_risk": 0.0752,
+        "observed_miss_rate": 0.0
+      },
+      {
+        "risk_target": 0.2,
+        "mean_time_ratio": 0.5061,
+        "mean_selection_ratio": 0.9645,
+        "failing_test_recall": 1.0,
+        "commit_safety_rate": 1.0,
+        "fallback_rate": 0.0133,
+        "mean_estimated_skip_risk": 0.0792,
+        "observed_miss_rate": 0.0
+      },
+      {
+        "risk_target": 0.3,
+        "mean_time_ratio": 0.5056,
+        "mean_selection_ratio": 0.9635,
+        "failing_test_recall": 1.0,
+        "commit_safety_rate": 1.0,
+        "fallback_rate": 0.0133,
+        "mean_estimated_skip_risk": 0.0807,
+        "observed_miss_rate": 0.0
+      }
+    ]
+  },
+  "ablations": {
+    "all_features": {
+      "features": 19,
+      "pr_auc": 0.0002,
+      "brier": 0.4537,
+      "failing_test_recall_at_budget": 1.0,
+      "commit_safety_rate_at_budget": 1.0
+    },
+    "without_change": {
+      "features": 13,
+      "pr_auc": 0.0002,
+      "brier": 0.4226,
+      "failing_test_recall_at_budget": 1.0,
+      "commit_safety_rate_at_budget": 1.0
+    },
+    "without_structural": {
+      "features": 16,
+      "pr_auc": 0.0002,
+      "brier": 0.4364,
+      "failing_test_recall_at_budget": 1.0,
+      "commit_safety_rate_at_budget": 1.0
+    },
+    "without_history": {
+      "features": 10,
+      "pr_auc": 0.0003,
+      "brier": 0.0144,
+      "failing_test_recall_at_budget": 1.0,
+      "commit_safety_rate_at_budget": 1.0
+    }
+  }
+}

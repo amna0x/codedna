@@ -94,10 +94,9 @@ Java stays the only supported language until Milestone 5 is complete.
 - ✅ `history import-rtptorrent`: imports one project's tested commits,
   changed files and per-job test-class results; bare-repository support;
   HikariCP imported (1,427 tested commits, 123 with failures)
-- ⏳ Import the chosen projects and run `history evaluate` /
-  `history experiment` on them; store reports in `experiments/results/`
-- ⏳ Run `history evaluate` on real data and record results under
-  `experiments/results/` with dataset versions and commands
+- ✅ First real run on HikariCP (`experiments/results/hikaricp-2026-10-21`)
+- ✅ Study over six RTPTorrent projects × five seeds with separated fallback
+  triggers B9r / B9n (D-034) — `experiments/results/study-2026-10-21`
 
 Product track, alongside:
 

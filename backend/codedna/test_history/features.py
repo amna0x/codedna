@@ -70,6 +70,27 @@ class Dataset:
                 writer.writerow([row.commit, row.seq, row.test_id, row.label, row.duration,
                                  *(row.features[name] for name in self.feature_names)])
 
+    @classmethod
+    def from_csv(cls, path: str | Path) -> Dataset:
+        """Load a dataset written by :meth:`to_csv` (features are not recomputed)."""
+        import csv
+        with open(path, encoding="utf-8", newline="") as handle:
+            reader = csv.reader(handle)
+            header = next(reader)
+            if header[:5] != ["commit", "seq", "test_id", "label", "duration"]:
+                raise ValueError(f"{path} is not a CodeDNA dataset CSV (header {header[:5]})")
+            names = header[5:]
+            rows, commits = [], []
+            for record in reader:
+                if not commits or commits[-1] != record[0]:
+                    commits.append(record[0])
+                rows.append(Row(record[0], int(record[1]), record[2], int(record[3]),
+                                float(record[4]),
+                                {name: float(value) for name, value in zip(names, record[5:])}))
+        dataset = cls(rows=rows, feature_names=names, commits=list(dict.fromkeys(commits)))
+        _warn_if_few_failures(dataset)
+        return dataset
+
 
 @dataclass
 class _TestState:
@@ -140,11 +161,15 @@ def build_dataset(store: HistoryStore, repo_path: str | Path | None = None, *,
                 for path in paths:
                     file_failures[path][result.test_id] += 1
 
+    _warn_if_few_failures(dataset)
+    return dataset
+
+
+def _warn_if_few_failures(dataset: Dataset) -> None:
     failing = sum(1 for rows in dataset.rows_by_commit().values() if any(r.label for r in rows))
     if failing < 10:
         dataset.warnings.append(f"only {failing} commit(s) with failing tests; results will be "
                                 "unreliable — collect more history or use a fault dataset")
-    return dataset
 
 
 def _history_features(state: _TestState, index: int) -> dict[str, float]:

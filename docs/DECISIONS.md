@@ -569,3 +569,27 @@ parse without a crash.
 Decision: `tree-sitter>=0.25,<0.26` in `pyproject.toml`, plus a test that
 fails if 0.26 is installed. Re-check when a newer release appears, using the
 same whole-history parse as the acceptance test.
+
+## D-034 — Study protocol: six projects, five seeds, separated fallback triggers
+
+After the first HikariCP run showed that B9's gain came mostly from the
+non-Java → retest-all rule, the experiment adds two variants:
+
+- **B9r** — calibrated model, time budget, fallback **only** from the
+  estimated skip risk (unfamiliar-change rule off);
+- **B9n** — calibrated model, time budget plus **only** the unfamiliar-change
+  rule (non-Java files changed, or mostly history-less tests), no risk target.
+
+B9 keeps both. RQ4 (does *risk-based* fallback help?) is answered by B8 vs
+B9r; B9n measures the simple rule on its own.
+
+Study (`scripts/run_study.py`): RTPTorrent projects HikariCP, LittleProxy,
+jade4j, jsprit, wicket-bootstrap, dynjs; seeds 0–4; gradient boosting,
+isotonic calibration, budget 0.5, risk target 0.05 (defaults). The feature
+dataset is built once per project and reused for all seeds
+(`--from-dataset` / `dataset.csv`). Seeds only change model randomness — the
+chronological split is fixed — so seed spread shows model stability, not
+data variation. Results are reported per project and as an **unweighted mean
+of project means** (each project counts once, so a large project cannot
+dominate). wicket-bootstrap (~40 % failing commits) is reported but its
+behaviour should be discussed separately.

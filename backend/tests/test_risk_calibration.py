@@ -7,6 +7,7 @@ how CodeDNA performs on real projects.
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 import pytest
 
@@ -164,7 +165,9 @@ def test_experiment_reports_policies_calibration_sweeps_and_ablations():
 
     policies = report["policies"]
     assert set(policies) == {"B0_retest_all", "B4_dependency", "B6_change_only_ml",
-                             "B7_ml_uncalibrated", "B8_ml_calibrated", "B9_calibrated_fallback"}
+                             "B7_ml_uncalibrated", "B8_ml_calibrated", "B9_calibrated_fallback",
+                             "B9r_risk_target_only", "B9n_unfamiliar_rule_only"}
+    assert len(report["risk_coverage"]["B9r_risk_target_sweep"]) == 6
     retest = policies["B0_retest_all"]
     assert (retest["mean_time_ratio"], retest["failing_test_recall"], retest["missed_failures"]) == \
         (1.0, 1.0, 0)
@@ -226,3 +229,73 @@ def test_history_experiment_command(repo, tmp_path, capsys):
     with pytest.raises(SystemExit):
         main(["history", "experiment", "--db", str(db), "--budget", "1.5"])
     assert main(["history", "experiment", "--db", str(tmp_path / "none.db")]) == EXIT_ANALYSIS_ERROR
+
+
+def test_fallback_variants_separate_the_two_triggers():
+    dataset = synthetic_dataset()
+    for row in dataset.rows:
+        if row.seq % 3 == 0:  # every third commit also changes a non-Java file
+            row.features["non_java_files_changed"] = 1.0
+    policies = run_experiment(dataset, model="logistic_regression", sweeps=False,
+                              ablations=False, budget=0.3, risk_target=0.05)["policies"]
+
+    unfamiliar = policies["B9n_unfamiliar_rule_only"]
+    risk_only = policies["B9r_risk_target_only"]
+    assert unfamiliar["fallback_rate"] > 0           # the non-Java rule fires
+    assert unfamiliar["mean_estimated_skip_risk"] is not None
+    # Without the rule, fallback can only come from the estimated risk; with a
+    # well-separated synthetic signal the budget already covers it.
+    assert risk_only["fallback_rate"] <= unfamiliar["fallback_rate"]
+    assert policies["B9_calibrated_fallback"]["fallback_rate"] >= unfamiliar["fallback_rate"]
+
+
+def test_dataset_csv_round_trip(tmp_path):
+    dataset = synthetic_dataset(commits=6)
+    path = tmp_path / "dataset.csv"
+    dataset.to_csv(path)
+
+    loaded = Dataset.from_csv(path)
+
+    assert loaded.commits == dataset.commits
+    assert loaded.feature_names == dataset.feature_names
+    assert [(r.commit, r.test_id, r.label, r.duration, r.features) for r in loaded.rows] == [
+        (r.commit, r.test_id, r.label, r.duration, r.features) for r in dataset.rows]
+    bad = tmp_path / "bad.csv"
+    bad.write_text("a,b" + chr(10), encoding="utf-8")
+    with pytest.raises(ValueError, match="not a CodeDNA dataset"):
+        Dataset.from_csv(bad)
+
+
+def test_cli_reuses_a_saved_dataset(tmp_path, capsys):
+    path = tmp_path / "dataset.csv"
+    synthetic_dataset().to_csv(path)
+
+    assert main(["history", "experiment", "--from-dataset", str(path), "--no-sweeps",
+                 "--no-ablations", "--model", "logistic_regression"]) == EXIT_OK
+    assert "B9r_risk_target_only" in json.loads(capsys.readouterr().out)["policies"]
+    assert main(["history", "evaluate", "--from-dataset", str(path),
+                 "--rankers", "random"]) == EXIT_OK
+    assert json.loads(capsys.readouterr().out)["protocol"]["rows"] == 120
+    assert main(["history", "evaluate"]) == EXIT_ANALYSIS_ERROR
+    assert "--db or --from-dataset" in capsys.readouterr().err
+
+
+def test_study_runner_aggregates_seeds_and_projects(tmp_path):
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        "run_study", Path(__file__).resolve().parents[2] / "scripts" / "run_study.py")
+    study = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(study)
+    for name in ("alpha", "beta"):
+        (tmp_path / name).mkdir()
+        synthetic_dataset().to_csv(tmp_path / name / "dataset.csv")  # reused, so no DB needed
+        study.run_project(name, "unused.db", str(tmp_path), [0, 1])
+
+    summary = study.summarise(tmp_path, ["alpha", "beta"], [0, 1])
+    markdown = study.to_markdown(summary)
+
+    b0 = summary["projects"]["alpha"]["policies"]["B0_retest_all"]
+    assert b0["failing_test_recall"] == {"mean": 1.0, "sd": 0.0}
+    assert summary["pooled"]["policies"]["B9r_risk_target_only"]["mean_time_ratio"]["projects"] == 2
+    assert (tmp_path / "alpha" / "experiment-seed1.json").is_file()
+    assert "| B9n_unfamiliar_rule_only |" in markdown and "## Ablations" in markdown

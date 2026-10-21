@@ -241,7 +241,9 @@ def build_parser() -> argparse.ArgumentParser:
 
     evaluate = history_commands.add_parser(
         "evaluate", help="Build features and compare orderings on a chronological split.")
-    evaluate.add_argument("--db", required=True, help="SQLite history database.")
+    evaluate.add_argument("--db", help="SQLite history database (or use --from-dataset).")
+    evaluate.add_argument("--from-dataset", help="Reuse a dataset CSV written by --dataset-csv "
+                                                 "instead of rebuilding features.")
     evaluate.add_argument("--repo", help="Repository path (default: the one recorded by mine).")
     evaluate.add_argument("--rankers", nargs="+", choices=BASELINES + ML_MODELS,
                           help="Rankers to evaluate (default: all).")
@@ -256,7 +258,9 @@ def build_parser() -> argparse.ArgumentParser:
         help="Calibration, risk-aware selection and fallback experiment (Milestone 5).",
         description="Train on the oldest 60%% of commits, calibrate on the next 20%%, and "
                     "compare policies B0, B4, B6-B9 on the latest 20%%.")
-    experiment.add_argument("--db", required=True, help="SQLite history database.")
+    experiment.add_argument("--db", help="SQLite history database (or use --from-dataset).")
+    experiment.add_argument("--from-dataset", help="Reuse a dataset CSV written by "
+                                                   "'history evaluate --dataset-csv'.")
     experiment.add_argument("--repo", help="Repository path (default: the one recorded by mine).")
     experiment.add_argument("--model", choices=ML_MODELS, default="gradient_boosting",
                             help="Failure model (default: gradient_boosting).")
@@ -386,13 +390,10 @@ def _run_tests(args: argparse.Namespace) -> int:
 
 
 def _run_history(args: argparse.Namespace) -> int:
-    from codedna.models.evaluate import evaluate
     from codedna.test_history.collection import collect_results, import_results
     from codedna.test_history.features import build_dataset
     from codedna.test_history.mining import mine_history
     from codedna.test_history.store import HistoryStore
-
-    from codedna.models.experiment import run_experiment
 
     command = args.history_command
     if command == "import-rtptorrent":
@@ -400,6 +401,13 @@ def _run_history(args: argparse.Namespace) -> int:
     if command == "collect" and not args.allow_build:
         print("error: history collect runs every commit's build (project code executes); "
               "re-run with --allow-build if you trust this project", file=sys.stderr)
+        return EXIT_ANALYSIS_ERROR
+    if command in ("evaluate", "experiment") and getattr(args, "from_dataset", None):
+        from codedna.test_history.features import Dataset
+        dataset = Dataset.from_csv(args.from_dataset)
+        return _run_on_dataset(args, dataset)
+    if command in ("evaluate", "experiment") and not args.db:
+        print("error: give --db or --from-dataset", file=sys.stderr)
         return EXIT_ANALYSIS_ERROR
     if command in ("import", "status", "evaluate", "experiment") and not Path(args.db).is_file():
         print(f"error: history database not found: {args.db} (run 'history mine' first)",
@@ -424,14 +432,21 @@ def _run_history(args: argparse.Namespace) -> int:
         if command == "status":
             return _write_json(store.summary(), None)
         dataset = build_dataset(store, args.repo, structural=not args.no_structural)
-        if command == "experiment":
-            return _write_json(run_experiment(
-                dataset, model=args.model, calibration=args.calibration, budget=args.budget,
-                risk_target=args.risk_target, seed=args.seed, sweeps=not args.no_sweeps,
-                ablations=not args.no_ablations), args.output)
-        if args.dataset_csv:
-            dataset.to_csv(args.dataset_csv)
-        return _write_json(evaluate(dataset, rankers=args.rankers, seed=args.seed), args.output)
+        return _run_on_dataset(args, dataset)
+
+
+def _run_on_dataset(args: argparse.Namespace, dataset) -> int:
+    from codedna.models.evaluate import evaluate
+    from codedna.models.experiment import run_experiment
+
+    if args.history_command == "experiment":
+        return _write_json(run_experiment(
+            dataset, model=args.model, calibration=args.calibration, budget=args.budget,
+            risk_target=args.risk_target, seed=args.seed, sweeps=not args.no_sweeps,
+            ablations=not args.no_ablations), args.output)
+    if args.dataset_csv:
+        dataset.to_csv(args.dataset_csv)
+    return _write_json(evaluate(dataset, rankers=args.rankers, seed=args.seed), args.output)
 
 
 def _import_rtptorrent(args: argparse.Namespace) -> int:

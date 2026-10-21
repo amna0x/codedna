@@ -1,0 +1,161 @@
+{
+  "protocol": {
+    "splits": {
+      "train": 492,
+      "validation": 164,
+      "test": 164
+    },
+    "split_fractions": {
+      "train": 0.6,
+      "validation": 0.2,
+      "test": 0.2
+    },
+    "seed": 2,
+    "features": [
+      "files_changed",
+      "java_files_changed",
+      "non_java_files_changed",
+      "test_files_changed",
+      "lines_added",
+      "lines_deleted",
+      "test_file_changed",
+      "dep_reachable",
+      "dep_distance",
+      "dep_confirmed",
+      "past_runs",
+      "past_failures",
+      "failure_rate",
+      "recent_failures",
+      "failed_last_run",
+      "commits_since_failure",
+      "mean_duration",
+      "last_duration",
+      "co_failures"
+    ],
+    "rows": 34791
+  },
+  "results": {
+    "validation": {
+      "commits": 164,
+      "commits_with_failures": 118,
+      "rankers": {
+        "random": {
+          "mean_apfd": 0.4999,
+          "mean_apfdc": 0.4968,
+          "mean_ttff": 0.0663,
+          "mean_recall_at_25pct_time": 0.2565,
+          "mean_recall_at_50pct_time": 0.489,
+          "evaluated_commits": 118
+        },
+        "shortest_first": {
+          "mean_apfd": 0.4077,
+          "mean_apfdc": 0.7454,
+          "mean_ttff": 0.0462,
+          "mean_recall_at_25pct_time": 0.6202,
+          "mean_recall_at_50pct_time": 0.7821,
+          "evaluated_commits": 118
+        },
+        "recent_failures": {
+          "mean_apfd": 0.6408,
+          "mean_apfdc": 0.8109,
+          "mean_ttff": 0.0289,
+          "mean_recall_at_25pct_time": 0.6838,
+          "mean_recall_at_50pct_time": 0.8975,
+          "evaluated_commits": 118
+        },
+        "failure_history": {
+          "mean_apfd": 0.6405,
+          "mean_apfdc": 0.7076,
+          "mean_ttff": 0.0366,
+          "mean_recall_at_25pct_time": 0.4599,
+          "mean_recall_at_50pct_time": 0.8721,
+          "evaluated_commits": 118
+        },
+        "logistic_regression": {
+          "mean_apfd": 0.6376,
+          "mean_apfdc": 0.7611,
+          "mean_ttff": 0.0373,
+          "mean_recall_at_25pct_time": 0.6215,
+          "mean_recall_at_50pct_time": 0.8727,
+          "evaluated_commits": 118,
+          "pr_auc": 0.6495,
+          "brier": 0.2192,
+          "positive_rate": 0.4414
+        },
+        "gradient_boosting": {
+          "mean_apfd": 0.6465,
+          "mean_apfdc": 0.6962,
+          "mean_ttff": 0.038,
+          "mean_recall_at_25pct_time": 0.3939,
+          "mean_recall_at_50pct_time": 0.8227,
+          "evaluated_commits": 118,
+          "pr_auc": 0.7243,
+          "brier": 0.2359,
+          "positive_rate": 0.4414
+        }
+      }
+    },
+    "test": {
+      "commits": 164,
+      "commits_with_failures": 87,
+      "rankers": {
+        "random": {
+          "mean_apfd": 0.5042,
+          "mean_apfdc": 0.5148,
+          "mean_ttff": 0.0407,
+          "mean_recall_at_25pct_time": 0.2869,
+          "mean_recall_at_50pct_time": 0.5012,
+          "evaluated_commits": 87
+        },
+        "shortest_first": {
+          "mean_apfd": 0.4119,
+          "mean_apfdc": 0.759,
+          "mean_ttff": 0.0392,
+          "mean_recall_at_25pct_time": 0.6276,
+          "mean_recall_at_50pct_time": 0.8288,
+          "evaluated_commits": 87
+        },
+        "recent_failures": {
+          "mean_apfd": 0.6475,
+          "mean_apfdc": 0.8242,
+          "mean_ttff": 0.0149,
+          "mean_recall_at_25pct_time": 0.7132,
+          "mean_recall_at_50pct_time": 0.9335,
+          "evaluated_commits": 87
+        },
+        "failure_history": {
+          "mean_apfd": 0.6416,
+          "mean_apfdc": 0.7049,
+          "mean_ttff": 0.0306,
+          "mean_recall_at_25pct_time": 0.4564,
+          "mean_recall_at_50pct_time": 0.8954,
+          "evaluated_commits": 87
+        },
+        "logistic_regression": {
+          "mean_apfd": 0.642,
+          "mean_apfdc": 0.7782,
+          "mean_ttff": 0.0229,
+          "mean_recall_at_25pct_time": 0.6161,
+          "mean_recall_at_50pct_time": 0.916,
+          "evaluated_commits": 87,
+          "pr_auc": 0.5682,
+          "brier": 0.3027,
+          "positive_rate": 0.3035
+        },
+        "gradient_boosting": {
+          "mean_apfd": 0.6508,
+          "mean_apfdc": 0.7191,
+          "mean_ttff": 0.0206,
+          "mean_recall_at_25pct_time": 0.4529,
+          "mean_recall_at_50pct_time": 0.8582,
+          "evaluated_commits": 87,
+          "pr_auc": 0.6536,
+          "brier": 0.1605,
+          "positive_rate": 0.3035
+        }
+      }
+    }
+  },
+  "warnings": [],
+  "note": "computed from the stored history only; no numbers are assumed"
+}

@@ -68,6 +68,13 @@ Caveats from the paper, to handle in the importer and report honestly:
 | Project | Jobs | Jobs imported | Tested commits | Failing commits | Test classes | Notes |
 |---------|------|---------------|----------------|-----------------|--------------|-------|
 | brettwooldridge@HikariCP | 1,662 | 1,577 | 1,427 | 123 | 23 | 85 jobs without built commits skipped; 21,803 repeated in-job runs merged; 0 negative durations (2026-10-21) |
+| adamfisk@LittleProxy | 581 | 431 | 262 | 60 | 50 | 150 jobs without built commits; 24 runs merged |
+| neuland@jade4j | 932 | 931 | 314 | 59 | 46 | 1 job without built commits |
+| jsprit@jsprit | 1,089 | 1,061 | 260 | 14 | 107 | 28 jobs without built commits; very few failing commits |
+| l0rdn1kk0n@wicket-bootstrap | 1,110 | 904 | 820 | 323 | 91 | 203 jobs without built commits, 3 with missing commits; 2,579 runs merged; ~40 % of commits fail (long-running failures likely) — report separately |
+| dynjs@dynjs | 1,020 | 935 | 375 | 25 | 83 | 85 jobs without built commits |
+
+All job counts equal Table 2 of the RTPTorrent paper.
 
 Derived databases live in `experiments/datasets/derived/` (git-ignored) and
 are rebuilt with `codedna history import-rtptorrent`.

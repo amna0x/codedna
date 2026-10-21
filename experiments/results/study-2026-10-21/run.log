@@ -1,0 +1,13 @@
+start 2026-10-21T11:17:20Z commit 1992e71 (+ uncommitted study changes)
+hikaricp: dataset 0s, total 196s
+littleproxy: dataset 267s, total 314s
+jade4j: dataset 373s, total 419s
+jsprit: dataset 715s, total 738s
+wicket-bootstrap: dataset 1344s, total 1419s
+dynjs: dataset 1035s, total 1069s
+wrote experiments\results\study-2026-10-21\summary.md
+
+real	23m39.799s
+user	0m0.015s
+sys	0m0.000s
+exit=0
