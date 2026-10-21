@@ -553,3 +553,19 @@ Buck, so `run-tests` cannot reproduce them — we only use the recorded
 outcomes. Jobs of one build ran concurrently; CodeDNA aggregates per commit
 and orders commits by their first job, which never lets a later build inform
 an earlier one.
+
+## D-033 — Pin tree-sitter below 0.26 (native crash)
+
+Found on 2026-10-21 while computing structural features on RTPTorrent's
+HikariCP history: `tree-sitter` **0.26.0** (newest release, 2026-06-30) crashes
+the Python process with an access violation while CodeDNA walks the tree of an
+ordinary 15 KB file (`HikariConfig.java`); just before the crash a node
+reports position row −1, i.e. it reads freed memory. Reproduced in a separate
+process, without forced garbage collection, on Python 3.12.0 and 3.14.0.
+With **0.25.2** the same file parses 30× without error, and all 3,413
+distinct Java file versions in HikariCP's history (112,530 declarations)
+parse without a crash.
+
+Decision: `tree-sitter>=0.25,<0.26` in `pyproject.toml`, plus a test that
+fails if 0.26 is installed. Re-check when a newer release appears, using the
+same whole-history parse as the acceptance test.

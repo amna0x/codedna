@@ -367,3 +367,12 @@ def test_demo_repository_names_modified_method_and_added_class(tmp_path):
     assert ("example.Rounding", "class", "added") in [
         (d.id, d.kind, d.change) for d in rounding.declarations]
     assert report.warnings == []
+
+
+def test_tree_sitter_version_avoids_known_crash():
+    """tree-sitter 0.26.0 crashes (use-after-free) on ordinary files such as
+    HikariCP's HikariConfig.java; 0.25.x does not (docs/DECISIONS.md D-033)."""
+    from importlib.metadata import version
+
+    major, minor = (int(part) for part in version("tree-sitter").split(".")[:2])
+    assert (major, minor) < (0, 26)
