@@ -76,6 +76,7 @@ def summarise(out: Path, names: list[str], seeds: list[int]) -> dict:
                                 ("brier", "ece")),
             "ablations": _agg([e.get("ablations", {}) for e in experiments], ("pr_auc", "brier")),
             "warnings": sorted({w for e in experiments for w in e["warnings"]}),
+            "cost_matched": _cost_matched(experiments),
         }
         summary["projects"][name] = project
     for section in ("policies", "ordering", "calibration", "ablations"):
@@ -89,7 +90,142 @@ def summarise(out: Path, names: list[str], seeds: list[int]) -> dict:
             item: {metric: {"mean": round(mean(values), 4), "projects": len(values)}
                    for metric, values in metrics.items()}
             for item, metrics in pooled.items()}
+    summary["pooled_bootstrap"] = pooled_bootstrap(out, names, seeds)
     return summary
+
+
+PAIRS = {
+    "B9r_risk_target_only": "B9r − B8 at same time",
+    "B9_calibrated_fallback": "B9 − B8 at same time",
+    "B9n_unfamiliar_rule_only": "B9n − B8 at same time",
+}
+
+
+def _cost_matched(experiments: list[dict], resamples: int = 1000) -> dict:
+    """Each fallback policy vs B8 at the same test time, for one project.
+
+    Point estimates are means over seeds. Intervals come from a hierarchical
+    bootstrap (pick a seed, then resample that seed's test commits), so they
+    reflect both model randomness and the limited number of commits.
+    """
+    import random
+
+    result = {}
+    runs_all = [e.get("per_commit", {}) for e in experiments]
+    for policy, label in PAIRS.items():
+        rows = [e.get("cost_matched", {}).get(policy) for e in experiments]
+        rows = [r for r in rows if r]
+        runs = [(pc[policy], pc[f"B8@{policy}"]) for pc in runs_all
+                if policy in pc and f"B8@{policy}" in pc]
+        if not rows or not runs:
+            continue
+        entry = {"b8_budget": round(mean(r["b8_budget"] for r in rows), 4)}
+        for side in ("policy", "b8_same_time"):
+            entry[side] = {m: _mean_or_none([r[side][m] for r in rows]) for m in ("time", "recall", "safety")}
+        point = _mean_over_seeds({"_": runs})
+        draws = _hierarchical_draws({"_": runs}, resamples, random.Random(0))
+        entry["difference"] = {m: {"estimate": point[m], "ci": _percentile(draws[m])}
+                               for m in ("time", "recall", "safety")}
+        result[label] = entry
+    return result
+
+
+def pooled_bootstrap(out: Path, names: list[str], seeds: list[int], *,
+                     resamples: int = 2000) -> dict:
+    """Paired, stratified, hierarchical bootstrap over projects.
+
+    Each resample picks a seed for every project, resamples that seed's test
+    commits within the project, computes the project's difference (policy − B8
+    at the same time) and averages over the projects where the metric is
+    defined, each project counting once.
+    """
+    import random
+
+    per_project = {}
+    for name in names:
+        per_project[name] = [
+            json.loads((out / name / f"experiment-seed{s}.json").read_text(encoding="utf-8"))
+            .get("per_commit", {}) for s in seeds]
+    rng = random.Random(0)
+    result = {"method": f"stratified paired hierarchical bootstrap (seed, then commits), "
+                        f"{resamples} resamples, seeds {seeds}, projects weighted equally",
+              "comparisons": {}}
+    for policy, label in PAIRS.items():
+        data = {}
+        for name, runs in per_project.items():
+            pairs = [(pc[policy], pc[f"B8@{policy}"]) for pc in runs
+                     if policy in pc and f"B8@{policy}" in pc]
+            if pairs:
+                data[name] = pairs
+        if not data:
+            continue
+        point = _mean_over_seeds(data)
+        draws = _hierarchical_draws(data, resamples, rng)
+        contributing = _contributing(data)
+        result["comparisons"][label] = {
+            m: {"estimate": point[m], "ci": _percentile(draws[m]), "projects": contributing[m]}
+            for m in ("time", "recall", "safety")}
+    return result
+
+
+def _project_difference(a, b) -> dict:
+    from codedna.models.uncertainty import metrics
+
+    ma, mb = metrics([tuple(x) for x in a]), metrics([tuple(x) for x in b])
+    return {m: None if ma[m] is None or mb[m] is None else ma[m] - mb[m]
+            for m in ("time", "recall", "safety")}
+
+
+def _macro(per_project: list[dict]) -> dict:
+    return {m: (round(mean(v), 4) if (v := [d[m] for d in per_project if d[m] is not None]) else None)
+            for m in ("time", "recall", "safety")}
+
+
+def _mean_over_seeds(data: dict) -> dict:
+    """Macro average over projects of each project's mean-over-seeds difference."""
+    per_project = []
+    for runs in data.values():
+        diffs = [_project_difference(a, b) for a, b in runs]
+        per_project.append({m: _mean_or_none([d[m] for d in diffs]) for m in ("time", "recall", "safety")})
+    return _macro(per_project)
+
+
+def _hierarchical_draws(data: dict, resamples: int, rng) -> dict:
+    draws = {m: [] for m in ("time", "recall", "safety")}
+    for _ in range(resamples):
+        per_project = []
+        for runs in data.values():
+            a, b = runs[rng.randrange(len(runs))]
+            index = [rng.randrange(len(a)) for _ in range(len(a))]
+            per_project.append(_project_difference([a[i] for i in index], [b[i] for i in index]))
+        for metric, value in _macro(per_project).items():
+            if value is not None:
+                draws[metric].append(value)
+    return draws
+
+
+def _contributing(data: dict) -> dict:
+    """Projects whose metric is defined (e.g. safety needs failing test commits)."""
+    counts = {m: 0 for m in ("time", "recall", "safety")}
+    for runs in data.values():
+        diffs = [_project_difference(a, b) for a, b in runs]
+        for m in counts:
+            counts[m] += any(d[m] is not None for d in diffs)
+    return counts
+
+
+def _percentile(values: list[float], level: float = 0.95):
+    if len(values) < 20:
+        return None
+    values = sorted(values)
+    tail = (1 - level) / 2
+    return [round(values[int(tail * (len(values) - 1))], 4),
+            round(values[int((1 - tail) * (len(values) - 1))], 4)]
+
+
+def _mean_or_none(values):
+    values = [v for v in values if v is not None]
+    return round(mean(values), 4) if values else None
 
 
 def _agg(per_seed: list[dict], metrics: tuple[str, ...]) -> dict:
@@ -135,11 +271,37 @@ def to_markdown(summary: dict) -> str:
                 pooled = summary["pooled"][section].get(item, {}).get(metric)
                 cells.append(_fmt(pooled["mean"]) if pooled else "–")
                 lines.append(f"| {item} | " + " | ".join(cells) + " |")
+    lines += ["", "## Fallback vs B8 at the same test time", "",
+              "Positive safety/recall differences favour the fallback policy. Estimates are means "
+              "over seeds; 95 % intervals come from a hierarchical bootstrap (seed, then test "
+              "commits). Pooled: projects weighted equally; n = projects where the metric is "
+              "defined.", ""]
+    for label in PAIRS.values():
+        lines += [f"### {label}", "", "| Project | Time (policy / B8) | Recall Δ [95 % CI] | "
+                  "Safety Δ [95 % CI] |", "|---|---|---|---|"]
+        for name in names:
+            entry = summary["projects"][name]["cost_matched"].get(label)
+            if not entry:
+                continue
+            d = entry["difference"]
+            lines.append(f"| {name} | {_fmt(entry['policy']['time'])} / {_fmt(entry['b8_same_time']['time'])} "
+                         f"| {_fmt(d['recall']['estimate'])} {_ci(d['recall']['ci'])} "
+                         f"| {_fmt(d['safety']['estimate'])} {_ci(d['safety']['ci'])} |")
+        pooled = summary["pooled_bootstrap"]["comparisons"].get(label)
+        if pooled:
+            lines.append(f"| **All** (n = {pooled['safety']['projects']}) | Δ {_fmt(pooled['time']['estimate'])} "
+                         f"| {_fmt(pooled['recall']['estimate'])} {_ci(pooled['recall']['ci'])} "
+                         f"| {_fmt(pooled['safety']['estimate'])} {_ci(pooled['safety']['ci'])} |")
+        lines.append("")
     lines += ["", "## Warnings", ""]
     for name in names:
         for warning in summary["projects"][name]["warnings"]:
             lines.append(f"- **{name}**: {warning}")
     return "\n".join(lines) + "\n"
+
+
+def _ci(interval) -> str:
+    return f"[{interval[0]:.3f}, {interval[1]:.3f}]" if interval else "[n/a]"
 
 
 def _fmt(value) -> str:

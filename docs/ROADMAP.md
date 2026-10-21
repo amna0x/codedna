@@ -97,6 +97,11 @@ Java stays the only supported language until Milestone 5 is complete.
 - ✅ First real run on HikariCP (`experiments/results/hikaricp-2026-10-21`)
 - ✅ Study over six RTPTorrent projects × five seeds with separated fallback
   triggers B9r / B9n (D-034) — `experiments/results/study-2026-10-21`
+- ✅ Study over eleven projects × five seeds with cost-matched comparisons
+  and hierarchical bootstrap intervals (D-035) —
+  `experiments/results/study11-2026-10-21/FINDINGS.md`: calibration robustly
+  improves reliability; fallback gives no reliable gain over the same test
+  time (one project excepted); ML ordering does not beat simple rules
 
 Product track, alongside:
 

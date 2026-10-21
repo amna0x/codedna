@@ -27,7 +27,11 @@ On the chronological split (D-023):
   missed failures, commit safety rate, fallback rate, and — for policies
   with probabilities — mean estimated skip risk vs observed miss rate;
 * ``risk_coverage`` sweeps the budget (B8) and the risk target (B9, B9r);
-* ``ablations`` retrains without each feature group — RQ1/RQ5.
+* ``ablations`` retrains without each feature group — RQ1/RQ5;
+* ``cost_matched`` compares each fallback policy with B8 at the budget that
+  spends the same real test time, and ``bootstrap`` gives 95 % intervals for
+  policies and paired differences (resampling test commits, D-035);
+  ``per_commit`` keeps compact outcomes so studies can pool projects.
 
 Nothing is assumed: every number comes from the stored history.
 """
@@ -45,6 +49,8 @@ from codedna.calibration.calibrators import METHODS, Calibrator
 from codedna.calibration.metrics import brier_score, expected_calibration_error, reliability_bins
 from codedna.models.evaluate import chronological_split
 from codedna.models.rankers import MLRanker
+from codedna.models.uncertainty import bootstrap, match_budget
+from codedna.models.uncertainty import metrics as outcome_metrics
 from codedna.selection.risk import RiskPolicy, decide
 from codedna.test_history.features import (
     CHANGE_FEATURES,
@@ -97,10 +103,15 @@ def run_experiment(dataset: Dataset, *, model: str = "gradient_boosting",
             warnings.append(f"calibrator not fitted ({exc}); B8/B9 use raw probabilities")
             calibrator = Calibrator("none")
 
-    def probabilities(rows, *, calibrated=True, ranker=None):
-        ranker = ranker or full
-        raw = ranker.predict_proba(rows)
-        return calibrator.transform(raw) if calibrated and calibrator else raw
+    memo: dict[tuple[bool, str], list[float]] = {}
+
+    def probabilities(rows, *, calibrated=True):
+        # Memoised per commit: budget searches re-evaluate the same commits often.
+        key = (calibrated, rows[0].commit if rows else "")
+        if key not in memo:
+            raw = full.predict_proba(rows)
+            memo[key] = calibrator.transform(raw) if calibrated and calibrator else raw
+        return memo[key]
 
     report["calibration"] = _calibration_section(full, valid, test_rows, warnings) \
         if full is not None else None
@@ -128,6 +139,9 @@ def run_experiment(dataset: Dataset, *, model: str = "gradient_boosting",
             probabilities, RiskPolicy(budget=budget, risk_target=None, fallback=True))
     report["policies"] = {name: _measure(test_commits, fn) for name, fn in policies.items()}
 
+    if full is not None:
+        _cost_matched_and_bootstrap(report, policies, test_commits, probabilities, seed)
+
     if sweeps and full is not None:
         report["risk_coverage"] = {
             "B8_budget_sweep": [
@@ -146,6 +160,46 @@ def run_experiment(dataset: Dataset, *, model: str = "gradient_boosting",
         report["ablations"] = _ablations(model, dataset.feature_names, train, test_commits,
                                          budget, seed, warnings)
     return report
+
+
+def _outcomes(test_commits: list[list[Row]], choose) -> list[tuple[float, int, int]]:
+    """Per-commit (time ratio, failing tests, missed failing tests)."""
+    result = []
+    for rows in test_commits:
+        chosen = set(choose(rows)[0])
+        failing = {r.test_id for r in rows if r.label}
+        total = sum(r.duration for r in rows)
+        time = sum(r.duration for r in rows if r.test_id in chosen) / total if total             else len(chosen) / len(rows)
+        result.append((round(time, 4), len(failing), len(failing - chosen)))
+    return result
+
+
+def _cost_matched_and_bootstrap(report: dict, policies: dict, test_commits, probabilities,
+                                seed: int) -> None:
+    keep = ("B0_retest_all", "B4_dependency", "B8_ml_calibrated", "B9_calibrated_fallback",
+            "B9r_risk_target_only", "B9n_unfamiliar_rule_only")
+    outcomes = {name: _outcomes(test_commits, policies[name]) for name in keep if name in policies}
+
+    def b8_at(budget: float):
+        return _outcomes(test_commits, _ml_policy(probabilities, RiskPolicy(budget=budget)))
+
+    matched = {}
+    pairs = {"B9r − B8 (default budget)": ("B9r_risk_target_only", "B8_ml_calibrated")}
+    for name in ("B9_calibrated_fallback", "B9r_risk_target_only", "B9n_unfamiliar_rule_only"):
+        target = outcome_metrics(outcomes[name])["time"]
+        budget, b8 = match_budget(b8_at, target)
+        outcomes[f"B8@{name}"] = b8
+        matched[name] = {"b8_budget": budget, "policy": _rounded(outcome_metrics(outcomes[name])),
+                         "b8_same_time": _rounded(outcome_metrics(b8))}
+        pairs[f"{name} − B8 at same time"] = (name, f"B8@{name}")
+    report["cost_matched"] = matched
+    report["bootstrap"] = bootstrap(outcomes, pairs, seed=seed)
+    report["per_commit"] = {"fields": ["time_ratio", "failing", "missed"],
+                            **{name: [list(o) for o in values] for name, values in outcomes.items()}}
+
+
+def _rounded(values: dict) -> dict:
+    return {k: None if v is None else round(v, 4) for k, v in values.items()}
 
 
 def _risk_only(budget: float, risk_target: float) -> RiskPolicy:

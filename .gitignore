@@ -28,7 +28,7 @@ experiments/datasets/raw/
 experiments/datasets/private/
 experiments/datasets/derived/
 # Study feature datasets are rebuilt by scripts/run_study.py (SHA-256 in each report)
-experiments/results/study-*/*/dataset.csv
+experiments/results/study*/*/dataset.csv
 *.sqlite
 *.db
 

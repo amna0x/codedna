@@ -84,10 +84,11 @@ class ImpactReport:
 
 
 def compute_impact(repo_path: str | Path, base: str, head: str, *,
-                   max_depth: int | None = None, include_heuristic: bool = True) -> ImpactReport:
+                   max_depth: int | None = None, include_heuristic: bool = True,
+                   cache: dict | None = None) -> ImpactReport:
     changes = analyze_changes(repo_path, base, head)
     repo = Path(changes.repository)
-    cache: dict = {}
+    cache = {} if cache is None else cache  # parses keyed by blob SHA (may be shared)
     java = load_plugins().get("java")  # only language analysed so far (D-013)
     graph = merge_graphs(
         java.build_graph(repo, changes.base_commit, cache=cache),

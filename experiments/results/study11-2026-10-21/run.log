@@ -1,0 +1,13 @@
+start 2026-10-21T16:42:34Z commit de24a4e (+ uncommitted cost-matching/bootstrap/cache changes)
+graylog2-server: dataset 7673s, total 7990s
+jooq: dataset 7649s, total 7706s
+jcabi-github: dataset 978s, total 1041s
+optiq: dataset 2022s, total 2062s
+achilles: dataset 1731s, total 1794s
+hikaricp: dataset 0s, total 88s
+littleproxy: dataset 0s, total 35s
+jade4j: dataset 0s, total 41s
+jsprit: dataset 0s, total 23s
+wicket-bootstrap: dataset 0s, total 68s
+dynjs: dataset 0s, total 35s
+wrote experiments\results\study11-2026-10-21\summary.md

@@ -593,3 +593,37 @@ data variation. Results are reported per project and as an **unweighted mean
 of project means** (each project counts once, so a large project cannot
 dominate). wicket-bootstrap (~40 % failing commits) is reported but its
 behaviour should be discussed separately.
+
+## D-035 — Cost-matched comparisons, bootstrap intervals, shared parse cache
+
+The six-project study showed that a fallback policy "wins" partly by running
+more tests. From now on every fallback policy (B9, B9r, B9n) is also
+compared with the calibrated selector **B8 at the budget that spends the same
+real test time**, found by bisection over the budget (`models/uncertainty.py`).
+That paired difference — not the default-setting comparison — answers RQ4.
+
+Uncertainty: percentile bootstrap over **test commits** (1,000 resamples per
+experiment, seed = run seed), with paired resampling for differences.
+Studies add a **stratified paired bootstrap** across projects (2,000
+resamples): commits are resampled within each project and project
+differences are averaged with equal weight. Limitations: commits are treated
+as independent (neighbouring commits are correlated, so intervals are
+somewhat optimistic), and the split is fixed, so intervals do not cover
+"another time period". Experiments keep compact per-commit outcomes
+(`per_commit`: time ratio, failing, missed) so pooled analyses need no rerun.
+
+Revision (2026-10-22): intervals that used one seed's outcomes were
+misleading where policies are seed-sensitive (wicket-bootstrap: the matched
+difference is ≈0 in seed 0 and ≈+0.9 in seeds 1–4). Study intervals now use a
+**hierarchical bootstrap** — pick a seed, then resample that seed's test
+commits — and point estimates are means over seeds; pooled results state how
+many projects contribute to each metric.
+
+Data quality (RTPTorrent): graylog2-server and jOOQ have no failing commits
+in their test periods because their CI logs record far fewer test classes
+there (~1 and ~7 per commit); they are kept but contribute no recall/safety.
+
+Performance: structural features now share one bounded LRU parse cache
+(4,000 blobs) across all commits of a dataset instead of re-parsing every
+file for every commit; LittleProxy's dataset is byte-identical and builds in
+145 s instead of 267 s.

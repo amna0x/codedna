@@ -23,6 +23,7 @@ from dataclasses import dataclass, field
 from pathlib import Path, PurePosixPath
 
 from codedna.git_analysis.git import CodeDNAGitError, resolve_repository
+from codedna.dependency_graph.builder import BoundedParseCache
 from codedna.impact_analysis import compute_impact
 from codedna.test_history.store import HistoryStore
 
@@ -116,6 +117,8 @@ def build_dataset(store: HistoryStore, repo_path: str | Path | None = None, *,
         return dataset
 
     states: dict[str, _TestState] = defaultdict(_TestState)
+    # Parses shared across commits: consecutive commits change few files.
+    parse_cache = BoundedParseCache()
     # path -> test -> number of failures of that test at commits touching path
     file_failures: dict[str, dict[str, int]] = defaultdict(lambda: defaultdict(int))
 
@@ -130,7 +133,7 @@ def build_dataset(store: HistoryStore, repo_path: str | Path | None = None, *,
             "lines_added": sum(f.added or 0 for f in files),
             "lines_deleted": sum(f.deleted or 0 for f in files),
         }
-        impacted = _structural(repo, commit, dataset.warnings) if structural else None
+        impacted = _structural(repo, commit, dataset.warnings, parse_cache) if structural else None
 
         results = [r for r in store.results(commit.sha) if r.status != "skipped"]
         for result in results:
@@ -186,12 +189,13 @@ def _history_features(state: _TestState, index: int) -> dict[str, float]:
     }
 
 
-def _structural(repo: Path, commit, warnings: list[str]) -> dict[str, tuple[int, bool]] | None:
+def _structural(repo: Path, commit, warnings: list[str],
+                cache: dict | None = None) -> dict[str, tuple[int, bool]] | None:
     """test id -> (graph distance, reached through confirmed edges only)."""
     if commit.parent is None:
         return None
     try:
-        report = compute_impact(repo, commit.parent, commit.sha)
+        report = compute_impact(repo, commit.parent, commit.sha, cache=cache)
     except CodeDNAGitError as exc:
         warnings.append(f"{commit.sha[:12]}: structural features unavailable ({exc})")
         return None

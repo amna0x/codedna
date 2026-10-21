@@ -73,6 +73,16 @@ Caveats from the paper, to handle in the importer and report honestly:
 | jsprit@jsprit | 1,089 | 1,061 | 260 | 14 | 107 | 28 jobs without built commits; very few failing commits |
 | l0rdn1kk0n@wicket-bootstrap | 1,110 | 904 | 820 | 323 | 91 | 203 jobs without built commits, 3 with missing commits; 2,579 runs merged; ~40 % of commits fail (long-running failures likely) — report separately |
 | dynjs@dynjs | 1,020 | 935 | 375 | 25 | 83 | 85 jobs without built commits |
+| doanduyhai@Achilles | 997 | 773 | 504 | 22 | 627 | 224 jobs without built commits; 6,302 runs merged |
+| jOOQ@jOOQ | 3,245 | 3,166 | 1,289 | 398 | 51 | 79 jobs without built commits; 1,057 runs merged |
+| jcabi@jcabi-github | 3,241 | 2,310 | 591 | 114 | 201 | 931 jobs without built commits; 2,050 runs merged |
+| Graylog2@graylog2-server | 10,622 | 8,367 | 4,394 | 162 | 293 | 2,238 without built commits, 17 with missing commits; 378,941 runs merged |
+| julianhyde@optiq | 1,808 | 1,306 | 454 | 38 | 63 | 502 jobs without built commits; 235 runs merged |
+
+Recording gaps: graylog2-server's logs hold ~1 test class per commit for
+about 30 % of its history and jOOQ's drop from ~34 to ~7 classes per commit in
+its last 30 %; neither has a failing commit in its latest 20 %. Check
+"test classes recorded per commit over time" before using a project.
 
 All job counts equal Table 2 of the RTPTorrent paper.
 

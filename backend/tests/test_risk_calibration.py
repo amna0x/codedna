@@ -299,3 +299,8 @@ def test_study_runner_aggregates_seeds_and_projects(tmp_path):
     assert summary["pooled"]["policies"]["B9r_risk_target_only"]["mean_time_ratio"]["projects"] == 2
     assert (tmp_path / "alpha" / "experiment-seed1.json").is_file()
     assert "| B9n_unfamiliar_rule_only |" in markdown and "## Ablations" in markdown
+    pooled = summary["pooled_bootstrap"]["comparisons"]["B9r − B8 at same time"]
+    assert pooled["time"]["projects"] == 2 and pooled["safety"]["estimate"] is not None
+    assert summary["projects"]["alpha"]["cost_matched"]["B9 − B8 at same time"]["difference"]["time"]["ci"] is not None
+    assert "B9 − B8 at same time" in summary["projects"]["alpha"]["cost_matched"]
+    assert "## Fallback vs B8 at the same test time" in markdown

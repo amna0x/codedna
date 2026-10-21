@@ -13,6 +13,7 @@ see docs/DECISIONS.md D-010 for exactly what is and is not handled.
 
 from __future__ import annotations
 
+from collections import OrderedDict
 from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
 
@@ -68,10 +69,10 @@ def build_graph_for_commit(repo: Path, commit: str, *, include_members: bool = T
                            cache: ParseCache | None = None) -> CodeGraph:
     cache = {} if cache is None else cache
     files = list_files(repo, commit, ".java")
-    _parse_missing(repo, files, cache)
+    by_blob = _parse_missing(repo, files, cache)
 
     graph = CodeGraph(repository=str(repo), commit=commit)
-    parsed = {path: cache[blob] for path, blob in files}
+    parsed = {path: by_blob[blob] for path, blob in files}
     _add_structure(graph, parsed, include_members)
     _Resolver(graph, parsed).add_dependency_edges()
     return graph
@@ -80,14 +81,46 @@ def build_graph_for_commit(repo: Path, commit: str, *, include_members: bool = T
 # --- reading files from Git ---------------------------------------------------
 
 
-def _parse_missing(repo: Path, files: list[tuple[str, str]], cache: ParseCache) -> None:
-    missing = sorted({blob for _, blob in files if blob not in cache})
-    if not missing:
-        return
-    contents = read_blobs(repo, missing)
-    for blob in missing:
-        source = contents[blob]
-        cache[blob] = (parse_java(source), extract_references(source))
+def _parse_missing(repo: Path, files: list[tuple[str, str]],
+                   cache: ParseCache) -> dict[str, tuple[JavaParseResult, FileFacts]]:
+    """Parses for every blob of ``files``: from ``cache`` when present, else parsed now.
+
+    The result is returned directly, so a bounded cache evicting entries
+    while new ones are added cannot make this commit's lookups fail.
+    """
+    needed = sorted({blob for _, blob in files})
+    result = {blob: cache[blob] for blob in needed if blob in cache}
+    missing = [blob for blob in needed if blob not in result]
+    if missing:
+        contents = read_blobs(repo, missing)
+        for blob in missing:
+            source = contents[blob]
+            result[blob] = cache[blob] = (parse_java(source), extract_references(source))
+    return result
+
+
+class BoundedParseCache(OrderedDict):
+    """Least-recently-used parse cache shared across many commits.
+
+    Consecutive commits share almost all files, so reusing parses by blob SHA
+    avoids re-parsing the whole repository for every commit; the bound keeps
+    memory flat on long histories.
+    """
+
+    def __init__(self, max_entries: int = 4000):
+        super().__init__()
+        self.max_entries = max_entries
+
+    def __getitem__(self, key):
+        value = super().__getitem__(key)
+        self.move_to_end(key)
+        return value
+
+    def __setitem__(self, key, value):
+        super().__setitem__(key, value)
+        self.move_to_end(key)
+        while len(self) > self.max_entries:
+            self.popitem(last=False)
 
 
 # --- structural nodes and "contains" edges ------------------------------------
