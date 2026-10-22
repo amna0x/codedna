@@ -77,6 +77,7 @@ def summarise(out: Path, names: list[str], seeds: list[int]) -> dict:
             "ablations": _agg([e.get("ablations", {}) for e in experiments], ("pr_auc", "brier")),
             "warnings": sorted({w for e in experiments for w in e["warnings"]}),
             "cost_matched": _cost_matched(experiments),
+            "graph": _graph_signal(experiments, out / name / "dataset.csv"),
         }
         summary["projects"][name] = project
     for section in ("policies", "ordering", "calibration", "ablations"):
@@ -92,6 +93,58 @@ def summarise(out: Path, names: list[str], seeds: list[int]) -> dict:
             for item, metrics in pooled.items()}
     summary["pooled_bootstrap"] = pooled_bootstrap(out, names, seeds)
     return summary
+
+
+GRAPH_ABLATION_METRICS = ("pr_auc", "failing_test_recall_at_budget", "commit_safety_rate_at_budget")
+
+
+def _graph_signal(experiments: list[dict], dataset_csv: Path) -> dict:
+    """What the dependency-graph (structural) features add, for one project.
+
+    * ``ablation``: mean over seeds of (all features − without structural) for
+      the experiment's model, plus in how many seeds PR-AUC improved;
+    * ``b4`` / ``b8``: graph-only selection (B4) next to calibrated ML (B8);
+    * ``reachability``: on the test split, the share of failing (commit, test)
+      rows whose test is reachable from the change in the graph, against the
+      share of all rows (lift > 1 means the graph points towards failures).
+    """
+    result: dict = {"ablation": {}}
+    pairs = [e.get("ablations", {}) for e in experiments]
+    pairs = [(a["all_features"], a["without_structural"]) for a in pairs
+             if "all_features" in a and "without_structural" in a]
+    for metric in GRAPH_ABLATION_METRICS:
+        result["ablation"][metric] = _mean_or_none(
+            [x[metric] - y[metric] for x, y in pairs if x[metric] is not None and y[metric] is not None])
+    defined = [(x, y) for x, y in pairs if x["pr_auc"] is not None and y["pr_auc"] is not None]
+    result["ablation"]["pr_auc_improved_seeds"] = (
+        f"{sum(x['pr_auc'] > y['pr_auc'] for x, y in defined)}/{len(defined)}" if defined else None)
+    for key, policy in (("b4", "B4_dependency"), ("b8", "B8_ml_calibrated")):
+        runs = [e["policies"][policy] for e in experiments if policy in e["policies"]]
+        result[key] = {m: _mean_or_none([r.get(m) for r in runs])
+                       for m in ("mean_time_ratio", "failing_test_recall", "commit_safety_rate")}
+    result["reachability"] = _reachability(dataset_csv)
+    return result
+
+
+def _reachability(dataset_csv: Path) -> dict | None:
+    from codedna.models.evaluate import chronological_split
+    from codedna.test_history.features import Dataset
+
+    if not dataset_csv.is_file():
+        return None
+    dataset = Dataset.from_csv(dataset_csv)
+    if "dep_reachable" not in dataset.feature_names:
+        return None
+    test = set(chronological_split(dataset)["test"])
+    rows = [r for r in dataset.rows if r.commit in test]
+    failing = [r for r in rows if r.label]
+    if not rows or not failing:
+        return {"failing_rows": len(failing), "failing_reachable": None, "all_reachable": None, "lift": None}
+    share = lambda group: sum(r.features["dep_reachable"] > 0 for r in group) / len(group)
+    fail_share, all_share = share(failing), share(rows)
+    return {"failing_rows": len(failing), "failing_reachable": round(fail_share, 4),
+            "all_reachable": round(all_share, 4),
+            "lift": round(fail_share / all_share, 3) if all_share else None}
 
 
 PAIRS = {
@@ -293,6 +346,27 @@ def to_markdown(summary: dict) -> str:
                          f"| {_fmt(pooled['recall']['estimate'])} {_ci(pooled['recall']['ci'])} "
                          f"| {_fmt(pooled['safety']['estimate'])} {_ci(pooled['safety']['ci'])} |")
         lines.append("")
+    lines += ["## Dependency-graph signal", "",
+              "Ablation Δ = all features − without structural features (mean over seeds; "
+              "the experiment's model, uncalibrated). B4 = graph-only selection; B8 = calibrated "
+              "ML at budget 0.5. Reachable = share of test-split (commit, test) rows whose test the "
+              "graph reaches from the change; lift = failing share / all share.", "",
+              "| Project | ΔPR-AUC (seeds better) | ΔRecall | ΔSafety | B4 time / recall / safety "
+              "| B8 time / recall / safety | Failing rows reachable / all rows (lift) |",
+              "|---|---|---|---|---|---|---|"]
+    for name in names:
+        g = summary["projects"][name].get("graph")
+        if not g:
+            continue
+        a, reach = g["ablation"], g["reachability"] or {}
+        triple = lambda p: " / ".join(_fmt(p[m]) for m in ("mean_time_ratio", "failing_test_recall",
+                                                            "commit_safety_rate"))
+        reach_cell = (f"{_fmt(reach['failing_reachable'])} / {_fmt(reach['all_reachable'])} "
+                      f"({_fmt(reach['lift'])})" if reach.get("lift") is not None else "–")
+        lines.append(f"| {name} | {_signed(a['pr_auc'])} ({a['pr_auc_improved_seeds'] or '–'}) "
+                     f"| {_signed(a['failing_test_recall_at_budget'])} "
+                     f"| {_signed(a['commit_safety_rate_at_budget'])} | {triple(g['b4'])} "
+                     f"| {triple(g['b8'])} | {reach_cell} |")
     lines += ["", "## Warnings", ""]
     for name in names:
         for warning in summary["projects"][name]["warnings"]:
@@ -302,6 +376,10 @@ def to_markdown(summary: dict) -> str:
 
 def _ci(interval) -> str:
     return f"[{interval[0]:.3f}, {interval[1]:.3f}]" if interval else "[n/a]"
+
+
+def _signed(value) -> str:
+    return "–" if value is None else f"{value:+.3f}"
 
 
 def _fmt(value) -> str:

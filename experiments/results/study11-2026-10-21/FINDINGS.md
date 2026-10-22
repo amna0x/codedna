@@ -95,6 +95,44 @@ Recall at 50 % of test time: recent-failures 0.71, shortest-first 0.70,
 random 0.63, logistic regression 0.62, gradient boosting 0.53. Both ML
 models are at or below random on average.
 
+## Dependency graph: **small, project-dependent signal**
+
+Source: "Dependency-graph signal" in `summary.md`. Three views of what
+the change-impact graph contributes:
+
+1. **Ablation** (gradient boosting, uncalibrated, mean over 5 seeds):
+   removing the three structural features (`dep_reachable`,
+   `dep_distance`, `dep_confirmed`) lowers PR-AUC on jcabi-github (−0.072,
+   4/5 seeds), optiq (−0.080, 5/5) and HikariCP (−0.013, 5/5); elsewhere the
+   change is within ±0.001. Recall/safety at budget 0.5 barely move: HikariCP
+   recall +0.017, jade4j +0.5 (one of its two failing commits),
+   jcabi-github slightly *worse* with the graph (−0.009 recall). History
+   features matter far more (pooled PR-AUC 0.138 with all features vs 0.080
+   without history, 0.119 without structural).
+2. **Does the graph point at failing tests?** On the test split, compare the
+   share of failing (commit, test) rows whose test the graph reaches from the
+   change with the share of all rows. Projects with ≥ 20 failing rows:
+   jsprit 0.96 vs 0.21 (lift 4.6), HikariCP 0.66 vs 0.49 (1.4),
+   wicket-bootstrap 0.04 vs 0.04 (0.9), jcabi-github 0.05 vs 0.16 (**0.3**,
+   failures occur in tests the graph does *not* reach). The other projects
+   have 1–7 failing rows, too few to read.
+3. **Graph-only selection (B4)** versus calibrated ML (B8), test time /
+   recall / safety: jsprit 0.41 / 0.96 / 0.86 vs 0.35 / 0.92 / 0.71; Achilles
+   reaches the same full safety with less time (0.33 vs 0.46); but on
+   jcabi-github (0.16 / 0.05 / 0.06) and wicket-bootstrap (0.05 / 0.04 / 0.04)
+   B4 runs almost nothing relevant. On graylog2-server and jOOQ the graph
+   reaches almost no recorded test (B4 time ≈ 0), consistent with their
+   sparse test recording.
+
+Reading: where failures come from code the change touches (jsprit,
+HikariCP), the graph is a real, cheap signal. Where failures come from
+long-running or environment-dependent tests unrelated to the change
+(wicket-bootstrap's persistent failure; jcabi-github's failures, whose cause
+we have not inspected), the graph cannot see them and history features carry the
+model. The graph is a useful *component*, not a decisive one, on this
+data. Caveats: class-level results only, class-level (not method-level)
+edges, and no type resolution (D-010).
+
 ## Honest summary
 
 1. **Calibration works** and is the most solid result: probability
@@ -105,7 +143,10 @@ models are at or below random on average.
    (wicket-bootstrap) where failures are frequent and concentrated in an
    expensive test; the pooled interval just touches 0.
 3. **ML ordering is not better than simple time-aware rules** (or random).
-4. Two of eleven projects carry no evaluable failures; several others very
+4. **The dependency graph helps on some projects** (jsprit, HikariCP,
+   optiq) and is blind on others (jcabi-github, wicket-bootstrap); history
+   features carry most of the model's signal.
+5. Two of eleven projects carry no evaluable failures; several others very
    few. The evidence is about *these* projects and periods (2012–2016).
 
 ## What this means for the claim

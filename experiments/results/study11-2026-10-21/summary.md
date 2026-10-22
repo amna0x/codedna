@@ -250,6 +250,23 @@ Positive safety/recall differences favour the fallback policy. Estimates are mea
 | dynjs | 0.744 / 0.724 | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] |
 | **All** (n = 9) | Δ 0.018 | -0.018 [-0.114, 0.092] | -0.006 [-0.109, 0.109] |
 
+## Dependency-graph signal
+
+Ablation Δ = all features − without structural features (mean over seeds; the experiment's model, uncalibrated). B4 = graph-only selection; B8 = calibrated ML at budget 0.5. Reachable = share of test-split (commit, test) rows whose test the graph reaches from the change; lift = failing share / all share.
+
+| Project | ΔPR-AUC (seeds better) | ΔRecall | ΔSafety | B4 time / recall / safety | B8 time / recall / safety | Failing rows reachable / all rows (lift) |
+|---|---|---|---|---|---|---|
+| graylog2-server | – (–) | – | – | 0.004 / – / – | 0.551 / – / – | – |
+| jooq | – (–) | – | – | 0.000 / – / – | 0.435 / – / – | – |
+| jcabi-github | +0.072 (4/5) | -0.009 | -0.008 | 0.163 / 0.051 / 0.058 | 0.498 / 0.754 / 0.615 | 0.051 / 0.159 (0.323) |
+| optiq | +0.080 (5/5) | +0.000 | +0.000 | 0.561 / 0.714 / 0.500 | 0.538 / 1.000 / 1.000 | 0.714 / 0.425 (1.681) |
+| achilles | -0.001 (2/5) | +0.000 | +0.000 | 0.332 / 1.000 / 1.000 | 0.464 / 1.000 / 1.000 | 1.000 / 0.256 (3.912) |
+| hikaricp | +0.013 (5/5) | +0.017 | +0.000 | 0.493 / 0.661 / 0.650 | 0.359 / 0.810 / 0.550 | 0.661 / 0.486 (1.361) |
+| littleproxy | -0.000 (0/5) | +0.000 | +0.000 | 0.609 / 0.400 / 0.400 | 0.469 / 0.200 / 0.200 | 0.400 / 0.594 (0.674) |
+| jade4j | +0.001 (5/5) | +0.500 | +0.500 | 0.300 / 0.500 / 0.500 | 0.861 / 1.000 / 1.000 | 0.500 / 0.248 (2.013) |
+| jsprit | -0.001 (2/5) | +0.000 | +0.000 | 0.414 / 0.960 / 0.857 | 0.353 / 0.920 / 0.714 | 0.960 / 0.207 (4.645) |
+| wicket-bootstrap | +0.001 (3/5) | +0.000 | +0.000 | 0.045 / 0.038 / 0.035 | 0.499 / 0.850 / 0.053 | 0.038 / 0.041 (0.917) |
+| dynjs | +0.000 (0/5) | +0.000 | +0.000 | 0.747 / 1.000 / 1.000 | 0.499 / 1.000 / 1.000 | 1.000 / 0.722 (1.385) |
 
 ## Warnings
 

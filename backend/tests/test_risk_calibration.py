@@ -304,3 +304,7 @@ def test_study_runner_aggregates_seeds_and_projects(tmp_path):
     assert summary["projects"]["alpha"]["cost_matched"]["B9 − B8 at same time"]["difference"]["time"]["ci"] is not None
     assert "B9 − B8 at same time" in summary["projects"]["alpha"]["cost_matched"]
     assert "## Fallback vs B8 at the same test time" in markdown
+    graph = summary["projects"]["alpha"]["graph"]
+    assert set(graph) == {"ablation", "b4", "b8", "reachability"}
+    assert graph["ablation"]["pr_auc_improved_seeds"] is None or "/" in graph["ablation"]["pr_auc_improved_seeds"]
+    assert "## Dependency-graph signal" in markdown

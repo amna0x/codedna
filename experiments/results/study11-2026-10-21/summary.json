@@ -530,6 +530,30 @@
             }
           }
         }
+      },
+      "graph": {
+        "ablation": {
+          "pr_auc": null,
+          "failing_test_recall_at_budget": null,
+          "commit_safety_rate_at_budget": null,
+          "pr_auc_improved_seeds": null
+        },
+        "b4": {
+          "mean_time_ratio": 0.004,
+          "failing_test_recall": null,
+          "commit_safety_rate": null
+        },
+        "b8": {
+          "mean_time_ratio": 0.5509,
+          "failing_test_recall": null,
+          "commit_safety_rate": null
+        },
+        "reachability": {
+          "failing_rows": 0,
+          "failing_reachable": null,
+          "all_reachable": null,
+          "lift": null
+        }
       }
     },
     "jooq": {
@@ -1053,6 +1077,30 @@
               "ci": null
             }
           }
+        }
+      },
+      "graph": {
+        "ablation": {
+          "pr_auc": null,
+          "failing_test_recall_at_budget": null,
+          "commit_safety_rate_at_budget": null,
+          "pr_auc_improved_seeds": null
+        },
+        "b4": {
+          "mean_time_ratio": 0.0,
+          "failing_test_recall": null,
+          "commit_safety_rate": null
+        },
+        "b8": {
+          "mean_time_ratio": 0.4347,
+          "failing_test_recall": null,
+          "commit_safety_rate": null
+        },
+        "reachability": {
+          "failing_rows": 0,
+          "failing_reachable": null,
+          "all_reachable": null,
+          "lift": null
         }
       }
     },
@@ -1596,6 +1644,30 @@
             }
           }
         }
+      },
+      "graph": {
+        "ablation": {
+          "pr_auc": 0.072,
+          "failing_test_recall_at_budget": -0.0085,
+          "commit_safety_rate_at_budget": -0.0077,
+          "pr_auc_improved_seeds": "4/5"
+        },
+        "b4": {
+          "mean_time_ratio": 0.1629,
+          "failing_test_recall": 0.0513,
+          "commit_safety_rate": 0.0577
+        },
+        "b8": {
+          "mean_time_ratio": 0.4976,
+          "failing_test_recall": 0.7538,
+          "commit_safety_rate": 0.6154
+        },
+        "reachability": {
+          "failing_rows": 117,
+          "failing_reachable": 0.0513,
+          "all_reachable": 0.1587,
+          "lift": 0.323
+        }
       }
     },
     "optiq": {
@@ -2138,6 +2210,30 @@
             }
           }
         }
+      },
+      "graph": {
+        "ablation": {
+          "pr_auc": 0.0796,
+          "failing_test_recall_at_budget": 0.0,
+          "commit_safety_rate_at_budget": 0.0,
+          "pr_auc_improved_seeds": "5/5"
+        },
+        "b4": {
+          "mean_time_ratio": 0.561,
+          "failing_test_recall": 0.7143,
+          "commit_safety_rate": 0.5
+        },
+        "b8": {
+          "mean_time_ratio": 0.5382,
+          "failing_test_recall": 1.0,
+          "commit_safety_rate": 1.0
+        },
+        "reachability": {
+          "failing_rows": 7,
+          "failing_reachable": 0.7143,
+          "all_reachable": 0.425,
+          "lift": 1.681
+        }
       }
     },
     "achilles": {
@@ -2663,6 +2759,30 @@
               ]
             }
           }
+        }
+      },
+      "graph": {
+        "ablation": {
+          "pr_auc": -0.0008,
+          "failing_test_recall_at_budget": 0.0,
+          "commit_safety_rate_at_budget": 0.0,
+          "pr_auc_improved_seeds": "2/5"
+        },
+        "b4": {
+          "mean_time_ratio": 0.3317,
+          "failing_test_recall": 1.0,
+          "commit_safety_rate": 1.0
+        },
+        "b8": {
+          "mean_time_ratio": 0.4641,
+          "failing_test_recall": 1.0,
+          "commit_safety_rate": 1.0
+        },
+        "reachability": {
+          "failing_rows": 1,
+          "failing_reachable": 1.0,
+          "all_reachable": 0.2556,
+          "lift": 3.912
         }
       }
     },
@@ -3206,6 +3326,30 @@
             }
           }
         }
+      },
+      "graph": {
+        "ablation": {
+          "pr_auc": 0.0129,
+          "failing_test_recall_at_budget": 0.0165,
+          "commit_safety_rate_at_budget": 0.0,
+          "pr_auc_improved_seeds": "5/5"
+        },
+        "b4": {
+          "mean_time_ratio": 0.4928,
+          "failing_test_recall": 0.6612,
+          "commit_safety_rate": 0.65
+        },
+        "b8": {
+          "mean_time_ratio": 0.3588,
+          "failing_test_recall": 0.8099,
+          "commit_safety_rate": 0.55
+        },
+        "reachability": {
+          "failing_rows": 121,
+          "failing_reachable": 0.6612,
+          "all_reachable": 0.4857,
+          "lift": 1.361
+        }
       }
     },
     "littleproxy": {
@@ -3747,6 +3891,30 @@
               ]
             }
           }
+        }
+      },
+      "graph": {
+        "ablation": {
+          "pr_auc": -0.0003,
+          "failing_test_recall_at_budget": 0.0,
+          "commit_safety_rate_at_budget": 0.0,
+          "pr_auc_improved_seeds": "0/5"
+        },
+        "b4": {
+          "mean_time_ratio": 0.6093,
+          "failing_test_recall": 0.4,
+          "commit_safety_rate": 0.4
+        },
+        "b8": {
+          "mean_time_ratio": 0.469,
+          "failing_test_recall": 0.2,
+          "commit_safety_rate": 0.2
+        },
+        "reachability": {
+          "failing_rows": 5,
+          "failing_reachable": 0.4,
+          "all_reachable": 0.5937,
+          "lift": 0.674
         }
       }
     },
@@ -4290,6 +4458,30 @@
             }
           }
         }
+      },
+      "graph": {
+        "ablation": {
+          "pr_auc": 0.0006,
+          "failing_test_recall_at_budget": 0.5,
+          "commit_safety_rate_at_budget": 0.5,
+          "pr_auc_improved_seeds": "5/5"
+        },
+        "b4": {
+          "mean_time_ratio": 0.3,
+          "failing_test_recall": 0.5,
+          "commit_safety_rate": 0.5
+        },
+        "b8": {
+          "mean_time_ratio": 0.8609,
+          "failing_test_recall": 1.0,
+          "commit_safety_rate": 1.0
+        },
+        "reachability": {
+          "failing_rows": 2,
+          "failing_reachable": 0.5,
+          "all_reachable": 0.2484,
+          "lift": 2.013
+        }
       }
     },
     "jsprit": {
@@ -4815,6 +5007,30 @@
               ]
             }
           }
+        }
+      },
+      "graph": {
+        "ablation": {
+          "pr_auc": -0.0012,
+          "failing_test_recall_at_budget": 0.0,
+          "commit_safety_rate_at_budget": 0.0,
+          "pr_auc_improved_seeds": "2/5"
+        },
+        "b4": {
+          "mean_time_ratio": 0.4139,
+          "failing_test_recall": 0.96,
+          "commit_safety_rate": 0.8571
+        },
+        "b8": {
+          "mean_time_ratio": 0.3528,
+          "failing_test_recall": 0.92,
+          "commit_safety_rate": 0.7143
+        },
+        "reachability": {
+          "failing_rows": 25,
+          "failing_reachable": 0.96,
+          "all_reachable": 0.2067,
+          "lift": 4.645
         }
       }
     },
@@ -5358,6 +5574,30 @@
             }
           }
         }
+      },
+      "graph": {
+        "ablation": {
+          "pr_auc": 0.0006,
+          "failing_test_recall_at_budget": 0.0002,
+          "commit_safety_rate_at_budget": 0.0,
+          "pr_auc_improved_seeds": "3/5"
+        },
+        "b4": {
+          "mean_time_ratio": 0.045,
+          "failing_test_recall": 0.0377,
+          "commit_safety_rate": 0.0345
+        },
+        "b8": {
+          "mean_time_ratio": 0.4995,
+          "failing_test_recall": 0.8502,
+          "commit_safety_rate": 0.0529
+        },
+        "reachability": {
+          "failing_rows": 2468,
+          "failing_reachable": 0.0377,
+          "all_reachable": 0.0411,
+          "lift": 0.917
+        }
       }
     },
     "dynjs": {
@@ -5899,6 +6139,30 @@
               ]
             }
           }
+        }
+      },
+      "graph": {
+        "ablation": {
+          "pr_auc": 0.0,
+          "failing_test_recall_at_budget": 0.0,
+          "commit_safety_rate_at_budget": 0.0,
+          "pr_auc_improved_seeds": "0/5"
+        },
+        "b4": {
+          "mean_time_ratio": 0.7474,
+          "failing_test_recall": 1.0,
+          "commit_safety_rate": 1.0
+        },
+        "b8": {
+          "mean_time_ratio": 0.4993,
+          "failing_test_recall": 1.0,
+          "commit_safety_rate": 1.0
+        },
+        "reachability": {
+          "failing_rows": 1,
+          "failing_reachable": 1.0,
+          "all_reachable": 0.722,
+          "lift": 1.385
         }
       }
     }
