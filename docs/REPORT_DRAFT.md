@@ -60,8 +60,10 @@ reverse breadth-first search over the merged before/after graphs.
 Commits are split chronologically: oldest 60 % train, next 20 %
 validation, latest 20 % test. Nothing is shuffled. Two classifiers are
 trained on the training split with scikit-learn: logistic regression and
-histogram gradient boosting, both with balanced class weights. Selection
-experiments use gradient boosting. Calibrators (Platt scaling and isotonic
+histogram gradient boosting, both with balanced class weights (the rare
+failing rows are up-weighted). Selection experiments use gradient boosting.
+A separate check trains the same model without class weights, as a stricter
+uncalibrated baseline for RQ3 (D-037). Calibrators (Platt scaling and isotonic
 regression) are fitted on the validation split only. Every experiment is run
 with five seeds (0 to 4); seeds change model randomness only, not the split.
 
@@ -221,9 +223,34 @@ estimated skip risk and the observed miss rate fell from 0.274 (B7,
 uncalibrated) to 0.078 (B8, calibrated), improving on 7 of 11 projects and
 getting worse on LittleProxy (0.22 to 0.27).
 
-**Answer to RQ3.** Yes. Calibration made test-level probabilities and
-commit-level risk estimates much more reliable. This is the clearest result
-of the study (see the caveat on class weights in section 5).
+The balanced class weights used for training push raw probabilities up,
+so the uncalibrated column above is a weak baseline. Training the same
+model without class weights gives a stricter one (`class-weight-summary.md`,
+same 9 projects, mean over 5 seeds):
+
+| | Balanced, raw | Balanced, isotonic | Unweighted, raw | Unweighted, isotonic |
+|---|---|---|---|---|
+| ECE | 0.118 | 0.021 | 0.030 | 0.021 |
+| Brier | 0.090 | 0.022 | 0.029 | 0.023 |
+| Skip-risk gap, 50 % budget | 0.306 | 0.067 | 0.054 | 0.071 |
+| PR-AUC (n = 9) | 0.138 | | 0.103 | |
+
+The unweighted model is already well calibrated. Calibrating it lowers ECE
+on 5 of 9 projects and raises it on 4; the clear gains are on the two
+projects with the most failures (wicket-bootstrap 0.171 to 0.102, HikariCP
+0.020 to 0.013). Its commit-level risk estimate is as close to the observed
+miss rate as any calibrated variant. Balanced weights, on the other hand,
+rank failures better (PR-AUC 0.138 against 0.103, much of it from optiq,
+which has four failing test commits).
+
+**Answer to RQ3.** Calibration makes the class-weighted model's
+probabilities and commit-level risk estimates far more reliable (ECE 0.118
+to 0.021, risk gap 0.306 to 0.067). Most of that gain, however, undoes the
+class weighting: a model trained on the natural failure rate is nearly as
+well calibrated without a calibrator, and calibration adds a clear further
+gain only where failures are frequent. Reliable risk estimates are
+achievable on this data; calibration is one way to get them, not the only
+one.
 
 ### 4.4 RQ4: fallback and risk-based stopping
 
@@ -283,9 +310,11 @@ a decisive one, on this data.
   flaky failure counts like a real one, because RTPTorrent does not mark
   flakiness.
 - **Calibration baseline.** Both models are trained with balanced class
-  weights, which pushes raw probabilities upwards. Part of the calibration
-  gain corrects that choice; a model trained without class weights would be
-  a stricter uncalibrated baseline. This check has not been run yet.
+  weights, which pushes raw probabilities upwards. Section 4.3 therefore
+  also reports an unweighted model; most of the calibration gain turns out
+  to correct the class weighting. The selection experiments (B8 to B10)
+  use the balanced, calibrated model; whether an unweighted model would
+  make B10 equally reliable has not been tested.
 - **Independence.** The skip-risk formula assumes test failures are
   independent; one bug often breaks several tests. Bootstrap intervals treat
   test commits as independent, but neighbouring commits are correlated, so
@@ -304,9 +333,11 @@ a decisive one, on this data.
 
 ## 6. Conclusion
 
-CodeDNA's clearest contribution is a calibrated, honest estimate of the
-risk of skipping tests, together with an evaluation that compares selection
-policies at equal test time. Learned models predict failures above chance
+CodeDNA's clearest contribution is an honest, checked estimate of the risk
+of skipping tests, together with an evaluation that compares selection
+policies at equal test time. Calibration delivers that estimate for the
+class-weighted model, but much of its apparent gain only undoes the class
+weighting. Learned models predict failures above chance
 but do not order tests better than simple rules, and fallback mainly buys
 safety with extra test time. Using simple rules to choose *which* tests run
 and the calibrated model to choose *how many* (B10) is at least as good as

@@ -1,0 +1,33 @@
+{
+  "model": "gradient_boosting",
+  "budget": 0.5,
+  "seed": 2,
+  "warnings": [
+    "balanced: calibration platt skipped: calibration data needs both failing and passing examples",
+    "balanced: calibration isotonic skipped: calibration data needs both failing and passing examples",
+    "unweighted: calibration platt skipped: calibration data needs both failing and passing examples",
+    "unweighted: calibration isotonic skipped: calibration data needs both failing and passing examples"
+  ],
+  "variants": {
+    "balanced": {
+      "pr_auc": 0.037,
+      "methods": {
+        "none": {
+          "brier": 0.0058,
+          "ece": 0.004,
+          "skip_risk_gap": 0.0343
+        }
+      }
+    },
+    "unweighted": {
+      "pr_auc": 0.005,
+      "methods": {
+        "none": {
+          "brier": 0.0312,
+          "ece": 0.0314,
+          "skip_risk_gap": 0.0191
+        }
+      }
+    }
+  }
+}

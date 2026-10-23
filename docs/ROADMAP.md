@@ -105,6 +105,9 @@ Java stays the only supported language until Milestone 5 is complete.
 - ✅ Hybrid B10 (rules order, calibrated stopping; D-036): never worse than
   rules or calibrated ML at the same time, meets its 5 % miss target on 10 of
   11 projects; pooled gain not statistically clear
+- ✅ Class-weight check for RQ3 (D-037): an unweighted model is nearly as
+  well calibrated as the calibrated class-weighted one; calibration mainly
+  undoes class weighting
 - 🔄 Evaluation chapter draft (RQ1–RQ5): `docs/REPORT_DRAFT.md`
 
 Product track, alongside:

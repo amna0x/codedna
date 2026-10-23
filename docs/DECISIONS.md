@@ -652,3 +652,22 @@ Result (study11, 2026-10-23): at the same test time B10 − B3 safety +0.075
 lower than B3 in safety on any project, and with target 0.05 its observed
 miss rate stays within the target on 10 of 11 projects. See
 `experiments/results/study11-2026-10-21/FINDINGS.md`.
+
+## D-037 — Class-weight check as a stricter RQ3 baseline
+
+The study's models use balanced class weights, which inflate raw
+probabilities, so "uncalibrated vs calibrated" partly measures undoing that
+choice. `MLRanker` gains a `class_weight` option (default unchanged,
+"balanced"), and `class_weight_check()` with `scripts/class_weight_check.py`
+trains the full model with and without class weights on each study dataset
+(test split, 5 seeds) and reports PR-AUC, raw and calibrated Brier/ECE, and
+the commit-level skip-risk gap of the 50 % budget policy.
+
+Result (study11, same 9 projects): ECE balanced raw 0.118, balanced
+isotonic 0.021, unweighted raw 0.030, unweighted isotonic 0.021; skip-risk
+gap 0.306 / 0.067 / 0.054 / 0.071; PR-AUC balanced 0.138, unweighted 0.103.
+Most of the calibration gain undoes class weighting; calibration adds a clear
+further gain only on the high-failure projects (wicket-bootstrap,
+HikariCP). The thesis claim is reworded accordingly: reliable risk
+estimates, not calibration per se. The selection experiments keep the
+balanced, calibrated model.

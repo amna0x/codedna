@@ -353,6 +353,62 @@ def _ablations(model: str, features: list[str], train: list[Row], test_commits, 
     return results
 
 
+# --- class-weight check (D-037) --------------------------------------------------------
+
+
+def class_weight_check(dataset: Dataset, *, model: str = "gradient_boosting",
+                       budget: float = 0.5, seed: int = 0) -> dict:
+    """Is the calibration gain only undoing balanced class weights?
+
+    Trains the full model twice on the train split, with balanced class
+    weights (as everywhere else) and without, and reports for each on the
+    test split: PR-AUC, raw and calibrated (validation-fitted) Brier / ECE,
+    and the commit-level gap |mean estimated skip risk − observed miss rate|
+    of the budget policy with raw and with isotonic probabilities.
+    """
+    from sklearn.metrics import average_precision_score
+
+    splits = chronological_split(dataset)
+    by_commit = dataset.rows_by_commit()
+    rows_of = lambda split: [r for sha in splits[split] for r in by_commit.get(sha, [])]  # noqa: E731
+    train, valid = rows_of("train"), rows_of("validation")
+    test_commits = [by_commit[sha] for sha in splits["test"] if sha in by_commit]
+    test_rows = [r for group in test_commits for r in group]
+    labels = [r.label for r in test_rows]
+    warnings: list[str] = []
+    report = {"model": model, "budget": budget, "seed": seed, "warnings": warnings, "variants": {}}
+    for variant, weight in (("balanced", "balanced"), ("unweighted", None)):
+        ranker = MLRanker(model, dataset.feature_names, seed=seed, class_weight=weight)
+        try:
+            ranker.fit(train)
+        except ValueError as exc:
+            warnings.append(f"{variant} model not trained: {exc}")
+            continue
+        raw_test = ranker.predict_proba(test_rows)
+        entry = {"pr_auc": round(float(average_precision_score(labels, raw_test)), 4)
+                 if any(labels) else None, "methods": {}}
+        for method in METHODS:
+            try:
+                calibrator = Calibrator(method).fit(ranker.predict_proba(valid),
+                                                    [r.label for r in valid])
+            except ValueError as exc:
+                warnings.append(f"{variant}: calibration {method} skipped: {exc}")
+                continue
+            scores = calibrator.transform(raw_test)
+            measured = _measure(test_commits, _ml_policy(
+                lambda rows, c=calibrator: c.transform(ranker.predict_proba(rows)),
+                RiskPolicy(budget=budget)))
+            estimate, observed = measured["mean_estimated_skip_risk"], measured["observed_miss_rate"]
+            entry["methods"][method] = {
+                "brier": round(brier_score(scores, labels), 4) if labels else None,
+                "ece": round(expected_calibration_error(scores, labels), 4) if labels else None,
+                "skip_risk_gap": round(abs(estimate - observed), 4)
+                if estimate is not None and observed is not None else None,
+            }
+        report["variants"][variant] = entry
+    return report
+
+
 # --- reproducibility --------------------------------------------------------------------
 
 

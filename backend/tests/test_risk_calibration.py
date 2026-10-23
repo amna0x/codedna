@@ -319,3 +319,26 @@ def test_study_runner_aggregates_seeds_and_projects(tmp_path):
     assert set(graph) == {"ablation", "b4", "b8", "reachability"}
     assert graph["ablation"]["pr_auc_improved_seeds"] is None or "/" in graph["ablation"]["pr_auc_improved_seeds"]
     assert "## Dependency-graph signal" in markdown
+
+
+def test_class_weight_check_compares_balanced_and_unweighted(tmp_path):
+    from codedna.models.experiment import class_weight_check
+
+    report = class_weight_check(synthetic_dataset(), model="logistic_regression", budget=0.3)
+    assert set(report["variants"]) == {"balanced", "unweighted"}
+    for entry in report["variants"].values():
+        assert set(entry["methods"]) == {"none", "platt", "isotonic"}
+        assert entry["methods"]["none"]["ece"] is not None
+        assert entry["methods"]["isotonic"]["skip_risk_gap"] is not None
+
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        "class_weight_check", Path(__file__).resolve().parents[2] / "scripts" / "class_weight_check.py")
+    script = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(script)
+    (tmp_path / "alpha").mkdir()
+    synthetic_dataset().to_csv(tmp_path / "alpha" / "dataset.csv")
+    script.run_project("alpha", str(tmp_path), [0])
+    summary = script.summarise(tmp_path, ["alpha"], [0])
+    assert summary["pooled"]["unweighted"]["none_ece"]["projects"] == 1
+    assert "## unweighted" in script.to_markdown(summary)

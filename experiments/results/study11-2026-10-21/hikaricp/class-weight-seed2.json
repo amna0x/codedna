@@ -1,0 +1,48 @@
+{
+  "model": "gradient_boosting",
+  "budget": 0.5,
+  "seed": 2,
+  "warnings": [],
+  "variants": {
+    "balanced": {
+      "pr_auc": 0.0387,
+      "methods": {
+        "none": {
+          "brier": 0.0204,
+          "ece": 0.0201,
+          "skip_risk_gap": 0.0345
+        },
+        "platt": {
+          "brier": 0.0198,
+          "ece": 0.0137,
+          "skip_risk_gap": 0.0155
+        },
+        "isotonic": {
+          "brier": 0.0199,
+          "ece": 0.0137,
+          "skip_risk_gap": 0.0167
+        }
+      }
+    },
+    "unweighted": {
+      "pr_auc": 0.045,
+      "methods": {
+        "none": {
+          "brier": 0.0201,
+          "ece": 0.0196,
+          "skip_risk_gap": 0.0314
+        },
+        "platt": {
+          "brier": 0.0198,
+          "ece": 0.0124,
+          "skip_risk_gap": 0.0101
+        },
+        "isotonic": {
+          "brier": 0.0198,
+          "ece": 0.0127,
+          "skip_risk_gap": 0.0118
+        }
+      }
+    }
+  }
+}

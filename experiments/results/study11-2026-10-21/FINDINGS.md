@@ -46,7 +46,7 @@ without failures); pooled comparisons therefore use **n = 9** projects.
 Their recording gaps are properties of the RTPTorrent logs, not of
 CodeDNA's import (stored and derived failure counts agree).
 
-## RQ3 — Calibration: **robust improvement**
+## RQ3 — Calibration: **large gain, but mostly undoing class weights**
 
 - ECE on the 9 projects where a calibrator could be fitted: uncalibrated
   0.118 → isotonic 0.021 (Platt 0.022). Better on 8 of 9, equal on jade4j.
@@ -58,6 +58,36 @@ CodeDNA's import (stored and derived failure counts agree).
   (B7, uncalibrated) → 0.078 (B8, calibrated); better on 7 of 11 projects,
   worse on LittleProxy (0.22 → 0.27), unchanged where no calibrator could be
   fitted.
+
+### Class-weight check (added 2026-10-23, D-037)
+
+The study's models are trained with **balanced class weights**, which
+up-weight the rare failing rows and push raw probabilities up. To see how
+much of the gain above only undoes that, the same gradient-boosting model
+was trained without class weights (`scripts/class_weight_check.py`;
+`class-weight-summary.md`; 5 seeds; same 9 projects with a calibrator):
+
+| Same 9 projects | Balanced, raw | Balanced, isotonic | Unweighted, raw | Unweighted, isotonic |
+|---|---|---|---|---|
+| ECE | 0.118 | 0.021 | 0.030 | 0.021 |
+| Brier | 0.090 | 0.022 | 0.029 | 0.023 |
+| Skip-risk gap (50 % budget policy) | 0.306 | 0.067 | **0.054** | 0.071 |
+| PR-AUC (pooled, n = 9) | 0.138 | | 0.103 | |
+
+- **Most of the calibration gain undoes the class weights.** A model
+  trained on the natural failure rate is already well calibrated (ECE
+  0.030). Calibrating it lowers ECE to 0.021 on average, but helps on only
+  5 of 9 projects and hurts on 4. The clear exceptions are the projects
+  with the most failures: wicket-bootstrap (0.171 → 0.102) and HikariCP
+  (0.020 → 0.013).
+- At commit level, the unweighted raw model's skip-risk estimate is as
+  close to reality as any calibrated variant (gap 0.054 against 0.067
+  and 0.071); calibration does not improve it further.
+- Balanced weights do help ranking (pooled PR-AUC 0.138 against 0.103,
+  mostly through optiq, 0.357 against 0.050, which has 4 failing test
+  commits). "Balanced weights + calibration" therefore keeps the better
+  ranking *and* calibrated probabilities, but the unweighted model is an
+  equally honest risk estimator.
 
 ## RQ4 — Fallback versus the same test time: **no reliable general gain**
 
@@ -176,9 +206,13 @@ edges, and no type resolution (D-010).
 
 ## Honest summary
 
-1. **Calibration works** and is the most solid result: probability
-   calibration error drops by roughly 60–80 % across projects, and the
-   commit-level risk estimate becomes several times closer to reality.
+1. **Reliable risk estimates are achievable, but calibration is not the
+   main reason.** Calibrating the class-weighted model cuts its
+   calibration error by ~80 % and brings its commit-level risk estimate
+   several times closer to reality; a model trained without class weights
+   is nearly as well calibrated without any calibrator (D-037).
+   Calibration adds a clear further gain only on the projects with the
+   most failures (wicket-bootstrap, HikariCP).
 2. **Risk-based fallback does not reliably beat spending the same time**
    on the budget. It is neutral on most projects and large on one
    (wicket-bootstrap) where failures are frequent and concentrated in an
@@ -196,9 +230,13 @@ edges, and no type resolution (D-010).
 
 ## What this means for the claim
 
-A defensible thesis claim is about **reliable risk estimates** (RQ3) and a
-careful, cost-matched evaluation showing **when** fallback helps (frequent,
-concentrated failures) and when it does not — not that CodeDNA's ML selects
-tests better than simple rules. Overturning that would need projects where
+A defensible thesis claim is that CodeDNA gives **honest, checked risk
+estimates** for skipping tests (whether by training on the natural failure
+rate or by calibrating a class-weighted model), used as a **stopping rule
+on top of simple ordering** (B10), with a careful, cost-matched evaluation
+showing **when** extra safety measures help (frequent, concentrated
+failures) and when they do not. It is not that CodeDNA's ML selects tests
+better than simple rules, nor that calibration by itself is the key
+ingredient. Overturning that would need projects where
 learned models clearly beat recent-failures ordering, which this data does
 not show.

@@ -1,0 +1,404 @@
+{
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "projects": {
+    "graylog2-server": {
+      "balanced": {
+        "pr_auc": null,
+        "none_brier": 0.1013,
+        "none_ece": 0.2255,
+        "none_skip_risk_gap": 0.7479,
+        "platt_brier": 0.0,
+        "platt_ece": 0.0002,
+        "platt_skip_risk_gap": 0.002,
+        "isotonic_brier": 0.0,
+        "isotonic_ece": 0.0,
+        "isotonic_skip_risk_gap": 0.0004
+      },
+      "unweighted": {
+        "pr_auc": null,
+        "none_brier": 0.0015,
+        "none_ece": 0.0025,
+        "none_skip_risk_gap": 0.0288,
+        "platt_brier": 0.0,
+        "platt_ece": 0.0,
+        "platt_skip_risk_gap": 0.001,
+        "isotonic_brier": 0.0,
+        "isotonic_ece": 0.0,
+        "isotonic_skip_risk_gap": 0.0002
+      },
+      "warnings": []
+    },
+    "jooq": {
+      "balanced": {
+        "pr_auc": null,
+        "none_brier": 0.0053,
+        "none_ece": 0.0325,
+        "none_skip_risk_gap": 0.0412,
+        "platt_brier": 0.0002,
+        "platt_ece": 0.0027,
+        "platt_skip_risk_gap": 0.0018,
+        "isotonic_brier": 0.0001,
+        "isotonic_ece": 0.0017,
+        "isotonic_skip_risk_gap": 0.002
+      },
+      "unweighted": {
+        "pr_auc": null,
+        "none_brier": 0.0002,
+        "none_ece": 0.0029,
+        "none_skip_risk_gap": 0.0015,
+        "platt_brier": 0.0013,
+        "platt_ece": 0.0067,
+        "platt_skip_risk_gap": 0.0023,
+        "isotonic_brier": 0.0017,
+        "isotonic_ece": 0.004,
+        "isotonic_skip_risk_gap": 0.0021
+      },
+      "warnings": []
+    },
+    "jcabi-github": {
+      "balanced": {
+        "pr_auc": 0.1628,
+        "none_brier": 0.0177,
+        "none_ece": 0.0837,
+        "none_skip_risk_gap": 0.6003,
+        "platt_brier": 0.0069,
+        "platt_ece": 0.0058,
+        "platt_skip_risk_gap": 0.1407,
+        "isotonic_brier": 0.0068,
+        "isotonic_ece": 0.0058,
+        "isotonic_skip_risk_gap": 0.1514
+      },
+      "unweighted": {
+        "pr_auc": 0.1238,
+        "none_brier": 0.0072,
+        "none_ece": 0.0058,
+        "none_skip_risk_gap": 0.1233,
+        "platt_brier": 0.007,
+        "platt_ece": 0.006,
+        "platt_skip_risk_gap": 0.1497,
+        "isotonic_brier": 0.0069,
+        "isotonic_ece": 0.0059,
+        "isotonic_skip_risk_gap": 0.1659
+      },
+      "warnings": []
+    },
+    "optiq": {
+      "balanced": {
+        "pr_auc": 0.3566,
+        "none_brier": 0.0012,
+        "none_ece": 0.0013,
+        "none_skip_risk_gap": 0.011,
+        "platt_brier": 0.0012,
+        "platt_ece": 0.0004,
+        "platt_skip_risk_gap": 0.0053,
+        "isotonic_brier": 0.0014,
+        "isotonic_ece": 0.0005,
+        "isotonic_skip_risk_gap": 0.0059
+      },
+      "unweighted": {
+        "pr_auc": 0.0495,
+        "none_brier": 0.0014,
+        "none_ece": 0.0014,
+        "none_skip_risk_gap": 0.0109,
+        "platt_brier": 0.0014,
+        "platt_ece": 0.0002,
+        "platt_skip_risk_gap": 0.0159,
+        "isotonic_brier": 0.0014,
+        "isotonic_ece": 0.0008,
+        "isotonic_skip_risk_gap": 0.0086
+      },
+      "warnings": []
+    },
+    "achilles": {
+      "balanced": {
+        "pr_auc": 0.005,
+        "none_brier": 0.0015,
+        "none_ece": 0.0256,
+        "none_skip_risk_gap": 0.2478,
+        "platt_brier": null,
+        "platt_ece": null,
+        "platt_skip_risk_gap": null,
+        "isotonic_brier": null,
+        "isotonic_ece": null,
+        "isotonic_skip_risk_gap": null
+      },
+      "unweighted": {
+        "pr_auc": 0.0018,
+        "none_brier": 0.0001,
+        "none_ece": 0.0009,
+        "none_skip_risk_gap": 0.0145,
+        "platt_brier": null,
+        "platt_ece": null,
+        "platt_skip_risk_gap": null,
+        "isotonic_brier": null,
+        "isotonic_ece": null,
+        "isotonic_skip_risk_gap": null
+      },
+      "warnings": [
+        "balanced: calibration isotonic skipped: calibration data needs both failing and passing examples",
+        "balanced: calibration platt skipped: calibration data needs both failing and passing examples",
+        "unweighted: calibration isotonic skipped: calibration data needs both failing and passing examples",
+        "unweighted: calibration platt skipped: calibration data needs both failing and passing examples"
+      ]
+    },
+    "hikaricp": {
+      "balanced": {
+        "pr_auc": 0.0387,
+        "none_brier": 0.0204,
+        "none_ece": 0.0201,
+        "none_skip_risk_gap": 0.0345,
+        "platt_brier": 0.0198,
+        "platt_ece": 0.0137,
+        "platt_skip_risk_gap": 0.0155,
+        "isotonic_brier": 0.0199,
+        "isotonic_ece": 0.0137,
+        "isotonic_skip_risk_gap": 0.0167
+      },
+      "unweighted": {
+        "pr_auc": 0.045,
+        "none_brier": 0.0201,
+        "none_ece": 0.0196,
+        "none_skip_risk_gap": 0.0314,
+        "platt_brier": 0.0198,
+        "platt_ece": 0.0124,
+        "platt_skip_risk_gap": 0.0101,
+        "isotonic_brier": 0.0198,
+        "isotonic_ece": 0.0127,
+        "isotonic_skip_risk_gap": 0.0118
+      },
+      "warnings": []
+    },
+    "littleproxy": {
+      "balanced": {
+        "pr_auc": 0.0045,
+        "none_brier": 0.0553,
+        "none_ece": 0.0755,
+        "none_skip_risk_gap": 0.2214,
+        "platt_brier": 0.0052,
+        "platt_ece": 0.0387,
+        "platt_skip_risk_gap": 0.331,
+        "isotonic_brier": 0.0056,
+        "isotonic_ece": 0.0382,
+        "isotonic_skip_risk_gap": 0.2662
+      },
+      "unweighted": {
+        "pr_auc": 0.0046,
+        "none_brier": 0.0438,
+        "none_ece": 0.0597,
+        "none_skip_risk_gap": 0.1127,
+        "platt_brier": 0.0055,
+        "platt_ece": 0.0412,
+        "platt_skip_risk_gap": 0.3621,
+        "isotonic_brier": 0.0057,
+        "isotonic_ece": 0.0415,
+        "isotonic_skip_risk_gap": 0.3239
+      },
+      "warnings": []
+    },
+    "jade4j": {
+      "balanced": {
+        "pr_auc": 0.0164,
+        "none_brier": 0.0022,
+        "none_ece": 0.0024,
+        "none_skip_risk_gap": 0.0001,
+        "platt_brier": 0.0014,
+        "platt_ece": 0.0022,
+        "platt_skip_risk_gap": 0.0081,
+        "isotonic_brier": 0.0014,
+        "isotonic_ece": 0.0026,
+        "isotonic_skip_risk_gap": 0.0074
+      },
+      "unweighted": {
+        "pr_auc": 0.0126,
+        "none_brier": 0.0018,
+        "none_ece": 0.0021,
+        "none_skip_risk_gap": 0.0157,
+        "platt_brier": 0.0013,
+        "platt_ece": 0.0021,
+        "platt_skip_risk_gap": 0.009,
+        "isotonic_brier": 0.0016,
+        "isotonic_ece": 0.0027,
+        "isotonic_skip_risk_gap": 0.0122
+      },
+      "warnings": []
+    },
+    "jsprit": {
+      "balanced": {
+        "pr_auc": 0.0199,
+        "none_brier": 0.0063,
+        "none_ece": 0.013,
+        "none_skip_risk_gap": 0.043,
+        "platt_brier": null,
+        "platt_ece": null,
+        "platt_skip_risk_gap": null,
+        "isotonic_brier": null,
+        "isotonic_ece": null,
+        "isotonic_skip_risk_gap": null
+      },
+      "unweighted": {
+        "pr_auc": 0.013,
+        "none_brier": 0.0291,
+        "none_ece": 0.0293,
+        "none_skip_risk_gap": 0.0383,
+        "platt_brier": null,
+        "platt_ece": null,
+        "platt_skip_risk_gap": null,
+        "isotonic_brier": null,
+        "isotonic_ece": null,
+        "isotonic_skip_risk_gap": null
+      },
+      "warnings": [
+        "balanced: calibration isotonic skipped: calibration data needs both failing and passing examples",
+        "balanced: calibration platt skipped: calibration data needs both failing and passing examples",
+        "unweighted: calibration isotonic skipped: calibration data needs both failing and passing examples",
+        "unweighted: calibration platt skipped: calibration data needs both failing and passing examples"
+      ]
+    },
+    "wicket-bootstrap": {
+      "balanced": {
+        "pr_auc": 0.6352,
+        "none_brier": 0.1833,
+        "none_ece": 0.1659,
+        "none_skip_risk_gap": 0.1275,
+        "platt_brier": 0.1514,
+        "platt_ece": 0.1124,
+        "platt_skip_risk_gap": 0.3229,
+        "isotonic_brier": 0.1653,
+        "isotonic_ece": 0.099,
+        "isotonic_skip_risk_gap": 0.0636
+      },
+      "unweighted": {
+        "pr_auc": 0.6734,
+        "none_brier": 0.1845,
+        "none_ece": 0.1706,
+        "none_skip_risk_gap": 0.1628,
+        "platt_brier": 0.1458,
+        "platt_ece": 0.1035,
+        "platt_skip_risk_gap": 0.3073,
+        "isotonic_brier": 0.1659,
+        "isotonic_ece": 0.1015,
+        "isotonic_skip_risk_gap": 0.0451
+      },
+      "warnings": []
+    },
+    "dynjs": {
+      "balanced": {
+        "pr_auc": 0.0002,
+        "none_brier": 0.4272,
+        "none_ece": 0.4526,
+        "none_skip_risk_gap": 0.9735,
+        "platt_brier": 0.0007,
+        "platt_ece": 0.0216,
+        "platt_skip_risk_gap": 0.0571,
+        "isotonic_brier": 0.001,
+        "isotonic_ece": 0.026,
+        "isotonic_skip_risk_gap": 0.0874
+      },
+      "unweighted": {
+        "pr_auc": 0.0002,
+        "none_brier": 0.0004,
+        "none_ece": 0.0006,
+        "none_skip_risk_gap": 0.0022,
+        "platt_brier": 0.0007,
+        "platt_ece": 0.0203,
+        "platt_skip_risk_gap": 0.0697,
+        "isotonic_brier": 0.0008,
+        "isotonic_ece": 0.0187,
+        "isotonic_skip_risk_gap": 0.0661
+      },
+      "warnings": []
+    }
+  },
+  "pooled": {
+    "balanced": {
+      "pr_auc": {
+        "mean": 0.1377,
+        "projects": 9
+      },
+      "none_brier": {
+        "mean": 0.0747,
+        "projects": 11
+      },
+      "none_ece": {
+        "mean": 0.0998,
+        "projects": 11
+      },
+      "none_skip_risk_gap": {
+        "mean": 0.2771,
+        "projects": 11
+      },
+      "platt_brier": {
+        "mean": 0.0208,
+        "projects": 9
+      },
+      "platt_ece": {
+        "mean": 0.022,
+        "projects": 9
+      },
+      "platt_skip_risk_gap": {
+        "mean": 0.0983,
+        "projects": 9
+      },
+      "isotonic_brier": {
+        "mean": 0.0224,
+        "projects": 9
+      },
+      "isotonic_ece": {
+        "mean": 0.0208,
+        "projects": 9
+      },
+      "isotonic_skip_risk_gap": {
+        "mean": 0.0668,
+        "projects": 9
+      }
+    },
+    "unweighted": {
+      "pr_auc": {
+        "mean": 0.1027,
+        "projects": 9
+      },
+      "none_brier": {
+        "mean": 0.0264,
+        "projects": 11
+      },
+      "none_ece": {
+        "mean": 0.0269,
+        "projects": 11
+      },
+      "none_skip_risk_gap": {
+        "mean": 0.0493,
+        "projects": 11
+      },
+      "platt_brier": {
+        "mean": 0.0203,
+        "projects": 9
+      },
+      "platt_ece": {
+        "mean": 0.0214,
+        "projects": 9
+      },
+      "platt_skip_risk_gap": {
+        "mean": 0.103,
+        "projects": 9
+      },
+      "isotonic_brier": {
+        "mean": 0.0226,
+        "projects": 9
+      },
+      "isotonic_ece": {
+        "mean": 0.0209,
+        "projects": 9
+      },
+      "isotonic_skip_risk_gap": {
+        "mean": 0.0707,
+        "projects": 9
+      }
+    }
+  }
+}
