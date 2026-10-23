@@ -147,15 +147,19 @@ def _reachability(dataset_csv: Path) -> dict | None:
             "lift": round(fail_share / all_share, 3) if all_share else None}
 
 
+# label → (cost_matched key in the experiment report, policy, same-time baseline in per_commit)
 PAIRS = {
-    "B9r_risk_target_only": "B9r − B8 at same time",
-    "B9_calibrated_fallback": "B9 − B8 at same time",
-    "B9n_unfamiliar_rule_only": "B9n − B8 at same time",
+    "B9r − B8 at same time": ("B9r_risk_target_only", "B9r_risk_target_only", "B8@B9r_risk_target_only"),
+    "B9 − B8 at same time": ("B9_calibrated_fallback", "B9_calibrated_fallback", "B8@B9_calibrated_fallback"),
+    "B9n − B8 at same time": ("B9n_unfamiliar_rule_only", "B9n_unfamiliar_rule_only",
+                              "B8@B9n_unfamiliar_rule_only"),
+    "B10 − B8 at same time": ("B10_hybrid", "B10_hybrid", "B8@B10_hybrid"),
+    "B10 − B3 (rules) at same time": ("B10_hybrid vs B3", "B10_hybrid", "B3@B10_hybrid"),
 }
 
 
 def _cost_matched(experiments: list[dict], resamples: int = 1000) -> dict:
-    """Each fallback policy vs B8 at the same test time, for one project.
+    """Each compared policy vs its baseline at the same test time, for one project.
 
     Point estimates are means over seeds. Intervals come from a hierarchical
     bootstrap (pick a seed, then resample that seed's test commits), so they
@@ -165,15 +169,16 @@ def _cost_matched(experiments: list[dict], resamples: int = 1000) -> dict:
 
     result = {}
     runs_all = [e.get("per_commit", {}) for e in experiments]
-    for policy, label in PAIRS.items():
-        rows = [e.get("cost_matched", {}).get(policy) for e in experiments]
+    for label, (key, policy, baseline) in PAIRS.items():
+        rows = [e.get("cost_matched", {}).get(key) for e in experiments]
         rows = [r for r in rows if r]
-        runs = [(pc[policy], pc[f"B8@{policy}"]) for pc in runs_all
-                if policy in pc and f"B8@{policy}" in pc]
+        runs = [(pc[policy], pc[baseline]) for pc in runs_all
+                if policy in pc and baseline in pc]
         if not rows or not runs:
             continue
-        entry = {"b8_budget": round(mean(r["b8_budget"] for r in rows), 4)}
-        for side in ("policy", "b8_same_time"):
+        entry = {"baseline": rows[0]["baseline"],
+                 "baseline_budget": round(mean(r["baseline_budget"] for r in rows), 4)}
+        for side in ("policy", "baseline_same_time"):
             entry[side] = {m: _mean_or_none([r[side][m] for r in rows]) for m in ("time", "recall", "safety")}
         point = _mean_over_seeds({"_": runs})
         draws = _hierarchical_draws({"_": runs}, resamples, random.Random(0))
@@ -203,11 +208,11 @@ def pooled_bootstrap(out: Path, names: list[str], seeds: list[int], *,
     result = {"method": f"stratified paired hierarchical bootstrap (seed, then commits), "
                         f"{resamples} resamples, seeds {seeds}, projects weighted equally",
               "comparisons": {}}
-    for policy, label in PAIRS.items():
+    for label, (_, policy, baseline) in PAIRS.items():
         data = {}
         for name, runs in per_project.items():
-            pairs = [(pc[policy], pc[f"B8@{policy}"]) for pc in runs
-                     if policy in pc and f"B8@{policy}" in pc]
+            pairs = [(pc[policy], pc[baseline]) for pc in runs
+                     if policy in pc and baseline in pc]
             if pairs:
                 data[name] = pairs
         if not data:
@@ -324,20 +329,21 @@ def to_markdown(summary: dict) -> str:
                 pooled = summary["pooled"][section].get(item, {}).get(metric)
                 cells.append(_fmt(pooled["mean"]) if pooled else "–")
                 lines.append(f"| {item} | " + " | ".join(cells) + " |")
-    lines += ["", "## Fallback vs B8 at the same test time", "",
-              "Positive safety/recall differences favour the fallback policy. Estimates are means "
+    lines += ["", "## Policies vs baselines at the same test time", "",
+              "Each policy is compared with its baseline (B8, or B3 rules) given the budget that "
+              "spends the same real test time. Positive safety/recall differences favour the policy. Estimates are means "
               "over seeds; 95 % intervals come from a hierarchical bootstrap (seed, then test "
               "commits). Pooled: projects weighted equally; n = projects where the metric is "
               "defined.", ""]
-    for label in PAIRS.values():
-        lines += [f"### {label}", "", "| Project | Time (policy / B8) | Recall Δ [95 % CI] | "
+    for label in PAIRS:
+        lines += [f"### {label}", "", "| Project | Time (policy / baseline) | Recall Δ [95 % CI] | "
                   "Safety Δ [95 % CI] |", "|---|---|---|---|"]
         for name in names:
             entry = summary["projects"][name]["cost_matched"].get(label)
             if not entry:
                 continue
             d = entry["difference"]
-            lines.append(f"| {name} | {_fmt(entry['policy']['time'])} / {_fmt(entry['b8_same_time']['time'])} "
+            lines.append(f"| {name} | {_fmt(entry['policy']['time'])} / {_fmt(entry['baseline_same_time']['time'])} "
                          f"| {_fmt(d['recall']['estimate'])} {_ci(d['recall']['ci'])} "
                          f"| {_fmt(d['safety']['estimate'])} {_ci(d['safety']['ci'])} |")
         pooled = summary["pooled_bootstrap"]["comparisons"].get(label)

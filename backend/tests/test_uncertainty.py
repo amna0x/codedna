@@ -56,12 +56,27 @@ def test_experiment_reports_cost_matched_bootstrap_and_per_commit():
     report = run_experiment(synthetic_dataset(), model="logistic_regression", sweeps=False,
                             ablations=False, budget=0.3)
     matched = report["cost_matched"]["B9_calibrated_fallback"]
-    assert matched["b8_same_time"]["time"] == pytest.approx(matched["policy"]["time"], abs=0.05)
+    assert matched["baseline"] == "B8"
+    assert matched["baseline_same_time"]["time"] == pytest.approx(matched["policy"]["time"], abs=0.05)
     assert "B9r_risk_target_only − B8 at same time" in report["bootstrap"]["differences"]
     per_commit = report["per_commit"]
     assert per_commit["fields"] == ["time_ratio", "failing", "missed"]
     assert len(per_commit["B8_ml_calibrated"]) == report["config"]["splits"]["test"]
     assert "B8@B9r_risk_target_only" in per_commit
+
+
+def test_experiment_compares_hybrid_with_b8_and_rules_at_same_time():
+    report = run_experiment(synthetic_dataset(), model="logistic_regression", ablations=False,
+                            budget=0.3)
+    assert {"B3_rules_budget", "B10_hybrid"} <= set(report["policies"])
+    assert report["cost_matched"]["B10_hybrid"]["baseline"] == "B8"
+    versus_rules = report["cost_matched"]["B10_hybrid vs B3"]
+    assert versus_rules["baseline"] == "B3"
+    assert versus_rules["baseline_same_time"]["time"] == pytest.approx(
+        versus_rules["policy"]["time"], abs=0.05)
+    assert {"B3@B10_hybrid", "B8@B10_hybrid"} <= set(report["per_commit"])
+    assert "B10_hybrid − B3 at same time" in report["bootstrap"]["differences"]
+    assert len(report["risk_coverage"]["B10_risk_target_sweep"]) > 0
 
 
 def test_bounded_cache_gives_identical_graphs(repo):

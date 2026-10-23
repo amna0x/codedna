@@ -252,6 +252,66 @@
             "mean": 0.0,
             "sd": 0.0
           }
+        },
+        "B3_rules_budget": {
+          "mean_time_ratio": {
+            "mean": 0.6228,
+            "sd": 0.0
+          },
+          "failing_test_recall": {
+            "mean": null,
+            "sd": null
+          },
+          "missed_failures": {
+            "mean": 0,
+            "sd": 0.0
+          },
+          "commit_safety_rate": {
+            "mean": null,
+            "sd": null
+          },
+          "fallback_rate": {
+            "mean": 0.0,
+            "sd": 0.0
+          },
+          "mean_estimated_skip_risk": {
+            "mean": 0.001,
+            "sd": 0.0006
+          },
+          "observed_miss_rate": {
+            "mean": 0.0,
+            "sd": 0.0
+          }
+        },
+        "B10_hybrid": {
+          "mean_time_ratio": {
+            "mean": 0.0046,
+            "sd": 0.0012
+          },
+          "failing_test_recall": {
+            "mean": null,
+            "sd": null
+          },
+          "missed_failures": {
+            "mean": 0,
+            "sd": 0.0
+          },
+          "commit_safety_rate": {
+            "mean": null,
+            "sd": null
+          },
+          "fallback_rate": {
+            "mean": 0.0,
+            "sd": 0.0
+          },
+          "mean_estimated_skip_risk": {
+            "mean": 0.0058,
+            "sd": 0.0032
+          },
+          "observed_miss_rate": {
+            "mean": 0.0,
+            "sd": 0.0
+          }
         }
       },
       "ordering": {
@@ -441,13 +501,14 @@
       "warnings": [],
       "cost_matched": {
         "B9r \u2212 B8 at same time": {
-          "b8_budget": 0.5,
+          "baseline": "B8",
+          "baseline_budget": 0.5,
           "policy": {
             "time": 0.5509,
             "recall": null,
             "safety": null
           },
-          "b8_same_time": {
+          "baseline_same_time": {
             "time": 0.5509,
             "recall": null,
             "safety": null
@@ -471,13 +532,14 @@
           }
         },
         "B9 \u2212 B8 at same time": {
-          "b8_budget": 0.8754,
+          "baseline": "B8",
+          "baseline_budget": 0.8754,
           "policy": {
             "time": 0.8669,
             "recall": null,
             "safety": null
           },
-          "b8_same_time": {
+          "baseline_same_time": {
             "time": 0.8667,
             "recall": null,
             "safety": null
@@ -501,13 +563,14 @@
           }
         },
         "B9n \u2212 B8 at same time": {
-          "b8_budget": 0.8754,
+          "baseline": "B8",
+          "baseline_budget": 0.8754,
           "policy": {
             "time": 0.8669,
             "recall": null,
             "safety": null
           },
-          "b8_same_time": {
+          "baseline_same_time": {
             "time": 0.8667,
             "recall": null,
             "safety": null
@@ -518,6 +581,68 @@
               "ci": [
                 -0.0134,
                 0.0144
+              ]
+            },
+            "recall": {
+              "estimate": null,
+              "ci": null
+            },
+            "safety": {
+              "estimate": null,
+              "ci": null
+            }
+          }
+        },
+        "B10 \u2212 B8 at same time": {
+          "baseline": "B8",
+          "baseline_budget": 0.0004,
+          "policy": {
+            "time": 0.0046,
+            "recall": null,
+            "safety": null
+          },
+          "baseline_same_time": {
+            "time": 0.0048,
+            "recall": null,
+            "safety": null
+          },
+          "difference": {
+            "time": {
+              "estimate": -0.0002,
+              "ci": [
+                -0.0011,
+                0.0008
+              ]
+            },
+            "recall": {
+              "estimate": null,
+              "ci": null
+            },
+            "safety": {
+              "estimate": null,
+              "ci": null
+            }
+          }
+        },
+        "B10 \u2212 B3 (rules) at same time": {
+          "baseline": "B3",
+          "baseline_budget": 0.0004,
+          "policy": {
+            "time": 0.0046,
+            "recall": null,
+            "safety": null
+          },
+          "baseline_same_time": {
+            "time": 0.0048,
+            "recall": null,
+            "safety": null
+          },
+          "difference": {
+            "time": {
+              "estimate": -0.0002,
+              "ci": [
+                -0.0011,
+                0.0008
               ]
             },
             "recall": {
@@ -800,6 +925,66 @@
             "mean": 0.0,
             "sd": 0.0
           }
+        },
+        "B3_rules_budget": {
+          "mean_time_ratio": {
+            "mean": 0.4147,
+            "sd": 0.0
+          },
+          "failing_test_recall": {
+            "mean": null,
+            "sd": null
+          },
+          "missed_failures": {
+            "mean": 0,
+            "sd": 0.0
+          },
+          "commit_safety_rate": {
+            "mean": null,
+            "sd": null
+          },
+          "fallback_rate": {
+            "mean": 0.0,
+            "sd": 0.0
+          },
+          "mean_estimated_skip_risk": {
+            "mean": 0.0056,
+            "sd": 0.003
+          },
+          "observed_miss_rate": {
+            "mean": 0.0,
+            "sd": 0.0
+          }
+        },
+        "B10_hybrid": {
+          "mean_time_ratio": {
+            "mean": 0.003,
+            "sd": 0.0039
+          },
+          "failing_test_recall": {
+            "mean": null,
+            "sd": null
+          },
+          "missed_failures": {
+            "mean": 0,
+            "sd": 0.0
+          },
+          "commit_safety_rate": {
+            "mean": null,
+            "sd": null
+          },
+          "fallback_rate": {
+            "mean": 0.0,
+            "sd": 0.0
+          },
+          "mean_estimated_skip_risk": {
+            "mean": 0.011,
+            "sd": 0.0027
+          },
+          "observed_miss_rate": {
+            "mean": 0.0,
+            "sd": 0.0
+          }
         }
       },
       "ordering": {
@@ -989,13 +1174,14 @@
       "warnings": [],
       "cost_matched": {
         "B9r \u2212 B8 at same time": {
-          "b8_budget": 0.4998,
+          "baseline": "B8",
+          "baseline_budget": 0.4998,
           "policy": {
             "time": 0.4347,
             "recall": null,
             "safety": null
           },
-          "b8_same_time": {
+          "baseline_same_time": {
             "time": 0.4346,
             "recall": null,
             "safety": null
@@ -1019,13 +1205,14 @@
           }
         },
         "B9 \u2212 B8 at same time": {
-          "b8_budget": 0.5546,
+          "baseline": "B8",
+          "baseline_budget": 0.5546,
           "policy": {
             "time": 0.5502,
             "recall": null,
             "safety": null
           },
-          "b8_same_time": {
+          "baseline_same_time": {
             "time": 0.55,
             "recall": null,
             "safety": null
@@ -1049,13 +1236,14 @@
           }
         },
         "B9n \u2212 B8 at same time": {
-          "b8_budget": 0.5546,
+          "baseline": "B8",
+          "baseline_budget": 0.5546,
           "policy": {
             "time": 0.5502,
             "recall": null,
             "safety": null
           },
-          "b8_same_time": {
+          "baseline_same_time": {
             "time": 0.55,
             "recall": null,
             "safety": null
@@ -1066,6 +1254,68 @@
               "ci": [
                 -0.0292,
                 0.0329
+              ]
+            },
+            "recall": {
+              "estimate": null,
+              "ci": null
+            },
+            "safety": {
+              "estimate": null,
+              "ci": null
+            }
+          }
+        },
+        "B10 \u2212 B8 at same time": {
+          "baseline": "B8",
+          "baseline_budget": 0.0141,
+          "policy": {
+            "time": 0.003,
+            "recall": null,
+            "safety": null
+          },
+          "baseline_same_time": {
+            "time": 0.0028,
+            "recall": null,
+            "safety": null
+          },
+          "difference": {
+            "time": {
+              "estimate": 0.0002,
+              "ci": [
+                -0.005,
+                0.0066
+              ]
+            },
+            "recall": {
+              "estimate": null,
+              "ci": null
+            },
+            "safety": {
+              "estimate": null,
+              "ci": null
+            }
+          }
+        },
+        "B10 \u2212 B3 (rules) at same time": {
+          "baseline": "B3",
+          "baseline_budget": 0.0141,
+          "policy": {
+            "time": 0.003,
+            "recall": null,
+            "safety": null
+          },
+          "baseline_same_time": {
+            "time": 0.0028,
+            "recall": null,
+            "safety": null
+          },
+          "difference": {
+            "time": {
+              "estimate": 0.0002,
+              "ci": [
+                -0.005,
+                0.0066
               ]
             },
             "recall": {
@@ -1348,6 +1598,66 @@
             "mean": 0.0407,
             "sd": 0.0063
           }
+        },
+        "B3_rules_budget": {
+          "mean_time_ratio": {
+            "mean": 0.507,
+            "sd": 0.0
+          },
+          "failing_test_recall": {
+            "mean": 0.7692,
+            "sd": 0.0
+          },
+          "missed_failures": {
+            "mean": 27,
+            "sd": 0.0
+          },
+          "commit_safety_rate": {
+            "mean": 0.6346,
+            "sd": 0.0
+          },
+          "fallback_rate": {
+            "mean": 0.0,
+            "sd": 0.0
+          },
+          "mean_estimated_skip_risk": {
+            "mean": 0.0243,
+            "sd": 0.0019
+          },
+          "observed_miss_rate": {
+            "mean": 0.161,
+            "sd": 0.0
+          }
+        },
+        "B10_hybrid": {
+          "mean_time_ratio": {
+            "mean": 0.3102,
+            "sd": 0.0341
+          },
+          "failing_test_recall": {
+            "mean": 0.6906,
+            "sd": 0.0261
+          },
+          "missed_failures": {
+            "mean": 36.2,
+            "sd": 3.0594
+          },
+          "commit_safety_rate": {
+            "mean": 0.5423,
+            "sd": 0.0352
+          },
+          "fallback_rate": {
+            "mean": 0.0,
+            "sd": 0.0
+          },
+          "mean_estimated_skip_risk": {
+            "mean": 0.0441,
+            "sd": 0.001
+          },
+          "observed_miss_rate": {
+            "mean": 0.2017,
+            "sd": 0.0155
+          }
         }
       },
       "ordering": {
@@ -1537,13 +1847,14 @@
       "warnings": [],
       "cost_matched": {
         "B9r \u2212 B8 at same time": {
-          "b8_budget": 0.5163,
+          "baseline": "B8",
+          "baseline_budget": 0.5163,
           "policy": {
             "time": 0.5097,
             "recall": 0.7658,
             "safety": 0.6423
           },
-          "b8_same_time": {
+          "baseline_same_time": {
             "time": 0.5096,
             "recall": 0.7761,
             "safety": 0.6346
@@ -1573,13 +1884,14 @@
           }
         },
         "B9 \u2212 B8 at same time": {
-          "b8_budget": 0.8613,
+          "baseline": "B8",
+          "baseline_budget": 0.8613,
           "policy": {
             "time": 0.7897,
             "recall": 0.9334,
             "safety": 0.9115
           },
-          "b8_same_time": {
+          "baseline_same_time": {
             "time": 0.7895,
             "recall": 0.8923,
             "safety": 0.7577
@@ -1609,13 +1921,14 @@
           }
         },
         "B9n \u2212 B8 at same time": {
-          "b8_budget": 0.8582,
+          "baseline": "B8",
+          "baseline_budget": 0.8582,
           "policy": {
             "time": 0.7877,
             "recall": 0.9316,
             "safety": 0.9077
           },
-          "b8_same_time": {
+          "baseline_same_time": {
             "time": 0.7877,
             "recall": 0.8906,
             "safety": 0.7538
@@ -1640,6 +1953,80 @@
               "ci": [
                 0.0217,
                 0.2727
+              ]
+            }
+          }
+        },
+        "B10 \u2212 B8 at same time": {
+          "baseline": "B8",
+          "baseline_budget": 0.2927,
+          "policy": {
+            "time": 0.3102,
+            "recall": 0.6906,
+            "safety": 0.5423
+          },
+          "baseline_same_time": {
+            "time": 0.3103,
+            "recall": 0.6308,
+            "safety": 0.4923
+          },
+          "difference": {
+            "time": {
+              "estimate": 0.0,
+              "ci": [
+                -0.0275,
+                0.0296
+              ]
+            },
+            "recall": {
+              "estimate": 0.0598,
+              "ci": [
+                -0.0388,
+                0.1795
+              ]
+            },
+            "safety": {
+              "estimate": 0.05,
+              "ci": [
+                -0.1071,
+                0.2045
+              ]
+            }
+          }
+        },
+        "B10 \u2212 B3 (rules) at same time": {
+          "baseline": "B3",
+          "baseline_budget": 0.3036,
+          "policy": {
+            "time": 0.3102,
+            "recall": 0.6906,
+            "safety": 0.5423
+          },
+          "baseline_same_time": {
+            "time": 0.3102,
+            "recall": 0.6616,
+            "safety": 0.5115
+          },
+          "difference": {
+            "time": {
+              "estimate": 0.0001,
+              "ci": [
+                -0.0275,
+                0.0293
+              ]
+            },
+            "recall": {
+              "estimate": 0.0291,
+              "ci": [
+                -0.0099,
+                0.075
+              ]
+            },
+            "safety": {
+              "estimate": 0.0308,
+              "ci": [
+                -0.0417,
+                0.1321
               ]
             }
           }
@@ -1914,6 +2301,66 @@
             "mean": 0.0,
             "sd": 0.0
           }
+        },
+        "B3_rules_budget": {
+          "mean_time_ratio": {
+            "mean": 0.5,
+            "sd": 0.0
+          },
+          "failing_test_recall": {
+            "mean": 0.8571,
+            "sd": 0.0
+          },
+          "missed_failures": {
+            "mean": 1,
+            "sd": 0.0
+          },
+          "commit_safety_rate": {
+            "mean": 0.75,
+            "sd": 0.0
+          },
+          "fallback_rate": {
+            "mean": 0.0,
+            "sd": 0.0
+          },
+          "mean_estimated_skip_risk": {
+            "mean": 0.0169,
+            "sd": 0.0
+          },
+          "observed_miss_rate": {
+            "mean": 0.011,
+            "sd": 0.0
+          }
+        },
+        "B10_hybrid": {
+          "mean_time_ratio": {
+            "mean": 0.2007,
+            "sd": 0.0
+          },
+          "failing_test_recall": {
+            "mean": 0.7143,
+            "sd": 0.0
+          },
+          "missed_failures": {
+            "mean": 2,
+            "sd": 0.0
+          },
+          "commit_safety_rate": {
+            "mean": 0.5,
+            "sd": 0.0
+          },
+          "fallback_rate": {
+            "mean": 0.0,
+            "sd": 0.0
+          },
+          "mean_estimated_skip_risk": {
+            "mean": 0.017,
+            "sd": 0.0
+          },
+          "observed_miss_rate": {
+            "mean": 0.022,
+            "sd": 0.0
+          }
         }
       },
       "ordering": {
@@ -2103,13 +2550,14 @@
       "warnings": [],
       "cost_matched": {
         "B9r \u2212 B8 at same time": {
-          "b8_budget": 0.5039,
+          "baseline": "B8",
+          "baseline_budget": 0.5039,
           "policy": {
             "time": 0.5447,
             "recall": 1.0,
             "safety": 1.0
           },
-          "b8_same_time": {
+          "baseline_same_time": {
             "time": 0.5446,
             "recall": 1.0,
             "safety": 1.0
@@ -2139,13 +2587,14 @@
           }
         },
         "B9 \u2212 B8 at same time": {
-          "b8_budget": 0.8847,
+          "baseline": "B8",
+          "baseline_budget": 0.8847,
           "policy": {
             "time": 0.8608,
             "recall": 1.0,
             "safety": 1.0
           },
-          "b8_same_time": {
+          "baseline_same_time": {
             "time": 0.8615,
             "recall": 1.0,
             "safety": 1.0
@@ -2175,13 +2624,14 @@
           }
         },
         "B9n \u2212 B8 at same time": {
-          "b8_budget": 0.8847,
+          "baseline": "B8",
+          "baseline_budget": 0.8847,
           "policy": {
             "time": 0.8608,
             "recall": 1.0,
             "safety": 1.0
           },
-          "b8_same_time": {
+          "baseline_same_time": {
             "time": 0.8615,
             "recall": 1.0,
             "safety": 1.0
@@ -2206,6 +2656,80 @@
               "ci": [
                 0.0,
                 0.0
+              ]
+            }
+          }
+        },
+        "B10 \u2212 B8 at same time": {
+          "baseline": "B8",
+          "baseline_budget": 0.105,
+          "policy": {
+            "time": 0.2007,
+            "recall": 0.7143,
+            "safety": 0.5
+          },
+          "baseline_same_time": {
+            "time": 0.2003,
+            "recall": 0.7143,
+            "safety": 0.5
+          },
+          "difference": {
+            "time": {
+              "estimate": 0.0004,
+              "ci": [
+                -0.0533,
+                0.0585
+              ]
+            },
+            "recall": {
+              "estimate": 0.0,
+              "ci": [
+                -1.0,
+                0.5
+              ]
+            },
+            "safety": {
+              "estimate": 0.0,
+              "ci": [
+                -1.0,
+                1.0
+              ]
+            }
+          }
+        },
+        "B10 \u2212 B3 (rules) at same time": {
+          "baseline": "B3",
+          "baseline_budget": 0.0921,
+          "policy": {
+            "time": 0.2007,
+            "recall": 0.7143,
+            "safety": 0.5
+          },
+          "baseline_same_time": {
+            "time": 0.2005,
+            "recall": 0.5714,
+            "safety": 0.25
+          },
+          "difference": {
+            "time": {
+              "estimate": 0.0002,
+              "ci": [
+                -0.0564,
+                0.061
+              ]
+            },
+            "recall": {
+              "estimate": 0.1429,
+              "ci": [
+                0.0,
+                0.5
+              ]
+            },
+            "safety": {
+              "estimate": 0.25,
+              "ci": [
+                0.0,
+                1.0
               ]
             }
           }
@@ -2480,6 +3004,66 @@
             "mean": 0.0,
             "sd": 0.0
           }
+        },
+        "B3_rules_budget": {
+          "mean_time_ratio": {
+            "mean": 0.4723,
+            "sd": 0.0
+          },
+          "failing_test_recall": {
+            "mean": 1.0,
+            "sd": 0.0
+          },
+          "missed_failures": {
+            "mean": 0,
+            "sd": 0.0
+          },
+          "commit_safety_rate": {
+            "mean": 1.0,
+            "sd": 0.0
+          },
+          "fallback_rate": {
+            "mean": 0.0,
+            "sd": 0.0
+          },
+          "mean_estimated_skip_risk": {
+            "mean": 0.2619,
+            "sd": 0.116
+          },
+          "observed_miss_rate": {
+            "mean": 0.0,
+            "sd": 0.0
+          }
+        },
+        "B10_hybrid": {
+          "mean_time_ratio": {
+            "mean": 0.7612,
+            "sd": 0.1629
+          },
+          "failing_test_recall": {
+            "mean": 1.0,
+            "sd": 0.0
+          },
+          "missed_failures": {
+            "mean": 0,
+            "sd": 0.0
+          },
+          "commit_safety_rate": {
+            "mean": 1.0,
+            "sd": 0.0
+          },
+          "fallback_rate": {
+            "mean": 0.0,
+            "sd": 0.0
+          },
+          "mean_estimated_skip_risk": {
+            "mean": 0.0384,
+            "sd": 0.0059
+          },
+          "observed_miss_rate": {
+            "mean": 0.0,
+            "sd": 0.0
+          }
         }
       },
       "ordering": {
@@ -2653,13 +3237,14 @@
       ],
       "cost_matched": {
         "B9r \u2212 B8 at same time": {
-          "b8_budget": 0.8313,
+          "baseline": "B8",
+          "baseline_budget": 0.8313,
           "policy": {
             "time": 0.7713,
             "recall": 1.0,
             "safety": 1.0
           },
-          "b8_same_time": {
+          "baseline_same_time": {
             "time": 0.7662,
             "recall": 1.0,
             "safety": 1.0
@@ -2689,13 +3274,14 @@
           }
         },
         "B9 \u2212 B8 at same time": {
-          "b8_budget": 0.9969,
+          "baseline": "B8",
+          "baseline_budget": 0.9969,
           "policy": {
             "time": 0.9525,
             "recall": 1.0,
             "safety": 1.0
           },
-          "b8_same_time": {
+          "baseline_same_time": {
             "time": 0.9713,
             "recall": 1.0,
             "safety": 1.0
@@ -2725,13 +3311,14 @@
           }
         },
         "B9n \u2212 B8 at same time": {
-          "b8_budget": 0.9844,
+          "baseline": "B8",
+          "baseline_budget": 0.9844,
           "policy": {
             "time": 0.8915,
             "recall": 1.0,
             "safety": 1.0
           },
-          "b8_same_time": {
+          "baseline_same_time": {
             "time": 0.8535,
             "recall": 1.0,
             "safety": 1.0
@@ -2742,6 +3329,80 @@
               "ci": [
                 -0.0115,
                 0.0797
+              ]
+            },
+            "recall": {
+              "estimate": 0.0,
+              "ci": [
+                0.0,
+                0.0
+              ]
+            },
+            "safety": {
+              "estimate": 0.0,
+              "ci": [
+                0.0,
+                0.0
+              ]
+            }
+          }
+        },
+        "B10 \u2212 B8 at same time": {
+          "baseline": "B8",
+          "baseline_budget": 0.8178,
+          "policy": {
+            "time": 0.7612,
+            "recall": 1.0,
+            "safety": 1.0
+          },
+          "baseline_same_time": {
+            "time": 0.7563,
+            "recall": 1.0,
+            "safety": 1.0
+          },
+          "difference": {
+            "time": {
+              "estimate": 0.005,
+              "ci": [
+                -0.0132,
+                0.0322
+              ]
+            },
+            "recall": {
+              "estimate": 0.0,
+              "ci": [
+                0.0,
+                0.0
+              ]
+            },
+            "safety": {
+              "estimate": 0.0,
+              "ci": [
+                0.0,
+                0.0
+              ]
+            }
+          }
+        },
+        "B10 \u2212 B3 (rules) at same time": {
+          "baseline": "B3",
+          "baseline_budget": 0.8209,
+          "policy": {
+            "time": 0.7612,
+            "recall": 1.0,
+            "safety": 1.0
+          },
+          "baseline_same_time": {
+            "time": 0.7563,
+            "recall": 1.0,
+            "safety": 1.0
+          },
+          "difference": {
+            "time": {
+              "estimate": 0.0049,
+              "ci": [
+                -0.0132,
+                0.0322
               ]
             },
             "recall": {
@@ -3030,6 +3691,66 @@
             "mean": 0.021,
             "sd": 0.0
           }
+        },
+        "B3_rules_budget": {
+          "mean_time_ratio": {
+            "mean": 0.3598,
+            "sd": 0.0
+          },
+          "failing_test_recall": {
+            "mean": 0.8264,
+            "sd": 0.0
+          },
+          "missed_failures": {
+            "mean": 21,
+            "sd": 0.0
+          },
+          "commit_safety_rate": {
+            "mean": 0.5,
+            "sd": 0.0
+          },
+          "fallback_rate": {
+            "mean": 0.0,
+            "sd": 0.0
+          },
+          "mean_estimated_skip_risk": {
+            "mean": 0.0181,
+            "sd": 0.0
+          },
+          "observed_miss_rate": {
+            "mean": 0.035,
+            "sd": 0.0
+          }
+        },
+        "B10_hybrid": {
+          "mean_time_ratio": {
+            "mean": 0.1333,
+            "sd": 0.0
+          },
+          "failing_test_recall": {
+            "mean": 0.7273,
+            "sd": 0.0
+          },
+          "missed_failures": {
+            "mean": 33,
+            "sd": 0.0
+          },
+          "commit_safety_rate": {
+            "mean": 0.5,
+            "sd": 0.0
+          },
+          "fallback_rate": {
+            "mean": 0.0,
+            "sd": 0.0
+          },
+          "mean_estimated_skip_risk": {
+            "mean": 0.0444,
+            "sd": 0.0
+          },
+          "observed_miss_rate": {
+            "mean": 0.035,
+            "sd": 0.0
+          }
         }
       },
       "ordering": {
@@ -3219,13 +3940,14 @@
       "warnings": [],
       "cost_matched": {
         "B9r \u2212 B8 at same time": {
-          "b8_budget": 0.5213,
+          "baseline": "B8",
+          "baseline_budget": 0.5213,
           "policy": {
             "time": 0.3616,
             "recall": 0.8099,
             "safety": 0.55
           },
-          "b8_same_time": {
+          "baseline_same_time": {
             "time": 0.3617,
             "recall": 0.8017,
             "safety": 0.55
@@ -3255,13 +3977,14 @@
           }
         },
         "B9 \u2212 B8 at same time": {
-          "b8_budget": 0.7746,
+          "baseline": "B8",
+          "baseline_budget": 0.7746,
           "policy": {
             "time": 0.6349,
             "recall": 0.876,
             "safety": 0.7
           },
-          "b8_same_time": {
+          "baseline_same_time": {
             "time": 0.6361,
             "recall": 0.8678,
             "safety": 0.55
@@ -3291,13 +4014,14 @@
           }
         },
         "B9n \u2212 B8 at same time": {
-          "b8_budget": 0.7745,
+          "baseline": "B8",
+          "baseline_budget": 0.7745,
           "policy": {
             "time": 0.6333,
             "recall": 0.876,
             "safety": 0.7
           },
-          "b8_same_time": {
+          "baseline_same_time": {
             "time": 0.6324,
             "recall": 0.8678,
             "safety": 0.55
@@ -3322,6 +4046,80 @@
               "ci": [
                 0.0,
                 0.32
+              ]
+            }
+          }
+        },
+        "B10 \u2212 B8 at same time": {
+          "baseline": "B8",
+          "baseline_budget": 0.1791,
+          "policy": {
+            "time": 0.1333,
+            "recall": 0.7273,
+            "safety": 0.5
+          },
+          "baseline_same_time": {
+            "time": 0.1331,
+            "recall": 0.6612,
+            "safety": 0.45
+          },
+          "difference": {
+            "time": {
+              "estimate": 0.0002,
+              "ci": [
+                -0.0202,
+                0.0233
+              ]
+            },
+            "recall": {
+              "estimate": 0.0661,
+              "ci": [
+                -0.0971,
+                0.23
+              ]
+            },
+            "safety": {
+              "estimate": 0.05,
+              "ci": [
+                -0.1333,
+                0.2222
+              ]
+            }
+          }
+        },
+        "B10 \u2212 B3 (rules) at same time": {
+          "baseline": "B3",
+          "baseline_budget": 0.1795,
+          "policy": {
+            "time": 0.1333,
+            "recall": 0.7273,
+            "safety": 0.5
+          },
+          "baseline_same_time": {
+            "time": 0.1315,
+            "recall": 0.719,
+            "safety": 0.45
+          },
+          "difference": {
+            "time": {
+              "estimate": 0.0019,
+              "ci": [
+                -0.0191,
+                0.0251
+              ]
+            },
+            "recall": {
+              "estimate": 0.0083,
+              "ci": [
+                -0.1081,
+                0.12
+              ]
+            },
+            "safety": {
+              "estimate": 0.05,
+              "ci": [
+                -0.1333,
+                0.2222
               ]
             }
           }
@@ -3596,6 +4394,66 @@
             "mean": 0.0566,
             "sd": 0.0
           }
+        },
+        "B3_rules_budget": {
+          "mean_time_ratio": {
+            "mean": 0.5967,
+            "sd": 0.0
+          },
+          "failing_test_recall": {
+            "mean": 0.4,
+            "sd": 0.0
+          },
+          "missed_failures": {
+            "mean": 3,
+            "sd": 0.0
+          },
+          "commit_safety_rate": {
+            "mean": 0.4,
+            "sd": 0.0
+          },
+          "fallback_rate": {
+            "mean": 0.0,
+            "sd": 0.0
+          },
+          "mean_estimated_skip_risk": {
+            "mean": 0.452,
+            "sd": 0.0
+          },
+          "observed_miss_rate": {
+            "mean": 0.0566,
+            "sd": 0.0
+          }
+        },
+        "B10_hybrid": {
+          "mean_time_ratio": {
+            "mean": 1.0,
+            "sd": 0.0
+          },
+          "failing_test_recall": {
+            "mean": 1.0,
+            "sd": 0.0
+          },
+          "missed_failures": {
+            "mean": 0,
+            "sd": 0.0
+          },
+          "commit_safety_rate": {
+            "mean": 1.0,
+            "sd": 0.0
+          },
+          "fallback_rate": {
+            "mean": 0.0,
+            "sd": 0.0
+          },
+          "mean_estimated_skip_risk": {
+            "mean": 0.0,
+            "sd": 0.0
+          },
+          "observed_miss_rate": {
+            "mean": 0.0,
+            "sd": 0.0
+          }
         }
       },
       "ordering": {
@@ -3785,13 +4643,14 @@
       "warnings": [],
       "cost_matched": {
         "B9r \u2212 B8 at same time": {
-          "b8_budget": 0.8356,
+          "baseline": "B8",
+          "baseline_budget": 0.8356,
           "policy": {
             "time": 0.8206,
             "recall": 0.6,
             "safety": 0.6
           },
-          "b8_same_time": {
+          "baseline_same_time": {
             "time": 0.8196,
             "recall": 0.6,
             "safety": 0.6
@@ -3821,13 +4680,14 @@
           }
         },
         "B9 \u2212 B8 at same time": {
-          "b8_budget": 0.8751,
+          "baseline": "B8",
+          "baseline_budget": 0.8751,
           "policy": {
             "time": 0.8875,
             "recall": 0.8,
             "safety": 0.8
           },
-          "b8_same_time": {
+          "baseline_same_time": {
             "time": 0.8875,
             "recall": 0.8,
             "safety": 0.8
@@ -3857,13 +4717,14 @@
           }
         },
         "B9n \u2212 B8 at same time": {
-          "b8_budget": 0.7007,
+          "baseline": "B8",
+          "baseline_budget": 0.7007,
           "policy": {
             "time": 0.6393,
             "recall": 0.4,
             "safety": 0.4
           },
-          "b8_same_time": {
+          "baseline_same_time": {
             "time": 0.6392,
             "recall": 0.6,
             "safety": 0.6
@@ -3888,6 +4749,80 @@
               "ci": [
                 -1.0,
                 0.6667
+              ]
+            }
+          }
+        },
+        "B10 \u2212 B8 at same time": {
+          "baseline": "B8",
+          "baseline_budget": 1.0,
+          "policy": {
+            "time": 1.0,
+            "recall": 1.0,
+            "safety": 1.0
+          },
+          "baseline_same_time": {
+            "time": 1.0,
+            "recall": 1.0,
+            "safety": 1.0
+          },
+          "difference": {
+            "time": {
+              "estimate": 0.0,
+              "ci": [
+                0.0,
+                0.0
+              ]
+            },
+            "recall": {
+              "estimate": 0.0,
+              "ci": [
+                0.0,
+                0.0
+              ]
+            },
+            "safety": {
+              "estimate": 0.0,
+              "ci": [
+                0.0,
+                0.0
+              ]
+            }
+          }
+        },
+        "B10 \u2212 B3 (rules) at same time": {
+          "baseline": "B3",
+          "baseline_budget": 1.0,
+          "policy": {
+            "time": 1.0,
+            "recall": 1.0,
+            "safety": 1.0
+          },
+          "baseline_same_time": {
+            "time": 1.0,
+            "recall": 1.0,
+            "safety": 1.0
+          },
+          "difference": {
+            "time": {
+              "estimate": 0.0,
+              "ci": [
+                0.0,
+                0.0
+              ]
+            },
+            "recall": {
+              "estimate": 0.0,
+              "ci": [
+                0.0,
+                0.0
+              ]
+            },
+            "safety": {
+              "estimate": 0.0,
+              "ci": [
+                0.0,
+                0.0
               ]
             }
           }
@@ -4162,6 +5097,66 @@
             "mean": 0.0,
             "sd": 0.0
           }
+        },
+        "B3_rules_budget": {
+          "mean_time_ratio": {
+            "mean": 0.8945,
+            "sd": 0.0
+          },
+          "failing_test_recall": {
+            "mean": 1.0,
+            "sd": 0.0
+          },
+          "missed_failures": {
+            "mean": 0,
+            "sd": 0.0
+          },
+          "commit_safety_rate": {
+            "mean": 1.0,
+            "sd": 0.0
+          },
+          "fallback_rate": {
+            "mean": 0.0,
+            "sd": 0.0
+          },
+          "mean_estimated_skip_risk": {
+            "mean": 0.0139,
+            "sd": 0.0
+          },
+          "observed_miss_rate": {
+            "mean": 0.0,
+            "sd": 0.0
+          }
+        },
+        "B10_hybrid": {
+          "mean_time_ratio": {
+            "mean": 0.2264,
+            "sd": 0.0
+          },
+          "failing_test_recall": {
+            "mean": 0.5,
+            "sd": 0.0
+          },
+          "missed_failures": {
+            "mean": 1,
+            "sd": 0.0
+          },
+          "commit_safety_rate": {
+            "mean": 0.5,
+            "sd": 0.0
+          },
+          "fallback_rate": {
+            "mean": 0.0,
+            "sd": 0.0
+          },
+          "mean_estimated_skip_risk": {
+            "mean": 0.033,
+            "sd": 0.0
+          },
+          "observed_miss_rate": {
+            "mean": 0.0159,
+            "sd": 0.0
+          }
         }
       },
       "ordering": {
@@ -4351,13 +5346,14 @@
       "warnings": [],
       "cost_matched": {
         "B9r \u2212 B8 at same time": {
-          "b8_budget": 0.5045,
+          "baseline": "B8",
+          "baseline_budget": 0.5045,
           "policy": {
             "time": 0.8618,
             "recall": 1.0,
             "safety": 1.0
           },
-          "b8_same_time": {
+          "baseline_same_time": {
             "time": 0.8618,
             "recall": 1.0,
             "safety": 1.0
@@ -4387,13 +5383,14 @@
           }
         },
         "B9 \u2212 B8 at same time": {
-          "b8_budget": 0.8033,
+          "baseline": "B8",
+          "baseline_budget": 0.8033,
           "policy": {
             "time": 0.9591,
             "recall": 1.0,
             "safety": 1.0
           },
-          "b8_same_time": {
+          "baseline_same_time": {
             "time": 0.9578,
             "recall": 1.0,
             "safety": 1.0
@@ -4423,13 +5420,14 @@
           }
         },
         "B9n \u2212 B8 at same time": {
-          "b8_budget": 0.8033,
+          "baseline": "B8",
+          "baseline_budget": 0.8033,
           "policy": {
             "time": 0.9582,
             "recall": 1.0,
             "safety": 1.0
           },
-          "b8_same_time": {
+          "baseline_same_time": {
             "time": 0.9578,
             "recall": 1.0,
             "safety": 1.0
@@ -4440,6 +5438,80 @@
               "ci": [
                 -0.025,
                 0.025
+              ]
+            },
+            "recall": {
+              "estimate": 0.0,
+              "ci": [
+                0.0,
+                0.0
+              ]
+            },
+            "safety": {
+              "estimate": 0.0,
+              "ci": [
+                0.0,
+                0.0
+              ]
+            }
+          }
+        },
+        "B10 \u2212 B8 at same time": {
+          "baseline": "B8",
+          "baseline_budget": 0.0556,
+          "policy": {
+            "time": 0.2264,
+            "recall": 0.5,
+            "safety": 0.5
+          },
+          "baseline_same_time": {
+            "time": 0.227,
+            "recall": 0.5,
+            "safety": 0.5
+          },
+          "difference": {
+            "time": {
+              "estimate": -0.0006,
+              "ci": [
+                -0.0858,
+                0.0929
+              ]
+            },
+            "recall": {
+              "estimate": 0.0,
+              "ci": [
+                0.0,
+                0.0
+              ]
+            },
+            "safety": {
+              "estimate": 0.0,
+              "ci": [
+                0.0,
+                0.0
+              ]
+            }
+          }
+        },
+        "B10 \u2212 B3 (rules) at same time": {
+          "baseline": "B3",
+          "baseline_budget": 0.0669,
+          "policy": {
+            "time": 0.2264,
+            "recall": 0.5,
+            "safety": 0.5
+          },
+          "baseline_same_time": {
+            "time": 0.2264,
+            "recall": 0.5,
+            "safety": 0.5
+          },
+          "difference": {
+            "time": {
+              "estimate": 0.0,
+              "ci": [
+                -0.0836,
+                0.0923
               ]
             },
             "recall": {
@@ -4728,6 +5800,66 @@
             "mean": 0.0,
             "sd": 0.0
           }
+        },
+        "B3_rules_budget": {
+          "mean_time_ratio": {
+            "mean": 0.3639,
+            "sd": 0.0
+          },
+          "failing_test_recall": {
+            "mean": 0.92,
+            "sd": 0.0
+          },
+          "missed_failures": {
+            "mean": 2,
+            "sd": 0.0
+          },
+          "commit_safety_rate": {
+            "mean": 0.7143,
+            "sd": 0.0
+          },
+          "fallback_rate": {
+            "mean": 0.0,
+            "sd": 0.0
+          },
+          "mean_estimated_skip_risk": {
+            "mean": 0.0363,
+            "sd": 0.0547
+          },
+          "observed_miss_rate": {
+            "mean": 0.0385,
+            "sd": 0.0
+          }
+        },
+        "B10_hybrid": {
+          "mean_time_ratio": {
+            "mean": 0.3022,
+            "sd": 0.3508
+          },
+          "failing_test_recall": {
+            "mean": 0.864,
+            "sd": 0.0742
+          },
+          "missed_failures": {
+            "mean": 3.4,
+            "sd": 1.8547
+          },
+          "commit_safety_rate": {
+            "mean": 0.7714,
+            "sd": 0.1143
+          },
+          "fallback_rate": {
+            "mean": 0.0,
+            "sd": 0.0
+          },
+          "mean_estimated_skip_risk": {
+            "mean": 0.0333,
+            "sd": 0.0172
+          },
+          "observed_miss_rate": {
+            "mean": 0.0308,
+            "sd": 0.0154
+          }
         }
       },
       "ordering": {
@@ -4901,13 +6033,14 @@
       ],
       "cost_matched": {
         "B9r \u2212 B8 at same time": {
-          "b8_budget": 0.5979,
+          "baseline": "B8",
+          "baseline_budget": 0.5979,
           "policy": {
             "time": 0.4822,
             "recall": 0.936,
             "safety": 0.7714
           },
-          "b8_same_time": {
+          "baseline_same_time": {
             "time": 0.4822,
             "recall": 0.936,
             "safety": 0.7714
@@ -4937,13 +6070,14 @@
           }
         },
         "B9 \u2212 B8 at same time": {
-          "b8_budget": 0.9,
+          "baseline": "B8",
+          "baseline_budget": 0.9,
           "policy": {
             "time": 0.7658,
             "recall": 1.0,
             "safety": 1.0
           },
-          "b8_same_time": {
+          "baseline_same_time": {
             "time": 0.6547,
             "recall": 0.968,
             "safety": 0.8857
@@ -4973,13 +6107,14 @@
           }
         },
         "B9n \u2212 B8 at same time": {
-          "b8_budget": 0.875,
+          "baseline": "B8",
+          "baseline_budget": 0.875,
           "policy": {
             "time": 0.7073,
             "recall": 1.0,
             "safety": 1.0
           },
-          "b8_same_time": {
+          "baseline_same_time": {
             "time": 0.5664,
             "recall": 0.96,
             "safety": 0.8571
@@ -5004,6 +6139,80 @@
               "ci": [
                 0.0,
                 0.5
+              ]
+            }
+          }
+        },
+        "B10 \u2212 B8 at same time": {
+          "baseline": "B8",
+          "baseline_budget": 0.343,
+          "policy": {
+            "time": 0.3022,
+            "recall": 0.864,
+            "safety": 0.7714
+          },
+          "baseline_same_time": {
+            "time": 0.3023,
+            "recall": 0.904,
+            "safety": 0.7714
+          },
+          "difference": {
+            "time": {
+              "estimate": -0.0001,
+              "ci": [
+                -0.0292,
+                0.0303
+              ]
+            },
+            "recall": {
+              "estimate": -0.04,
+              "ci": [
+                -0.1143,
+                0.0
+              ]
+            },
+            "safety": {
+              "estimate": 0.0,
+              "ci": [
+                0.0,
+                0.0
+              ]
+            }
+          }
+        },
+        "B10 \u2212 B3 (rules) at same time": {
+          "baseline": "B3",
+          "baseline_budget": 0.3363,
+          "policy": {
+            "time": 0.3022,
+            "recall": 0.864,
+            "safety": 0.7714
+          },
+          "baseline_same_time": {
+            "time": 0.302,
+            "recall": 0.904,
+            "safety": 0.7714
+          },
+          "difference": {
+            "time": {
+              "estimate": 0.0002,
+              "ci": [
+                -0.0256,
+                0.028
+              ]
+            },
+            "recall": {
+              "estimate": -0.04,
+              "ci": [
+                -0.1143,
+                0.0
+              ]
+            },
+            "safety": {
+              "estimate": 0.0,
+              "ci": [
+                0.0,
+                0.0
               ]
             }
           }
@@ -5278,6 +6487,66 @@
             "mean": 0.1768,
             "sd": 0.0
           }
+        },
+        "B3_rules_budget": {
+          "mean_time_ratio": {
+            "mean": 0.5072,
+            "sd": 0.0
+          },
+          "failing_test_recall": {
+            "mean": 0.8553,
+            "sd": 0.0
+          },
+          "missed_failures": {
+            "mean": 357,
+            "sd": 0.0
+          },
+          "commit_safety_rate": {
+            "mean": 0.0575,
+            "sd": 0.0
+          },
+          "fallback_rate": {
+            "mean": 0.0,
+            "sd": 0.0
+          },
+          "mean_estimated_skip_risk": {
+            "mean": 0.6344,
+            "sd": 0.0203
+          },
+          "observed_miss_rate": {
+            "mean": 0.5,
+            "sd": 0.0
+          }
+        },
+        "B10_hybrid": {
+          "mean_time_ratio": {
+            "mean": 0.7513,
+            "sd": 0.0649
+          },
+          "failing_test_recall": {
+            "mean": 0.9971,
+            "sd": 0.004
+          },
+          "missed_failures": {
+            "mean": 7.2,
+            "sd": 9.8468
+          },
+          "commit_safety_rate": {
+            "mean": 0.9862,
+            "sd": 0.0113
+          },
+          "fallback_rate": {
+            "mean": 0.0,
+            "sd": 0.0
+          },
+          "mean_estimated_skip_risk": {
+            "mean": 0.0149,
+            "sd": 0.0079
+          },
+          "observed_miss_rate": {
+            "mean": 0.0073,
+            "sd": 0.006
+          }
         }
       },
       "ordering": {
@@ -5467,13 +6736,14 @@
       "warnings": [],
       "cost_matched": {
         "B9r \u2212 B8 at same time": {
-          "b8_budget": 0.7611,
+          "baseline": "B8",
+          "baseline_budget": 0.7611,
           "policy": {
             "time": 0.7138,
             "recall": 0.9989,
             "safety": 0.9839
           },
-          "b8_same_time": {
+          "baseline_same_time": {
             "time": 0.7139,
             "recall": 0.9672,
             "safety": 0.3288
@@ -5503,13 +6773,14 @@
           }
         },
         "B9 \u2212 B8 at same time": {
-          "b8_budget": 0.9867,
+          "baseline": "B8",
+          "baseline_budget": 0.9867,
           "policy": {
             "time": 0.8885,
             "recall": 0.9999,
             "safety": 0.9977
           },
-          "b8_same_time": {
+          "baseline_same_time": {
             "time": 0.8888,
             "recall": 0.9996,
             "safety": 0.9885
@@ -5539,13 +6810,14 @@
           }
         },
         "B9n \u2212 B8 at same time": {
-          "b8_budget": 0.8833,
+          "baseline": "B8",
+          "baseline_budget": 0.8833,
           "policy": {
             "time": 0.8278,
             "recall": 0.9478,
             "safety": 0.6667
           },
-          "b8_same_time": {
+          "baseline_same_time": {
             "time": 0.8283,
             "recall": 0.9988,
             "safety": 0.9655
@@ -5570,6 +6842,80 @@
               "ci": [
                 -0.4125,
                 -0.1771
+              ]
+            }
+          }
+        },
+        "B10 \u2212 B8 at same time": {
+          "baseline": "B8",
+          "baseline_budget": 0.8339,
+          "policy": {
+            "time": 0.7513,
+            "recall": 0.9971,
+            "safety": 0.9862
+          },
+          "baseline_same_time": {
+            "time": 0.7512,
+            "recall": 0.9779,
+            "safety": 0.4138
+          },
+          "difference": {
+            "time": {
+              "estimate": 0.0001,
+              "ci": [
+                -0.0286,
+                0.0303
+              ]
+            },
+            "recall": {
+              "estimate": 0.0192,
+              "ci": [
+                0.0,
+                0.0389
+              ]
+            },
+            "safety": {
+              "estimate": 0.5724,
+              "ci": [
+                0.0,
+                0.9747
+              ]
+            }
+          }
+        },
+        "B10 \u2212 B3 (rules) at same time": {
+          "baseline": "B3",
+          "baseline_budget": 0.8335,
+          "policy": {
+            "time": 0.7513,
+            "recall": 0.9971,
+            "safety": 0.9862
+          },
+          "baseline_same_time": {
+            "time": 0.7468,
+            "recall": 0.9875,
+            "safety": 0.646
+          },
+          "difference": {
+            "time": {
+              "estimate": 0.0046,
+              "ci": [
+                -0.0278,
+                0.0417
+              ]
+            },
+            "recall": {
+              "estimate": 0.0096,
+              "ci": [
+                -0.0009,
+                0.0332
+              ]
+            },
+            "safety": {
+              "estimate": 0.3402,
+              "ci": [
+                -0.0241,
+                0.9551
               ]
             }
           }
@@ -5844,6 +7190,66 @@
             "mean": 0.0,
             "sd": 0.0
           }
+        },
+        "B3_rules_budget": {
+          "mean_time_ratio": {
+            "mean": 0.4869,
+            "sd": 0.0
+          },
+          "failing_test_recall": {
+            "mean": 1.0,
+            "sd": 0.0
+          },
+          "missed_failures": {
+            "mean": 0,
+            "sd": 0.0
+          },
+          "commit_safety_rate": {
+            "mean": 1.0,
+            "sd": 0.0
+          },
+          "fallback_rate": {
+            "mean": 0.0,
+            "sd": 0.0
+          },
+          "mean_estimated_skip_risk": {
+            "mean": 0.0937,
+            "sd": 0.0051
+          },
+          "observed_miss_rate": {
+            "mean": 0.0,
+            "sd": 0.0
+          }
+        },
+        "B10_hybrid": {
+          "mean_time_ratio": {
+            "mean": 0.5839,
+            "sd": 0.0152
+          },
+          "failing_test_recall": {
+            "mean": 1.0,
+            "sd": 0.0
+          },
+          "missed_failures": {
+            "mean": 0,
+            "sd": 0.0
+          },
+          "commit_safety_rate": {
+            "mean": 1.0,
+            "sd": 0.0
+          },
+          "fallback_rate": {
+            "mean": 0.0,
+            "sd": 0.0
+          },
+          "mean_estimated_skip_risk": {
+            "mean": 0.0393,
+            "sd": 0.0029
+          },
+          "observed_miss_rate": {
+            "mean": 0.0,
+            "sd": 0.0
+          }
         }
       },
       "ordering": {
@@ -6033,13 +7439,14 @@
       "warnings": [],
       "cost_matched": {
         "B9r \u2212 B8 at same time": {
-          "b8_budget": 0.8063,
+          "baseline": "B8",
+          "baseline_budget": 0.8063,
           "policy": {
             "time": 0.6147,
             "recall": 1.0,
             "safety": 1.0
           },
-          "b8_same_time": {
+          "baseline_same_time": {
             "time": 0.614,
             "recall": 1.0,
             "safety": 1.0
@@ -6069,13 +7476,14 @@
           }
         },
         "B9 \u2212 B8 at same time": {
-          "b8_budget": 0.998,
+          "baseline": "B8",
+          "baseline_budget": 0.998,
           "policy": {
             "time": 0.8157,
             "recall": 1.0,
             "safety": 1.0
           },
-          "b8_same_time": {
+          "baseline_same_time": {
             "time": 0.8677,
             "recall": 1.0,
             "safety": 1.0
@@ -6105,13 +7513,14 @@
           }
         },
         "B9n \u2212 B8 at same time": {
-          "b8_budget": 0.9937,
+          "baseline": "B8",
+          "baseline_budget": 0.9937,
           "policy": {
             "time": 0.7441,
             "recall": 1.0,
             "safety": 1.0
           },
-          "b8_same_time": {
+          "baseline_same_time": {
             "time": 0.7241,
             "recall": 1.0,
             "safety": 1.0
@@ -6122,6 +7531,80 @@
               "ci": [
                 -0.0637,
                 0.12
+              ]
+            },
+            "recall": {
+              "estimate": 0.0,
+              "ci": [
+                0.0,
+                0.0
+              ]
+            },
+            "safety": {
+              "estimate": 0.0,
+              "ci": [
+                0.0,
+                0.0
+              ]
+            }
+          }
+        },
+        "B10 \u2212 B8 at same time": {
+          "baseline": "B8",
+          "baseline_budget": 0.7403,
+          "policy": {
+            "time": 0.5839,
+            "recall": 1.0,
+            "safety": 1.0
+          },
+          "baseline_same_time": {
+            "time": 0.5831,
+            "recall": 1.0,
+            "safety": 1.0
+          },
+          "difference": {
+            "time": {
+              "estimate": 0.0009,
+              "ci": [
+                -0.0079,
+                0.0096
+              ]
+            },
+            "recall": {
+              "estimate": 0.0,
+              "ci": [
+                0.0,
+                0.0
+              ]
+            },
+            "safety": {
+              "estimate": 0.0,
+              "ci": [
+                0.0,
+                0.0
+              ]
+            }
+          }
+        },
+        "B10 \u2212 B3 (rules) at same time": {
+          "baseline": "B3",
+          "baseline_budget": 0.7784,
+          "policy": {
+            "time": 0.5839,
+            "recall": 1.0,
+            "safety": 1.0
+          },
+          "baseline_same_time": {
+            "time": 0.5836,
+            "recall": 1.0,
+            "safety": 1.0
+          },
+          "difference": {
+            "time": {
+              "estimate": 0.0003,
+              "ci": [
+                -0.0102,
+                0.0105
               ]
             },
             "recall": {
@@ -6400,6 +7883,66 @@
           "mean": 0.8527,
           "projects": 9
         }
+      },
+      "B3_rules_budget": {
+        "mean_time_ratio": {
+          "mean": 0.5205,
+          "projects": 11
+        },
+        "missed_failures": {
+          "mean": 37.3636,
+          "projects": 11
+        },
+        "fallback_rate": {
+          "mean": 0.0,
+          "projects": 11
+        },
+        "mean_estimated_skip_risk": {
+          "mean": 0.1416,
+          "projects": 11
+        },
+        "observed_miss_rate": {
+          "mean": 0.0729,
+          "projects": 11
+        },
+        "failing_test_recall": {
+          "mean": 0.8476,
+          "projects": 9
+        },
+        "commit_safety_rate": {
+          "mean": 0.6729,
+          "projects": 9
+        }
+      },
+      "B10_hybrid": {
+        "mean_time_ratio": {
+          "mean": 0.3888,
+          "projects": 11
+        },
+        "missed_failures": {
+          "mean": 7.5273,
+          "projects": 11
+        },
+        "fallback_rate": {
+          "mean": 0.0,
+          "projects": 11
+        },
+        "mean_estimated_skip_risk": {
+          "mean": 0.0256,
+          "projects": 11
+        },
+        "observed_miss_rate": {
+          "mean": 0.0284,
+          "projects": 11
+        },
+        "failing_test_recall": {
+          "mean": 0.8326,
+          "projects": 9
+        },
+        "commit_safety_rate": {
+          "mean": 0.7555,
+          "projects": 9
+        }
       }
     },
     "ordering": {
@@ -6664,6 +8207,58 @@
           "ci": [
             -0.1086,
             0.1086
+          ],
+          "projects": 9
+        }
+      },
+      "B10 \u2212 B8 at same time": {
+        "time": {
+          "estimate": 0.0005,
+          "ci": [
+            -0.0098,
+            0.0119
+          ],
+          "projects": 11
+        },
+        "recall": {
+          "estimate": 0.0117,
+          "ci": [
+            -0.086,
+            0.0739
+          ],
+          "projects": 9
+        },
+        "safety": {
+          "estimate": 0.0747,
+          "ci": [
+            -0.0551,
+            0.2237
+          ],
+          "projects": 9
+        }
+      },
+      "B10 \u2212 B3 (rules) at same time": {
+        "time": {
+          "estimate": 0.0011,
+          "ci": [
+            -0.01,
+            0.0122
+          ],
+          "projects": 11
+        },
+        "recall": {
+          "estimate": 0.0167,
+          "ci": [
+            -0.0121,
+            0.0632
+          ],
+          "projects": 9
+        },
+        "safety": {
+          "estimate": 0.0746,
+          "ci": [
+            -0.0012,
+            0.2015
           ],
           "projects": 9
         }

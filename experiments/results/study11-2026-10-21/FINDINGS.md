@@ -87,6 +87,47 @@ safety: B8 0.68, B9r 0.84, B9n 0.85, B9 0.93), but it also spends more time
 (0.50 → 0.61 / 0.77 / 0.82). The cost-matched comparison shows most of that
 gain is bought with test time, not with better decisions.
 
+## Hybrid B10 — rules order, calibrated stopping (added 2026-10-23, D-036)
+
+B10 takes tests in the B3 rule order (recent failures, then shortest) and
+uses the calibrated probabilities only to decide where to stop: tests are
+added until the estimated skip risk is at most 0.05. The experiments were
+rerun with `run_study.py` (same command; `rerun-hybrid.log`); every
+earlier policy, calibration and ablation number reproduced exactly.
+
+| Pooled (mean of project means) | Time | Recall (n = 9) | Safety (n = 9) | Est. skip risk | Observed miss rate |
+|---|---|---|---|---|---|
+| B3 rules, 50 % budget | 0.52 | 0.85 | 0.67 | 0.142 | 0.073 |
+| B8 calibrated ML, 50 % budget | 0.50 | 0.84 | 0.68 | 0.120 | 0.074 |
+| B10 hybrid, target 0.05 | 0.39 | 0.83 | 0.76 | 0.026 | 0.028 |
+
+At the same test time (hierarchical bootstrap):
+
+| Comparison | Safety Δ [95 % CI] | Recall Δ [95 % CI] |
+|---|---|---|
+| B10 − B8 | +0.075 [−0.055, 0.224] | +0.012 [−0.086, 0.074] |
+| B10 − B3 (rules) | +0.075 [−0.001, 0.202] | +0.017 [−0.012, 0.063] |
+
+- Against the rules at the same time, B10's safety is higher on 4 projects
+  (wicket-bootstrap +0.34, optiq +0.25, HikariCP +0.05, jcabi-github +0.03)
+  and equal on the other 5; it is lower on none. Recall is lower only on
+  jsprit (−0.04). The pooled interval still touches 0, and wicket-bootstrap
+  again contributes most.
+- **B10 keeps its promise.** With a 5 % target, the observed share of
+  commits where it missed a failure is at most 5 % on 10 of 11 projects
+  (pooled 2.8 %, estimated 2.6 %). The exception is jcabi-github (observed
+  20 %, estimated 4.4 %). With stricter targets (1–2 %) the estimate is too
+  optimistic on 4 of 11 projects.
+- B10 needs no time budget: it spends little where the model sees little
+  risk (HikariCP 0.13, jade4j 0.23) and much where it sees more
+  (wicket-bootstrap 0.75, LittleProxy 1.00). On jade4j this cost one of its
+  two failing commits.
+
+Reading: using the model to decide **how many** tests to run, and simple
+rules to decide **which**, is at least as good as either alone on every
+project here and gives a risk statement that mostly holds. The gain over
+the same-time baselines is not statistically clear.
+
 ## RQ1/RQ2 — Ordering: **ML does not beat simple rules**
 
 Pooled APFDc: recent-failures 0.76, shortest-first 0.74, random 0.65,
@@ -143,6 +184,10 @@ edges, and no type resolution (D-010).
    (wicket-bootstrap) where failures are frequent and concentrated in an
    expensive test; the pooled interval just touches 0.
 3. **ML ordering is not better than simple time-aware rules** (or random).
+   Combining them works better: the hybrid B10 (rules order, calibrated
+   stopping) is never worse than rules or ML at the same time, meets its
+   5 % miss target on 10 of 11 projects, but its pooled gain is not
+   statistically clear.
 4. **The dependency graph helps on some projects** (jsprit, HikariCP,
    optiq) and is blind on others (jcabi-github, wicket-bootstrap); history
    features carry most of the model's signal.

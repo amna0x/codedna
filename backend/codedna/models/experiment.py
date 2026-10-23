@@ -18,7 +18,13 @@ On the chronological split (D-023):
   B9r  as B9, but only the risk-target fallback (no unfamiliar-change rule)
   B9n  as B8 plus only the unfamiliar-change rule (non-Java files changed or
        mostly history-less tests → retest all), no risk target
+  B3   rules only: recent failures first, then shortest, budget
+  B10  hybrid: the B3 order, but no budget — tests are added until the
+       calibrated estimated skip risk is at most the risk target
   ===  ==============================================================
+
+  B10 asks whether the model is better used to decide *how many* tests to
+  run than to order them (simple rules ordered better in the study, D-036).
 
   B9r and B9n separate the two fallback triggers, so the effect of the
   calibrated risk estimate is not confused with the simple rule.
@@ -28,8 +34,8 @@ On the chronological split (D-023):
   with probabilities — mean estimated skip risk vs observed miss rate;
 * ``risk_coverage`` sweeps the budget (B8) and the risk target (B9, B9r);
 * ``ablations`` retrains without each feature group — RQ1/RQ5;
-* ``cost_matched`` compares each fallback policy with B8 at the budget that
-  spends the same real test time, and ``bootstrap`` gives 95 % intervals for
+* ``cost_matched`` compares each fallback policy and B10 with B8 at the
+  budget that spends the same real test time (B10 also with B3), and ``bootstrap`` gives 95 % intervals for
   policies and paired differences (resampling test commits, D-035);
   ``per_commit`` keeps compact outcomes so studies can pool projects.
 
@@ -48,7 +54,7 @@ from statistics import mean
 from codedna.calibration.calibrators import METHODS, Calibrator
 from codedna.calibration.metrics import brier_score, expected_calibration_error, reliability_bins
 from codedna.models.evaluate import chronological_split
-from codedna.models.rankers import MLRanker
+from codedna.models.rankers import MLRanker, order_by_baseline
 from codedna.models.uncertainty import bootstrap, match_budget
 from codedna.models.uncertainty import metrics as outcome_metrics
 from codedna.selection.risk import RiskPolicy, decide
@@ -137,6 +143,9 @@ def run_experiment(dataset: Dataset, *, model: str = "gradient_boosting",
         policies["B9r_risk_target_only"] = _ml_policy(probabilities, _risk_only(budget, risk_target))
         policies["B9n_unfamiliar_rule_only"] = _ml_policy(
             probabilities, RiskPolicy(budget=budget, risk_target=None, fallback=True))
+        policies["B3_rules_budget"] = _rules_policy(probabilities, budget_policy)
+        policies["B10_hybrid"] = _rules_policy(
+            probabilities, RiskPolicy(budget=None, risk_target=risk_target))
     report["policies"] = {name: _measure(test_commits, fn) for name, fn in policies.items()}
 
     if full is not None:
@@ -154,6 +163,10 @@ def run_experiment(dataset: Dataset, *, model: str = "gradient_boosting",
             "B9r_risk_target_sweep": [
                 {"risk_target": t, **_summary(_measure(test_commits, _ml_policy(
                     probabilities, _risk_only(budget, t))))}
+                for t in RISK_SWEEP],
+            "B10_risk_target_sweep": [
+                {"risk_target": t, **_summary(_measure(test_commits, _rules_policy(
+                    probabilities, RiskPolicy(budget=None, risk_target=t))))}
                 for t in RISK_SWEEP],
         }
     if ablations and full is not None:
@@ -177,21 +190,28 @@ def _outcomes(test_commits: list[list[Row]], choose) -> list[tuple[float, int, i
 def _cost_matched_and_bootstrap(report: dict, policies: dict, test_commits, probabilities,
                                 seed: int) -> None:
     keep = ("B0_retest_all", "B4_dependency", "B8_ml_calibrated", "B9_calibrated_fallback",
-            "B9r_risk_target_only", "B9n_unfamiliar_rule_only")
+            "B9r_risk_target_only", "B9n_unfamiliar_rule_only", "B3_rules_budget", "B10_hybrid")
     outcomes = {name: _outcomes(test_commits, policies[name]) for name in keep if name in policies}
 
-    def b8_at(budget: float):
-        return _outcomes(test_commits, _ml_policy(probabilities, RiskPolicy(budget=budget)))
-
+    baselines = {
+        "B8": lambda b: _outcomes(test_commits, _ml_policy(probabilities, RiskPolicy(budget=b))),
+        "B3": lambda b: _outcomes(test_commits, _rules_policy(probabilities, RiskPolicy(budget=b))),
+    }
+    matches = [(name, "B8") for name in ("B9_calibrated_fallback", "B9r_risk_target_only",
+                                         "B9n_unfamiliar_rule_only", "B10_hybrid")]
+    matches.append(("B10_hybrid", "B3"))
     matched = {}
     pairs = {"B9r − B8 (default budget)": ("B9r_risk_target_only", "B8_ml_calibrated")}
-    for name in ("B9_calibrated_fallback", "B9r_risk_target_only", "B9n_unfamiliar_rule_only"):
+    for name, baseline in matches:
         target = outcome_metrics(outcomes[name])["time"]
-        budget, b8 = match_budget(b8_at, target)
-        outcomes[f"B8@{name}"] = b8
-        matched[name] = {"b8_budget": budget, "policy": _rounded(outcome_metrics(outcomes[name])),
-                         "b8_same_time": _rounded(outcome_metrics(b8))}
-        pairs[f"{name} − B8 at same time"] = (name, f"B8@{name}")
+        budget, same_time = match_budget(baselines[baseline], target)
+        key = f"{baseline}@{name}"
+        outcomes[key] = same_time
+        matched[name if baseline == "B8" else f"{name} vs {baseline}"] = {
+            "baseline": baseline, "baseline_budget": budget,
+            "policy": _rounded(outcome_metrics(outcomes[name])),
+            "baseline_same_time": _rounded(outcome_metrics(same_time))}
+        pairs[f"{name} − {baseline} at same time"] = (name, key)
     report["cost_matched"] = matched
     report["bootstrap"] = bootstrap(outcomes, pairs, seed=seed)
     report["per_commit"] = {"fields": ["time_ratio", "failing", "missed"],
@@ -252,6 +272,15 @@ def _calibration_section(full: MLRanker, valid: list[Row], test: list[Row],
 def _ml_policy(probability_fn, policy: RiskPolicy):
     def choose(rows: list[Row]):
         decision = decide(rows, probability_fn(rows), policy)
+        return decision.selected, decision
+    return choose
+
+
+def _rules_policy(probability_fn, policy: RiskPolicy):
+    """Recent failures first (then shortest); probabilities only decide where to stop."""
+    def choose(rows: list[Row]):
+        decision = decide(rows, probability_fn(rows), policy,
+                          order=order_by_baseline("recent_failures", rows))
         return decision.selected, decision
     return choose
 

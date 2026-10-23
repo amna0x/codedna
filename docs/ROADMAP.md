@@ -102,6 +102,10 @@ Java stays the only supported language until Milestone 5 is complete.
   `experiments/results/study11-2026-10-21/FINDINGS.md`: calibration robustly
   improves reliability; fallback gives no reliable gain over the same test
   time (one project excepted); ML ordering does not beat simple rules
+- ✅ Hybrid B10 (rules order, calibrated stopping; D-036): never worse than
+  rules or calibrated ML at the same time, meets its 5 % miss target on 10 of
+  11 projects; pooled gain not statistically clear
+- 🔄 Evaluation chapter draft (RQ1–RQ5): `docs/REPORT_DRAFT.md`
 
 Product track, alongside:
 

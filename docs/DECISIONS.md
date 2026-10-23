@@ -627,3 +627,28 @@ Performance: structural features now share one bounded LRU parse cache
 (4,000 blobs) across all commits of a dataset instead of re-parsing every
 file for every commit; LittleProxy's dataset is byte-identical and builds in
 145 s instead of 267 s.
+
+## D-036 — Hybrid policy B10: rules order, calibrated stopping
+
+The eleven-project study showed two things: simple rules (recent failures
+first, then shortest) order tests better than the learned models, while the
+calibrated model gives the most reliable *risk estimates*. B10 combines the
+two: tests are taken in the B3 rule order, and the calibrated probabilities
+only decide where to stop — tests are added until the estimated skip risk is
+at most the risk target (default 0.05). There is no time budget and no
+unfamiliar-change rule, so the comparison isolates "rules + calibrated
+stopping".
+
+`decide()` gains an optional `order` argument (changed test classes are
+still always run). The experiment adds B3 (rules order, plain budget) and
+B10, and compares B10 at the same real test time with both B8 (calibrated
+ML at a matched budget) and B3 (rules at a matched budget). Cost-matched
+entries now name their baseline (`baseline`, `baseline_budget`,
+`baseline_same_time`); the study runner lists every comparison as
+policy − baseline. A risk-target sweep for B10 is part of `risk_coverage`.
+
+Result (study11, 2026-10-23): at the same test time B10 − B3 safety +0.075
+[−0.001, 0.202] and B10 − B8 +0.075 [−0.055, 0.224] (n = 9); B10 is never
+lower than B3 in safety on any project, and with target 0.05 its observed
+miss rate stays within the target on 10 of 11 projects. See
+`experiments/results/study11-2026-10-21/FINDINGS.md`.

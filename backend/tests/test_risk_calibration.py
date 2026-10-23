@@ -112,6 +112,16 @@ def test_risk_target_without_budget_adds_until_risk_is_low():
     assert decision.estimated_skip_risk == pytest.approx(1 - 0.98 * 0.99)
 
 
+def test_given_order_is_followed_and_probabilities_decide_where_to_stop():
+    rows = [candidate(f"t{i}") for i in range(4)]
+    # The model ranks t0 highest, but the caller's rule order puts t3 first.
+    decision = decide(rows, [0.3, 0.2, 0.02, 0.01], RiskPolicy(budget=None, risk_target=0.25),
+                      order=["t3", "t1", "t0", "t2"])
+    assert decision.selected == ["t0", "t1", "t3"]  # stops once the remaining risk ≤ 0.25
+    assert decision.estimated_skip_risk == pytest.approx(0.02)
+    assert "given order" in decision.reasons[0]
+
+
 def test_fallback_broadens_when_budget_leaves_too_much_risk():
     rows = [candidate(f"t{i}") for i in range(4)]
     probabilities = [0.3, 0.3, 0.3, 0.01]
@@ -166,7 +176,8 @@ def test_experiment_reports_policies_calibration_sweeps_and_ablations():
     policies = report["policies"]
     assert set(policies) == {"B0_retest_all", "B4_dependency", "B6_change_only_ml",
                              "B7_ml_uncalibrated", "B8_ml_calibrated", "B9_calibrated_fallback",
-                             "B9r_risk_target_only", "B9n_unfamiliar_rule_only"}
+                             "B9r_risk_target_only", "B9n_unfamiliar_rule_only",
+                             "B3_rules_budget", "B10_hybrid"}
     assert len(report["risk_coverage"]["B9r_risk_target_sweep"]) == 6
     retest = policies["B0_retest_all"]
     assert (retest["mean_time_ratio"], retest["failing_test_recall"], retest["missed_failures"]) == \
@@ -303,7 +314,7 @@ def test_study_runner_aggregates_seeds_and_projects(tmp_path):
     assert pooled["time"]["projects"] == 2 and pooled["safety"]["estimate"] is not None
     assert summary["projects"]["alpha"]["cost_matched"]["B9 − B8 at same time"]["difference"]["time"]["ci"] is not None
     assert "B9 − B8 at same time" in summary["projects"]["alpha"]["cost_matched"]
-    assert "## Fallback vs B8 at the same test time" in markdown
+    assert "## Policies vs baselines at the same test time" in markdown
     graph = summary["projects"]["alpha"]["graph"]
     assert set(graph) == {"ablation", "b4", "b8", "reachability"}
     assert graph["ablation"]["pr_auc_improved_seeds"] is None or "/" in graph["ablation"]["pr_auc_improved_seeds"]

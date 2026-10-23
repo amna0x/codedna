@@ -1,0 +1,12 @@
+graylog2-server: dataset 4s, total 387s
+jooq: dataset 0s, total 78s
+jcabi-github: dataset 1s, total 118s
+optiq: dataset 0s, total 166s
+achilles: dataset 1s, total 135s
+hikaricp: dataset 0s, total 251s
+littleproxy: dataset 0s, total 118s
+jade4j: dataset 0s, total 114s
+jsprit: dataset 0s, total 50s
+wicket-bootstrap: dataset 0s, total 105s
+dynjs: dataset 1s, total 69s
+wrote experiments\results\study11-2026-10-21\summary.md

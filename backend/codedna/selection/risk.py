@@ -4,7 +4,9 @@ Input: one commit's candidate tests with (ideally calibrated) failure
 probabilities ``p`` and *estimated* costs (historical mean duration — the
 real duration of this run is unknown when selecting).
 
-1. Tests are ordered by ``p / cost`` (most risk removed per second first);
+1. Tests are ordered by ``p / cost`` (most risk removed per second first),
+   or by a caller-supplied order (e.g. a simple rule such as recent failures
+   first, so the probabilities only decide *how many* tests to run);
    changed test classes are always selected.
 2. **Budget**: take the prefix that fits ``budget × total estimated time``.
 3. **Risk target**: estimated *skip risk* = probability that at least one
@@ -48,7 +50,8 @@ class SelectionDecision:
     reasons: list[str] = field(default_factory=list)
 
 
-def decide(rows: list[Row], probabilities: list[float], policy: RiskPolicy) -> SelectionDecision:
+def decide(rows: list[Row], probabilities: list[float], policy: RiskPolicy, *,
+           order: list[str] | None = None) -> SelectionDecision:
     if not rows:
         return SelectionDecision([], [], 0.0, 0.0, 0.0)
     prob = {row.test_id: min(max(p, 0.0), 1.0) for row, p in zip(rows, probabilities)}
@@ -62,8 +65,13 @@ def decide(rows: list[Row], probabilities: list[float], policy: RiskPolicy) -> S
             return _decision(rows, set(prob), prob, cost, total_cost, True,
                              [f"fallback to retest-all: {reason}"])
 
-    order = sorted(rows, key=lambda r: (-prob[r.test_id] / cost[r.test_id],
-                                        -prob[r.test_id], r.test_id))
+    if order is None:
+        order = sorted(rows, key=lambda r: (-prob[r.test_id] / cost[r.test_id],
+                                            -prob[r.test_id], r.test_id))
+    else:
+        by_id = {r.test_id: r for r in rows}
+        order = [by_id[t] for t in order if t in by_id]
+        reasons.append("tests taken in the given order")
     selected = {r.test_id for r in rows if r.features.get("test_file_changed")}
     if selected:
         reasons.append(f"{len(selected)} changed test class(es) always run")

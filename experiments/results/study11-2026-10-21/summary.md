@@ -32,6 +32,8 @@ Mean over seeds (± standard deviation over seeds). "All" = unweighted mean of p
 | B9_calibrated_fallback | 0.867 ±0.015 | 0.550 ±0.022 | 0.790 ±0.004 | 0.861 | 0.953 ±0.028 | 0.635 | 0.887 | 0.959 | 0.766 ±0.117 | 0.888 ±0.021 | 0.816 ±0.043 | 0.816 |
 | B9r_risk_target_only | 0.551 ±0.051 | 0.435 ±0.025 | 0.510 ±0.021 | 0.545 | 0.771 ±0.145 | 0.362 | 0.821 | 0.862 | 0.482 ±0.259 | 0.714 ±0.064 | 0.615 ±0.052 | 0.606 |
 | B9n_unfamiliar_rule_only | 0.867 ±0.015 | 0.550 ±0.022 | 0.788 ±0.001 | 0.861 | 0.891 ±0.001 | 0.633 | 0.639 | 0.958 | 0.707 | 0.828 ±0.002 | 0.744 ±0.005 | 0.770 |
+| B3_rules_budget | 0.623 | 0.415 | 0.507 | 0.500 | 0.472 | 0.360 | 0.597 | 0.894 | 0.364 | 0.507 | 0.487 | 0.520 |
+| B10_hybrid | 0.005 ±0.001 | 0.003 ±0.004 | 0.310 ±0.034 | 0.201 | 0.761 ±0.163 | 0.133 | 1.000 | 0.226 | 0.302 ±0.351 | 0.751 ±0.065 | 0.584 ±0.015 | 0.389 |
 
 ### failing_test_recall
 
@@ -45,6 +47,8 @@ Mean over seeds (± standard deviation over seeds). "All" = unweighted mean of p
 | B9_calibrated_fallback | – | – | 0.933 ±0.008 | 1.000 | 1.000 | 0.876 | 0.800 | 1.000 | 1.000 | 1.000 ±0.000 | 1.000 | 0.957 |
 | B9r_risk_target_only | – | – | 0.766 ±0.012 | 1.000 | 1.000 | 0.810 | 0.600 | 1.000 | 0.936 ±0.032 | 0.999 ±0.001 | 1.000 | 0.901 |
 | B9n_unfamiliar_rule_only | – | – | 0.932 ±0.008 | 1.000 | 1.000 | 0.876 | 0.400 | 1.000 | 1.000 | 0.948 ±0.001 | 1.000 | 0.906 |
+| B3_rules_budget | – | – | 0.769 | 0.857 | 1.000 | 0.826 | 0.400 | 1.000 | 0.920 | 0.855 | 1.000 | 0.848 |
+| B10_hybrid | – | – | 0.691 ±0.026 | 0.714 | 1.000 | 0.727 | 1.000 | 0.500 | 0.864 ±0.074 | 0.997 ±0.004 | 1.000 | 0.833 |
 
 ### missed_failures
 
@@ -58,6 +62,8 @@ Mean over seeds (± standard deviation over seeds). "All" = unweighted mean of p
 | B9_calibrated_fallback | 0 | 0 | 7.800 ±0.980 | 0 | 0 | 15 | 1 | 0 | 0 | 0.200 ±0.400 | 0 | 2.182 |
 | B9r_risk_target_only | 0 | 0 | 27.400 ±1.357 | 0 | 0 | 23 | 2 | 0 | 1.600 ±0.800 | 2.800 ±2.482 | 0 | 5.164 |
 | B9n_unfamiliar_rule_only | 0 | 0 | 8 ±0.894 | 0 | 0 | 15 | 3 | 0 | 0 | 128.800 ±1.720 | 0 | 14.073 |
+| B3_rules_budget | 0 | 0 | 27 | 1 | 0 | 21 | 3 | 0 | 2 | 357 | 0 | 37.364 |
+| B10_hybrid | 0 | 0 | 36.200 ±3.059 | 2 | 0 | 33 | 0 | 1 | 3.400 ±1.855 | 7.200 ±9.847 | 0 | 7.527 |
 
 ### commit_safety_rate
 
@@ -71,6 +77,8 @@ Mean over seeds (± standard deviation over seeds). "All" = unweighted mean of p
 | B9_calibrated_fallback | – | – | 0.911 ±0.020 | 1.000 | 1.000 | 0.700 | 0.800 | 1.000 | 1.000 | 0.998 ±0.005 | 1.000 | 0.934 |
 | B9r_risk_target_only | – | – | 0.642 ±0.031 | 1.000 | 1.000 | 0.550 | 0.600 | 1.000 | 0.771 ±0.114 | 0.984 ±0.014 | 1.000 | 0.839 |
 | B9n_unfamiliar_rule_only | – | – | 0.908 ±0.014 | 1.000 | 1.000 | 0.700 | 0.400 | 1.000 | 1.000 | 0.667 | 1.000 | 0.853 |
+| B3_rules_budget | – | – | 0.635 | 0.750 | 1.000 | 0.500 | 0.400 | 1.000 | 0.714 | 0.058 | 1.000 | 0.673 |
+| B10_hybrid | – | – | 0.542 ±0.035 | 0.500 | 1.000 | 0.500 | 1.000 | 0.500 | 0.771 ±0.114 | 0.986 ±0.011 | 1.000 | 0.755 |
 
 ### fallback_rate
 
@@ -84,6 +92,8 @@ Mean over seeds (± standard deviation over seeds). "All" = unweighted mean of p
 | B9_calibrated_fallback | 0.704 | 0.202 | 0.615 ±0.009 | 0.714 | 0.972 ±0.055 | 0.444 | 1.000 | 0.778 | 0.646 ±0.177 | 0.887 ±0.036 | 0.987 ±0.027 | 0.723 |
 | B9r_risk_target_only | 0.000 | 0.000 | 0.032 ±0.020 | 0.033 | 0.816 ±0.348 | 0.018 | 1.000 | 0.016 | 0.200 ±0.400 | 0.724 ±0.105 | 0.984 ±0.032 | 0.347 |
 | B9n_unfamiliar_rule_only | 0.704 | 0.202 | 0.593 | 0.714 | 0.802 | 0.430 | 0.302 | 0.762 | 0.558 | 0.652 | 0.493 | 0.565 |
+| B3_rules_budget | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
+| B10_hybrid | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
 
 ### mean_estimated_skip_risk
 
@@ -97,6 +107,8 @@ Mean over seeds (± standard deviation over seeds). "All" = unweighted mean of p
 | B9_calibrated_fallback | 0.000 | 0.001 ±0.000 | 0.007 ±0.001 | 0.000 | 0.007 ±0.001 | 0.009 | 0.010 | 0.002 | 0.003 ±0.003 | 0.005 ±0.002 | 0.018 ±0.004 | 0.006 |
 | B9r_risk_target_only | 0.000 ±0.000 | 0.002 ±0.000 | 0.016 ±0.002 | 0.001 | 0.037 ±0.004 | 0.014 | 0.015 | 0.006 | 0.007 ±0.006 | 0.015 ±0.006 | 0.037 ±0.005 | 0.014 |
 | B9n_unfamiliar_rule_only | 0.000 | 0.001 ±0.000 | 0.008 ±0.001 | 0.000 | 0.062 ±0.024 | 0.009 | 0.240 | 0.003 | 0.014 ±0.021 | 0.185 ±0.008 | 0.038 ±0.004 | 0.051 |
+| B3_rules_budget | 0.001 ±0.001 | 0.006 ±0.003 | 0.024 ±0.002 | 0.017 | 0.262 ±0.116 | 0.018 | 0.452 | 0.014 | 0.036 ±0.055 | 0.634 ±0.020 | 0.094 ±0.005 | 0.142 |
+| B10_hybrid | 0.006 ±0.003 | 0.011 ±0.003 | 0.044 ±0.001 | 0.017 | 0.038 ±0.006 | 0.044 | 0.000 | 0.033 | 0.033 ±0.017 | 0.015 ±0.008 | 0.039 ±0.003 | 0.026 |
 
 ### observed_miss_rate
 
@@ -110,6 +122,8 @@ Mean over seeds (± standard deviation over seeds). "All" = unweighted mean of p
 | B9_calibrated_fallback | 0.000 | 0.000 | 0.039 ±0.009 | 0.000 | 0.000 | 0.021 | 0.019 | 0.000 | 0.000 | 0.001 ±0.002 | 0.000 | 0.007 |
 | B9r_risk_target_only | 0.000 | 0.000 | 0.158 ±0.014 | 0.000 | 0.000 | 0.032 | 0.038 | 0.000 | 0.031 ±0.015 | 0.009 ±0.007 | 0.000 | 0.024 |
 | B9n_unfamiliar_rule_only | 0.000 | 0.000 | 0.041 ±0.006 | 0.000 | 0.000 | 0.021 | 0.057 | 0.000 | 0.000 | 0.177 | 0.000 | 0.027 |
+| B3_rules_budget | 0.000 | 0.000 | 0.161 | 0.011 | 0.000 | 0.035 | 0.057 | 0.000 | 0.038 | 0.500 | 0.000 | 0.073 |
+| B10_hybrid | 0.000 | 0.000 | 0.202 ±0.015 | 0.022 | 0.000 | 0.035 | 0.000 | 0.016 | 0.031 ±0.015 | 0.007 ±0.006 | 0.000 | 0.028 |
 
 ## Ordering
 
@@ -195,13 +209,13 @@ Mean over seeds (± standard deviation over seeds). "All" = unweighted mean of p
 | without_structural | 0.024 ±0.046 | 0.011 ±0.015 | 0.019 ±0.008 | 0.001 | 0.002 ±0.001 | 0.021 | 0.058 | 0.003 | 0.006 ±0.001 | 0.180 ±0.009 | 0.447 ±0.022 | 0.070 |
 | without_history | 0.075 ±0.016 | 0.213 ±0.008 | 0.100 ±0.008 | 0.024 | 0.025 ±0.003 | 0.054 | 0.030 | 0.055 | 0.011 ±0.012 | 0.297 ±0.003 | 0.015 ±0.001 | 0.082 |
 
-## Fallback vs B8 at the same test time
+## Policies vs baselines at the same test time
 
-Positive safety/recall differences favour the fallback policy. Estimates are means over seeds; 95 % intervals come from a hierarchical bootstrap (seed, then test commits). Pooled: projects weighted equally; n = projects where the metric is defined.
+Each policy is compared with its baseline (B8, or B3 rules) given the budget that spends the same real test time. Positive safety/recall differences favour the policy. Estimates are means over seeds; 95 % intervals come from a hierarchical bootstrap (seed, then test commits). Pooled: projects weighted equally; n = projects where the metric is defined.
 
 ### B9r − B8 at same time
 
-| Project | Time (policy / B8) | Recall Δ [95 % CI] | Safety Δ [95 % CI] |
+| Project | Time (policy / baseline) | Recall Δ [95 % CI] | Safety Δ [95 % CI] |
 |---|---|---|---|
 | graylog2-server | 0.551 / 0.551 | – [n/a] | – [n/a] |
 | jooq | 0.435 / 0.435 | – [n/a] | – [n/a] |
@@ -218,7 +232,7 @@ Positive safety/recall differences favour the fallback policy. Estimates are mea
 
 ### B9 − B8 at same time
 
-| Project | Time (policy / B8) | Recall Δ [95 % CI] | Safety Δ [95 % CI] |
+| Project | Time (policy / baseline) | Recall Δ [95 % CI] | Safety Δ [95 % CI] |
 |---|---|---|---|
 | graylog2-server | 0.867 / 0.867 | – [n/a] | – [n/a] |
 | jooq | 0.550 / 0.550 | – [n/a] | – [n/a] |
@@ -235,7 +249,7 @@ Positive safety/recall differences favour the fallback policy. Estimates are mea
 
 ### B9n − B8 at same time
 
-| Project | Time (policy / B8) | Recall Δ [95 % CI] | Safety Δ [95 % CI] |
+| Project | Time (policy / baseline) | Recall Δ [95 % CI] | Safety Δ [95 % CI] |
 |---|---|---|---|
 | graylog2-server | 0.867 / 0.867 | – [n/a] | – [n/a] |
 | jooq | 0.550 / 0.550 | – [n/a] | – [n/a] |
@@ -249,6 +263,40 @@ Positive safety/recall differences favour the fallback policy. Estimates are mea
 | wicket-bootstrap | 0.828 / 0.828 | -0.051 [-0.067, -0.035] | -0.299 [-0.412, -0.177] |
 | dynjs | 0.744 / 0.724 | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] |
 | **All** (n = 9) | Δ 0.018 | -0.018 [-0.114, 0.092] | -0.006 [-0.109, 0.109] |
+
+### B10 − B8 at same time
+
+| Project | Time (policy / baseline) | Recall Δ [95 % CI] | Safety Δ [95 % CI] |
+|---|---|---|---|
+| graylog2-server | 0.005 / 0.005 | – [n/a] | – [n/a] |
+| jooq | 0.003 / 0.003 | – [n/a] | – [n/a] |
+| jcabi-github | 0.310 / 0.310 | 0.060 [-0.039, 0.179] | 0.050 [-0.107, 0.204] |
+| optiq | 0.201 / 0.200 | 0.000 [-1.000, 0.500] | 0.000 [-1.000, 1.000] |
+| achilles | 0.761 / 0.756 | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] |
+| hikaricp | 0.133 / 0.133 | 0.066 [-0.097, 0.230] | 0.050 [-0.133, 0.222] |
+| littleproxy | 1.000 / 1.000 | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] |
+| jade4j | 0.226 / 0.227 | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] |
+| jsprit | 0.302 / 0.302 | -0.040 [-0.114, 0.000] | 0.000 [0.000, 0.000] |
+| wicket-bootstrap | 0.751 / 0.751 | 0.019 [0.000, 0.039] | 0.572 [0.000, 0.975] |
+| dynjs | 0.584 / 0.583 | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] |
+| **All** (n = 9) | Δ 0.001 | 0.012 [-0.086, 0.074] | 0.075 [-0.055, 0.224] |
+
+### B10 − B3 (rules) at same time
+
+| Project | Time (policy / baseline) | Recall Δ [95 % CI] | Safety Δ [95 % CI] |
+|---|---|---|---|
+| graylog2-server | 0.005 / 0.005 | – [n/a] | – [n/a] |
+| jooq | 0.003 / 0.003 | – [n/a] | – [n/a] |
+| jcabi-github | 0.310 / 0.310 | 0.029 [-0.010, 0.075] | 0.031 [-0.042, 0.132] |
+| optiq | 0.201 / 0.201 | 0.143 [0.000, 0.500] | 0.250 [0.000, 1.000] |
+| achilles | 0.761 / 0.756 | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] |
+| hikaricp | 0.133 / 0.132 | 0.008 [-0.108, 0.120] | 0.050 [-0.133, 0.222] |
+| littleproxy | 1.000 / 1.000 | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] |
+| jade4j | 0.226 / 0.226 | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] |
+| jsprit | 0.302 / 0.302 | -0.040 [-0.114, 0.000] | 0.000 [0.000, 0.000] |
+| wicket-bootstrap | 0.751 / 0.747 | 0.010 [-0.001, 0.033] | 0.340 [-0.024, 0.955] |
+| dynjs | 0.584 / 0.584 | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] |
+| **All** (n = 9) | Δ 0.001 | 0.017 [-0.012, 0.063] | 0.075 [-0.001, 0.202] |
 
 ## Dependency-graph signal
 
