@@ -20,6 +20,8 @@ dependencies = [
 ml = ["scikit-learn>=1.4"]
 # FastAPI + uvicorn: local API for the CodeDNA IDE (D-028).
 api = ["fastapi>=0.110", "uvicorn>=0.29"]
+# Matplotlib: optional saved-report figures for Milestones 4-5 (D-038).
+plots = ["matplotlib>=3.8"]
 dev = ["pytest>=8", "scikit-learn>=1.4", "fastapi>=0.110", "uvicorn>=0.29", "httpx>=0.27"]
 
 [project.scripts]

@@ -43,3 +43,9 @@ class JavaPlugin:
                   allow_build: bool, per_test_coverage: bool = False, **options: Any):
         return run_maven_tests(repo_path, revision, output_dir, allow_build=allow_build,
                                per_test_coverage=per_test_coverage, **options)
+
+
+    def risk_select(self, repo_path, base, head, **options):
+        """Optional additive capability; Java live-feature construction stays here."""
+        from codedna.plugins.java_live import recommend
+        return recommend(repo_path,base,head,**options)

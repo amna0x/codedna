@@ -21,10 +21,11 @@ export interface CodeDnaService {
     status(): Promise<CodeDnaStatus>;
     analyze(repo: string, base: string, head: string): Promise<AnalyzeReport>;
     impact(repo: string, base: string, head: string): Promise<ImpactReport>;
-    select(repo: string, base: string, head: string, strategy: SelectionStrategy): Promise<SelectionReport>;
+    select(repo: string, base: string, head: string, strategy: SelectionStrategy, historyCsv?: string): Promise<SelectionReport>;
+    runSelection(repo: string, base: string, head: string, strategy: SelectionStrategy, historyCsv?: string): Promise<SelectionRun>;
 }
 
-export type SelectionStrategy = 'dependency' | 'all';
+export type SelectionStrategy = 'dependency' | 'all' | 'risk';
 
 // --- analyze -----------------------------------------------------------------
 
@@ -93,7 +94,24 @@ export interface ImpactReport {
 
 // --- select --------------------------------------------------------------------
 
+export interface SelectionRun {
+    selection: SelectionReport;
+    results: { tests: { id: string; status: string; time: number }[];
+        failing_tests: string[]; warnings: string[]; duration_seconds: number; exit_codes: number[] };
+    output_dir: string;
+}
+
 export interface SelectionReport {
+    repository: string;
+    base_commit: string;
+    head_commit: string;
+    risk?: {
+        status: 'unvalidated' | 'validated_history'; target: number;
+        estimated_skip_risk: number | null; proposed_skip_risk: number | null;
+        reasons: string[]; note: string;
+        validation: { commits: number; failing_commits: number; miss_upper_bound: number;
+            failure_recall: number | null; accepted: boolean } | null;
+    };
     strategy: string;
     total_tests: number;
     selected: { test: string; reasons: string[] }[];

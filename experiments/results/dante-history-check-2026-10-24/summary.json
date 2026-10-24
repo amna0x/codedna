@@ -1,0 +1,284 @@
+{
+  "projects": {
+    "hikaricp": {
+      "policies": {
+        "D1_50pct": {
+          "mean_time_ratio": 0.447,
+          "failing_test_recall": 0.8347,
+          "commit_safety_rate": 0.55,
+          "observed_miss_rate": 0.0315,
+          "mean_estimated_skip_risk": 0.0271
+        },
+        "DANTE-H_raw": {
+          "mean_time_ratio": 0.0579,
+          "failing_test_recall": 0.1405,
+          "commit_safety_rate": 0.2,
+          "observed_miss_rate": 0.0559,
+          "mean_estimated_skip_risk": 0.0087
+        },
+        "rules_raw": {
+          "mean_time_ratio": 0.0373,
+          "failing_test_recall": 0.1405,
+          "commit_safety_rate": 0.2,
+          "observed_miss_rate": 0.0559,
+          "mean_estimated_skip_risk": 0.009
+        },
+        "DANTE-H_calibrated": {
+          "mean_time_ratio": 0.2939,
+          "failing_test_recall": 0.719,
+          "commit_safety_rate": 0.5,
+          "observed_miss_rate": 0.035,
+          "mean_estimated_skip_risk": 0.0418
+        },
+        "rules_calibrated": {
+          "mean_time_ratio": 0.1333,
+          "failing_test_recall": 0.7273,
+          "commit_safety_rate": 0.5,
+          "observed_miss_rate": 0.035,
+          "mean_estimated_skip_risk": 0.0444
+        }
+      },
+      "test_commits": 286,
+      "failing_commits": 20,
+      "ordering": {
+        "DANTE-H": 0.753,
+        "rules": 0.7528
+      }
+    },
+    "littleproxy": {
+      "policies": {
+        "D1_50pct": {
+          "mean_time_ratio": 0.2824,
+          "failing_test_recall": 0.8,
+          "commit_safety_rate": 0.8,
+          "observed_miss_rate": 0.0189,
+          "mean_estimated_skip_risk": 0.5111
+        },
+        "DANTE-H_raw": {
+          "mean_time_ratio": 0.7159,
+          "failing_test_recall": 0.6,
+          "commit_safety_rate": 0.6,
+          "observed_miss_rate": 0.0377,
+          "mean_estimated_skip_risk": 0.0149
+        },
+        "rules_raw": {
+          "mean_time_ratio": 0.8184,
+          "failing_test_recall": 0.8,
+          "commit_safety_rate": 0.8,
+          "observed_miss_rate": 0.0189,
+          "mean_estimated_skip_risk": 0.0121
+        },
+        "DANTE-H_calibrated": {
+          "mean_time_ratio": 0.9834,
+          "failing_test_recall": 1.0,
+          "commit_safety_rate": 1.0,
+          "observed_miss_rate": 0.0,
+          "mean_estimated_skip_risk": 0.0082
+        },
+        "rules_calibrated": {
+          "mean_time_ratio": 1.0,
+          "failing_test_recall": 1.0,
+          "commit_safety_rate": 1.0,
+          "observed_miss_rate": 0.0,
+          "mean_estimated_skip_risk": 0.0
+        }
+      },
+      "test_commits": 53,
+      "failing_commits": 5,
+      "ordering": {
+        "DANTE-H": 0.7054,
+        "rules": 0.5337
+      }
+    },
+    "jade4j": {
+      "policies": {
+        "D1_50pct": {
+          "mean_time_ratio": 0.8945,
+          "failing_test_recall": 1.0,
+          "commit_safety_rate": 1.0,
+          "observed_miss_rate": 0.0,
+          "mean_estimated_skip_risk": 0.0139
+        },
+        "DANTE-H_raw": {
+          "mean_time_ratio": 0.0866,
+          "failing_test_recall": 0.5,
+          "commit_safety_rate": 0.5,
+          "observed_miss_rate": 0.0159,
+          "mean_estimated_skip_risk": 0.004
+        },
+        "rules_raw": {
+          "mean_time_ratio": 0.0968,
+          "failing_test_recall": 0.5,
+          "commit_safety_rate": 0.5,
+          "observed_miss_rate": 0.0159,
+          "mean_estimated_skip_risk": 0.0051
+        },
+        "DANTE-H_calibrated": {
+          "mean_time_ratio": 0.2345,
+          "failing_test_recall": 0.5,
+          "commit_safety_rate": 0.5,
+          "observed_miss_rate": 0.0159,
+          "mean_estimated_skip_risk": 0.0339
+        },
+        "rules_calibrated": {
+          "mean_time_ratio": 0.2264,
+          "failing_test_recall": 0.5,
+          "commit_safety_rate": 0.5,
+          "observed_miss_rate": 0.0159,
+          "mean_estimated_skip_risk": 0.033
+        }
+      },
+      "test_commits": 63,
+      "failing_commits": 2,
+      "ordering": {
+        "DANTE-H": 0.6584,
+        "rules": 0.5198
+      }
+    },
+    "wicket-bootstrap": {
+      "policies": {
+        "D1_50pct": {
+          "mean_time_ratio": 0.4746,
+          "failing_test_recall": 0.8521,
+          "commit_safety_rate": 0.0575,
+          "observed_miss_rate": 0.5,
+          "mean_estimated_skip_risk": 0.64856
+        },
+        "DANTE-H_raw": {
+          "mean_time_ratio": 0.50376,
+          "failing_test_recall": 0.94808,
+          "commit_safety_rate": 0.8184,
+          "observed_miss_rate": 0.09636,
+          "mean_estimated_skip_risk": 0.02078
+        },
+        "rules_raw": {
+          "mean_time_ratio": 0.51606,
+          "failing_test_recall": 0.94816,
+          "commit_safety_rate": 0.823,
+          "observed_miss_rate": 0.09394,
+          "mean_estimated_skip_risk": 0.01882
+        },
+        "DANTE-H_calibrated": {
+          "mean_time_ratio": 0.776,
+          "failing_test_recall": 0.99726,
+          "commit_safety_rate": 0.9908,
+          "observed_miss_rate": 0.004880000000000001,
+          "mean_estimated_skip_risk": 0.02018
+        },
+        "rules_calibrated": {
+          "mean_time_ratio": 0.75132,
+          "failing_test_recall": 0.9971,
+          "commit_safety_rate": 0.9862,
+          "observed_miss_rate": 0.00732,
+          "mean_estimated_skip_risk": 0.01492
+        }
+      },
+      "test_commits": 164,
+      "failing_commits": 87,
+      "ordering": {
+        "DANTE-H": 0.8171,
+        "rules": 0.8242
+      }
+    }
+  },
+  "comparisons": {
+    "DANTE-H_raw": {
+      "time": {
+        "estimate": 0.0,
+        "ci": [
+          -0.0313,
+          0.0297
+        ]
+      },
+      "recall": {
+        "estimate": -0.1487,
+        "ci": [
+          -0.3056,
+          -0.0289
+        ]
+      },
+      "safety": {
+        "estimate": 0.0402,
+        "ci": [
+          -0.1031,
+          0.1755
+        ]
+      }
+    },
+    "rules_raw": {
+      "time": {
+        "estimate": -0.0005,
+        "ci": [
+          -0.0289,
+          0.0259
+        ]
+      },
+      "recall": {
+        "estimate": -0.0309,
+        "ci": [
+          -0.1648,
+          0.0609
+        ]
+      },
+      "safety": {
+        "estimate": 0.1289,
+        "ci": [
+          0.009,
+          0.2346
+        ]
+      }
+    },
+    "DANTE-H_calibrated": {
+      "time": {
+        "estimate": -0.0002,
+        "ci": [
+          -0.0228,
+          0.0226
+        ]
+      },
+      "recall": {
+        "estimate": -0.0056,
+        "ci": [
+          -0.042,
+          0.0312
+        ]
+      },
+      "safety": {
+        "estimate": 0.046,
+        "ci": [
+          -0.05,
+          0.2806
+        ]
+      }
+    },
+    "rules_calibrated": {
+      "time": {
+        "estimate": 0.0016,
+        "ci": [
+          -0.0229,
+          0.0263
+        ]
+      },
+      "recall": {
+        "estimate": 0.0045,
+        "ci": [
+          -0.0242,
+          0.0347
+        ]
+      },
+      "safety": {
+        "estimate": 0.0975,
+        "ci": [
+          -0.0197,
+          0.2914
+        ]
+      }
+    }
+  },
+  "limits": [
+    "DANTE-inspired adaptation, not published DANTE reproduction",
+    "Exploratory reuse of inspected historical windows; no universal ordering claim",
+    "Few failing commits, four projects, serial dependence ignored by bootstrap",
+    "No end-to-end CI speedup claim; overhead excludes feature extraction and build startup"
+  ]
+}

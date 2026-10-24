@@ -82,6 +82,17 @@ class SelectRequest(ChangeRequest):
     non_java: Literal["retest-all", "ignore"] = "retest-all"
 
 
+class RiskRequest(ChangeRequest):
+    history_csv: str | None = None
+    risk_target: float = Field(default=.05, gt=0, lt=1)
+
+
+class RunSelectionRequest(RiskRequest):
+    strategy: Literal['all', 'dependency', 'risk'] = 'risk'
+    allow_build: bool = False
+    timeout: int = Field(default=1800, ge=1)
+
+
 class CompareRequest(ChangeRequest):
     ground_truth: str
     coverage_map: str | None = None
@@ -180,6 +191,34 @@ def create_app(token: str, *, allow_build: bool = False,
             coverage_map=load_coverage_map(coverage) if coverage else None,
             durations=load_results(durations) if durations else None,
             non_java=body.non_java).to_dict()
+
+    @app.post('/api/risk-select', dependencies=secured)
+    def risk_select(body: RiskRequest) -> dict:
+        from codedna.selection.live import recommend
+        return recommend(body.repo,body.base,body.head,history_csv=body.history_csv,
+                         risk_target=body.risk_target)
+
+    @app.post('/api/run-selection', dependencies=secured)
+    def run_selection(body: RunSelectionRequest) -> dict:
+        if not app.state.allow_build:
+            raise HTTPException(status_code=403,detail='test execution is disabled on this server')
+        if not body.allow_build:
+            raise HTTPException(status_code=400,detail='running tests executes project code; confirm allow_build')
+        from uuid import uuid4
+        from codedna.git_analysis.git import resolve_repository
+        if body.strategy == 'risk':
+            selection = risk_select(body)
+        else:
+            selection = select_tests(body.repo,body.base,body.head,body.strategy).to_dict()
+        repo = resolve_repository(body.repo)
+        output = repo/'.codedna/runs'/uuid4().hex
+        plugin = load_plugins().get('java')
+        if plugin is None:
+            raise SelectionError('Java test execution plugin is unavailable')
+        run,_ = plugin.run_tests(repo,selection['head_commit'],output,allow_build=True,
+            selected_tests=[t['test'] for t in selection['selected']],
+            maven_command=maven_command,timeout=body.timeout)
+        return {'selection':selection,'results':run.to_dict(),'output_dir':str(output)}
 
     @app.post("/api/compare", dependencies=secured)
     def compare(body: CompareRequest) -> dict:

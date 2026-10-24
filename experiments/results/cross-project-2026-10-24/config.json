@@ -1,0 +1,48 @@
+{
+  "projects": [
+    "hikaricp",
+    "littleproxy",
+    "jade4j",
+    "wicket-bootstrap"
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "model": "gradient_boosting",
+  "calibration": "isotonic",
+  "budget": 0.5,
+  "risk_target": 0.05,
+  "calendar_rule": "source prefix before earliest target test Git committer date",
+  "input_sha256": {
+    "experiments/results/study11-2026-10-21/hikaricp/dataset.csv": "f2c4ce350b858f2daec1ccc1a3f017ca5c2c95e1ff534720155b12b16414ec7b",
+    "experiments/datasets/derived/hikaricp.db": "92a3e45e3065daa08b8668e6e3a523071f73baf7da1830fd9242007d0895501c",
+    "experiments/results/study11-2026-10-21/littleproxy/dataset.csv": "868dbdd676ce04f2186afd2720ffe196db8603b93e8e338069995826803a3bfe",
+    "experiments/datasets/derived/littleproxy.db": "ba8f6ae1f3ab9ed93acf559c964fa38b12e613503283a576697c3e69109dd0b7",
+    "experiments/results/study11-2026-10-21/jade4j/dataset.csv": "d2399798e36770594a19a23ea247a99c7d34c6f227d3861fea68f5e1e90a3e65",
+    "experiments/datasets/derived/jade4j.db": "8199de76cec405be7af2b226bc132db6d3fe3c344a815152afe471b3402bd5e9",
+    "experiments/results/study11-2026-10-21/wicket-bootstrap/dataset.csv": "376ccf886d411c25b1ee534fa9bea969dc62f97ad09392c93dcad485eb829199",
+    "experiments/datasets/derived/wicket-bootstrap.db": "a7459fe495f55bdce11db3fdb58cf6b51fce164e82d9b3b815593325059bbd60"
+  },
+  "versions": {
+    "python": "3.12.14",
+    "scikit-learn": "1.9.1",
+    "numpy": "2.5.4"
+  },
+  "code_sha256": {
+    "backend/codedna/models/transfer.py": "a9a036d7aef58ca5f7e169c27448a230fc350e88fad1c44fa96d7005978ee089",
+    "scripts/run_cross_project.py": "e63f900165ba2fe7f5871273a4a8f40d4c1498054e21c25fe415a14a54daed55",
+    "scripts/run_study.py": "65f67f18d87f89e87cb899daf487f86a2610dee24694d3c61afa193360b7aa47",
+    "backend/codedna/models/experiment.py": "c57c552c6f7d94db43937338818199404cd772804c31a3e5fb60e819ddcba215",
+    "backend/codedna/models/evaluate.py": "6d6106e78f14b251970558681714a3ba5220b5b3f0bf85d86431f88f252f4968",
+    "backend/codedna/models/rankers.py": "79c0a6f7fb67803009addffc13086db2762e28b2f829c1cc106299711b239f10",
+    "backend/codedna/models/uncertainty.py": "bfcda9e1da26ea79525b7678a520eb01042ef91da8ca8f8f85bf5786295db792",
+    "backend/codedna/selection/risk.py": "be5b074d1c43def00305ca62a6909198eaac7e571e65f075e19219bf1bf971a5",
+    "backend/codedna/calibration/calibrators.py": "1a182cea9040ecb7258af3e0a1c031e73161e96a15f3e1561b66b67c07023ddc",
+    "backend/codedna/calibration/metrics.py": "1fdf02b26d855c6da99baea375e3b663a2d3175b413a8268dadda9e3d84351e8",
+    "backend/codedna/test_history/features.py": "3a9ecfe884716b489e2193b1f379eb1c39eb193fea915b8ccf2d09ca76748572"
+  }
+}

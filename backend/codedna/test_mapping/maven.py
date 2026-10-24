@@ -58,7 +58,8 @@ def find_maven() -> list[str]:
 def run_maven_tests(repo_path: str | Path, revision: str, output_dir: str | Path, *,
                     allow_build: bool, per_test_coverage: bool = False,
                     maven_command: list[str] | None = None, timeout: int = 1800,
-                    keep_checkout: bool = False) -> tuple[TestRunResult, CoverageMap | None]:
+                    keep_checkout: bool = False,
+                    selected_tests: list[str] | None = None) -> tuple[TestRunResult, CoverageMap | None]:
     """Run the tests of ``revision`` and write ``results.json`` (+ ``coverage-map.json``)."""
     if not allow_build:
         raise BuildError("running tests executes project code; pass --allow-build to confirm")
@@ -67,8 +68,15 @@ def run_maven_tests(repo_path: str | Path, revision: str, output_dir: str | Path
     output = Path(output_dir).resolve()
     if output.exists() and any(output.iterdir()):
         raise BuildError(f"output directory is not empty: {output}")
-    maven = maven_command or find_maven()
+    maven = (maven_command or find_maven()) if selected_tests != [] else []
 
+    if selected_tests is not None:
+        if per_test_coverage:
+            raise BuildError("selected tests and per-test coverage cannot be combined")
+        available = {t.id for t in discover_tests_for_commit(repo, commit).tests if t.runs_by_default}
+        if len(set(selected_tests)) != len(selected_tests) or any(
+                not _JAVA_NAME.fullmatch(t) or t not in available for t in selected_tests):
+            raise BuildError("selected tests must be distinct discovered Surefire test classes")
     checkout = output / "checkout"
     export_commit(repo, commit, checkout)
     if not (checkout / "pom.xml").is_file():
@@ -82,9 +90,19 @@ def run_maven_tests(repo_path: str | Path, revision: str, output_dir: str | Path
     try:
         if per_test_coverage:
             coverage_map = _run_per_test(repo, commit, maven, checkout, output, run, timeout)
+        elif selected_tests == []:
+            run.warnings.append("no tests selected; Maven was not invoked")
         else:
-            _run_maven(maven, ["test"], checkout, output / "logs" / "full-suite.log", run, timeout)
+            goals = ["test"]
+            if selected_tests is not None:
+                patterns = [pattern for t in selected_tests for pattern in (t, t + "$*")]
+                goals += ["-Dtest=" + ",".join(patterns), "-Dsurefire.failIfNoSpecifiedTests=true"]
+            _run_maven(maven, goals, checkout, output / "logs" / "full-suite.log", run, timeout)
             _collect_results(checkout, output / "reports" / "full-suite", run)
+            if selected_tests is not None:
+                missing = set(selected_tests) - set(run.tests)
+                if missing:
+                    run.warnings.append("selected tests missing from reports: " + ", ".join(sorted(missing)))
     finally:
         run.duration_seconds = round(time.monotonic() - started, 3)
         if not keep_checkout:

@@ -1,0 +1,71 @@
+{
+  "config": {
+    "projects": [
+      "hikaricp",
+      "littleproxy",
+      "jade4j",
+      "wicket-bootstrap"
+    ],
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "protocol": "DANTE-H independent adaptation; 60/20/20; 5% risk; no parameter tuning",
+    "python": "3.12.14",
+    "packages": {
+      "scikit-learn": "1.9.1",
+      "numpy": "2.5.4"
+    },
+    "input_sha256": {
+      "hikaricp": "f2c4ce350b858f2daec1ccc1a3f017ca5c2c95e1ff534720155b12b16414ec7b",
+      "littleproxy": "868dbdd676ce04f2186afd2720ffe196db8603b93e8e338069995826803a3bfe",
+      "jade4j": "d2399798e36770594a19a23ea247a99c7d34c6f227d3861fea68f5e1e90a3e65",
+      "wicket-bootstrap": "376ccf886d411c25b1ee534fa9bea969dc62f97ad09392c93dcad485eb829199"
+    },
+    "code_sha256": {
+      "scripts/run_dante_check.py": "be17b54c1bc5de59da7118566112c51d7e82e0102658201727ddd9273fc8b3d3",
+      "docs/DANTE_B10_PROTOCOL.md": "39c8f36e6ebf0758c3e81a671be2754495e0abe45694ef4b8e32dec48b383baf",
+      "backend/codedna/models/dante_history.py": "5f1bd0e75e45fb4786c40969f79fc693ae4c9c0a01615df95c212dbf0ab17a58",
+      "backend/codedna/models/transfer.py": "a9a036d7aef58ca5f7e169c27448a230fc350e88fad1c44fa96d7005978ee089",
+      "backend/codedna/models/rankers.py": "79c0a6f7fb67803009addffc13086db2762e28b2f829c1cc106299711b239f10",
+      "backend/codedna/models/evaluate.py": "6d6106e78f14b251970558681714a3ba5220b5b3f0bf85d86431f88f252f4968",
+      "backend/codedna/models/experiment.py": "c57c552c6f7d94db43937338818199404cd772804c31a3e5fb60e819ddcba215",
+      "backend/codedna/models/uncertainty.py": "bfcda9e1da26ea79525b7678a520eb01042ef91da8ca8f8f85bf5786295db792",
+      "backend/codedna/selection/risk.py": "be5b074d1c43def00305ca62a6909198eaac7e571e65f075e19219bf1bf971a5",
+      "backend/codedna/test_history/features.py": "3a9ecfe884716b489e2193b1f379eb1c39eb193fea915b8ccf2d09ca76748572",
+      "backend/codedna/calibration/calibrators.py": "1a182cea9040ecb7258af3e0a1c031e73161e96a15f3e1561b66b67c07023ddc",
+      "scripts/run_study.py": "65f67f18d87f89e87cb899daf487f86a2610dee24694d3c61afa193360b7aa47"
+    }
+  },
+  "outputs": {
+    "config.json": "793bc2a9287fa20eb4b03b459f04b5d9cae2bb5445e5a2202a727ecb5b4f0660",
+    "hikaricp/seed0.json": "82f26ddf14fa68c0a9a8db0194a83bcaf9b6090b840fa37e1f28aa4f1ac1bd09",
+    "hikaricp/seed1.json": "cd8cd5170449f3dc32651f32c55a9345811cb139547bf075654eca5791720aa3",
+    "hikaricp/seed2.json": "b33a3a7b8d91c84e5a3bd650ef4ae3a7ce371cf368f86523ea75fa6ac8b2b7e9",
+    "hikaricp/seed3.json": "1b8e9eb40a30c362586d822b789e484339a6d6364436e18cc7a44863b5c28747",
+    "hikaricp/seed4.json": "74ac22ae47e0d5384488081321348cd555f278f20d6ee12df41508431bfb742c",
+    "jade4j/seed0.json": "e00c08eacbb534f225aac823cac68804767847b2c047c3872e1b48375b800147",
+    "jade4j/seed1.json": "850a65be6681525c4c315ce47f0cf94b7c1ab2106fb7e6786d5b2e684c846679",
+    "jade4j/seed2.json": "78b8c4f13f510aff2a1222db2fc7892684a2edf5947d5a0f90baf5d6be25cb4c",
+    "jade4j/seed3.json": "337c4b6b942e343322e453d0415926772b266d835f6284e17f86ef1a7ccb37de",
+    "jade4j/seed4.json": "b02db8274928a7a1ab387b0b299a1003151a067362d6e07f58ee426408d090cd",
+    "littleproxy/seed0.json": "e3ee1e4eb2a7db7a458fa5d1ef6282b3febf5bb71bc6460276bc1cf9dd800e4c",
+    "littleproxy/seed1.json": "4f74265bf052f0ff1c4a2e5a5f91aac18263f17ec49aa83e9daa0dded4c68f44",
+    "littleproxy/seed2.json": "50d4179548560126b3f47a175c6c10687b704d2cecf150c2c4fe1bd60a558b79",
+    "littleproxy/seed3.json": "39ea5945503a8eb7cdfd18348f014c0b53e815d4738cf67472018c52e92870e9",
+    "littleproxy/seed4.json": "41af233d51b3eebc644640d05dc79a36a2f9a7a14fc990dc9a78af2e6d6c29ca",
+    "source_snapshot/DANTE_B10_PROTOCOL.md": "39c8f36e6ebf0758c3e81a671be2754495e0abe45694ef4b8e32dec48b383baf",
+    "source_snapshot/dante_history.py": "5f1bd0e75e45fb4786c40969f79fc693ae4c9c0a01615df95c212dbf0ab17a58",
+    "source_snapshot/run_dante_check.py": "be17b54c1bc5de59da7118566112c51d7e82e0102658201727ddd9273fc8b3d3",
+    "summary.json": "4187af7331b3ea85fa74d5b7f3bcbdf3ab47f241070d82c3db29233b36beb907",
+    "summary.md": "80e5d7fce834671f4a61b7bd19c864ffc58521a7db7102acf53c21a7eebdfd48",
+    "wicket-bootstrap/seed0.json": "b1e08e0b3836cbb2275c47a4f7aff7c534d64ddcd85bbb6ad7319770a4843ecf",
+    "wicket-bootstrap/seed1.json": "6c03b604eafa06a18242d11225119a88cb0615e5c9255a03bd4c3d5a4847ed85",
+    "wicket-bootstrap/seed2.json": "7835c4d6c60309f5669a018feff6974c589e47caca0ca24289bbccca49d1836b",
+    "wicket-bootstrap/seed3.json": "9a7043bf06bfc3a25c8c7686c29e5b0938224f413713bd6009fb9ec0f8cbf667",
+    "wicket-bootstrap/seed4.json": "4424f3be7f75817f384a2e5ecf15afa8dea46af8a945b82597a31bf62307c2c0"
+  }
+}

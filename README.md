@@ -10,12 +10,17 @@ it is to skip the rest — and explain every decision.
 
 **Where it is heading:** a platform — the Python analysis core, downloadable
 language plugins (Java first), the **CodeDNA IDE** built on Eclipse Theia,
-and a platform website with a plugin catalogue. Only the analysis core exists
+and a platform website with a plugin catalogue. The core and an initial IDE exist
 today; see [docs/ROADMAP.md](docs/ROADMAP.md) and decisions D-017 – D-020 in
 [docs/DECISIONS.md](docs/DECISIONS.md).
 
-**Status:** Milestones 0–3 done; Milestone 4 and 5 tooling done — waiting for
-real study data, so **no research results exist yet**.
+**Status:** Milestones 0–3 are complete. Milestones 4–5 have saved results from
+eleven RTPTorrent projects and five seeds; the evaluation report is in progress.
+Learned ordering does not beat simple rules on this study. See
+[findings](experiments/results/study11-2026-10-21/FINDINGS.md) and
+[reproducible figures](experiments/results/study11-2026-10-21/figures/FIGURES.md).
+The [four-project transfer check](experiments/results/cross-project-2026-10-24/FINDINGS.md)
+does not establish reliable general transfer; target-project validation remains necessary.
 Today CodeDNA can:
 
 - report changes between two commits: files, line ranges, and the Java
@@ -32,8 +37,8 @@ Today CodeDNA can:
 
 Analysis commands parse code with Tree-sitter and never build or execute it;
 only `run-tests` executes the project, and only when you pass `--allow-build`.
-History mining and ML are not implemented yet — see
-[docs/ROADMAP.md](docs/ROADMAP.md).
+History mining, predictive ranking, calibration and the hybrid B10 experiment
+are implemented; see [docs/ROADMAP.md](docs/ROADMAP.md).
 
 ## Prerequisites
 
@@ -78,6 +83,12 @@ downloads plugins); CI runs it. To run it locally:
 
 ```bash
 python -m pytest -m maven --run-maven
+```
+
+To validate the entire suite including Maven, run:
+
+```bash
+python -m pytest --run-maven
 ```
 
 ## Usage
@@ -261,9 +272,9 @@ codedna compare --repo ../codedna-demo --base <BASE_SHA> --head <HEAD_SHA> --gro
 ```
 
 The demo change also edits `README.md`; without `--non-java ignore` every
-strategy falls back to retest-all. No output is shown here because this has
-not yet been run on the development laptop (no Maven); CI runs the same flow
-in `test_maven_integration.py`.
+strategy falls back to retest-all. The real Maven/JUnit/JaCoCo integration
+flow in `test_maven_integration.py` passed on the Windows development laptop
+on 2026-10-24 with the portable JDK and Maven runtime.
 
 ## CodeDNA IDE
 
@@ -346,3 +357,51 @@ are reported, not analysed. Software engineering only: no vulnerability detectio
 or security scoring.
 CodeDNA does not claim novelty for established techniques, and reports no
 performance numbers until experiments have actually been run.
+
+
+## Reproduce the study figures
+
+The saved study reports are sufficient; no raw dataset, history database,
+model training, or third-party project build is needed.
+
+```powershell
+python -m pip install -e ".[plots]"
+python scripts/make_study_figures.py --study experiments/results/study11-2026-10-21
+```
+
+This writes five PNG/SVG figures, their exact values, and a SHA-256 provenance
+manifest under the study's `figures/` directory. Use `--data-only` to export
+values and provenance without Matplotlib, or `--out PATH` for another output
+directory. Missing reports and inconsistent seed/budget grids stop the export.
+
+
+## Reproduce the cross-project transfer check
+
+The four-project protocol is fixed in [CROSS_PROJECT_PROTOCOL.md](docs/CROSS_PROJECT_PROTOCOL.md).
+Install the `ml` extra, then recover the public recorded data and run:
+
+```powershell
+python scripts/fetch_rtptorrent_subset.py
+python scripts/prepare_transfer_features.py --workers 2
+python scripts/run_cross_project.py
+```
+
+Recovery downloads only the selected RTPTorrent archive entries and rebuilds
+four history databases and feature CSVs. Feature digests must match the original
+study. No analysed repository is built. Results, within-project controls and
+provenance go to `experiments/results/cross-project-2026-10-24/`. Training and
+calibration use the source only; past target history remains available.
+
+
+## Target-validated risk and execution
+
+The IDE's **Tests to run** view now supports target-validated stopping, explicit
+full-suite fallback and execution of recommended test classes after confirmation.
+Use `codedna risk-select --repo PATH --base BASE --head HEAD` for the same core
+recommendation. Without adequate history, risk stays unvalidated and all tests
+are recommended. See [Java workflow](docs/JAVA_WORKFLOW.md) for history preparation,
+validation limits, selected Maven execution and the IDE workflow.
+
+The [fixed DANTE-H/B10 extension protocol](docs/DANTE_B10_PROTOCOL.md) and
+[related-work comparison](docs/RELATED_WORK_COMPARISON.md) describe the independent
+history-only adaptation; it is not a reproduction of published full DANTE.

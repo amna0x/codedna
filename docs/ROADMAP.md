@@ -21,9 +21,8 @@ Java stays the only supported language until Milestone 5 is complete.
 - ✅ GitHub Actions workflow (Python tests on Ubuntu + Windows; Maven build of
   the sample project)
 - ✅ Example Java/Maven/JUnit 5 project (`examples/sample-java-project`)
-- ⚠️ Maven is not installed on the original development laptop; the sample
-  project's Maven build is verified in CI only. Main sources compile with
-  `javac` locally.
+- ✅ Portable JDK 17 and Maven 3.10 are installed on the current Windows
+  laptop; the real sample-project Maven/JaCoCo integration test passed locally.
 
 ## Milestone 1 — Git and Java change analysis ✅
 
@@ -70,7 +69,8 @@ Java stays the only supported language until Milestone 5 is complete.
 - ✅ `codedna compare`: selection ratio, estimated time, failures caught/missed
   against a full HEAD run
 - ✅ Offline tests with a fake `mvn`; real Maven/JaCoCo end-to-end test in CI
-- ⚠️ Real Maven flow not yet run on the development laptop (Maven missing)
+- ✅ Real Maven/JaCoCo flow verified locally on Windows (JDK 17, Maven 3.10);
+  the full suite includes the integration test with `--run-maven`.
 - ⏳ Multi-module Maven, Gradle, custom Surefire includes
 - ⏳ Evaluate B0/B4/coverage over many commits of a real project (needs
   Milestone 4 history tooling)
@@ -88,7 +88,7 @@ Java stays the only supported language until Milestone 5 is complete.
 - ✅ `history evaluate`: chronological 60/20/20 split; APFD, APFDc,
   recall at 25 %/50 % time, time to first failure, PR-AUC, Brier;
   `--dataset-csv` export
-- ✅ Tests on synthetic histories only — **no research numbers exist yet**
+- ✅ Offline tests on synthetic histories; real study results are recorded below
 - ✅ Study dataset chosen: RTPTorrent v1.1 (D-032), downloaded and verified;
   Defects4J and Commons CSV remain secondary options (DATASET_PLAN.md)
 - ✅ `history import-rtptorrent`: imports one project's tested commits,
@@ -127,11 +127,25 @@ Product track, alongside:
 - ✅ `history experiment`: B0, B4, B6, B7, B8, B9 on the test split;
   budget and risk-target sweeps (risk–coverage); feature-group ablations;
   reproducibility block (dataset SHA-256, seed, versions) (D-027)
-- ✅ Tests on synthetic data only — **no research numbers exist yet**
-- ⏳ Run on real study data (blocked on the study project, see Milestone 4),
-  store reports in `experiments/results/`, write up RQ1–RQ5 honestly,
-  including null or negative results
-- ⏳ Cross-project / multiple-seed runs for robustness
+- ✅ Offline tests on synthetic histories and saved-report figure exports
+- ✅ Real study over eleven projects × five seeds, with reports under
+  `experiments/results/study11-2026-10-21/`
+- ✅ Reproducible RQ1–RQ5 figures and SHA-256 input/output manifest
+  (`scripts/make_study_figures.py`, D-038); no experiment rerun required
+- 🔄 Finish the evaluation chapter and remaining report, including null and
+  negative results; supervisor review of the thesis claim remains outstanding
+- ✅ Multi-project / multiple-seed robustness: eleven projects, each trained
+  and evaluated separately with five seeds on a fixed chronological split.
+  Cross-project transfer check completed separately (D-039): four projects,
+  twelve directions, five seeds, plus fresh within-project controls. Seven of
+  nine calibrated directions meet the observed 5% miss target; three other
+  directions lack source calibration. General transfer is not established.
+  See `experiments/results/cross-project-2026-10-24/FINDINGS.md`.
+
+- ✅ Exploratory DANTE-history-score adaptation/B10 extension: four projects ×
+  five seeds; all calibrated observed targets hold, but matched-time safety
+  difference +0.0460 [-0.0500, 0.2806] is not significant. Full-DANTE reproduction
+  and general superiority are not claimed (D-040).
 
 ## Milestone 6 — CodeDNA IDE and FYP demo ⏳
 
@@ -141,8 +155,9 @@ May start in parallel (Student C) once the analysis JSON formats are stable.
 - ✅ Local API (FastAPI): `codedna serve`; analyze / graph / impact / tests /
   select / compare / run-tests / plugins / capabilities; loopback only,
   session token, Host check, build opt-in (D-019, D-028)
-- ⏳ API: per-commit risk scores for the Tests view (needs a trained model
-  stored per repository), progress for long runs, run only selected tests
+- ✅ API/CLI: target-bound risk selection, 50/25/25 fit/calibrate/audit gate,
+  explicit full-suite fallback, recomputed selected-test execution (D-041).
+  No serialized model is loaded; long-run progress remains outstanding.
 - ✅ CodeDNA IDE skeleton: Theia 1.76.0 + Electron 42 desktop app in `ide/`
   (D-029); builds and runs on Windows; extension compiled in CI
 - ✅ "Changed code" and "Recommended tests" views talking to the core through
@@ -152,9 +167,12 @@ May start in parallel (Student C) once the analysis JSON formats are stable.
   calm neutral look, plain-language "Changes" / "Tests to run" views,
   shared "Compare" picker, friendly errors, first-run guide (D-031)
 - ⏳ Java language support in the editor (VS Code extension host + a Java
-  extension), graph view (Cytoscape.js), run selected tests from the IDE,
-  risk scores in the Tests view, uncommitted-change analysis, installers
+  extension), graph view (Cytoscape.js), uncommitted-change analysis, installers
 - ⏳ GitHub PR demonstration and final experimental report
+
+- ✅ IDE: risk status/audit evidence, explicit execution confirmation, actual
+  selected-test statuses and logs; structural selection carries no probability
+  guarantee. Native build validation is recorded in the implementation handoff.
 
 ## Milestone 7 — Platform website and plugin distribution ⏳
 

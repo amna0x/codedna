@@ -1,0 +1,12 @@
+{
+  "url": "https://zenodo.org/records/18900675/files/ML_TCSP.zip?download=1",
+  "code_copied": false,
+  "source_entry_sha256": {
+    "augment_history.py": "4b9deb87c12e724cbaab9f438ec6f25289741b3c09ccd2b5f3e2d1617374aa03",
+    "lookback_analyzer.py": "60268fcd0e1e2cc43934311e893946bbae8d5cfc0abb5837b05392efeb3b91bc",
+    "post_hoc_prioritizer.py": "26e003a198f3e4063368f53fae2507601ba27cda3ee6163d744f4a11a13d89c0",
+    "run_selection.py": "b85b98f38ec7fdc9d5d57251131d34f3055b3d0118123b8d500d8c20ec24a5d8"
+  },
+  "whole_archive_verified": false,
+  "interpretation": "CRC-checked selected source entries, read only. Independent mathematical adaptation; no published-result reproduction."
+}

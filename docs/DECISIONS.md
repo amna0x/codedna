@@ -680,3 +680,112 @@ safety 0.46, observed miss 4.4 % vs estimated 1.8 %, target held on 6 of
 (time 0.35, safety 0.68, observed 3.1 %, target held on 8 of 9). Low ECE
 does not imply a usable stopping rule; held-out calibration does. The claim
 is reworded again: calibration matters for decisions, not for the ECE drop.
+
+
+## D-038 — Reproducible figures from saved study reports
+
+The next Milestone 4–5 reporting step uses `scripts/make_study_figures.py`.
+The exporter reads saved `summary.json`, `class-weight-summary.json`, and
+per-project experiment/class-weight seed reports. It does not rerun models,
+rebuild feature datasets, or change study results. Matplotlib (`plots` extra,
+`>=3.8`) is optional tooling for PNG and vector SVG figures, not a core
+analysis dependency; data-only export uses the standard library.
+
+Budget curves average seeds within each project, then weight projects equally.
+Undefined recall and safety remain null rather than becoming zero. Raw and
+calibrated variants use common available project cohorts, with contributing
+project counts shown. Target attainment is counted per project rather than
+inferred from the pooled miss rate. The saved hierarchical bootstrap supplies
+the cost-matched intervals; no intervals are invented from seed spread.
+
+`figure-data.json` records the plotted numbers. `manifest.json` records SHA-256
+hashes of every read report, every generated artifact, and the exporter source,
+plus tool versions, so report figures can be tied to a specific saved snapshot.
+The exporter rejects missing seed reports, inconsistent budget grids, differing
+risk targets and empty comparison cohorts rather than silently dropping runs.
+
+
+## D-039 — Pre-specified project-disjoint transfer check
+
+The owner requested testing whether a model trained on one project works on
+another (2026-10-24), with permission to download/rebuild the missing feature
+CSVs and history databases. The primary transfer study uses HikariCP,
+LittleProxy, jade4j and wicket-bootstrap, chosen before inspecting transfer
+results because they have recorded failures and fit the available disk space.
+All twelve source-target directions and four within-project controls use seeds
+0–4, gradient boosting, balanced weights, source-only isotonic calibration,
+a 50% time budget and the B10 5% risk target. See CROSS_PROJECT_PROTOCOL.md.
+
+For cross-project runs, source history is conservatively restricted to a
+chronological prefix older than the target test window's earliest Git committer
+date. The source's oldest 60% trains the model and next 20% calibrates it;
+source labels never come from the target. Target testing uses its latest 20%,
+with previously recorded target history available as features. Git dates are a
+proxy for time, not CI completion timestamps. This does not test a repository
+with no prior history. Missing or single-class calibration is reported as
+unavailable rather than relabelled raw probabilities.
+
+RTPTorrent v1.1 is fetched by HTTP byte ranges because a full 5 GB download
+would exceed the available space. Only four project CSVs, their bare Git
+repositories and the shared job-to-commit map are needed. The map is filtered
+while streaming to the selected projects' job IDs. Each ZIP entry is CRC-checked;
+SHA-256 hashes and transformations are recorded. The whole-archive MD5 is
+explicitly not claimed verified by this partial download. No project is built.
+Rebuilt feature tables must match the original study's dataset hashes before
+running transfer models. Raw data, databases and feature CSVs remain git-ignored.
+
+D-039 results (2026-10-24): all 80 raw runs completed. Source calibration is
+available in nine transfer directions; seven meet the observed 5% miss target.
+HikariCP to LittleProxy misses every recorded failing target commit (9.43% miss),
+and LittleProxy to wicket-bootstrap misses at least one failure on 16.46% of
+commits. Wicket-bootstrap transfers spend 97.84–99.96% of full test time. Source
+calibration worsens target ECE in six of nine directions; raw ML ordering beats
+rules in three of twelve. Some pairs help, but general model/risk transfer is
+not established. Target-project validation remains necessary before trusting
+transferred risk. No production default or IDE behaviour changed. Full evidence:
+`experiments/results/cross-project-2026-10-24/FINDINGS.md`.
+
+
+## D-040 — Fixed history-order stopping extension
+
+The owner asked to complete the interrupted research/IDE work, deferring more
+languages. The original scope explicitly includes calibration, fallback,
+explanations and baseline evaluation, so this extends Milestones 5–6 directly.
+See RELATED_WORK_COMPARISON.md and DANTE_B10_PROTOCOL.md. An initial independent
+transition proxy is archived with its source snapshot; after retrieving the
+DANTE artifact, a separately fixed second run implements a closer history-only
+CCH score adaptation. No author source is copied, no full-DANTE reproduction or
+universal-ordering claim is made, and no model/threshold tuning uses the results.
+Both are exploratory extensions on previously inspected windows. GitHub auth
+failed, so protocols were fixed locally with hashes rather than publicly pushed.
+
+## D-041 — Target evidence gate and explicit selected execution
+
+Live risk uses a separately audited 15-feature GB/isotonic variant: 50% older
+training, 25% calibration, 25% independent audit. It excludes structural and
+co-failure features that cannot be reproduced from a CSV alone for a live commit.
+The frozen engineering gate requires a one-sided 95% Wilson miss-rate upper
+bound <= target, >=10 failing audit commits and >=90% failing-test recall.
+It also checks target ancestry, fresh BASE history, complete current-test audit
+coverage and supported changes. These checks yield an evidence screen, not a
+formal safety guarantee; periodic full-suite audits remain required.
+
+`risk-select`, `/api/risk-select` and `/api/run-selection` expose core JSON.
+The IDE starts with builds disabled; explicit user confirmation enables the
+server and each request. Selection is recomputed at immutable revisions, then
+only validated discovered test-class filters are passed to Maven in an isolated
+export. Empty selections execute nothing. No pickled model is loaded and no new
+core dependency is added. Full details: JAVA_WORKFLOW.md.
+
+D-041 boundary: shared audited fitting/gating stays in `selection.live` and
+`selection.validation`. Java live feature construction is in `plugins.java_live`,
+reached through the existing Java plugin’s additive optional `risk_select` hook.
+New selected execution also goes through the plugin runner. This preserves the
+language boundary without implementing a second language or changing API major.
+
+D-040 final result: all four calibrated observed miss targets hold with the closer
+history-score adapter; matched-time pooled safety +0.0460 [-0.0500, 0.2806] and
+recall -0.0056 [-0.0420, 0.0312] do not establish a benefit. Raw stopping violates
+the target on two projects. Retain recent-failure order for live use; preserve
+both exploratory studies rather than selecting the more favourable adapter.
+Evidence: `experiments/results/dante-history-check-2026-10-24/FINDINGS.md`.

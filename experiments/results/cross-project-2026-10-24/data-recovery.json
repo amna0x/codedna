@@ -1,0 +1,341 @@
+{
+  "dataset": "RTPTorrent v1.1",
+  "citation": "Mattis et al., MSR 2020, doi:10.1145/3379597.3387458",
+  "license": "CC BY 4.0",
+  "download_manifest": {
+    "url": "https://zenodo.org/records/4046180/files/rtp-torrent-v11.zip?download=1",
+    "archive_bytes": 5016963482,
+    "published_archive_md5": "1f7fa822b0cf155bd007a94d1a24a336",
+    "whole_archive_md5_verified": false,
+    "verification": "ZIP entry CRC32 and extracted-file SHA-256; selective download",
+    "projects": [
+      "brettwooldridge@HikariCP",
+      "adamfisk@LittleProxy",
+      "neuland@jade4j",
+      "l0rdn1kk0n@wicket-bootstrap"
+    ],
+    "entries": {
+      "rtp-torrent/adamfisk@LittleProxy/adamfisk@LittleProxy.csv": {
+        "bytes": 1209894,
+        "archive_entry_bytes": 1209894,
+        "crc32": "4c452750",
+        "sha256": "4e41b18241133d877951eb32aa796898e6cb167cf6d3740e29996c8763824b95",
+        "transformation": null
+      },
+      "rtp-torrent/brettwooldridge@HikariCP/brettwooldridge@HikariCP.csv": {
+        "bytes": 2825388,
+        "archive_entry_bytes": 2825388,
+        "crc32": "232ee2a8",
+        "sha256": "0ebc3dd28d09227f6aa56698b76c7a217d034aa83318ffc5a75ff8d2d0632687",
+        "transformation": null
+      },
+      "rtp-torrent/l0rdn1kk0n@wicket-bootstrap/l0rdn1kk0n@wicket-bootstrap.csv": {
+        "bytes": 5055771,
+        "archive_entry_bytes": 5055771,
+        "crc32": "629a70b0",
+        "sha256": "7ead1b7834f9b04f70d5b8f059da66a5969cc834eab7c58525430f2ca808a9ad",
+        "transformation": null
+      },
+      "rtp-torrent/neuland@jade4j/neuland@jade4j.csv": {
+        "bytes": 2534462,
+        "archive_entry_bytes": 2534462,
+        "crc32": "263655bf",
+        "sha256": "50ea86dd2c7659a525865c5ca6fdc473ba2809449533d28e373f3b0e7720070a",
+        "transformation": null
+      },
+      "rtp-torrent/readme.md": {
+        "bytes": 4700,
+        "archive_entry_bytes": 4700,
+        "crc32": "f49638d6",
+        "sha256": "1952297caf9c51102b3abbd138abf1359b58465906901ddafdfa4ae998d5c458",
+        "transformation": null
+      },
+      "rtp-torrent/repo/adamfisk@LittleProxy/HEAD": {
+        "bytes": 23,
+        "archive_entry_bytes": 23,
+        "crc32": "a773692b",
+        "sha256": "f6f2b945f6c411b02ba3da9c7ace88dcf71b6af65ba2e0d89aa82900042b5a10",
+        "transformation": null
+      },
+      "rtp-torrent/repo/adamfisk@LittleProxy/config": {
+        "bytes": 155,
+        "archive_entry_bytes": 155,
+        "crc32": "0c16d1bc",
+        "sha256": "3d1bd5ef47550ae1d661ebefd8e254d87ca916e3be33e3168cc4933b811bbbee",
+        "transformation": null
+      },
+      "rtp-torrent/repo/adamfisk@LittleProxy/description": {
+        "bytes": 73,
+        "archive_entry_bytes": 73,
+        "crc32": "1f078b37",
+        "sha256": "85ab6c163d43a17ea9cf7788308bca1466f1b0a8d1cc92e26e9bf63da4062aee",
+        "transformation": null
+      },
+      "rtp-torrent/repo/adamfisk@LittleProxy/info/exclude": {
+        "bytes": 240,
+        "archive_entry_bytes": 240,
+        "crc32": "21cd3d77",
+        "sha256": "6671fe83b7a07c8932ee89164d1f2793b2318058eb8b98dc5c06ee0a5a3b0ec1",
+        "transformation": null
+      },
+      "rtp-torrent/repo/adamfisk@LittleProxy/objects/pack/pack-e671ab2fbee2b0c4c2abc81a7abed9fde32d079f.idx": {
+        "bytes": 380836,
+        "archive_entry_bytes": 380836,
+        "crc32": "9a654bfc",
+        "sha256": "005d982c8f04a873ab67a829e65699ad0d4a99466305881cf346d05ee929009d",
+        "transformation": null
+      },
+      "rtp-torrent/repo/adamfisk@LittleProxy/objects/pack/pack-e671ab2fbee2b0c4c2abc81a7abed9fde32d079f.pack": {
+        "bytes": 7584655,
+        "archive_entry_bytes": 7584655,
+        "crc32": "9c848f41",
+        "sha256": "365be0ec1129c0846e0715d8cfbd6a4dba535c02dc220397a24e97cd3a6d83b4",
+        "transformation": null
+      },
+      "rtp-torrent/repo/adamfisk@LittleProxy/packed-refs": {
+        "bytes": 2502,
+        "archive_entry_bytes": 2502,
+        "crc32": "60fb3c57",
+        "sha256": "e8991677877fe9d8979f8c7c9fa7e83265b8f280d470ec24fb7f4ace1c62532c",
+        "transformation": null
+      },
+      "rtp-torrent/repo/brettwooldridge@HikariCP/HEAD": {
+        "bytes": 20,
+        "archive_entry_bytes": 20,
+        "crc32": "fe38acd1",
+        "sha256": "bda77d7d12a90332080071375095fb080d8cd2a6702e6ee44552863a0ca4317e",
+        "transformation": null
+      },
+      "rtp-torrent/repo/brettwooldridge@HikariCP/config": {
+        "bytes": 159,
+        "archive_entry_bytes": 159,
+        "crc32": "e11b8095",
+        "sha256": "c52ae3e1b1cc21587129d85a46f6d85025fd1c8007c25dcfd6b01b6d93b4050f",
+        "transformation": null
+      },
+      "rtp-torrent/repo/brettwooldridge@HikariCP/description": {
+        "bytes": 73,
+        "archive_entry_bytes": 73,
+        "crc32": "1f078b37",
+        "sha256": "85ab6c163d43a17ea9cf7788308bca1466f1b0a8d1cc92e26e9bf63da4062aee",
+        "transformation": null
+      },
+      "rtp-torrent/repo/brettwooldridge@HikariCP/info/exclude": {
+        "bytes": 240,
+        "archive_entry_bytes": 240,
+        "crc32": "21cd3d77",
+        "sha256": "6671fe83b7a07c8932ee89164d1f2793b2318058eb8b98dc5c06ee0a5a3b0ec1",
+        "transformation": null
+      },
+      "rtp-torrent/repo/brettwooldridge@HikariCP/objects/pack/pack-100d09e05a60730a7a5782bca80959682fa4277c.idx": {
+        "bytes": 711824,
+        "archive_entry_bytes": 711824,
+        "crc32": "e25fe577",
+        "sha256": "48d01836267f6a7fa6d23c3c1c0575d043e456f831c75f2e5e4c6557dd315319",
+        "transformation": null
+      },
+      "rtp-torrent/repo/brettwooldridge@HikariCP/objects/pack/pack-100d09e05a60730a7a5782bca80959682fa4277c.pack": {
+        "bytes": 4653782,
+        "archive_entry_bytes": 4653782,
+        "crc32": "5660119b",
+        "sha256": "131eb96a9ac2eb21688b537aa3e820d59211e38479687a05dabdbab6dc103b8a",
+        "transformation": null
+      },
+      "rtp-torrent/repo/brettwooldridge@HikariCP/packed-refs": {
+        "bytes": 10702,
+        "archive_entry_bytes": 10702,
+        "crc32": "0e794235",
+        "sha256": "0a39610bd6569e355dcd5032adb50ab0f14a9442c7026d3266b85fc1da8799bc",
+        "transformation": null
+      },
+      "rtp-torrent/repo/l0rdn1kk0n@wicket-bootstrap/HEAD": {
+        "bytes": 27,
+        "archive_entry_bytes": 27,
+        "crc32": "f6a007a4",
+        "sha256": "da9d8f43b6baddb3ef2fb068532ec4986ccf939605657b9d258b3ebaabc8ce64",
+        "transformation": null
+      },
+      "rtp-torrent/repo/l0rdn1kk0n@wicket-bootstrap/config": {
+        "bytes": 162,
+        "archive_entry_bytes": 162,
+        "crc32": "abd1e9c2",
+        "sha256": "6ec4ab18405cbdc66e1abfae8945d98144c148065542c61510f8209d0bbd3d48",
+        "transformation": null
+      },
+      "rtp-torrent/repo/l0rdn1kk0n@wicket-bootstrap/description": {
+        "bytes": 73,
+        "archive_entry_bytes": 73,
+        "crc32": "1f078b37",
+        "sha256": "85ab6c163d43a17ea9cf7788308bca1466f1b0a8d1cc92e26e9bf63da4062aee",
+        "transformation": null
+      },
+      "rtp-torrent/repo/l0rdn1kk0n@wicket-bootstrap/info/exclude": {
+        "bytes": 240,
+        "archive_entry_bytes": 240,
+        "crc32": "21cd3d77",
+        "sha256": "6671fe83b7a07c8932ee89164d1f2793b2318058eb8b98dc5c06ee0a5a3b0ec1",
+        "transformation": null
+      },
+      "rtp-torrent/repo/l0rdn1kk0n@wicket-bootstrap/objects/pack/pack-ced4389d09d3addbc3234241e241438229ef96f2.idx": {
+        "bytes": 1197652,
+        "archive_entry_bytes": 1197652,
+        "crc32": "37bc04d5",
+        "sha256": "f262aedba7992820edacc055972b3987aa48c1425d8516254090245b202b9981",
+        "transformation": null
+      },
+      "rtp-torrent/repo/l0rdn1kk0n@wicket-bootstrap/objects/pack/pack-ced4389d09d3addbc3234241e241438229ef96f2.pack": {
+        "bytes": 20931426,
+        "archive_entry_bytes": 20931426,
+        "crc32": "7e3ba917",
+        "sha256": "f15262eaf66190dbe770e3cc7c2ef9c1af1bd86f17d5fc9b6d9e153c8d413683",
+        "transformation": null
+      },
+      "rtp-torrent/repo/l0rdn1kk0n@wicket-bootstrap/packed-refs": {
+        "bytes": 12829,
+        "archive_entry_bytes": 12829,
+        "crc32": "21767193",
+        "sha256": "739c22406f32635cd7e06b83e8a9bc60b345032c81ea735976c2407951e93dee",
+        "transformation": null
+      },
+      "rtp-torrent/repo/neuland@jade4j/HEAD": {
+        "bytes": 23,
+        "archive_entry_bytes": 23,
+        "crc32": "a773692b",
+        "sha256": "f6f2b945f6c411b02ba3da9c7ace88dcf71b6af65ba2e0d89aa82900042b5a10",
+        "transformation": null
+      },
+      "rtp-torrent/repo/neuland@jade4j/config": {
+        "bytes": 149,
+        "archive_entry_bytes": 149,
+        "crc32": "8a02ca0d",
+        "sha256": "2bedcfb7795f2e0f3f1d27e8a2848d226b456d158894d9c4324c7c2fc6dbf7c5",
+        "transformation": null
+      },
+      "rtp-torrent/repo/neuland@jade4j/description": {
+        "bytes": 73,
+        "archive_entry_bytes": 73,
+        "crc32": "1f078b37",
+        "sha256": "85ab6c163d43a17ea9cf7788308bca1466f1b0a8d1cc92e26e9bf63da4062aee",
+        "transformation": null
+      },
+      "rtp-torrent/repo/neuland@jade4j/info/exclude": {
+        "bytes": 240,
+        "archive_entry_bytes": 240,
+        "crc32": "21cd3d77",
+        "sha256": "6671fe83b7a07c8932ee89164d1f2793b2318058eb8b98dc5c06ee0a5a3b0ec1",
+        "transformation": null
+      },
+      "rtp-torrent/repo/neuland@jade4j/objects/pack/pack-184a3089bd01104889ea615220be31de152397c9.idx": {
+        "bytes": 222048,
+        "archive_entry_bytes": 222048,
+        "crc32": "b797d0d9",
+        "sha256": "55160d98038fac72a3a00b448e99c813d671ff143f59a871ed06733481060391",
+        "transformation": null
+      },
+      "rtp-torrent/repo/neuland@jade4j/objects/pack/pack-184a3089bd01104889ea615220be31de152397c9.pack": {
+        "bytes": 2177470,
+        "archive_entry_bytes": 2177470,
+        "crc32": "e2acb06b",
+        "sha256": "49728c1732e4312c63e93ed712a6b3c16fec528938db0fe45881e2802fb61051",
+        "transformation": null
+      },
+      "rtp-torrent/repo/neuland@jade4j/packed-refs": {
+        "bytes": 5083,
+        "archive_entry_bytes": 5083,
+        "crc32": "12c7ed56",
+        "sha256": "a8ad31c9d97233298182fccd32e68358296a9151bf3c58925f4b1c6c25e5c733",
+        "transformation": null
+      },
+      "rtp-torrent/tr_all_built_commits.csv": {
+        "bytes": 228894,
+        "archive_entry_bytes": 295639369,
+        "crc32": "58b28494",
+        "sha256": "e83d75ec420244cc3cb9a43c5322df6354c173f50c45f88d7cfbc9e2a0bc0880",
+        "transformation": {
+          "kind": "filter job IDs to selected projects",
+          "jobs": 4285,
+          "rows_kept": 4486,
+          "source_sha256": "11e60b8c36d8b6968d10106f84eed76c544164cfde80513fccf29b8f10a8ba96"
+        }
+      }
+    },
+    "license": "CC BY 4.0",
+    "citation": "Mattis et al., MSR 2020, doi:10.1145/3379597.3387458"
+  },
+  "preparation": [
+    {
+      "project": "hikaricp",
+      "database": "experiments/datasets/derived/hikaricp.db",
+      "dataset": "experiments/results/study11-2026-10-21/hikaricp/dataset.csv",
+      "rows": 20206,
+      "commits": 1427,
+      "dataset_sha256": "67a0d5225111424dac8f4799571c4df01d2332e6b140fde14cacc3ac9c91bf3f",
+      "expected_dataset_sha256": "67a0d5225111424dac8f4799571c4df01d2332e6b140fde14cacc3ac9c91bf3f",
+      "matches_original_study": true,
+      "csv_sha256": "f2c4ce350b858f2daec1ccc1a3f017ca5c2c95e1ff534720155b12b16414ec7b",
+      "seconds": 2176.55,
+      "packages": {
+        "codedna": "0.1.0",
+        "scikit-learn": "1.9.1",
+        "numpy": "2.5.4"
+      }
+    },
+    {
+      "project": "littleproxy",
+      "database": "experiments/datasets/derived/littleproxy.db",
+      "dataset": "experiments/results/study11-2026-10-21/littleproxy/dataset.csv",
+      "rows": 4575,
+      "commits": 262,
+      "dataset_sha256": "c65178e8eb9d64761eafa09cfe2a3c366068bc744b2ac07ff9ea5f36e3d8c8d0",
+      "expected_dataset_sha256": "c65178e8eb9d64761eafa09cfe2a3c366068bc744b2ac07ff9ea5f36e3d8c8d0",
+      "matches_original_study": true,
+      "csv_sha256": "868dbdd676ce04f2186afd2720ffe196db8603b93e8e338069995826803a3bfe",
+      "seconds": 487.61,
+      "packages": {
+        "codedna": "0.1.0",
+        "scikit-learn": "1.9.1",
+        "numpy": "2.5.4"
+      }
+    },
+    {
+      "project": "jade4j",
+      "database": "experiments/datasets/derived/jade4j.db",
+      "dataset": "experiments/results/study11-2026-10-21/jade4j/dataset.csv",
+      "rows": 10913,
+      "commits": 314,
+      "dataset_sha256": "d4362ffcc04bf289682e9426c60e6a56ce26e537b6e574b46c8abd73728afe5b",
+      "expected_dataset_sha256": "d4362ffcc04bf289682e9426c60e6a56ce26e537b6e574b46c8abd73728afe5b",
+      "matches_original_study": true,
+      "csv_sha256": "d2399798e36770594a19a23ea247a99c7d34c6f227d3861fea68f5e1e90a3e65",
+      "seconds": 655.03,
+      "packages": {
+        "codedna": "0.1.0",
+        "scikit-learn": "1.9.1",
+        "numpy": "2.5.4"
+      }
+    },
+    {
+      "project": "wicket-bootstrap",
+      "database": "experiments/datasets/derived/wicket-bootstrap.db",
+      "dataset": "experiments/results/study11-2026-10-21/wicket-bootstrap/dataset.csv",
+      "rows": 34791,
+      "commits": 820,
+      "dataset_sha256": "afc0ddb840a45c2a651c5887a887ff53018b91c5a344b5ecbdb0a703dfec2d80",
+      "expected_dataset_sha256": "afc0ddb840a45c2a651c5887a887ff53018b91c5a344b5ecbdb0a703dfec2d80",
+      "matches_original_study": true,
+      "csv_sha256": "376ccf886d411c25b1ee534fa9bea969dc62f97ad09392c93dcad485eb829199",
+      "seconds": 2175.25,
+      "packages": {
+        "codedna": "0.1.0",
+        "scikit-learn": "1.9.1",
+        "numpy": "2.5.4"
+      }
+    }
+  ],
+  "provenance_sha256": {
+    "experiments/datasets/raw/rtptorrent-subset-manifest.json": "7058a0b7ecff4b1edc6a07a7cd55a70bd87f630ce7b85b95b92ffb2a60db6d7d",
+    "experiments/datasets/derived/transfer-preparation.json": "e14d5e1f041295c90bdff89c20e85493d2e70d5ceb56a6a99b88d07f57239673",
+    "scripts/fetch_rtptorrent_subset.py": "9d3e0192b067ffadbc7c31b1b5760253c8be137a0621ec5bef66f184196b5b11",
+    "scripts/prepare_transfer_features.py": "29aa1c6004bf650733999953b2c8f3c7e2a5d85945e40a43514f9baa4918beef"
+  }
+}

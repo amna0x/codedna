@@ -4,7 +4,7 @@ import { createServer } from 'net';
 import { injectable } from '@theia/core/shared/inversify';
 import { BackendApplicationContribution } from '@theia/core/lib/node';
 import {
-    AnalyzeReport, CodeDnaService, CodeDnaStatus, ImpactReport, SelectionReport, SelectionStrategy
+    AnalyzeReport, CodeDnaService, CodeDnaStatus, ImpactReport, SelectionReport, SelectionStrategy, SelectionRun
 } from '../common/codedna-protocol';
 
 /**
@@ -16,12 +16,14 @@ import {
  *   (`CODEDNA_API_TOKEN`), never on the command line, and stays in this
  *   backend process — the renderer never sees it.
  * - The server listens on 127.0.0.1 only and is stopped with the IDE.
- * - Builds are not enabled (`--allow-build` is not passed): these views only
- *   analyse, they never execute project code.
+ * - Builds start disabled. Only runSelection, after explicit view confirmation,
+ *   restarts the server with build permission and sends a confirmed request.
  */
+// Build execution is now enabled only after runSelection receives explicit UI consent.
 @injectable()
 export class CodeDnaServiceImpl implements CodeDnaService, BackendApplicationContribution {
 
+    protected buildsEnabled = false;
     protected process: ChildProcess | undefined;
     protected baseUrl: string | undefined;
     protected token: string | undefined;
@@ -55,8 +57,22 @@ export class CodeDnaServiceImpl implements CodeDnaService, BackendApplicationCon
         return this.post('/api/impact', { repo, base, head });
     }
 
-    select(repo: string, base: string, head: string, strategy: SelectionStrategy): Promise<SelectionReport> {
-        return this.post('/api/select', { repo, base, head, strategy });
+    select(repo: string, base: string, head: string, strategy: SelectionStrategy, historyCsv?: string): Promise<SelectionReport> {
+        return strategy === 'risk'
+            ? this.post('/api/risk-select', { repo, base, head, history_csv: historyCsv || undefined })
+            : this.post('/api/select', { repo, base, head, strategy });
+    }
+
+    async runSelection(repo: string, base: string, head: string, strategy: SelectionStrategy, historyCsv?: string): Promise<SelectionRun> {
+        // Called only after the view's explicit build-execution confirmation.
+        await this.starting;
+        if (!this.buildsEnabled) {
+            this.onStop();
+            this.buildsEnabled = true;
+        }
+        return this.post('/api/run-selection', {
+            repo, base, head, strategy, history_csv: historyCsv || undefined, allow_build: true
+        });
     }
 
     protected async post<T>(path: string, body: object): Promise<T> {
@@ -87,7 +103,9 @@ export class CodeDnaServiceImpl implements CodeDnaService, BackendApplicationCon
     protected async start(): Promise<void> {
         const port = await freePort();
         const token = randomBytes(32).toString('base64url');
-        const child = spawn(this.executable, ['serve', '--host', '127.0.0.1', '--port', String(port)], {
+        const args = ['serve', '--host', '127.0.0.1', '--port', String(port)];
+        if (this.buildsEnabled) { args.push('--allow-build'); }
+        const child = spawn(this.executable, args, {
             env: { ...process.env, CODEDNA_API_TOKEN: token },
             stdio: ['ignore', 'pipe', 'pipe'],
             shell: false,

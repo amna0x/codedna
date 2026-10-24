@@ -3,7 +3,7 @@
 Draft of the methods, results and threats-to-validity chapters for the FYP
 report, covering research questions RQ1 to RQ5 (docs/RESEARCH_PLAN.md).
 Every number comes from files under `experiments/results/`; the source of
-each table is named. Status: first draft, 2026-10-23.
+each table is named. Status: evaluation draft with reproducible figures, 2026-10-24.
 
 ## 1. Research questions
 
@@ -119,6 +119,16 @@ the projects with equal weight, resampling within each project, and report
 how many projects contribute (a project without failing test commits has no
 recall or safety).
 
+### 2.7 Figure provenance
+
+The five figures are generated from saved reports by
+`scripts/make_study_figures.py` (D-038), without retraining or rebuilding the
+feature datasets. Their exact values and project cohorts are in
+`experiments/results/study11-2026-10-21/figures/figure-data.json`; the adjacent
+`manifest.json` fingerprints the input reports, exporter and artifacts.
+Raw/calibrated comparisons use common project cohorts. No confidence intervals
+are derived from standard deviations over random seeds.
+
 ## 3. Data actually available
 
 Source: `experiments/results/study11-2026-10-21/summary.md`.
@@ -179,6 +189,10 @@ duration counts (APFDc, recall at a time budget), the time-aware rules win
 and both learned models are at or below random. The best ordering by APFDc
 is a simple rule on six of the nine projects.
 
+![Figure 1. APFDc of the saved orderings; n is the number of projects with a defined metric.](../experiments/results/study11-2026-10-21/figures/rq1-ordering.png)
+
+Figure 1. APFDc of the saved orderings; n is the number of projects with a defined metric.
+
 **Answer to RQ1.** The features predict failures well above chance, mainly
 through test history. The learned models do not order tests better than
 simple time-aware rules on this data.
@@ -202,6 +216,10 @@ commits it needs about 82 % (an 18 % saving). The hybrid B10 (section 4.4)
 reaches recall 0.94 and safety 0.88 at 61 % of the time with a 1 % risk
 target, but that pooled comparison is not cost-matched per project and is
 driven by wicket-bootstrap.
+
+![Figure 2. B8 detection rates against actual mean test time. Time pools eleven projects; recall and safety pool nine. These pooled curves are descriptive, not per-project cost-matched comparisons.](../experiments/results/study11-2026-10-21/figures/rq2-budget.png)
+
+Figure 2. B8 detection rates against actual mean test time. Time pools eleven projects; recall and safety pool nine. These pooled curves are descriptive, not per-project cost-matched comparisons.
 
 **Answer to RQ2.** Savings of about 40 % are possible at 90 % recall, but
 much smaller savings if every failing commit must be fully caught. The
@@ -264,6 +282,10 @@ sums the small probabilities of every skipped test, so a slight
 underestimate of rare failures, invisible in ECE, becomes a large
 underestimate of commit risk.
 
+![Figure 3. Calibration and B10 stopping on matching nine-project cohorts. Labels count projects within the 5% target; a pooled mean below target does not imply that every project met it.](../experiments/results/study11-2026-10-21/figures/rq3-calibration.png)
+
+Figure 3. Calibration and B10 stopping on matching nine-project cohorts. Labels count projects within the 5% target; a pooled mean below target does not imply that every project met it.
+
 **Answer to RQ3.** Calibration makes the class-weighted model's
 probabilities and commit-level risk estimates far more reliable (ECE 0.118
 to 0.021, risk gap 0.306 to 0.067). Most of the ECE gain undoes the class
@@ -301,6 +323,10 @@ equal on five), and with a 5 % target its observed miss rate stays within
 exception is jcabi-github (observed 20 %, estimated 4.4 %). With stricter
 targets (1 to 2 %) the estimates are too optimistic on four projects.
 
+![Figure 4. Saved pooled safety differences and hierarchical bootstrap 95% intervals. Intervals touching or crossing zero do not establish an improvement.](../experiments/results/study11-2026-10-21/figures/rq4-cost-matched.png)
+
+Figure 4. Saved pooled safety differences and hierarchical bootstrap 95% intervals. Intervals touching or crossing zero do not establish an improvement.
+
 **Answer to RQ4.** Fallback does not reliably improve the trade-off once
 cost is matched; it helps only where failures are frequent and concentrated
 (wicket-bootstrap). The best use of the calibrated model is as a stopping
@@ -320,9 +346,71 @@ wicket-bootstrap. Graph-only selection (B4) does well on jsprit (time 0.41,
 safety 0.86, against B8's 0.35 and 0.71) and catches almost nothing on
 jcabi-github and wicket-bootstrap (safety 0.06 and 0.04).
 
-**Answer to RQ5.** The graph helps where failures are caused by the changed
-code and is blind where they are not. It is a useful, cheap component, not
-a decisive one, on this data.
+![Figure 5. Reachability among all and failing test rows. n counts failing rows; estimates with very few failures are unstable. Reachability alone does not establish the cause of a failure.](../experiments/results/study11-2026-10-21/figures/rq5-graph-signal.png)
+
+Figure 5. Reachability among all and failing test rows. n counts failing rows; estimates with very few failures are unstable. Reachability alone does not establish the cause of a failure.
+
+**Answer to RQ5.** Graph features help on some projects, while reachability
+is weak on others. These associations do not identify failure causes. The
+graph is a useful component, not a decisive one, on this data.
+
+### 4.6 Additional validation: cross-project transfer (D-039)
+
+The original eleven-project study trains a separate model for each project.
+A new, pre-specified check tests actual model transfer on HikariCP, LittleProxy,
+jade4j and wicket-bootstrap. All 12 directions and four fresh within-project
+controls use five seeds (80 raw evaluations). Source fitting is restricted to
+history older than target testing by Git committer date; calibration uses source
+labels only. Prior target outcomes remain available as historical features.
+
+Only nine transfer directions have usable source calibration; jade4j's three
+eligible source calibration windows lack both classes. Seven of those nine meet
+the observed 5% miss target. HikariCP to LittleProxy misses all recorded target
+failures (9.43% observed miss, estimated 4.40%). LittleProxy to wicket-bootstrap
+has 16.46% observed miss against estimated 3.48%, despite 98.30% failure recall.
+Wicket-bootstrap to the other projects uses 97.84–99.96% of full test time.
+Raw-model ordering beats rules in only three of twelve directions, and source
+calibration worsens target ECE in six of nine available directions.
+
+There are useful individual pairs: HikariCP to wicket-bootstrap uses 72.51% time
+with 98.85% commit safety and 0.61% observed miss; its safety gain against rules
+at matched time is +0.1034 [0.0449, 0.1711]. This pairwise interval has no
+multiple-comparison correction. Some transfer can work, but there is no reliable
+general transfer result. All four within-project controls meet the observed
+miss target, though one runs the whole suite and jade4j has only two failing
+commits among 63; even skipping all its tests meets the unconditional 5% target.
+
+The project should retain target-project validation before trusting a transferred
+stopping-risk estimate. This limits deployment claims rather than invalidating
+the original within-project findings. Source:
+`experiments/results/cross-project-2026-10-24/summary.json` and `FINDINGS.md`;
+protocol, all pair/seed reports, recovered-data hashes and package versions are
+saved alongside them. Original study reports remain unchanged.
+
+### 4.7 Additional validation: stopping across historical orderings (D-040)
+
+A separately fixed four-project/five-seed extension applies B10 to a history-only
+adaptation of the DANTE author artifact’s score. It retains historical failure
+rate, inverse-lag conditional stickiness and CCH density, while omitting commit
+relevance and using observed test-class lags. This is an independently implemented
+adaptation, not full-DANTE reproduction. A preliminary transition proxy is also
+archived; both extensions reuse previously inspected windows and are exploratory.
+
+Calibrated stopping meets the observed unconditional 5% miss target on all four
+projects for both adapted and rules orders. Raw stopping with the adapted order
+fails on HikariCP (5.59%) and wicket-bootstrap (9.64%). Adapted-order calibrated
+stopping versus a same-order budget baseline at matched actual cost has pooled
+safety difference +0.0460 [-0.0500, 0.2806], and recall difference -0.0056
+[-0.0420, 0.0312]. These intervals do not establish a benefit. HikariCP spends
+29.39% time under the adapted calibrated order versus 13.33% under rules, with
+71.90% versus 72.73% recall. Simple rules therefore remain the live default.
+
+The results support evaluating stopping separately from ordering, but cannot
+establish reliability for arbitrary orders or superiority over published DANTE.
+Small failure counts, dependent commits and non-confirmatory reuse remain limits.
+Source: `experiments/results/dante-history-check-2026-10-24/summary.json` and
+`FINDINGS.md`. The separate live 15-feature evidence gate is an engineering
+addition, not an empirically demonstrated abstention improvement from this study.
 
 ## 5. Threats to validity
 
@@ -342,12 +430,17 @@ a decisive one, on this data.
 - **Internal.** Splits are chronological and features use only earlier
   commits, so no future information leaks. Seeds change only model
   randomness; the fixed split means intervals do not cover other periods.
+- **Transfer.** The added four-project check includes only one model/protocol,
+  historical target features and fixed target windows. Source-only calibration
+  is unavailable in three directions and violates its observed miss target in
+  two others. Target risk must be validated rather than inferred from source
+  calibration.
 - **External.** Eleven open-source Java projects from 2007 to 2016 on
   Travis CI. Two have no evaluable failures, several have very few, and one
   project (wicket-bootstrap) drives most selection differences. The results
   may not transfer to modern or industrial CI.
-- **Reliability.** Every number is produced by committed code from the
-  stored data; dataset hashes, package versions and commands are recorded
+- **Reliability.** Every number comes from the stored data and saved reports;
+  dataset hashes, package versions and commands are recorded
   in each report, and rerunning the experiments reproduced earlier numbers
   exactly.
 
@@ -362,4 +455,6 @@ but do not order tests better than simple rules, and fallback mainly buys
 safety with extra test time. Using simple rules to choose *which* tests run
 and the calibrated model to choose *how many* (B10) is at least as good as
 either alone on every project studied and mostly keeps its stated risk,
-though the gain is not statistically clear on this data.
+though the gain is not statistically clear on this data. These statements concern
+within-project fitting; the additional four-project transfer check does not
+establish a generally reliable source-trained model or risk estimate.

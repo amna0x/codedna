@@ -319,7 +319,8 @@ electron-app/package.json           product config: Theia packages, default them
 - B4 in `history experiment` uses the `dep_reachable` feature (class-level
   static reachability), a proxy of `codedna select --strategy dependency`.
 
-- History/ML: no real study data yet; first-parent history only; commits
+- History/ML: real RTPTorrent study reports are saved, but the raw dataset and
+  derived history databases are not included in Git; first-parent history only; commits
   whose build fails produce no rows (and `collect` retries them); author
   features deliberately omitted (privacy); structural features recompute two
   graphs per commit (slow on large histories).
@@ -392,3 +393,61 @@ electron-app/package.json           product config: Theia packages, default them
 Modules are created when their first implementation lands (see AGENTS.md).
 Every stage should exchange plain dataclasses/Pydantic models serialisable to
 JSON so results can be stored, diffed, inspected in tests, and fed to the UI.
+
+
+## Saved-study figure export (D-038)
+
+`scripts/make_study_figures.py` reads the saved study summaries and per-seed
+reports. It exports RQ1–RQ5 PNG/SVG figures and their numerical data without
+loading a history database or retraining a model. Matplotlib is an optional
+`plots` dependency; `--data-only` needs only the standard library.
+
+Aggregation averages seeds within each project, then weights projects equally.
+Missing metrics remain undefined. Calibration and B10 variant comparisons use
+common project cohorts; pooled confidence intervals are reused from the saved
+hierarchical bootstrap, not reconstructed from seed standard deviations.
+The manifest fingerprints all read reports, generated artifacts, and the
+exporter source with SHA-256 and records Python/Matplotlib versions.
+
+## Project-disjoint transfer validation (D-039)
+
+`codedna.models.transfer.fit_project` accepts only source-project data. It fits
+on the source training split and calibrates on its validation split.
+`evaluate_target` applies that frozen model to the target test split and records
+prediction, ordering, selection and matched-cost outcomes. Missing source
+calibration remains unavailable; target labels never repair it.
+
+`scripts/run_cross_project.py` fixes the four-project, five-seed protocol,
+restricts source history before the target test window using Git dates, and
+reports all directions alongside fresh within-project controls. Input, code
+and package fingerprints protect resumed runs from mixing incompatible fits.
+The target's past test history remains available as features; this evaluates
+transfer between repositories with history, rather than history-free startup.
+
+`scripts/fetch_rtptorrent_subset.py` recovers selected public archive entries
+with HTTP byte ranges. `scripts/prepare_transfer_features.py` imports recorded
+outcomes, rebuilds structural/history features, and requires the original
+study's dataset digest before model evaluation. Neither script builds the
+analysed repositories. Raw data, SQLite histories and feature CSVs remain
+outside version control.
+
+
+## Live risk and selected execution (D-040/D-041)
+
+`selection.live` provides shared audited fitting and dispatches through the
+installed language plugin’s optional `risk_select` capability. The Java adapter
+(`plugins.java_live`) binds CSV rows to first-parent ancestry and constructs
+Java change/history features without observing target outcomes.
+A separately fitted/calibrated/audited model feeds `selection.validation`'s
+conservative empirical gate. Missing or inadequate evidence yields full-suite
+selection with explicit unvalidated status. No serialized executable model is
+loaded. Fixed 15-feature live inputs differ explicitly from the 19-feature
+retrospective experiment. `models.dante_history` supplies an independently
+implemented history-only CCH ordering for the exploratory stopping extension.
+
+The authenticated local API adds risk selection and recomputed selection runs.
+The IDE backend enables build permission only following explicit execution
+confirmation, preserving the per-request consent check. `run_maven_tests` accepts
+optional discovered test IDs, includes nested classes, and handles empty lists
+without invoking Maven. The UI displays actual result statuses and evidence
+without implementing model/selection logic. See JAVA_WORKFLOW.md.

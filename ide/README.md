@@ -10,8 +10,8 @@ terminal and preferences; the `codedna-extension` package adds:
   the file at that line.
 - **Tests to run** (right panel, `Ctrl+Alt+T`): the test classes your change
   can affect (or all tests), each with the reason in plain words, and which
-  ones are safe to skip. Failure-risk scores are not shown until CodeDNA has
-  learned from the project's test history — nothing is invented.
+  ones were not selected. The risk strategy shows calibrated estimates only
+  after a separate target-history audit; otherwise it recommends the full suite.
 
 Both views share one **Compare** choice: *My last commit* (default), *My
 last 5 commits*, or *Choose commits…* for any two commits or branches.
@@ -25,7 +25,8 @@ Theia frontend (views, React)  ── JSON-RPC ──▶  Theia backend (Node)
 ```
 
 The session token stays in the backend process; the views never see it. The
-views only analyse — they never run project code.
+views analyse without executing code. Explicit confirmation in **Tests to run**
+enables selected Maven execution; analysis never triggers a build.
 
 ## Prerequisites
 
@@ -64,5 +65,18 @@ Layout** (command palette).
 ## Not yet
 
 Java language support in the editor (Theia's VS Code extension host + a Java
-extension), the graph view, run-selected-tests from the IDE, risk scores in
-the Tests view, uncommitted-change analysis, packaging/installers.
+extension), the graph view, uncommitted-change analysis, packaging/installers.
+
+
+## Risk and test execution
+
+**Validated risk stopping** is the default recommendation strategy. The core
+checks prior target evidence; missing/failed evidence displays **Risk unvalidated**
+and recommends the full suite. Accepted history shows the estimated aggregate
+skip risk and prior audit counts/upper bound, with no safety guarantee.
+
+**Run recommended test classes** asks before executing project code. The backend
+recomputes selection at the displayed immutable revisions, runs the selected
+classes in an isolated export and returns actual statuses, warnings and logs.
+Changing the comparison clears old recommendations. See
+[the Java workflow](../docs/JAVA_WORKFLOW.md) for history preparation and limits.

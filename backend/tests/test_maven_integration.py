@@ -38,6 +38,11 @@ def test_coverage_mapping_and_strategy_comparison_with_real_maven(repo, tmp_path
     head_run, _ = run_maven_tests(repo.path, head, tmp_path / "head", allow_build=True)
     assert head_run.failing_tests == ["example.OrderServiceTest", "example.PriceCalculatorTest"]
 
+    selected_run, _ = run_maven_tests(repo.path, head, tmp_path / "selected", allow_build=True,
+        selected_tests=["example.PriceCalculatorTest"])
+    assert set(selected_run.tests) == {"example.PriceCalculatorTest"}
+    assert selected_run.failing_tests == ["example.PriceCalculatorTest"]
+
     comparison = compare_strategies(repo.path, base, head, head_run, coverage_map=coverage)
     rows = {row["strategy"]: row for row in comparison["strategies"]}
     for strategy in ("all", "dependency", "coverage"):

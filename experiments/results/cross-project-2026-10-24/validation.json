@@ -1,0 +1,37 @@
+{
+  "recorded_at_utc": "2026-10-24T15:44:02.561511+00:00",
+  "command": ".venv/Scripts/python -m pytest --run-maven -q",
+  "passed": 220,
+  "failed": 0,
+  "skipped": 0,
+  "warnings": 1,
+  "seconds": 363.77,
+  "reported_summary": "220 passed, 1 warning in 363.77s (0:06:03)",
+  "maven_included": true,
+  "warning": "Existing Starlette/httpx TestClient deprecation",
+  "runtime": {
+    "java_home": "C:\\Users\\hp\\.codex\\tools\\java17\\jdk-17.0.20+8",
+    "jdk_release": "jdk-17.0.20+8",
+    "jdk_sha256": "418497be5cf585bdd2203d6486a565d66d3f5e992d5630d45104cb873fab8122",
+    "maven_home": "C:\\Users\\hp\\.codex\\tools\\maven\\apache-maven-3.10.0",
+    "maven_version": "3.10.0",
+    "maven_sha512": "22d31676d5b92ed53308c19ecded3245d0efd0cddfec51ec7bab62f4f13ad70ddddceff8e62940e0e8e2421f3cde8106737f4becec0aa034ffeff2a754e88337",
+    "sources": {
+      "jdk": "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.20%2B8/OpenJDK17U-jdk_x64_windows_hotspot_17.0.20_8.zip?download=1",
+      "maven": "https://dlcdn.apache.org/maven/maven-3/3.10.0/binaries/apache-maven-3.10.0-bin.zip"
+    }
+  },
+  "audit": {
+    "raw_pair_seed_reports": 80,
+    "calibrated_pair_seed_reports": 65,
+    "cross_project_directions": 12,
+    "calibrated_directions": 9,
+    "directions_meeting_observed_miss_target": 7,
+    "within_project_controls": 4,
+    "recovered_dataset_hash_matches": 4,
+    "original_study_input_hash_matches": 112,
+    "source_target_test_sha_overlap": false,
+    "all_source_fitting_before_target_test_git_dates": true,
+    "input_code_output_hashes_verified": true
+  }
+}

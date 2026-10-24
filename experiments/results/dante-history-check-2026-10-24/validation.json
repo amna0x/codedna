@@ -1,0 +1,188 @@
+{
+  "recorded_at_utc": "2026-10-24T17:34:44.795217+00:00",
+  "backend": {
+    "command": ".venv/Scripts/python -m pytest --run-maven -q",
+    "passed": 245,
+    "failed": 0,
+    "skipped": 0,
+    "warnings": 1,
+    "seconds": 499.39,
+    "summary": "245 passed, 1 warning in 499.39s (0:08:19)",
+    "warning": "Existing Starlette/httpx TestClient deprecation"
+  },
+  "ide": {
+    "command": "npm run build",
+    "exit_code": 0,
+    "stages": [
+      "TypeScript extension",
+      "Electron native rebuild",
+      "browser bundle",
+      "Node backend bundle",
+      "Electron main bundle"
+    ],
+    "live_controls_checked": true,
+    "live_demo_type": "Disposable project from own Java sample, then deliberate discount regression; no invented CI outcomes",
+    "demo_runs": [
+      {
+        "commit": "35481e062fe5b8d6ca0a406a6e101033eea1e8bd",
+        "tests": [
+          {
+            "id": "example.OrderTotalsTest",
+            "status": "passed",
+            "time": 0.085,
+            "cases": [
+              {
+                "name": "totalSumsLinesAndAppliesDiscount",
+                "status": "passed",
+                "time": 0.085,
+                "message": null
+              },
+              {
+                "name": "emptyOrderTotalsZero",
+                "status": "passed",
+                "time": 0.0,
+                "message": null
+              }
+            ]
+          },
+          {
+            "id": "example.PriceCalculatorTest",
+            "status": "passed",
+            "time": 0.015,
+            "cases": [
+              {
+                "name": "linePriceMultipliesUnitPriceByQuantity",
+                "status": "passed",
+                "time": 0.003,
+                "message": null
+              },
+              {
+                "name": "negativeQuantityIsRejected",
+                "status": "passed",
+                "time": 0.004,
+                "message": null
+              },
+              {
+                "name": "invalidDiscountRateIsRejected",
+                "status": "passed",
+                "time": 0.006,
+                "message": null
+              },
+              {
+                "name": "discountIsApplied",
+                "status": "passed",
+                "time": 0.002,
+                "message": null
+              }
+            ]
+          }
+        ],
+        "failing_tests": [],
+        "exit_codes": [
+          0
+        ],
+        "duration_seconds": 17.172,
+        "results_sha256": "3d10d2ba20c546be680082c7806d54aa01faa796f1a7872b4a3bc954a85711d9",
+        "output_dir": "C:\\Users\\hp\\AppData\\Local\\Temp\\codedna-java-workflow-cc3d1c95\\.codedna\\runs\\89aef49db76042f086abf58a4aa045f6"
+      },
+      {
+        "commit": "25643b4a0fa76a792f5ebfd48f6cda7f971677ee",
+        "tests": [
+          {
+            "id": "example.OrderTotalsTest",
+            "status": "failed",
+            "time": 0.1,
+            "cases": [
+              {
+                "name": "totalSumsLinesAndAppliesDiscount",
+                "status": "failed",
+                "time": 0.1,
+                "message": "expected: <20.0> but was: <40.0>"
+              },
+              {
+                "name": "emptyOrderTotalsZero",
+                "status": "passed",
+                "time": 0.0,
+                "message": null
+              }
+            ]
+          },
+          {
+            "id": "example.PriceCalculatorTest",
+            "status": "failed",
+            "time": 0.022,
+            "cases": [
+              {
+                "name": "linePriceMultipliesUnitPriceByQuantity",
+                "status": "passed",
+                "time": 0.006,
+                "message": null
+              },
+              {
+                "name": "negativeQuantityIsRejected",
+                "status": "passed",
+                "time": 0.006,
+                "message": null
+              },
+              {
+                "name": "invalidDiscountRateIsRejected",
+                "status": "passed",
+                "time": 0.006,
+                "message": null
+              },
+              {
+                "name": "discountIsApplied",
+                "status": "failed",
+                "time": 0.004,
+                "message": "expected: <90.0> but was: <100.0>"
+              }
+            ]
+          }
+        ],
+        "failing_tests": [
+          "example.OrderTotalsTest",
+          "example.PriceCalculatorTest"
+        ],
+        "exit_codes": [
+          0
+        ],
+        "duration_seconds": 17.422,
+        "results_sha256": "05f7912b26243c1ccd55fdb42ae0537123ee0cb3cb78d59267ca73f2e0dc57fb",
+        "output_dir": "C:\\Users\\hp\\AppData\\Local\\Temp\\codedna-java-workflow-cc3d1c95\\.codedna\\runs\\a736fa047dc0473ab25444c5e67f5a86"
+      }
+    ]
+  },
+  "environment": {
+    "jdk": "17.0.20+8",
+    "maven": "3.10.0",
+    "electron": "42.8.1",
+    "theia": "1.76.0",
+    "visual_studio_build_tools": "17.14.42",
+    "windows_sdk": "10.0.26100",
+    "windows_restart_performed": false
+  },
+  "research_audit": {
+    "final_project_seed_reports": 20,
+    "original_rules_controls_identical": 20,
+    "code_input_output_hashes_verified": true,
+    "claim": "Exploratory DANTE-history-only adaptation, not full DANTE reproduction"
+  },
+  "workflow_code_sha256": {
+    "backend/codedna/selection/live.py": "f4d5d1594646302134c8b6d75a37da32043352475ff2b33ccbd21db366e3c38a",
+    "backend/codedna/selection/validation.py": "34f9fcbf7ac0d42ca217ecc214ab4d26dbe60beca0359cf315e58a24bc09a0f3",
+    "backend/codedna/plugins/java_live.py": "d36cc8abbd7aa3d3d4c34f44a046612912c5cb9ab85b8c9ed13eb975f20bce83",
+    "backend/codedna/plugins/java.py": "af525a66252c7ef023035478b810d13ed15ad61e158d842127e5f16d92ce4ffb",
+    "backend/codedna/api/app.py": "abc28141c103fe32a4d529ab379ace80229e8232b471e78f656557774c035b0e",
+    "backend/codedna/cli.py": "4f023bd77400cd748a268d0b0d83119f0aa4e8f03ef5439a83d026ab84f1a7d0",
+    "backend/codedna/test_mapping/maven.py": "321ce945e9138a304baa34ba71e594fc9a89366f097a5ec354e805f5e72914eb",
+    "ide/codedna-extension/src/browser/tests-view-widget.tsx": "f545f9e0d413a28ecd91da76478c9432c6b105d29d8617e94f407f125c71844e",
+    "ide/codedna-extension/src/common/codedna-protocol.ts": "c6cad96511f778ccc7199334062178bef85d65604cfc74042d22938a17fb606b",
+    "ide/codedna-extension/src/node/codedna-service-impl.ts": "9b4e0c088108d93bab6d1dc459185fe6f6d65b38ef171398e609a9ed6e6f04ac"
+  },
+  "limitations": [
+    "GitHub saved credentials rejected; remote Claude code/PR unavailable",
+    "Supervisor sign-off not obtained",
+    "Operational gate is an evidence screen, not a future guarantee",
+    "Interactive graph view, Java editor support, progress jobs and installers remain original roadmap work"
+  ]
+}

@@ -148,6 +148,13 @@ def build_parser() -> argparse.ArgumentParser:
     run_tests.add_argument("--keep-checkout", action="store_true",
                            help="Keep OUTPUT_DIR/checkout after the run (for debugging).")
 
+    run_tests.add_argument('--tests', nargs='*', default=None,
+                           help='Only run these discovered test classes; empty list runs nothing.')
+    risk_select = subcommands.add_parser('risk-select', help='Target-validated calibrated stopping or full-suite fallback.')
+    _add_change_args(risk_select)
+    risk_select.add_argument('--history-csv', help='Target history CSV; default REPO/.codedna/history.csv')
+    risk_select.add_argument('--risk-target', type=float, default=.05)
+
     select = subcommands.add_parser(
         "select", help="Select regression tests for a change with a baseline strategy.")
     _add_change_args(select)
@@ -328,6 +335,10 @@ def main(argv: list[str] | None = None) -> int:
                                     include_heuristic=not args.confirmed_only)
         elif args.command == "tests":
             report = discover_tests(args.repo, args.rev)
+        elif args.command == 'risk-select':
+            from codedna.selection.live import recommend
+            return _write_json(recommend(args.repo,args.base,args.head,
+                history_csv=args.history_csv,risk_target=args.risk_target),None)
         elif args.command == "run-tests":
             return _run_tests(args)
         elif args.command == "plugins":
@@ -376,7 +387,7 @@ def _run_tests(args: argparse.Namespace) -> int:
         args.repo, args.rev, args.output_dir, allow_build=True,
         per_test_coverage=args.per_test_coverage,
         maven_command=[args.mvn] if args.mvn else None, timeout=args.timeout,
-        keep_checkout=args.keep_checkout)
+        keep_checkout=args.keep_checkout, selected_tests=args.tests)
     summary = {
         "results": str(Path(args.output_dir) / RESULTS_FILE),
         "coverage_map": str(Path(args.output_dir) / COVERAGE_MAP_FILE) if coverage else None,

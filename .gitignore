@@ -40,3 +40,6 @@ Thumbs.db
 
 # Frontend (later)
 node_modules/
+
+# Target-project history and local execution output
+.codedna/

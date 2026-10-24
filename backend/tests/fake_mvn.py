@@ -29,8 +29,8 @@ with open(target / "fake-mvn-calls.txt", "a", encoding="utf-8") as calls:
 selected = None
 for arg in args:
     if arg.startswith("-Dtest="):
-        selected = arg.removeprefix("-Dtest=").split(",")[0]
-tests = {k: v for k, v in spec["tests"].items() if selected is None or k == selected}
+        selected = arg.removeprefix("-Dtest=").split(",")
+tests = {k: v for k, v in spec["tests"].items() if selected is None or k in selected}
 
 reports = target / "surefire-reports"
 reports.mkdir(parents=True, exist_ok=True)

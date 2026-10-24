@@ -116,3 +116,24 @@ executes their code. Do this only for projects chosen deliberately by the team,
 ideally inside a container or VM, never automatically on arbitrary input.
 RTPTorrent avoids this entirely: its outcomes were recorded by the projects'
 own CI.
+
+
+## Local recovery for transfer validation (2026-10-24)
+
+The current laptop has a verified RTPTorrent v1.1 subset for HikariCP,
+LittleProxy, jade4j and wicket-bootstrap. The downloader uses HTTP byte ranges,
+preserves the bare Git repositories, omits hooks, and stream-filters the shared
+job-to-commit map to those projects. Selected ZIP entries pass CRC verification;
+the complete archive MD5 is not claimed verified.
+
+All four SQLite history databases and feature CSVs were rebuilt. Their row
+counts are 20,206, 4,575, 10,913 and 34,791 respectively. All four feature dataset
+SHA-256 digests match the original study reports. The other seven projects'
+raw data, databases and feature CSVs are not present on this laptop; their saved
+study reports remain available. Recovery provenance is saved in
+`experiments/results/cross-project-2026-10-24/data-recovery.json`.
+
+Use `scripts/fetch_rtptorrent_subset.py` followed by
+`scripts/prepare_transfer_features.py --workers 2` to reproduce this subset.
+The transfer protocol and its limits are documented in
+`docs/CROSS_PROJECT_PROTOCOL.md` (D-039).

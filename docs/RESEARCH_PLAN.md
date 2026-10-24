@@ -1,8 +1,9 @@
 # CodeDNA — Research Plan
 
-> No results exist yet. Everything below is a plan. Do not quote numbers
-> until experiments have actually been run and recorded under
-> `experiments/results/`.
+> This document records the research questions and protocol. Saved results
+> from eleven RTPTorrent projects and five seeds now exist under
+> `experiments/results/study11-2026-10-21/`; see its `FINDINGS.md` and
+> `docs/REPORT_DRAFT.md` for the evaluated claims and limitations.
 
 ## What is *not* novel
 

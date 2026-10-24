@@ -1,0 +1,1462 @@
+{
+  "projects": [
+    "hikaricp",
+    "littleproxy",
+    "jade4j",
+    "wicket-bootstrap"
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "pairs": {
+    "hikaricp -> hikaricp": {
+      "source": "hikaricp",
+      "target": "hikaricp",
+      "runs": 5,
+      "expected_runs": 5,
+      "warnings": [],
+      "evaluation": "within_project",
+      "raw": {
+        "runs": 5,
+        "pr_auc": 0.03868030894049004,
+        "positive_rate": 0.020146520146520148,
+        "brier": 0.020435238520612846,
+        "ece": 0.020119796869796872,
+        "b10": {
+          "time": 0.0373,
+          "recall": 0.1405,
+          "safety": 0.2,
+          "estimated_skip_risk": 0.009,
+          "observed_miss_rate": 0.0559
+        },
+        "target_held": false,
+        "vs_rules_same_time": {
+          "time": {
+            "estimate": -0.0002,
+            "ci": [
+              -0.0033,
+              0.0033
+            ]
+          },
+          "recall": {
+            "estimate": -0.0165,
+            "ci": [
+              -0.1345,
+              0.1901
+            ]
+          },
+          "safety": {
+            "estimate": -0.05,
+            "ci": [
+              -0.16,
+              0.0
+            ]
+          }
+        }
+      },
+      "calibrated": {
+        "runs": 5,
+        "pr_auc": 0.03217943685188701,
+        "positive_rate": 0.020146520146520148,
+        "brier": 0.01988773202264323,
+        "ece": 0.0137,
+        "b10": {
+          "time": 0.1333,
+          "recall": 0.7273,
+          "safety": 0.5,
+          "estimated_skip_risk": 0.0444,
+          "observed_miss_rate": 0.035
+        },
+        "target_held": true,
+        "vs_rules_same_time": {
+          "time": {
+            "estimate": 0.0019,
+            "ci": [
+              -0.0197,
+              0.0246
+            ]
+          },
+          "recall": {
+            "estimate": 0.0083,
+            "ci": [
+              -0.1064,
+              0.1157
+            ]
+          },
+          "safety": {
+            "estimate": 0.05,
+            "ci": [
+              -0.125,
+              0.2222
+            ]
+          }
+        }
+      },
+      "apfdc_ml_raw": 0.5342,
+      "apfdc_rules": 0.7528,
+      "source_train_rows": [
+        8218
+      ]
+    },
+    "hikaricp -> littleproxy": {
+      "source": "hikaricp",
+      "target": "littleproxy",
+      "runs": 5,
+      "expected_runs": 5,
+      "warnings": [],
+      "evaluation": "cross_project",
+      "raw": {
+        "runs": 5,
+        "pr_auc": 0.0020696237368508703,
+        "positive_rate": 0.002587991718426501,
+        "brier": 0.003468128238310458,
+        "ece": 0.0033609730848861287,
+        "b10": {
+          "time": 0.1076,
+          "recall": 0.0,
+          "safety": 0.0,
+          "estimated_skip_risk": 0.0164,
+          "observed_miss_rate": 0.0943
+        },
+        "target_held": false,
+        "vs_rules_same_time": {
+          "time": {
+            "estimate": -0.0001,
+            "ci": [
+              -0.0401,
+              0.0378
+            ]
+          },
+          "recall": {
+            "estimate": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "safety": {
+            "estimate": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          }
+        }
+      },
+      "calibrated": {
+        "runs": 5,
+        "pr_auc": 0.0022458527761367673,
+        "positive_rate": 0.002587991718426501,
+        "brier": 0.002891366413011193,
+        "ece": 0.006500000000000001,
+        "b10": {
+          "time": 0.2926,
+          "recall": 0.0,
+          "safety": 0.0,
+          "estimated_skip_risk": 0.044,
+          "observed_miss_rate": 0.0943
+        },
+        "target_held": false,
+        "vs_rules_same_time": {
+          "time": {
+            "estimate": 0.0004,
+            "ci": [
+              -0.0525,
+              0.0487
+            ]
+          },
+          "recall": {
+            "estimate": -0.2,
+            "ci": [
+              -0.6667,
+              0.0
+            ]
+          },
+          "safety": {
+            "estimate": -0.2,
+            "ci": [
+              -0.6667,
+              0.0
+            ]
+          }
+        }
+      },
+      "apfdc_ml_raw": 0.3823,
+      "apfdc_rules": 0.5337,
+      "source_train_rows": [
+        8218
+      ]
+    },
+    "hikaricp -> jade4j": {
+      "source": "hikaricp",
+      "target": "jade4j",
+      "runs": 5,
+      "expected_runs": 5,
+      "warnings": [],
+      "evaluation": "cross_project",
+      "raw": {
+        "runs": 5,
+        "pr_auc": 0.0016855865153078777,
+        "positive_rate": 0.0011580775911986102,
+        "brier": 0.001174600662685756,
+        "ece": 0.0010835552982049795,
+        "b10": {
+          "time": 0.0376,
+          "recall": 0.5,
+          "safety": 0.5,
+          "estimated_skip_risk": 0.0021,
+          "observed_miss_rate": 0.0159
+        },
+        "target_held": true,
+        "vs_rules_same_time": {
+          "time": {
+            "estimate": 0.0,
+            "ci": [
+              -0.0006,
+              0.0009
+            ]
+          },
+          "recall": {
+            "estimate": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "safety": {
+            "estimate": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          }
+        }
+      },
+      "calibrated": {
+        "runs": 5,
+        "pr_auc": 0.0015539373396592745,
+        "positive_rate": 0.0011580775911986102,
+        "brier": 0.001176816294230952,
+        "ece": 0.0017,
+        "b10": {
+          "time": 0.0727,
+          "recall": 0.5,
+          "safety": 0.5,
+          "estimated_skip_risk": 0.0468,
+          "observed_miss_rate": 0.0159
+        },
+        "target_held": true,
+        "vs_rules_same_time": {
+          "time": {
+            "estimate": 0.001,
+            "ci": [
+              -0.0225,
+              0.0319
+            ]
+          },
+          "recall": {
+            "estimate": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "safety": {
+            "estimate": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          }
+        }
+      },
+      "apfdc_ml_raw": 0.494,
+      "apfdc_rules": 0.5198,
+      "source_train_rows": [
+        8218
+      ]
+    },
+    "hikaricp -> wicket-bootstrap": {
+      "source": "hikaricp",
+      "target": "wicket-bootstrap",
+      "runs": 5,
+      "expected_runs": 5,
+      "warnings": [],
+      "evaluation": "cross_project",
+      "raw": {
+        "runs": 5,
+        "pr_auc": 0.21887871800875133,
+        "positive_rate": 0.3034923757993114,
+        "brier": 0.3033363886515194,
+        "ece": 0.30315339399901625,
+        "b10": {
+          "time": 0.0413,
+          "recall": 0.0134,
+          "safety": 0.0115,
+          "estimated_skip_risk": 0.0072,
+          "observed_miss_rate": 0.5244
+        },
+        "target_held": false,
+        "vs_rules_same_time": {
+          "time": {
+            "estimate": 0.0,
+            "ci": [
+              -0.0247,
+              0.0266
+            ]
+          },
+          "recall": {
+            "estimate": -0.233,
+            "ci": [
+              -0.2528,
+              -0.2046
+            ]
+          },
+          "safety": {
+            "estimate": 0.0115,
+            "ci": [
+              0.0,
+              0.0357
+            ]
+          }
+        }
+      },
+      "calibrated": {
+        "runs": 5,
+        "pr_auc": 0.30559237202030787,
+        "positive_rate": 0.3034923757993114,
+        "brier": 0.29569481950794363,
+        "ece": 0.2905,
+        "b10": {
+          "time": 0.7251,
+          "recall": 0.9996,
+          "safety": 0.9885,
+          "estimated_skip_risk": 0.0389,
+          "observed_miss_rate": 0.0061
+        },
+        "target_held": true,
+        "vs_rules_same_time": {
+          "time": {
+            "estimate": 0.0,
+            "ci": [
+              -0.0062,
+              0.0054
+            ]
+          },
+          "recall": {
+            "estimate": 0.0036,
+            "ci": [
+              0.0016,
+              0.0061
+            ]
+          },
+          "safety": {
+            "estimate": 0.1034,
+            "ci": [
+              0.0449,
+              0.1711
+            ]
+          }
+        }
+      },
+      "apfdc_ml_raw": 0.2375,
+      "apfdc_rules": 0.8242,
+      "source_train_rows": [
+        6396
+      ]
+    },
+    "littleproxy -> hikaricp": {
+      "source": "littleproxy",
+      "target": "hikaricp",
+      "runs": 5,
+      "expected_runs": 5,
+      "warnings": [],
+      "evaluation": "cross_project",
+      "raw": {
+        "runs": 5,
+        "pr_auc": 0.031632613014335495,
+        "positive_rate": 0.020146520146520148,
+        "brier": 0.020078699733802337,
+        "ece": 0.01997793872793873,
+        "b10": {
+          "time": 0.0557,
+          "recall": 0.1653,
+          "safety": 0.2,
+          "estimated_skip_risk": 0.0024,
+          "observed_miss_rate": 0.0559
+        },
+        "target_held": false,
+        "vs_rules_same_time": {
+          "time": {
+            "estimate": 0.0002,
+            "ci": [
+              -0.0164,
+              0.0183
+            ]
+          },
+          "recall": {
+            "estimate": -0.3471,
+            "ci": [
+              -0.5041,
+              -0.0575
+            ]
+          },
+          "safety": {
+            "estimate": -0.2,
+            "ci": [
+              -0.4,
+              -0.0417
+            ]
+          }
+        }
+      },
+      "calibrated": {
+        "runs": 5,
+        "pr_auc": 0.02245037035175893,
+        "positive_rate": 0.020146520146520148,
+        "brier": 0.021288644198371967,
+        "ece": 0.017806560106560107,
+        "b10": {
+          "time": 0.7879,
+          "recall": 0.6446,
+          "safety": 0.65,
+          "estimated_skip_risk": 0.0146,
+          "observed_miss_rate": 0.0245
+        },
+        "target_held": true,
+        "vs_rules_same_time": {
+          "time": {
+            "estimate": 0.0315,
+            "ci": [
+              -0.0104,
+              0.0723
+            ]
+          },
+          "recall": {
+            "estimate": -0.3223,
+            "ci": [
+              -0.6477,
+              -0.0417
+            ]
+          },
+          "safety": {
+            "estimate": -0.15,
+            "ci": [
+              -0.3684,
+              0.0556
+            ]
+          }
+        }
+      },
+      "apfdc_ml_raw": 0.5219,
+      "apfdc_rules": 0.7528,
+      "source_train_rows": [
+        832
+      ]
+    },
+    "littleproxy -> littleproxy": {
+      "source": "littleproxy",
+      "target": "littleproxy",
+      "runs": 5,
+      "expected_runs": 5,
+      "warnings": [],
+      "evaluation": "within_project",
+      "raw": {
+        "runs": 5,
+        "pr_auc": 0.004461341147225478,
+        "positive_rate": 0.002587991718426501,
+        "brier": 0.05534608842413604,
+        "ece": 0.0754656314699793,
+        "b10": {
+          "time": 0.8184,
+          "recall": 0.8,
+          "safety": 0.8,
+          "estimated_skip_risk": 0.0121,
+          "observed_miss_rate": 0.0189
+        },
+        "target_held": true,
+        "vs_rules_same_time": {
+          "time": {
+            "estimate": -0.0016,
+            "ci": [
+              -0.1037,
+              0.0879
+            ]
+          },
+          "recall": {
+            "estimate": -0.2,
+            "ci": [
+              -0.6667,
+              0.0
+            ]
+          },
+          "safety": {
+            "estimate": -0.2,
+            "ci": [
+              -0.6667,
+              0.0
+            ]
+          }
+        }
+      },
+      "calibrated": {
+        "runs": 5,
+        "pr_auc": 0.0034255603541243646,
+        "positive_rate": 0.002587991718426501,
+        "brier": 0.00563294069637891,
+        "ece": 0.03823022774327122,
+        "b10": {
+          "time": 1.0,
+          "recall": 1.0,
+          "safety": 1.0,
+          "estimated_skip_risk": 0.0,
+          "observed_miss_rate": 0.0
+        },
+        "target_held": true,
+        "vs_rules_same_time": {
+          "time": {
+            "estimate": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "recall": {
+            "estimate": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "safety": {
+            "estimate": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          }
+        }
+      },
+      "apfdc_ml_raw": 0.4584,
+      "apfdc_rules": 0.5337,
+      "source_train_rows": [
+        1493
+      ]
+    },
+    "littleproxy -> jade4j": {
+      "source": "littleproxy",
+      "target": "jade4j",
+      "runs": 5,
+      "expected_runs": 5,
+      "warnings": [],
+      "evaluation": "cross_project",
+      "raw": {
+        "runs": 5,
+        "pr_auc": 0.0022262697367611407,
+        "positive_rate": 0.0011580775911986102,
+        "brier": 0.001158104342805741,
+        "ece": 0.0012,
+        "b10": {
+          "time": 0.037,
+          "recall": 0.5,
+          "safety": 0.5,
+          "estimated_skip_risk": 0.0009,
+          "observed_miss_rate": 0.0159
+        },
+        "target_held": true,
+        "vs_rules_same_time": {
+          "time": {
+            "estimate": -0.0003,
+            "ci": [
+              -0.0004,
+              -0.0001
+            ]
+          },
+          "recall": {
+            "estimate": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "safety": {
+            "estimate": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          }
+        }
+      },
+      "calibrated": {
+        "runs": 5,
+        "pr_auc": 0.0016497026071624742,
+        "positive_rate": 0.0011580775911986102,
+        "brier": 0.011414161676777336,
+        "ece": 0.06681899247249566,
+        "b10": {
+          "time": 0.9722,
+          "recall": 1.0,
+          "safety": 1.0,
+          "estimated_skip_risk": 0.0003,
+          "observed_miss_rate": 0.0
+        },
+        "target_held": true,
+        "vs_rules_same_time": {
+          "time": {
+            "estimate": -0.0278,
+            "ci": [
+              -0.0593,
+              -0.005
+            ]
+          },
+          "recall": {
+            "estimate": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "safety": {
+            "estimate": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          }
+        }
+      },
+      "apfdc_ml_raw": 0.4824,
+      "apfdc_rules": 0.5198,
+      "source_train_rows": [
+        1069
+      ]
+    },
+    "littleproxy -> wicket-bootstrap": {
+      "source": "littleproxy",
+      "target": "wicket-bootstrap",
+      "runs": 5,
+      "expected_runs": 5,
+      "warnings": [],
+      "evaluation": "cross_project",
+      "raw": {
+        "runs": 5,
+        "pr_auc": 0.6017921496733897,
+        "positive_rate": 0.3034923757993114,
+        "brier": 0.30343691393671746,
+        "ece": 0.30347006886374817,
+        "b10": {
+          "time": 0.0061,
+          "recall": 0.0134,
+          "safety": 0.0115,
+          "estimated_skip_risk": 0.0009,
+          "observed_miss_rate": 0.5244
+        },
+        "target_held": false,
+        "vs_rules_same_time": {
+          "time": {
+            "estimate": 0.0,
+            "ci": [
+              -0.0037,
+              0.0104
+            ]
+          },
+          "recall": {
+            "estimate": 0.0085,
+            "ci": [
+              -0.0057,
+              0.0372
+            ]
+          },
+          "safety": {
+            "estimate": 0.0115,
+            "ci": [
+              0.0,
+              0.04
+            ]
+          }
+        }
+      },
+      "calibrated": {
+        "runs": 5,
+        "pr_auc": 0.5731630217193401,
+        "positive_rate": 0.3034923757993114,
+        "brier": 0.27162812814380155,
+        "ece": 0.2727294392523365,
+        "b10": {
+          "time": 0.7082,
+          "recall": 0.983,
+          "safety": 0.6897,
+          "estimated_skip_risk": 0.0348,
+          "observed_miss_rate": 0.1646
+        },
+        "target_held": false,
+        "vs_rules_same_time": {
+          "time": {
+            "estimate": 0.0002,
+            "ci": [
+              -0.0227,
+              0.0226
+            ]
+          },
+          "recall": {
+            "estimate": 0.0053,
+            "ci": [
+              -0.0031,
+              0.0126
+            ]
+          },
+          "safety": {
+            "estimate": 0.3218,
+            "ci": [
+              0.1852,
+              0.4598
+            ]
+          }
+        }
+      },
+      "apfdc_ml_raw": 0.6196,
+      "apfdc_rules": 0.8242,
+      "source_train_rows": [
+        832
+      ]
+    },
+    "jade4j -> hikaricp": {
+      "source": "jade4j",
+      "target": "hikaricp",
+      "runs": 5,
+      "expected_runs": 5,
+      "warnings": [
+        "Source calibration unavailable: calibration data needs both failing and passing examples"
+      ],
+      "evaluation": "cross_project",
+      "raw": {
+        "runs": 5,
+        "pr_auc": 0.04382612376916362,
+        "positive_rate": 0.020146520146520148,
+        "brier": 0.03281632871430506,
+        "ece": 0.035741808191808194,
+        "b10": {
+          "time": 0.097,
+          "recall": 0.7355,
+          "safety": 0.4,
+          "estimated_skip_risk": 0.024,
+          "observed_miss_rate": 0.042
+        },
+        "target_held": true,
+        "vs_rules_same_time": {
+          "time": {
+            "estimate": 0.0001,
+            "ci": [
+              -0.0159,
+              0.0178
+            ]
+          },
+          "recall": {
+            "estimate": 0.0661,
+            "ci": [
+              -0.0891,
+              0.1923
+            ]
+          },
+          "safety": {
+            "estimate": -0.05,
+            "ci": [
+              -0.2667,
+              0.1875
+            ]
+          }
+        }
+      },
+      "calibrated": {
+        "runs": 0,
+        "pr_auc": null,
+        "positive_rate": null,
+        "brier": null,
+        "ece": null,
+        "b10": {
+          "time": null,
+          "recall": null,
+          "safety": null,
+          "estimated_skip_risk": null,
+          "observed_miss_rate": null
+        },
+        "target_held": null
+      },
+      "apfdc_ml_raw": 0.6524,
+      "apfdc_rules": 0.7528,
+      "source_train_rows": [
+        2583
+      ]
+    },
+    "jade4j -> littleproxy": {
+      "source": "jade4j",
+      "target": "littleproxy",
+      "runs": 5,
+      "expected_runs": 5,
+      "warnings": [
+        "Source calibration unavailable: calibration data needs both failing and passing examples"
+      ],
+      "evaluation": "cross_project",
+      "raw": {
+        "runs": 5,
+        "pr_auc": 0.008778084582998323,
+        "positive_rate": 0.002587991718426501,
+        "brier": 0.0027403816073807295,
+        "ece": 0.002630900621118012,
+        "b10": {
+          "time": 0.0138,
+          "recall": 0.0,
+          "safety": 0.0,
+          "estimated_skip_risk": 0.0065,
+          "observed_miss_rate": 0.0943
+        },
+        "target_held": false,
+        "vs_rules_same_time": {
+          "time": {
+            "estimate": 0.0001,
+            "ci": [
+              -0.0067,
+              0.008
+            ]
+          },
+          "recall": {
+            "estimate": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "safety": {
+            "estimate": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          }
+        }
+      },
+      "calibrated": {
+        "runs": 0,
+        "pr_auc": null,
+        "positive_rate": null,
+        "brier": null,
+        "ece": null,
+        "b10": {
+          "time": null,
+          "recall": null,
+          "safety": null,
+          "estimated_skip_risk": null,
+          "observed_miss_rate": null
+        },
+        "target_held": null
+      },
+      "apfdc_ml_raw": 0.6946,
+      "apfdc_rules": 0.5337,
+      "source_train_rows": [
+        2727
+      ]
+    },
+    "jade4j -> jade4j": {
+      "source": "jade4j",
+      "target": "jade4j",
+      "runs": 5,
+      "expected_runs": 5,
+      "warnings": [],
+      "evaluation": "within_project",
+      "raw": {
+        "runs": 5,
+        "pr_auc": 0.01636658198019073,
+        "positive_rate": 0.0011580775911986102,
+        "brier": 0.0021749107868851594,
+        "ece": 0.002375796178343949,
+        "b10": {
+          "time": 0.0968,
+          "recall": 0.5,
+          "safety": 0.5,
+          "estimated_skip_risk": 0.0051,
+          "observed_miss_rate": 0.0159
+        },
+        "target_held": true,
+        "vs_rules_same_time": {
+          "time": {
+            "estimate": -0.0001,
+            "ci": [
+              -0.0439,
+              0.0519
+            ]
+          },
+          "recall": {
+            "estimate": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "safety": {
+            "estimate": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          }
+        }
+      },
+      "calibrated": {
+        "runs": 5,
+        "pr_auc": 0.0068582375478927204,
+        "positive_rate": 0.0011580775911986102,
+        "brier": 0.001374131667241945,
+        "ece": 0.002641169658367111,
+        "b10": {
+          "time": 0.2264,
+          "recall": 0.5,
+          "safety": 0.5,
+          "estimated_skip_risk": 0.033,
+          "observed_miss_rate": 0.0159
+        },
+        "target_held": true,
+        "vs_rules_same_time": {
+          "time": {
+            "estimate": 0.0,
+            "ci": [
+              -0.0832,
+              0.0862
+            ]
+          },
+          "recall": {
+            "estimate": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "safety": {
+            "estimate": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          }
+        }
+      },
+      "apfdc_ml_raw": 0.6469,
+      "apfdc_rules": 0.5198,
+      "source_train_rows": [
+        6918
+      ]
+    },
+    "jade4j -> wicket-bootstrap": {
+      "source": "jade4j",
+      "target": "wicket-bootstrap",
+      "runs": 5,
+      "expected_runs": 5,
+      "warnings": [
+        "Source calibration unavailable: calibration data needs both failing and passing examples"
+      ],
+      "evaluation": "cross_project",
+      "raw": {
+        "runs": 5,
+        "pr_auc": 0.47421468505904524,
+        "positive_rate": 0.3034923757993114,
+        "brier": 0.30003207874184107,
+        "ece": 0.2991064436792917,
+        "b10": {
+          "time": 0.3542,
+          "recall": 0.5361,
+          "safety": 0.3103,
+          "estimated_skip_risk": 0.016,
+          "observed_miss_rate": 0.3659
+        },
+        "target_held": false,
+        "vs_rules_same_time": {
+          "time": {
+            "estimate": 0.0001,
+            "ci": [
+              -0.0557,
+              0.0514
+            ]
+          },
+          "recall": {
+            "estimate": -0.201,
+            "ci": [
+              -0.2941,
+              -0.1126
+            ]
+          },
+          "safety": {
+            "estimate": 0.2529,
+            "ci": [
+              0.1392,
+              0.3646
+            ]
+          }
+        }
+      },
+      "calibrated": {
+        "runs": 0,
+        "pr_auc": null,
+        "positive_rate": null,
+        "brier": null,
+        "ece": null,
+        "b10": {
+          "time": null,
+          "recall": null,
+          "safety": null,
+          "estimated_skip_risk": null,
+          "observed_miss_rate": null
+        },
+        "target_held": null
+      },
+      "apfdc_ml_raw": 0.612,
+      "apfdc_rules": 0.8242,
+      "source_train_rows": [
+        2583
+      ]
+    },
+    "wicket-bootstrap -> hikaricp": {
+      "source": "wicket-bootstrap",
+      "target": "hikaricp",
+      "runs": 5,
+      "expected_runs": 5,
+      "warnings": [],
+      "evaluation": "cross_project",
+      "raw": {
+        "runs": 5,
+        "pr_auc": 0.03425842277620096,
+        "positive_rate": 0.020146520146520148,
+        "brier": 0.04751925366341043,
+        "ece": 0.062434465534465536,
+        "b10": {
+          "time": 0.81552,
+          "recall": 0.94216,
+          "safety": 0.84,
+          "estimated_skip_risk": 0.01594,
+          "observed_miss_rate": 0.0112
+        },
+        "target_held": true,
+        "vs_rules_same_time": {
+          "time": {
+            "estimate": 0.0204,
+            "ci": [
+              -0.1117,
+              0.1298
+            ]
+          },
+          "recall": {
+            "estimate": -0.0182,
+            "ci": [
+              -0.1279,
+              0.0421
+            ]
+          },
+          "safety": {
+            "estimate": 0.08,
+            "ci": [
+              -0.25,
+              0.3333
+            ]
+          }
+        }
+      },
+      "calibrated": {
+        "runs": 5,
+        "pr_auc": 0.02874884951181775,
+        "positive_rate": 0.020146520146520148,
+        "brier": 0.16392666972613218,
+        "ece": 0.3270360972360972,
+        "b10": {
+          "time": 0.9784200000000001,
+          "recall": 0.9917400000000001,
+          "safety": 0.96,
+          "estimated_skip_risk": 0.00022,
+          "observed_miss_rate": 0.0028
+        },
+        "target_held": true,
+        "vs_rules_same_time": {
+          "time": {
+            "estimate": -0.0216,
+            "ci": [
+              -0.0897,
+              0.0
+            ]
+          },
+          "recall": {
+            "estimate": -0.0083,
+            "ci": [
+              -0.0429,
+              0.0
+            ]
+          },
+          "safety": {
+            "estimate": -0.04,
+            "ci": [
+              -0.2,
+              0.0
+            ]
+          }
+        }
+      },
+      "apfdc_ml_raw": 0.50388,
+      "apfdc_rules": 0.7528,
+      "source_train_rows": [
+        14439
+      ]
+    },
+    "wicket-bootstrap -> littleproxy": {
+      "source": "wicket-bootstrap",
+      "target": "littleproxy",
+      "runs": 5,
+      "expected_runs": 5,
+      "warnings": [],
+      "evaluation": "cross_project",
+      "raw": {
+        "runs": 5,
+        "pr_auc": 0.03901589722298161,
+        "positive_rate": 0.002587991718426501,
+        "brier": 0.007545860553803052,
+        "ece": 0.01794289855072464,
+        "b10": {
+          "time": 0.53238,
+          "recall": 0.72,
+          "safety": 0.72,
+          "estimated_skip_risk": 0.03118,
+          "observed_miss_rate": 0.02642
+        },
+        "target_held": true,
+        "vs_rules_same_time": {
+          "time": {
+            "estimate": 0.0009,
+            "ci": [
+              -0.0717,
+              0.0703
+            ]
+          },
+          "recall": {
+            "estimate": 0.12,
+            "ci": [
+              -0.5,
+              1.0
+            ]
+          },
+          "safety": {
+            "estimate": 0.12,
+            "ci": [
+              -0.5,
+              1.0
+            ]
+          }
+        }
+      },
+      "calibrated": {
+        "runs": 5,
+        "pr_auc": 0.018030498931757545,
+        "positive_rate": 0.002587991718426501,
+        "brier": 0.1829802699129842,
+        "ece": 0.374018033126294,
+        "b10": {
+          "time": 0.99442,
+          "recall": 1.0,
+          "safety": 1.0,
+          "estimated_skip_risk": 0.00044,
+          "observed_miss_rate": 0.0
+        },
+        "target_held": true,
+        "vs_rules_same_time": {
+          "time": {
+            "estimate": -0.0056,
+            "ci": [
+              -0.0241,
+              0.0
+            ]
+          },
+          "recall": {
+            "estimate": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "safety": {
+            "estimate": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          }
+        }
+      },
+      "apfdc_ml_raw": 0.71892,
+      "apfdc_rules": 0.5337,
+      "source_train_rows": [
+        16698
+      ]
+    },
+    "wicket-bootstrap -> jade4j": {
+      "source": "wicket-bootstrap",
+      "target": "jade4j",
+      "runs": 5,
+      "expected_runs": 5,
+      "warnings": [],
+      "evaluation": "cross_project",
+      "raw": {
+        "runs": 5,
+        "pr_auc": 0.01311390073320048,
+        "positive_rate": 0.0011580775911986102,
+        "brier": 0.017312477807152397,
+        "ece": 0.03786127388535032,
+        "b10": {
+          "time": 0.7977,
+          "recall": 0.9,
+          "safety": 0.9,
+          "estimated_skip_risk": 0.02434,
+          "observed_miss_rate": 0.00318
+        },
+        "target_held": true,
+        "vs_rules_same_time": {
+          "time": {
+            "estimate": 0.0013,
+            "ci": [
+              -0.0598,
+              0.0539
+            ]
+          },
+          "recall": {
+            "estimate": -0.1,
+            "ci": [
+              -1.0,
+              0.0
+            ]
+          },
+          "safety": {
+            "estimate": -0.1,
+            "ci": [
+              -1.0,
+              0.0
+            ]
+          }
+        }
+      },
+      "calibrated": {
+        "runs": 5,
+        "pr_auc": 0.005336589796600683,
+        "positive_rate": 0.0011580775911986102,
+        "brier": 0.128458431326545,
+        "ece": 0.2542926577880718,
+        "b10": {
+          "time": 0.99964,
+          "recall": 1.0,
+          "safety": 1.0,
+          "estimated_skip_risk": 0.0,
+          "observed_miss_rate": 0.0
+        },
+        "target_held": true,
+        "vs_rules_same_time": {
+          "time": {
+            "estimate": -0.0004,
+            "ci": [
+              -0.0035,
+              0.0
+            ]
+          },
+          "recall": {
+            "estimate": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "safety": {
+            "estimate": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ]
+          }
+        }
+      },
+      "apfdc_ml_raw": 0.60942,
+      "apfdc_rules": 0.5198,
+      "source_train_rows": [
+        17337
+      ]
+    },
+    "wicket-bootstrap -> wicket-bootstrap": {
+      "source": "wicket-bootstrap",
+      "target": "wicket-bootstrap",
+      "runs": 5,
+      "expected_runs": 5,
+      "warnings": [],
+      "evaluation": "within_project",
+      "raw": {
+        "runs": 5,
+        "pr_auc": 0.6352046982548365,
+        "positive_rate": 0.3034923757993114,
+        "brier": 0.18333866969425078,
+        "ece": 0.16593676094441712,
+        "b10": {
+          "time": 0.51606,
+          "recall": 0.94816,
+          "safety": 0.823,
+          "estimated_skip_risk": 0.01882,
+          "observed_miss_rate": 0.09394
+        },
+        "target_held": false,
+        "vs_rules_same_time": {
+          "time": {
+            "estimate": 0.0,
+            "ci": [
+              -0.0307,
+              0.0309
+            ]
+          },
+          "recall": {
+            "estimate": 0.0929,
+            "ci": [
+              -0.002,
+              0.1389
+            ]
+          },
+          "safety": {
+            "estimate": 0.7655,
+            "ci": [
+              0.6517,
+              0.875
+            ]
+          }
+        }
+      },
+      "calibrated": {
+        "runs": 5,
+        "pr_auc": 0.5500469055626029,
+        "positive_rate": 0.3034923757993114,
+        "brier": 0.16536275829415012,
+        "ece": 0.09899668716182981,
+        "b10": {
+          "time": 0.75132,
+          "recall": 0.9971,
+          "safety": 0.9862,
+          "estimated_skip_risk": 0.01492,
+          "observed_miss_rate": 0.00732
+        },
+        "target_held": true,
+        "vs_rules_same_time": {
+          "time": {
+            "estimate": 0.0046,
+            "ci": [
+              -0.0297,
+              0.0417
+            ]
+          },
+          "recall": {
+            "estimate": 0.0096,
+            "ci": [
+              -0.0009,
+              0.0331
+            ]
+          },
+          "safety": {
+            "estimate": 0.3402,
+            "ci": [
+              -0.0241,
+              0.9545
+            ]
+          }
+        }
+      },
+      "apfdc_ml_raw": 0.73208,
+      "apfdc_rules": 0.8242,
+      "source_train_rows": [
+        19214
+      ]
+    }
+  },
+  "targets": {
+    "hikaricp": {
+      "test_commits": 286,
+      "failing_test_commits": 20,
+      "skip_all_miss_rate": 0.06993006993006994,
+      "failure_row_rate": 0.020146520146520148
+    },
+    "littleproxy": {
+      "test_commits": 53,
+      "failing_test_commits": 5,
+      "skip_all_miss_rate": 0.09433962264150944,
+      "failure_row_rate": 0.002587991718426501
+    },
+    "jade4j": {
+      "test_commits": 63,
+      "failing_test_commits": 2,
+      "skip_all_miss_rate": 0.031746031746031744,
+      "failure_row_rate": 0.0011580775911986102
+    },
+    "wicket-bootstrap": {
+      "test_commits": 164,
+      "failing_test_commits": 87,
+      "skip_all_miss_rate": 0.5304878048780488,
+      "failure_row_rate": 0.3034923757993114
+    }
+  },
+  "transfer_by_target": {
+    "hikaricp": {
+      "source_pairs": 2,
+      "expected_source_pairs": 3,
+      "time": 0.8831600000000001,
+      "recall": 0.8181700000000001,
+      "safety": 0.8049999999999999,
+      "estimated_skip_risk": 0.00741,
+      "observed_miss_rate": 0.01365
+    },
+    "littleproxy": {
+      "source_pairs": 2,
+      "expected_source_pairs": 3,
+      "time": 0.64351,
+      "recall": 0.5,
+      "safety": 0.5,
+      "estimated_skip_risk": 0.02222,
+      "observed_miss_rate": 0.04715
+    },
+    "jade4j": {
+      "source_pairs": 3,
+      "expected_source_pairs": 3,
+      "time": 0.6815133333333333,
+      "recall": 0.8333333333333334,
+      "safety": 0.8333333333333334,
+      "estimated_skip_risk": 0.015700000000000002,
+      "observed_miss_rate": 0.0053
+    },
+    "wicket-bootstrap": {
+      "source_pairs": 2,
+      "expected_source_pairs": 3,
+      "time": 0.71665,
+      "recall": 0.9913000000000001,
+      "safety": 0.8391,
+      "estimated_skip_risk": 0.036849999999999994,
+      "observed_miss_rate": 0.08535
+    }
+  },
+  "protocol": "Source-only train/calibration; latest 20% target test; historical target features allowed",
+  "limitations": [
+    "Four pre-selected projects only; no universal transfer claim",
+    "Git committer dates proxy time; CI completion dates are unavailable",
+    "Prior target-project history is available; this is not cold-start prediction",
+    "Fixed chronological target split; seeds vary models, not time periods",
+    "Bootstrap treats target commits as independent; serial correlation is ignored",
+    "Source-target directions share projects and are statistically dependent"
+  ],
+  "transfer_macro": {
+    "complete_calibrated_directions": 9,
+    "expected_directions": 12,
+    "within_target_directions": 7,
+    "contributing_targets": 4,
+    "time": 0.7312083333333333,
+    "recall": 0.7857008333333334,
+    "safety": 0.7443583333333333,
+    "estimated_skip_risk": 0.020545,
+    "observed_miss_rate": 0.0378625
+  }
+}

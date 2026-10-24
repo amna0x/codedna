@@ -54,7 +54,9 @@ Full brief: [CODEDNA_STARTER.md](CODEDNA_STARTER.md). Current plan:
 
 ## Before claiming completion
 
-- Run the test suite: `python -m pytest`.
+- Run the full local test suite with Maven included: `python -m pytest --run-maven`.
+  The owner requests that the Maven integration test not be silently skipped.
+  Install/check its prerequisites or report it as unverified if it cannot run.
 - Report the actual commands and results. **Never fabricate test results,
   accuracy, runtime, or research numbers.**
 - Update documentation after architectural changes (`docs/ARCHITECTURE.md`,
@@ -82,3 +84,28 @@ Full brief: [CODEDNA_STARTER.md](CODEDNA_STARTER.md). Current plan:
 New top-level directories (`experiments/`, `ide/`, `website/`) and new
 packages under `backend/codedna/` (e.g. `plugins/`) are created only when
 their first real implementation lands.
+
+
+## Local Graphify for project navigation
+
+The owner selected the local `graphifyy` package and its `graphify` Codex skill
+for use throughout CodeDNA. Consult this local graph for codebase questions.
+
+- Skill: `C:/Users/hp/.codex/skills/graphify/SKILL.md`.
+- CLI: `C:/Users/hp/.codex/tools/graphify/Scripts/graphify.exe`.
+- Python: `C:/Users/hp/.codex/tools/graphify/Scripts/python.exe`.
+- Run commands from this checkout, `C:/Users/hp/OneDrive/Documents/GitHub/codedna`.
+- Before source searches for architecture, symbols, or relationships, query
+  `graphify-out/graph.json` with `graphify query "<question>"`; use `path` and
+  `explain` for specific relationships. Invoke the full CLI path in PowerShell
+  with `&` when `graphify` is not on PATH.
+- Check graph freshness and confirm relevant source before editing. If the
+  graph is missing or cannot answer, rebuild it or use targeted source reads;
+  report gaps rather than treating inferred edges as confirmed dependencies.
+- After code changes, refresh the local graph with `graphify update .`.
+  Keep AST extraction local; semantic processing of documents is a separate
+  step. The initial setup excludes generated `experiments/results/**` files.
+- Use this local installation for project navigation. The connected Graphify
+  Cloud tools require a separate workspace and are not needed for this setup.
+- Keep Graphify isolated from CodeDNA's application dependencies. Continue to
+  read `MEMORY.md` for handoff context and preserve its commit/push rules.

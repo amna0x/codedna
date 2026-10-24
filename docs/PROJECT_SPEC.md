@@ -210,3 +210,22 @@ parameter names as the CLI options (`repo`, `base`, `head`, `rev`,
   repositories, runnable offline.
 - Runs on an ordinary student laptop (Windows, macOS, Linux).
 - Analysis never executes code from the analysed repository.
+
+
+## Target risk and selection execution (D-041)
+
+`codedna risk-select --repo PATH --base BASE --head HEAD [--history-csv FILE]
+[--risk-target F]` returns the shared selection JSON plus `risk`: status
+`unvalidated` or `validated_history`, target, optional estimated/proposed skip
+risk, audit evidence/reasons and fitted-history provenance. Missing evidence
+means all discovered tests; no probability is invented. Java's live 15-feature
+model has its own 50/25/25 audit, separately from retrospective study models.
+
+Authenticated `/api/risk-select` accepts `repo`, `base`, `head`, optional
+`history_csv` and `risk_target` strictly between 0 and 1. `/api/run-selection`
+adds strategy (`all`, `dependency`, `risk`), `allow_build` and timeout. Server
+build permission and explicit request consent are both required. It recomputes
+selection at immutable SHAs and returns `{selection, results, output_dir}`.
+`run-tests --tests CLASS ... --allow-build` supports explicit discovered class
+filters; empty `--tests` executes nothing. See JAVA_WORKFLOW.md for assumptions,
+complete-audit requirements, execution isolation and remaining original scope.

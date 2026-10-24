@@ -1,15 +1,17 @@
 import * as React from '@theia/core/shared/react';
 import { inject, injectable, postConstruct } from '@theia/core/shared/inversify';
+import { ConfirmDialog } from '@theia/core/lib/browser/dialogs';
 import { ReactWidget } from '@theia/core/lib/browser/widgets/react-widget';
-import { CodeDnaService, SelectionReport, SelectionStrategy } from '../common/codedna-protocol';
+import { CodeDnaService, SelectionReport, SelectionStrategy, SelectionRun } from '../common/codedna-protocol';
 import { CodeDnaComparison } from './comparison';
 import { CodeDnaWorkspace } from './codedna-workspace';
 import { breakable, friendlyReason, friendlyWarning, packageName, plural, simpleName } from './plain-language';
 import { Chip, ComparePicker, ErrorNotice, FirstRun, Spinner } from './ui';
 
 const STRATEGIES: { value: SelectionStrategy; label: string }[] = [
+    { value: 'risk', label: 'Validated risk stopping' },
     { value: 'dependency', label: 'Affected tests only' },
-    { value: 'all', label: 'All tests (safest)' }
+    { value: 'all', label: 'All discovered tests' }
 ];
 
 /**
@@ -27,10 +29,14 @@ export class TestsViewWidget extends ReactWidget {
     @inject(CodeDnaWorkspace) protected readonly workspace: CodeDnaWorkspace;
     @inject(CodeDnaComparison) protected readonly comparison: CodeDnaComparison;
 
-    protected strategy: SelectionStrategy = 'dependency';
+    protected strategy: SelectionStrategy = 'risk';
     protected loading = false;
     protected error: string | undefined;
     protected report: SelectionReport | undefined;
+    protected execution: SelectionRun | undefined;
+    protected historyCsv = '';
+    protected reportHistory = '';
+    protected reportStrategy: SelectionStrategy = 'risk';
 
     @postConstruct()
     protected init(): void {
@@ -40,7 +46,7 @@ export class TestsViewWidget extends ReactWidget {
         this.title.iconClass = 'codicon codicon-beaker';
         this.title.closable = true;
         this.addClass('codedna-view');
-        this.toDispose.push(this.comparison.onDidChange(() => this.update()));
+        this.toDispose.push(this.comparison.onDidChange(() => { this.report = undefined; this.execution = undefined; this.update(); }));
         this.update();
     }
 
@@ -52,10 +58,45 @@ export class TestsViewWidget extends ReactWidget {
             return;
         }
         this.loading = true;
+        this.report = undefined;
+        this.execution = undefined;
         this.error = undefined;
         this.update();
         try {
-            this.report = await this.codedna.select(repo, this.comparison.base, this.comparison.head, this.strategy);
+            const base = this.comparison.base, head = this.comparison.head;
+            const result = await this.codedna.select(repo, base, head, this.strategy, this.historyCsv);
+            if (base !== this.comparison.base || head !== this.comparison.head) {
+                this.error = 'The comparison changed. Suggest tests again.';
+                return;
+            }
+            this.report = result;
+            this.reportHistory = this.historyCsv;
+            this.reportStrategy = this.strategy;
+        } catch (error) {
+            this.error = error instanceof Error ? error.message : String(error);
+        } finally {
+            this.loading = false;
+            this.update();
+        }
+    }
+
+    protected async runSelected(): Promise<void> {
+        const report = this.report;
+        if (!report || this.loading) { return; }
+        const confirmed = await new ConfirmDialog({
+            title: 'Run project tests?',
+            msg: 'This executes this project’s code and Maven plugins. Maven may download dependencies. Run only projects you trust.',
+            ok: 'Run tests', cancel: 'Cancel'
+        }).open();
+        if (!confirmed || this.report !== report) { return; }
+        this.loading = true;
+        this.error = undefined;
+        this.execution = undefined;
+        this.update();
+        try {
+            this.execution = await this.codedna.runSelection(report.repository,
+                report.base_commit, report.head_commit, this.reportStrategy, this.reportHistory);
+            this.report = this.execution.selection;
         } catch (error) {
             this.error = error instanceof Error ? error.message : String(error);
         } finally {
@@ -75,11 +116,17 @@ export class TestsViewWidget extends ReactWidget {
                 <label className='cd-field'>
                     <span className='cd-field-label'>Which tests</span>
                     <select value={this.strategy} disabled={this.loading}
-                        onChange={e => { this.strategy = e.target.value as SelectionStrategy; this.update(); }}>
+                        onChange={e => { this.strategy = e.target.value as SelectionStrategy; this.report = undefined; this.execution = undefined; this.update(); }}>
                         {STRATEGIES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
                     </select>
                 </label>
-                <button className='cd-button' type='submit' disabled={this.loading} aria-busy={this.loading}>
+                {this.strategy === 'risk' && <label className='cd-field'>
+                    <span className='cd-field-label'>Test history file (optional)</span>
+                    <input value={this.historyCsv} disabled={this.loading}
+                        placeholder='Use this project’s saved history'
+                        onChange={e => { this.historyCsv = e.target.value; this.report = undefined; this.execution = undefined; this.update(); }} />
+                </label>}
+                <button className='cd-button' type='submit'  disabled={this.loading} aria-busy={this.loading}>
                     {this.loading ? <><Spinner /> Finding tests…</> : 'Suggest tests'}
                 </button>
             </form>
@@ -90,14 +137,44 @@ export class TestsViewWidget extends ReactWidget {
 
     protected renderReport(report: SelectionReport): React.ReactNode {
         const time = report.estimated_time;
+        const risk = report.risk;
         const notes = report.warnings.map(friendlyWarning).filter((w): w is string => !!w);
         const everything = report.selected.length === report.total_tests && report.total_tests > 0;
         return <div className='cd-results'>
+            <section className='cd-notice' aria-label='Risk evidence'>
+                <h3>{risk?.status === 'validated_history' ? 'Validated on earlier project history' : 'Risk unvalidated'}</h3>
+                {risk?.status === 'validated_history'
+                    ? <p>Estimated chance of at least one skipped test failing: {((risk.estimated_skip_risk ?? 0) * 100).toFixed(2)}%.
+                        Target: {(risk.target * 100).toFixed(0)}%. This is an estimate, not a guarantee.</p>
+                    : <p>{risk ? 'Run the full suite because the evidence does not justify risk-based skipping.'
+                        : 'This structural selection has no validated probability of missing failures.'}</p>}
+                {risk?.validation && <p>Prior audit: {risk.validation.commits} commits,
+                    {' '}{risk.validation.failing_commits} with failures. Historical miss-rate upper bound:
+                    {' '}{(risk.validation.miss_upper_bound * 100).toFixed(2)}%.</p>}
+                {!!risk?.reasons.length && <ul>{risk.reasons.map(reason => <li key={reason}>{reason}</li>)}</ul>}
+            </section>
+            <button className='cd-button' disabled={this.loading || !report.total_tests}
+                onClick={() => this.runSelected()}>
+                {this.loading ? 'Running…' : `Run ${report.selected.length} recommended test classes`}
+            </button>
+            {this.execution && <section aria-label='Test execution results'>
+                <h3>{this.execution.results.exit_codes.some(code => code !== 0)
+                    ? 'Build did not complete successfully'
+                    : this.execution.results.tests.length === 0 ? 'No test results recorded'
+                    : `${this.execution.results.failing_tests.length} failing test classes`}</h3>
+                <p>Finished in {this.execution.results.duration_seconds.toFixed(1)} seconds.</p>
+                <div className='cd-card'>{this.execution.results.tests.map(test => <div className='cd-row cd-static' key={test.id}>
+                    <span className='cd-code'>{simpleName(test.id)}</span><span>{test.status}</span>
+                </div>)}</div>
+                {this.execution.results.warnings.map(warning => <p key={warning}>{warning}</p>)}
+                <p className='cd-footnote'>Logs and reports: {this.execution.output_dir}</p>
+            </section>}
+            <p className='cd-meta'>Compared commits: {report.base_commit.slice(0, 8)} → {report.head_commit.slice(0, 8)}</p>
             <p className='cd-lede'>
                 {report.total_tests === 0
                     ? 'No JUnit tests were found in this project.'
                     : report.selected.length === 0
-                        ? 'No tests are affected by this change.'
+                        ? 'No tests are recommended by the current selection policy.'
                         : <>Run {report.selected.length} of {plural(report.total_tests, 'test class', 'test classes')}.
                             {everything ? ' That’s all of them.' : ` You can skip ${report.skipped.length}.`}</>}
             </p>
@@ -127,20 +204,20 @@ export class TestsViewWidget extends ReactWidget {
                     </button>)}
                 </div>
             </section>}
-            {report.skipped.length > 0 && <section aria-label='Safe to skip'>
-                <h3>Safe to skip</h3>
+            {report.skipped.length > 0 && <section aria-label='Not selected'>
+                <h3>Not selected</h3>
                 <div className='cd-card'>
                     {report.skipped.map(test => <div className='cd-row cd-static' key={test}>
                         <span className='cd-code'>{simpleName(test)}</span>
                         <span className='cd-row-meta'>
                             <Chip tone='muted'>Skip</Chip>
-                            <span className='cd-meta'>Doesn’t use anything that changed.</span>
+                            <span className='cd-meta'>No failure-free guarantee. Review the selection evidence.</span>
                         </span>
                     </div>)}
                 </div>
             </section>}
             <p className='cd-footnote'>
-                Failure risk for each test appears once CodeDNA has learned from this project’s test history.
+                Risk-based skipping requires a separate prior audit. Refresh evidence with full-suite runs; selected-only results cannot reveal missed failures.
             </p>
         </div>;
     }

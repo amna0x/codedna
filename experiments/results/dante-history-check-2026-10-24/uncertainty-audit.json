@@ -1,0 +1,54 @@
+{
+  "analysis": "Post-hoc descriptive explanation, not a new confirmatory experiment",
+  "method": "Mean saved per-seed paired safety point estimate within each project",
+  "projects": [
+    {
+      "project": "hikaricp",
+      "test_commits": 286,
+      "failing_commits": 20,
+      "safety_difference": 0.0
+    },
+    {
+      "project": "littleproxy",
+      "test_commits": 53,
+      "failing_commits": 5,
+      "safety_difference": 0.0
+    },
+    {
+      "project": "jade4j",
+      "test_commits": 63,
+      "failing_commits": 2,
+      "safety_difference": 0.0
+    },
+    {
+      "project": "wicket-bootstrap",
+      "test_commits": 164,
+      "failing_commits": 87,
+      "safety_difference": 0.1839
+    }
+  ],
+  "source_sha256": {
+    "hikaricp/seed0.json": "697085c5867fbdf655a6c11002d2782d9588a8effd9adc53dc51c230bf495e96",
+    "hikaricp/seed1.json": "9d38f28bbde26c51837e47d234cc0f4dadd4a19ee674a74979c94d7bcf7a21e5",
+    "hikaricp/seed2.json": "c0417678f33b6584c06867852e767d5fa4703477bbe11bd0d4ddc81b81273f31",
+    "hikaricp/seed3.json": "266bbda491a2881721847352969ee32f76669f8b84f636243def7acdef8feab5",
+    "hikaricp/seed4.json": "be41afe061335dab130785561f6b3b1439b1a776e4951f323eab02da2dcd17fe",
+    "littleproxy/seed0.json": "a60a2cc14a65fb237b3d04ae586d159ad809fe1bf4cf52f3e27d02fe65be7ed5",
+    "littleproxy/seed1.json": "ed2c3cb90539216897e439efad3d05d1ee76499e57eb14bf16626ad77b5cfa69",
+    "littleproxy/seed2.json": "ad5dd2d9df601e63c777d500ffac4bff222422400237ae457c26ec0af3bab4a3",
+    "littleproxy/seed3.json": "be3060696f6ea4c225be25a339d5932ef847c1657a70d59e914f349308a93aef",
+    "littleproxy/seed4.json": "5f7cde7df4d79c7743efe86a5e5c4a22c4281f414f6e1b076cc3baa83a406ef0",
+    "jade4j/seed0.json": "2be2973e576f9cff33f02c85805ca8d5a74ab7189a87e1fcfe26b3c3e754f722",
+    "jade4j/seed1.json": "1df6796c82cf718a37f7d58c847615e7fb356ca3c9c0f9d065e9b9c3c8dde026",
+    "jade4j/seed2.json": "e319893d241bd176ee9a7b6f38076517ad243b319226a047454668afc759e866",
+    "jade4j/seed3.json": "31a8f420e2389aaa58c053c2952a7d239725532fd3fd721f82966ff14d16fe93",
+    "jade4j/seed4.json": "aa1172bcd3df89ad58cd7b1ac49af6a852f19835f45960c0d2351554bf981bbc",
+    "wicket-bootstrap/seed0.json": "44ebae73771172e5a1288a887e22d059fac40790c59134e915e7ab0ceafa3976",
+    "wicket-bootstrap/seed1.json": "d0b703c5cc6247f15f1badc50f01f576849545557f53ae9be54d8b66f5460cae",
+    "wicket-bootstrap/seed2.json": "433088d907e2c8d6d4ff53dbf0163250018b21a2676b703b850b6ec8ebc4d01e",
+    "wicket-bootstrap/seed3.json": "407b7ec8c01cb56a1bd838066b95cca81a7eddf64a63712de65199b1f88980b3",
+    "wicket-bootstrap/seed4.json": "0fece8b3e47e699131ca0a076bf7ba44606f3f38d3b099b40e95b7c5a4a3101e"
+  },
+  "conclusion": "The observed matched-cost gain is concentrated in one project; no consistent general advantage is established.",
+  "next_evidence": "Pre-specify independent project/time-window evaluation; do not tune or stop collecting when significance appears."
+}
