@@ -1,10 +1,12 @@
 import * as React from '@theia/core/shared/react';
 import { inject, injectable, postConstruct } from '@theia/core/shared/inversify';
+import { ProgressService } from '@theia/core/lib/common/progress-service';
 import { ReactWidget } from '@theia/core/lib/browser/widgets/react-widget';
 import cytoscape from 'cytoscape';
 import { CodeDnaService, ExplanationGraph } from '../common/codedna-protocol';
 import { CodeDnaComparison } from './comparison';
 import { CodeDnaWorkspace } from './codedna-workspace';
+import { withProgress } from './progress';
 import { confidenceLabel, friendlyWarning, readableName } from './plain-language';
 import { Chip, ComparePicker, ErrorNotice, FirstRun, Spinner } from './ui';
 
@@ -31,6 +33,7 @@ export class GraphViewWidget extends ReactWidget {
     @inject(CodeDnaService) protected readonly codedna: CodeDnaService;
     @inject(CodeDnaWorkspace) protected readonly workspace: CodeDnaWorkspace;
     @inject(CodeDnaComparison) protected readonly comparison: CodeDnaComparison;
+    @inject(ProgressService) protected readonly progress: ProgressService;
 
     protected loading = false;
     protected error: string | undefined;
@@ -74,7 +77,7 @@ export class GraphViewWidget extends ReactWidget {
         this.update();
         try {
             const { base, head } = this.comparison;
-            const impact = await this.codedna.impact(repo, base, head);
+            const impact = await withProgress(this.progress, 'CodeDNA: building the impact graph', () => this.codedna.impact(repo, base, head));
             if (base !== this.comparison.base || head !== this.comparison.head) {
                 this.error = 'The comparison changed. Show the graph again.';
                 return;
