@@ -134,10 +134,10 @@ def run_maven_tests(repo_path: str | Path, revision: str, output_dir: str | Path
                 goals += ["-Dtest=" + ",".join(patterns), f"-Dsurefire.failIfNoSpecifiedTests={strict}"]
             _run_maven(tool, goals, checkout, output / "logs" / "full-suite.log", run, timeout)
             _collect_results(checkout, output / "reports" / "full-suite", run)
-            if selected_tests is not None:
-                missing = set(selected_tests) - set(run.tests)
-                if missing:
-                    run.warnings.append("selected tests missing from reports: " + ", ".join(sorted(missing)))
+        if selected_tests:
+            missing = set(selected_tests) - set(run.tests)
+            if missing:
+                run.warnings.append("selected tests missing from reports: " + ", ".join(sorted(missing)))
     finally:
         run.duration_seconds = round(time.monotonic() - started, 3)
         if not keep_checkout:

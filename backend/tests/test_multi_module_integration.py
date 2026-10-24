@@ -102,3 +102,11 @@ def test_gradle_multi_project_runs_and_selects(repo, tmp_path):
     selected, _ = run_maven_tests(repo.path, head, tmp_path / "one", allow_build=True,
                                   selected_tests=["a.CoreTest"])
     assert set(selected.tests) == {"a.CoreTest"} and selected.failing_tests == [], selected.warnings
+
+    # A class the build's test task does not run is reported as missing, not dropped.
+    excluded = dict(GRADLE, **{"build.gradle": GRADLE["build.gradle"]
+                               + "project(':core') { test { exclude '**/CoreTest*' } }\n"})
+    head = write(repo, excluded)
+    partial, _ = run_maven_tests(repo.path, head, tmp_path / "partial", allow_build=True,
+                                 selected_tests=["a.CoreTest"])
+    assert partial.tests == {} and any("missing from reports" in w for w in partial.warnings)
