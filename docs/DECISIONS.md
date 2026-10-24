@@ -721,3 +721,9 @@ On the four restored datasets the gate passes for HikariCP, LittleProxy and
 wicket-bootstrap and fails for jade4j (2 failing validation commits). This
 offline check reuses the study's test split, so it is not an independent
 evaluation of the gate.
+
+Addendum (review): a decision for `base → head` uses only `base` and its
+ancestors as history, for both the gate and the features, so results stored
+for the change itself or later commits never leak in. Candidates are the
+tests Maven runs by default at `head` (history tests if none are found), and
+test classes without history always run.

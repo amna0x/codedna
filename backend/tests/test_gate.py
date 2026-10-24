@@ -119,7 +119,7 @@ def test_assess_change_and_cli_report_unvalidated_history(repo, tmp_path, capsys
     assert report["decision"]["mode"] == "full_suite"
     assert report["decision"]["estimated_skip_risk"] is None
     assert sorted(report["decision"]["selected"]) == ["a.ATest", "a.BTest"]
-    assert report["commits_since_full_run"] == 0
+    assert report["commits_since_full_run"] == 1  # evidence ends at the base
 
     code = main(["history", "risk", "--db", str(tmp_path / "h.db"), "--base", shas[-2],
                  "--head", shas[-1], "--no-structural"])
@@ -139,3 +139,39 @@ def test_evidence_age_counts_commits_after_the_newest_result(repo, tmp_path):
     store.close()
     assert report["gate"]["validated_through"] == shas[-1]
     assert report["commits_since_full_run"] == 2
+
+
+def test_only_the_base_and_its_ancestors_are_used(repo, tmp_path):
+    store, shas = small_history(repo, tmp_path)
+    report = assess_change(store, shas[2], shas[3], structural=False)
+    rows = change_rows(store, shas[2], shas[3], structural=False,
+                       only={s for s in shas[:3]})
+    store.close()
+    # Results stored for shas[3] (the change) and later must not be history.
+    assert report["gate"]["validated_through"] == shas[2]
+    assert report["gate"]["evidence"]["history_commits"] == 3
+    assert {r.test_id: r.features["past_runs"] for r in rows} == {"a.ATest": 3, "a.BTest": 3}
+
+
+def test_candidates_are_the_tests_at_head_including_new_ones(repo, tmp_path):
+    store, shas = small_history(repo, tmp_path)
+    repo.write("src/test/java/a/NewTest.java",
+               "package a;\nimport org.junit.jupiter.api.Test;\nclass NewTest { @Test void t() {} }\n")
+    head = repo.commit("add a test")
+    report = assess_change(store, shas[-1], head, structural=False)
+    store.close()
+    assert [t["test"] for t in report["tests"]] == ["a.NewTest"]  # only tests present at head
+    assert report["decision"]["selected"] == ["a.NewTest"]
+
+
+def test_tests_without_history_always_run_when_validated():
+    gate = validate(synthetic_dataset(commits=200))
+    rows = rows_for()
+    for r in rows:
+        if r.test_id == "t5":
+            r.features["past_runs"] = 0.0
+            r.features["recent_failures"] = 0.0
+    decision, _ = gated_decision(gate, rows, commits_since_full_run=0)
+    assert not decision.fallback
+    assert "t5" in decision.selected
+    assert any("without history always run" in r for r in decision.reasons)

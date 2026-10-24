@@ -104,11 +104,16 @@ class _TestState:
 
 
 def build_dataset(store: HistoryStore, repo_path: str | Path | None = None, *,
-                  structural: bool = True) -> Dataset:
-    """Turn stored history + results into labelled rows (see module docstring)."""
+                  structural: bool = True, only: set[str] | None = None) -> Dataset:
+    """Turn stored history + results into labelled rows (see module docstring).
+
+    ``only`` restricts the history to these commits (e.g. the ancestors of a
+    change being assessed, so nothing from it or later is used).
+    """
     repo = resolve_repository(repo_path or store.get_meta("repository") or ".")
     with_results = store.commits_with_results()
-    commits = [c for c in store.commits() if c.sha in with_results]
+    commits = [c for c in store.commits()
+               if c.sha in with_results and (only is None or c.sha in only)]
     names = CHANGE_FEATURES + TEST_FEATURES + (STRUCTURAL_FEATURES if structural else []) \
         + HISTORY_FEATURES
     dataset = Dataset(rows=[], feature_names=names, commits=[c.sha for c in commits])
@@ -176,20 +181,24 @@ def _record(states, file_failures, results, paths: list[str], index: int) -> Non
 
 
 def change_rows(store: HistoryStore, base: str, head: str, test_ids: list[str] | None = None, *,
-                repo_path: str | Path | None = None, structural: bool = True) -> list[Row]:
+                repo_path: str | Path | None = None, structural: bool = True,
+                only: set[str] | None = None) -> list[Row]:
     """Feature rows for a change ``base → head`` that has no test results yet.
 
     History features come from **every** stored commit with results (all of
-    them are earlier than the change being decided). ``test_ids`` defaults to
-    the tests seen in the history. Labels are 0 and durations the historical
-    mean: neither is known before the tests run.
+    them must be earlier than the change being decided; ``only`` restricts the
+    history, as in :func:`build_dataset`). ``test_ids`` defaults to the tests
+    seen in the history; tests without history get empty history features.
+    Labels are 0 and durations the historical mean: neither is known before
+    the tests run.
     """
     from codedna.git_analysis.git import resolve_commit, run_git
     from codedna.test_history.store import CommitRecord, FileChange
 
     repo = resolve_repository(repo_path or store.get_meta("repository") or ".")
     with_results = store.commits_with_results()
-    commits = [c for c in store.commits() if c.sha in with_results]
+    commits = [c for c in store.commits()
+               if c.sha in with_results and (only is None or c.sha in only)]
     states: dict[str, _TestState] = defaultdict(_TestState)
     file_failures: dict[str, dict[str, int]] = defaultdict(lambda: defaultdict(int))
     for index, commit in enumerate(commits):

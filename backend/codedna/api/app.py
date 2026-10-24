@@ -200,18 +200,22 @@ def create_app(token: str, *, allow_build: bool = False,
     @app.post("/api/risk", dependencies=secured)
     def risk(body: RiskRequest) -> dict:
         # Validation retrains the model, so it is cached per database version.
-        from codedna.selection.gate import GateConfig, assess_change, validate
+        from codedna.selection.gate import GateConfig, assess_change, history_before, validate
         from codedna.test_history.features import build_dataset
         from codedna.test_history.store import HistoryStore
 
         db = Path(body.history_db)
         if not db.is_file():
             raise FileNotFoundError(2, "history database not found", str(db))
-        key = (str(db.resolve()), db.stat().st_mtime_ns, body.risk_target, body.structural)
         with HistoryStore(db) as store:
+            # Only the base and its ancestors count as history (no leakage from the change).
+            before = history_before(Path(body.repo), body.base)
+            key = (str(db.resolve()), db.stat().st_mtime_ns, body.risk_target, body.structural,
+                   frozenset(before & store.commits_with_results()))
             gate = app.state.risk_gates.get(key)
             if gate is None:
-                gate = validate(build_dataset(store, body.repo, structural=body.structural),
+                gate = validate(build_dataset(store, body.repo, structural=body.structural,
+                                              only=before),
                                 GateConfig(risk_target=body.risk_target))
                 app.state.risk_gates = {key: gate}
             return assess_change(store, body.base, body.head, repo_path=body.repo,

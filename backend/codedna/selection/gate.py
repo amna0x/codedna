@@ -31,7 +31,7 @@ from dataclasses import asdict, dataclass, field
 
 from codedna.models.evaluate import chronological_split
 from codedna.selection.dante import wilson
-from codedna.selection.risk import RiskPolicy, SelectionDecision, decide
+from codedna.selection.risk import RiskPolicy, SelectionDecision, _decision, _estimated_costs, decide
 from codedna.test_history.features import Dataset, Row
 
 
@@ -178,20 +178,55 @@ def gated_decision(gate: RiskGate, rows: list[Row], *,
 
     decision = decide(rows, probabilities, RiskPolicy(budget=None, risk_target=config.risk_target),
                       order=order_by_baseline("recent_failures", rows))
-    decision.reasons.insert(0, "risk validated on this project's earlier history")
+    reasons = ["risk validated on this project's earlier history", *decision.reasons]
+    new = [r.test_id for r in rows if r.features.get("past_runs", 0) == 0
+           and r.test_id not in decision.selected]
+    if new:  # no history means no evidence for skipping them
+        reasons.append(f"{len(new)} test class(es) without history always run")
+        prob = {r.test_id: min(max(p, 0.0), 1.0) for r, p in zip(rows, probabilities)}
+        cost = _estimated_costs(rows)
+        decision = _decision(rows, set(decision.selected) | set(new), prob, cost,
+                             sum(cost.values()), False, reasons)
+    else:
+        decision.reasons = reasons
     return decision, probabilities
+
+
+def history_before(repo, base: str) -> set[str]:
+    """``base`` and its ancestors: the only history a decision for ``base → head`` may use."""
+    from codedna.git_analysis.git import resolve_commit, run_git
+
+    return set(run_git(repo, "rev-list", resolve_commit(repo, base)).split())
+
+
+def candidate_tests(repo, head: str) -> list[str] | None:
+    """Test classes Maven runs by default at ``head``; None if none are found."""
+    from codedna.git_analysis.git import resolve_commit
+    from codedna.test_mapping.discovery import discover_tests_for_commit
+
+    found = [t.id for t in discover_tests_for_commit(repo, resolve_commit(repo, head)).tests
+             if t.runs_by_default]
+    return sorted(found) or None
 
 
 def assess_change(store, base: str, head: str, *, repo_path=None, structural: bool = True,
                   config: GateConfig | None = None, gate: RiskGate | None = None) -> dict:
-    """Validate (unless ``gate`` is given) and decide for ``base → head``; JSON-ready."""
+    """Validate (unless ``gate`` is given) and decide for ``base → head``; JSON-ready.
+
+    Only ``base`` and its ancestors are used as history, for the gate and for
+    the features, so results of the assessed change or later never leak in.
+    Candidates are the tests present at ``head`` (history tests if none are
+    discovered).
+    """
     from codedna.git_analysis.git import resolve_commit, resolve_repository, run_git
     from codedna.test_history.features import build_dataset, change_rows
 
     repo = resolve_repository(repo_path or store.get_meta("repository") or ".")
+    before = history_before(repo, base)
     if gate is None:
-        gate = validate(build_dataset(store, repo, structural=structural), config)
-    rows = change_rows(store, base, head, repo_path=repo, structural=structural)
+        gate = validate(build_dataset(store, repo, structural=structural, only=before), config)
+    rows = change_rows(store, base, head, candidate_tests(repo, head), repo_path=repo,
+                       structural=structural, only=before)
     since = None
     if gate.report.validated_through:
         try:
