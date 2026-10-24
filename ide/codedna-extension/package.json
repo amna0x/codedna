@@ -17,9 +17,11 @@
     "@theia/editor": "1.76.0",
     "@theia/filesystem": "1.76.0",
     "@theia/monaco": "1.76.0",
-    "@theia/workspace": "1.76.0"
+    "@theia/workspace": "1.76.0",
+    "cytoscape": "3.30.4"
   },
   "devDependencies": {
+    "@types/cytoscape": "3.21.9",
     "@types/react": "^19.3.0",
     "rimraf": "^5.0.0",
     "typescript": "~5.4.5"

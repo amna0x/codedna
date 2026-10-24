@@ -317,3 +317,25 @@
   .codedna-view .cd-help,
   .codedna-view .cd-subtitle { color: var(--cd-text); }
 }
+
+/* Impact graph (main area) */
+.codedna-view.cd-graph-view { overflow: auto; }
+.codedna-view .cd-graph-layout { display: grid; gap: 12px; max-width: 1100px; }
+.codedna-view .cd-graph-canvas {
+  height: 460px;
+  border: 1px solid var(--cd-line);
+  border-radius: var(--cd-radius);
+  background: var(--cd-card);
+}
+.codedna-view .cd-legend { display: flex; flex-wrap: wrap; gap: 14px; margin: 0; padding: 0; list-style: none; font-size: 12px; color: var(--cd-muted); }
+.codedna-view .cd-legend li { display: flex; align-items: center; gap: 6px; }
+.codedna-view .cd-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.codedna-view .cd-dot-changed { background: var(--cd-modified); }
+.codedna-view .cd-dot-impacted { background: var(--cd-muted); }
+.codedna-view .cd-dot-test { background: var(--cd-added); }
+.codedna-view .cd-dot-unanalysed { border: 2px dashed var(--cd-deleted); }
+.codedna-view .cd-line-solid,
+.codedna-view .cd-line-dashed { width: 18px; border-top: 2px solid var(--cd-muted); display: inline-block; }
+.codedna-view .cd-line-dashed { border-top-style: dashed; }
+.codedna-view .cd-graph-details { display: grid; gap: 8px; padding: 12px; }
+.codedna-view .cd-path-steps { margin: 0; padding-left: 20px; display: grid; gap: 4px; }

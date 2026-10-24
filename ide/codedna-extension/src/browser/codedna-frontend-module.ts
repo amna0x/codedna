@@ -4,9 +4,10 @@ import { ApplicationShellOptions } from '@theia/core/lib/browser/shell/applicati
 import { ServiceConnectionProvider } from '@theia/core/lib/browser/messaging/service-connection-provider';
 import { CODEDNA_SERVICE_PATH, CodeDnaService } from '../common/codedna-protocol';
 import { ChangeViewWidget } from './change-view-widget';
-import { ChangeViewContribution, TestsViewContribution } from './codedna-contributions';
+import { ChangeViewContribution, GraphViewContribution, TestsViewContribution } from './codedna-contributions';
 import { CodeDnaComparison } from './comparison';
 import { CodeDnaWorkspace } from './codedna-workspace';
+import { GraphViewWidget } from './graph-view-widget';
 import { TestsViewWidget } from './tests-view-widget';
 import { CodeDnaThemeContribution } from './theme/codedna-theme';
 // Geist / Geist Mono (SIL OFL 1.1), bundled so the UI looks the same on every machine.
@@ -48,4 +49,11 @@ export default new ContainerModule((bind, _unbind, _isBound, rebind) => {
     })).inSingletonScope();
     bindViewContribution(bind, TestsViewContribution);
     bind(FrontendApplicationContribution).toService(TestsViewContribution);
+
+    bind(GraphViewWidget).toSelf();
+    bind(WidgetFactory).toDynamicValue(ctx => ({
+        id: GraphViewWidget.ID,
+        createWidget: () => ctx.container.get<GraphViewWidget>(GraphViewWidget)
+    })).inSingletonScope();
+    bindViewContribution(bind, GraphViewContribution);
 });

@@ -789,3 +789,16 @@ recall -0.0056 [-0.0420, 0.0312] do not establish a benefit. Raw stopping violat
 the target on two projects. Retain recent-failure order for live use; preserve
 both exploratory studies rather than selecting the more favourable adapter.
 Evidence: `experiments/results/dante-history-check-2026-10-24/FINDINGS.md`.
+
+## D-043 — Impact graph view (Cytoscape.js)
+
+The IDE gets an "Impact graph" main-area view (Ctrl/Cmd+Alt+G): changed code →
+parts that may be affected → related tests. The core adds `explanation_graph`
+to the impact JSON (`impact_analysis.explanation_graph`): nodes by category
+(changed / impacted / test / unanalysed), only the edges on each node's
+shortest explanation path, each labelled confirmed or heuristic; non-Java
+changes are `unresolved` nodes with no edges. The view only draws this JSON
+(no analysis in TypeScript); clicking a node highlights its path and lists each
+step with its evidence line. New frontend dependency: `cytoscape@3.30.4`
+(MIT, pinned) plus `@types/cytoscape` for compilation; named for this view in
+Milestone 6. Additive JSON field, so no API version change.

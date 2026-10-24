@@ -158,3 +158,22 @@ def test_impact_command_outputs_json(repo, capsys):
     assert data["max_depth"] == 2 and data["include_heuristic"] is False
     assert [n["node"] for n in data["impacted"]] == ["type:a.Service", "type:a.Api"]
     assert data["impacted"][1]["path"][0]["kind"] == "uses"
+
+
+def test_explanation_graph_links_change_to_test_with_labelled_edges(repo):
+    base = commit_files(repo, {**CHAIN, "pom.xml": "<project/>\n"}, "base")
+    head = commit_files(repo, {"a/Core.java": CHAIN["a/Core.java"].replace("1", "2"),
+                               "pom.xml": "<project></project>\n"}, "head")
+
+    graph = compute_impact(repo.path, base, head).to_dict()["explanation_graph"]
+
+    nodes = {n["id"]: n for n in graph["nodes"]}
+    assert nodes["type:a.Core"]["category"] == "changed"
+    assert nodes["type:a.Service"]["category"] == "impacted"
+    assert nodes["type:a.ApiTest"]["category"] == "test"
+    assert nodes["file:pom.xml"]["confidence"] == "unresolved"
+    assert nodes["type:a.ApiTest"]["path_edges"] == [
+        "type:a.ApiTest->type:a.Api", "type:a.Api->type:a.Service", "type:a.Service->type:a.Core"]
+    assert {e["confidence"] for e in graph["edges"]} <= {"confirmed", "heuristic"}
+    assert all(e["source"] in nodes and e["target"] in nodes for e in graph["edges"])
+    assert "type:a.Unrelated" not in nodes
