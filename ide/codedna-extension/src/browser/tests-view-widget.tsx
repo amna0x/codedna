@@ -1,14 +1,17 @@
 import * as React from '@theia/core/shared/react';
 import { inject, injectable, postConstruct } from '@theia/core/shared/inversify';
 import { ReactWidget } from '@theia/core/lib/browser/widgets/react-widget';
-import { CodeDnaService, SelectionReport, SelectionStrategy } from '../common/codedna-protocol';
+import { CodeDnaService, RiskReport, SelectionReport, SelectionStrategy } from '../common/codedna-protocol';
 import { CodeDnaComparison } from './comparison';
 import { CodeDnaWorkspace } from './codedna-workspace';
 import { breakable, friendlyReason, friendlyWarning, packageName, plural, simpleName } from './plain-language';
 import { Chip, ComparePicker, ErrorNotice, FirstRun, Spinner } from './ui';
 
-const STRATEGIES: { value: SelectionStrategy; label: string }[] = [
+type Mode = SelectionStrategy | 'risk';
+
+const STRATEGIES: { value: Mode; label: string }[] = [
     { value: 'dependency', label: 'Affected tests only' },
+    { value: 'risk', label: 'Learned from test history (risk check)' },
     { value: 'all', label: 'All tests (safest)' }
 ];
 
@@ -27,10 +30,11 @@ export class TestsViewWidget extends ReactWidget {
     @inject(CodeDnaWorkspace) protected readonly workspace: CodeDnaWorkspace;
     @inject(CodeDnaComparison) protected readonly comparison: CodeDnaComparison;
 
-    protected strategy: SelectionStrategy = 'dependency';
+    protected strategy: Mode = 'dependency';
     protected loading = false;
     protected error: string | undefined;
     protected report: SelectionReport | undefined;
+    protected riskReport: RiskReport | undefined;
 
     @postConstruct()
     protected init(): void {
@@ -55,7 +59,13 @@ export class TestsViewWidget extends ReactWidget {
         this.error = undefined;
         this.update();
         try {
-            this.report = await this.codedna.select(repo, this.comparison.base, this.comparison.head, this.strategy);
+            if (this.strategy === 'risk') {
+                this.report = undefined;
+                this.riskReport = await this.codedna.risk(repo, this.comparison.base, this.comparison.head);
+            } else {
+                this.riskReport = undefined;
+                this.report = await this.codedna.select(repo, this.comparison.base, this.comparison.head, this.strategy);
+            }
         } catch (error) {
             this.error = error instanceof Error ? error.message : String(error);
         } finally {
@@ -75,7 +85,7 @@ export class TestsViewWidget extends ReactWidget {
                 <label className='cd-field'>
                     <span className='cd-field-label'>Which tests</span>
                     <select value={this.strategy} disabled={this.loading}
-                        onChange={e => { this.strategy = e.target.value as SelectionStrategy; this.update(); }}>
+                        onChange={e => { this.strategy = e.target.value as Mode; this.update(); }}>
                         {STRATEGIES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
                     </select>
                 </label>
@@ -84,7 +94,9 @@ export class TestsViewWidget extends ReactWidget {
                 </button>
             </form>
             {this.error && <ErrorNotice message={this.error} />}
-            {this.report ? this.renderReport(this.report) : !this.loading && !this.error && <FirstRun action='Suggest tests' />}
+            {this.riskReport ? this.renderRisk(this.riskReport)
+                : this.report ? this.renderReport(this.report)
+                    : !this.loading && !this.error && <FirstRun action='Suggest tests' />}
         </div>;
     }
 
@@ -140,10 +152,87 @@ export class TestsViewWidget extends ReactWidget {
                 </div>
             </section>}
             <p className='cd-footnote'>
-                Failure risk for each test appears once CodeDNA has learned from this project’s test history.
+                For failure risk per test, pick “Learned from test history”.
             </p>
         </div>;
     }
+
+    protected renderRisk(report: RiskReport): React.ReactNode {
+        const { gate, decision } = report;
+        const validated = gate.status === 'validated';
+        const full = decision.mode === 'full_suite';
+        const target = gate.config.risk_target;
+        const evidence = gate.evidence.validation;
+        const probability = new Map(report.tests.map(t => [t.test, t.probability]));
+        return <div className='cd-results'>
+            <p className='cd-lede'>
+                {full
+                    ? <>Run all {plural(decision.selected.length, 'test class', 'test classes')}.</>
+                    : <>Run {decision.selected.length} of {plural(report.tests.length, 'test class', 'test classes')}.
+                        {` Estimated chance that a skipped test fails: ${percent(decision.estimated_skip_risk ?? 0)}.`}</>}
+            </p>
+            <p className='cd-help'>
+                {full
+                    ? 'CodeDNA isn’t confident enough to skip anything for this change.'
+                    : `About ${Math.round(decision.estimated_time_fraction * 100)}% of the usual test time. ` +
+                      `CodeDNA stops adding tests once the estimated risk is at most ${percent(target)}.`}
+            </p>
+            <div className={validated ? 'cd-notice' : 'cd-notice cd-error'} role='status'>
+                <strong>{validated ? 'Risk check passed on this project’s history' : 'Risk not validated for this project'}</strong>
+                <ul>{gate.reasons.map(r => <li key={r}>{r}</li>)}</ul>
+                {evidence && <p className='cd-help'>
+                    {`On the newest earlier commits a failure was missed on ${percent(evidence.observed_miss_rate)} of commits ` +
+                     `(95% range ${percent(evidence.observed_miss_rate_95ci[0])}–${percent(evidence.observed_miss_rate_95ci[1])}), ` +
+                     `estimated ${percent(evidence.mean_estimated_skip_risk)}.`}
+                </p>}
+                {report.commits_since_full_run !== null && <p className='cd-help'>
+                    {`${plural(report.commits_since_full_run, 'commit', 'commits')} since the last full test run ` +
+                     `(a full run is needed at least every ${gate.config.max_commits_since_full_run}).`}
+                </p>}
+            </div>
+            {decision.reasons.length > 0 && <div className='cd-notice'>
+                <strong>Why</strong>
+                <ul>{decision.reasons.map(r => <li key={r}>{r}</li>)}</ul>
+            </div>}
+            {decision.selected.length > 0 && <section aria-label='Run these'>
+                <h3>Run these</h3>
+                <div className='cd-card'>
+                    {decision.selected.map(test => <button className='cd-row' key={test} title={`Open ${test}`}
+                        onClick={() => this.workspace.openFile(testPath(test))}>
+                        <span className='cd-code'>{simpleName(test)}</span>
+                        <span className='cd-row-meta'>
+                            <Chip tone='added'>Run</Chip>
+                            {riskChip(probability.get(test))}
+                            <span className='cd-meta'>{breakable(packageName(test))}</span>
+                        </span>
+                    </button>)}
+                </div>
+            </section>}
+            {decision.skipped.length > 0 && <section aria-label='Skipped'>
+                <h3>Skipped</h3>
+                <div className='cd-card'>
+                    {decision.skipped.map(test => <div className='cd-row cd-static' key={test}>
+                        <span className='cd-code'>{simpleName(test)}</span>
+                        <span className='cd-row-meta'>
+                            <Chip tone='muted'>Skip</Chip>
+                            {riskChip(probability.get(test))}
+                        </span>
+                    </div>)}
+                </div>
+            </section>}
+            <p className='cd-footnote'>{report.note}.</p>
+        </div>;
+    }
+}
+
+function percent(value: number): string {
+    return value < 0.01 && value > 0 ? '<1%' : `${Math.round(value * 100)}%`;
+}
+
+function riskChip(probability: number | null | undefined): React.ReactNode {
+    return probability === null || probability === undefined
+        ? undefined
+        : <Chip tone='muted' title='Estimated chance this test fails for this change'>{`fail ${percent(probability)}`}</Chip>;
 }
 
 function testPath(testId: string): string {

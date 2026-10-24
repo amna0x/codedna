@@ -99,6 +99,7 @@ codedna history status   --db FILE
 codedna history evaluate --db FILE [--repo PATH] [--rankers ...] [--no-structural] [--dataset-csv F]
 codedna history import-rtptorrent --dataset DIR (--list | --project NAME --db FILE) [--max-commits N]
 codedna history experiment --db FILE [--repo PATH] [--model M] [--calibration none|platt|isotonic] [--budget F] [--risk-target F]
+codedna history risk --db FILE --base REV [--head REV] [--repo PATH] [--risk-target F] [--no-structural]
 ```
 
 - `analyze --level method` (default) adds a `java` object to every changed

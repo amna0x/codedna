@@ -22,6 +22,8 @@ export interface CodeDnaService {
     analyze(repo: string, base: string, head: string): Promise<AnalyzeReport>;
     impact(repo: string, base: string, head: string): Promise<ImpactReport>;
     select(repo: string, base: string, head: string, strategy: SelectionStrategy): Promise<SelectionReport>;
+    /** Calibrated stopping behind the target-validation gate (D-041). */
+    risk(repo: string, base: string, head: string): Promise<RiskReport>;
 }
 
 export type SelectionStrategy = 'dependency' | 'all';
@@ -101,4 +103,39 @@ export interface SelectionReport {
     selection_ratio: number;
     estimated_time: { selected_seconds: number; all_seconds: number; saved_ratio: number } | null;
     warnings: string[];
+}
+
+// --- risk (D-041) --------------------------------------------------------------
+
+export interface RiskGateReport {
+    status: 'validated' | 'unvalidated';
+    reasons: string[];
+    evidence: {
+        history_commits: number;
+        failing_commits: { train: number; calibration: number; validation: number };
+        validation?: {
+            observed_miss_rate: number;
+            observed_miss_rate_95ci: [number, number];
+            mean_estimated_skip_risk: number;
+            mean_time_ratio: number;
+        };
+    };
+    config: { risk_target: number; max_commits_since_full_run: number };
+    validated_through: string | null;
+}
+
+export interface RiskReport {
+    head: string;
+    gate: RiskGateReport;
+    commits_since_full_run: number | null;
+    decision: {
+        mode: 'full_suite' | 'calibrated_stop';
+        selected: string[];
+        skipped: string[];
+        estimated_skip_risk: number | null;
+        estimated_time_fraction: number;
+        reasons: string[];
+    };
+    tests: { test: string; probability: number | null; selected: boolean; estimated_seconds: number }[];
+    note: string;
 }

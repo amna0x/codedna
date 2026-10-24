@@ -1,0 +1,719 @@
+{
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "projects": {
+    "hikaricp": {
+      "runs": 5,
+      "test_commits": 286,
+      "test_commits_with_failures": 20,
+      "warnings": [],
+      "D2_dante_stop": {
+        "mean_time_ratio": 0.156,
+        "failing_test_recall": 0.6612,
+        "commit_safety_rate": 0.45,
+        "mean_estimated_skip_risk": 0.0448,
+        "observed_miss_rate": 0.0385,
+        "meets_risk_target": true
+      },
+      "B10_hybrid": {
+        "mean_time_ratio": 0.1333,
+        "failing_test_recall": 0.7273,
+        "commit_safety_rate": 0.5,
+        "mean_estimated_skip_risk": 0.0444,
+        "observed_miss_rate": 0.035,
+        "meets_risk_target": true
+      },
+      "D1@D2": {
+        "budget": 0.1801,
+        "time": 0.1581,
+        "recall": 0.6777,
+        "safety": 0.45
+      },
+      "B3@D2": {
+        "budget": 0.1801,
+        "time": 0.1555,
+        "recall": 0.719,
+        "safety": 0.45
+      },
+      "B3@B10": {
+        "budget": 0.1795,
+        "time": 0.1315,
+        "recall": 0.719,
+        "safety": 0.45
+      },
+      "differences": {
+        "D2 \u2212 D1 at same time": {
+          "time": {
+            "estimate": -0.0021,
+            "ci_mean": [
+              -0.0261,
+              0.024
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          },
+          "recall": {
+            "estimate": -0.0165,
+            "ci_mean": [
+              -0.1292,
+              0.0894
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          },
+          "safety": {
+            "estimate": 0.0,
+            "ci_mean": [
+              -0.1432,
+              0.143
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          }
+        },
+        "D2 \u2212 B10": {
+          "time": {
+            "estimate": 0.0227,
+            "ci_mean": [
+              0.0106,
+              0.036
+            ],
+            "seeds_ci_excludes_zero_positive": 5,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          },
+          "recall": {
+            "estimate": -0.0661,
+            "ci_mean": [
+              -0.1541,
+              0.0154
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          },
+          "safety": {
+            "estimate": -0.05,
+            "ci_mean": [
+              -0.1698,
+              0.0
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          }
+        },
+        "B10 \u2212 B3 at same time": {
+          "time": {
+            "estimate": 0.0019,
+            "ci_mean": [
+              -0.0201,
+              0.0259
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          },
+          "recall": {
+            "estimate": 0.0083,
+            "ci_mean": [
+              -0.1079,
+              0.1168
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          },
+          "safety": {
+            "estimate": 0.05,
+            "ci_mean": [
+              -0.112,
+              0.2342
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          }
+        },
+        "D1 \u2212 B3 at D2 time": {
+          "time": {
+            "estimate": 0.0026,
+            "ci_mean": [
+              0.0003,
+              0.006
+            ],
+            "seeds_ci_excludes_zero_positive": 5,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          },
+          "recall": {
+            "estimate": -0.0413,
+            "ci_mean": [
+              -0.131,
+              0.0
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          },
+          "safety": {
+            "estimate": 0.0,
+            "ci_mean": [
+              0.0,
+              0.0
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          }
+        }
+      },
+      "overhead": {
+        "dante_scoring_seconds_all_rows": 0.1136,
+        "d2_decide_ms_per_test_commit": 0.0906,
+        "rows": 20206
+      }
+    },
+    "littleproxy": {
+      "runs": 5,
+      "test_commits": 53,
+      "test_commits_with_failures": 5,
+      "warnings": [],
+      "D2_dante_stop": {
+        "mean_time_ratio": 1.0,
+        "failing_test_recall": 1.0,
+        "commit_safety_rate": 1.0,
+        "mean_estimated_skip_risk": 0.0,
+        "observed_miss_rate": 0.0,
+        "meets_risk_target": true
+      },
+      "B10_hybrid": {
+        "mean_time_ratio": 1.0,
+        "failing_test_recall": 1.0,
+        "commit_safety_rate": 1.0,
+        "mean_estimated_skip_risk": 0.0,
+        "observed_miss_rate": 0.0,
+        "meets_risk_target": true
+      },
+      "D1@D2": {
+        "budget": 1.0,
+        "time": 1.0,
+        "recall": 1.0,
+        "safety": 1.0
+      },
+      "B3@D2": {
+        "budget": 1.0,
+        "time": 1.0,
+        "recall": 1.0,
+        "safety": 1.0
+      },
+      "B3@B10": {
+        "budget": 1.0,
+        "time": 1.0,
+        "recall": 1.0,
+        "safety": 1.0
+      },
+      "differences": {
+        "D2 \u2212 D1 at same time": {
+          "time": {
+            "estimate": 0.0,
+            "ci_mean": [
+              0.0,
+              0.0
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          },
+          "recall": {
+            "estimate": 0.0,
+            "ci_mean": [
+              0.0,
+              0.0
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          },
+          "safety": {
+            "estimate": 0.0,
+            "ci_mean": [
+              0.0,
+              0.0
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          }
+        },
+        "D2 \u2212 B10": {
+          "time": {
+            "estimate": 0.0,
+            "ci_mean": [
+              0.0,
+              0.0
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          },
+          "recall": {
+            "estimate": 0.0,
+            "ci_mean": [
+              0.0,
+              0.0
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          },
+          "safety": {
+            "estimate": 0.0,
+            "ci_mean": [
+              0.0,
+              0.0
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          }
+        },
+        "B10 \u2212 B3 at same time": {
+          "time": {
+            "estimate": 0.0,
+            "ci_mean": [
+              0.0,
+              0.0
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          },
+          "recall": {
+            "estimate": 0.0,
+            "ci_mean": [
+              0.0,
+              0.0
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          },
+          "safety": {
+            "estimate": 0.0,
+            "ci_mean": [
+              0.0,
+              0.0
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          }
+        },
+        "D1 \u2212 B3 at D2 time": {
+          "time": {
+            "estimate": 0.0,
+            "ci_mean": [
+              0.0,
+              0.0
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          },
+          "recall": {
+            "estimate": 0.0,
+            "ci_mean": [
+              0.0,
+              0.0
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          },
+          "safety": {
+            "estimate": 0.0,
+            "ci_mean": [
+              0.0,
+              0.0
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          }
+        }
+      },
+      "overhead": {
+        "dante_scoring_seconds_all_rows": 0.0312,
+        "d2_decide_ms_per_test_commit": 0.4126,
+        "rows": 4575
+      }
+    },
+    "jade4j": {
+      "runs": 5,
+      "test_commits": 63,
+      "test_commits_with_failures": 2,
+      "warnings": [],
+      "D2_dante_stop": {
+        "mean_time_ratio": 0.2287,
+        "failing_test_recall": 0.5,
+        "commit_safety_rate": 0.5,
+        "mean_estimated_skip_risk": 0.033,
+        "observed_miss_rate": 0.0159,
+        "meets_risk_target": true
+      },
+      "B10_hybrid": {
+        "mean_time_ratio": 0.2264,
+        "failing_test_recall": 0.5,
+        "commit_safety_rate": 0.5,
+        "mean_estimated_skip_risk": 0.033,
+        "observed_miss_rate": 0.0159,
+        "meets_risk_target": true
+      },
+      "D1@D2": {
+        "budget": 0.0703,
+        "time": 0.2277,
+        "recall": 0.5,
+        "safety": 0.5
+      },
+      "B3@D2": {
+        "budget": 0.0684,
+        "time": 0.2265,
+        "recall": 0.5,
+        "safety": 0.5
+      },
+      "B3@B10": {
+        "budget": 0.0669,
+        "time": 0.2264,
+        "recall": 0.5,
+        "safety": 0.5
+      },
+      "differences": {
+        "D2 \u2212 D1 at same time": {
+          "time": {
+            "estimate": 0.001,
+            "ci_mean": [
+              -0.0808,
+              0.0937
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          },
+          "recall": {
+            "estimate": 0.0,
+            "ci_mean": [
+              0.0,
+              0.0
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          },
+          "safety": {
+            "estimate": 0.0,
+            "ci_mean": [
+              0.0,
+              0.0
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          }
+        },
+        "D2 \u2212 B10": {
+          "time": {
+            "estimate": 0.0023,
+            "ci_mean": [
+              0.0,
+              0.0068
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          },
+          "recall": {
+            "estimate": 0.0,
+            "ci_mean": [
+              0.0,
+              0.0
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          },
+          "safety": {
+            "estimate": 0.0,
+            "ci_mean": [
+              0.0,
+              0.0
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          }
+        },
+        "B10 \u2212 B3 at same time": {
+          "time": {
+            "estimate": 0.0,
+            "ci_mean": [
+              -0.0828,
+              0.091
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          },
+          "recall": {
+            "estimate": 0.0,
+            "ci_mean": [
+              0.0,
+              0.0
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          },
+          "safety": {
+            "estimate": 0.0,
+            "ci_mean": [
+              0.0,
+              0.0
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          }
+        },
+        "D1 \u2212 B3 at D2 time": {
+          "time": {
+            "estimate": 0.0012,
+            "ci_mean": [
+              -0.0086,
+              0.0168
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          },
+          "recall": {
+            "estimate": 0.0,
+            "ci_mean": [
+              0.0,
+              0.0
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          },
+          "safety": {
+            "estimate": 0.0,
+            "ci_mean": [
+              0.0,
+              0.0
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          }
+        }
+      },
+      "overhead": {
+        "dante_scoring_seconds_all_rows": 0.0628,
+        "d2_decide_ms_per_test_commit": 0.1694,
+        "rows": 10913
+      }
+    },
+    "wicket-bootstrap": {
+      "runs": 5,
+      "test_commits": 164,
+      "test_commits_with_failures": 87,
+      "warnings": [],
+      "D2_dante_stop": {
+        "mean_time_ratio": 0.7499,
+        "failing_test_recall": 0.9971,
+        "commit_safety_rate": 0.9862,
+        "mean_estimated_skip_risk": 0.0152,
+        "observed_miss_rate": 0.0073,
+        "meets_risk_target": true
+      },
+      "B10_hybrid": {
+        "mean_time_ratio": 0.7513,
+        "failing_test_recall": 0.9971,
+        "commit_safety_rate": 0.9862,
+        "mean_estimated_skip_risk": 0.0149,
+        "observed_miss_rate": 0.0073,
+        "meets_risk_target": true
+      },
+      "D1@D2": {
+        "budget": 0.8247,
+        "time": 0.7449,
+        "recall": 0.9835,
+        "safety": 0.531
+      },
+      "B3@D2": {
+        "budget": 0.8319,
+        "time": 0.7449,
+        "recall": 0.987,
+        "safety": 0.6299
+      },
+      "B3@B10": {
+        "budget": 0.8335,
+        "time": 0.7468,
+        "recall": 0.9875,
+        "safety": 0.646
+      },
+      "differences": {
+        "D2 \u2212 D1 at same time": {
+          "time": {
+            "estimate": 0.0049,
+            "ci_mean": [
+              -0.0267,
+              0.0359
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          },
+          "recall": {
+            "estimate": 0.0136,
+            "ci_mean": [
+              0.0061,
+              0.0179
+            ],
+            "seeds_ci_excludes_zero_positive": 2,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          },
+          "safety": {
+            "estimate": 0.4552,
+            "ci_mean": [
+              0.3972,
+              0.5108
+            ],
+            "seeds_ci_excludes_zero_positive": 3,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          }
+        },
+        "D2 \u2212 B10": {
+          "time": {
+            "estimate": -0.0014,
+            "ci_mean": [
+              -0.004,
+              0.0001
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          },
+          "recall": {
+            "estimate": 0.0,
+            "ci_mean": [
+              0.0,
+              0.0
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          },
+          "safety": {
+            "estimate": 0.0,
+            "ci_mean": [
+              0.0,
+              0.0
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          }
+        },
+        "B10 \u2212 B3 at same time": {
+          "time": {
+            "estimate": 0.0046,
+            "ci_mean": [
+              -0.0264,
+              0.0348
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          },
+          "recall": {
+            "estimate": 0.0096,
+            "ci_mean": [
+              0.0021,
+              0.014
+            ],
+            "seeds_ci_excludes_zero_positive": 2,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          },
+          "safety": {
+            "estimate": 0.3402,
+            "ci_mean": [
+              0.2796,
+              0.3971
+            ],
+            "seeds_ci_excludes_zero_positive": 3,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          }
+        },
+        "D1 \u2212 B3 at D2 time": {
+          "time": {
+            "estimate": 0.0001,
+            "ci_mean": [
+              -0.0015,
+              0.0017
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 0,
+            "seeds_with_ci": 5
+          },
+          "recall": {
+            "estimate": -0.0035,
+            "ci_mean": [
+              -0.0047,
+              -0.0023
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 2,
+            "seeds_with_ci": 5
+          },
+          "safety": {
+            "estimate": -0.0989,
+            "ci_mean": [
+              -0.1339,
+              -0.0653
+            ],
+            "seeds_ci_excludes_zero_positive": 0,
+            "seeds_ci_excludes_zero_negative": 2,
+            "seeds_with_ci": 5
+          }
+        }
+      },
+      "overhead": {
+        "dante_scoring_seconds_all_rows": 0.2784,
+        "d2_decide_ms_per_test_commit": 0.334,
+        "rows": 34791
+      }
+    }
+  },
+  "verdict": {
+    "verdict": "inconclusive",
+    "d2_minus_d1_safety_non_negative_all": true,
+    "projects_ci_excludes_zero": 1,
+    "projects_ci_below_zero": [],
+    "projects_meeting_target": 4,
+    "projects_failing_target": 0
+  }
+}

@@ -1,10 +1,11 @@
 import { ChildProcess, spawn } from 'child_process';
+import { join } from 'path';
 import { randomBytes } from 'crypto';
 import { createServer } from 'net';
 import { injectable } from '@theia/core/shared/inversify';
 import { BackendApplicationContribution } from '@theia/core/lib/node';
 import {
-    AnalyzeReport, CodeDnaService, CodeDnaStatus, ImpactReport, SelectionReport, SelectionStrategy
+    AnalyzeReport, CodeDnaService, CodeDnaStatus, ImpactReport, RiskReport, SelectionReport, SelectionStrategy
 } from '../common/codedna-protocol';
 
 /**
@@ -57,6 +58,16 @@ export class CodeDnaServiceImpl implements CodeDnaService, BackendApplicationCon
 
     select(repo: string, base: string, head: string, strategy: SelectionStrategy): Promise<SelectionReport> {
         return this.post('/api/select', { repo, base, head, strategy });
+    }
+
+    /**
+     * The history database is `<repo>/.codedna/history.db`, or
+     * `CODEDNA_HISTORY_DB`. It is built with `codedna history mine` and
+     * `history collect` / `import`; without it the core recommends the full suite.
+     */
+    risk(repo: string, base: string, head: string): Promise<RiskReport> {
+        const historyDb = process.env.CODEDNA_HISTORY_DB || join(repo, '.codedna', 'history.db');
+        return this.post('/api/risk', { repo, base, head, history_db: historyDb });
     }
 
     protected async post<T>(path: string, body: object): Promise<T> {

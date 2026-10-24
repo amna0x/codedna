@@ -680,3 +680,44 @@ safety 0.46, observed miss 4.4 % vs estimated 1.8 %, target held on 6 of
 (time 0.35, safety 0.68, observed 3.1 %, target held on 8 of 9). Low ECE
 does not imply a usable stopping rule; held-out calibration does. The claim
 is reworded again: calibration matters for decisions, not for the ECE drop.
+
+## D-040 — DANTE-H baseline and calibrated stopping across orderings
+
+To test whether B10's calibrated stopping helps beyond one ordering, a
+history-only approximation of DANTE (ICST 2026) is added:
+`codedna.selection.dante` (THFR + Wilson-weighted "stickiness" over windows
+1–10, × recent failures ÷ mean duration). DANTE's TF-IDF change/test
+relevance is **not** implemented, so it is called DANTE-H everywhere.
+`codedna.models.dante_check` and `scripts/dante_check.py` compare D2
+(DANTE-H order, calibrated stop at 5 %) with D1 (DANTE-H, fixed budget) at
+the same real time, plus B10 / B3. The protocol and decision rule were
+committed before any result (`docs/DANTE_B10_PROTOCOL.md`).
+
+Result on the four restored projects × 5 seeds: **inconclusive** under the
+pre-specified rule. D2 meets the 5 % target on all four and is never worse
+than D1 at the same time, but the gain shows only on wicket-bootstrap and is
+a seed-dependent budget cliff. Ordering matters little once the stop is
+calibrated. See `experiments/results/dante-b10-2026-10-24/FINDINGS.md` and
+the provisional `docs/RELATED_WORK_COMPARISON.md`.
+
+## D-041 — Target-validation gate before any calibrated skip
+
+Following D-039 (transfer is unreliable), runtime selection with risk
+estimates is gated (`codedna.selection.gate`): train/calibrate/validate on
+the project's own earlier history (60/20/20, chronological), replay B10 on
+the newest slice, and pass only with enough failing commits in calibration
+and validation (≥ 3 each, ≥ 20 validation commits), observed miss ≤ target
+and its 95 % Wilson upper bound ≤ 0.10. Otherwise, or when more than 50
+commits passed since the last recorded full-suite run, or non-Java files
+changed, the full suite is recommended with the reason. Thresholds are
+design choices, not tuned on results. Exposed as `codedna history risk`,
+`POST /api/risk` (gate cached per database version) and the IDE's "Learned
+from test history" mode in *Tests to run*. History features for an untested
+change come from `features.change_rows`; `build_dataset` was refactored to
+share the per-row code; its output is unchanged (identical row digest on
+LittleProxy without structural features, and the existing tests pass).
+
+On the four restored datasets the gate passes for HikariCP, LittleProxy and
+wicket-bootstrap and fails for jade4j (2 failing validation commits). This
+offline check reuses the study's test split, so it is not an independent
+evaluation of the gate.

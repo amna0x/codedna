@@ -143,3 +143,29 @@ def test_run_tests_needs_server_and_request_opt_in(project, tmp_path, monkeypatc
     ran = enabled.post("/api/run-tests", headers=AUTH, json={**body, "allow_build": True}).json()
     assert ran["results"]["failing_tests"] == ["a.CoreTest"]
     assert ran["coverage_map"] is None
+
+
+def test_risk_endpoint_reports_the_gate_and_falls_back_without_evidence(project, tmp_path):
+    from codedna.test_history.mining import mine_history
+    from codedna.test_history.store import HistoryStore
+    from test_history import run_result
+
+    repo, base, head = project
+    db = tmp_path / "history.db"
+    with HistoryStore(db) as store:
+        mine_history(repo.path, store)
+        store.add_run(run_result(base, {"a.CoreTest": "passed"}), "test")
+    api = client()
+    body = {"repo": str(repo.path), "base": base, "head": head, "history_db": str(db)}
+    assert api.post("/api/risk", json=body).status_code == 401
+    response = api.post("/api/risk", json=body, headers=AUTH)
+    assert response.status_code == 200, response.text
+    data = response.json()
+    assert data["gate"]["status"] == "unvalidated"
+    assert data["decision"]["mode"] == "full_suite"
+    assert data["decision"]["selected"] == ["a.CoreTest"]
+    assert data["commits_since_full_run"] == 1
+    missing = api.post("/api/risk", json={**body, "history_db": str(tmp_path / "none.db")},
+                       headers=AUTH)
+    assert missing.status_code == 400
+    assert "none.db" in missing.json()["error"]

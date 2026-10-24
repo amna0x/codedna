@@ -276,6 +276,22 @@ def build_parser() -> argparse.ArgumentParser:
     experiment.add_argument("--no-ablations", action="store_true", help="Skip feature ablations.")
     experiment.add_argument("--seed", type=int, default=0, help="Random seed (default: 0).")
     experiment.add_argument("--output", help="Write JSON to this file instead of standard output.")
+
+    risk = history_commands.add_parser(
+        "risk", help="Validate calibrated stopping on this project's history, then decide "
+                     "which tests a change needs (D-041).",
+        description="Trains, calibrates and checks the B10 stopping rule on the project's own "
+                    "earlier history. Recommends the full suite when the check fails, the "
+                    "evidence is stale, or non-Java files changed.")
+    risk.add_argument("--db", required=True, help="SQLite history database.")
+    risk.add_argument("--repo", help="Repository path (default: the one recorded by mine).")
+    risk.add_argument("--base", required=True, help="Base commit of the change.")
+    risk.add_argument("--head", default="HEAD", help="Head commit of the change (default: HEAD).")
+    risk.add_argument("--risk-target", type=_fraction, default=0.05,
+                      help="Max estimated skip risk (default: 0.05).")
+    risk.add_argument("--no-structural", action="store_true",
+                      help="Skip graph-based features (faster).")
+    risk.add_argument("--output", help="Write JSON to this file instead of standard output.")
     return parser
 
 
@@ -414,7 +430,17 @@ def _run_history(args: argparse.Namespace) -> int:
               file=sys.stderr)
         return EXIT_ANALYSIS_ERROR
 
+    if command == "risk" and not Path(args.db).is_file():
+        print(f"error: history database not found: {args.db}", file=sys.stderr)
+        return EXIT_ANALYSIS_ERROR
+
     with HistoryStore(args.db) as store:
+        if command == "risk":
+            from codedna.selection.gate import GateConfig, assess_change
+            return _write_json(assess_change(
+                store, args.base, args.head, repo_path=args.repo,
+                structural=not args.no_structural,
+                config=GateConfig(risk_target=args.risk_target)), args.output)
         if command == "mine":
             commits = mine_history(args.repo, store, revision=args.rev,
                                    max_commits=args.max_commits)

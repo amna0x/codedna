@@ -88,6 +88,12 @@ class CompareRequest(ChangeRequest):
     non_java: Literal["retest-all", "ignore"] = "retest-all"
 
 
+class RiskRequest(ChangeRequest):
+    history_db: str = Field(description="SQLite history database of this repository.")
+    risk_target: float = Field(default=0.05, ge=0.0, le=1.0)
+    structural: bool = True
+
+
 class RunTestsRequest(RevRequest):
     output_dir: str
     allow_build: bool = False
@@ -109,6 +115,7 @@ def create_app(token: str, *, allow_build: bool = False,
     app = FastAPI(title="CodeDNA local API", version=__version__,
                   description="Local API used by the CodeDNA IDE. Loopback only.")
     app.state.allow_build = allow_build
+    app.state.risk_gates = {}
 
     @app.middleware("http")
     async def loopback_host_only(request: Request, call_next):
@@ -189,6 +196,26 @@ def create_app(token: str, *, allow_build: bool = False,
             load_results(_json_file(body.ground_truth, RESULTS_FILE)),
             coverage_map=load_coverage_map(coverage) if coverage else None,
             non_java=body.non_java)
+
+    @app.post("/api/risk", dependencies=secured)
+    def risk(body: RiskRequest) -> dict:
+        # Validation retrains the model, so it is cached per database version.
+        from codedna.selection.gate import GateConfig, assess_change, validate
+        from codedna.test_history.features import build_dataset
+        from codedna.test_history.store import HistoryStore
+
+        db = Path(body.history_db)
+        if not db.is_file():
+            raise FileNotFoundError(2, "history database not found", str(db))
+        key = (str(db.resolve()), db.stat().st_mtime_ns, body.risk_target, body.structural)
+        with HistoryStore(db) as store:
+            gate = app.state.risk_gates.get(key)
+            if gate is None:
+                gate = validate(build_dataset(store, body.repo, structural=body.structural),
+                                GateConfig(risk_target=body.risk_target))
+                app.state.risk_gates = {key: gate}
+            return assess_change(store, body.base, body.head, repo_path=body.repo,
+                                 structural=body.structural, gate=gate)
 
     @app.post("/api/run-tests", dependencies=secured)
     def run_tests(body: RunTestsRequest) -> dict:

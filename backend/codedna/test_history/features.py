@@ -125,47 +125,95 @@ def build_dataset(store: HistoryStore, repo_path: str | Path | None = None, *,
     for index, commit in enumerate(commits):
         files = store.changed_files(commit.sha)
         paths = [f.path for f in files]
-        change = {
-            "files_changed": len(files),
-            "java_files_changed": sum(p.endswith(".java") for p in paths),
-            "non_java_files_changed": sum(not p.endswith(".java") for p in paths),
-            "test_files_changed": sum(_is_test_path(p) for p in paths),
-            "lines_added": sum(f.added or 0 for f in files),
-            "lines_deleted": sum(f.deleted or 0 for f in files),
-        }
         impacted = _structural(repo, commit, dataset.warnings, parse_cache) if structural else None
-
         results = [r for r in store.results(commit.sha) if r.status != "skipped"]
         for result in results:
-            state = states[result.test_id]
-            features = dict(change)
-            features["test_file_changed"] = float(any(_is_file_of(result.test_id, p) for p in paths))
-            if structural:
-                hit = (impacted or {}).get(result.test_id)
-                features["dep_reachable"] = float(hit is not None)
-                features["dep_distance"] = float(hit[0]) if hit else -1.0
-                features["dep_confirmed"] = float(bool(hit and hit[1]))
-            features.update(_history_features(state, index))
-            features["co_failures"] = float(sum(file_failures[p].get(result.test_id, 0)
-                                                for p in paths))
+            features = _row_features(files, result.test_id, impacted, structural,
+                                     states[result.test_id], file_failures, index)
             dataset.rows.append(Row(commit.sha, commit.seq, result.test_id,
                                     int(result.failed), result.time, features))
-
         # Only now does commit `index` become history for later commits.
-        for result in results:
-            state = states[result.test_id]
-            state.runs += 1
-            state.failures += int(result.failed)
-            state.recent.append(int(result.failed))
-            state.total_time += result.time
-            state.last_time = result.time
-            if result.failed:
-                state.last_failure_index = index
-                for path in paths:
-                    file_failures[path][result.test_id] += 1
+        _record(states, file_failures, results, paths, index)
 
     _warn_if_few_failures(dataset)
     return dataset
+
+
+def _row_features(files, test_id: str, impacted, structural: bool, state: _TestState,
+                  file_failures, index: int) -> dict[str, float]:
+    paths = [f.path for f in files]
+    features = {
+        "files_changed": len(files),
+        "java_files_changed": sum(p.endswith(".java") for p in paths),
+        "non_java_files_changed": sum(not p.endswith(".java") for p in paths),
+        "test_files_changed": sum(_is_test_path(p) for p in paths),
+        "lines_added": sum(f.added or 0 for f in files),
+        "lines_deleted": sum(f.deleted or 0 for f in files),
+        "test_file_changed": float(any(_is_file_of(test_id, p) for p in paths)),
+    }
+    if structural:
+        hit = (impacted or {}).get(test_id)
+        features["dep_reachable"] = float(hit is not None)
+        features["dep_distance"] = float(hit[0]) if hit else -1.0
+        features["dep_confirmed"] = float(bool(hit and hit[1]))
+    features.update(_history_features(state, index))
+    features["co_failures"] = float(sum(file_failures[p].get(test_id, 0) for p in paths))
+    return features
+
+
+def _record(states, file_failures, results, paths: list[str], index: int) -> None:
+    for result in results:
+        state = states[result.test_id]
+        state.runs += 1
+        state.failures += int(result.failed)
+        state.recent.append(int(result.failed))
+        state.total_time += result.time
+        state.last_time = result.time
+        if result.failed:
+            state.last_failure_index = index
+            for path in paths:
+                file_failures[path][result.test_id] += 1
+
+
+def change_rows(store: HistoryStore, base: str, head: str, test_ids: list[str] | None = None, *,
+                repo_path: str | Path | None = None, structural: bool = True) -> list[Row]:
+    """Feature rows for a change ``base → head`` that has no test results yet.
+
+    History features come from **every** stored commit with results (all of
+    them are earlier than the change being decided). ``test_ids`` defaults to
+    the tests seen in the history. Labels are 0 and durations the historical
+    mean: neither is known before the tests run.
+    """
+    from codedna.git_analysis.git import resolve_commit, run_git
+    from codedna.test_history.store import CommitRecord, FileChange
+
+    repo = resolve_repository(repo_path or store.get_meta("repository") or ".")
+    with_results = store.commits_with_results()
+    commits = [c for c in store.commits() if c.sha in with_results]
+    states: dict[str, _TestState] = defaultdict(_TestState)
+    file_failures: dict[str, dict[str, int]] = defaultdict(lambda: defaultdict(int))
+    for index, commit in enumerate(commits):
+        results = [r for r in store.results(commit.sha) if r.status != "skipped"]
+        _record(states, file_failures, results,
+                [f.path for f in store.changed_files(commit.sha)], index)
+    base_sha, head_sha = resolve_commit(repo, base), resolve_commit(repo, head)
+    files = []
+    for line in run_git(repo, "diff", "--no-renames", "--numstat", base_sha, head_sha).splitlines():
+        if line.strip():
+            added, deleted, path = line.split("\t", 2)
+            files.append(FileChange(path, None if added == "-" else int(added),
+                                    None if deleted == "-" else int(deleted)))
+    warnings: list[str] = []
+    impacted = _structural(repo, CommitRecord(head_sha, len(commits), base_sha, 0), warnings) \
+        if structural else None
+    tests = test_ids if test_ids is not None else sorted(states)
+    rows = []
+    for test_id in tests:
+        state = states[test_id]
+        features = _row_features(files, test_id, impacted, structural, state, file_failures,
+                                 len(commits))
+        rows.append(Row(head_sha, len(commits), test_id, 0, features["mean_duration"], features))
+    return rows
 
 
 def _warn_if_few_failures(dataset: Dataset) -> None:
