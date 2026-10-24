@@ -46,6 +46,20 @@ the full suite there.
   projects with ≥20 failing commits in the later half; rerun the same command
   with their datasets added and a new output folder.
 
+## Deviations from the protocol (disclosed)
+
+- After the first run, review found two bugs in the verdict code: the gate
+  could read "supported" with no rejected blocks to compare against, and the
+  project count for the "fewer than 3" rule used eligible rather than compared
+  projects. Both were fixed (commit a1616ce) and the whole study was rerun
+  into this same folder. Neither fix changed any number or verdict above (all
+  four projects were compared, and 12 rejected blocks exist). Strictly, the
+  protocol asks for a new folder after any change; this note records that it
+  was reused.
+- The protocol asks for the pipeline commit that produced each dataset. Only
+  the dataset SHA-256 values were recorded (`config.json`); the datasets were
+  converted earlier with `scripts/run_study.py` on main.
+
 ## Limits
 
 Four projects, one deterministic fit per block, commit bootstrap ignores serial
