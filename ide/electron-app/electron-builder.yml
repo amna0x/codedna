@@ -15,6 +15,10 @@ files:
   - "!**/*.map"
 # Extensions run from disk, not from an asar archive.
 asar: false
+# `npm run rebuild` (theia rebuild:electron) already built the native modules
+# for Electron; a second rebuild by electron-builder needs Electron headers
+# from the internet and fails on @parcel/watcher.
+npmRebuild: false
 win:
   target: nsis
 nsis:
