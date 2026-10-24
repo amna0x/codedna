@@ -101,10 +101,17 @@ export class GraphViewWidget extends ReactWidget {
     protected override onResize(msg: Parameters<ReactWidget['onResize']>[0]): void {
         super.onResize(msg);
         this.cy?.resize();
+        this.update();  // draws a graph that arrived while the view was hidden
+    }
+
+    protected override onAfterShow(msg: Parameters<ReactWidget['onAfterShow']>[0]): void {
+        super.onAfterShow(msg);
+        this.update();
     }
 
     protected draw(): void {
-        if (!this.graph || !this.canvas || this.cy) {
+        // A hidden view has no size; a layout computed then would stack every node.
+        if (!this.graph || !this.canvas || this.cy || !this.canvas.clientWidth) {
             return;
         }
         const style = getComputedStyle(this.node);
@@ -121,7 +128,6 @@ export class GraphViewWidget extends ReactWidget {
             ],
             layout: { name: 'breadthfirst', directed: true, spacingFactor: 1.1,
                 roots: this.graph.nodes.filter(n => n.changed).map(n => n.id) },
-            wheelSensitivity: 0.3,
             style: [
                 { selector: 'node', style: {
                     'background-color': 'data(color)', label: 'data(label)', color: color('--cd-text'),
@@ -135,7 +141,9 @@ export class GraphViewWidget extends ReactWidget {
                 { selector: 'edge[confidence = "heuristic"]', style: { 'line-style': 'dashed' } },
                 { selector: '.cd-faded', style: { opacity: 0.25 } },
                 { selector: '.cd-path', style: { 'line-color': color('--cd-modified'),
-                    'target-arrow-color': color('--cd-modified'), width: 3 } }
+                    'target-arrow-color': color('--cd-modified'), width: 3 } },
+                { selector: 'node.cd-selected', style: {
+                    'border-width': 3, 'border-style': 'solid', 'border-color': color('--cd-text') } }
             ]
         });
         this.cy.on('tap', 'node', event => this.select(event.target.id()));
@@ -146,7 +154,7 @@ export class GraphViewWidget extends ReactWidget {
         const cy = this.cy;
         this.selected = this.graph?.nodes.find(n => n.id === id);
         if (cy) {
-            cy.elements().removeClass('cd-faded cd-path');
+            cy.elements().removeClass('cd-faded cd-path cd-selected');
             if (this.selected) {
                 const path = cy.collection();
                 for (const edgeId of this.selected.path_edges) {
@@ -156,9 +164,19 @@ export class GraphViewWidget extends ReactWidget {
                 path.merge(cy.getElementById(this.selected.id));
                 cy.elements().not(path).addClass('cd-faded');
                 path.edges().addClass('cd-path');
+                cy.getElementById(this.selected.id).addClass('cd-selected');
             }
         }
         this.update();
+    }
+
+    protected async open(file: string): Promise<void> {
+        try {
+            await this.workspace.openFile(file);
+        } catch {
+            this.error = `Could not open ${file}. It may have been deleted or moved by this change.`;
+            this.update();
+        }
     }
 
     protected render(): React.ReactNode {
@@ -185,7 +203,16 @@ export class GraphViewWidget extends ReactWidget {
                     <li><span className='cd-line-dashed' />Likely link</li>
                 </ul>
                 <div className='cd-graph-canvas' ref={el => { this.canvas = el; }}
-                    role='img' aria-label={`Impact graph with ${graph.nodes.length} parts`} />
+                    role='img' aria-label={`Impact graph with ${graph.nodes.length} parts. Use the list below to explain a part.`} />
+                <label className='cd-field cd-graph-pick'>
+                    <span className='cd-field-label'>Explain a part</span>
+                    <select value={this.selected?.id ?? ''} onChange={e => this.select(e.currentTarget.value || undefined)}>
+                        <option value=''>Choose…</option>
+                        {graph.nodes.map(n => <option key={n.id} value={n.id}>
+                            {nodeLabel(n.id)} ({CATEGORY[n.category].label.toLowerCase()})
+                        </option>)}
+                    </select>
+                </label>
                 {this.selected ? this.renderDetails(this.selected, graph) : <p className='cd-help'>Click a dot to see its explanation path.</p>}
                 {this.warnings.length > 0 && <div className='cd-notice'>
                     <strong>Good to know</strong>
@@ -211,11 +238,11 @@ export class GraphViewWidget extends ReactWidget {
             {node.reasons.length > 0 && <ul className='cd-reasons'>{node.reasons.map(r => <li key={r}>{r}</li>)}</ul>}
             {steps.length > 0 && <ol className='cd-path-steps'>
                 {[...steps].reverse().map(step => <li key={step.id}>
-                    <span className='cd-code'>{readableName(step.source)}</span> uses <span className='cd-code'>{readableName(step.target)}</span>
+                    <span className='cd-code'>{readableName(step.source)}</span> depends on <span className='cd-code'>{readableName(step.target)}</span>
                     {' '}({step.kind}, {confidenceLabel(step.confidence).text.toLowerCase()}, <span className='cd-meta'>{step.evidence}</span>)
                 </li>)}
             </ol>}
-            {node.file && <button className='cd-button' onClick={() => this.workspace.openFile(node.file!)}>Open file</button>}
+            {node.file && <button className='cd-button' onClick={() => this.open(node.file!)}>Open file</button>}
         </section>;
     }
 }
