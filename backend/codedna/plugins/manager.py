@@ -72,8 +72,11 @@ def install(catalogue: dict, plugin: str, version: str, *, confirmed: bool,
     name = PurePosixPath(entry.url).name
     if not name.endswith(".whl"):
         raise CatalogueError(f"{plugin} {version}: only wheel files are installed")
-    if _canonical(name.split("-", 1)[0]) != _canonical(entry.package or ""):
+    parts = name.split("-")
+    if _canonical(parts[0]) != _canonical(entry.package or ""):
         raise CatalogueError(f"{plugin} {version}: wheel {name} is not package {entry.package}")
+    if len(parts) < 2 or parts[1] != version:
+        raise CatalogueError(f"{plugin} {version}: wheel {name} is not version {version}")
     data = (download or _download)(entry.url)
     digest = hashlib.sha256(data).hexdigest()
     if digest != entry.sha256:

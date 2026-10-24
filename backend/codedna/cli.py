@@ -396,6 +396,10 @@ def _plugins(args: argparse.Namespace) -> int:
     if args.plugin_action == "catalogue":
         return _write_json(catalogue, None)
     if args.plugin_action == "install":
+        details = next((p for p in catalogue["plugins"] if p["id"] == args.plugin), None)
+        if details is not None:  # shown before anything runs, even with --yes
+            print(f"{details['name']} {args.version}: licence {details['licence']}; "
+                  f"source {details['source']}", file=sys.stderr)
         return _write_json(manager.install(catalogue, args.plugin, args.version,
                                            confirmed=args.yes), None)
     return _write_json(manager.remove(catalogue, args.plugin, confirmed=args.yes), None)

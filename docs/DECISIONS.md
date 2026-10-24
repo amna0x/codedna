@@ -810,7 +810,8 @@ none yet.
 official URL and validated (D-047); the caller names a plugin and an exact
 version and cannot pass a URL or file. Catalogue entries with a download gain
 a pip `package` name. Install order: compatibility (plugin API major), explicit
-confirmation, wheel file name must belong to that package, download (50 MB
+confirmation (the CLI first prints the plugin's licence and source, even with
+`--yes`), wheel file name must be that package at that exact version, download (50 MB
 cap), SHA-256 compared before pip sees the file, then `python -m pip install
 --no-index --no-deps` of that one wheel into CodeDNA's own interpreter. Remove
 needs confirmation, refuses built-ins and plugins that are not installed, and

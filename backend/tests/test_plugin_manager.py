@@ -93,7 +93,8 @@ def test_cli_install_without_yes_is_refused(monkeypatch, capsys):
                         else WHEEL)
     monkeypatch.setattr(manager, "_pip", FakePip())
     assert main(["plugins", "install", "python", "1.0.0"]) == EXIT_ANALYSIS_ERROR
-    assert "confirm" in capsys.readouterr().err
+    err = capsys.readouterr().err
+    assert "confirm" in err and "licence MIT" in err and "source https://example.org" in err
 
 
 def test_wheel_for_another_package_is_refused_before_download():
@@ -167,3 +168,12 @@ def test_real_pip_installs_and_removes_the_verified_wheel_offline(tmp_path):
         manager.remove(index, "python", confirmed=True, pip=pip)
     assert "codedna_python" not in subprocess.run(
         [str(python), "-m", "pip", "list"], capture_output=True, text=True, check=True).stdout
+
+
+def test_wheel_of_another_version_is_refused_before_download():
+    data = catalogue()
+    data["plugins"][1]["versions"][0]["url"] = (
+        OFFICIAL_RELEASES + "python-1.0.0/codedna_python-0.9.0-py3-none-any.whl")
+    with pytest.raises(CatalogueError, match="is not version 1.0.0"):
+        manager.install(data, "python", "1.0.0", confirmed=True,
+                        download=lambda url: pytest.fail("downloaded"), pip=FakePip())
