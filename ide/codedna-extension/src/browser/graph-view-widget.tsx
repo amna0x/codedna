@@ -110,7 +110,7 @@ export class GraphViewWidget extends ReactWidget {
             container: this.canvas,
             elements: [
                 ...this.graph.nodes.map(n => ({ data: {
-                    id: n.id, label: readableName(n.id.replace(/^file:/, '')),
+                    id: n.id, label: nodeLabel(n.id),
                     color: color(CATEGORY[n.category].color), category: n.category } })),
                 // Core edges read "dependent depends on target"; draw them the way the change travels.
                 ...this.graph.edges.map(e => ({ data: {
@@ -198,7 +198,7 @@ export class GraphViewWidget extends ReactWidget {
         const confidence = node.confidence === 'unresolved' ? undefined : confidenceLabel(node.confidence);
         return <section className='cd-card cd-graph-details' aria-label='Explanation path'>
             <div className='cd-row cd-static'>
-                <span className='cd-code'>{readableName(node.id.replace(/^file:/, ''))}</span>
+                <span className='cd-code'>{nodeLabel(node.id)}</span>
                 <span className='cd-row-meta'>
                     <Chip tone={node.category === 'test' ? 'added' : node.changed ? 'modified' : 'muted'}>{CATEGORY[node.category].label}</Chip>
                     {confidence ? <Chip tone={confidence.tone} title={confidence.hint}>{confidence.text}</Chip>
@@ -215,4 +215,9 @@ export class GraphViewWidget extends ReactWidget {
             {node.file && <button className='cd-button' onClick={() => this.workspace.openFile(node.file!)}>Open file</button>}
         </section>;
     }
+}
+
+/** Type ids read as class names; unanalysed files keep their path (`file:pom.xml` → `pom.xml`). */
+function nodeLabel(id: string): string {
+    return id.startsWith('file:') ? id.slice('file:'.length) : readableName(id);
 }
