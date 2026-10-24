@@ -106,7 +106,8 @@ def explanation_graph(report: dict) -> dict:
     for item in report["impacted"]:
         ids = []
         for step in item["path"]:
-            edge_id = f'{step["dependent"]}->{step["depends_on"]}'
+            # Two types can be linked by several kinds (extends and uses); keep them apart.
+            edge_id = f'{step["dependent"]}->{step["depends_on"]}:{step["kind"]}'
             edges.setdefault(edge_id, {"id": edge_id, "source": step["dependent"],
                                        "target": step["depends_on"], "kind": step["kind"],
                                        "confidence": step["confidence"],

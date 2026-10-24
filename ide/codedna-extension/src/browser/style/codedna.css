@@ -339,3 +339,4 @@
 .codedna-view .cd-line-dashed { border-top-style: dashed; }
 .codedna-view .cd-graph-details { display: grid; gap: 8px; padding: 12px; }
 .codedna-view .cd-path-steps { margin: 0; padding-left: 20px; display: grid; gap: 4px; }
+.codedna-view .cd-graph-pick { max-width: 420px; }

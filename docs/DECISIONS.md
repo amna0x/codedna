@@ -799,6 +799,8 @@ to the impact JSON (`impact_analysis.explanation_graph`): nodes by category
 shortest explanation path, each labelled confirmed or heuristic; non-Java
 changes are `unresolved` nodes with no edges. The view only draws this JSON
 (no analysis in TypeScript); clicking a node highlights its path and lists each
-step with its evidence line. New frontend dependency: `cytoscape@3.30.4`
+step with its evidence line. Edge ids include the edge kind
+(`A->B:uses`), since two types can be linked by several kinds. A list under
+the graph selects the same paths from the keyboard. New frontend dependency: `cytoscape@3.30.4`
 (MIT, pinned) plus `@types/cytoscape` for compilation; named for this view in
 Milestone 6. Additive JSON field, so no API version change.
