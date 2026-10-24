@@ -789,3 +789,16 @@ recall -0.0056 [-0.0420, 0.0312] do not establish a benefit. Raw stopping violat
 the target on two projects. Retain recent-failure order for live use; preserve
 both exploratory studies rather than selecting the more favourable adapter.
 Evidence: `experiments/results/dante-history-check-2026-10-24/FINDINGS.md`.
+
+## D-047 — Static website and validated catalogue index
+
+`website/` is plain HTML/CSS plus one small script that renders
+`catalogue/index.json`. There is no framework, build step, account or tracking,
+so GitHub Pages can serve the folder as is. The page only displays the
+catalogue; it never installs anything. The catalogue schema (version 1)
+follows D-020. `codedna.plugins.catalogue` rejects unpinned versions, missing
+or malformed SHA-256 checksums, and any download URL outside the official
+repository's GitHub Releases. The future in-app plugin manager reuses that
+validator. Java is listed as a built-in version with no download until it
+moves into its own package. No licence is claimed because the repository has
+none yet.

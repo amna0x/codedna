@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CodeDNA docs</title>
+<meta name="description" content="CodeDNA: change impact and risk-aware regression test selection for Java.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><a class="logo" href="index.html">CodeDNA</a><nav><a href="index.html">Home</a><a href="docs.html" aria-current="page">Docs</a><a href="plugins.html">Plugins</a></nav></header>
+<main>
+<h1>Docs</h1>
+<h2 id="install">Install</h2>
+<p>You need Python 3.11+, Git, and for running tests a JDK 17+ with Maven or Gradle.</p>
+<pre>git clone https://github.com/mohibk0004-del/codedna
+cd codedna
+pip install -e ".[api]"
+codedna --version</pre>
+<p>The desktop IDE is built from <code>ide/</code> (Node 22): <code>npm install</code>, then <code>npm run build</code> and <code>npm start</code>. A Windows installer is produced with <code>npm run package --workspace electron-app</code>.</p>
+
+<h2>First run</h2>
+<pre># what changed in the last commit, and what it may affect
+codedna impact --repo . --base HEAD~1 --head HEAD
+
+# the same for edits you have not committed yet
+codedna impact --repo . --base HEAD --head WORKTREE
+
+# tests to run, with reasons
+codedna select --repo . --base HEAD~1 --head HEAD --strategy dependency</pre>
+
+<h2>Running tests</h2>
+<p>Running tests executes the project's own code, so CodeDNA only does it when you pass <code>--allow-build</code>:</p>
+<pre>codedna run-tests --repo . --output-dir out --allow-build</pre>
+<p>Maven projects run from the root reactor; Gradle projects use the Gradle on your PATH (the repository's <code>gradlew</code> is never run).</p>
+
+<h2>Risk-based selection</h2>
+<p><code>codedna risk-select</code> fits a model on the project's own older history, audits it on later history, and only then estimates the chance that a skipped test fails. If the audit fails or the history is stale, it recommends the full suite and says why.</p>
+</main>
+<footer>CodeDNA — a final-year project. Static site; no accounts, no tracking.</footer>
+</body>
+</html>
