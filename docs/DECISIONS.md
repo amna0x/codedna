@@ -794,8 +794,9 @@ Evidence: `experiments/results/dante-history-check-2026-10-24/FINDINGS.md`.
 
 Every command and API call that takes a revision also accepts `WORKTREE`, and
 the IDE compare picker offers "My uncommitted changes" (`HEAD` → `WORKTREE`).
-`git_analysis.git.snapshot_worktree` builds a temporary index from HEAD,
-runs `git add -A` into it (so `.gitignore` applies), and writes the tree plus
+`git_analysis.git.snapshot_worktree` copies the real index to a temporary
+file (HEAD's tree when there is no index; the copy keeps the stat cache, so
+unchanged files are not hashed again), runs `git add -A` into it (so `.gitignore` applies), and writes the tree plus
 an unreferenced commit with fixed identity and dates. The same working tree
 therefore always gives the same SHA. The real index, refs and files are not
 touched; the extra objects are ordinary unreachable objects that `git gc`

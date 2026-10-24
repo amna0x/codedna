@@ -14,6 +14,7 @@ Design rules (see docs/DECISIONS.md, D-003):
 from __future__ import annotations
 
 import os
+import shutil
 import subprocess
 import tempfile
 from pathlib import Path
@@ -143,9 +144,11 @@ _SNAPSHOT_ENV = {
 def snapshot_worktree(repo: Path) -> str:
     """Commit object for the working tree on top of HEAD, without touching refs or the index.
 
-    A temporary index receives ``git add -A`` (so ``.gitignore`` applies); the
-    tree and an unreferenced commit are written to the object store, where
-    ``git gc`` eventually removes them. Repositories whose attributes name a
+    A copy of the real index (its file stat cache means unchanged files are
+    not hashed again; HEAD's tree if there is no index) receives
+    ``git add -A`` (so ``.gitignore`` applies). The tree and an unreferenced
+    commit are written to the object store, where ``git gc`` eventually
+    removes them. The real index and every ref stay untouched. Repositories whose attributes name a
     filter driver (e.g. Git LFS) are refused: ``git add`` would run that
     driver's configured program.
     """
@@ -160,8 +163,13 @@ def snapshot_worktree(repo: Path) -> str:
             "uncommitted changes cannot be analysed: Git filter drivers apply to "
             f"{len(filtered)} file(s), e.g. {filtered[0]}; commit the changes instead")
     with tempfile.TemporaryDirectory(prefix="codedna-index-") as tmp:
-        env = {"GIT_INDEX_FILE": str(Path(tmp) / "index"), **_SNAPSHOT_ENV}
-        _run(repo, ("read-tree", head), env=env)
+        index = Path(tmp) / "index"
+        env = {"GIT_INDEX_FILE": str(index), **_SNAPSHOT_ENV}
+        real = repo / run_git(repo, "rev-parse", "--git-path", "index").strip()
+        try:
+            shutil.copyfile(real, index)
+        except OSError:  # no index yet (or unreadable): start from HEAD's tree
+            _run(repo, ("read-tree", head), env=env)
         _run(repo, ("add", "-A", "--", "."), env=env)
         tree = _run(repo, ("write-tree",), env=env).decode().strip()
         return _run(repo, ("commit-tree", tree, "-p", head, "-m", "CodeDNA working-tree snapshot"),

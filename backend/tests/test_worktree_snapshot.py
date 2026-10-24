@@ -42,3 +42,31 @@ def test_filter_drivers_are_refused_rather_than_run(repo):
 
     with pytest.raises(InvalidCommitError, match="filter drivers"):
         resolve_commit(repo.path, WORKTREE)
+
+
+def test_staged_and_deleted_files_are_snapshotted_from_the_working_tree(repo):
+    repo.write("a/Core.java", CORE)
+    repo.write("a/User.java", USER)
+    repo.commit("base")
+    repo.write("a/Core.java", CORE.replace("return 1", "return 3"))
+    repo.git("add", "a/Core.java")  # staged ...
+    repo.write("a/Core.java", CORE.replace("return 1", "return 4"))  # ... then edited again
+    (repo.path / "a/User.java").unlink()
+
+    snapshot = resolve_commit(repo.path, WORKTREE)
+
+    assert "return 4" in repo.git("show", f"{snapshot}:a/Core.java")
+    assert "a/User.java" not in repo.git("ls-tree", "-r", "--name-only", snapshot)
+    assert "return 3" in repo.git("show", ":a/Core.java")  # the real index is unchanged
+
+
+def test_sparse_checkout_files_are_not_reported_as_deleted(repo):
+    repo.write("a/Core.java", CORE)
+    repo.write("b/Other.java", "package b;\nclass Other {}\n")
+    repo.commit("base")
+    repo.git("sparse-checkout", "set", "a")
+    assert not (repo.path / "b/Other.java").exists()
+
+    changes = extract_changes(repo.path, "HEAD", WORKTREE)
+
+    assert changes.changed_files == []
