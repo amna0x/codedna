@@ -71,7 +71,8 @@ Java stays the only supported language until Milestone 5 is complete.
 - ✅ Offline tests with a fake `mvn`; real Maven/JaCoCo end-to-end test in CI
 - ✅ Real Maven/JaCoCo flow verified locally on Windows (JDK 17, Maven 3.10);
   the full suite includes the integration test with `--run-maven`.
-- ⏳ Multi-module Maven, Gradle, custom Surefire includes
+- ✅ Multi-module Maven, Gradle, custom Surefire includes (D-045; static
+  layout, per-test coverage still single-module Maven only)
 - ⏳ Evaluate B0/B4/coverage over many commits of a real project (needs
   Milestone 4 history tooling)
 
@@ -146,6 +147,10 @@ Product track, alongside:
   five seeds; all calibrated observed targets hold, but matched-time safety
   difference +0.0460 [-0.0500, 0.2806] is not significant. Full-DANTE reproduction
   and general superiority are not claimed (D-040).
+- 🔄 Rolling-origin evidence study with pre-fixed rules (D-042): on the four
+  inspected projects B10 shows no meaningful safety difference from matched B3;
+  the gate accepts few blocks but those miss rarely. New-project confirmation
+  pending data access.
 
 ## Milestone 6 — CodeDNA IDE and FYP demo ⏳
 
@@ -157,7 +162,7 @@ May start in parallel (Student C) once the analysis JSON formats are stable.
   session token, Host check, build opt-in (D-019, D-028)
 - ✅ API/CLI: target-bound risk selection, 50/25/25 fit/calibrate/audit gate,
   explicit full-suite fallback, recomputed selected-test execution (D-041).
-  No serialized model is loaded; long-run progress remains outstanding.
+  No serialized model is loaded; long runs show elapsed-time progress (D-044).
 - ✅ CodeDNA IDE skeleton: Theia 1.76.0 + Electron 42 desktop app in `ide/`
   (D-029); builds and runs on Windows; extension compiled in CI
 - ✅ "Changed code" and "Recommended tests" views talking to the core through
@@ -166,8 +171,12 @@ May start in parallel (Student C) once the analysis JSON formats are stable.
 - ✅ CodeDNA Dark theme as the default (D-030), revised for newcomers:
   calm neutral look, plain-language "Changes" / "Tests to run" views,
   shared "Compare" picker, friendly errors, first-run guide (D-031)
-- ⏳ Java language support in the editor (VS Code extension host + a Java
-  extension), graph view (Cytoscape.js), uncommitted-change analysis, installers
+- ✅ Impact graph view (Cytoscape.js, D-043): changed code → affected parts →
+  tests, confidence-labelled edges, click-to-explain paths
+- 🔄 Java editor support, progress notifications, Windows installer (D-044);
+  needs a Windows build check
+- ✅ Uncommitted-change analysis: `WORKTREE` revision + "My uncommitted
+  changes" in the IDE (D-046)
 - ⏳ GitHub PR demonstration and final experimental report
 
 - ✅ IDE: risk status/audit evidence, explicit execution confirmation, actual

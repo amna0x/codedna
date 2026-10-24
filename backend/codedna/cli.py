@@ -7,7 +7,7 @@ Usage:
                     [--output FILE]
     codedna tests   --repo PATH [--rev REV] [--output FILE]
     codedna run-tests --repo PATH [--rev REV] --output-dir DIR --allow-build
-                    [--per-test-coverage] [--mvn PATH] [--timeout SECONDS] [--keep-checkout]
+                    [--per-test-coverage] [--mvn PATH] [--gradle PATH] [--timeout SECONDS] [--keep-checkout]
     codedna select  --repo PATH --base SHA --head SHA --strategy all|dependency|coverage
                     [--coverage-map FILE] [--durations FILE] [--non-java retest-all|ignore]
     codedna risk-select --repo PATH --base SHA --head SHA [--history-csv FILE] [--risk-target F]
@@ -127,10 +127,10 @@ def build_parser() -> argparse.ArgumentParser:
 
     run_tests = subcommands.add_parser(
         "run-tests",
-        help="Run the Maven test suite of one commit (executes project code; needs --allow-build).",
+        help="Run the Maven or Gradle test suite of one commit (executes project code; needs --allow-build).",
         description=(
             "Export the commit into OUTPUT_DIR/checkout with git archive, run 'mvn test' there and "
-            "save results.json. With --per-test-coverage, run each test class separately under "
+            "save results.json (Gradle projects: 'gradle test'). With --per-test-coverage, run each test class separately under "
             "JaCoCo and also save coverage-map.json. This EXECUTES the project's code and build "
             "plugins, and Maven may download dependencies: only use it on projects you trust."
         ),
@@ -144,8 +144,11 @@ def build_parser() -> argparse.ArgumentParser:
     run_tests.add_argument("--per-test-coverage", action="store_true",
                            help="Run each test class separately with JaCoCo (slow).")
     run_tests.add_argument("--mvn", help="Path to the Maven executable (default: mvn on PATH).")
+    run_tests.add_argument("--gradle",
+                           help="Path to the Gradle executable (default: gradle on PATH; "
+                                "the repository's gradlew is never used).")
     run_tests.add_argument("--timeout", type=_non_negative_int, default=1800,
-                           help="Timeout per Maven invocation in seconds (default: 1800).")
+                           help="Timeout per build invocation in seconds (default: 1800).")
     run_tests.add_argument("--keep-checkout", action="store_true",
                            help="Keep OUTPUT_DIR/checkout after the run (for debugging).")
 
@@ -228,7 +231,7 @@ def build_parser() -> argparse.ArgumentParser:
                          help="Collect at most N commits in this invocation.")
     collect.add_argument("--mvn", help="Path to the Maven executable (default: mvn on PATH).")
     collect.add_argument("--timeout", type=_non_negative_int, default=1800,
-                         help="Timeout per Maven invocation in seconds (default: 1800).")
+                         help="Timeout per build invocation in seconds (default: 1800).")
 
     rtp = history_commands.add_parser(
         "import-rtptorrent",
@@ -382,12 +385,13 @@ def _run_tests(args: argparse.Namespace) -> int:
         print("error: run-tests executes the project's code and build plugins; "
               "re-run with --allow-build if you trust this project", file=sys.stderr)
         return EXIT_ANALYSIS_ERROR
-    print(f"warning: running the Maven build of {args.repo} (project code will execute)",
+    print(f"warning: running the build of {args.repo} (project code will execute)",
           file=sys.stderr)
     run, coverage = run_maven_tests(
         args.repo, args.rev, args.output_dir, allow_build=True,
         per_test_coverage=args.per_test_coverage,
-        maven_command=[args.mvn] if args.mvn else None, timeout=args.timeout,
+        maven_command=[args.mvn] if args.mvn else None,
+        gradle_command=[args.gradle] if args.gradle else None, timeout=args.timeout,
         keep_checkout=args.keep_checkout, selected_tests=args.tests)
     summary = {
         "results": str(Path(args.output_dir) / RESULTS_FILE),

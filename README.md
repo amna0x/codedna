@@ -47,7 +47,8 @@ are implemented; see [docs/ROADMAP.md](docs/ROADMAP.md).
 | Python | 3.11 or newer | CodeDNA itself |
 | Git | 2.24 or newer | Change extraction |
 | Java (JDK) | 17 | `run-tests` and the sample project |
-| Maven | 3.9+ | `run-tests` (everything else works without it) |
+| Maven | 3.9+ | `run-tests` on Maven projects (everything else works without it) |
+| Gradle | 8+ (optional) | `run-tests` on Gradle projects; the repository's `gradlew` is never run |
 
 ## Setup
 
@@ -94,11 +95,12 @@ python -m pytest --run-maven
 ## Usage
 
 ```bash
+# HEAD_REV may be WORKTREE: uncommitted edits and new (non-ignored) files
 codedna analyze --repo PATH --base BASE_REV --head HEAD_REV [--level method|file] [--output FILE]
 codedna graph   --repo PATH [--rev REV] [--no-members] [--output FILE]
 codedna impact  --repo PATH --base BASE_REV --head HEAD_REV [--max-depth N] [--confirmed-only] [--output FILE]
 codedna tests   --repo PATH [--rev REV] [--output FILE]
-codedna run-tests --repo PATH [--rev REV] --output-dir DIR --allow-build [--per-test-coverage] [--mvn PATH] [--timeout S]
+codedna run-tests --repo PATH [--rev REV] --output-dir DIR --allow-build [--per-test-coverage] [--mvn PATH] [--gradle PATH] [--timeout S]
 codedna select  --repo PATH --base BASE_REV --head HEAD_REV --strategy all|dependency|coverage [--coverage-map F] [--durations F] [--non-java retest-all|ignore]
 codedna compare --repo PATH --base BASE_REV --head HEAD_REV --ground-truth F [--coverage-map F] [--non-java retest-all|ignore]
 codedna plugins

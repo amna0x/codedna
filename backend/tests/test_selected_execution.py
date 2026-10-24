@@ -40,7 +40,7 @@ def test_empty_selection_never_invokes_maven(project,tmp_path):
 @pytest.mark.parametrize('tests',[['a.ATest','a.ATest'],['UnknownTest'],['*'],['a.ATest,-DskipTests']])
 def test_invalid_test_filter_rejected_before_export(project,tmp_path,tests):
     repo,head=project
-    with pytest.raises(BuildError,match='distinct discovered'):
+    with pytest.raises(BuildError,match='distinct test classes'):
         run_maven_tests(repo.path,head,tmp_path/'invalid',allow_build=True,
             selected_tests=tests,maven_command=FAKE)
     assert not (tmp_path/'invalid').exists()
