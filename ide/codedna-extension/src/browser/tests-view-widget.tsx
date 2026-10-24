@@ -1,10 +1,12 @@
 import * as React from '@theia/core/shared/react';
 import { inject, injectable, postConstruct } from '@theia/core/shared/inversify';
 import { ConfirmDialog } from '@theia/core/lib/browser/dialogs';
+import { ProgressService } from '@theia/core/lib/common/progress-service';
 import { ReactWidget } from '@theia/core/lib/browser/widgets/react-widget';
 import { CodeDnaService, SelectionReport, SelectionStrategy, SelectionRun } from '../common/codedna-protocol';
 import { CodeDnaComparison } from './comparison';
 import { CodeDnaWorkspace } from './codedna-workspace';
+import { withProgress } from './progress';
 import { breakable, friendlyReason, friendlyWarning, packageName, plural, simpleName } from './plain-language';
 import { Chip, ComparePicker, ErrorNotice, FirstRun, Spinner } from './ui';
 
@@ -28,6 +30,7 @@ export class TestsViewWidget extends ReactWidget {
     @inject(CodeDnaService) protected readonly codedna: CodeDnaService;
     @inject(CodeDnaWorkspace) protected readonly workspace: CodeDnaWorkspace;
     @inject(CodeDnaComparison) protected readonly comparison: CodeDnaComparison;
+    @inject(ProgressService) protected readonly progress: ProgressService;
 
     protected strategy: SelectionStrategy = 'risk';
     protected loading = false;
@@ -64,7 +67,8 @@ export class TestsViewWidget extends ReactWidget {
         this.update();
         try {
             const base = this.comparison.base, head = this.comparison.head;
-            const result = await this.codedna.select(repo, base, head, this.strategy, this.historyCsv);
+            const result = await withProgress(this.progress, this.strategy === 'risk' ? 'CodeDNA: checking history and choosing tests' : 'CodeDNA: choosing tests',
+                () => this.codedna.select(repo, base, head, this.strategy, this.historyCsv));
             if (base !== this.comparison.base || head !== this.comparison.head) {
                 this.error = 'The comparison changed. Suggest tests again.';
                 return;
@@ -94,8 +98,9 @@ export class TestsViewWidget extends ReactWidget {
         this.execution = undefined;
         this.update();
         try {
-            this.execution = await this.codedna.runSelection(report.repository,
-                report.base_commit, report.head_commit, this.reportStrategy, this.reportHistory);
+            this.execution = await withProgress(this.progress, 'CodeDNA: running selected tests with Maven',
+                () => this.codedna.runSelection(report.repository,
+                    report.base_commit, report.head_commit, this.reportStrategy, this.reportHistory));
             this.report = this.execution.selection;
         } catch (error) {
             this.error = error instanceof Error ? error.message : String(error);

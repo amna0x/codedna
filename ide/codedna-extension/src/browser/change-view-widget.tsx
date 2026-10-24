@@ -1,11 +1,13 @@
 import * as React from '@theia/core/shared/react';
 import { inject, injectable, postConstruct } from '@theia/core/shared/inversify';
+import { ProgressService } from '@theia/core/lib/common/progress-service';
 import { ReactWidget } from '@theia/core/lib/browser/widgets/react-widget';
 import {
     AnalyzeReport, ChangedFile, CodeDnaService, DeclarationChange, ImpactReport, ImpactedNode
 } from '../common/codedna-protocol';
 import { CodeDnaComparison } from './comparison';
 import { CodeDnaWorkspace } from './codedna-workspace';
+import { withProgress } from './progress';
 import {
     breakable, changeLabel, confidenceLabel, fileStatusLabel, friendlyWarning, kindLabel, plural, readableName, simpleName
 } from './plain-language';
@@ -25,6 +27,7 @@ export class ChangeViewWidget extends ReactWidget {
     @inject(CodeDnaService) protected readonly codedna: CodeDnaService;
     @inject(CodeDnaWorkspace) protected readonly workspace: CodeDnaWorkspace;
     @inject(CodeDnaComparison) protected readonly comparison: CodeDnaComparison;
+    @inject(ProgressService) protected readonly progress: ProgressService;
 
     protected loading = false;
     protected error: string | undefined;
@@ -55,10 +58,10 @@ export class ChangeViewWidget extends ReactWidget {
         this.update();
         try {
             const { base, head } = this.comparison;
-            const [changes, impact] = await Promise.all([
+            const [changes, impact] = await withProgress(this.progress, 'CodeDNA: analysing the change', () => Promise.all([
                 this.codedna.analyze(repo, base, head),
                 this.codedna.impact(repo, base, head)
-            ]);
+            ]));
             this.changes = changes;
             this.impact = impact;
         } catch (error) {

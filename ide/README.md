@@ -52,6 +52,28 @@ by `python scripts/make_demo_repo.py ../codedna-demo`), then press
 If panels look narrow from an earlier session, run **View → Reset Workbench
 Layout** (command palette).
 
+### Java editing
+
+The app bundles Theia's VS Code extension host with two pinned Open VSX
+extensions (`theiaPlugins` in `electron-app/package.json`): the Java grammar
+(`vscode.java`) and Red Hat Language Support for Java (`redhat.java`, Windows
+x64 build with its own Java runtime). `npm run build` downloads them into
+`electron-app/plugins/` (git-ignored). They give completion, errors, go to
+definition and Maven project import; CodeDNA's own analysis does not use them.
+
+### Windows installer
+
+```bash
+cd ide
+npm install
+npm run build
+npm run package --workspace electron-app   # → electron-app/dist/CodeDNA IDE Setup 0.1.0.exe
+```
+
+The installer contains the IDE only. The Python core is installed separately
+(`pip install -e "..[api]"`, or set `CODEDNA_EXECUTABLE`). Long CodeDNA
+actions show a progress notification with the elapsed time.
+
 ### Troubleshooting
 
 - `UNABLE_TO_GET_ISSUER_CERT` while rebuilding native modules on Windows:

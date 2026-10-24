@@ -1,0 +1,26 @@
+# Windows installer for the CodeDNA IDE (D-044). Build after `npm run build`
+# from ide/: `npm run package --workspace electron-app`.
+appId: org.codedna.ide
+productName: CodeDNA IDE
+electronDist: ../node_modules/electron/dist
+directories:
+  buildResources: resources
+  output: dist
+files:
+  - lib/**
+  - src-gen/**
+  - package.json
+  - "!**/*.map"
+extraResources:
+  - from: plugins
+    to: app/plugins
+    filter: ["**/*"]
+win:
+  target: nsis
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  shortcutName: CodeDNA IDE
+publish: null

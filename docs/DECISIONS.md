@@ -802,3 +802,17 @@ changes are `unresolved` nodes with no edges. The view only draws this JSON
 step with its evidence line. New frontend dependency: `cytoscape@3.30.4`
 (MIT, pinned) plus `@types/cytoscape` for compilation; named for this view in
 Milestone 6. Additive JSON field, so no API version change.
+
+## D-044 — Java editing, progress notifications and Windows installer
+
+Step 4 of the final plan. (1) Java editing: add `@theia/plugin-ext` and
+`@theia/plugin-ext-vscode` 1.76.0 and two pinned Open VSX extensions,
+`vscode.java` 1.95.3 (grammar) and `redhat.java` 1.36.0 win32-x64 (language
+server with embedded JRE). These are editor features only; CodeDNA analysis
+stays in the Python core. They are build-time downloads at fixed versions, not
+CodeDNA plugins, so the D-020 catalogue rule does not apply; record their
+SHA-256 after the first verified build. (2) Long core calls show a Theia
+progress notification with stage text and elapsed seconds; no fake
+percentages, because the core reports no intermediate steps. (3)
+`electron-builder` 26.0.12 builds a per-user NSIS installer for the IDE. The
+Python core is not bundled yet; bundling it (e.g. PyInstaller) is left open.

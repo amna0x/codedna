@@ -157,7 +157,7 @@ May start in parallel (Student C) once the analysis JSON formats are stable.
   session token, Host check, build opt-in (D-019, D-028)
 - ✅ API/CLI: target-bound risk selection, 50/25/25 fit/calibrate/audit gate,
   explicit full-suite fallback, recomputed selected-test execution (D-041).
-  No serialized model is loaded; long-run progress remains outstanding.
+  No serialized model is loaded; long runs show elapsed-time progress (D-044).
 - ✅ CodeDNA IDE skeleton: Theia 1.76.0 + Electron 42 desktop app in `ide/`
   (D-029); builds and runs on Windows; extension compiled in CI
 - ✅ "Changed code" and "Recommended tests" views talking to the core through
@@ -168,8 +168,8 @@ May start in parallel (Student C) once the analysis JSON formats are stable.
   shared "Compare" picker, friendly errors, first-run guide (D-031)
 - ✅ Impact graph view (Cytoscape.js, D-043): changed code → affected parts →
   tests, confidence-labelled edges, click-to-explain paths
-- ⏳ Java language support in the editor (VS Code extension host + a Java
-  extension), uncommitted-change analysis, installers
+- 🔄 Java editor support, progress notifications, Windows installer (D-044);
+  needs a Windows build check. Uncommitted-change analysis still open
 - ⏳ GitHub PR demonstration and final experimental report
 
 - ✅ IDE: risk status/audit evidence, explicit execution confirmation, actual
