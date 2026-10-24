@@ -3,7 +3,7 @@
   "name": "codedna-ide-electron",
   "productName": "CodeDNA IDE",
   "version": "0.1.0",
-  "main": "lib/backend/electron-main.js",
+  "main": "scripts/codedna-electron-main.js",
   "dependencies": {
     "@theia/core": "1.76.0",
     "@theia/editor": "1.76.0",

@@ -9,12 +9,12 @@ directories:
 files:
   - lib/**
   - src-gen/**
+  - scripts/**
+  - plugins/**
   - package.json
   - "!**/*.map"
-extraResources:
-  - from: plugins
-    to: app/plugins
-    filter: ["**/*"]
+# Extensions run from disk, not from an asar archive.
+asar: false
 win:
   target: nsis
 nsis:
