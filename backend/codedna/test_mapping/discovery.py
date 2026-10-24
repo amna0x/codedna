@@ -6,10 +6,11 @@ A *test class* is a top-level, non-abstract class that has test methods
 ``@Nested`` inner classes, or inherited from a test base class found through
 the dependency graph's ``extends`` edges.
 
-Discovery is syntactic. It also reports whether Maven Surefire would pick the
-class up with its *default* configuration (``src/test/java`` and the
-``Test*``/``*Test``/``*Tests``/``*TestCase`` name patterns); projects that
-customise Surefire includes may differ.
+Discovery is syntactic. It also reports whether the build would run the class
+by default, from the static build layout (``build.py``): Maven modules with
+Surefire's default or the module's own ``<includes>``, or every class in a
+Gradle module's ``src/test/java``. Without a build file it falls back to
+Surefire's default name patterns.
 """
 
 from __future__ import annotations
@@ -23,6 +24,7 @@ from codedna.dependency_graph import build_graph_for_commit
 from codedna.git_analysis.blobs import list_files, read_blobs
 from codedna.git_analysis.git import resolve_commit, resolve_repository
 from codedna.java_analysis.parser import _LANGUAGE, TYPE_NODES
+from codedna.test_mapping.build import detect_build
 
 TEST_ANNOTATIONS = frozenset({
     "Test", "ParameterizedTest", "RepeatedTest", "TestFactory", "TestTemplate",
@@ -39,9 +41,13 @@ class DiscoveredTest:
     inherited_from: list[str] = field(default_factory=list)
     in_test_sources: bool = False
     matches_surefire_defaults: bool = False
+    module: str | None = None  # build module directory ("" = root), None if unknown
+    selected_by_build: bool | None = None  # from the detected build layout, if any
 
     @property
     def runs_by_default(self) -> bool:
+        if self.selected_by_build is not None:
+            return self.selected_by_build
         return self.in_test_sources and self.matches_surefire_defaults
 
 
@@ -51,6 +57,7 @@ class DiscoveryReport:
     commit: str
     tests: list[DiscoveredTest]
     warnings: list[str]
+    build_tool: str | None = None
 
     def to_dict(self) -> dict:
         tests = []
@@ -59,6 +66,7 @@ class DiscoveryReport:
             entry["runs_by_default"] = test.runs_by_default
             tests.append(entry)
         return {"repository": self.repository, "commit": self.commit,
+                "build_tool": self.build_tool,
                 "test_count": len(tests), "tests": tests, "warnings": self.warnings}
 
 
@@ -94,6 +102,9 @@ def discover_tests_for_commit(repo: Path, commit: str) -> DiscoveryReport:
         for info in file_types:
             types.setdefault(info.id, info)
 
+    layout = detect_build(repo, commit)
+    if layout.tool:
+        warnings.extend(layout.warnings)
     superclasses = _superclasses(repo, commit)
     tests: list[DiscoveredTest] = []
     for info in types.values():
@@ -120,11 +131,14 @@ def discover_tests_for_commit(repo: Path, commit: str) -> DiscoveryReport:
             in_test_sources="/src/test/java/" in f"/{info.file}",
             matches_surefire_defaults=name.startswith("Test")
             or name.endswith(("Test", "Tests", "TestCase")),
+            module=layout.module_of(info.file) if layout.tool else None,
+            selected_by_build=layout.runs_by_default(info.file) if layout.tool else None,
         ))
         if not tests[-1].runs_by_default:
-            warnings.append(f"{info.id}: not matched by Surefire's default includes; "
+            warnings.append(f"{info.id}: not selected by the build's test includes; "
                             "it only runs if the project configures it")
-    return DiscoveryReport(str(repo), commit, sorted(tests, key=lambda t: t.id), warnings)
+    return DiscoveryReport(str(repo), commit, sorted(tests, key=lambda t: t.id), warnings,
+                           layout.tool)
 
 
 def _superclasses(repo: Path, commit: str) -> dict[str, list[str]]:
