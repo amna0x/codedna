@@ -32,7 +32,7 @@
     "start": "theia start",
     "watch": "npm run rebuild && theia build --watch --mode development",
     "download:plugins": "theia download:plugins --rate-limit=15 --parallel=false",
-    "package": "theia build --mode production && electron-builder --win"
+    "package": "npm run rebuild && npm run download:plugins && theia build --mode production && electron-builder --win"
   },
   "theia": {
     "target": "electron",
