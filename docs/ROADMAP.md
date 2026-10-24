@@ -71,7 +71,8 @@ Java stays the only supported language until Milestone 5 is complete.
 - ✅ Offline tests with a fake `mvn`; real Maven/JaCoCo end-to-end test in CI
 - ✅ Real Maven/JaCoCo flow verified locally on Windows (JDK 17, Maven 3.10);
   the full suite includes the integration test with `--run-maven`.
-- ⏳ Multi-module Maven, Gradle, custom Surefire includes
+- ✅ Multi-module Maven, Gradle, custom Surefire includes (D-045; static
+  layout, per-test coverage still single-module Maven only)
 - ⏳ Evaluate B0/B4/coverage over many commits of a real project (needs
   Milestone 4 history tooling)
 

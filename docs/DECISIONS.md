@@ -789,3 +789,17 @@ recall -0.0056 [-0.0420, 0.0312] do not establish a benefit. Raw stopping violat
 the target on two projects. Retain recent-failure order for live use; preserve
 both exploratory studies rather than selecting the more favourable adapter.
 Evidence: `experiments/results/dante-history-check-2026-10-24/FINDINGS.md`.
+
+## D-045 — Multi-module Maven and Gradle test discovery and runs
+
+`test_mapping.build.detect_build` reads the committed build files only: Maven
+`<modules>` recursively plus each module's own Surefire `<includes>` (parent
+inheritance and profiles are not resolved), or Gradle `include` lines in
+`settings.gradle(.kts)` (syntactic, with a warning). Discovery records each
+test's module and whether the build runs it by default. Gradle runs every class
+in a module's `src/test/java`, so no name filter applies. `run-tests` runs the
+Maven reactor from the root (`failIfNoSpecifiedTests=false` across modules) or
+the system `gradle` (never the repository's `gradlew`) with our own init script.
+That script sets `ignoreFailures` and `failOnNoMatchingTests=false`. Reports
+are collected from every module. Per-test JaCoCo coverage stays single-module
+Maven and is refused otherwise rather than guessed.
