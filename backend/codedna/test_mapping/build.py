@@ -2,14 +2,16 @@
 
 Read from committed build files only; no build tool runs here. Maven modules
 come from ``<modules>`` (followed recursively); custom Surefire ``<includes>``
-come from each module's own ``pom.xml`` (inherited parent configuration and
-profiles are not resolved). Gradle modules come from ``include`` lines in
+and ``<excludes>`` come from each module's own ``pom.xml`` (inherited parent
+configuration and profiles are not resolved; modules listed only inside
+profiles are reported, not followed). Gradle modules come from ``include`` lines in
 ``settings.gradle(.kts)`` (a syntactic reading, recorded as such); Gradle runs
 every class in the ``test`` source set by default, so no name filter applies.
 """
 
 from __future__ import annotations
 
+import posixpath
 import re
 from dataclasses import dataclass, field
 from fnmatch import fnmatch
@@ -21,8 +23,10 @@ from codedna.git_analysis.blobs import list_files, read_blobs
 SUREFIRE_DEFAULTS = ["**/Test*.java", "**/*Test.java", "**/*Tests.java", "**/*TestCase.java"]
 _GRADLE_SETTINGS = ("settings.gradle", "settings.gradle.kts")
 _GRADLE_BUILD = ("build.gradle", "build.gradle.kts")
-_INCLUDE = re.compile(r"""^\s*include\s*\(?(.*?)\)?\s*$""", re.MULTILINE)
+# `include "a", "b"` or `include("a",\n "b")`; comments are removed first.
+_INCLUDE = re.compile(r"""^[ \t]*include\b[ \t]*(\([^)]*\)|[^\n]*)""", re.MULTILINE)
 _QUOTED = re.compile(r"""["']([^"']+)["']""")
+_COMMENT = re.compile(r"""//[^\n]*|/\*.*?\*/""", re.DOTALL)
 
 
 @dataclass
@@ -30,6 +34,7 @@ class BuildLayout:
     tool: str | None  # "maven" | "gradle" | None
     modules: list[str]  # module directories relative to the root; "" is the root
     includes: dict[str, list[str]] = field(default_factory=dict)  # module → Surefire includes
+    excludes: dict[str, list[str]] = field(default_factory=dict)  # module → Surefire excludes
     warnings: list[str] = field(default_factory=list)
 
     def module_of(self, path: str) -> str | None:
@@ -51,7 +56,8 @@ class BuildLayout:
         root = f"{module}/src/test/java/" if module else "src/test/java/"
         relative = path.removeprefix(root)
         patterns = self.includes.get(module) or SUREFIRE_DEFAULTS
-        return any(_matches(relative, p) for p in patterns)
+        return (any(_matches(relative, p) for p in patterns)
+                and not any(_matches(relative, p) for p in self.excludes.get(module, ())))
 
 
 def _matches(relative: str, pattern: str) -> bool:
@@ -90,15 +96,24 @@ def _maven(repo: Path, files: dict[str, str]) -> BuildLayout:
             layout.warnings.append(f"{pom}: not readable XML ({exc}); its modules are unknown")
             continue
         for child in _all(root, "modules", "module"):
-            name = (child.text or "").strip().removesuffix("/pom.xml")
-            if name:
-                path = str(PurePosixPath(module, name)) if module else str(PurePosixPath(name))
-                pending.append(path)
-        includes = [i.text.strip() for plugin in _all(root, "build", "plugins", "plugin")
-                    if (_child_text(plugin, "artifactId") or "") == "maven-surefire-plugin"
-                    for i in _all(plugin, "configuration", "includes", "include") if i.text]
-        if includes:
-            layout.includes[module] = includes
+            name = (child.text or "").strip().removesuffix("/pom.xml").strip("/")
+            if not name:
+                continue
+            path = posixpath.normpath(posixpath.join(module, name))
+            if path == ".." or path.startswith("../") or posixpath.isabs(path):
+                layout.warnings.append(f"{pom}: module {name!r} is outside the repository; not followed")
+            else:
+                pending.append("" if path == "." else path)
+        if _all(root, "profiles", "profile", "modules", "module"):
+            layout.warnings.append(f"{pom}: modules inside <profiles> are not followed")
+        surefire = [plugin for plugin in _all(root, "build", "plugins", "plugin")
+                    if (_child_text(plugin, "artifactId") or "") == "maven-surefire-plugin"]
+        for name, store in (("include", layout.includes), ("exclude", layout.excludes)):
+            patterns = [i.text.strip() for plugin in surefire
+                        for i in _all(plugin, "configuration", name + "s", name)
+                        if i.text and i.text.strip()]
+            if patterns:
+                store[module] = patterns
     layout.modules.sort()
     return layout
 
@@ -108,13 +123,17 @@ def _gradle(repo: Path, files: dict[str, str]) -> BuildLayout:
     settings = next((f for f in _GRADLE_SETTINGS if f in files), None)
     if settings:
         text = read_blobs(repo, [files[settings]])[files[settings]].decode("utf-8", "replace")
-        for line in _INCLUDE.findall(text):
-            for name in _QUOTED.findall(line):
+        text = _COMMENT.sub("", text)
+        for arguments in _INCLUDE.findall(text):
+            for name in _QUOTED.findall(arguments):
                 module = name.strip(":").replace(":", "/")
                 if module and module not in layout.modules:
                     layout.modules.append(module)
         layout.warnings.append(f"Gradle modules read syntactically from {settings}; "
                                "programmatic includes are not seen")
+        if "projectDir" in text:
+            layout.warnings.append(f"{settings} moves project directories (projectDir); "
+                                   "those modules may be placed wrongly")
     layout.modules.sort()
     return layout
 

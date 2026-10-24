@@ -72,3 +72,41 @@ def test_gradle_settings_modules_run_every_junit_class(repo):
     assert tests["a.Checks"].module == "core" and tests["a.Checks"].runs_by_default
     assert tests["c.CliTest"].module == "tools/cli"
     assert any("syntactically" in w for w in report.warnings)
+
+
+def test_surefire_excludes_and_unsafe_or_profile_modules(repo):
+    head = commit(repo, {
+        "pom.xml": "<project><modules><module>core/</module><module>../outside</module>"
+                   "<module>./core</module></modules><profiles><profile><modules>"
+                   "<module>extra</module></modules></profile></profiles></project>\n",
+        "core/pom.xml": "<project><build><plugins><plugin>"
+                        "<artifactId>maven-surefire-plugin</artifactId><configuration>"
+                        "<excludes><exclude>**/*SlowTest.java</exclude></excludes>"
+                        "</configuration></plugin></plugins></build></project>\n",
+        "core/src/test/java/a/FastTest.java": junit_class("a", "FastTest"),
+        "core/src/test/java/a/DbSlowTest.java": junit_class("a", "DbSlowTest"),
+        "extra/pom.xml": "<project/>\n",
+    })
+
+    layout = detect_build(repo.path, resolve_commit(repo.path, head))
+
+    assert layout.modules == ["", "core"]
+    assert layout.excludes == {"core": ["**/*SlowTest.java"]}
+    assert any("outside the repository" in w for w in layout.warnings)
+    assert any("<profiles>" in w for w in layout.warnings)
+    tests = {t.id: t for t in discover_tests(repo.path, head).tests}
+    assert tests["a.FastTest"].runs_by_default
+    assert not tests["a.DbSlowTest"].runs_by_default
+
+
+def test_gradle_multi_line_include_and_comments(repo):
+    head = commit(repo, {
+        "settings.gradle": "rootProject.name = 'demo'\n// include 'old'\n"
+                           "include(\n    ':core',\n    ':tools:cli'\n)\n/* include 'gone' */\n"
+                           "include 'web'\n",
+        "build.gradle": "plugins { id 'java' }\n",
+    })
+
+    layout = detect_build(repo.path, resolve_commit(repo.path, head))
+
+    assert layout.modules == ["", "core", "tools/cli", "web"]

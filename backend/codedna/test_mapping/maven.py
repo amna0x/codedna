@@ -109,7 +109,7 @@ def run_maven_tests(repo_path: str | Path, revision: str, output_dir: str | Path
         available = {t.id for t in discover_tests_for_commit(repo, commit).tests if t.runs_by_default}
         if len(set(selected_tests)) != len(selected_tests) or any(
                 not _JAVA_NAME.fullmatch(t) or t not in available for t in selected_tests):
-            raise BuildError("selected tests must be distinct discovered Surefire test classes")
+            raise BuildError("selected tests must be distinct test classes the build runs by default")
     checkout = output / "checkout"
     export_commit(repo, commit, checkout)
 

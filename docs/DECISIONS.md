@@ -793,9 +793,11 @@ Evidence: `experiments/results/dante-history-check-2026-10-24/FINDINGS.md`.
 ## D-045 — Multi-module Maven and Gradle test discovery and runs
 
 `test_mapping.build.detect_build` reads the committed build files only: Maven
-`<modules>` recursively plus each module's own Surefire `<includes>` (parent
-inheritance and profiles are not resolved), or Gradle `include` lines in
-`settings.gradle(.kts)` (syntactic, with a warning). Discovery records each
+`<modules>` recursively plus each module's own Surefire `<includes>` and
+`<excludes>` (parent inheritance and profiles are not resolved; modules inside
+profiles and module paths leaving the repository are warned about, not
+followed), or Gradle `include` statements in `settings.gradle(.kts)`, also
+spread over several lines (syntactic, comments removed, with a warning). Discovery records each
 test's module and whether the build runs it by default. Gradle runs every class
 in a module's `src/test/java`, so no name filter applies. `run-tests` runs the
 Maven reactor from the root (`failIfNoSpecifiedTests=false` across modules) or
