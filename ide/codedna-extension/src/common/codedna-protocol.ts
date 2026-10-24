@@ -90,6 +90,24 @@ export interface ImpactReport {
     impacted: ImpactedNode[];
     unanalysed_changes: { path: string; reason: string }[];
     warnings: string[];
+    explanation_graph: ExplanationGraph;
+}
+
+/** Built by the core (impact_analysis.explanation_graph); the IDE only draws it. */
+export interface ExplanationGraph {
+    nodes: {
+        id: string;
+        category: 'changed' | 'impacted' | 'test' | 'unanalysed';
+        changed: boolean;
+        file: string | null;
+        confidence: 'confirmed' | 'heuristic' | 'unresolved';
+        distance: number | null;
+        seed?: string;
+        reasons: string[];
+        path_edges: string[];
+    }[];
+    edges: { id: string; source: string; target: string; kind: string;
+        confidence: 'confirmed' | 'heuristic'; evidence: string }[];
 }
 
 // --- select --------------------------------------------------------------------

@@ -80,7 +80,50 @@ class ImpactReport:
     warnings: list[str]
 
     def to_dict(self) -> dict:
-        return asdict(self)
+        data = asdict(self)
+        data["explanation_graph"] = explanation_graph(data)
+        return data
+
+
+def explanation_graph(report: dict) -> dict:
+    """Display graph of a report: changed → impacted → test, with explanation paths.
+
+    Only edges on an explanation path are kept (the shortest path the traversal
+    found), each labelled confirmed or heuristic. Non-Java changes become
+    ``unresolved`` nodes with no edges: their impact is unknown, not absent.
+    """
+    tests = {t["type"] for t in report["candidate_tests"]}
+    nodes: dict[str, dict] = {}
+    edges: dict[str, dict] = {}
+
+    def category(node_id: str, default: str) -> str:
+        return "test" if node_id in tests else default
+
+    for seed in report["seeds"]:
+        nodes[seed["node"]] = {"id": seed["node"], "category": category(seed["node"], "changed"),
+                               "changed": True, "file": seed["file"], "confidence": "confirmed",
+                               "distance": 0, "reasons": seed["reasons"], "path_edges": []}
+    for item in report["impacted"]:
+        ids = []
+        for step in item["path"]:
+            # Two types can be linked by several kinds (extends and uses); keep them apart.
+            edge_id = f'{step["dependent"]}->{step["depends_on"]}:{step["kind"]}'
+            edges.setdefault(edge_id, {"id": edge_id, "source": step["dependent"],
+                                       "target": step["depends_on"], "kind": step["kind"],
+                                       "confidence": step["confidence"],
+                                       "evidence": step["evidence"]})
+            ids.append(edge_id)
+        nodes[item["node"]] = {"id": item["node"], "category": category(item["node"], "impacted"),
+                               "changed": False, "file": item["file"],
+                               "confidence": item["confidence"], "distance": item["distance"],
+                               "seed": item["seed"], "reasons": [], "path_edges": ids}
+    for change in report["unanalysed_changes"]:
+        node_id = "file:" + change["path"]
+        nodes[node_id] = {"id": node_id, "category": "unanalysed", "changed": True,
+                          "file": change["path"], "confidence": "unresolved", "distance": None,
+                          "reasons": [change["reason"]], "path_edges": []}
+    return {"nodes": sorted(nodes.values(), key=lambda n: n["id"]),
+            "edges": sorted(edges.values(), key=lambda e: e["id"])}
 
 
 def compute_impact(repo_path: str | Path, base: str, head: str, *,

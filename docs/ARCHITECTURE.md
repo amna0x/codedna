@@ -298,6 +298,7 @@ codedna-extension/src
 └── browser/
     ├── change-view-widget.tsx      "Changed code" (analyze + impact)
     ├── tests-view-widget.tsx       "Recommended tests" (select)
+    ├── graph-view-widget.tsx       "Impact graph" (impact.explanation_graph, Cytoscape.js)
     ├── codedna-workspace.ts        repo path = first workspace root; open file at line
     ├── theme/codedna-theme.ts      CodeDNA Dark colour theme + shell class toggle
     └── style/codedna(.|-shell).css view and shell styling (D-030)

@@ -6,6 +6,7 @@ import json
 
 from codedna.cli import EXIT_OK, main
 from codedna.impact_analysis import compute_impact
+from codedna.impact_analysis.impact import explanation_graph
 
 CHAIN = {
     "a/Core.java": "package a;\npublic class Core {\n    int value() { return 1; }\n}\n",
@@ -158,3 +159,46 @@ def test_impact_command_outputs_json(repo, capsys):
     assert data["max_depth"] == 2 and data["include_heuristic"] is False
     assert [n["node"] for n in data["impacted"]] == ["type:a.Service", "type:a.Api"]
     assert data["impacted"][1]["path"][0]["kind"] == "uses"
+
+
+def test_explanation_graph_links_change_to_test_with_labelled_edges(repo):
+    base = commit_files(repo, {**CHAIN, "pom.xml": "<project/>\n"}, "base")
+    head = commit_files(repo, {"a/Core.java": CHAIN["a/Core.java"].replace("1", "2"),
+                               "pom.xml": "<project></project>\n"}, "head")
+
+    graph = compute_impact(repo.path, base, head).to_dict()["explanation_graph"]
+
+    nodes = {n["id"]: n for n in graph["nodes"]}
+    assert nodes["type:a.Core"]["category"] == "changed"
+    assert nodes["type:a.Service"]["category"] == "impacted"
+    assert nodes["type:a.ApiTest"]["category"] == "test"
+    assert nodes["file:pom.xml"]["confidence"] == "unresolved"
+    assert nodes["type:a.ApiTest"]["path_edges"] == [
+        "type:a.ApiTest->type:a.Api:uses", "type:a.Api->type:a.Service:uses",
+        "type:a.Service->type:a.Core:uses"]
+    assert {e["confidence"] for e in graph["edges"]} <= {"confirmed", "heuristic"}
+    assert all(e["source"] in nodes and e["target"] in nodes for e in graph["edges"])
+    assert "type:a.Unrelated" not in nodes
+
+
+def test_explanation_graph_keeps_edges_of_different_kinds_apart():
+    step = lambda kind, confidence: {"dependent": "type:x.A", "depends_on": "type:x.B",
+                                     "kind": kind, "confidence": confidence, "evidence": "A.java:1"}
+    report = {"candidate_tests": [], "unanalysed_changes": [],
+              "seeds": [{"node": "type:x.B", "file": "B.java", "reasons": ["changed"]}],
+              "impacted": [
+                  {"node": "type:x.A", "file": "A.java", "confidence": "confirmed", "distance": 1,
+                   "seed": "type:x.B", "path": [step("extends", "confirmed")]},
+                  {"node": "type:x.C", "file": "C.java", "confidence": "heuristic", "distance": 2,
+                   "seed": "type:x.B", "path": [
+                       {"dependent": "type:x.C", "depends_on": "type:x.A", "kind": "uses",
+                        "confidence": "heuristic", "evidence": "C.java:3"},
+                       step("same_package", "heuristic")]}]}
+
+    graph = explanation_graph(report)
+
+    edges = {e["id"]: e for e in graph["edges"]}
+    assert edges["type:x.A->type:x.B:extends"]["confidence"] == "confirmed"
+    assert edges["type:x.A->type:x.B:same_package"]["confidence"] == "heuristic"
+    nodes = {n["id"]: n for n in graph["nodes"]}
+    assert nodes["type:x.C"]["path_edges"][-1] == "type:x.A->type:x.B:same_package"
