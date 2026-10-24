@@ -136,9 +136,9 @@ def gate_verdict(accepted, rejected):
         return 'gate unexercised'
     if accepted['observed_miss_rate'] > RISK:
         return 'gate not supported'
-    if rejected['observed_miss_rate'] is not None and \
+    if rejected['observed_miss_rate'] is None or \
             accepted['observed_miss_rate'] > rejected['observed_miss_rate']:
-        return 'inconclusive'
+        return 'inconclusive'  # the comparison with rejected blocks is required
     return 'gate supported'
 
 
@@ -194,7 +194,7 @@ def run(root, inputs, out):
                            (summary['projects'][n]['b3']['safety'] or 0) for n in data)
             entry['safety_positive_projects'] = positive
             s = entry['b10_minus_b3']['safety']
-            entry['verdict'] = verdict(s['estimate'], s['ci'], positive, len(names))
+            entry['verdict'] = verdict(s['estimate'], s['ci'], positive, len(data))
         else:
             entry['verdict'] = 'inconclusive'
         chosen = [reports[n] for n in names]

@@ -6,7 +6,7 @@
       "end": 856,
       "commits": 143,
       "failing_commits": 31,
-      "fit_seconds": 1.744122685000093,
+      "fit_seconds": 1.619848594999894,
       "evidence": {
         "commits": 179,
         "failing_commits": 11,
@@ -745,7 +745,7 @@
       "end": 999,
       "commits": 143,
       "failing_commits": 20,
-      "fit_seconds": 1.1994727569999668,
+      "fit_seconds": 1.0288088680001692,
       "evidence": {
         "commits": 214,
         "failing_commits": 33,
@@ -1484,7 +1484,7 @@
       "end": 1141,
       "commits": 142,
       "failing_commits": 10,
-      "fit_seconds": 1.399381781999864,
+      "fit_seconds": 1.1795092159998148,
       "evidence": {
         "commits": 250,
         "failing_commits": 37,
@@ -2218,7 +2218,7 @@
       "end": 1284,
       "commits": 143,
       "failing_commits": 17,
-      "fit_seconds": 1.2842106929999773,
+      "fit_seconds": 1.3257586780000565,
       "evidence": {
         "commits": 286,
         "failing_commits": 30,
@@ -2957,7 +2957,7 @@
       "end": 1427,
       "commits": 143,
       "failing_commits": 3,
-      "fit_seconds": 1.361142942000015,
+      "fit_seconds": 1.517468990999987,
       "evidence": {
         "commits": 321,
         "failing_commits": 40,

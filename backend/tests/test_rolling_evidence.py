@@ -49,6 +49,7 @@ def test_verdict_rules_are_the_fixed_ones():
     assert runner.gate_verdict(gate(2, 0.), gate(3, .2)) == 'gate unexercised'
     assert runner.gate_verdict(gate(3, .1), gate(3, .2)) == 'gate not supported'
     assert runner.gate_verdict(gate(3, .01), gate(3, .2)) == 'gate supported'
+    assert runner.gate_verdict(gate(3, .01), gate(0, None)) == 'inconclusive'
 
 
 def test_runner_sets_eligibility_and_resume_fingerprints(repo):
