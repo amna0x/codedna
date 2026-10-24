@@ -167,7 +167,9 @@ May start in parallel (Student C) once the analysis JSON formats are stable.
   calm neutral look, plain-language "Changes" / "Tests to run" views,
   shared "Compare" picker, friendly errors, first-run guide (D-031)
 - ⏳ Java language support in the editor (VS Code extension host + a Java
-  extension), graph view (Cytoscape.js), uncommitted-change analysis, installers
+  extension), graph view (Cytoscape.js), installers
+- ✅ Uncommitted-change analysis: `WORKTREE` revision + "My uncommitted
+  changes" in the IDE (D-046)
 - ⏳ GitHub PR demonstration and final experimental report
 
 - ✅ IDE: risk status/audit evidence, explicit execution confirmation, actual

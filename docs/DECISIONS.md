@@ -789,3 +789,17 @@ recall -0.0056 [-0.0420, 0.0312] do not establish a benefit. Raw stopping violat
 the target on two projects. Retain recent-failure order for live use; preserve
 both exploratory studies rather than selecting the more favourable adapter.
 Evidence: `experiments/results/dante-history-check-2026-10-24/FINDINGS.md`.
+
+## D-046 — Uncommitted changes through a WORKTREE snapshot commit
+
+Every command and API call that takes a revision also accepts `WORKTREE`, and
+the IDE compare picker offers "My uncommitted changes" (`HEAD` → `WORKTREE`).
+`git_analysis.git.snapshot_worktree` builds a temporary index from HEAD,
+runs `git add -A` into it (so `.gitignore` applies), and writes the tree plus
+an unreferenced commit with fixed identity and dates. The same working tree
+therefore always gives the same SHA. The real index, refs and files are not
+touched; the extra objects are ordinary unreachable objects that `git gc`
+removes. Because `git add` would run a configured clean/process filter
+program, repositories whose attributes name any filter driver (such as LFS)
+are refused with an explanation. Every later step reuses the commit-based
+pipeline unchanged.
