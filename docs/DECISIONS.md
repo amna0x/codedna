@@ -866,3 +866,16 @@ are refused with an explanation, and so are edits inside a submodule whose
 commit did not change (the parent records only that commit, so the edits
 would vanish silently). Every later step reuses the commit-based
 pipeline unchanged.
+
+## D-047 — Static website and validated catalogue index
+
+`website/` is plain HTML/CSS plus one small script that renders
+`catalogue/index.json`. There is no framework, build step, account or tracking,
+so GitHub Pages can serve the folder as is. The page only displays the
+catalogue; it never installs anything. The catalogue schema (version 1)
+follows D-020. `codedna.plugins.catalogue` rejects unpinned versions, missing
+or malformed SHA-256 checksums, and any download URL outside the official
+repository's GitHub Releases. The future in-app plugin manager reuses that
+validator. Java is listed as a built-in version with no download until it
+moves into its own package. No licence is claimed because the repository has
+none yet.

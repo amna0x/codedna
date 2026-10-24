@@ -185,9 +185,10 @@ May start in parallel (Student C) once the analysis JSON formats are stable.
 
 ## Milestone 7 — Platform website and plugin distribution ⏳
 
-- ⏳ Static platform website: project info, IDE downloads, documentation,
-  plugin catalogue (D-020)
-- ⏳ Plugin catalogue index (versioned JSON) shared by the website and the IDE
+- ✅ Static platform website in `website/`: home, docs, catalogue page (D-047);
+  hosting (e.g. GitHub Pages) still to switch on
+- ✅ Plugin catalogue index `website/catalogue/index.json` with a core
+  validator (`codedna.plugins.catalogue`: pinned, SHA-256, official URLs)
 - ⏳ In-app plugin manager: browse, install, update, remove — official
   catalogue only, checksums verified, versions pinned (D-020)
 - ⏳ Package the Java plugin through the catalogue
