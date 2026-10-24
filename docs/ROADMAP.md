@@ -150,7 +150,8 @@ Product track, alongside:
 - 🔄 Rolling-origin evidence study with pre-fixed rules (D-042): on the four
   inspected projects B10 shows no meaningful safety difference from matched B3;
   the gate accepts few blocks but those miss rarely. New-project confirmation
-  pending data access.
+  pending data access: `scripts/prepare_confirmatory.py` fetches, imports and
+  builds the projects outside study11 on a machine that reaches Zenodo.
 
 ## Milestone 6 — CodeDNA IDE and FYP demo ⏳
 

@@ -239,6 +239,17 @@ def fetch(out: Path, projects: list[str]) -> dict:
     return json.loads(manifest_path.read_text(encoding="utf-8"))
 
 
+def remote_projects() -> list[str]:
+    """Project names in the archive, read from its central directory only."""
+    with zipfile.ZipFile(RemoteZip()) as archive:
+        names = set()
+        for entry in archive.infolist():
+            parts = entry.filename.split("/")
+            if len(parts) == 3 and parts[0] == "rtp-torrent" and parts[2] == f"{parts[1]}.csv":
+                names.add(parts[1])
+    return sorted(names)
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--out", type=Path, default=Path("experiments/datasets/raw"))
