@@ -804,3 +804,18 @@ difference -0.0032 [-0.0362, 0.0294], "no meaningful difference"; gate
 accepted 7 of 19 fitted blocks with observed commit miss 0.0043 versus 0.0274
 on rejected blocks. The confirmatory verdict stays open until new projects are
 added. Evidence: `experiments/results/rolling-evidence-2026-10-24/FINDINGS.md`.
+
+## D-043 — Impact graph view (Cytoscape.js)
+
+The IDE gets an "Impact graph" main-area view (Ctrl/Cmd+Alt+G): changed code →
+parts that may be affected → related tests. The core adds `explanation_graph`
+to the impact JSON (`impact_analysis.explanation_graph`): nodes by category
+(changed / impacted / test / unanalysed), only the edges on each node's
+shortest explanation path, each labelled confirmed or heuristic; non-Java
+changes are `unresolved` nodes with no edges. The view only draws this JSON
+(no analysis in TypeScript); clicking a node highlights its path and lists each
+step with its evidence line. Edge ids include the edge kind
+(`A->B:uses`), since two types can be linked by several kinds. A list under
+the graph selects the same paths from the keyboard. New frontend dependency: `cytoscape@3.30.4`
+(MIT, pinned) plus `@types/cytoscape` for compilation; named for this view in
+Milestone 6. Additive JSON field, so no API version change.

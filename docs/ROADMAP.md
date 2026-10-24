@@ -170,8 +170,10 @@ May start in parallel (Student C) once the analysis JSON formats are stable.
 - ✅ CodeDNA Dark theme as the default (D-030), revised for newcomers:
   calm neutral look, plain-language "Changes" / "Tests to run" views,
   shared "Compare" picker, friendly errors, first-run guide (D-031)
+- ✅ Impact graph view (Cytoscape.js, D-043): changed code → affected parts →
+  tests, confidence-labelled edges, click-to-explain paths
 - ⏳ Java language support in the editor (VS Code extension host + a Java
-  extension), graph view (Cytoscape.js), uncommitted-change analysis, installers
+  extension), uncommitted-change analysis, installers
 - ⏳ GitHub PR demonstration and final experimental report
 
 - ✅ IDE: risk status/audit evidence, explicit execution confirmation, actual
