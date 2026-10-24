@@ -21,6 +21,8 @@ OFFICIAL_RELEASES = "https://github.com/mohibk0004-del/codedna/releases/download
 _ID = re.compile(r"^[a-z][a-z0-9-]{1,40}$")
 _VERSION = re.compile(r"^\d+\.\d+\.\d+$")
 _SHA256 = re.compile(r"^[0-9a-f]{64}$")
+# <tag>/<asset file name>: no further path, query, fragment or escapes.
+_ASSET = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._+-]*/[A-Za-z0-9][A-Za-z0-9._+-]*$")
 
 
 class CatalogueError(ValueError):
@@ -58,6 +60,8 @@ def validate_catalogue(data: dict) -> list[PluginVersion]:
         raise CatalogueError("catalogue needs a 'plugins' list")
     versions, seen = [], set()
     for plugin in plugins:
+        if not isinstance(plugin, dict):
+            raise CatalogueError("every catalogue plugin must be an object")
         pid = plugin.get("id", "")
         if not _ID.fullmatch(pid) or pid in seen:
             raise CatalogueError(f"invalid or duplicate plugin id {pid!r}")
@@ -70,8 +74,15 @@ def validate_catalogue(data: dict) -> list[PluginVersion]:
         entries = plugin.get("versions")
         if not isinstance(entries, list) or not entries:
             raise CatalogueError(f"{pid}: needs at least one version")
+        numbers = set()
         for entry in entries:
-            versions.append(_version(pid, entry))
+            if not isinstance(entry, dict):
+                raise CatalogueError(f"{pid}: every version must be an object")
+            item = _version(pid, entry)
+            if item.version in numbers:
+                raise CatalogueError(f"{pid}: version {item.version} is listed twice")
+            numbers.add(item.version)
+            versions.append(item)
     return versions
 
 
@@ -87,7 +98,8 @@ def _version(pid: str, entry: dict) -> PluginVersion:
         if url is not None or sha is not None:
             raise CatalogueError(f"{pid} {version}: a built-in version has no download")
     else:
-        if not isinstance(url, str) or not url.startswith(OFFICIAL_RELEASES) or ".." in url:
+        if not (isinstance(url, str) and url.startswith(OFFICIAL_RELEASES)
+                and _ASSET.fullmatch(url.removeprefix(OFFICIAL_RELEASES)) and ".." not in url):
             raise CatalogueError(f"{pid} {version}: url must be an official release asset")
         if not isinstance(sha, str) or not _SHA256.fullmatch(sha):
             raise CatalogueError(f"{pid} {version}: sha256 must be 64 lowercase hex digits")

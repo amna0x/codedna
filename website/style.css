@@ -17,7 +17,7 @@ header nav a[aria-current="page"], header nav a:hover { color: var(--text); }
 h1 { font-size: clamp(30px, 5vw, 44px); line-height: 1.15; letter-spacing: -0.02em; margin: 56px 0 14px; }
 h2 { font-size: 22px; margin: 44px 0 10px; }
 .lede { font-size: 19px; color: var(--muted); max-width: 640px; }
-.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-top: 18px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 14px; margin-top: 18px; }
 .card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; }
 .card h3 { margin: 0 0 6px; font-size: 16px; }
 .card p { margin: 0; color: var(--muted); font-size: 15px; }

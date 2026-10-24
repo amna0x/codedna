@@ -36,6 +36,9 @@ codedna select --repo . --base HEAD~1 --head HEAD --strategy dependency</pre>
 
 <h2>Risk-based selection</h2>
 <p><code>codedna risk-select</code> fits a model on the project's own older history, audits it on later history, and only then estimates the chance that a skipped test fails. If the audit fails or the history is stale, it recommends the full suite and says why.</p>
+<pre>codedna risk-select --repo . --base HEAD~1 --head HEAD
+# history is read from .codedna/history.csv unless you pass --history-csv FILE</pre>
+<p>How to prepare that history is described in <code>docs/JAVA_WORKFLOW.md</code> in the repository.</p>
 </main>
 <footer>CodeDNA — a final-year project. Static site; no accounts, no tracking.</footer>
 </body>

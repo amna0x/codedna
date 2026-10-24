@@ -41,6 +41,10 @@ def test_valid_download_entry_is_accepted():
 @pytest.mark.parametrize("change", [
     {"url": "https://evil.example/p.whl"},
     {"url": OFFICIAL_RELEASES + "../../other/p.whl"},
+    {"url": OFFICIAL_RELEASES + "%2e%2e/%2e%2e/other/p.whl"},
+    {"url": OFFICIAL_RELEASES + "v1/p.whl?x=https://evil.example/p.whl"},
+    {"url": OFFICIAL_RELEASES + "v1/sub/p.whl"},
+    {"url": OFFICIAL_RELEASES + "v1/p.whl#frag"},
     {"sha256": "ABC"},
     {"sha256": None},
     {"version": "1.2"},
@@ -58,3 +62,12 @@ def test_duplicate_ids_and_wrong_schema_are_rejected():
         validate_catalogue(data)
     with pytest.raises(CatalogueError, match="schema_version"):
         validate_catalogue({**catalogue(), "schema_version": 2})
+
+
+def test_repeated_versions_and_non_object_entries_are_rejected():
+    data = catalogue()
+    data["plugins"][0]["versions"].append(dict(DOWNLOAD))
+    with pytest.raises(CatalogueError, match="listed twice"):
+        validate_catalogue(data)
+    with pytest.raises(CatalogueError, match="object"):
+        validate_catalogue({"schema_version": 1, "plugins": ["java"]})

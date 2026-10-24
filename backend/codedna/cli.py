@@ -10,6 +10,7 @@ Usage:
                     [--per-test-coverage] [--mvn PATH] [--timeout SECONDS] [--keep-checkout]
     codedna select  --repo PATH --base SHA --head SHA --strategy all|dependency|coverage
                     [--coverage-map FILE] [--durations FILE] [--non-java retest-all|ignore]
+    codedna risk-select --repo PATH --base SHA --head SHA [--history-csv FILE] [--risk-target F]
     codedna compare --repo PATH --base SHA --head SHA --ground-truth FILE
                     [--coverage-map FILE] [--non-java retest-all|ignore]
     codedna plugins
