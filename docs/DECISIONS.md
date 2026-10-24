@@ -790,6 +790,83 @@ the target on two projects. Retain recent-failure order for live use; preserve
 both exploratory studies rather than selecting the more favourable adapter.
 Evidence: `experiments/results/dante-history-check-2026-10-24/FINDINGS.md`.
 
+## D-042 — Rolling-origin evidence study with pre-fixed rules
+
+Step 2 of the final plan. Rules in `docs/EVIDENCE_STUDY_PROTOCOL.md` were
+committed before results: five rolling blocks over each project's later half,
+the unchanged D-041 live fit/gate refitted on all prior commits per block, B10
+versus same-order budget B3 at matched time, and a separate gate check. Only
+RTPTorrent projects outside study11 count towards the verdict; study11
+projects are replication only. Runner: `scripts/run_rolling_evidence.py`.
+
+First run (four inspected projects only, data host unreachable): safety
+difference -0.0032 [-0.0362, 0.0294], "no meaningful difference"; gate
+accepted 7 of 19 fitted blocks with observed commit miss 0.0043 versus 0.0274
+on rejected blocks. The confirmatory verdict stays open until new projects are
+added. Evidence: `experiments/results/rolling-evidence-2026-10-24/FINDINGS.md`.
+
+## D-043 — Impact graph view (Cytoscape.js)
+
+The IDE gets an "Impact graph" main-area view (Ctrl/Cmd+Alt+G): changed code →
+parts that may be affected → related tests. The core adds `explanation_graph`
+to the impact JSON (`impact_analysis.explanation_graph`): nodes by category
+(changed / impacted / test / unanalysed), only the edges on each node's
+shortest explanation path, each labelled confirmed or heuristic; non-Java
+changes are `unresolved` nodes with no edges. The view only draws this JSON
+(no analysis in TypeScript); clicking a node highlights its path and lists each
+step with its evidence line. Edge ids include the edge kind
+(`A->B:uses`), since two types can be linked by several kinds. A list under
+the graph selects the same paths from the keyboard. New frontend dependency: `cytoscape@3.30.4`
+(MIT, pinned) plus `@types/cytoscape` for compilation; named for this view in
+Milestone 6. Additive JSON field, so no API version change.
+
+## D-044 — Java editing, progress notifications and Windows installer
+
+Step 4 of the final plan. (1) Java editing: add `@theia/plugin-ext` and
+`@theia/plugin-ext-vscode` 1.76.0 and two pinned Open VSX extensions,
+`vscode.java` 1.95.3 (grammar) and `redhat.java` 1.36.0 win32-x64 (language
+server with embedded JRE). These are editor features only; CodeDNA analysis
+stays in the Python core. They are build-time downloads at fixed versions, not
+CodeDNA plugins, so the D-020 catalogue rule does not apply; record their
+SHA-256 after the first verified build. (2) Long core calls show a Theia
+progress notification with stage text and elapsed seconds; no fake
+percentages, because the core reports no intermediate steps. (3)
+`electron-builder` 26.0.12 builds a per-user NSIS installer for the IDE. The
+Python core is not bundled yet; bundling it (e.g. PyInstaller) is left open.
+
+## D-045 — Multi-module Maven and Gradle test discovery and runs
+
+`test_mapping.build.detect_build` reads the committed build files only: Maven
+`<modules>` recursively plus each module's own Surefire `<includes>` and
+`<excludes>` (parent inheritance and profiles are not resolved; modules inside
+profiles and module paths leaving the repository are warned about, not
+followed), or Gradle `include` statements in `settings.gradle(.kts)`, also
+spread over several lines (syntactic, comments removed, with a warning). Discovery records each
+test's module and whether the build runs it by default. Gradle runs every class
+in a module's `src/test/java`, so no name filter applies. `run-tests` runs the
+Maven reactor from the root (`failIfNoSpecifiedTests=false` across modules) or
+the system `gradle` (never the repository's `gradlew`) with our own init script.
+That script sets `ignoreFailures` and `failOnNoMatchingTests=false`. Reports
+are collected from every module. Per-test JaCoCo coverage stays single-module
+Maven and is refused otherwise rather than guessed.
+
+## D-046 — Uncommitted changes through a WORKTREE snapshot commit
+
+Every command and API call that takes a revision also accepts `WORKTREE`, and
+the IDE compare picker offers "My uncommitted changes" (`HEAD` → `WORKTREE`).
+`git_analysis.git.snapshot_worktree` copies the real index to a temporary
+file (HEAD's tree when there is no index; the copy keeps the stat cache, so
+unchanged files are not hashed again), runs `git add -A` into it (so `.gitignore` applies), and writes the tree plus
+an unreferenced commit with fixed identity and dates. The same working tree
+therefore always gives the same SHA. The real index, refs and files are not
+touched; the extra objects are ordinary unreachable objects that `git gc`
+removes. Because `git add` would run a configured clean/process filter
+program, repositories whose attributes name any filter driver (such as LFS)
+are refused with an explanation, and so are edits inside a submodule whose
+commit did not change (the parent records only that commit, so the edits
+would vanish silently). Every later step reuses the commit-based
+pipeline unchanged.
+
 ## D-047 — Static website and validated catalogue index
 
 `website/` is plain HTML/CSS plus one small script that renders

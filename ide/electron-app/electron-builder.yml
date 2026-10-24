@@ -1,0 +1,30 @@
+# Windows installer for the CodeDNA IDE (D-044). Build after `npm run build`
+# from ide/: `npm run package --workspace electron-app`.
+appId: org.codedna.ide
+productName: CodeDNA IDE
+electronDist: ../node_modules/electron/dist
+directories:
+  buildResources: resources
+  output: dist
+files:
+  - lib/**
+  - src-gen/**
+  - scripts/**
+  - plugins/**
+  - package.json
+  - "!**/*.map"
+# Extensions run from disk, not from an asar archive.
+asar: false
+# `npm run rebuild` (theia rebuild:electron) already built the native modules
+# for Electron; a second rebuild by electron-builder needs Electron headers
+# from the internet and fails on @parcel/watcher.
+npmRebuild: false
+win:
+  target: nsis
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  shortcutName: CodeDNA IDE
+publish: null

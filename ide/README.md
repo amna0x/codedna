@@ -12,8 +12,11 @@ terminal and preferences; the `codedna-extension` package adds:
   can affect (or all tests), each with the reason in plain words, and which
   ones were not selected. The risk strategy shows calibrated estimates only
   after a separate target-history audit; otherwise it recommends the full suite.
+- **Impact graph** (main area, `Ctrl+Alt+G`): changed code → parts that may be
+  affected → related tests. Solid lines are direct links, dashed lines likely
+  ones. Click a dot, or pick a part from the list, to see why it is included.
 
-Both views share one **Compare** choice: *My last commit* (default), *My
+All views share one **Compare** choice: *My last commit* (default), *My
 last 5 commits*, or *Choose commits…* for any two commits or branches.
 
 ```
@@ -35,7 +38,7 @@ enables selected Maven execution; analysis never triggers a build.
 | Node.js | 22 (tested 22.21); Theia recommends 24 | build and run |
 | npm | 10+ | install |
 | Python | 3.11+ with CodeDNA installed: `pip install -e "..[api]"` | the analysis core (`codedna` on PATH, or set `CODEDNA_EXECUTABLE`) |
-| Windows | Visual Studio Build Tools with "Desktop development with C++" | native modules (node-pty, keytar, drivelist, ffmpeg) |
+| Windows | Visual Studio Build Tools with "Desktop development with C++" | native modules (node-pty, keytar, drivelist, native-keymap, ffmpeg) |
 
 ## Build and run
 
@@ -52,7 +55,40 @@ by `python scripts/make_demo_repo.py ../codedna-demo`), then press
 If panels look narrow from an earlier session, run **View → Reset Workbench
 Layout** (command palette).
 
+### Java editing
+
+The app bundles Theia's VS Code extension host with two pinned Open VSX
+extensions (`theiaPlugins` in `electron-app/package.json`): the Java grammar
+(`vscode.java`) and Red Hat Language Support for Java (`redhat.java`, Windows
+x64 build with its own Java runtime). `npm run build` downloads them into
+`electron-app/plugins/` (git-ignored). They give completion, errors, go to
+definition and Maven project import; CodeDNA's own analysis does not use them.
+The pinned `redhat.java` file is the Windows x64 build: on macOS or Linux the
+grammar still works but the Java language server will not start. Change that
+entry to the matching platform build to develop there.
+
+### Windows installer
+
+```bash
+cd ide
+npm install
+npm run build
+npm run package --workspace electron-app   # → electron-app/dist/CodeDNA IDE Setup 0.1.0.exe
+```
+
+The installer contains the IDE only. The Python core is installed separately
+(`pip install -e "..[api]"`, or set `CODEDNA_EXECUTABLE`). Long CodeDNA
+actions show a progress notification with the elapsed time.
+
 ### Troubleshooting
+
+- `[build/node] Finished with 1 errors` / `esbuild exited with an unexpected
+  code: 1`: usually a native module (`keymapping.node`, `pty.node`, …) was
+  never compiled, so the bundler cannot read it. The lines starting with
+  `✘ [ERROR]` above it name the file. Run `npm run rebuild --workspace
+  electron-app` and read its output; it needs the Visual Studio Build Tools
+  from the table above. `npm run build` and `npm run package` run this step
+  first.
 
 - `UNABLE_TO_GET_ISSUER_CERT` while rebuilding native modules on Windows:
   if `NODE_USE_SYSTEM_CA=1` is set and the Windows store lacks
@@ -64,8 +100,9 @@ Layout** (command palette).
 
 ## Not yet
 
-Java language support in the editor (Theia's VS Code extension host + a Java
-extension), the graph view, uncommitted-change analysis, packaging/installers.
+A bundled Python core (the installer still needs CodeDNA installed
+separately), installers for macOS and Linux, and full Java language support
+outside Windows x64.
 
 
 ## Risk and test execution
