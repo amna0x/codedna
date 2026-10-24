@@ -32,6 +32,7 @@ class CatalogueError(ValueError):
 @dataclass(frozen=True)
 class PluginVersion:
     plugin: str
+    package: str | None  # pip distribution name; None for built-in plugins
     version: str
     api_version: str
     builtin: bool
@@ -74,19 +75,23 @@ def validate_catalogue(data: dict) -> list[PluginVersion]:
         entries = plugin.get("versions")
         if not isinstance(entries, list) or not entries:
             raise CatalogueError(f"{pid}: needs at least one version")
+        package = plugin.get("package")
         numbers = set()
         for entry in entries:
             if not isinstance(entry, dict):
                 raise CatalogueError(f"{pid}: every version must be an object")
-            item = _version(pid, entry)
+            item = _version(pid, entry, package)
             if item.version in numbers:
                 raise CatalogueError(f"{pid}: version {item.version} is listed twice")
             numbers.add(item.version)
+            if not item.builtin and not (isinstance(package, str)
+                                         and _ID.fullmatch(package.replace("_", "-"))):
+                raise CatalogueError(f"{pid}: downloadable plugins need a pip 'package' name")
             versions.append(item)
     return versions
 
 
-def _version(pid: str, entry: dict) -> PluginVersion:
+def _version(pid: str, entry: dict, package: str | None) -> PluginVersion:
     version, api = entry.get("version", ""), entry.get("api_version", "")
     if not _VERSION.fullmatch(version):
         raise CatalogueError(f"{pid}: version {version!r} must be pinned as MAJOR.MINOR.PATCH")
@@ -103,4 +108,4 @@ def _version(pid: str, entry: dict) -> PluginVersion:
             raise CatalogueError(f"{pid} {version}: url must be an official release asset")
         if not isinstance(sha, str) or not _SHA256.fullmatch(sha):
             raise CatalogueError(f"{pid} {version}: sha256 must be 64 lowercase hex digits")
-    return PluginVersion(pid, version, api, builtin, url, sha)
+    return PluginVersion(pid, None if builtin else package, version, api, builtin, url, sha)

@@ -13,7 +13,7 @@ Usage:
     codedna risk-select --repo PATH --base SHA --head SHA [--history-csv FILE] [--risk-target F]
     codedna compare --repo PATH --base SHA --head SHA --ground-truth FILE
                     [--coverage-map FILE] [--non-java retest-all|ignore]
-    codedna plugins
+    codedna plugins [catalogue | install ID VERSION --yes | remove ID --yes]
     codedna serve   [--host 127.0.0.1] [--port 8765] [--allow-build]
     codedna history mine     --repo PATH --db FILE [--rev REV] [--max-commits N]
     codedna history import   --db FILE RESULTS [RESULTS ...] [--source NAME]
@@ -180,7 +180,18 @@ def build_parser() -> argparse.ArgumentParser:
     _add_non_java_arg(compare)
     compare.add_argument("--output", help="Write JSON to this file instead of standard output.")
 
-    subcommands.add_parser("plugins", help="List installed language plugins.")
+    plugins = subcommands.add_parser(
+        "plugins", help="List installed language plugins, or manage them from the official catalogue.")
+    plugin_actions = plugins.add_subparsers(dest="plugin_action")
+    plugin_actions.add_parser("catalogue", help="Show the official plugin catalogue.")
+    install = plugin_actions.add_parser(
+        "install", help="Install one exact catalogue version (runs the plugin's code later).")
+    install.add_argument("plugin")
+    install.add_argument("version", help="Exact version, e.g. 1.0.0")
+    install.add_argument("--yes", action="store_true", help="Confirm the installation.")
+    remove = plugin_actions.add_parser("remove", help="Remove an installed catalogue plugin.")
+    remove.add_argument("plugin")
+    remove.add_argument("--yes", action="store_true", help="Confirm the removal.")
 
     serve = subcommands.add_parser(
         "serve",
@@ -343,7 +354,7 @@ def main(argv: list[str] | None = None) -> int:
         elif args.command == "run-tests":
             return _run_tests(args)
         elif args.command == "plugins":
-            return _write_json(load_plugins().describe(), None)
+            return _plugins(args)
         elif args.command == "serve":
             try:
                 from codedna.api.server import serve
@@ -375,6 +386,19 @@ def main(argv: list[str] | None = None) -> int:
         print(f"error: {exc}", file=sys.stderr)
         return EXIT_ANALYSIS_ERROR
     return _write_json(report.to_dict(), args.output)
+
+
+def _plugins(args: argparse.Namespace) -> int:
+    if args.plugin_action is None:
+        return _write_json(load_plugins().describe(), None)
+    from codedna.plugins import manager
+    catalogue = manager.fetch_catalogue()
+    if args.plugin_action == "catalogue":
+        return _write_json(catalogue, None)
+    if args.plugin_action == "install":
+        return _write_json(manager.install(catalogue, args.plugin, args.version,
+                                           confirmed=args.yes), None)
+    return _write_json(manager.remove(catalogue, args.plugin, confirmed=args.yes), None)
 
 
 def _run_tests(args: argparse.Namespace) -> int:

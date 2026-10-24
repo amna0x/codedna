@@ -180,8 +180,9 @@ May start in parallel (Student C) once the analysis JSON formats are stable.
   hosting (e.g. GitHub Pages) still to switch on
 - ✅ Plugin catalogue index `website/catalogue/index.json` with a core
   validator (`codedna.plugins.catalogue`: pinned, SHA-256, official URLs)
-- ⏳ In-app plugin manager: browse, install, update, remove — official
-  catalogue only, checksums verified, versions pinned (D-020)
+- 🔄 Plugin manager (D-048): `codedna plugins catalogue|install|remove` done —
+  official catalogue only, SHA-256 checked before pip, exact versions. Open:
+  an IDE view over it, and a public place to host the catalogue and wheels
 - ⏳ Package the Java plugin through the catalogue
 
 ## Later (only if Milestones 4–7 are on track)

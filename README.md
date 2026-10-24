@@ -101,7 +101,10 @@ codedna tests   --repo PATH [--rev REV] [--output FILE]
 codedna run-tests --repo PATH [--rev REV] --output-dir DIR --allow-build [--per-test-coverage] [--mvn PATH] [--timeout S]
 codedna select  --repo PATH --base BASE_REV --head HEAD_REV --strategy all|dependency|coverage [--coverage-map F] [--durations F] [--non-java retest-all|ignore]
 codedna compare --repo PATH --base BASE_REV --head HEAD_REV --ground-truth F [--coverage-map F] [--non-java retest-all|ignore]
-codedna plugins
+codedna plugins                                     # installed plugins and load problems
+codedna plugins catalogue                           # the official catalogue
+codedna plugins install ID VERSION --yes            # exact version, SHA-256 checked first
+codedna plugins remove ID --yes
 codedna serve   [--host 127.0.0.1] [--port 8765] [--allow-build]
 codedna history mine     --repo PATH --db FILE [--rev REV] [--max-commits N]
 codedna history import   --db FILE RESULTS [RESULTS ...] [--source NAME]
