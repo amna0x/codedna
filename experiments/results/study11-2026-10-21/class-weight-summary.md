@@ -36,3 +36,13 @@ Gradient boosting trained with balanced class weights (as in the study) and with
 | dynjs | 0.0002 | 0.0004 | 0.0007 | 0.0008 | 0.0006 | 0.0203 | 0.0187 | 0.0022 | 0.0697 | 0.0661 |
 | **All** | 0.1027 (n = 9) | 0.0264 (n = 11) | 0.0203 (n = 9) | 0.0226 (n = 9) | 0.0269 (n = 11) | 0.0214 (n = 9) | 0.0209 (n = 9) | 0.0493 (n = 11) | 0.1030 (n = 9) | 0.0707 (n = 9) |
 
+## Hybrid B10 by model variant
+
+B10 = rules order (recent failures, then shortest), stop when the estimated skip risk is at most the target. Δ vs B3 = B10 − rules at the budget spending the same time (hierarchical bootstrap over seeds and commits; projects weighted equally).
+
+| Model / probabilities | Time | Recall | Safety | Est. risk | Observed miss | Within target | Safety Δ vs B3 [95 % CI] | Recall Δ vs B3 [95 % CI] |
+|---|---|---|---|---|---|---|---|---|
+| balanced/isotonic | 0.3570 | 0.8042 | 0.7184 | 0.0233 | 0.0313 | 8/9 | 0.0959 [-0.003, 0.250] | 0.0271 [-0.008, 0.083] |
+| balanced/none | 0.5511 | 0.7582 | 0.7049 | 0.0158 | 0.0226 | 9/11 | 0.0620 [0.003, 0.126] | -0.0161 [-0.082, 0.034] |
+| unweighted/none | 0.2331 | 0.4578 | 0.4239 | 0.0197 | 0.0424 | 7/11 | 0.0510 [-0.030, 0.130] | -0.0525 [-0.153, 0.016] |
+| unweighted/isotonic | 0.3517 | 0.7965 | 0.6801 | 0.0227 | 0.0314 | 8/9 | 0.0520 [-0.023, 0.171] | 0.0139 [0.001, 0.030] |

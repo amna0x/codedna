@@ -342,3 +342,7 @@ def test_class_weight_check_compares_balanced_and_unweighted(tmp_path):
     summary = script.summarise(tmp_path, ["alpha"], [0])
     assert summary["pooled"]["unweighted"]["none_ece"]["projects"] == 1
     assert "## unweighted" in script.to_markdown(summary)
+    assert report["variants"]["unweighted"]["methods"]["none"]["B10"]["time"] is not None
+    assert "unweighted/none" in report["per_commit"]
+    assert summary["b10"]["unweighted/none"]["vs_rules_same_time"]["time"]["projects"] == 1
+    assert "## Hybrid B10 by model variant" in script.to_markdown(summary)

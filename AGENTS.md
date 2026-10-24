@@ -14,8 +14,9 @@ Full brief: [CODEDNA_STARTER.md](CODEDNA_STARTER.md). Current plan:
 
 ## Before you start
 
-- Read `docs/PROJECT_SPEC.md`, `docs/ARCHITECTURE.md`, `docs/ROADMAP.md` and
-  `docs/DECISIONS.md` before implementing anything.
+- Read `MEMORY.md` (handoff notes: current state, environment quirks, next
+  steps), then `docs/PROJECT_SPEC.md`, `docs/ARCHITECTURE.md`,
+  `docs/ROADMAP.md` and `docs/DECISIONS.md` before implementing anything.
 - Work on **one milestone at a time**. Check the roadmap for the active one.
 - Before a large change, summarise the intended implementation first.
 

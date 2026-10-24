@@ -357,7 +357,7 @@ def _ablations(model: str, features: list[str], train: list[Row], test_commits, 
 
 
 def class_weight_check(dataset: Dataset, *, model: str = "gradient_boosting",
-                       budget: float = 0.5, seed: int = 0) -> dict:
+                       budget: float = 0.5, risk_target: float = 0.05, seed: int = 0) -> dict:
     """Is the calibration gain only undoing balanced class weights?
 
     Trains the full model twice on the train split, with balanced class
@@ -365,6 +365,11 @@ def class_weight_check(dataset: Dataset, *, model: str = "gradient_boosting",
     test split: PR-AUC, raw and calibrated (validation-fitted) Brier / ECE,
     and the commit-level gap |mean estimated skip risk − observed miss rate|
     of the budget policy with raw and with isotonic probabilities.
+
+    With raw (``none``) and isotonic probabilities it also runs the hybrid
+    B10 (rules order, stop at ``risk_target``) and B3 (rules order) at the
+    budget that spends the same real time; ``per_commit`` keeps both
+    outcome lists so a study can pool them with a bootstrap.
     """
     from sklearn.metrics import average_precision_score
 
@@ -376,7 +381,9 @@ def class_weight_check(dataset: Dataset, *, model: str = "gradient_boosting",
     test_rows = [r for group in test_commits for r in group]
     labels = [r.label for r in test_rows]
     warnings: list[str] = []
-    report = {"model": model, "budget": budget, "seed": seed, "warnings": warnings, "variants": {}}
+    report = {"model": model, "budget": budget, "risk_target": risk_target, "seed": seed,
+              "warnings": warnings, "variants": {},
+              "per_commit": {"fields": ["time_ratio", "failing", "missed"]}}
     for variant, weight in (("balanced", "balanced"), ("unweighted", None)):
         ranker = MLRanker(model, dataset.feature_names, seed=seed, class_weight=weight)
         try:
@@ -405,8 +412,38 @@ def class_weight_check(dataset: Dataset, *, model: str = "gradient_boosting",
                 "skip_risk_gap": round(abs(estimate - observed), 4)
                 if estimate is not None and observed is not None else None,
             }
+            if method in ("none", "isotonic"):
+                entry["methods"][method]["B10"] = _hybrid_vs_rules(
+                    report["per_commit"], f"{variant}/{method}", test_commits,
+                    lambda rows, c=calibrator: c.transform(ranker.predict_proba(rows)), risk_target)
         report["variants"][variant] = entry
     return report
+
+
+def _hybrid_vs_rules(per_commit: dict, key: str, test_commits, probability_fn,
+                     risk_target: float) -> dict:
+    memo: dict[str, list[float]] = {}
+
+    def probabilities(rows):
+        commit = rows[0].commit if rows else ""
+        if commit not in memo:
+            memo[commit] = probability_fn(rows)
+        return memo[commit]
+
+    hybrid = _rules_policy(probabilities, RiskPolicy(budget=None, risk_target=risk_target))
+    measured = _measure(test_commits, hybrid)
+    outcomes = _outcomes(test_commits, hybrid)
+    target = outcome_metrics(outcomes)["time"]
+    budget, rules = match_budget(lambda b: _outcomes(test_commits, _rules_policy(
+        probabilities, RiskPolicy(budget=b))), target)
+    per_commit[key] = {"B10": [list(o) for o in outcomes], "B3@B10": [list(o) for o in rules]}
+    return {
+        "time": measured["mean_time_ratio"], "recall": measured["failing_test_recall"],
+        "safety": measured["commit_safety_rate"],
+        "estimated_skip_risk": measured["mean_estimated_skip_risk"],
+        "observed_miss_rate": measured["observed_miss_rate"],
+        "b3_budget_same_time": budget, "b3_same_time": _rounded(outcome_metrics(rules)),
+    }
 
 
 # --- reproducibility --------------------------------------------------------------------

@@ -87,7 +87,39 @@ was trained without class weights (`scripts/class_weight_check.py`;
   mostly through optiq, 0.357 against 0.050, which has 4 failing test
   commits). "Balanced weights + calibration" therefore keeps the better
   ranking *and* calibrated probabilities, but the unweighted model is an
-  equally honest risk estimator.
+  equally honest risk estimator at the 50 % budget.
+
+### But calibration is what makes risk-based stopping work (added 2026-10-24)
+
+The same check also ran the hybrid B10 (rules order, stop at 5 % estimated
+skip risk) with each model's raw and isotonic probabilities
+(`class-weight-summary.md`, "Hybrid B10 by model variant"):
+
+| B10 (target 0.05), same 9 projects | Time | Recall (n = 7) | Safety (n = 7) | Est. risk | Observed miss | Within 5 % |
+|---|---|---|---|---|---|---|
+| Balanced, isotonic (the study's model) | 0.36 | 0.80 | 0.72 | 0.023 | 0.031 | 8 of 9 |
+| Balanced, raw | 0.56 | 0.71 | 0.65 | 0.011 | 0.024 | 7 of 9 |
+| Unweighted, raw | 0.26 | 0.50 | 0.46 | 0.018 | 0.044 | 6 of 9 |
+| Unweighted, isotonic | 0.35 | 0.80 | 0.68 | 0.023 | 0.031 | 8 of 9 |
+
+- With the **unweighted, uncalibrated** model, B10 stops far too early: it
+  runs 26 % of the test time, catches every failing test on only 46 % of
+  failing commits, and misses failures on 4.4 % of commits while
+  estimating 1.8 %. Its target holds on only 6 of 9 projects (for example
+  wicket-bootstrap: estimated 1.8 %, observed 11.9 %).
+- **Calibrating that same model** (isotonic on the validation split) makes
+  B10 behave like the study's model: 35 % time, safety 0.68, observed 3.1 %
+  against 3.1 %, target held on 8 of 9 projects.
+- With the balanced model's raw probabilities, B10 spends more time (56 %)
+  for lower safety (0.65): the inflated probabilities make it stop late
+  and in the wrong places.
+
+Reading: a low ECE is not enough. ECE is dominated by the many near-zero
+predictions; a stopping rule sums the small probabilities of all the tests
+it skips, so a model that is slightly too low on rare failures
+underestimates commit risk. Calibration on held-out data fixes this
+whichever way the model was trained, and **calibration is what makes the
+risk target usable as a stopping rule**.
 
 ## RQ4 — Fallback versus the same test time: **no reliable general gain**
 
@@ -206,13 +238,12 @@ edges, and no type resolution (D-010).
 
 ## Honest summary
 
-1. **Reliable risk estimates are achievable, but calibration is not the
-   main reason.** Calibrating the class-weighted model cuts its
-   calibration error by ~80 % and brings its commit-level risk estimate
-   several times closer to reality; a model trained without class weights
-   is nearly as well calibrated without any calibrator (D-037).
-   Calibration adds a clear further gain only on the projects with the
-   most failures (wicket-bootstrap, HikariCP).
+1. **Calibration is needed for decisions, not for the ECE number.** A
+   model trained without class weights already has a low ECE (0.030 vs
+   0.021 calibrated), so most of the ECE gain undoes class weighting. But
+   used as a stopping rule (B10), the uncalibrated unweighted model stops
+   too early and breaks its 5 % miss target on 3 of 9 projects; calibrating
+   it restores the target on 8 of 9 (D-037).
 2. **Risk-based fallback does not reliably beat spending the same time**
    on the budget. It is neutral on most projects and large on one
    (wicket-bootstrap) where failures are frequent and concentrated in an
@@ -232,11 +263,11 @@ edges, and no type resolution (D-010).
 
 A defensible thesis claim is that CodeDNA gives **honest, checked risk
 estimates** for skipping tests (whether by training on the natural failure
-rate or by calibrating a class-weighted model), used as a **stopping rule
-on top of simple ordering** (B10), with a careful, cost-matched evaluation
+rate is not enough on its own; held-out calibration is what makes them
+usable), used as a **stopping rule on top of simple ordering** (B10), with a careful, cost-matched evaluation
 showing **when** extra safety measures help (frequent, concentrated
 failures) and when they do not. It is not that CodeDNA's ML selects tests
-better than simple rules, nor that calibration by itself is the key
-ingredient. Overturning that would need projects where
+better than simple rules, nor that calibration matters because of
+the drop in ECE. Overturning that would need projects where
 learned models clearly beat recent-failures ordering, which this data does
 not show.

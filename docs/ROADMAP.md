@@ -107,7 +107,7 @@ Java stays the only supported language until Milestone 5 is complete.
   11 projects; pooled gain not statistically clear
 - ✅ Class-weight check for RQ3 (D-037): an unweighted model is nearly as
   well calibrated as the calibrated class-weighted one; calibration mainly
-  undoes class weighting
+  undoes class weighting in ECE, but B10 needs it to keep its risk target
 - 🔄 Evaluation chapter draft (RQ1–RQ5): `docs/REPORT_DRAFT.md`
 
 Product track, alongside:

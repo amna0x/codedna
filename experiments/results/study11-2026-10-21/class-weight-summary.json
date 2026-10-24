@@ -32,7 +32,37 @@
         "isotonic_ece": 0.0,
         "isotonic_skip_risk_gap": 0.0002
       },
-      "warnings": []
+      "warnings": [],
+      "b10": {
+        "balanced/isotonic": {
+          "time": 0.0046,
+          "recall": null,
+          "safety": null,
+          "estimated_skip_risk": 0.0058,
+          "observed_miss_rate": 0.0
+        },
+        "balanced/none": {
+          "time": 0.9684,
+          "recall": null,
+          "safety": null,
+          "estimated_skip_risk": 0.0149,
+          "observed_miss_rate": 0.0
+        },
+        "unweighted/none": {
+          "time": 0.415,
+          "recall": null,
+          "safety": null,
+          "estimated_skip_risk": 0.0486,
+          "observed_miss_rate": 0.0
+        },
+        "unweighted/isotonic": {
+          "time": 0.0086,
+          "recall": null,
+          "safety": null,
+          "estimated_skip_risk": 0.0001,
+          "observed_miss_rate": 0.0
+        }
+      }
     },
     "jooq": {
       "balanced": {
@@ -59,7 +89,37 @@
         "isotonic_ece": 0.004,
         "isotonic_skip_risk_gap": 0.0021
       },
-      "warnings": []
+      "warnings": [],
+      "b10": {
+        "balanced/isotonic": {
+          "time": 0.003,
+          "recall": null,
+          "safety": null,
+          "estimated_skip_risk": 0.011,
+          "observed_miss_rate": 0.0
+        },
+        "balanced/none": {
+          "time": 0.5052,
+          "recall": null,
+          "safety": null,
+          "estimated_skip_risk": 0.0294,
+          "observed_miss_rate": 0.0
+        },
+        "unweighted/none": {
+          "time": 0.0349,
+          "recall": null,
+          "safety": null,
+          "estimated_skip_risk": 0.0126,
+          "observed_miss_rate": 0.0
+        },
+        "unweighted/isotonic": {
+          "time": 0.0124,
+          "recall": null,
+          "safety": null,
+          "estimated_skip_risk": 0.0116,
+          "observed_miss_rate": 0.0
+        }
+      }
     },
     "jcabi-github": {
       "balanced": {
@@ -86,7 +146,37 @@
         "isotonic_ece": 0.0059,
         "isotonic_skip_risk_gap": 0.1659
       },
-      "warnings": []
+      "warnings": [],
+      "b10": {
+        "balanced/isotonic": {
+          "time": 0.3102,
+          "recall": 0.6906,
+          "safety": 0.5423,
+          "estimated_skip_risk": 0.0441,
+          "observed_miss_rate": 0.2017
+        },
+        "balanced/none": {
+          "time": 0.9808,
+          "recall": 1.0,
+          "safety": 1.0,
+          "estimated_skip_risk": 0.0125,
+          "observed_miss_rate": 0.0
+        },
+        "unweighted/none": {
+          "time": 0.4266,
+          "recall": 0.7658,
+          "safety": 0.6692,
+          "estimated_skip_risk": 0.0408,
+          "observed_miss_rate": 0.1458
+        },
+        "unweighted/isotonic": {
+          "time": 0.4123,
+          "recall": 0.7333,
+          "safety": 0.5769,
+          "estimated_skip_risk": 0.045,
+          "observed_miss_rate": 0.1864
+        }
+      }
     },
     "optiq": {
       "balanced": {
@@ -113,7 +203,37 @@
         "isotonic_ece": 0.0008,
         "isotonic_skip_risk_gap": 0.0086
       },
-      "warnings": []
+      "warnings": [],
+      "b10": {
+        "balanced/isotonic": {
+          "time": 0.2007,
+          "recall": 0.7143,
+          "safety": 0.5,
+          "estimated_skip_risk": 0.017,
+          "observed_miss_rate": 0.022
+        },
+        "balanced/none": {
+          "time": 0.0762,
+          "recall": 0.5714,
+          "safety": 0.25,
+          "estimated_skip_risk": 0.0001,
+          "observed_miss_rate": 0.033
+        },
+        "unweighted/none": {
+          "time": 0.0764,
+          "recall": 0.4286,
+          "safety": 0.25,
+          "estimated_skip_risk": 0.0005,
+          "observed_miss_rate": 0.033
+        },
+        "unweighted/isotonic": {
+          "time": 0.1255,
+          "recall": 0.5714,
+          "safety": 0.25,
+          "estimated_skip_risk": 0.0236,
+          "observed_miss_rate": 0.033
+        }
+      }
     },
     "achilles": {
       "balanced": {
@@ -145,7 +265,23 @@
         "balanced: calibration platt skipped: calibration data needs both failing and passing examples",
         "unweighted: calibration isotonic skipped: calibration data needs both failing and passing examples",
         "unweighted: calibration platt skipped: calibration data needs both failing and passing examples"
-      ]
+      ],
+      "b10": {
+        "balanced/none": {
+          "time": 0.7612,
+          "recall": 1.0,
+          "safety": 1.0,
+          "estimated_skip_risk": 0.0384,
+          "observed_miss_rate": 0.0
+        },
+        "unweighted/none": {
+          "time": 0.0975,
+          "recall": 0.0,
+          "safety": 0.0,
+          "estimated_skip_risk": 0.0452,
+          "observed_miss_rate": 0.0099
+        }
+      }
     },
     "hikaricp": {
       "balanced": {
@@ -172,7 +308,37 @@
         "isotonic_ece": 0.0127,
         "isotonic_skip_risk_gap": 0.0118
       },
-      "warnings": []
+      "warnings": [],
+      "b10": {
+        "balanced/isotonic": {
+          "time": 0.1333,
+          "recall": 0.7273,
+          "safety": 0.5,
+          "estimated_skip_risk": 0.0444,
+          "observed_miss_rate": 0.035
+        },
+        "balanced/none": {
+          "time": 0.0373,
+          "recall": 0.1405,
+          "safety": 0.2,
+          "estimated_skip_risk": 0.009,
+          "observed_miss_rate": 0.0559
+        },
+        "unweighted/none": {
+          "time": 0.034,
+          "recall": 0.1074,
+          "safety": 0.25,
+          "estimated_skip_risk": 0.0063,
+          "observed_miss_rate": 0.0524
+        },
+        "unweighted/isotonic": {
+          "time": 0.1303,
+          "recall": 0.7769,
+          "safety": 0.45,
+          "estimated_skip_risk": 0.0456,
+          "observed_miss_rate": 0.0385
+        }
+      }
     },
     "littleproxy": {
       "balanced": {
@@ -199,7 +365,37 @@
         "isotonic_ece": 0.0415,
         "isotonic_skip_risk_gap": 0.3239
       },
-      "warnings": []
+      "warnings": [],
+      "b10": {
+        "balanced/isotonic": {
+          "time": 1.0,
+          "recall": 1.0,
+          "safety": 1.0,
+          "estimated_skip_risk": 0.0,
+          "observed_miss_rate": 0.0
+        },
+        "balanced/none": {
+          "time": 0.8184,
+          "recall": 0.8,
+          "safety": 0.8,
+          "estimated_skip_risk": 0.0121,
+          "observed_miss_rate": 0.0189
+        },
+        "unweighted/none": {
+          "time": 0.7965,
+          "recall": 0.8,
+          "safety": 0.8,
+          "estimated_skip_risk": 0.0103,
+          "observed_miss_rate": 0.0189
+        },
+        "unweighted/isotonic": {
+          "time": 1.0,
+          "recall": 1.0,
+          "safety": 1.0,
+          "estimated_skip_risk": 0.0,
+          "observed_miss_rate": 0.0
+        }
+      }
     },
     "jade4j": {
       "balanced": {
@@ -226,7 +422,37 @@
         "isotonic_ece": 0.0027,
         "isotonic_skip_risk_gap": 0.0122
       },
-      "warnings": []
+      "warnings": [],
+      "b10": {
+        "balanced/isotonic": {
+          "time": 0.2264,
+          "recall": 0.5,
+          "safety": 0.5,
+          "estimated_skip_risk": 0.033,
+          "observed_miss_rate": 0.0159
+        },
+        "balanced/none": {
+          "time": 0.0968,
+          "recall": 0.5,
+          "safety": 0.5,
+          "estimated_skip_risk": 0.0051,
+          "observed_miss_rate": 0.0159
+        },
+        "unweighted/none": {
+          "time": 0.086,
+          "recall": 0.5,
+          "safety": 0.5,
+          "estimated_skip_risk": 0.0059,
+          "observed_miss_rate": 0.0159
+        },
+        "unweighted/isotonic": {
+          "time": 0.2096,
+          "recall": 0.5,
+          "safety": 0.5,
+          "estimated_skip_risk": 0.0335,
+          "observed_miss_rate": 0.0159
+        }
+      }
     },
     "jsprit": {
       "balanced": {
@@ -258,7 +484,23 @@
         "balanced: calibration platt skipped: calibration data needs both failing and passing examples",
         "unweighted: calibration isotonic skipped: calibration data needs both failing and passing examples",
         "unweighted: calibration platt skipped: calibration data needs both failing and passing examples"
-      ]
+      ],
+      "b10": {
+        "balanced/none": {
+          "time": 0.3022,
+          "recall": 0.864,
+          "safety": 0.7714,
+          "estimated_skip_risk": 0.0333,
+          "observed_miss_rate": 0.0308
+        },
+        "unweighted/none": {
+          "time": 0.121,
+          "recall": 0.616,
+          "safety": 0.5714,
+          "estimated_skip_risk": 0.0092,
+          "observed_miss_rate": 0.0577
+        }
+      }
     },
     "wicket-bootstrap": {
       "balanced": {
@@ -285,7 +527,37 @@
         "isotonic_ece": 0.1015,
         "isotonic_skip_risk_gap": 0.0451
       },
-      "warnings": []
+      "warnings": [],
+      "b10": {
+        "balanced/isotonic": {
+          "time": 0.7513,
+          "recall": 0.9971,
+          "safety": 0.9862,
+          "estimated_skip_risk": 0.0149,
+          "observed_miss_rate": 0.0073
+        },
+        "balanced/none": {
+          "time": 0.5161,
+          "recall": 0.9482,
+          "safety": 0.823,
+          "estimated_skip_risk": 0.0188,
+          "observed_miss_rate": 0.0939
+        },
+        "unweighted/none": {
+          "time": 0.4424,
+          "recall": 0.9024,
+          "safety": 0.7747,
+          "estimated_skip_risk": 0.0179,
+          "observed_miss_rate": 0.1195
+        },
+        "unweighted/isotonic": {
+          "time": 0.7164,
+          "recall": 0.9939,
+          "safety": 0.9839,
+          "estimated_skip_risk": 0.0052,
+          "observed_miss_rate": 0.0085
+        }
+      }
     },
     "dynjs": {
       "balanced": {
@@ -312,7 +584,37 @@
         "isotonic_ece": 0.0187,
         "isotonic_skip_risk_gap": 0.0661
       },
-      "warnings": []
+      "warnings": [],
+      "b10": {
+        "balanced/isotonic": {
+          "time": 0.5839,
+          "recall": 1.0,
+          "safety": 1.0,
+          "estimated_skip_risk": 0.0393,
+          "observed_miss_rate": 0.0
+        },
+        "balanced/none": {
+          "time": 1.0,
+          "recall": 1.0,
+          "safety": 1.0,
+          "estimated_skip_risk": 0.0,
+          "observed_miss_rate": 0.0
+        },
+        "unweighted/none": {
+          "time": 0.0337,
+          "recall": 0.0,
+          "safety": 0.0,
+          "estimated_skip_risk": 0.0198,
+          "observed_miss_rate": 0.0133
+        },
+        "unweighted/isotonic": {
+          "time": 0.5501,
+          "recall": 1.0,
+          "safety": 1.0,
+          "estimated_skip_risk": 0.0396,
+          "observed_miss_rate": 0.0
+        }
+      }
     }
   },
   "pooled": {
@@ -398,6 +700,212 @@
       "isotonic_skip_risk_gap": {
         "mean": 0.0707,
         "projects": 9
+      }
+    }
+  },
+  "b10": {
+    "balanced/isotonic": {
+      "metrics": {
+        "time": {
+          "mean": 0.357,
+          "projects": 9
+        },
+        "recall": {
+          "mean": 0.8042,
+          "projects": 7
+        },
+        "safety": {
+          "mean": 0.7184,
+          "projects": 7
+        },
+        "estimated_skip_risk": {
+          "mean": 0.0233,
+          "projects": 9
+        },
+        "observed_miss_rate": {
+          "mean": 0.0313,
+          "projects": 9
+        }
+      },
+      "within_target": "8/9",
+      "vs_rules_same_time": {
+        "time": {
+          "estimate": 0.0008,
+          "ci": [
+            -0.0121,
+            0.0138
+          ],
+          "projects": 9
+        },
+        "recall": {
+          "estimate": 0.0271,
+          "ci": [
+            -0.0082,
+            0.0826
+          ],
+          "projects": 7
+        },
+        "safety": {
+          "estimate": 0.0959,
+          "ci": [
+            -0.003,
+            0.2504
+          ],
+          "projects": 7
+        }
+      }
+    },
+    "balanced/none": {
+      "metrics": {
+        "time": {
+          "mean": 0.5511,
+          "projects": 11
+        },
+        "recall": {
+          "mean": 0.7582,
+          "projects": 9
+        },
+        "safety": {
+          "mean": 0.7049,
+          "projects": 9
+        },
+        "estimated_skip_risk": {
+          "mean": 0.0158,
+          "projects": 11
+        },
+        "observed_miss_rate": {
+          "mean": 0.0226,
+          "projects": 11
+        }
+      },
+      "within_target": "9/11",
+      "vs_rules_same_time": {
+        "time": {
+          "estimate": 0.0002,
+          "ci": [
+            -0.0118,
+            0.0129
+          ],
+          "projects": 11
+        },
+        "recall": {
+          "estimate": -0.0161,
+          "ci": [
+            -0.0819,
+            0.0339
+          ],
+          "projects": 9
+        },
+        "safety": {
+          "estimate": 0.062,
+          "ci": [
+            0.0029,
+            0.1259
+          ],
+          "projects": 9
+        }
+      }
+    },
+    "unweighted/none": {
+      "metrics": {
+        "time": {
+          "mean": 0.2331,
+          "projects": 11
+        },
+        "recall": {
+          "mean": 0.4578,
+          "projects": 9
+        },
+        "safety": {
+          "mean": 0.4239,
+          "projects": 9
+        },
+        "estimated_skip_risk": {
+          "mean": 0.0197,
+          "projects": 11
+        },
+        "observed_miss_rate": {
+          "mean": 0.0424,
+          "projects": 11
+        }
+      },
+      "within_target": "7/11",
+      "vs_rules_same_time": {
+        "time": {
+          "estimate": 0.0003,
+          "ci": [
+            -0.0131,
+            0.0138
+          ],
+          "projects": 11
+        },
+        "recall": {
+          "estimate": -0.0525,
+          "ci": [
+            -0.1535,
+            0.0156
+          ],
+          "projects": 9
+        },
+        "safety": {
+          "estimate": 0.051,
+          "ci": [
+            -0.0305,
+            0.1301
+          ],
+          "projects": 9
+        }
+      }
+    },
+    "unweighted/isotonic": {
+      "metrics": {
+        "time": {
+          "mean": 0.3517,
+          "projects": 9
+        },
+        "recall": {
+          "mean": 0.7965,
+          "projects": 7
+        },
+        "safety": {
+          "mean": 0.6801,
+          "projects": 7
+        },
+        "estimated_skip_risk": {
+          "mean": 0.0227,
+          "projects": 9
+        },
+        "observed_miss_rate": {
+          "mean": 0.0314,
+          "projects": 9
+        }
+      },
+      "within_target": "8/9",
+      "vs_rules_same_time": {
+        "time": {
+          "estimate": 0.0,
+          "ci": [
+            -0.0098,
+            0.0106
+          ],
+          "projects": 9
+        },
+        "recall": {
+          "estimate": 0.0139,
+          "ci": [
+            0.0008,
+            0.0303
+          ],
+          "projects": 7
+        },
+        "safety": {
+          "estimate": 0.052,
+          "ci": [
+            -0.0231,
+            0.1709
+          ],
+          "projects": 7
+        }
       }
     }
   }

@@ -671,3 +671,12 @@ further gain only on the high-failure projects (wicket-bootstrap,
 HikariCP). The thesis claim is reworded accordingly: reliable risk
 estimates, not calibration per se. The selection experiments keep the
 balanced, calibrated model.
+
+Addendum (2026-10-24): the check also runs B10 per variant with raw and
+isotonic probabilities, compared with B3 at the same time. On the same 9
+projects, B10 with the unweighted raw model stops too early (time 0.26,
+safety 0.46, observed miss 4.4 % vs estimated 1.8 %, target held on 6 of
+9); with the unweighted model calibrated it matches the study's model
+(time 0.35, safety 0.68, observed 3.1 %, target held on 8 of 9). Low ECE
+does not imply a usable stopping rule; held-out calibration does. The claim
+is reworded again: calibration matters for decisions, not for the ECE drop.

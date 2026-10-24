@@ -243,14 +243,35 @@ miss rate as any calibrated variant. Balanced weights, on the other hand,
 rank failures better (PR-AUC 0.138 against 0.103, much of it from optiq,
 which has four failing test commits).
 
+The ECE comparison does not show how the probabilities behave in a
+decision. The same check therefore ran the hybrid policy B10 (section 4.4:
+rules order, stop when the estimated skip risk is at most 0.05) with each
+model's raw and isotonic probabilities (`class-weight-summary.md`):
+
+| B10 (target 0.05), same 9 projects | Time | Recall (n = 7) | Safety (n = 7) | Est. risk | Observed miss | Within 5 % |
+|---|---|---|---|---|---|---|
+| Balanced, isotonic (the study's model) | 0.36 | 0.80 | 0.72 | 0.023 | 0.031 | 8 of 9 |
+| Balanced, raw | 0.56 | 0.71 | 0.65 | 0.011 | 0.024 | 7 of 9 |
+| Unweighted, raw | 0.26 | 0.50 | 0.46 | 0.018 | 0.044 | 6 of 9 |
+| Unweighted, isotonic | 0.35 | 0.80 | 0.68 | 0.023 | 0.031 | 8 of 9 |
+
+With the unweighted model's raw probabilities B10 stops far too early: it
+spends 26 % of the test time, is safe on only 46 % of failing commits, and
+misses failures on 4.4 % of commits while estimating 1.8 %, breaking the
+target on 3 of 9 projects. Calibrating the same model restores the target
+on 8 of 9 and matches the study's model almost exactly. A stopping rule
+sums the small probabilities of every skipped test, so a slight
+underestimate of rare failures, invisible in ECE, becomes a large
+underestimate of commit risk.
+
 **Answer to RQ3.** Calibration makes the class-weighted model's
 probabilities and commit-level risk estimates far more reliable (ECE 0.118
-to 0.021, risk gap 0.306 to 0.067). Most of that gain, however, undoes the
-class weighting: a model trained on the natural failure rate is nearly as
-well calibrated without a calibrator, and calibration adds a clear further
-gain only where failures are frequent. Reliable risk estimates are
-achievable on this data; calibration is one way to get them, not the only
-one.
+to 0.021, risk gap 0.306 to 0.067). Most of the ECE gain undoes the class
+weighting: a model trained on the natural failure rate has a low ECE
+without a calibrator. Calibration is nevertheless what makes the risk
+estimate usable for decisions: without it, a risk-target stopping rule
+breaks its target on a third of the projects; with it, the target holds on
+8 of 9, whichever way the model was trained.
 
 ### 4.4 RQ4: fallback and risk-based stopping
 
@@ -312,9 +333,8 @@ a decisive one, on this data.
 - **Calibration baseline.** Both models are trained with balanced class
   weights, which pushes raw probabilities upwards. Section 4.3 therefore
   also reports an unweighted model; most of the calibration gain turns out
-  to correct the class weighting. The selection experiments (B8 to B10)
-  use the balanced, calibrated model; whether an unweighted model would
-  make B10 equally reliable has not been tested.
+  to correct the class weighting. B10 was also run with the unweighted
+  model: it needs calibration to keep its target (section 4.3).
 - **Independence.** The skip-risk formula assumes test failures are
   independent; one bug often breaks several tests. Bootstrap intervals treat
   test commits as independent, but neighbouring commits are correlated, so
@@ -335,9 +355,9 @@ a decisive one, on this data.
 
 CodeDNA's clearest contribution is an honest, checked estimate of the risk
 of skipping tests, together with an evaluation that compares selection
-policies at equal test time. Calibration delivers that estimate for the
-class-weighted model, but much of its apparent gain only undoes the class
-weighting. Learned models predict failures above chance
+policies at equal test time. Held-out calibration is what makes that
+estimate usable as a stopping rule, even though much of its gain in ECE
+only undoes class weighting. Learned models predict failures above chance
 but do not order tests better than simple rules, and fallback mainly buys
 safety with extra test time. Using simple rules to choose *which* tests run
 and the calibrated model to choose *how many* (B10) is at least as good as
