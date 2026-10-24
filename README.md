@@ -95,6 +95,7 @@ python -m pytest --run-maven
 ## Usage
 
 ```bash
+# HEAD_REV may be WORKTREE: uncommitted edits and new (non-ignored) files
 codedna analyze --repo PATH --base BASE_REV --head HEAD_REV [--level method|file] [--output FILE]
 codedna graph   --repo PATH [--rev REV] [--no-members] [--output FILE]
 codedna impact  --repo PATH --base BASE_REV --head HEAD_REV [--max-depth N] [--confirmed-only] [--output FILE]

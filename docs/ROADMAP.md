@@ -174,7 +174,9 @@ May start in parallel (Student C) once the analysis JSON formats are stable.
 - ✅ Impact graph view (Cytoscape.js, D-043): changed code → affected parts →
   tests, confidence-labelled edges, click-to-explain paths
 - 🔄 Java editor support, progress notifications, Windows installer (D-044);
-  needs a Windows build check. Uncommitted-change analysis still open
+  needs a Windows build check
+- ✅ Uncommitted-change analysis: `WORKTREE` revision + "My uncommitted
+  changes" in the IDE (D-046)
 - ⏳ GitHub PR demonstration and final experimental report
 
 - ✅ IDE: risk status/audit evidence, explicit execution confirmation, actual
