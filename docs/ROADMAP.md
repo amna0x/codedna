@@ -146,6 +146,10 @@ Product track, alongside:
   five seeds; all calibrated observed targets hold, but matched-time safety
   difference +0.0460 [-0.0500, 0.2806] is not significant. Full-DANTE reproduction
   and general superiority are not claimed (D-040).
+- 🔄 Rolling-origin evidence study with pre-fixed rules (D-042): on the four
+  inspected projects B10 shows no meaningful safety difference from matched B3;
+  the gate accepts few blocks but those miss rarely. New-project confirmation
+  pending data access.
 
 ## Milestone 6 — CodeDNA IDE and FYP demo ⏳
 

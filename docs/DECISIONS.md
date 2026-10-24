@@ -790,6 +790,21 @@ the target on two projects. Retain recent-failure order for live use; preserve
 both exploratory studies rather than selecting the more favourable adapter.
 Evidence: `experiments/results/dante-history-check-2026-10-24/FINDINGS.md`.
 
+## D-042 — Rolling-origin evidence study with pre-fixed rules
+
+Step 2 of the final plan. Rules in `docs/EVIDENCE_STUDY_PROTOCOL.md` were
+committed before results: five rolling blocks over each project's later half,
+the unchanged D-041 live fit/gate refitted on all prior commits per block, B10
+versus same-order budget B3 at matched time, and a separate gate check. Only
+RTPTorrent projects outside study11 count towards the verdict; study11
+projects are replication only. Runner: `scripts/run_rolling_evidence.py`.
+
+First run (four inspected projects only, data host unreachable): safety
+difference -0.0032 [-0.0362, 0.0294], "no meaningful difference"; gate
+accepted 7 of 19 fitted blocks with observed commit miss 0.0043 versus 0.0274
+on rejected blocks. The confirmatory verdict stays open until new projects are
+added. Evidence: `experiments/results/rolling-evidence-2026-10-24/FINDINGS.md`.
+
 ## D-043 — Impact graph view (Cytoscape.js)
 
 The IDE gets an "Impact graph" main-area view (Ctrl/Cmd+Alt+G): changed code →
