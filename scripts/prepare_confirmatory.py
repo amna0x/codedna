@@ -89,6 +89,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--list", action="store_true", help="Only list the projects that would be used")
     args = parser.parse_args(argv)
     os.environ.setdefault("OMP_NUM_THREADS", "1")  # gradient boosting is slow when oversubscribed
+    if importlib.util.find_spec("codedna") is None or importlib.util.find_spec("sklearn") is None:
+        print("codedna or scikit-learn is not installed for this Python "
+              f"({sys.executable}). Use the project venv, e.g. "
+              ".venv\\Scripts\\python scripts\\prepare_confirmatory.py, "
+              'or install it with: pip install -e ".[ml]"', file=sys.stderr)
+        return 1
 
     fetcher = _script("fetch_rtptorrent_subset")
     exploratory = _script("run_rolling_evidence").STUDY11
