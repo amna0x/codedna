@@ -70,3 +70,24 @@ def test_sparse_checkout_files_are_not_reported_as_deleted(repo):
     changes = extract_changes(repo.path, "HEAD", WORKTREE)
 
     assert changes.changed_files == []
+
+
+def test_edits_inside_a_submodule_are_refused_not_lost(repo, tmp_path):
+    import subprocess
+    inner = tmp_path / "inner"
+    inner.mkdir()
+    git = lambda *a, cwd=inner: subprocess.run(["git", *a], cwd=cwd, check=True, capture_output=True)
+    git("init", "-q")
+    (inner / "Lib.java").write_text("class Lib {}\n")
+    git("add", "-A")
+    git("-c", "user.name=t", "-c", "user.email=t@t", "commit", "-qm", "lib")
+    repo.write("a/Core.java", CORE)
+    repo.commit("base")
+    git("-c", "protocol.file.allow=always", "submodule", "add", "-q", str(inner), "lib", cwd=repo.path)
+    git("-c", "user.name=t", "-c", "user.email=t@t", "commit", "-qm", "sub", cwd=repo.path)
+    assert resolve_commit(repo.path, WORKTREE)  # clean submodule: fine
+
+    (repo.path / "lib/Lib.java").write_text("class Lib { int x; }\n")
+
+    with pytest.raises(InvalidCommitError, match="inside submodules.*lib"):
+        resolve_commit(repo.path, WORKTREE)

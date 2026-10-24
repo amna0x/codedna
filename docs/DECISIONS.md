@@ -802,5 +802,7 @@ therefore always gives the same SHA. The real index, refs and files are not
 touched; the extra objects are ordinary unreachable objects that `git gc`
 removes. Because `git add` would run a configured clean/process filter
 program, repositories whose attributes name any filter driver (such as LFS)
-are refused with an explanation. Every later step reuses the commit-based
+are refused with an explanation, and so are edits inside a submodule whose
+commit did not change (the parent records only that commit, so the edits
+would vanish silently). Every later step reuses the commit-based
 pipeline unchanged.

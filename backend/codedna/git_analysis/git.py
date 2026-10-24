@@ -162,6 +162,13 @@ def snapshot_worktree(repo: Path) -> str:
         raise InvalidCommitError(
             "uncommitted changes cannot be analysed: Git filter drivers apply to "
             f"{len(filtered)} file(s), e.g. {filtered[0]}; commit the changes instead")
+    dirty = _dirty_submodules(repo)
+    if dirty:
+        # The parent only records each submodule's commit, so edits inside one
+        # would silently vanish from the snapshot.
+        raise InvalidCommitError(
+            "uncommitted changes inside submodules cannot be analysed "
+            f"({', '.join(dirty)}); commit them in the submodule first")
     with tempfile.TemporaryDirectory(prefix="codedna-index-") as tmp:
         index = Path(tmp) / "index"
         env = {"GIT_INDEX_FILE": str(index), **_SNAPSHOT_ENV}
@@ -174,3 +181,17 @@ def snapshot_worktree(repo: Path) -> str:
         tree = _run(repo, ("write-tree",), env=env).decode().strip()
         return _run(repo, ("commit-tree", tree, "-p", head, "-m", "CodeDNA working-tree snapshot"),
                     env=env).decode().strip()
+
+
+def _dirty_submodules(repo: Path) -> list[str]:
+    """Submodules with modified or untracked content but an unchanged commit."""
+    status = run_git_bytes(repo, "status", "--porcelain=v2", "-z", "--ignore-submodules=none")
+    dirty = []
+    for entry in status.split(b"\0"):
+        parts = entry.split(b" ", 8)
+        # "1 XY S<c><m><u> ..." (or "2 ..." for renames): S = submodule.
+        if parts[0] in (b"1", b"2") and len(parts) > 8 and parts[2].startswith(b"S") \
+                and parts[2][1:2] != b"C" and (parts[2][2:3] == b"M" or parts[2][3:4] == b"U"):
+            dirty.append(parts[-1].decode("utf-8", "replace"))
+    return sorted(dirty)
+
