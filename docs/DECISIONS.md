@@ -833,3 +833,19 @@ progress notification with stage text and elapsed seconds; no fake
 percentages, because the core reports no intermediate steps. (3)
 `electron-builder` 26.0.12 builds a per-user NSIS installer for the IDE. The
 Python core is not bundled yet; bundling it (e.g. PyInstaller) is left open.
+
+## D-045 — Multi-module Maven and Gradle test discovery and runs
+
+`test_mapping.build.detect_build` reads the committed build files only: Maven
+`<modules>` recursively plus each module's own Surefire `<includes>` and
+`<excludes>` (parent inheritance and profiles are not resolved; modules inside
+profiles and module paths leaving the repository are warned about, not
+followed), or Gradle `include` statements in `settings.gradle(.kts)`, also
+spread over several lines (syntactic, comments removed, with a warning). Discovery records each
+test's module and whether the build runs it by default. Gradle runs every class
+in a module's `src/test/java`, so no name filter applies. `run-tests` runs the
+Maven reactor from the root (`failIfNoSpecifiedTests=false` across modules) or
+the system `gradle` (never the repository's `gradlew`) with our own init script.
+That script sets `ignoreFailures` and `failOnNoMatchingTests=false`. Reports
+are collected from every module. Per-test JaCoCo coverage stays single-module
+Maven and is refused otherwise rather than guessed.
