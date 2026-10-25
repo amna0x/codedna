@@ -235,7 +235,7 @@ export class GraphViewWidget extends ReactWidget {
                 <label className='cd-check'>
                     <input type='checkbox' checked={!!this.options.confirmedOnly} disabled={this.loading}
                         onChange={e => { this.options = { ...this.options, confirmedOnly: e.currentTarget.checked }; this.update(); }} />
-                    Direct links only
+                    Confirmed links only
                 </label>
                 <button className='cd-button' type='submit' disabled={this.loading} aria-busy={this.loading}>
                     {this.loading ? <><Spinner /> Building graph…</> : 'Show graph'}
