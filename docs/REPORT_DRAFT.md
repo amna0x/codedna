@@ -1,7 +1,7 @@
 # CodeDNA: evaluation chapter (draft)
 
 Draft of the methods, results and threats-to-validity chapters for the FYP
-report, covering research questions RQ1 to RQ5 (docs/RESEARCH_PLAN.md).
+report (the other chapters are in [REPORT_SYSTEM_DRAFT.md](REPORT_SYSTEM_DRAFT.md)), covering research questions RQ1 to RQ5 (docs/RESEARCH_PLAN.md).
 Every number comes from files under `experiments/results/`; the source of
 each table is named. Status: evaluation draft with reproducible figures, 2026-10-24.
 
