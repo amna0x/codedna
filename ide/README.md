@@ -42,6 +42,12 @@ enables selected Maven execution; analysis never triggers a build.
 
 ## Build and run
 
+On Windows, `start.bat` in the repository root does all of this: it builds
+the IDE if needed, sets `CODEDNA_EXECUTABLE` to `.venv\Scripts\codedna.exe`
+and `JAVA_HOME` to the portable JDK when one is recorded, and opens a demo
+repository (created in `%USERPROFILE%\codedna-demo`) or the folder given as
+its argument. By hand:
+
 ```bash
 cd ide
 npm install

@@ -283,7 +283,10 @@ on 2026-10-24 with the portable JDK and Maven runtime.
 `ide/` contains the desktop IDE (Eclipse Theia 1.76 + Electron) with the
 **Changes** and **Tests to run** views, written so newcomers can use them,
 and the calm CodeDNA Dark theme. See [ide/README.md](ide/README.md) for prerequisites and
-`npm install && npm run build && npm start`.
+`npm install && npm run build && npm start`. On Windows, double-click
+`start.bat` in the repository root: it installs and builds the IDE on first
+run, points it at the `.venv` core and the JDK, and opens a demo project
+(`start.bat C:\path\to\repo` opens another folder).
 
 ![CodeDNA IDE](docs/ide-screenshot.png)
 
