@@ -13,9 +13,11 @@ from pathlib import Path
 from typing import Any, Protocol, runtime_checkable
 
 # Plugin API version. Plugins declaring another major version are refused;
-# bump the major only for incompatible interface changes. 1.1 (D-054) adds
-# ``type_kinds`` and ``attach_declarations``, which the core now needs because
-# it no longer imports any language code itself.
+# bump the major only for incompatible interface changes. 1.1 (D-054) adds two
+# optional members, ``type_kinds`` and ``attach_declarations``: the core reads
+# them with ``getattr``, so 1.0 plugins keep loading (their changes then stay at
+# file level). Optional members are not part of the Protocol below, because
+# ``isinstance`` would reject plugins that lack them.
 PLUGIN_API_VERSION = "1.1"
 
 
@@ -26,7 +28,8 @@ class LanguagePlugin(Protocol):
     version: str  # plugin version
     api_version: str  # plugin API version it was written for, e.g. "1.0"
     file_suffixes: tuple[str, ...]  # e.g. (".java",)
-    type_kinds: frozenset[str]  # graph node kinds that are types, e.g. {"class", "enum"}
+    # Optional since 1.1: type_kinds: frozenset[str], graph node kinds that are
+    # types (e.g. {"class", "enum"}); default: none.
 
     def handles(self, path: str) -> bool:
         """True if this plugin analyses the file at ``path``."""
@@ -34,8 +37,8 @@ class LanguagePlugin(Protocol):
     def parse(self, source: bytes) -> Any:
         """Declarations with line ranges for one source file."""
 
-    def attach_declarations(self, report: Any) -> None:
-        """Fill the declaration mapping of the files it handles in a ``ChangeReport`` (in place)."""
+    # Optional since 1.1: attach_declarations(report) fills the declaration
+    # mapping of the files it handles in a ``ChangeReport`` (in place).
 
     def build_graph(self, repo: Path, commit: str, *, include_members: bool = True,
                     cache: dict | None = None) -> Any:

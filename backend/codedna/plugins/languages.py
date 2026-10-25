@@ -43,7 +43,12 @@ def require(language: str = "java", registry: PluginRegistry | None = None) -> L
 def type_kinds(registry: PluginRegistry | None = None) -> frozenset[str]:
     """Graph node kinds that are types, over all installed plugins."""
     registry = registry or load_plugins()
-    return frozenset().union(*(p.type_kinds for p in registry.plugins.values()))
+    return frozenset().union(*(plugin_type_kinds(p) for p in registry.plugins.values()))
+
+
+def plugin_type_kinds(plugin: LanguagePlugin) -> frozenset[str]:
+    """Optional since plugin API 1.1; a 1.0 plugin reports no type kinds."""
+    return frozenset(getattr(plugin, "type_kinds", ()))
 
 
 def analyze_changes(repo_path: str | Path, base: str, head: str, *,
@@ -52,7 +57,9 @@ def analyze_changes(repo_path: str | Path, base: str, head: str, *,
     registry = registry or load_plugins()
     report = extract_changes(repo_path, base, head)
     for plugin in registry.plugins.values():
-        plugin.attach_declarations(report)
+        attach = getattr(plugin, "attach_declarations", None)  # optional since API 1.1
+        if attach is not None:
+            attach(report)
     for language, (package, suffix, command) in KNOWN.items():
         missed = [c.path for c in report.changed_files
                   if c.path.endswith(suffix) or (c.old_path or "").endswith(suffix)]

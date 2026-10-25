@@ -64,7 +64,7 @@ backend/codedna/
 ├── selection/
 │   └── baselines.py       all / dependency / coverage strategies, compare
 ├── plugins/
-│   ├── base.py            LanguagePlugin protocol, PLUGIN_API_VERSION 1.1, api_compatible()
+│   ├── base.py            LanguagePlugin protocol (1.1 adds optional members), api_compatible()
 │   ├── registry.py        entry-point plugins ("codedna.languages"), compatibility checks
 │   ├── languages.py       the core's only way into a language: require(), analyze_changes(),
 │   │                      build_graph(), discover_tests(), PluginMissingError

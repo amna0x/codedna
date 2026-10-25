@@ -236,14 +236,25 @@ def test_incompatible_and_broken_plugins_are_rejected(monkeypatch):
     class Current(Old):
         name, api_version = "current", "1.0"  # older minor: still compatible
 
+    class Plain:  # written for API 1.0: none of the optional 1.1 members
+        name, display_name, version, api_version, file_suffixes = "plain", "P", "1", "1.0", (".p",)
+
+        def handles(self, path): return path.endswith(".p")
+        def parse(self, source): ...
+        def build_graph(self, repo, commit, **kw): ...
+        def discover_tests(self, repo, commit): ...
+        def run_tests(self, *a, **kw): ...
+
     fake = [EntryPoint("old", Old), EntryPoint("broken", None), EntryPoint("junk", object),
-            EntryPoint("newer", Newer), EntryPoint("current", Current)]
+            EntryPoint("newer", Newer), EntryPoint("current", Current), EntryPoint("plain", Plain)]
     monkeypatch.setattr("codedna.plugins.registry.entry_points",
                         lambda group: fake if group == ENTRY_POINT_GROUP else [])
 
     registry = load_plugins()
 
-    assert list(registry.plugins) == ["current"]
+    assert list(registry.plugins) == ["current", "plain"]
+    from codedna.plugins.languages import type_kinds
+    assert type_kinds(registry) == frozenset({"class"})  # "plain" contributes none
     problems = " ".join(registry.problems)
     assert "newer: plugin API 1.9 is incompatible" in problems
     assert "incompatible" in problems and "failed to load" in problems and "does not implement" in problems

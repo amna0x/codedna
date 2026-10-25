@@ -30,7 +30,7 @@ from pathlib import Path
 from codedna.git_analysis.git import resolve_commit, resolve_repository
 from codedna.impact_analysis import compute_impact
 from codedna.plugins import load_plugins
-from codedna.plugins.languages import analyze_changes, require
+from codedna.plugins.languages import analyze_changes, plugin_type_kinds, require
 from codedna.selection.policy import apply_policy
 from codedna.test_mapping.results import CoverageMap, TestRunResult
 
@@ -124,7 +124,7 @@ def select_tests(repo_path: str | Path, base: str, head: str, strategy: str, *,
         if coverage_map.commit != base_sha:
             warnings.append(f"coverage map is from commit {coverage_map.commit[:12]}, not BASE "
                             f"{base_sha[:12]}; selection may miss or over-select tests")
-        _select_by_coverage(changes, coverage_map, universe, pick, java.type_kinds)
+        _select_by_coverage(changes, coverage_map, universe, pick, plugin_type_kinds(java))
 
     if non_java_changes and non_java == "ignore":
         warnings.append(f"{len(non_java_changes)} non-Java change(s) ignored by request: "

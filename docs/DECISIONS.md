@@ -1098,10 +1098,11 @@ D-018/D-024: the core has no built-in language and no Tree-sitter dependency.
   `test_mapping.results` including `TestClassResult` and `ReportError`), the
   generic `BoundedParseCache`, and everything language-neutral.
 - **One way in:** `codedna.plugins.languages` (`require`, `analyze_changes`,
-  `build_graph`, `discover_tests`, `type_kinds`). Plugin API 1.1 adds
-  `type_kinds` and `attach_declarations` to the protocol. A plugin with a
-  newer minor than the core is refused, because it may rely on members the
-  core lacks. A test imports every core module with `codedna_java` and
+  `build_graph`, `discover_tests`, `type_kinds`). Plugin API 1.1 adds two
+  optional members, `type_kinds` and `attach_declarations`, read with
+  `getattr`, so a 1.0 plugin still loads (its changes stay at file level).
+  A plugin with a newer minor than the core is refused, because it may rely
+  on members the core lacks. A test imports every core module with `codedna_java` and
   `tree_sitter` blocked.
 - **Without the Java plugin** `analyze` still lists changed files and warns
   which `.java` files were not analysed. Commands that need a graph or test
