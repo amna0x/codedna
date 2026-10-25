@@ -79,6 +79,7 @@ backend/codedna/
 │   ├── mining.py          first-parent history + numstat
 │   ├── collection.py      import results.json / opt-in per-commit runs
 │   ├── rtptorrent.py      RTPTorrent importer (real CI results, no builds)
+│   ├── recording.py       full-suite runs kept as .codedna/history.csv (D-053)
 │   └── features.py        leakage-free (commit, test) rows
 └── models/
     ├── metrics.py         APFD, APFDc, recall@budget, time to first failure

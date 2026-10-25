@@ -236,6 +236,8 @@ def create_app(token: str, *, allow_build: bool = False,
             selection = select_tests(body.repo,body.base,body.head,body.strategy,
                                      must_run=body.must_run).to_dict()
         repo = resolve_repository(body.repo)
+        from codedna.test_history.recording import ignore_outputs, record_run
+        ignore_outputs(repo)
         output = repo/'.codedna/runs'/uuid4().hex
         plugin = load_plugins().get('java')
         if plugin is None:
@@ -243,7 +245,14 @@ def create_app(token: str, *, allow_build: bool = False,
         run,_ = plugin.run_tests(repo,selection['head_commit'],output,allow_build=True,
             selected_tests=[t['test'] for t in selection['selected']],
             maven_command=maven_command,timeout=body.timeout)
-        return {'selection':selection,'results':run.to_dict(),'output_dir':str(output)}
+        # Whole-suite runs become project history so the risk gate can turn on (D-053).
+        if selection['skipped']:
+            recording = {'recorded':False,'reason':'selected runs are not recorded; '
+                         'the risk gate needs complete outcomes'}
+        else:
+            recording = record_run(repo,run,expected_tests=[t['test'] for t in selection['selected']])
+        return {'selection':selection,'results':run.to_dict(),'output_dir':str(output),
+                'recording':recording}
 
     @app.post("/api/compare", dependencies=secured)
     def compare(body: CompareRequest) -> dict:

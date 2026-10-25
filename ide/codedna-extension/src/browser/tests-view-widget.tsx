@@ -172,6 +172,9 @@ export class TestsViewWidget extends ReactWidget {
                     <span className='cd-code'>{simpleName(test.id)}</span><span>{test.status}</span>
                 </div>)}</div>
                 {this.execution.results.warnings.map(warning => <p key={warning}>{warning}</p>)}
+                {this.execution.recording && <p className='cd-footnote'>{this.execution.recording.recorded
+                    ? `Saved as project history (${this.execution.recording.commits_with_results} commits with full results). Risk selection turns on once this history passes its audit.`
+                    : `Not saved as history: ${this.execution.recording.reason}`}</p>}
                 <p className='cd-footnote'>Logs and reports: {this.execution.output_dir}</p>
             </section>}
             <p className='cd-meta'>Compared commits: {report.base_commit.slice(0, 8)} → {report.head_commit.slice(0, 8)}</p>

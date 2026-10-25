@@ -1019,3 +1019,43 @@ view instead. A product change for this (for example, always run tests
 without history and validate the rest) would need its own pre-registered
 check.
 
+## D-053 — Record full-suite runs as project history ("record as you go")
+
+**Why.** D-052 showed the live gate (D-041) never turns on from public CI
+records, because they are incomplete. A project using CodeDNA can build
+complete records itself: every whole-suite run CodeDNA starts is a full,
+labelled outcome of one commit.
+
+**What.** `test_history/recording.py` `record_run(repo, run, expected_tests)`
+stores the run in `.codedna/history.db` (first-parent history mined again,
+source `codedna-run`) and rebuilds `.codedna/history.csv` from it
+(`structural=False`; the live predictor does not use those features). The
+CSV is written to a `.partial` file and then replaced. Used by
+`/api/run-selection` (IDE) when nothing was skipped, and by
+`codedna history record --repo PATH RESULTS` for a saved run, whose expected
+tests are the classes the build runs by default at that commit.
+
+**Refused, with a reason, never guessed:**
+
+- selected (partial) runs: a skipped test's outcome is unknown and the gate
+  audits complete outcomes;
+- runs where an expected test class has no result (the build stopped early);
+- commits not on HEAD's first-parent line (working-tree snapshots, other
+  branches);
+- a `history.csv` CodeDNA did not write (no database, or its SHA-256 differs
+  from the one stored after the last recording), e.g. the HikariCP demo or a
+  hand-edited file.
+
+A second run of the same commit replaces that commit's earlier result.
+
+**Git hygiene.** A self-ignoring `.codedna/.gitignore` (only if none exists)
+ignores `runs/` and the history files; a committed `policy.toml` is
+unaffected. `snapshot_worktree` also leaves those paths out, for run folders
+created before the ignore file existed.
+
+**What it does not do.** It does not loosen the gate. With the default 5%
+target the gate needs at least 10 failure-bearing audit commits (the last 25%
+of recorded commits) and a Wilson upper bound at or under 5%, so in practice
+a few hundred recorded commits. A synthetic check (240 commits, one test failing every
+third commit, scratch script only, not evidence) reached `validated_history`
+from recorded runs alone; real projects will differ.

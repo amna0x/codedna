@@ -135,6 +135,8 @@ export interface SelectionRun {
     results: { tests: { id: string; status: string; time: number }[];
         failing_tests: string[]; warnings: string[]; duration_seconds: number; exit_codes: number[] };
     output_dir: string;
+    /** Whole-suite runs are kept as project history for risk selection (D-053). */
+    recording?: { recorded: boolean; reason: string | null; commits_with_results?: number };
 }
 
 export interface SelectionReport {

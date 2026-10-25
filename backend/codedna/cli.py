@@ -22,6 +22,7 @@ Usage:
     codedna history collect  --repo PATH --db FILE --output-dir DIR --allow-build
                              [--max-commits N] [--mvn PATH] [--timeout SECONDS]
     codedna history status   --db FILE
+    codedna history record   --repo PATH RESULTS
     codedna history import-rtptorrent --dataset DIR (--project NAME --db FILE | --list)
                              [--max-commits N]
     codedna history evaluate --db FILE [--repo PATH] [--rankers NAME ...]
@@ -239,6 +240,15 @@ def build_parser() -> argparse.ArgumentParser:
     collect.add_argument("--mvn", help="Path to the Maven executable (default: mvn on PATH).")
     collect.add_argument("--timeout", type=_non_negative_int, default=1800,
                          help="Timeout per build invocation in seconds (default: 1800).")
+
+    record = history_commands.add_parser(
+        "record",
+        help="Add a full-suite run to REPO/.codedna/history.csv (nothing is built).",
+        description="Stores a complete run of the whole suite at a commit on the current "
+                    "branch as project history for risk selection (D-053). Incomplete "
+                    "runs and other branches are refused with a reason.")
+    record.add_argument("--repo", required=True, help="Path to a local Git repository.")
+    record.add_argument("results", help="results.json file or run directory.")
 
     rtp = history_commands.add_parser(
         "import-rtptorrent",
@@ -465,6 +475,8 @@ def _run_history(args: argparse.Namespace) -> int:
     command = args.history_command
     if command == "import-rtptorrent":
         return _import_rtptorrent(args)
+    if command == "record":
+        return _record_run(args)
     if command == "collect" and not args.allow_build:
         print("error: history collect runs every commit's build (project code executes); "
               "re-run with --allow-build if you trust this project", file=sys.stderr)
@@ -514,6 +526,22 @@ def _run_on_dataset(args: argparse.Namespace, dataset) -> int:
     if args.dataset_csv:
         dataset.to_csv(args.dataset_csv)
     return _write_json(evaluate(dataset, rankers=args.rankers, seed=args.seed), args.output)
+
+
+def _record_run(args: argparse.Namespace) -> int:
+    from codedna.git_analysis.git import resolve_repository
+    from codedna.test_history.recording import record_run
+    from codedna.test_mapping.discovery import discover_tests_for_commit
+    from codedna.test_mapping.results import RESULTS_FILE, load_results
+
+    path = Path(args.results)
+    run = load_results(path / RESULTS_FILE if path.is_dir() else path)
+    repo = resolve_repository(args.repo)
+    expected = [t.id for t in discover_tests_for_commit(repo, run.commit).tests
+                if t.runs_by_default]
+    report = record_run(repo, run, expected_tests=expected)
+    _write_json(report, None)
+    return EXIT_OK if report["recorded"] else EXIT_ANALYSIS_ERROR
 
 
 def _import_rtptorrent(args: argparse.Namespace) -> int:

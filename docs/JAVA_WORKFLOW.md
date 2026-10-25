@@ -46,6 +46,11 @@ codedna risk-select --repo PATH --base BASE --head HEAD
 `--allow-build`, and can take hours; it is not run automatically by analysis.
 Use the IDE's optional history-file field to choose another exported CSV.
 
+From then on, full-suite runs started by CodeDNA are added automatically
+(D-053), but only to a `history.csv` CodeDNA wrote itself. A CSV exported by
+the commands above is left unchanged; delete it once and the next full run
+rebuilds it from `history.db`, which keeps your imported results.
+
 ## What risk validation means
 
 The live 15-feature predictor uses only change, changed-test and historical

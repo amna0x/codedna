@@ -110,6 +110,7 @@ codedna history mine     --repo PATH --db FILE [--rev REV] [--max-commits N]
 codedna history import   --db FILE RESULTS [RESULTS ...] [--source NAME]
 codedna history collect  --repo PATH --db FILE --output-dir DIR --allow-build [--max-commits N]
 codedna history status   --db FILE
+codedna history record   --repo PATH RESULTS
 codedna history evaluate --db FILE [--repo PATH] [--rankers ...] [--no-structural] [--dataset-csv F]
 codedna history import-rtptorrent --dataset DIR (--list | --project NAME --db FILE) [--max-commits N]
 codedna history experiment --db FILE [--repo PATH] [--model M] [--calibration none|platt|isotonic] [--budget F] [--risk-target F] [--replay]
@@ -452,6 +453,16 @@ reason = "checkout and security checks run on every change"
 The file is read from the BASE commit, so a change cannot loosen its own
 policy; a broken file makes every test run. `--must-run PATTERN` adds
 patterns for one run.
+
+### History builds up as you use it
+
+Every run of the whole suite that CodeDNA starts (IDE **Run**, when nothing
+is skipped) is saved in `.codedna/history.db` and `.codedna/history.csv`
+(D-053). `codedna history record --repo PATH RESULTS` adds a saved
+`results.json`. Partial runs, other branches and uncommitted states are not
+recorded, and a `history.csv` you supplied is never overwritten. Risk
+selection turns on only when this history passes the audit, which takes many
+recorded commits with failures; until then it recommends the full suite.
 
 The [fixed DANTE-H/B10 extension protocol](docs/DANTE_B10_PROTOCOL.md) and
 [related-work comparison](docs/RELATED_WORK_COMPARISON.md) describe the independent

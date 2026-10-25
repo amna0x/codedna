@@ -187,6 +187,8 @@ May start in parallel (Student C) once the analysis JSON formats are stable.
   hook for later checks (D-050)
 - ✅ Real-project demo on HikariCP history (`scripts/make_hikaricp_demo.py`);
   discovery follows build-helper test folders and `.class` includes (D-052)
+- ✅ Record as you go: full-suite runs build the project's own history so
+  the risk gate can turn on without external data (D-053)
 - ⏳ GitHub PR demonstration and final experimental report
 
 - ✅ IDE: risk status/audit evidence, explicit execution confirmation, actual
