@@ -976,3 +976,46 @@ Checked by rendering the compiled layout with Cytoscape in headless Chromium
 on HikariCP commits 086bf183 (13 nodes, 4 packages) and 93c71780 (63 nodes,
 9 packages); not yet checked inside the packaged Windows app.
 
+## D-052 — Real-project demo, two discovery fixes and what the live gate does on public CI history
+
+**Demo.** `scripts/make_hikaricp_demo.py DEST` clones HikariCP from the
+RTPTorrent bare repository, checks out a real tested change (default
+dd7c9a9a, chosen from `--list` for the demonstration, not as evidence),
+writes `.codedna/history.csv` with the study's rows for tested commits on
+BASE's first-parent line up to BASE (nothing from the change or later), and
+`.codedna/demo.json` with CodeDNA's dependency selection and risk
+recommendation next to RTPTorrent's CI record of the change. `.codedna/` is
+added to `.git/info/exclude`. No project code is built or run.
+
+**Discovery fixes found on the way** (both made the test universe smaller
+than what CI ran, so even "run everything" missed failures):
+
+- build-helper-maven-plugin `add-test-source` folders and a module's own
+  `<testSourceDirectory>` are now test roots (`BuildLayout.test_roots`).
+  HikariCP 2.x shares `hikaricp-common/src/test/java` between two modules;
+  before the fix 2 of its 21 CI test classes were discovered. A folder shared
+  by several modules belongs to the first in sorted order. Property
+  (`${...}`) paths and paths outside the repository are reported, not followed.
+- Surefire include/exclude patterns ending in `.class` are treated like
+  `.java` (Surefire's rule). wicket-bootstrap's core module includes
+  `**/*.class`; before the fix none of its tests ran by default.
+
+Study numbers are unaffected: the study uses RTPTorrent's recorded tests,
+not discovery.
+
+**Live gate on public CI history (finding, not changed).** HikariCP has 89
+consecutive tested first-parent pairs whose CI run failed; every Java-only one
+was run through `risk-select` with history up to its BASE, as were the failing
+Java-only changes on wicket-bootstrap's master line. The D-041 gate never
+accepted. HikariCP's audit windows always contain a commit
+whose CI record lacks a current test class (for example TestMetrics missing
+at 8a20f775), and the gate requires complete outcomes. Dropping incomplete
+commits would leave too few failing audit commits and the gate still refuses
+(upper bound above target, recall below 90%). wicket-bootstrap's CI records
+cover 41 of the 72 test classes its build runs. The gate behaves as designed:
+without complete evidence it recommends the full suite. The gate was not
+loosened for the demo; the calibrated stopping is shown in the History replay
+view instead. A product change for this (for example, always run tests
+without history and validate the rest) would need its own pre-registered
+check.
+

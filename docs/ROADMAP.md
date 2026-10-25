@@ -185,6 +185,8 @@ May start in parallel (Student C) once the analysis JSON formats are stable.
   checked against the saved reports, all-projects overview
 - ✅ Must-run (pinned) tests policy read from BASE, fail-safe, add-on rule
   hook for later checks (D-050)
+- ✅ Real-project demo on HikariCP history (`scripts/make_hikaricp_demo.py`);
+  discovery follows build-helper test folders and `.class` includes (D-052)
 - ⏳ GitHub PR demonstration and final experimental report
 
 - ✅ IDE: risk status/audit evidence, explicit execution confirmation, actual

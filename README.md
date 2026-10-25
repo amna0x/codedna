@@ -301,6 +301,24 @@ and the calm CodeDNA Dark theme. See [ide/README.md](ide/README.md) for prerequi
 run, points it at the `.venv` core and the JDK, and opens a demo project
 (`start.bat C:\path\to\repo` opens another folder).
 
+### Demo on a real project (HikariCP)
+
+With the RTPTorrent HikariCP data in `experiments/` (see DATASET_PLAN.md):
+
+```bat
+.venv\Scripts\python scripts\make_hikaricp_demo.py %USERPROFILE%\codedna-hikaricp
+start.bat %USERPROFILE%\codedna-hikaricp
+```
+
+The folder's last commit is a real HikariCP change (dd7c9a9a) whose CI run
+failed 17 of 21 test classes; `.codedna/history.csv` holds the project's
+recorded test history up to the commit before it, and `.codedna/demo.json`
+puts CodeDNA's answers next to the real CI outcome. Dependency selection picks
+19 of 21 classes and catches all 17 failures in 24% of the CI test time; the
+risk view falls back to the full suite because the history fails the gate
+(D-052). The commit was picked for the demonstration (`--list` shows the
+others); it is not evidence.
+
 ![CodeDNA IDE](docs/ide-screenshot.png)
 
 ## Sample Java project

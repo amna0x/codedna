@@ -128,7 +128,8 @@ def discover_tests_for_commit(repo: Path, commit: str) -> DiscoveryReport:
         tests.append(DiscoveredTest(
             id=info.id, file=info.file, framework=frameworks.get(info.file, "unknown"),
             methods=methods, inherited_from=inherited_from,
-            in_test_sources="/src/test/java/" in f"/{info.file}",
+            in_test_sources="/src/test/java/" in f"/{info.file}"
+            or bool(layout.tool and layout.module_of(info.file) is not None),
             matches_surefire_defaults=name.startswith("Test")
             or name.endswith(("Test", "Tests", "TestCase")),
             module=layout.module_of(info.file) if layout.tool else None,
