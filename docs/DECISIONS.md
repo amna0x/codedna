@@ -969,7 +969,7 @@ crowded to read. Changes:
   package boxes that contain changed code have a coloured border. A one-line
   summary gives the counts per category and packages.
 - **Controls:** "Follow" (all links, or 1/2/3 links from the change) and
-  "Direct links only" pass the existing `max_depth` / `confirmed_only` options
+  "Confirmed links only" (drops heuristic links; depth is set separately) pass the existing `max_depth` / `confirmed_only` options
   to the core; no filtering happens in TypeScript.
 
 Checked by rendering the compiled layout with Cytoscape in headless Chromium
