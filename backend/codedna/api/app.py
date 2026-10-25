@@ -30,6 +30,12 @@ from codedna.dependency_graph import build_graph
 from codedna.git_analysis import CodeDNAGitError, extract_changes
 from codedna.impact_analysis import compute_impact
 from codedna.java_analysis import analyze_changes
+from codedna.models.replay import (
+    ReplayError,
+    find_replay_sources,
+    replay_from_file,
+    replay_overview,
+)
 from codedna.plugins import load_plugins
 from codedna.selection import SelectionError, compare_strategies, select_tests
 from codedna.test_mapping.discovery import discover_tests
@@ -99,6 +105,18 @@ class CompareRequest(ChangeRequest):
     non_java: Literal["retest-all", "ignore"] = "retest-all"
 
 
+class ReplayRequest(BaseModel):
+    path: str = Field(description="Experiment report JSON (history experiment --output).")
+
+
+class ReplaySourcesRequest(BaseModel):
+    folders: list[str] = Field(min_length=1, description="Folders with experiment reports.")
+
+
+class ReplayOverviewRequest(ReplaySourcesRequest):
+    seed: int | None = None
+
+
 class RunTestsRequest(RevRequest):
     output_dir: str
     allow_build: bool = False
@@ -141,6 +159,10 @@ def create_app(token: str, *, allow_build: bool = False,
 
     @app.exception_handler(ReportError)
     async def report_error(_request: Request, exc: ReportError):
+        return JSONResponse({"error": str(exc)}, status_code=400)
+
+    @app.exception_handler(ReplayError)
+    async def replay_error(_request: Request, exc: ReplayError):
         return JSONResponse({"error": str(exc)}, status_code=400)
 
     @app.exception_handler(FileNotFoundError)
@@ -228,6 +250,19 @@ def create_app(token: str, *, allow_build: bool = False,
             load_results(_json_file(body.ground_truth, RESULTS_FILE)),
             coverage_map=load_coverage_map(coverage) if coverage else None,
             non_java=body.non_java)
+
+    @app.post("/api/replay", dependencies=secured)
+    def replay(body: ReplayRequest) -> dict:
+        """Read-only: replays a saved experiment report; runs no model and no code."""
+        return replay_from_file(body.path)
+
+    @app.post("/api/replay/sources", dependencies=secured)
+    def replay_sources(body: ReplaySourcesRequest) -> dict:
+        return find_replay_sources(body.folders)
+
+    @app.post("/api/replay/overview", dependencies=secured)
+    def replay_overview_(body: ReplayOverviewRequest) -> dict:
+        return replay_overview(body.folders, seed=body.seed)
 
     @app.post("/api/run-tests", dependencies=secured)
     def run_tests(body: RunTestsRequest) -> dict:

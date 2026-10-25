@@ -1,10 +1,12 @@
 import { ChildProcess, spawn } from 'child_process';
 import { randomBytes } from 'crypto';
 import { createServer } from 'net';
+import { delimiter } from 'path';
 import { injectable } from '@theia/core/shared/inversify';
 import { BackendApplicationContribution } from '@theia/core/lib/node';
 import {
-    AnalyzeReport, CodeDnaService, CodeDnaStatus, ImpactReport, SelectionReport, SelectionStrategy, SelectionRun
+    AnalyzeReport, CodeDnaService, CodeDnaStatus, ImpactReport, ReplayOverview, ReplaySources, ReplayTimeline,
+    SelectionReport, SelectionStrategy, SelectionRun
 } from '../common/codedna-protocol';
 
 /**
@@ -73,6 +75,23 @@ export class CodeDnaServiceImpl implements CodeDnaService, BackendApplicationCon
         return this.post('/api/run-selection', {
             repo, base, head, strategy, history_csv: historyCsv || undefined, allow_build: true
         });
+    }
+
+    async replayFolders(): Promise<string[]> {
+        // Set by start.bat to the study results in the repository.
+        return (process.env.CODEDNA_REPLAY_FOLDERS ?? '').split(delimiter).map(f => f.trim()).filter(f => !!f);
+    }
+
+    replaySources(folders: string[]): Promise<ReplaySources> {
+        return this.post('/api/replay/sources', { folders });
+    }
+
+    replayOverview(folders: string[], seed?: number): Promise<ReplayOverview> {
+        return this.post('/api/replay/overview', { folders, seed: seed ?? undefined });
+    }
+
+    replay(path: string): Promise<ReplayTimeline> {
+        return this.post('/api/replay', { path });
     }
 
     protected async post<T>(path: string, body: object): Promise<T> {

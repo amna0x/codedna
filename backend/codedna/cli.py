@@ -26,7 +26,10 @@ Usage:
                              [--no-structural] [--dataset-csv FILE] [--seed N] [--output FILE]
     codedna history experiment --db FILE [--repo PATH] [--model NAME] [--calibration METHOD]
                              [--budget F] [--risk-target F] [--no-structural] [--no-sweeps]
-                             [--no-ablations] [--seed N] [--output FILE]
+                             [--no-ablations] [--seed N] [--replay] [--output FILE]
+    codedna replay  REPORT [--output FILE]
+    codedna replay  --list FOLDER [FOLDER ...]
+    codedna replay  --overview FOLDER [FOLDER ...] [--seed N]
 """
 
 from __future__ import annotations
@@ -286,7 +289,28 @@ def build_parser() -> argparse.ArgumentParser:
     experiment.add_argument("--no-sweeps", action="store_true", help="Skip risk-coverage sweeps.")
     experiment.add_argument("--no-ablations", action="store_true", help="Skip feature ablations.")
     experiment.add_argument("--seed", type=int, default=0, help="Random seed (default: 0).")
+    experiment.add_argument("--replay", action="store_true",
+                            help="Also record per-commit detail (SHAs, test names, seconds, "
+                                 "estimated risk) for 'codedna replay'.")
     experiment.add_argument("--output", help="Write JSON to this file instead of standard output.")
+
+    replay = subcommands.add_parser(
+        "replay",
+        help="Commit-by-commit timeline of an experiment report, for the IDE's History replay.",
+        description=("Turn an experiment report (history experiment --output) into a "
+                     "timeline: what each policy would have run on every test commit, "
+                     "with running totals checked against the report."))
+    replay.add_argument("report", nargs="?", help="Experiment report JSON.")
+    replay_mode = replay.add_mutually_exclusive_group()
+    replay_mode.add_argument("--list", metavar="FOLDER", nargs="+",
+                             help="List the experiment reports in these folders "
+                                  "(and one level down).")
+    replay_mode.add_argument("--overview", metavar="FOLDER", nargs="+",
+                             help="Per-project results and the mean over projects for the "
+                                  "reports in these folders.")
+    replay.add_argument("--seed", type=int,
+                        help="With --overview: only this seed (default: mean over seeds).")
+    replay.add_argument("--output", help="Write JSON to this file instead of standard output.")
     return parser
 
 
@@ -358,6 +382,21 @@ def main(argv: list[str] | None = None) -> int:
                          allow_build=args.allow_build)
         elif args.command == "history":
             return _run_history(args)
+        elif args.command == "replay":
+            from codedna.models.replay import (
+                find_replay_sources,
+                replay_from_file,
+                replay_overview,
+            )
+            if bool(args.report) == bool(args.list or args.overview):
+                print("error: give a REPORT, --list FOLDER or --overview FOLDER",
+                      file=sys.stderr)
+                return EXIT_ANALYSIS_ERROR
+            if args.list:
+                return _write_json(find_replay_sources(args.list), args.output)
+            if args.overview:
+                return _write_json(replay_overview(args.overview, seed=args.seed), args.output)
+            return _write_json(replay_from_file(args.report), args.output)
         elif args.command == "select":
             coverage = _json_file(args.coverage_map, COVERAGE_MAP_FILE)
             durations = _json_file(args.durations, RESULTS_FILE)
@@ -459,7 +498,7 @@ def _run_on_dataset(args: argparse.Namespace, dataset) -> int:
         return _write_json(run_experiment(
             dataset, model=args.model, calibration=args.calibration, budget=args.budget,
             risk_target=args.risk_target, seed=args.seed, sweeps=not args.no_sweeps,
-            ablations=not args.no_ablations), args.output)
+            ablations=not args.no_ablations, trace=args.replay), args.output)
     if args.dataset_csv:
         dataset.to_csv(args.dataset_csv)
     return _write_json(evaluate(dataset, rankers=args.rankers, seed=args.seed), args.output)

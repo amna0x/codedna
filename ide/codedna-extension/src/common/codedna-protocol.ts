@@ -23,6 +23,11 @@ export interface CodeDnaService {
     impact(repo: string, base: string, head: string): Promise<ImpactReport>;
     select(repo: string, base: string, head: string, strategy: SelectionStrategy, historyCsv?: string): Promise<SelectionReport>;
     runSelection(repo: string, base: string, head: string, strategy: SelectionStrategy, historyCsv?: string): Promise<SelectionRun>;
+    /** Folders to look for experiment reports in (CODEDNA_REPLAY_FOLDERS), may be empty. */
+    replayFolders(): Promise<string[]>;
+    replaySources(folders: string[]): Promise<ReplaySources>;
+    replayOverview(folders: string[], seed?: number): Promise<ReplayOverview>;
+    replay(path: string): Promise<ReplayTimeline>;
 }
 
 export type SelectionStrategy = 'dependency' | 'all' | 'risk';
@@ -137,4 +142,116 @@ export interface SelectionReport {
     selection_ratio: number;
     estimated_time: { selected_seconds: number; all_seconds: number; saved_ratio: number } | null;
     warnings: string[];
+}
+
+// --- history replay (codedna.models.replay, D-049) --------------------------------
+
+export interface ReplayPolicy { key: string; label: string; description: string }
+
+export interface ReplaySource {
+    project: string;
+    seed: number | null;
+    path: string;
+    kind: 'trace' | 'per_commit';
+    commits: number;
+}
+
+export interface ReplaySources { folders: string[]; missing: string[]; sources: ReplaySource[] }
+
+export interface ReplayOutcome {
+    time_ratio: number;
+    missed: number;
+    missed_tests: string[] | null;
+    selected: number | null;
+    seconds: number | null;
+    estimated_risk: number | null;
+    fallback: boolean | null;
+}
+
+export interface ReplayCommit {
+    index: number;
+    sha: string | null;
+    tests: number | null;
+    suite_seconds: number | null;
+    failing: number;
+    failing_tests: string[] | null;
+    outcomes: Record<string, ReplayOutcome>;
+}
+
+/** Running values after each commit, index-aligned with `commits`. */
+export interface ReplayCumulative {
+    mean_time_ratio: number[];
+    failures: number[];
+    failures_missed: number[];
+    failures_caught: number[];
+    commits_with_miss: number[];
+    observed_miss_rate: number[];
+    seconds_run: (number | null)[];
+    seconds_saved: (number | null)[];
+    mean_estimated_risk: (number | null)[];
+}
+
+export interface ReplaySummary {
+    commits: number;
+    commits_with_failures: number;
+    failures: number;
+    missed_failures: number;
+    failing_test_recall: number | null;
+    commit_safety_rate: number | null;
+    mean_time_ratio: number | null;
+    observed_miss_rate: number | null;
+    mean_estimated_skip_risk: number | null;
+    fallback_rate: number | null;
+    seconds_run: number | null;
+    suite_seconds: number | null;
+    from_report: string[];
+}
+
+export interface ReplayEvent {
+    index: number;
+    kind: 'caught' | 'missed' | 'fallback';
+    sha: string | null;
+    failing: number;
+    missed: number;
+    missed_tests: string[] | null;
+    time_ratio: number;
+    estimated_risk: number | null;
+}
+
+export interface ReplayTimeline {
+    project: string | null;
+    source: { kind: 'trace' | 'per_commit'; path: string | null; seed: number | null;
+        model: string | null; calibration: string | null; dataset_sha256: string | null;
+        splits: Record<string, number> | null };
+    risk_target: number | null;
+    rules_budget_at_same_time: number | null;
+    policies: ReplayPolicy[];
+    commits: ReplayCommit[];
+    cumulative: Record<string, ReplayCumulative>;
+    summary: Record<string, ReplaySummary>;
+    events: ReplayEvent[];
+    checks: { policy: string; metric: string; replay: number; report: number; match: boolean }[];
+    notes: string[];
+}
+
+export type ReplayMetric = 'mean_time_ratio' | 'observed_miss_rate' | 'mean_estimated_skip_risk'
+    | 'failing_test_recall' | 'commit_safety_rate' | 'missed_failures';
+
+export interface ReplayOverview {
+    seed: number | null;
+    policies: ReplayPolicy[];
+    projects: {
+        project: string;
+        seeds: number[];
+        kinds: ('trace' | 'per_commit')[];
+        commits: number;
+        commits_with_failures: number;
+        risk_target: number | null;
+        within_risk_target: boolean | null;
+        policies: Record<string, Record<ReplayMetric, number | null>>;
+        mismatches: number;
+    }[];
+    overall: Record<string, Record<ReplayMetric, { mean: number | null; projects: number }>>;
+    within_risk_target: { projects: number; of: number };
+    note: string;
 }

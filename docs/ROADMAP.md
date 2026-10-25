@@ -178,6 +178,9 @@ May start in parallel (Student C) once the analysis JSON formats are stable.
   needs a Windows build check
 - ✅ Uncommitted-change analysis: `WORKTREE` revision + "My uncommitted
   changes" in the IDE (D-046)
+- ✅ History replay view (D-049): the study's test commits played back one by
+  one, CodeDNA vs run-everything / dependency / simple rules, running totals
+  checked against the saved reports, all-projects overview
 - ⏳ GitHub PR demonstration and final experimental report
 
 - ✅ IDE: risk status/audit evidence, explicit execution confirmation, actual

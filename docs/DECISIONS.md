@@ -879,3 +879,41 @@ repository's GitHub Releases. The future in-app plugin manager reuses that
 validator. Java is listed as a built-in version with no download until it
 moves into its own package. No licence is claimed because the repository has
 none yet.
+
+## D-049 — History replay from experiment reports
+
+The IDE's **History replay** view (`Ctrl+Alt+R`) plays a project's test
+split back commit by commit: per commit, the test time each policy spent and
+whether it skipped a failing test, with running totals, against the risk
+target. It is built only from saved experiment reports, so it shows the
+study's own measurements and never retrains or runs code.
+
+- `codedna.models.replay.replay_timeline` turns a report into a timeline. A
+  compact report (the `per_commit` triples every report keeps) gives time and
+  miss curves; a report written with `history experiment --replay`
+  (`run_experiment(trace=True)`) also records each commit's SHA, test names,
+  suite seconds, and per policy the tests run, seconds, missed test names,
+  estimated skip risk and fallback flag. The trace uses the experiment's own
+  policy functions; `--replay` leaves every other part of the report
+  unchanged (tested).
+- Shown policies: run everything (B0), dependency only (B4), simple rules at
+  CodeDNA's mean time (B3 at the cost-matched budget from `cost_matched`), and
+  CodeDNA (B10). All running totals are computed in Python; the view only
+  indexes them (no analysis in TypeScript, D-019).
+- Every timeline is checked against the report's `policies` summary and the
+  result is shown (`checks`, `notes`). All 55 study11 reports match.
+  `replay_overview` (mean over seeds, then over projects) reproduces the
+  study's `summary.json` pooled means.
+- `scripts/record_replays.py` re-runs the experiment with `trace=True` for
+  projects whose `dataset.csv` is present and keeps a trace only if its
+  `policies` and `per_commit` equal the study report. Traces for hikaricp,
+  jade4j, littleproxy and wicket-bootstrap (seed 0) are committed in
+  `experiments/results/replay-2026-10-25/`; the other seven projects replay
+  from their compact reports until their datasets are rebuilt.
+- API: `POST /api/replay`, `/api/replay/sources`, `/api/replay/overview`
+  (token-protected, read-only). `start.bat` sets `CODEDNA_REPLAY_FOLDERS` to
+  the study folders in the checkout.
+
+Limitation: the replay is a simulation on recorded history (what each policy
+would have run, given the recorded test outcomes), not a live run; it cannot
+show effects such as tests that would have behaved differently if run alone.

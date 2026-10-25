@@ -111,7 +111,9 @@ codedna history collect  --repo PATH --db FILE --output-dir DIR --allow-build [-
 codedna history status   --db FILE
 codedna history evaluate --db FILE [--repo PATH] [--rankers ...] [--no-structural] [--dataset-csv F]
 codedna history import-rtptorrent --dataset DIR (--list | --project NAME --db FILE) [--max-commits N]
-codedna history experiment --db FILE [--repo PATH] [--model M] [--calibration none|platt|isotonic] [--budget F] [--risk-target F]
+codedna history experiment --db FILE [--repo PATH] [--model M] [--calibration none|platt|isotonic] [--budget F] [--risk-target F] [--replay]
+codedna replay  REPORT [--output FILE]
+codedna replay  (--list | --overview) FOLDER [FOLDER ...] [--seed N]
 ```
 
 - `analyze --level method` (default) adds a `java` object to every changed
@@ -144,7 +146,8 @@ codedna history experiment --db FILE [--repo PATH] [--model M] [--calibration no
   (`CODEDNA_API_TOKEN` overrides it); every request except
   `/api/health` needs the `X-CodeDNA-Token` header. Endpoints mirror the CLI
   (`/api/analyze`, `/api/graph`, `/api/impact`, `/api/tests`, `/api/select`,
-  `/api/compare`, `/api/run-tests`); `/api/run-tests` additionally needs
+  `/api/compare`, `/api/run-tests`, `/api/replay`, `/api/replay/sources`,
+  `/api/replay/overview`); `/api/run-tests` additionally needs
   `--allow-build` on the server and `"allow_build": true` in the request.
   Interactive docs: `http://127.0.0.1:8765/docs`.
 - `history` builds a per-repository SQLite database: `mine` stores the
@@ -165,6 +168,15 @@ codedna history experiment --db FILE [--repo PATH] [--model M] [--calibration no
   calibrated ML with risk target + fallback (B9) on the latest 20 %, plus
   calibration quality, budget/risk sweeps and feature ablations. The report
   includes a dataset hash, seed and package versions for reproducibility.
+  `--replay` also records each test commit's SHA, test names and seconds for
+  `replay`.
+- `replay` turns a saved experiment report into a commit-by-commit timeline
+  (what each policy ran and missed, with running totals checked against the
+  report) for the IDE's **History replay** view; `--list` finds reports in
+  study folders and `--overview` gives per-project results and the mean over
+  projects. It reads saved results only. Detailed traces for four study
+  projects are in `experiments/results/replay-2026-10-25/`
+  (`scripts/record_replays.py` makes more when a project's dataset is present).
 
 `BASE_REV`/`HEAD_REV` can be full or short SHAs, branches, tags or expressions
 like `HEAD~1`. They are resolved to full SHAs in the output.
