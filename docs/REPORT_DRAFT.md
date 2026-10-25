@@ -412,6 +412,37 @@ Source: `experiments/results/dante-history-check-2026-10-24/summary.json` and
 `FINDINGS.md`. The separate live 15-feature evidence gate is an engineering
 addition, not an empirically demonstrated abstention improvement from this study.
 
+### 4.8 Additional validation: rolling-origin study (D-042, exploratory)
+
+The comparisons above use one fixed chronological split. A rolling-origin
+study, with its rules fixed in `docs/EVIDENCE_STUDY_PROTOCOL.md` before it
+ran, refits on five successive blocks over the later half of each history
+and compares B10 with the rules order B3 under a budget matched to B10's
+actual test time. Only the four previously inspected projects were
+available, so by protocol this run is exploratory and gives no confirmatory
+verdict (source: `experiments/results/rolling-evidence-2026-10-24/`).
+
+| Project | Failing commits | Gate accepted blocks | B10 safety | B3 safety, matched time | Product time | Product commit miss rate |
+|---|---|---|---|---|---|---|
+| HikariCP | 81 | 0 / 5 | 0.827 | 0.753 | 1.000 | 0.000 |
+| jade4j | 28 | 1 / 5 | 1.000 | 1.000 | 0.984 | 0.000 |
+| LittleProxy | 38 | 1 / 5 | 0.711 | 0.789 | 0.998 | 0.000 |
+| wicket-bootstrap | 248 | 5 / 5 | 0.992 | 1.000 | 0.941 | 0.005 |
+
+B10 minus matched B3, equal project weight, hierarchical bootstrap: safety
+−0.003 [−0.036, 0.029], recall +0.008 [−0.005, 0.020]. By the protocol's rule
+this is **no meaningful difference**. B10 is less safe than the matched rule
+on LittleProxy and wicket-bootstrap, so the earlier wicket-bootstrap gain
+does not replicate in rolling blocks.
+
+The validation gate behaves as designed. In the 7 accepted blocks (467
+commits) B10 missed a failure on 0.43 % of commits (Wilson upper bound
+1.29 %); in the 12 rejected blocks (914 commits) it would have missed 2.74 %
+(upper bound 3.77 %). The cost is that the product saves little time: about
+6 % on wicket-bootstrap and 0–2 % elsewhere, and five of the seven accepted
+blocks come from that one project. A confirmatory run on new RTPTorrent
+projects (D-042) is pending.
+
 ## 5. Threats to validity
 
 - **Construct.** Results are per test class, not per test method. "Commit
@@ -439,6 +470,12 @@ addition, not an empirically demonstrated abstention improvement from this study
   Travis CI. Two have no evaluable failures, several have very few, and one
   project (wicket-bootstrap) drives most selection differences. The results
   may not transfer to modern or industrial CI.
+- **Comparison with prior work.** Predictive Test Selection [9 in the
+  system chapters] and its commercial successors are compared by method, not
+  run: no baseline here tunes a single global score cutoff to an aggregate
+  recall target. B8's time budget is the nearest equivalent. The claim that
+  CodeDNA's per-commit estimate is more useful than an aggregate target is
+  therefore argued, not measured.
 - **Reliability.** Every number comes from the stored data and saved reports;
   dataset hashes, package versions and commands are recorded
   in each report, and rerunning the experiments reproduced earlier numbers
@@ -453,8 +490,16 @@ estimate usable as a stopping rule, even though much of its gain in ECE
 only undoes class weighting. Learned models predict failures above chance
 but do not order tests better than simple rules, and fallback mainly buys
 safety with extra test time. Using simple rules to choose *which* tests run
-and the calibrated model to choose *how many* (B10) is at least as good as
-either alone on every project studied and mostly keeps its stated risk,
-though the gain is not statistically clear on this data. These statements concern
-within-project fitting; the additional four-project transfer check does not
-establish a generally reliable source-trained model or risk estimate.
+and the calibrated model to choose *how many* (B10) mostly keeps its stated
+risk, but in the rolling-origin study it catches no more failures than the
+same rule with a matched fixed budget (safety difference −0.003
+[−0.036, 0.029]). What B10 adds is not a better selection but a checked
+statement of how risky the skipped tests are, and the gate turns that into
+a safe refusal when the statement cannot be checked: misses were 0.43 % in
+accepted blocks against 2.74 % in rejected ones, at the price of little time
+saved outside one project. Unlike aggregate recall targets in industrial
+predictive test selection, this risk is given per change and validated per
+project; that difference is argued from method, not measured head to head.
+These statements concern within-project fitting; the additional four-project
+transfer check does not establish a generally reliable source-trained model
+or risk estimate, and the confirmatory study is still pending.

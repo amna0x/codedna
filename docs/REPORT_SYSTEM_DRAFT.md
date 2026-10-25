@@ -18,10 +18,13 @@ may be exactly the one that would have failed. Developers therefore need two
 answers for each change: *which* tests the change is likely to affect, and
 *how risky* it is to skip the others.
 
-Most existing work answers the first question: it ranks or selects tests from
-dependencies, coverage or failure history. Fewer tools give a stated,
-checked risk for the tests they leave out, and fewer still refuse to skip
-tests when that risk cannot be checked on the project at hand.
+Most research answers the first question: it ranks or selects tests from
+dependencies, coverage or failure history [2, 24]. Industrial predictive test
+selection answers part of the second with an *aggregate* target, such as
+"catch 95 % of failing tests across past changes" [9, 11, 12]. What is
+rarely given is a risk number for *this* change, checked against the
+project's own history, with the full suite recommended whenever that check
+fails.
 
 ### 1.2 Aim
 
@@ -55,24 +58,32 @@ and recommends the full suite.
 ### 1.4 Contribution and its limits
 
 Changed-file detection, dependency graphs, affected-test selection, learned
-prioritisation and history-based ranking are established techniques, and
-CodeDNA does not claim novelty for them. The contribution this project
-evaluates is narrower:
+prioritisation, history-based ranking, probability calibration and
+recall-target cutoffs are all established, and CodeDNA claims novelty for
+none of them. Predictive Test Selection at Facebook [9] already combines a
+learned model, a holdout and a recall target. The contribution this project
+evaluates is a narrower combination:
 
-- a calibrated stopping rule (a target for the probability that a skipped
-  test fails) applied on top of a simple history ordering (policy B10,
-  D-036), evaluated against the alternatives at matched test time;
-- a target-project validation gate (D-041) that recommends the full suite
-  whenever the project's own recent history does not support the risk
-  estimate;
-- an implementation that keeps every unverified relationship and every
-  missing outcome visible to the user instead of hiding it.
+- a **per-commit estimate of omitted-failure risk** (the probability that at
+  least one skipped test fails), computed from calibrated per-test
+  probabilities and used as the stopping rule on top of a simple history
+  ordering (policy B10, D-036). Simple rules choose *which* tests run; the
+  model chooses only *how many*;
+- a **per-project validation gate** (D-041) that accepts the estimate only
+  when it matched observed misses on the project's own recent history, and
+  otherwise recommends the full suite with a reason;
+- an **open, matched-time evaluation** on public CI data that reports where
+  the approach does not help, and an implementation that keeps unverified
+  relationships and missing outcomes visible.
 
-Section 4 of the evaluation chapter reports that B10 is at least as safe as
-the rules at the same test time on the nine projects where safety is defined
-(two projects have no failing test commits), but that its pooled advantage is
-not statistically clear, and that models trained on one project do not
-reliably transfer to another (D-039).
+The evaluation chapter finds that the per-commit estimate is usable (with a
+5 % target the observed miss rate stays within the target on ten of eleven
+projects; pooled estimate 2.6 %, observed 2.8 %) but that stopping on it does not catch more failures than a well-chosen
+fixed budget at the same test time: the exploratory rolling-origin
+difference is −0.003 [−0.036, 0.029] in safety. The value claimed is
+therefore a *checked* risk statement and a safe refusal, not a faster or
+safer selection. Models trained on one project do not reliably transfer to
+another (D-039).
 
 ### 1.5 Report structure
 
@@ -88,52 +99,123 @@ closes with limitations and future work.
 
 Regression test selection (RTS) runs a subset of tests that may be affected
 by a change; test case prioritisation (TCP) orders tests so failures are
-found early. Static RTS follows dependencies from changed code to tests;
-dynamic RTS uses coverage collected on an earlier run. CodeDNA implements
-both as baselines: `dependency` selection from the graph and `coverage`
-selection from per-test JaCoCo maps (D-015, D-016).
+found early; minimisation removes redundant tests [1, 2]. Static RTS follows
+dependencies from changed code to tests [4]; dynamic RTS uses dependencies
+recorded on an earlier run [3]. Both aim to be *safe*: never skip a test
+whose outcome could change. CodeDNA implements both as baselines:
+`dependency` selection from the graph and `coverage` selection from per-test
+JaCoCo maps (D-015, D-016). Section 4.5 of the evaluation shows why safe
+selection alone is not enough on this data: on two projects the graph
+reaches almost none of the failing tests.
 
-### 2.2 History-based and learned approaches
+### 2.2 History-based and learned approaches in CI
 
-History-based methods rank tests by recent failures, failure rate or time
-since the last failure. Learned methods combine such features with change
-and code features in a classifier. CodeDNA's study models use 19 features in
-four groups (change, test, structural, history; [REPORT_DRAFT.md](REPORT_DRAFT.md)
-section 2.2) and are compared against random, shortest-first and
-history orderings (B1, B2, B3, B5).
+In continuous integration, dependency analysis is often too slow or too
+coarse, so selection uses test history instead. Elbaum et al. select tests
+that failed recently or have not run for a while [5]. RETECS learns
+prioritisation by reinforcement learning [6]. Bertolino et al. compare
+learning-to-rank with ranking-to-learn on CI data [7], and Yaraghi et al.
+build a 150-feature model over 25 Java projects [25]. A systematic review
+lists dozens of ML-based selection and prioritisation methods [24]. A
+recurring finding, which CodeDNA's evaluation repeats, is that simple
+history rules are hard to beat once test duration is counted [7, 15].
+CodeDNA's study models use 19 features in four groups (change, test,
+structural, history; [REPORT_DRAFT.md](REPORT_DRAFT.md) section 2.2) and are
+compared against random, shortest-first and history orderings (B1, B2, B3,
+B5). The study data is RTPTorrent [8].
 
-### 2.3 Recent work closest to CodeDNA
+### 2.3 Predictive test selection with a target
 
-A focused comparison is kept in
+Predictive Test Selection at Facebook [9] scores each test with a gradient
+boosted model trained on past outcomes. It selects tests above a score cutoff
+plus the top N, and tunes both cutoffs on a one-week holdout so that over
+95 % of failing tests and over 99.9 % of faulty changes are still caught.
+Each weekly model is deployed only if it keeps the selection rate under 0.3
+at 90 % recall. A 2025 replication on 12 open-source Java projects confirms
+the main findings but again analyses no calibration [10]. Two commercial
+tools follow the same idea. Launchable's "confidence curve" is the share of
+past failing sessions that a given runtime would have caught [11].
+Develocity offers Conservative, Standard and Fast profiles "calibrated to
+catch over 99 %" of failures, and always runs new, changed, recently failed
+and flaky tests [12].
+
+These targets are *aggregate*: they promise a catch rate over many past
+changes, not a risk for the current one, and the per-test scores are not
+checked as probabilities. CodeDNA differs in two narrow ways. It reports an
+estimated omitted-failure risk for each change, and it checks that estimate
+against observed misses on the target project before using it (D-041). Its
+must-run policy (D-050) plays the same role as Develocity's always-run rules.
+
+### 2.4 Recent research closest to CodeDNA
+
+A property-by-property comparison is kept in
 [RELATED_WORK_COMPARISON.md](RELATED_WORK_COMPARISON.md). In summary:
 
-- **DANTE** (ICST 2026) is a training-free history and commit-aware method
-  and the strongest baseline found. CodeDNA evaluates an independently
-  implemented, history-only adaptation (DANTE-H, D-040); it is not a
-  reproduction of the full published method.
-- **MOX** (Electronics 2026) optimises cost, impact, coverage and
-  traceability on a Pareto front; its impact score is not a calibrated
-  probability.
-- **Context-Aware Sequential Ranking** (Mathematics 2026) uses the same
-  RTPTorrent data, conformal candidate sets and sequential stopping on a cost
-  budget. Its stopping rule must be compared in detail before any difference
-  from CodeDNA's omitted-failure risk target is claimed.
-- **AutoTCP** (Empirical Software Engineering 2026) composes and tunes
-  prioritisation workflows automatically; it ranks tests and does not, as far
-  as checked, give an aggregate skip risk.
+- **Context-Aware Sequential Ranking** [13] uses the same RTPTorrent data.
+  It fuses history and code-semantic scores, builds class-conditional
+  conformal candidate sets (α = 0.10, with an adaptive update) and stops at a
+  cost budget of 10, 25 or 50 % of the suite. Its conformal layer reorders
+  tests and reports candidate coverage (0.906); it does not estimate the
+  probability of missing a failure among skipped tests, and no per-project
+  acceptance step was found. It also finds that history alone is close to
+  its best model (0.869 against 0.884).
+- **MOX** [14] optimises cost, impact, coverage and traceability on a Pareto
+  front under a residual impact budget θ. The authors state that the budget
+  is "not an empirically calibrated safety guarantee", and change events in
+  their data are inferred from failures.
+- **DANTE** [15] is a training-free history and commit-aware method that
+  beats ML baselines on long-running Java suites. It is the strongest
+  baseline found. CodeDNA evaluates an independently implemented,
+  history-only adaptation (DANTE-H, D-040), not the full published method.
+  Only DANTE's abstract was available; whether it has a stopping rule is
+  unverified.
+- **AutoTCP** [16] composes and tunes prioritisation workflows per build by
+  grammar-guided genetic programming; it ranks tests and gives no skip risk.
+- **Risk-aware batch testing** at Mozilla [17] predicts a regression
+  probability per commit and flushes a batch when the probability that it
+  holds a regressor passes a threshold, using the same independence
+  assumption as CodeDNA's skip risk. Its scores are not calibrated.
+- **Continuous test suite failure prediction** [18] predicts whether a whole
+  suite run will fail, so that runs can be skipped.
 
-The open space CodeDNA occupies is therefore a calibrated stopping rule with
-a per-project validation gate, evaluated honestly against simple rules. The
-report never claims to be the first to do this.
-
-### 2.4 Calibration
+### 2.5 Calibration and uncertainty
 
 A predicted probability is calibrated when, among tests given probability p,
-a fraction p actually fail. CodeDNA fits Platt scaling or isotonic regression
-on a held-out window and reports Brier score, expected calibration error and
-reliability bins (D-025). The evaluation shows that much of the
-calibration gain only undoes balanced class weighting
-(D-037; [REPORT_DRAFT.md](REPORT_DRAFT.md) section 4.3).
+a fraction p actually fail. Platt scaling and isotonic regression are the
+standard post-hoc methods [20]; conformal prediction gives distribution-free
+coverage sets instead of probabilities [23]. In software engineering,
+just-in-time defect predictors were found miscalibrated (ECE 7–35 %), and
+post-hoc calibration did not consistently help [19]. CodeDNA fits Platt or
+isotonic calibration on a held-out window and reports Brier score, expected
+calibration error and reliability bins (D-025). Its evaluation shows a large
+ECE drop (0.118 to 0.021), but also that much of the gain only undoes
+balanced class weighting (D-037; [REPORT_DRAFT.md](REPORT_DRAFT.md)
+section 4.3). The finding that matters is a different one: a model with a
+low ECE can still underestimate the *summed* risk of many skipped tests, and
+without calibration the stopping rule broke its target on a third of the
+projects. Calibration is therefore presented as a requirement of a
+risk-target stopping rule, not as an accuracy gain.
+
+### 2.6 Test selection for AI coding agents
+
+Coding agents now open many pull requests, and failing tests are a leading
+reason they are rejected. TDAD [21] gives an agent a static code-to-test map
+before it commits and reports fewer regressions on SWE-bench Verified
+(6.08 % to 1.82 %, on 100 and 25 tasks). TestPrune [22] minimises the
+existing regression suite so an agent can use it for reproduction and
+validation. Neither states a risk for the tests left out. CodeDNA's brake
+(D-059) exposes the same risk estimate and gate to agents; this report makes
+no claim that it improves agents, because no paid agent runs were made.
+
+### 2.7 Position
+
+CodeDNA sits between safe RTS, which never skips a possibly affected test,
+and predictive selection, which skips tests to meet an aggregate target. It
+keeps a simple history ordering, adds a per-change risk estimate that must
+pass a per-project check, and falls back to the full suite when it does not.
+The report never claims to be the first to do this, and section 4 shows that
+the approach buys a trustworthy risk statement rather than extra failures
+caught.
 
 ## 3. Requirements
 
@@ -428,3 +510,71 @@ GitHub Actions (`.github/workflows/ci.yml`) runs on every pull request:
 - Method-level call edges in the graph.
 - A guard for AI coding agents: an interface through which an agent asks
   CodeDNA which tests must run before accepting its change.
+- A risk estimate that does not assume independent test failures, for
+  example by grouping tests that fail together, or a conformal risk-control
+  bound [23] instead of a calibrated point estimate.
+
+## References
+
+1. G. Rothermel and M. J. Harrold. Analyzing regression test selection
+   techniques. *IEEE Transactions on Software Engineering* 22(8), 1996.
+2. S. Yoo and M. Harman. Regression testing minimization, selection and
+   prioritization: a survey. *Software Testing, Verification and
+   Reliability* 22(2), 2012.
+3. M. Gligoric, L. Eloussi and D. Marinov. Practical regression test
+   selection with dynamic file dependencies. *ISSTA* 2015.
+4. O. Legunsen, F. Hariri, A. Shi, Y. Lu, L. Zhang and D. Marinov. An
+   extensive study of static regression test selection in modern software
+   evolution. *FSE* 2016.
+5. S. Elbaum, G. Rothermel and J. Penix. Techniques for improving regression
+   testing in continuous integration development environments. *FSE* 2014.
+6. H. Spieker, A. Gotlieb, D. Marijan and M. Mossige. Reinforcement learning
+   for automatic test case prioritization and selection in continuous
+   integration. *ISSTA* 2017.
+7. A. Bertolino, A. Guerriero, B. Miranda, R. Pietrantuono and S. Russo.
+   Learning-to-rank vs ranking-to-learn: strategies for regression testing
+   in continuous integration. *ICSE* 2020.
+8. T. Mattis, P. Rein, F. Dürsch and R. Hirschfeld. RTPTorrent: an
+   open-source dataset for evaluating regression test prioritization.
+   *MSR* 2020.
+9. M. Machalica, A. Samylkin, M. Porth and S. Chandra. Predictive test
+   selection. *ICSE-SEIP* 2019. arXiv:1810.05286.
+10. S. Aichmann. *Predictive Test Selection: A Replication Study*. Diploma
+    thesis, TU Wien, 2025.
+11. Launchable. How a confidence curve is generated. Product documentation,
+    accessed 2026-10-25.
+12. Gradle Develocity. Predictive Test Selection user manual (2026.3).
+    Product documentation, accessed 2026-10-25.
+13. U. Altınışık. Context-aware sequential ranking for dynamic test case
+    prioritization in continuous integration. *Mathematics* 14(18):3276,
+    2026.
+14. M. Bădoi, A. Bărcan, A. Vultureanu-Albiși and N. Țăpuș. Multi-objective
+    explainable AI for risk-aware test selection in multi-layer continuous
+    integration systems. *Electronics* 15(17):3854, 2026.
+15. S. Reale, E. Di Nitto, L. Baresi, M. Di Penta and G. Quattrocchi. DANTE:
+    data-driven test case selection and prioritization for long-running test
+    suites. *ICST* 2026, pp. 5–16.
+16. J. R. Romero, A. Ramírez and C. García-Martínez. Automated machine
+    learning for test case prioritisation. *Empirical Software Engineering*
+    31:120, 2026.
+17. A. Sayedsalehi, P. C. Rigby and G. Mierzwinski. Risk-aware batch testing
+    for performance regression detection. arXiv:2604.00222, 2026.
+18. C. Pan and M. Pradel. Continuous test suite failure prediction. *ISSTA*
+    2021.
+19. X. Shahini, J. Bartel and K. Pohl. On the calibration of just-in-time
+    defect prediction. *MSR* 2025.
+20. A. Niculescu-Mizil and R. Caruana. Predicting good probabilities with
+    supervised learning. *ICML* 2005.
+21. P. Alonso, S. Yovine and V. A. Braberman. TDAD: test-driven agentic
+    development. Reducing code regressions in AI coding agents via
+    graph-based impact analysis. arXiv:2603.17973, 2026.
+22. Y. Chen, T. Ahmed, R. Jabbarvand and M. Hirzel. Can old tests do new
+    tricks for resolving SWE issues? arXiv:2510.18270, 2025.
+23. A. N. Angelopoulos and S. Bates. Conformal prediction: a gentle
+    introduction. *Foundations and Trends in Machine Learning* 16(4), 2023.
+24. R. Pan, M. Bagherzadeh, T. A. Ghaleb and L. Briand. Test case selection
+    and prioritization using machine learning: a systematic literature
+    review. *Empirical Software Engineering* 27, 2022.
+25. A. S. Yaraghi, M. Bagherzadeh, N. Kahani and L. Briand. Scalable and
+    accurate test case prioritization in continuous integration contexts.
+    *IEEE Transactions on Software Engineering* 49(4), 2023.
