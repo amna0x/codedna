@@ -166,7 +166,7 @@ once (cache keyed by blob SHA). Then:
 2. **References** (`references.py`) — every type name written inside a type
    (fields, parameters, `new X()`, generics, annotations, `extends`,
    `implements`), plus capitalised `X.member` receivers as `static_access`.
-3. **Resolution** (`builder.py`, D-010) — each name becomes an edge
+3. **Resolution** (`builder.py`, D-010, D-054) — each name becomes an edge
    (`confirmed`/`heuristic`, with `file:line` evidence, max 10 kept per edge),
    an external reference (counted), or an `unresolved` entry with a reason.
 

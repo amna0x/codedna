@@ -34,14 +34,32 @@ _TYPE_KINDS = frozenset(TYPE_NODES.values())
 
 # java.lang is imported implicitly into every compilation unit, so these
 # names refer to the JDK unless a repository type shadows them (checked first).
+# The public top-level types of java.lang in JDK 21.
 _JAVA_LANG = frozenset({
-    "AutoCloseable", "Boolean", "Byte", "CharSequence", "Character", "Class", "ClassCastException",
-    "Cloneable", "Comparable", "Deprecated", "Double", "Enum", "Error", "Exception", "Float",
-    "FunctionalInterface", "IllegalArgumentException", "IllegalStateException",
-    "IndexOutOfBoundsException", "Integer", "Iterable", "Long", "Math", "NullPointerException",
-    "Number", "Object", "Override", "Record", "Runnable", "RuntimeException", "SafeVarargs",
-    "Short", "String", "StringBuilder", "SuppressWarnings", "System", "Thread", "Throwable",
-    "UnsupportedOperationException", "Void", "ArithmeticException", "InterruptedException",
+    "AbstractMethodError", "Appendable", "ArithmeticException", "ArrayIndexOutOfBoundsException",
+    "ArrayStoreException", "AssertionError", "AutoCloseable", "Boolean", "BootstrapMethodError",
+    "Byte", "CharSequence", "Character", "Class", "ClassCastException", "ClassCircularityError",
+    "ClassFormatError", "ClassLoader", "ClassNotFoundException", "ClassValue",
+    "CloneNotSupportedException", "Cloneable", "Comparable", "Deprecated", "Double", "Enum",
+    "EnumConstantNotPresentException", "Error", "Exception", "ExceptionInInitializerError",
+    "Float", "FunctionalInterface", "IllegalAccessError", "IllegalAccessException",
+    "IllegalArgumentException", "IllegalCallerException", "IllegalMonitorStateException",
+    "IllegalStateException", "IllegalThreadStateException", "IncompatibleClassChangeError",
+    "IndexOutOfBoundsException", "InheritableThreadLocal", "InstantiationError",
+    "InstantiationException", "Integer", "InternalError", "InterruptedException", "Iterable",
+    "LayerInstantiationException", "LinkageError", "Long", "MatchException", "Math", "Module",
+    "ModuleLayer", "NegativeArraySizeException", "NoClassDefFoundError", "NoSuchFieldError",
+    "NoSuchFieldException", "NoSuchMethodError", "NoSuchMethodException", "NullPointerException",
+    "Number", "NumberFormatException", "Object", "OutOfMemoryError", "Override", "Package",
+    "Process", "ProcessBuilder", "ProcessHandle", "Readable", "Record",
+    "ReflectiveOperationException", "Runnable", "Runtime", "RuntimeException", "RuntimePermission",
+    "SafeVarargs", "ScopedValue", "SecurityException", "SecurityManager", "Short",
+    "StackOverflowError", "StackTraceElement", "StackWalker", "StrictMath", "String",
+    "StringBuffer", "StringBuilder", "StringIndexOutOfBoundsException", "StringTemplate",
+    "SuppressWarnings", "System", "Thread", "ThreadDeath", "ThreadGroup", "ThreadLocal",
+    "Throwable", "TypeNotPresentException", "UnknownError", "UnsatisfiedLinkError",
+    "UnsupportedClassVersionError", "UnsupportedOperationException", "VerifyError",
+    "VirtualMachineError", "Void", "WrongThreadException",
 })
 
 # Parsed files keyed by Git blob SHA, so identical files in two commits are
@@ -197,10 +215,20 @@ class _Resolver:
                     self.all_types.setdefault(declaration.id, []).append(path)
                     if declaration.parent is None:
                         self.top_level.add(declaration.id)
+        # Names written after `extends` / `implements`, per declaring type.
+        self.declared_supertypes: dict[str, list[tuple[str, str]]] = {}
+        for path, (_result, facts) in parsed.items():
+            for reference in facts.references:
+                if reference.kind in ("extends", "implements"):
+                    self.declared_supertypes.setdefault(reference.owner, []).append(
+                        (path, reference.name))
+        self.contexts: dict[str, _FileContext] = {}
+        self.supertype_cache: dict[str, list[str]] = {}
+        self._resolving: set[str] = set()
 
     def add_dependency_edges(self) -> None:
         for path, (result, facts) in self.parsed.items():
-            context = _FileContext(path, result, facts)
+            context = self._context(path)
             self._add_import_edges(context)
             for reference in facts.references:
                 self._add_reference(context, reference.owner, reference.name,
@@ -257,6 +285,30 @@ class _Resolver:
         self.graph.add_edge(f"type:{owner}", f"type:{resolution.target}", kind,
                             Evidence(context.path, line, confidence, note))
 
+    def _context(self, path: str) -> _FileContext:
+        if path not in self.contexts:
+            result, facts = self.parsed[path]
+            self.contexts[path] = _FileContext(path, result, facts)
+        return self.contexts[path]
+
+    def _supertypes(self, type_id: str) -> list[str]:
+        """Repository supertypes of ``type_id``, transitively, nearest first."""
+        if type_id in self.supertype_cache:
+            return self.supertype_cache[type_id]
+        if type_id in self._resolving:
+            return []  # a cycle (invalid code) or one being resolved further up
+        self._resolving.add(type_id)
+        found: list[str] = []
+        for path, name in self.declared_supertypes.get(type_id, []):
+            resolution = self._resolve(name.split("<", 1)[0], self._context(path), type_id)
+            if resolution.status == "repo" and resolution.target not in found:
+                found.append(resolution.target)
+        for direct in list(found):
+            found += [t for t in self._supertypes(direct) if t not in found]
+        self._resolving.discard(type_id)
+        self.supertype_cache[type_id] = found
+        return found
+
     def _confidence_for(self, target: str, context: _FileContext, confidence: str) -> str:
         if len(self.all_types.get(target, ())) > 1 or context.result.has_syntax_errors:
             return HEURISTIC
@@ -286,8 +338,8 @@ class _Resolver:
         return _Resolution("unresolved", note="qualified name not declared in repository")
 
     def _resolve_simple(self, name: str, context: _FileContext, owner: str) -> _Resolution:
-        if name in context.facts.type_parameters:
-            return _Resolution("skip")
+        if name in context.facts.type_parameters or name == "var":
+            return _Resolution("skip")  # `var` infers a local variable's type; no type is named
 
         # 1. The type itself, enclosing types, and their member types.
         scope = owner
@@ -297,16 +349,25 @@ class _Resolver:
             member = f"{scope}.{name}"
             if member in self.all_types:
                 return _Resolution("repo", member, CONFIRMED, "member type in scope")
+            if scope in self.all_types:
+                for supertype in self._supertypes(scope):
+                    if f"{supertype}.{name}" in self.all_types:
+                        # Hiding rules and library supertypes are not checked.
+                        return _Resolution("repo", f"{supertype}.{name}", HEURISTIC,
+                                           f"member type inherited from {supertype}")
             scope = scope.rsplit(".", 1)[0] if "." in scope else ""
             if scope == (context.package or ""):
                 break  # reached the package; not a type
 
-        # 2. Single-type imports.
+        # 2. Single-type imports, and single static imports naming a member type.
         imported = context.single_imports.get(name)
         if imported is not None:
             if imported in self.all_types:
                 return _Resolution("repo", imported, CONFIRMED, "single-type import")
             return _Resolution("external")
+        imported = context.static_single_imports.get(name)
+        if imported is not None and imported in self.all_types:
+            return _Resolution("repo", imported, CONFIRMED, "single static import")
 
         # 3. Top-level types of the same package (including this file).
         same_package = f"{context.package}.{name}" if context.package else name
@@ -318,7 +379,8 @@ class _Resolver:
             return _Resolution("external")
 
         # 5. On-demand (wildcard) imports.
-        candidates = [f"{p}.{name}" for p in context.wildcard_imports
+        # `import static a.T.*` also imports T's static member types.
+        candidates = [f"{p}.{name}" for p in context.wildcard_imports + context.static_wildcards
                       if f"{p}.{name}" in self.all_types]
         if len(candidates) == 1:
             return _Resolution("repo", candidates[0], HEURISTIC,
@@ -343,3 +405,7 @@ class _FileContext:
             for i in facts.imports if not i.static and not i.wildcard
         }
         self.wildcard_imports = [i.name for i in facts.imports if i.wildcard and not i.static]
+        self.static_wildcards = [i.name for i in facts.imports if i.wildcard and i.static]
+        self.static_single_imports = {
+            i.name.rsplit(".", 1)[-1]: i.name for i in facts.imports if i.static and not i.wildcard
+        }

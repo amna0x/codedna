@@ -1059,3 +1059,41 @@ of recorded commits) and a Wilson upper bound at or under 5%, so in practice
 a few hundred recorded commits. A synthetic check (240 commits, one test failing every
 third commit, scratch script only, not evidence) reached `validated_history`
 from recorded runs alone; real projects will differ.
+
+## D-054 — Graph precision check and four resolution fixes
+
+**Check (M2).** 160 dependency edges (40 confirmed + 40 heuristic from each
+of HikariCP a4d93f4f and LittleProxy 70edbe1c, seed 0) were labelled against
+the source: 160 correct, so precision is 1.00 with a 95 % Wilson interval of
+[0.954, 1.00] for each label. Missed references were found by sorting every
+unresolved name into groups. Method, data and the AI-made labels (to be
+spot-checked by a student) are in
+`experiments/results/graph-precision-2026-10-25/`; tools are
+`scripts/sample_graph_edges.py` and `scripts/score_graph_sample.py`.
+
+**Fixes to D-010 found by the check** (`dependency_graph/builder.py`):
+
+- `var` is skipped. It infers a local variable's type and names no type; it
+  was 260 of HikariCP's 546 unresolved references.
+- `java.lang` is the full list of public top-level types in JDK 21 (107
+  names) instead of 42, so names like `ClassNotFoundException` count as
+  external, not unresolved.
+- Static imports bring member types: `import static a.T.*` makes `T`'s
+  member types candidates on the same footing as type wildcards (heuristic);
+  `import static a.T.Nested` resolves `Nested` like a single-type import
+  (confirmed).
+- Member types inherited from repository supertypes are in scope, after the
+  type's own members, at each enclosing level, transitively; generic
+  arguments are ignored and cycles stop. These edges are heuristic because
+  hiding rules and library supertypes are not checked. As in Java, an
+  inherited member type shadows a `java.lang` name. HikariCP's
+  `SQLExceptionOverride.Override` was silently resolved to the JDK annotation
+  before.
+
+Effect: the unresolved rate goes from 0.264 to 0.139 (HikariCP) and from
+0.103 to 0.070 (LittleProxy), and dependency edges go from 668 to 676 and
+from 479 to 502. Structural features (`dep_reachable`, `dep_distance`,
+`dep_confirmed`) of datasets built from now on can differ slightly from the
+saved study datasets. The saved study results and the live risk gate are
+unaffected: the gate uses no structural features (D-041). Local classes stay
+unresolved by design (D-009).

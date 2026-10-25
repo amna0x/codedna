@@ -362,7 +362,7 @@ real Maven build of `examples/sample-java-project` with JaCoCo; the project
 rule is that it must not be silently skipped (`--run-maven`).
 
 Latest full local run (2026-10-25, Linux, Python 3.13, Maven included):
-`python -m pytest --run-maven` → 325 passed, 4 skipped. The skipped tests
+`python -m pytest --run-maven` → 329 passed, 4 skipped. The skipped tests
 are the Windows-only `start.bat` checks.
 
 ### 6.2 Continuous integration
@@ -382,9 +382,20 @@ GitHub Actions (`.github/workflows/ci.yml`) runs on every pull request:
   is recorded in [IMPLEMENTATION_HANDOFF.md](IMPLEMENTATION_HANDOFF.md).
 - Impact graph layout rendered on real HikariCP graphs (D-051).
 - Test discovery on HikariCP 688d1911 matches the 21 classes CI ran (D-052).
-- **Graph precision check (open).** A manual check of a sample of graph
-  edges against the source is still needed before the report can state how
-  often confirmed and heuristic edges are correct. *To be filled.*
+- **Graph precision check (D-054).** 160 dependency edges were sampled with
+  a fixed seed, 40 confirmed and 40 heuristic from each of HikariCP and
+  LittleProxy, and checked against the source. All 160 were correct:
+  precision 1.00, with a 95 % Wilson interval of [0.954, 1.00] for each label.
+  Every unresolved name was also sorted into groups to look for missed links.
+  This found four causes: `var` read as a type name, an incomplete
+  `java.lang` list, member types brought in by static imports, and member
+  types inherited from a superclass. One of these had silently resolved an
+  inherited `Override` enum to the JDK annotation. After the fixes, the
+  unresolved rate fell from 0.264 to 0.139 on HikariCP and from 0.103 to
+  0.070 on LittleProxy, and no remaining unresolved name is a type the graph
+  models. The labels were made by Claude while reading the source and still
+  need a spot check by a student
+  (`experiments/results/graph-precision-2026-10-25/FINDINGS.md`).
 
 ## 7. Limitations and future work
 

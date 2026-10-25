@@ -186,6 +186,58 @@ def test_wildcard_import_resolution_is_heuristic(repo):
     assert "wildcard" in edge.evidence[0].note
 
 
+def test_var_and_all_java_lang_names_are_not_unresolved(repo):
+    graph = build(repo, {"a/Job.java": (
+        "package a;\nclass Job { void run() throws ClassNotFoundException {\n"
+        "  var n = 1; AbstractMethodError e = null; } }\n")})
+
+    assert graph.unresolved == {}
+    assert graph.stats()["unresolved_references"] == 0
+
+
+def test_static_imports_bring_member_types(repo):
+    graph = build(repo, {
+        "u/Elf.java": "package u;\npublic class Elf { public static class Policy {}\n"
+                      "  public static class Factory {} }\n",
+        "a/Pool.java": "package a;\nimport static u.Elf.*;\nclass Pool { Policy p; }\n",
+        "a/Other.java": "package a;\nimport static u.Elf.Factory;\nclass Other { Factory f; }\n",
+    })
+
+    edges = dependency_edges(graph)
+    on_demand = edges[("type:a.Pool", "type:u.Elf.Policy", "uses")]
+    assert on_demand.confidence == HEURISTIC and "wildcard" in on_demand.evidence[0].note
+    single = edges[("type:a.Other", "type:u.Elf.Factory", "uses")]
+    assert single.confidence == CONFIRMED and single.evidence[0].note == "single static import"
+    assert graph.unresolved == {}
+
+
+def test_member_types_inherited_from_supertypes(repo):
+    graph = build(repo, {
+        "a/Base.java": "package a;\nabstract class Base { static class Failure extends Exception {} }\n",
+        "a/Mid.java": "package a;\nabstract class Mid extends Base {}\n",
+        "a/Pool.java": "package a;\nclass Pool extends Mid { Failure f; }\n",
+        "a/Rules.java": "package a;\npublic interface Rules { enum Override { KEEP } }\n",
+        "a/Handler.java": "package a;\nclass Handler implements Rules {\n"
+                          "  @java.lang.Override public String toString() { return \"\"; }\n"
+                          "  Override pick() { return Override.KEEP; } }\n",
+    })
+
+    edges = dependency_edges(graph)
+    inherited = edges[("type:a.Pool", "type:a.Base.Failure", "uses")]
+    assert inherited.confidence == HEURISTIC
+    assert inherited.evidence[0].note == "member type inherited from a.Base"
+    # The inherited enum shadows java.lang.Override, as in Java.
+    assert ("type:a.Handler", "type:a.Rules.Override", "uses") in edges
+    assert graph.unresolved == {}
+
+
+def test_supertype_cycles_do_not_loop(repo):
+    graph = build(repo, {"a/A.java": "package a;\nclass A extends B { Inner i; }\n",
+                         "a/B.java": "package a;\nclass B extends A {}\n"})
+
+    assert ("type:a.A", "Inner") in graph.unresolved
+
+
 def test_type_parameters_are_not_references(repo):
     graph = build(repo, {
         "a/T.java": "package a;\npublic class T {}\n",
