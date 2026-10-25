@@ -69,7 +69,8 @@ evaluates is narrower:
   missing outcome visible to the user instead of hiding it.
 
 Section 4 of the evaluation chapter reports that B10 is at least as safe as
-the alternatives on every project studied, but that its pooled advantage is
+the rules at the same test time on the nine projects where safety is defined
+(two projects have no failing test commits), but that its pooled advantage is
 not statistically clear, and that models trained on one project do not
 reliably transfer to another (D-039).
 
@@ -346,8 +347,10 @@ The commit was picked for the demonstration and is not evidence.
 
 ### 6.1 Automated tests
 
-The pytest suite builds temporary Git repositories for every scenario and
-needs no network. Areas covered include renames, CRLF files, syntax errors,
+The pytest suite builds temporary Git repositories for every scenario; the
+default run needs no network. The Maven integration tests (`--run-maven`)
+also need a JDK, Maven and network access while Maven downloads its plugins
+and JUnit. Areas covered include renames, CRLF files, syntax errors,
 binary files, multi-module and Gradle layouts, graph resolution and labels,
 impact paths, selection strategies, history leakage, calibration, the live
 gate's refusal cases, the must-run policy, recording, the API's token and
