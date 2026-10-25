@@ -880,6 +880,29 @@ validator. Java is listed as a built-in version with no download until it
 moves into its own package. No licence is claimed because the repository has
 none yet.
 
+## D-048 — Plugin install and remove through the official catalogue
+
+`codedna.plugins.manager` and `codedna plugins catalogue | install ID VERSION
+--yes | remove ID --yes`. The catalogue is fetched only from the fixed
+official URL and validated (D-047); the caller names a plugin and an exact
+version and cannot pass a URL or file. Catalogue entries with a download gain
+a pip `package` name. Install order: compatibility (plugin API major), explicit
+confirmation (the CLI first prints the plugin's licence and source, even with
+`--yes`), wheel file name must be that package at that exact version, download (50 MB
+cap), SHA-256 compared before pip sees the file, then `python -m pip install
+--no-index --no-deps` of that one wheel into CodeDNA's own interpreter. Remove
+needs confirmation, refuses built-ins and plugins that are not installed, and
+runs `pip uninstall`. Installed plugins are found by the existing entry-point
+registry, which reports a plugin that fails to load instead of breaking the
+core. `--no-deps` means a plugin must not need extra packages. Tests are
+offline: fakes for the rule checks plus one real pip install and removal of a
+generated wheel in a throwaway virtual environment.
+
+Limit: the repository is private, so the official catalogue URL (GitHub Pages)
+and release assets are not publicly downloadable yet. Until a public host is
+chosen, install works only against a reachable copy, which the code does not
+allow by design.
+
 ## D-049 — History replay from experiment reports
 
 The IDE's **History replay** view (`Ctrl+Shift+Alt+R`) plays a project's test
