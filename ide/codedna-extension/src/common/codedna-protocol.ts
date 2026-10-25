@@ -163,7 +163,7 @@ export interface SelectionReport {
     };
     strategy: string;
     total_tests: number;
-    selected: { test: string; reasons: string[] }[];
+    selected: { test: string; reasons: string[]; file?: string | null }[];
     skipped: string[];
     selection_ratio: number;
     estimated_time: { selected_seconds: number; all_seconds: number; saved_ratio: number } | null;

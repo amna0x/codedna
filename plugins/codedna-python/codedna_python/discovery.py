@@ -9,7 +9,7 @@ subclass) with test methods. Its ID is the module's graph ID,
 ``py:<module>``.
 
 pytest's settings are read from the repository root, in pytest's own order
-(``pytest.ini``, ``pyproject.toml`` ``[tool.pytest.ini_options]``,
+(``pytest.ini``, ``.pytest.ini``, ``pyproject.toml`` ``[tool.pytest.ini_options]``,
 ``tox.ini`` ``[pytest]``, ``setup.cfg`` ``[tool:pytest]``): ``python_files``,
 ``python_classes``, ``python_functions``, ``testpaths`` and
 ``norecursedirs``. A test outside ``testpaths`` is reported but does not run
@@ -153,7 +153,8 @@ def _in_testpaths(path: str, config: PytestConfig) -> bool:
 
 def read_config(repo: Path, commit: str) -> PytestConfig:
     """pytest settings from the first root config file that has a pytest section."""
-    readers = (("pytest.ini", _ini("pytest")), ("pyproject.toml", _pyproject),
+    readers = (("pytest.ini", _ini("pytest")), (".pytest.ini", _ini("pytest")),
+               ("pyproject.toml", _pyproject),
                ("tox.ini", _ini("pytest")), ("setup.cfg", _ini("tool:pytest")))
     present = set(run_git(repo, "ls-tree", "--name-only", "-z", commit, "--",
                           *(name for name, _ in readers)).split("\0"))
@@ -163,7 +164,7 @@ def read_config(repo: Path, commit: str) -> PytestConfig:
         text = run_git_bytes(repo, "show", "--no-textconv", f"{commit}:{name}").decode(
             "utf-8", errors="replace")
         try:
-            values = reader(text, name == "pytest.ini")
+            values = reader(text, name in ("pytest.ini", ".pytest.ini"))
         except (configparser.Error, tomllib.TOMLDecodeError, ValueError) as exc:
             return PytestConfig(warnings=[f"{name} could not be read ({exc}); pytest defaults "
                                           "are used for discovery"])

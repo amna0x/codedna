@@ -200,7 +200,7 @@ export class TestsViewWidget extends ReactWidget {
                 <div className='cd-card'>
                     {report.selected.map(item => <button className='cd-row' key={item.test}
                         title={`Open ${item.test}`}
-                        onClick={() => this.workspace.openFile(testPath(item.test))}>
+                        onClick={() => this.workspace.openFile(item.file ?? testPath(item.test))}>
                         <span className='cd-code'>{simpleName(item.test)}</span>
                         <span className='cd-row-meta'>
                             <Chip tone='added'>Run</Chip>
@@ -231,7 +231,7 @@ export class TestsViewWidget extends ReactWidget {
     }
 }
 
-/** Best guess at a test's file from its ID (Python: `py:tests.test_x` → `tests/test_x.py`). */
+/** Best guess at a test's file from its ID, for reports without `file` (Python: `py:tests.test_x` → `tests/test_x.py`). */
 function testPath(testId: string): string {
     if (testId.startsWith('py:')) {
         return `${testId.slice(3).replace(/\./g, '/')}.py`;

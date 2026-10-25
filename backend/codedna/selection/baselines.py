@@ -51,6 +51,7 @@ class SelectionError(ValueError):
 class SelectedTest:
     test: str
     reasons: list[str] = field(default_factory=list)
+    file: str | None = None  # where discovery found the test, for opening it
 
 
 @dataclass
@@ -104,7 +105,7 @@ def select_tests(repo_path: str | Path, base: str, head: str, strategy: str, *,
 
     def pick(test_id: str, reason: str) -> None:
         if test_id in universe:
-            entry = chosen.setdefault(test_id, SelectedTest(test_id))
+            entry = chosen.setdefault(test_id, SelectedTest(test_id, file=test_files[test_id]))
             if reason not in entry.reasons:
                 entry.reasons.append(reason)
 

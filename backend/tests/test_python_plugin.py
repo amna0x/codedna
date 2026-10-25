@@ -290,6 +290,18 @@ def test_pytest_settings_change_what_is_discovered(repo):
     ]
 
 
+def test_a_dot_pytest_ini_is_read_like_pytest_ini(repo):
+    head = commit(repo, {".pytest.ini": "[pytest]\npython_functions = check_\n",
+                         "pyproject.toml": "[tool.pytest.ini_options]\npython_functions = 'x'\n",
+                         "tests/test_a.py": "def check_a():\n    pass\n\n\ndef test_b():\n"
+                                            "    pass\n"}, "base")
+
+    report = discover_tests(repo.path, head, language="python")
+
+    assert read_config(repo.path, head).source == ".pytest.ini"
+    assert [(t.id, t.methods) for t in report.tests] == [("py:tests.test_a", ["check_a"])]
+
+
 # --- selection and impact in a mixed repository -------------------------------------
 
 
@@ -304,6 +316,7 @@ def test_a_python_change_selects_only_the_python_tests_that_depend_on_it(mixed):
     assert [t["type"] for t in impact.candidate_tests] == [
         "type:py:tests.test_models", "type:py:tests.test_report"]
     assert [s.test for s in report.selected] == ["py:tests.test_models", "py:tests.test_report"]
+    assert [s.file for s in report.selected] == ["tests/test_models.py", "tests/test_report.py"]
     assert report.skipped == ["py:tests.test_util", "shop.PriceTest"]
     assert report.total_tests == 4
 

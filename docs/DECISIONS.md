@@ -1179,7 +1179,7 @@ mixed Java + Python project is analysed by both at once.
   unanalysed, so it falls back to retest-all exactly like a build file
   (a Python release script in a Java project keeps today's behaviour).
   `non_java="ignore"` keeps its name and now means "unanalysed files".
-- **Discovery:** pytest's own settings from the root config (`pytest.ini`,
+- **Discovery:** pytest's own settings from the root config (`pytest.ini`, `.pytest.ini`,
   `pyproject.toml`, `tox.ini`, `setup.cfg`, in pytest's order):
   `python_files`, `python_classes`, `python_functions`, `testpaths` and
   `norecursedirs`. Tests outside `testpaths` are listed but do not run by
