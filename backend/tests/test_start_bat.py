@@ -69,7 +69,10 @@ def checkout(tmp_path: Path, *, built: bool) -> tuple[Path, dict[str, str], Path
 
 
 def run(repo: Path, env: dict[str, str], *args: str) -> subprocess.CompletedProcess:
-    return subprocess.run(["cmd", "/c", str(repo / "start.bat"), *args], cwd=repo.parent,
+    # As typed at a prompt: cmd /s /c strips only the outer pair of quotes, so a
+    # quoted script path followed by a quoted argument survives intact.
+    line = " ".join(f'"{part}"' for part in (repo / "start.bat", *args))
+    return subprocess.run(f'cmd /s /c "{line}"', cwd=repo.parent,
                           env=env, capture_output=True, text=True, timeout=120)
 
 
