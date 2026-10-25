@@ -37,7 +37,9 @@ On the chronological split (D-023):
 * ``cost_matched`` compares each fallback policy and B10 with B8 at the
   budget that spends the same real test time (B10 also with B3), and ``bootstrap`` gives 95 % intervals for
   policies and paired differences (resampling test commits, D-035);
-  ``per_commit`` keeps compact outcomes so studies can pool projects.
+  ``per_commit`` keeps compact outcomes so studies can pool projects;
+* ``replay`` (only with ``trace=True``) records per test commit the SHA, test
+  names and seconds for the history replay (``codedna.models.replay``).
 
 Nothing is assumed: every number comes from the stored history.
 """
@@ -76,7 +78,7 @@ RISK_SWEEP = (0.01, 0.02, 0.05, 0.1, 0.2, 0.3)
 def run_experiment(dataset: Dataset, *, model: str = "gradient_boosting",
                    calibration: str = "isotonic", budget: float = 0.5,
                    risk_target: float = 0.05, seed: int = 0, sweeps: bool = True,
-                   ablations: bool = True) -> dict:
+                   ablations: bool = True, trace: bool = False) -> dict:
     if calibration not in METHODS:
         raise ValueError(f"unknown calibration {calibration!r}; choose from {METHODS}")
     splits = chronological_split(dataset)
@@ -150,6 +152,8 @@ def run_experiment(dataset: Dataset, *, model: str = "gradient_boosting",
 
     if full is not None:
         _cost_matched_and_bootstrap(report, policies, test_commits, probabilities, seed)
+    if trace:
+        report["replay"] = _replay_trace(report, policies, test_commits, probabilities)
 
     if sweeps and full is not None:
         report["risk_coverage"] = {
@@ -220,6 +224,18 @@ def _cost_matched_and_bootstrap(report: dict, policies: dict, test_commits, prob
 
 def _rounded(values: dict) -> dict:
     return {k: None if v is None else round(v, 4) for k, v in values.items()}
+
+
+def _replay_trace(report: dict, policies: dict, test_commits, probabilities) -> dict:
+    """Per-commit detail for the history replay (D-049), from the same policy functions."""
+    from codedna.models.replay import POLICIES, record_trace
+
+    chosen = {key: policies[key] for key, _, _ in POLICIES if key in policies}
+    matched = report.get("cost_matched", {}).get("B10_hybrid vs B3")
+    if matched:  # the same budget, and so the same outcomes, as per_commit["B3@B10_hybrid"]
+        chosen["B3@B10_hybrid"] = _rules_policy(
+            probabilities, RiskPolicy(budget=matched["baseline_budget"]))
+    return record_trace(test_commits, chosen)
 
 
 def _risk_only(budget: float, risk_target: float) -> RiskPolicy:

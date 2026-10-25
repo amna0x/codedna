@@ -264,6 +264,9 @@ test commit rows ─────────────────────
 - `run_experiment` measures every policy on the test split with *real*
   durations and outcomes and reports estimated skip risk next to the observed
   miss rate, so the risk estimate itself is evaluated.
+- `models.replay` (D-049) turns a saved report into a commit-by-commit
+  timeline for the IDE's History replay; `run_experiment(trace=True)`
+  (`history experiment --replay`) adds SHAs, test names and seconds.
 
 ### `api` (local API for the IDE, D-028)
 
@@ -284,6 +287,9 @@ same JSON:
 | `POST /api/select` | `select` |
 | `POST /api/compare` | `compare` |
 | `POST /api/run-tests` | `run-tests` — needs `serve --allow-build` **and** `"allow_build": true` |
+| `POST /api/replay` | `replay REPORT` |
+| `POST /api/replay/sources` | `replay --list FOLDER…` |
+| `POST /api/replay/overview` | `replay --overview FOLDER… [--seed N]` |
 
 Errors are JSON: 400 `{"error": ...}` for analysis errors, 401 bad token,
 403 host/build not allowed, 422 invalid request body.
@@ -299,6 +305,7 @@ codedna-extension/src
     ├── change-view-widget.tsx      "Changed code" (analyze + impact)
     ├── tests-view-widget.tsx       "Recommended tests" (select)
     ├── graph-view-widget.tsx       "Impact graph" (impact.explanation_graph, Cytoscape.js)
+    ├── replay-view-widget.tsx      "History replay" (replay timelines, D-049)
     ├── codedna-workspace.ts        repo path = first workspace root; open file at line
     ├── theme/codedna-theme.ts      CodeDNA Dark colour theme + shell class toggle
     └── style/codedna(.|-shell).css view and shell styling (D-030)

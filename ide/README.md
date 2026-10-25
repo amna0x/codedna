@@ -15,6 +15,15 @@ terminal and preferences; the `codedna-extension` package adds:
 - **Impact graph** (main area, `Ctrl+Alt+G`): changed code → parts that may be
   affected → related tests. Solid lines are direct links, dashed lines likely
   ones. Click a dot, or pick a part from the list, to see why it is included.
+- **History replay** (main area, `Ctrl+Alt+R`): plays a real project's history
+  back commit by commit from the saved study results. Per commit it shows
+  what "run every test", "dependency only", "simple rules at the same time"
+  and CodeDNA would have run, how much test time that took, and which
+  failing tests each one missed, with running totals and the risk target.
+  The first screen lists all study projects. `start.bat` fills in the study
+  folders; otherwise paste the path of `experiments/results/study11-2026-10-21`
+  (and `replay-2026-10-25` for full commit detail), or set
+  `CODEDNA_REPLAY_FOLDERS` (folders separated by `;` on Windows, `:` elsewhere).
 
 All views share one **Compare** choice: *My last commit* (default), *My
 last 5 commits*, or *Choose commits…* for any two commits or branches.
@@ -46,7 +55,7 @@ On Windows, `start.bat` in the repository root does all of this: it builds
 the IDE if needed, sets `CODEDNA_EXECUTABLE` to `.venv\Scripts\codedna.exe`
 and `JAVA_HOME` to the portable JDK when one is recorded, and opens a demo
 repository (created in `%USERPROFILE%\codedna-demo`) or the folder given as
-its argument. By hand:
+its argument. It also points **History replay** at the study results. By hand:
 
 ```bash
 cd ide

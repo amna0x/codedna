@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parents[2]
 
 # Each stub appends one line to %STUB_LOG%, so the test can see what ran.
 THEIA = r"""@echo off
->>"%STUB_LOG%" echo theia cwd=%CD% args=%* exe=%CODEDNA_EXECUTABLE% java=%JAVA_HOME%
+>>"%STUB_LOG%" echo theia cwd=%CD% args=%* exe=%CODEDNA_EXECUTABLE% java=%JAVA_HOME% replay=%CODEDNA_REPLAY_FOLDERS%
 """
 PYTHON = r"""@echo off
 >>"%STUB_LOG%" echo python %*
@@ -89,6 +89,9 @@ def test_default_run_creates_the_demo_and_opens_it(tmp_path):
     assert f'args=start "{demo}"' in theia
     assert f"exe={repo / '.venv' / 'Scripts' / 'codedna.exe'}" in theia
     assert f"java={tmp_path / 'jdk'}" in theia
+    results = repo / "experiments" / "results"
+    assert (f"replay={results / 'replay-2026-10-25'};{results / 'study11-2026-10-21'}"
+            in theia)
     assert not any(line.startswith("npm") for line in lines)  # already built
 
     run(repo, env)  # the demo now exists: it is reused, not recreated

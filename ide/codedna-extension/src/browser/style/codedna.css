@@ -340,3 +340,34 @@
 .codedna-view .cd-graph-details { display: grid; gap: 8px; padding: 12px; }
 .codedna-view .cd-path-steps { margin: 0; padding-left: 20px; display: grid; gap: 4px; }
 .codedna-view .cd-graph-pick { max-width: 420px; }
+
+/* History replay (plain layout; to be designed later) */
+.codedna-view.cd-replay-view { overflow: auto; }
+.codedna-view .cd-replay-layout { display: grid; gap: 12px; padding-bottom: 24px; }
+.codedna-view .cd-replay-layout textarea { width: 100%; min-width: 320px; font-family: var(--theia-code-font-family); background: var(--cd-field); color: var(--cd-text); border: 1px solid var(--cd-line); border-radius: 6px; padding: 6px; }
+.codedna-view .cd-replay-headline { display: flex; flex-wrap: wrap; gap: 12px; align-items: end; justify-content: space-between; }
+.codedna-view .cd-table-wrap { overflow-x: auto; }
+.codedna-view .cd-table { border-collapse: collapse; width: 100%; font-size: 12px; font-variant-numeric: tabular-nums; }
+.codedna-view .cd-table th, .codedna-view .cd-table td { padding: 4px 8px; text-align: left; border-bottom: 1px solid var(--cd-line); white-space: nowrap; }
+.codedna-view .cd-table .cd-subhead th { color: var(--cd-muted); font-weight: normal; }
+.codedna-view .cd-table .cd-total td { font-weight: 600; }
+.codedna-view .cd-small { padding: 2px 8px; font-size: 12px; }
+.codedna-view .cd-secondary { background: transparent; border: 1px solid var(--cd-line); color: var(--cd-text); }
+.codedna-view .cd-inline { display: inline-flex; gap: 6px; align-items: center; }
+.codedna-view .cd-link { background: none; border: none; padding: 0; color: var(--theia-textLink-foreground); cursor: pointer; font-family: var(--theia-code-font-family); }
+.codedna-view .cd-replay { display: grid; gap: 12px; }
+.codedna-view .cd-replay-bar, .codedna-view .cd-replay-transport { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.codedna-view .cd-replay-bar h3 { margin: 0; }
+.codedna-view .cd-replay-scrub { flex: 1; min-width: 160px; }
+.codedna-view .cd-replay-strip { width: 100%; height: 24px; cursor: pointer; display: block; }
+.codedna-view .cd-replay-counters { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 8px; }
+.codedna-view .cd-counter { display: grid; gap: 2px; padding: 10px; border-left: 3px solid; margin: 0; }
+.codedna-view .cd-counter-big { font-size: 24px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.codedna-view .cd-warn { color: var(--cd-deleted); }
+.codedna-view .cd-replay-charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 8px; }
+.codedna-view .cd-replay-chart { margin: 0; padding: 10px; display: grid; gap: 6px; }
+.codedna-view .cd-replay-chart svg { width: 100%; height: auto; }
+.codedna-view .cd-axis { font-size: 10px; fill: var(--cd-muted); }
+.codedna-view .cd-replay-commit { padding: 10px; display: grid; gap: 6px; }
+.codedna-view .cd-replay-events ul { margin: 4px 0 0; padding-left: 18px; display: grid; gap: 2px; }
+.codedna-view .cd-replay-provenance { font-size: 12px; }
