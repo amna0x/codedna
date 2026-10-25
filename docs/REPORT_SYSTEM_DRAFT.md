@@ -382,7 +382,7 @@ GitHub Actions (`.github/workflows/ci.yml`) runs on every pull request:
   is recorded in [IMPLEMENTATION_HANDOFF.md](IMPLEMENTATION_HANDOFF.md).
 - Impact graph layout rendered on real HikariCP graphs (D-051).
 - Test discovery on HikariCP 688d1911 matches the 21 classes CI ran (D-052).
-- **Graph precision check (D-054).** 160 dependency edges were sampled with
+- **Graph precision check (D-058).** 160 dependency edges were sampled with
   a fixed seed, 40 confirmed and 40 heuristic from each of HikariCP and
   LittleProxy, and checked against the source. All 160 were correct:
   precision 1.00, with a 95 % Wilson interval of [0.954, 1.00] for each label.

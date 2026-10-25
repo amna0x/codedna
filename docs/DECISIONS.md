@@ -1060,7 +1060,15 @@ a few hundred recorded commits. A synthetic check (240 commits, one test failing
 third commit, scratch script only, not evidence) reached `validated_history`
 from recorded runs alone; real projects will differ.
 
-## D-054 — Graph precision check and four resolution fixes
+**Fix (with D-059).** Once `.codedna/.gitignore` existed, a worktree
+snapshot failed: Git refuses an `:(exclude)` pathspec that names an ignored
+path. The snapshot now excludes only outputs that `git ls-files` actually
+lists (outputs from before the ignore file existed).
+
+## D-058 — Graph precision check and four resolution fixes
+
+(D-054 to D-057 are taken by open branches: the `codedna-java` plugin split
+and the project-history fixes.)
 
 **Check (M2).** 160 dependency edges (40 confirmed + 40 heuristic from each
 of HikariCP a4d93f4f and LittleProxy 70edbe1c, seed 0) were labelled against
@@ -1097,3 +1105,39 @@ from 479 to 502. Structural features (`dep_reachable`, `dep_distance`,
 saved study datasets. The saved study results and the live risk gate are
 unaffected: the gate uses no structural features (D-041). Local classes stay
 unresolved by design (D-009).
+
+## D-059 — Test brake for AI coding agents (`codedna mcp`)
+
+**What.** `codedna mcp` is a Model Context Protocol server on stdin/stdout,
+so coding agents (Claude Code, Cursor, Codex and others) can ask CodeDNA
+before they say a change is done. Tools:
+
+- `codedna_plan_tests` — the tests that must run for BASE..HEAD (default:
+  uncommitted changes), a reason for each, and the skip risk. It is the live
+  recommendation (D-041) with the must-run policy (D-050): without validated
+  history it lists every test, so the brake never skips on a guess.
+- `codedna_impact` — the impact report with confirmed and heuristic links
+  apart and the changed files CodeDNA cannot analyse.
+- `codedna_check` — runs the planned tests and gives one verdict: `passed`,
+  `blocked` (a listed test failed), `incomplete` (a listed test has no
+  result, e.g. a compile error or timeout) or `no_tests`. A whole-suite check
+  of a commit on the first-parent line is recorded as history (D-053);
+  uncommitted states never are.
+
+**Consent.** `plan` and `impact` read Git objects only. `check` executes the
+project's build, so it is listed only when the person starts the server with
+`--allow-build --repo PATH`, and it then serves that one repository whatever
+path the agent sends. An agent cannot turn it on (same rule as D-014).
+
+**No dependency.** Only the part of MCP that tools need is implemented
+(`initialize` with version negotiation, `ping`, `tools/list`, `tools/call`;
+newline-delimited JSON-RPC 2.0), so the core needs no MCP SDK. Errors in a
+tool come back as tool results with `isError`, protocol errors as JSON-RPC
+errors. Logs go to stderr.
+
+**Limits.** The verdict covers the listed test classes only; `passed` with
+unvalidated history means the whole suite passed, not that the change is
+correct. The brake is language-neutral and uses the installed language
+plugin (Java first). Whether agents finish with fewer broken changes when
+they use it is a research question still to be measured (planned SWE-bench
+Java study); no result is claimed here.

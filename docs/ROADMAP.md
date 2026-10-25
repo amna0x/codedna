@@ -54,7 +54,7 @@ Java stays the only supported language until Milestone 5 is complete.
 - ✅ Class-level dependency-only candidate tests (preview of baseline B4)
 - ⏳ Method-level call edges (deferred: needs type resolution; see D-010)
 - ✅ Precision check of extracted edges on HikariCP and LittleProxy: 160 of
-  160 sampled edges correct; four missed-reference causes fixed (D-054).
+  160 sampled edges correct; four missed-reference causes fixed (D-058).
   Labels still need a student spot check.
 
 ## Milestone 3 — Test mapping ✅

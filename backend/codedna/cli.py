@@ -17,6 +17,7 @@ Usage:
                     [--coverage-map FILE] [--non-java retest-all|ignore]
     codedna plugins
     codedna serve   [--host 127.0.0.1] [--port 8765] [--allow-build]
+    codedna mcp     [--repo PATH] [--allow-build] [--mvn PATH]
     codedna history mine     --repo PATH --db FILE [--rev REV] [--max-commits N]
     codedna history import   --db FILE RESULTS [RESULTS ...] [--source NAME]
     codedna history collect  --repo PATH --db FILE --output-dir DIR --allow-build
@@ -208,6 +209,19 @@ def build_parser() -> argparse.ArgumentParser:
                        help="Port (default: 8765).")
     serve.add_argument("--allow-build", action="store_true",
                        help="Allow /api/run-tests (executes project code on request).")
+
+    mcp = subcommands.add_parser(
+        "mcp",
+        help="Test brake for AI coding agents: an MCP server on stdin/stdout (D-059).",
+        description=(
+            "Serves codedna_plan_tests and codedna_impact to a coding agent over the Model "
+            "Context Protocol (stdio). With --allow-build and --repo it also serves "
+            "codedna_check, which runs the planned tests of that one repository."),
+    )
+    mcp.add_argument("--repo", help="Repository the agent works on (required with --allow-build).")
+    mcp.add_argument("--allow-build", action="store_true",
+                     help="Offer codedna_check (executes the project's build when the agent asks).")
+    mcp.add_argument("--mvn", help="Path to the Maven executable (default: mvn on PATH).")
 
     history = subcommands.add_parser(
         "history", help="Mine commit history, store test results, evaluate test ordering.")
@@ -402,6 +416,10 @@ def main(argv: list[str] | None = None) -> int:
                 return EXIT_ANALYSIS_ERROR
             return serve(args.host, args.port, token=os.environ.get("CODEDNA_API_TOKEN"),
                          allow_build=args.allow_build)
+        elif args.command == "mcp":
+            from codedna.agent.mcp_server import main as mcp_main
+            return mcp_main(args.repo, args.allow_build,
+                            {"maven_command": [args.mvn]} if args.mvn else None)
         elif args.command == "history":
             return _run_history(args)
         elif args.command == "replay":
