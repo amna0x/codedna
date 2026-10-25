@@ -2,7 +2,8 @@
 rem Start the CodeDNA IDE (Windows).
 rem   start.bat            opens a demo project (created on first run in %USERPROFILE%\codedna-demo)
 rem   start.bat C:\path    opens that folder instead
-rem The first run installs and builds the IDE, which takes several minutes.
+rem The first run installs and builds the IDE, which takes several minutes;
+rem it builds again after a pull that changed the IDE.
 setlocal
 cd /d "%~dp0"
 
@@ -37,15 +38,27 @@ if "%TARGET%"=="" (
     )
 )
 
+rem Last commit that changed the IDE; after a pull that changes it, rebuild.
+rem Without git on PATH the IDE is only built when it has never been built.
+set "IDE_REV="
+for /f "usebackq delims=" %%r in (`git log -1 "--format=%%H" -- ide 2^>nul`) do set "IDE_REV=%%r"
+
 cd ide
 if not exist "node_modules" (
     echo Installing the IDE, first run only ...
     call npm install || exit /b 1
 )
-if not exist "electron-app\lib\backend\main.js" (
-    echo Building the IDE, first run only ...
-    call npm run build || exit /b 1
-)
+set "STAMP=electron-app\lib\codedna-build.txt"
+set "BUILT_REV="
+if exist "%STAMP%" set /p BUILT_REV=<"%STAMP%"
+if not exist "electron-app\lib\backend\main.js" goto build
+if defined IDE_REV if not "%IDE_REV%"=="%BUILT_REV%" goto build
+goto built
+:build
+echo Building the IDE (first run, or the IDE code changed) ...
+call npm run build || exit /b 1
+if defined IDE_REV >"%STAMP%" echo %IDE_REV%
+:built
 
 echo Starting the CodeDNA IDE on %TARGET%
 echo Keep this window open while you use the IDE; closing it closes the IDE.

@@ -55,7 +55,8 @@ On Windows, `start.bat` in the repository root does all of this: it builds
 the IDE if needed, sets `CODEDNA_EXECUTABLE` to `.venv\Scripts\codedna.exe`
 and `JAVA_HOME` to the portable JDK when one is recorded, and opens a demo
 repository (created in `%USERPROFILE%\codedna-demo`) or the folder given as
-its argument. It also points **History replay** at the study results. By hand:
+its argument. It also points **History replay** at the study results, and it
+rebuilds the IDE after a `git pull` that changed `ide/` (needs `git` on PATH). By hand:
 
 ```bash
 cd ide
