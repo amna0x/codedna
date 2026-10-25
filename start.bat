@@ -31,7 +31,7 @@ if "%TARGET%"=="" (
     set "TARGET=%USERPROFILE%\codedna-demo"
     if not exist "%USERPROFILE%\codedna-demo" (
         echo Creating the demo project in %USERPROFILE%\codedna-demo ...
-        ".venv\Scripts\python" scripts\make_demo_repo.py "%USERPROFILE%\codedna-demo" || exit /b 1
+        call ".venv\Scripts\python" scripts\make_demo_repo.py "%USERPROFILE%\codedna-demo" || exit /b 1
     )
 )
 
