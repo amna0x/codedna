@@ -58,6 +58,7 @@ Windows (PowerShell):
 py -3.12 -m venv .venv
 .venv\Scripts\Activate.ps1
 python -m pip install -e ".[dev]"
+python -m pip install -e plugins/codedna-java
 ```
 
 macOS / Linux:
@@ -66,11 +67,15 @@ macOS / Linux:
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -e ".[dev]"
+python -m pip install -e plugins/codedna-java
 ```
 
-Installing needs internet once (it downloads the `tree-sitter` and
+Java support is a separate plugin, `plugins/codedna-java` (D-054). Without it
+CodeDNA still lists changed files but says that Java files were not analysed.
+Installing the plugin needs internet once (it downloads the `tree-sitter` and
 `tree-sitter-java` wheels, which include the compiled Java grammar). After
-that, analysis and tests run fully offline.
+that, analysis and tests run fully offline. `start.bat` installs the plugin by
+itself if it is missing.
 
 ## Run the tests
 
@@ -144,7 +149,7 @@ codedna replay  (--list | --overview) FOLDER [FOLDER ...] [--seed N]
   and reports selection ratio, estimated time, and failing tests caught/missed.
   Files and run directories are both accepted for `--coverage-map`,
   `--durations` and `--ground-truth`.
-- `plugins` lists installed language plugins (Java is built in).
+- `plugins` lists installed language plugins (Java comes from `plugins/codedna-java`).
 - `serve` starts the **local API for the CodeDNA IDE** (needs
   `pip install -e ".[api]"`, included in `.[dev]`). It listens on loopback
   only and prints one JSON line with the URL and a session token
@@ -341,16 +346,17 @@ mvn verify
 backend/codedna/          Python package
   cli.py                  `codedna` command
   git_analysis/           Git wrapper + file-level change extraction
-  java_analysis/          Tree-sitter Java parser + line-to-declaration mapping
-  dependency_graph/       code graph model, reference extraction, name resolution
+  dependency_graph/       shared code-graph schema (any language plugin)
   impact_analysis/        reverse-dependency traversal with explanation paths
-  test_mapping/           JUnit discovery, Maven runner, Surefire/JaCoCo parsers
+  test_mapping/           shared test-results and coverage-map schema
   selection/              retest-all / dependency / coverage baselines, compare
-  plugins/                language-plugin interface, registry, built-in Java plugin
+  plugins/                language-plugin interface, registry, catalogue, plugin manager
   test_history/           SQLite history store, mining, result collection, features
   models/                 ranking baselines, ML models, metrics, evaluation, experiment
   calibration/            Platt / isotonic calibration, Brier, ECE, reliability
   api/                    local FastAPI server for the CodeDNA IDE
+plugins/codedna-java/     Java plugin: Tree-sitter parser, change mapping, graph builder,
+                          JUnit discovery, Maven/Gradle runner, Surefire/JaCoCo parsers
 ide/                      CodeDNA IDE (Theia + Electron, TypeScript)
 backend/tests/            pytest suite (temporary Git repos, no network)
 examples/                 sample Java/Maven project

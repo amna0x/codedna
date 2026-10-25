@@ -1082,3 +1082,53 @@ of recorded commits) and a Wilson upper bound at or under 5%, so in practice
 a few hundred recorded commits. A synthetic check (240 commits, one test failing every
 third commit, scratch script only, not evidence) reached `validated_history`
 from recorded runs alone; real projects will differ.
+
+## D-054 — Java as a separate plugin package (`codedna-java`) and the plugin manager view
+
+The Java implementation moves out of the core into `plugins/codedna-java`, a
+separate distribution registered under the `codedna.languages` entry point
+(`java = codedna_java:JavaPlugin`). This finishes the refactor planned in
+D-018/D-024: the core has no built-in language and no Tree-sitter dependency.
+
+- **What moved:** the Java parser and change mapping (`java_analysis`), the
+  graph builder and reference walker, build-layout detection, JUnit
+  discovery, Surefire/JaCoCo parsers, the Maven/Gradle runner, the Java plugin
+  class and the live risk adapter (`plugins.java_live` → `codedna_java.live`).
+- **What stays in the core:** the shared schemas (`dependency_graph.model`,
+  `test_mapping.results` including `TestClassResult` and `ReportError`), the
+  generic `BoundedParseCache`, and everything language-neutral.
+- **One way in:** `codedna.plugins.languages` (`require`, `analyze_changes`,
+  `build_graph`, `discover_tests`, `type_kinds`). Plugin API 1.1 adds
+  `type_kinds` and `attach_declarations` to the protocol. A plugin with a
+  newer minor than the core is refused, because it may rely on members the
+  core lacks. A test imports every core module with `codedna_java` and
+  `tree_sitter` blocked.
+- **Without the Java plugin** `analyze` still lists changed files and warns
+  which `.java` files were not analysed. Commands that need a graph or test
+  discovery fail with `PluginMissingError`, which names the install command
+  (CLI exit 1, API 400). Nothing guesses.
+- **JSON is unchanged:** `is_java` and `java` stay in the change report so the
+  IDE and saved reports keep working. Renaming them would be a format change
+  for a later decision.
+- **Installing:** developers and `start.bat` run
+  `pip install -e plugins/codedna-java` (start.bat does it once for an
+  existing `.venv`). The catalogue lists Java as bundled (`builtin: true`,
+  package `codedna-java`, API 1.1); no wheel is published while the repository
+  is private (D-048).
+- **Manager:** catalogue wheels are installed with `--no-deps`, so the manager
+  runs `pip check` afterwards. If the plugin's own dependencies are missing it
+  is uninstalled again and the missing packages are named. An unreachable
+  catalogue is a normal `CatalogueError`, not a crash.
+- **API and IDE:** `GET /api/plugins/catalogue`, `POST /api/plugins/install`
+  and `POST /api/plugins/remove`. Install and remove need `"confirm": true`,
+  and versions must be exact. The IDE's "Language plugins" view shows
+  installed plugins and load problems, and the catalogue with licence and
+  source. Install, update and remove each ask for confirmation. The view
+  sends only a plugin id and version; the URL and checksum come from the
+  official catalogue inside the core.
+- **Research reproducibility:** `docs/EVIDENCE_STUDY_PROTOCOL.md` is frozen
+  and keeps its old module name (`plugins.java_live`). The fingerprint list in
+  `scripts/run_rolling_evidence.py` now points at
+  `plugins/codedna-java/codedna_java/live.py`, so a rolling-evidence run
+  started before this change will not resume after it; restart it instead.
+  The module's code is unchanged.
