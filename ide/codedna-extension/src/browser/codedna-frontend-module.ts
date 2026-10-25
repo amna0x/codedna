@@ -4,10 +4,13 @@ import { ApplicationShellOptions } from '@theia/core/lib/browser/shell/applicati
 import { ServiceConnectionProvider } from '@theia/core/lib/browser/messaging/service-connection-provider';
 import { CODEDNA_SERVICE_PATH, CodeDnaService } from '../common/codedna-protocol';
 import { ChangeViewWidget } from './change-view-widget';
-import { ChangeViewContribution, GraphViewContribution, ReplayViewContribution, TestsViewContribution } from './codedna-contributions';
+import {
+    ChangeViewContribution, GraphViewContribution, PluginsViewContribution, ReplayViewContribution, TestsViewContribution
+} from './codedna-contributions';
 import { CodeDnaComparison } from './comparison';
 import { CodeDnaWorkspace } from './codedna-workspace';
 import { GraphViewWidget } from './graph-view-widget';
+import { PluginsViewWidget } from './plugins-view-widget';
 import { ReplayViewWidget } from './replay-view-widget';
 import { TestsViewWidget } from './tests-view-widget';
 import { CodeDnaThemeContribution } from './theme/codedna-theme';
@@ -64,4 +67,11 @@ export default new ContainerModule((bind, _unbind, _isBound, rebind) => {
         createWidget: () => ctx.container.get<ReplayViewWidget>(ReplayViewWidget)
     })).inSingletonScope();
     bindViewContribution(bind, ReplayViewContribution);
+
+    bind(PluginsViewWidget).toSelf();
+    bind(WidgetFactory).toDynamicValue(ctx => ({
+        id: PluginsViewWidget.ID,
+        createWidget: () => ctx.container.get<PluginsViewWidget>(PluginsViewWidget)
+    })).inSingletonScope();
+    bindViewContribution(bind, PluginsViewContribution);
 });

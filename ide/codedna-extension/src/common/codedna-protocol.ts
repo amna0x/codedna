@@ -19,8 +19,8 @@ export interface CodeDnaStatus {
 
 export interface CodeDnaService {
     status(): Promise<CodeDnaStatus>;
-    projectHistory(repo: string, base: string): Promise<ProjectHistory>;
-    prepareHistory(repo: string, base: string): Promise<PreparedHistory>;
+    projectHistory(repo: string): Promise<ProjectHistory>;
+    recordSavedRuns(repo: string): Promise<RecordedHistory>;
     importRun(repo: string, source: string): Promise<{ id: string; tests: number; failures: number }>;
     savedRun(repo: string, runId: string): Promise<SavedRun>;
     analyze(repo: string, base: string, head: string): Promise<AnalyzeReport>;
@@ -32,6 +32,13 @@ export interface CodeDnaService {
     replaySources(folders: string[]): Promise<ReplaySources>;
     replayOverview(folders: string[], seed?: number): Promise<ReplayOverview>;
     replay(path: string): Promise<ReplayTimeline>;
+    /** Language plugins CodeDNA's engine found (D-018, D-054). */
+    installedPlugins(): Promise<InstalledPlugins>;
+    /** The official catalogue (fixed URL in the core) plus what is installed. */
+    pluginCatalogue(): Promise<PluginCatalogueView>;
+    /** Only after the view's explicit confirmation: installing runs the plugin's code. */
+    installPlugin(plugin: string, version: string): Promise<PluginChange>;
+    removePlugin(plugin: string): Promise<PluginChange>;
 }
 
 export type SelectionStrategy = 'dependency' | 'all' | 'risk';
@@ -285,31 +292,25 @@ export interface ProjectRun {
     duration_seconds: number;
     recorded_at: string;
     result_path: string;
+    /** True when the run meets the D-053 recording rules. */
     candidate: boolean;
     reason: string | null;
 }
 export interface ProjectHistory {
     repository: string;
-    base_commit: string;
-    commits_considered: number;
     runs: ProjectRun[];
+    candidate_runs: number;
     candidate_commits: number;
-    base_has_complete_run: boolean;
-    base_tests: number;
     history_csv: string | null;
     warnings: string[];
     note: string;
 }
-export interface PreparedHistory {
-    base_commit: string;
-    rows: number;
-    commits: number;
-    failing_commits: number;
-    imported_runs: number;
-    excluded: { id: string; reason: string }[];
-    csv_path: string;
-    database_path: string;
-    automatic_csv_path: string;
+export interface RecordedHistory {
+    repository: string;
+    recorded_runs: number;
+    commits_with_results: number | null;
+    history_csv: string;
+    skipped: { id: string; reason: string }[];
     warnings: string[];
     note: string;
 }
@@ -318,4 +319,48 @@ export interface SavedRun {
     results: SelectionRun['results'];
     logs: string[];
     result_path: string;
+}
+
+// --- language plugins and the catalogue (codedna.plugins, D-020, D-048, D-054) -------
+
+export interface InstalledPlugin {
+    name: string;
+    display_name: string;
+    version: string;
+    api_version: string;
+    file_suffixes: string[];
+}
+
+export interface InstalledPlugins { api_version: string; plugins: InstalledPlugin[]; problems: string[] }
+
+export interface CatalogueVersion {
+    version: string;
+    api_version: string;
+    /** Bundled with CodeDNA (installed from the repository), no download. */
+    builtin: boolean;
+    url: string | null;
+    sha256: string | null;
+}
+
+export interface CataloguePlugin {
+    id: string;
+    package?: string;
+    name: string;
+    description: string;
+    licence: string;
+    source: string;
+    versions: CatalogueVersion[];
+}
+
+export interface PluginCatalogueView {
+    catalogue: { schema_version: number; plugins: CataloguePlugin[] };
+    installed: InstalledPlugins;
+}
+
+export interface PluginChange {
+    plugin: string;
+    version?: string;
+    sha256?: string;
+    status: string;
+    installed: InstalledPlugins;
 }

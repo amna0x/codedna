@@ -83,7 +83,7 @@ def test_explicit_project_selection_cannot_relabel_inspected_or_colliding_data(m
 
 
 def test_nonstructural_preparation_preserves_live_inputs_and_refuses_mixed_resume(dataset, tmp_path):
-    from codedna.plugins.java_live import LIVE_FEATURES
+    from codedna_java.live import LIVE_FEATURES
     from codedna.test_history.features import STRUCTURAL_FEATURES
 
     prepare = load("prepare_confirmatory")

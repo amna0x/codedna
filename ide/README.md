@@ -15,6 +15,10 @@ terminal and preferences; the `codedna-extension` package adds:
 - **Impact graph** (main area, `Ctrl+Shift+Alt+G`): changed code → parts that may be
   affected → related tests. Solid lines are direct links, dashed lines likely
   ones. Click a dot, or pick a part from the list, to see why it is included.
+- **Language plugins** (command palette: *View: Toggle Language plugins*):
+  the language plugins CodeDNA found, load problems, and the official
+  catalogue with licence and source. Install, update and remove ask first;
+  the core checks the SHA-256 and pins the version (D-054).
 - **History replay** (main area, `Ctrl+Shift+Alt+R`): plays a real project's history
   back commit by commit from the saved study results. Per commit it shows
   what "run every test", "dependency only", "simple rules at the same time"
@@ -49,7 +53,7 @@ Node and Python; end users still need Git and any project build tools they use.
 |------|---------|-----|
 | Node.js | 22 (tested 22.21); Theia recommends 24 | build and run |
 | npm | 10+ | install |
-| Python (source builds) | 3.11+ with CodeDNA installed: `pip install -e "..[ml,api]"` | the analysis core (`codedna` on PATH, or set `CODEDNA_EXECUTABLE`) |
+| Python (source builds) | 3.11+ with CodeDNA installed: `pip install -e "..[ml,api]"` and `pip install -e ../plugins/codedna-java` | the analysis core (`codedna` on PATH, or set `CODEDNA_EXECUTABLE`) |
 | Windows | Visual Studio Build Tools with "Desktop development with C++" | native modules (node-pty, keytar, drivelist, native-keymap, ffmpeg) |
 
 ## Build and run
@@ -102,7 +106,8 @@ The installer bundles the analysis core, Python and its ML/API dependencies
 the bundled core for development. Long actions show elapsed-time progress.
 
 Before packaging, install the build-only freezer into the project environment:
-`python -m pip install -e ".[ml,api,desktop]"` from the repository root.
+`python -m pip install -e ".[ml,api,desktop]"` and `python -m pip install -e plugins/codedna-java`
+from the repository root (the bundle includes the Java plugin, D-054).
 `npm run package --workspace electron-app` freezes the core, compiles the
 extension, rebuilds native modules and produces the Windows installer. Each
 core bundle includes `bundle-manifest.json` with versions and file hashes.

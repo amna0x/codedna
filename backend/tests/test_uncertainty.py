@@ -4,8 +4,9 @@ from __future__ import annotations
 
 import pytest
 
-from codedna.dependency_graph import build_graph
-from codedna.dependency_graph.builder import BoundedParseCache, build_graph_for_commit
+from codedna_java.builder import build_graph
+from codedna.dependency_graph import BoundedParseCache
+from codedna_java.builder import build_graph_for_commit
 from codedna.git_analysis.git import resolve_commit, resolve_repository
 from codedna.models.experiment import run_experiment
 from codedna.models.uncertainty import bootstrap, match_budget, metrics

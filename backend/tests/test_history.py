@@ -13,7 +13,7 @@ from codedna.git_analysis import CodeDNAGitError
 from codedna.test_history.collection import collect_results, import_results
 from codedna.test_history.mining import mine_history
 from codedna.test_history.store import HistoryStore
-from codedna.test_mapping.reports import TestCaseResult, TestClassResult
+from codedna.test_mapping.results import TestCaseResult, TestClassResult
 from codedna.test_mapping.results import TestRunResult, save_json
 
 FAKE_MVN = [sys.executable, str(Path(__file__).with_name("fake_mvn.py"))]

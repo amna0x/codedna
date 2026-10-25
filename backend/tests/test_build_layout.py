@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 from codedna.git_analysis.git import resolve_commit
-from codedna.test_mapping.build import detect_build
-from codedna.test_mapping.discovery import discover_tests
+from codedna_java.build import detect_build
+from codedna_java.discovery import discover_tests
 
 JUNIT = "import org.junit.jupiter.api.Test;\n"
 POM_NS = 'xmlns="http://maven.apache.org/POM/4.0.0"'

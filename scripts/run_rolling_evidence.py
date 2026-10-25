@@ -14,7 +14,7 @@ from time import perf_counter
 from codedna.models.experiment import _outcomes
 from codedna.models.rankers import order_by_baseline
 from codedna.models.uncertainty import match_budget, metrics
-from codedna.plugins.java_live import LIVE_FEATURES
+from codedna_java.live import LIVE_FEATURES
 from codedna.selection.live import fit_audited
 from codedna.selection.risk import RiskPolicy, decide
 from codedna.test_history.features import Dataset
@@ -24,7 +24,7 @@ STUDY11 = {'achilles', 'dynjs', 'graylog2-server', 'hikaricp', 'jade4j', 'jcabi-
 BLOCKS, MIN_FAILING, RISK, MARGIN = 5, 20, .05, .05
 CODE = ['scripts/run_rolling_evidence.py', 'docs/EVIDENCE_STUDY_PROTOCOL.md',
         'backend/codedna/selection/live.py', 'backend/codedna/selection/validation.py',
-        'backend/codedna/selection/risk.py', 'backend/codedna/plugins/java_live.py',
+        'backend/codedna/selection/risk.py', 'plugins/codedna-java/codedna_java/live.py',
         'backend/codedna/models/rankers.py', 'backend/codedna/models/experiment.py',
         'backend/codedna/models/uncertainty.py', 'backend/codedna/calibration/calibrators.py',
         'backend/codedna/test_history/features.py', 'scripts/run_study.py']

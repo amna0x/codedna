@@ -21,6 +21,10 @@ THEIA = r"""@echo off
 """
 PYTHON = r"""@echo off
 >>"%STUB_LOG%" echo python %*
+if "%1"=="-m" (
+    mkdir ".venv\Lib\site-packages\codedna_java-0.1.0.dist-info"
+    exit /b 0
+)
 mkdir "%~2"
 """
 NPM = r"""@echo off
@@ -36,7 +40,8 @@ if "%1"=="run" (
 """
 
 
-def checkout(tmp_path: Path, *, built: bool) -> tuple[Path, dict[str, str], Path]:
+def checkout(tmp_path: Path, *, built: bool,
+             java_plugin: bool = True) -> tuple[Path, dict[str, str], Path]:
     repo = tmp_path / "code dna"  # a space, as in many Windows paths
     (repo / "ide" / "electron-app").mkdir(parents=True)
     shutil.copy(ROOT / "start.bat", repo / "start.bat")
@@ -44,6 +49,9 @@ def checkout(tmp_path: Path, *, built: bool) -> tuple[Path, dict[str, str], Path
     scripts.mkdir(parents=True)
     (scripts / "codedna.exe").write_bytes(b"")
     (scripts / "python.cmd").write_text(PYTHON)
+    if java_plugin:
+        (repo / ".venv" / "Lib" / "site-packages" / "codedna_java-0.1.0.dist-info").mkdir(
+            parents=True)
 
     stubs = tmp_path / "stubs"
     stubs.mkdir()
@@ -117,6 +125,16 @@ def test_missing_core_stops_with_setup_instructions(tmp_path):
     assert result.returncode == 1
     assert "pip install" in result.stdout
     assert not log.exists()
+
+
+def test_installs_the_java_plugin_once_into_an_older_venv(tmp_path):
+    repo, env, log = checkout(tmp_path, built=True, java_plugin=False)
+    (Path(env["USERPROFILE"]) / "codedna-demo").mkdir()  # no demo creation in this run
+    assert run(repo, env).returncode == 0
+    assert run(repo, env).returncode == 0
+    installs = [line for line in log.read_text().splitlines() if line.startswith("python -m pip")]
+    assert installs == [
+        "python -m pip install --disable-pip-version-check -e plugins\\codedna-java"]
 
 
 def test_rebuilds_once_after_a_pull_that_changed_the_ide(tmp_path):

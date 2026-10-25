@@ -20,11 +20,11 @@ from pathlib import Path, PurePosixPath
 
 from tree_sitter import Node, Parser
 
-from codedna.dependency_graph import build_graph_for_commit
+from codedna_java.builder import build_graph_for_commit
 from codedna.git_analysis.blobs import list_files, read_blobs
 from codedna.git_analysis.git import resolve_commit, resolve_repository
-from codedna.java_analysis.parser import _LANGUAGE, TYPE_NODES
-from codedna.test_mapping.build import detect_build
+from codedna_java.parser import _LANGUAGE, TYPE_NODES
+from codedna_java.build import detect_build
 
 TEST_ANNOTATIONS = frozenset({
     "Test", "ParameterizedTest", "RepeatedTest", "TestFactory", "TestTemplate",

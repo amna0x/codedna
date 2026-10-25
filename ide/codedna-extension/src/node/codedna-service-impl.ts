@@ -5,8 +5,9 @@ import { delimiter } from 'path';
 import { injectable } from '@theia/core/shared/inversify';
 import { BackendApplicationContribution } from '@theia/core/lib/node';
 import {
-    AnalyzeReport, CodeDnaService, CodeDnaStatus, ImpactOptions, ImpactReport, ReplayOverview, ReplaySources, ReplayTimeline,
-    ProjectHistory, PreparedHistory, SavedRun,
+    AnalyzeReport, CodeDnaService, CodeDnaStatus, ImpactOptions, ImpactReport, InstalledPlugins, PluginCatalogueView, PluginChange,
+    ReplayOverview, ReplaySources, ReplayTimeline,
+    ProjectHistory, RecordedHistory, SavedRun,
     SelectionReport, SelectionStrategy, SelectionRun
 } from '../common/codedna-protocol';
 
@@ -79,12 +80,12 @@ export class CodeDnaServiceImpl implements CodeDnaService, BackendApplicationCon
         });
     }
 
-    projectHistory(repo: string, base: string): Promise<ProjectHistory> {
-        return this.post('/api/project-history', { repo, base });
+    projectHistory(repo: string): Promise<ProjectHistory> {
+        return this.post('/api/project-history', { repo });
     }
 
-    prepareHistory(repo: string, base: string): Promise<PreparedHistory> {
-        return this.post('/api/project-history/prepare', { repo, base });
+    recordSavedRuns(repo: string): Promise<RecordedHistory> {
+        return this.post('/api/project-history/record', { repo });
     }
 
     importRun(repo: string, source: string): Promise<{ id: string; tests: number; failures: number }> {
@@ -112,12 +113,39 @@ export class CodeDnaServiceImpl implements CodeDnaService, BackendApplicationCon
         return this.post('/api/replay', { path });
     }
 
-    protected async post<T>(path: string, body: object): Promise<T> {
+    installedPlugins(): Promise<InstalledPlugins> {
+        return this.get('/api/plugins');
+    }
+
+    pluginCatalogue(): Promise<PluginCatalogueView> {
+        return this.get('/api/plugins/catalogue');
+    }
+
+    installPlugin(plugin: string, version: string): Promise<PluginChange> {
+        // Called only after the view's confirmation; the core takes the URL and
+        // checksum from the official catalogue, never from here.
+        return this.post('/api/plugins/install', { plugin, version, confirm: true });
+    }
+
+    removePlugin(plugin: string): Promise<PluginChange> {
+        return this.post('/api/plugins/remove', { plugin, confirm: true });
+    }
+
+    protected get<T>(path: string): Promise<T> {
+        return this.request(path, { method: 'GET' });
+    }
+
+    protected post<T>(path: string, body: object): Promise<T> {
+        return this.request(path, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body)
+        });
+    }
+
+    protected async request<T>(path: string, init: { method: string; headers?: Record<string, string>; body?: string }): Promise<T> {
         await this.ensureStarted();
         const response = await fetch(`${this.baseUrl}${path}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'X-CodeDNA-Token': this.token! },
-            body: JSON.stringify(body)
+            ...init,
+            headers: { ...init.headers, 'X-CodeDNA-Token': this.token! }
         });
         const data = await response.json().catch(() => ({}));
         if (!response.ok) {

@@ -5,7 +5,7 @@ import pytest
 from fastapi.testclient import TestClient
 from codedna.api.app import create_app
 from codedna.selection.live import recommend
-from codedna.plugins.java_live import prediction_rows, fit_audited, LIVE_FEATURES
+from codedna_java.live import prediction_rows, fit_audited, LIVE_FEATURES
 from codedna.selection.validation import validate_outcomes
 from codedna.test_history.features import Dataset,Row
 from codedna.models.dante_history import historical_scores,order_history
@@ -121,7 +121,7 @@ def test_cli_risk_select(change,capsys):
 
 
 def test_validation_rejects_partial_audit_history(change,tmp_path,monkeypatch):
-    import codedna.plugins.java_live as live
+    import codedna_java.live as live
     repo,base,head=change
     # All SHAs are real target ancestors, but the audit omits the current class.
     rows=[Row(base,0,'a.OtherTest',0,1.,{k:0. for k in LIVE_FEATURES})]

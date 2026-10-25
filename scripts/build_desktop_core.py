@@ -17,8 +17,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 NAME = "codedna-core"
-PACKAGES = ("codedna", "uvicorn", "tree_sitter_java")
-VERSIONS = ("codedna", "pyinstaller", "pyinstaller-hooks-contrib", "scikit-learn",
+# codedna_java is the Java language plugin (D-054); its metadata carries the
+# codedna.languages entry point, without which the bundled core finds no plugin.
+PACKAGES = ("codedna", "codedna_java", "uvicorn", "tree_sitter_java")
+VERSIONS = ("codedna", "codedna-java", "pyinstaller", "pyinstaller-hooks-contrib", "scikit-learn",
             "scipy", "numpy", "tree-sitter", "tree-sitter-java", "fastapi", "uvicorn")
 
 
@@ -28,7 +30,9 @@ def build_command(root: Path) -> list[str]:
             "--onedir", "--console", "--noupx", "--name", NAME,
             "--distpath", str(root / "ide" / "electron-app" / "resources"),
             "--workpath", str(work / "work"), "--specpath", str(work),
-            "--paths", str(root / "backend"), "--copy-metadata", "codedna"]
+            "--paths", str(root / "backend"),
+            "--paths", str(root / "plugins" / "codedna-java"), "--copy-metadata", "codedna",
+            "--copy-metadata", "codedna-java"]
     for package in PACKAGES:
         args += ["--collect-all", package]
     for module in ("matplotlib", "pytest", "IPython", "notebook", "sklearn.tests",
@@ -61,6 +65,12 @@ def main() -> int:
         importlib.metadata.version("pyinstaller")
     except importlib.metadata.PackageNotFoundError:
         print('Install build prerequisites: python -m pip install -e ".[ml,api,desktop]"',
+              file=sys.stderr)
+        return 1
+    try:
+        importlib.metadata.version("codedna-java")
+    except importlib.metadata.PackageNotFoundError:
+        print("Install the Java plugin first: python -m pip install -e plugins/codedna-java",
               file=sys.stderr)
         return 1
     (ROOT / "build" / "desktop-core").mkdir(parents=True, exist_ok=True)

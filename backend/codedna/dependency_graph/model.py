@@ -8,8 +8,9 @@ gets the same ID in every commit:
 * ``type:<declaration id>``   e.g. ``type:example.OrderService``
 * ``member:<declaration id>`` e.g. ``member:example.OrderService#total()``
 
-Declaration IDs are the ones produced by ``codedna.java_analysis`` (D-009),
-which lets method-level change reports point straight into the graph.
+Declaration IDs are the ones the language plugin's change mapping produces
+(Java: D-009), which lets method-level change reports point straight into the
+graph.
 
 Every edge carries a ``confidence``:
 

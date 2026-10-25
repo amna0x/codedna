@@ -8,7 +8,7 @@ import pytest
 
 from codedna.cli import EXIT_ANALYSIS_ERROR, EXIT_OK, main
 from codedna.selection import SelectionError, compare_strategies, select_tests
-from codedna.test_mapping.reports import TestCaseResult, TestClassResult
+from codedna.test_mapping.results import TestCaseResult, TestClassResult
 from codedna.test_mapping.results import (
     CoverageMap,
     TestCoverage,

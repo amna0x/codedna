@@ -11,7 +11,14 @@ if not exist ".venv\Scripts\codedna.exe" (
     echo The CodeDNA core is not installed in .venv. Run these once, then start.bat again:
     echo   python -m venv .venv
     echo   .venv\Scripts\python -m pip install -e ".[ml,api,dev]"
+    echo   .venv\Scripts\python -m pip install -e plugins\codedna-java
     exit /b 1
+)
+rem Java support is the codedna-java plugin (D-054). Install it once from this
+rem checkout, so an older .venv keeps working after the pull that split it out.
+if not exist ".venv\Lib\site-packages\codedna_java-*.dist-info" (
+    echo Installing the Java plugin from plugins\codedna-java ...
+    call ".venv\Scripts\python" -m pip install --disable-pip-version-check -e plugins\codedna-java || exit /b 1
 )
 rem The IDE starts "codedna serve" itself; point it at the project venv.
 set "CODEDNA_EXECUTABLE=%~dp0.venv\Scripts\codedna.exe"

@@ -145,11 +145,16 @@ Deadline: approximately May or June (presumed 2027 from the current October 2026
 ## Environment (Windows 11)
 
 - Python 3.12 venv at `.venv` (`.venv/Scripts/python`). Install:
-  `pip install -e ".[ml,api,dev]"`.
+  `pip install -e ".[ml,api,dev]"`, then the Java plugin:
+  `pip install -e plugins/codedna-java` (D-054; start.bat does it if missing).
+  Java code (parser, graph builder, discovery, Maven runner, live risk) now
+  lives in `plugins/codedna-java/codedna_java/`; the core reaches it only via
+  `codedna.plugins.languages`.
 - Set `PYTHONIOENCODING=utf-8` when scripts print "−" or "Δ".
 - In Git Bash, heredocs containing apostrophes sometimes fail ("unexpected
   EOF"); write a Python script to a file and run it instead.
-- tree-sitter is pinned `>=0.25,<0.26`: 0.26.0 crashes (D-033).
+- tree-sitter is pinned `>=0.25,<0.26` in `plugins/codedna-java/pyproject.toml`:
+  0.26.0 crashes (D-033).
 - IDE builds need `env -u NODE_USE_SYSTEM_CA` (certificate issue).
 - Markdown to PDF: render HTML with the `markdown` package, then
   `chrome.exe --headless=new --no-pdf-header-footer --print-to-pdf=...`.

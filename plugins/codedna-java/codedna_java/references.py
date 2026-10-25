@@ -13,7 +13,7 @@ from dataclasses import dataclass, field
 
 from tree_sitter import Node, Parser
 
-from codedna.java_analysis.parser import _LANGUAGE, TYPE_NODES
+from codedna_java.parser import _LANGUAGE, TYPE_NODES
 
 _BODY_NODES = frozenset({
     "class_body", "interface_body", "enum_body", "enum_body_declarations",

@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 
 from codedna.cli import EXIT_OK, main
-from codedna.test_mapping.discovery import discover_tests
+from codedna_java.discovery import discover_tests
 
 
 def discover(repo, files):

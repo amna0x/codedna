@@ -880,6 +880,29 @@ validator. Java is listed as a built-in version with no download until it
 moves into its own package. No licence is claimed because the repository has
 none yet.
 
+## D-048 — Plugin install and remove through the official catalogue
+
+`codedna.plugins.manager` and `codedna plugins catalogue | install ID VERSION
+--yes | remove ID --yes`. The catalogue is fetched only from the fixed
+official URL and validated (D-047); the caller names a plugin and an exact
+version and cannot pass a URL or file. Catalogue entries with a download gain
+a pip `package` name. Install order: compatibility (plugin API major), explicit
+confirmation (the CLI first prints the plugin's licence and source, even with
+`--yes`), wheel file name must be that package at that exact version, download (50 MB
+cap), SHA-256 compared before pip sees the file, then `python -m pip install
+--no-index --no-deps` of that one wheel into CodeDNA's own interpreter. Remove
+needs confirmation, refuses built-ins and plugins that are not installed, and
+runs `pip uninstall`. Installed plugins are found by the existing entry-point
+registry, which reports a plugin that fails to load instead of breaking the
+core. `--no-deps` means a plugin must not need extra packages. Tests are
+offline: fakes for the rule checks plus one real pip install and removal of a
+generated wheel in a throwaway virtual environment.
+
+Limit: the repository is private, so the official catalogue URL (GitHub Pages)
+and release assets are not publicly downloadable yet. Until a public host is
+chosen, install works only against a reachable copy, which the code does not
+allow by design.
+
 ## D-049 — History replay from experiment reports
 
 The IDE's **History replay** view (`Ctrl+Shift+Alt+R`) plays a project's test
@@ -1059,6 +1082,58 @@ of recorded commits) and a Wilson upper bound at or under 5%, so in practice
 a few hundred recorded commits. A synthetic check (240 commits, one test failing every
 third commit, scratch script only, not evidence) reached `validated_history`
 from recorded runs alone; real projects will differ.
+
+## D-054 — Java as a separate plugin package (`codedna-java`) and the plugin manager view
+
+The Java implementation moves out of the core into `plugins/codedna-java`, a
+separate distribution registered under the `codedna.languages` entry point
+(`java = codedna_java:JavaPlugin`). This finishes the refactor planned in
+D-018/D-024: the core has no built-in language and no Tree-sitter dependency.
+
+- **What moved:** the Java parser and change mapping (`java_analysis`), the
+  graph builder and reference walker, build-layout detection, JUnit
+  discovery, Surefire/JaCoCo parsers, the Maven/Gradle runner, the Java plugin
+  class and the live risk adapter (`plugins.java_live` → `codedna_java.live`).
+- **What stays in the core:** the shared schemas (`dependency_graph.model`,
+  `test_mapping.results` including `TestClassResult` and `ReportError`), the
+  generic `BoundedParseCache`, and everything language-neutral.
+- **One way in:** `codedna.plugins.languages` (`require`, `analyze_changes`,
+  `build_graph`, `discover_tests`, `type_kinds`). Plugin API 1.1 adds two
+  optional members, `type_kinds` and `attach_declarations`, read with
+  `getattr`, so a 1.0 plugin still loads (its changes stay at file level).
+  A plugin with a newer minor than the core is refused, because it may rely
+  on members the core lacks. A test imports every core module with `codedna_java` and
+  `tree_sitter` blocked.
+- **Without the Java plugin** `analyze` still lists changed files and warns
+  which `.java` files were not analysed. Commands that need a graph or test
+  discovery fail with `PluginMissingError`, which names the install command
+  (CLI exit 1, API 400). Nothing guesses.
+- **JSON is unchanged:** `is_java` and `java` stay in the change report so the
+  IDE and saved reports keep working. Renaming them would be a format change
+  for a later decision.
+- **Installing:** developers and `start.bat` run
+  `pip install -e plugins/codedna-java` (start.bat does it once for an
+  existing `.venv`). The catalogue lists Java as bundled (`builtin: true`,
+  package `codedna-java`, API 1.1); no wheel is published while the repository
+  is private (D-048).
+- **Manager:** catalogue wheels are installed with `--no-deps`, so the manager
+  runs `pip check` afterwards. If the plugin's own dependencies are missing it
+  is uninstalled again and the missing packages are named. An unreachable
+  catalogue is a normal `CatalogueError`, not a crash.
+- **API and IDE:** `GET /api/plugins/catalogue`, `POST /api/plugins/install`
+  and `POST /api/plugins/remove`. Install and remove need `"confirm": true`,
+  and versions must be exact. The IDE's "Language plugins" view shows
+  installed plugins and load problems, and the catalogue with licence and
+  source. Install, update and remove each ask for confirmation. The view
+  sends only a plugin id and version; the URL and checksum come from the
+  official catalogue inside the core.
+- **Research reproducibility:** `docs/EVIDENCE_STUDY_PROTOCOL.md` is frozen
+  and keeps its old module name (`plugins.java_live`). The fingerprint list in
+  `scripts/run_rolling_evidence.py` now points at
+  `plugins/codedna-java/codedna_java/live.py`, so a rolling-evidence run
+  started before this change will not resume after it; restart it instead.
+  The module's code is unchanged.
+
 ## D-055 — Bundle the Python core in the Windows desktop installer
 
 The desktop installer must support analysis without a separate Python/CodeDNA
@@ -1097,3 +1172,41 @@ never starts a network download. A `raw_dir` option separates shared raw inputs
 from projected CSV/DB outputs. Queue-time code/library/equivalence fingerprints,
 a single-worker OS lock, a full-set check and local phase status guard unattended
 execution. No paid AI calls, notifications or recurring scheduler are used.
+
+## D-057 — Saved runs join the one recorded history (finishing the Codex draft)
+
+**Why.** Codex (2026-10-25, laptop) drafted `test_history/project.py`: list the
+saved runs under `.codedna/runs/`, import a clone's `results.json`, and build
+history from saved runs. The draft had no tests and three problems against
+D-053: it wrote a second history (`.codedna/history-exports/…`) and then
+overwrote `.codedna/history.csv`, so the next D-053 recording refused that
+file as foreign; it excluded every run with a non-zero build exit code,
+which drops all runs with a failing test (Maven/Gradle exit 1 then), so the
+history would have held passes only; and it edited `.git/info/exclude` in the
+user's repository.
+
+**What.** One history, one set of rules. `recording.py` gains
+`record_runs(repo, [(run, expected_tests), …])` (one rebuild for many runs,
+oldest first; `record_run` is now the one-run case) and `refusal()`, the D-053
+rules on their own. `project.py` uses them:
+
+- `list_runs` shows every saved run, newest first, with `candidate` and the
+  refusal reason (unreadable file, another repository, off the first-parent
+  line, an expected test class without a result);
+- `record_saved_runs` adds every eligible saved run to `.codedna/history.db`
+  and rebuilds `history.csv` like D-053 (a CSV CodeDNA did not write is still
+  left unchanged); recording twice is idempotent;
+- `import_run` copies a clone's `results.json` into `.codedna/runs/` bound to
+  this repository, only if its commit exists here, keeping the source path and
+  SHA-256 in `record.json`; it does not record by itself;
+- `run_detail` returns one saved run and its log files.
+
+Expected tests per commit come from the language plugin
+(`plugins.languages.discover_tests`, D-054). Failing runs are evidence;
+partial runs never are. API: `/api/project-history` (read-only),
+`/record`, `/import`, `/run`. Outputs stay ignored through
+`.codedna/.gitignore` (D-053); nothing is written inside `.git`.
+
+**Not done.** No IDE view uses these yet (protocol methods only); the gate
+(D-041) still decides whether the history is good enough.
+

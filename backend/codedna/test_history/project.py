@@ -1,9 +1,21 @@
-"""Project run browsing and causal history preparation, without executing builds.
+"""Saved test runs of a project, and adding them to its recorded history (D-057).
 
-Only successful build invocations covering exactly the discovered default test
-classes can contribute labels. Partial, skipped, foreign and future runs remain
-visible but never become assumed passes. Repeated complete runs merge through
-the existing store's failure-wins policy.
+Every run CodeDNA starts is saved under ``.codedna/runs/<id>/results.json``.
+Whole-suite runs started from the IDE are recorded as history straight away
+(D-053); this module covers the rest:
+
+* ``list_runs`` shows every saved run and whether it can be history, with the
+  reason when it cannot (the same rules as D-053, ``recording.refusal``);
+* ``record_saved_runs`` adds every eligible saved run to the one project
+  history (``.codedna/history.db`` and ``history.csv``), e.g. runs saved by
+  an older version of CodeDNA, or imported from a clone;
+* ``import_run`` copies a ``results.json`` from another clone of the same
+  project into this one, binding it to this repository;
+* ``run_detail`` returns one saved run and its log files.
+
+Nothing here runs a build. A saved run is evidence only if its file is valid,
+it names an immutable commit of this repository, and it is complete: a
+partial run never becomes "the other tests passed".
 """
 
 from __future__ import annotations
@@ -12,27 +24,28 @@ import hashlib
 import json
 import math
 import re
-import shutil
 from datetime import datetime, timezone
 from pathlib import Path
 from uuid import uuid4
 
-from codedna.git_analysis.git import CodeDNAGitError, resolve_commit, resolve_repository, run_git
-from codedna.test_history.features import build_dataset
-from codedna.test_history.mining import mine_history
-from codedna.test_history.store import HistoryStore
-from codedna.test_mapping.discovery import discover_tests
-from codedna.test_mapping.results import TestRunResult, save_json
+from codedna.git_analysis.git import CodeDNAGitError, resolve_commit, resolve_repository
+from codedna.plugins.languages import discover_tests
+from codedna.test_history.recording import (NOT_ON_LINE, first_parent_line, ignore_outputs,
+                                            record_runs, refusal)
+from codedna.test_mapping.results import RESULTS_FILE, TestRunResult, save_json
 
+RUNS = ".codedna/runs"
+MAX_RUNS = 1000
 _ID = re.compile(r"^[A-Za-z0-9_-]{1,128}$")
 _SHA = re.compile(r"^(?:[0-9a-fA-F]{40}|[0-9a-fA-F]{64})$")
 
 
 class ProjectHistoryError(CodeDNAGitError):
-    """A recorded run cannot be used as project history."""
+    """A saved run cannot be read or used as project history."""
 
 
-def _load(path):
+def load_saved_run(path: Path) -> tuple[TestRunResult, str]:
+    """Read and check a saved ``results.json``; returns the run and the file's SHA-256."""
     raw = path.read_bytes()
     data = json.loads(raw.decode("utf-8"))
     entries = data.get("tests", [])
@@ -60,179 +73,140 @@ def _load(path):
     return run, hashlib.sha256(raw).hexdigest()
 
 
-
-def ensure_local_output_ignore(repo):
-    """Keep untracked generated outputs out of WORKTREE snapshots, locally only."""
+def _same_repository(run: TestRunResult, repo: Path) -> bool:
     try:
-        run_git(repo, "check-ignore", "--quiet", "--no-index", ".codedna/")
-        return
-    except CodeDNAGitError:
-        pass
-    exclude = Path(run_git(repo, "rev-parse", "--git-path", "info/exclude").strip())
-    if not exclude.is_absolute():
-        exclude = repo / exclude
-    exclude.parent.mkdir(parents=True, exist_ok=True)
-    old = exclude.read_bytes() if exclude.exists() else b""
-    rule = b"/.codedna/"
-    if rule not in old.splitlines():
-        with exclude.open("ab") as stream:
-            stream.write((b"\n" if old and not old.endswith(b"\n") else b"")
-                         + b"# CodeDNA local run/history outputs\n" + rule + b"\n")
+        return Path(run.repository).resolve() == repo
+    except OSError:
+        return False
 
 
-def _reason(run, repo, ancestors):
-    if Path(run.repository).resolve() != repo:
-        return "Recorded for another repository; import it explicitly to bind a clone's results."
-    if run.commit not in ancestors:
-        return "Outside the selected BASE first-parent history window."
-    if not run.exit_codes or any(run.exit_codes):
-        return "Build did not complete successfully or its exit code was not recorded."
-    if not run.tests:
-        return "No test outcomes were recorded."
-    if any(t.status == "skipped" for t in run.tests.values()):
-        return "Some test classes were skipped; their outcomes are unknown."
-    return None
-
-
-def _context(repo_path, base, max_commits):
-    if type(max_commits) is not int or not 1 <= max_commits <= 2000:
-        raise ProjectHistoryError("History window must be between 1 and 2000 commits")
-    repo = resolve_repository(repo_path)
-    tip = resolve_commit(repo, base)
-    ancestors = run_git(repo, "rev-list", "--first-parent", f"--max-count={max_commits}", tip).splitlines()
-    return repo, tip, ancestors
-
-
-def _scan(repo, ancestors):
-    root = repo / ".codedna" / "runs"
-    paths = sorted(root.glob("*/results.json"), key=lambda p: p.stat().st_mtime_ns, reverse=True)
+def _scan(repo: Path) -> tuple[list[dict], dict[str, TestRunResult], bool]:
+    """Saved runs, oldest first, with what could be read of each."""
+    paths = sorted((repo / RUNS).glob(f"*/{RESULTS_FILE}"), key=lambda p: p.stat().st_mtime_ns)
+    truncated = len(paths) > MAX_RUNS
     records, loaded = [], {}
-    for path in paths[:1000]:
+    for path in paths[-MAX_RUNS:]:
         if not _ID.fullmatch(path.parent.name):
             continue
         item = {"id": path.parent.name, "commit": None, "tests": 0, "failures": 0,
-                "duration_seconds": 0., "recorded_at": datetime.fromtimestamp(
-                    path.stat().st_mtime, timezone.utc).isoformat(),
-                "result_path": path.relative_to(repo).as_posix(),
+                "duration_seconds": 0.0, "result_path": path.relative_to(repo).as_posix(),
+                "recorded_at": datetime.fromtimestamp(path.stat().st_mtime, timezone.utc).isoformat(),
                 "candidate": False, "reason": None}
         try:
-            run, digest = _load(path)
-            reason = _reason(run, repo, ancestors)
-            item.update(commit=run.commit, tests=len(run.tests), failures=len(run.failing_tests),
-                        duration_seconds=run.duration_seconds, candidate=reason is None,
-                        reason=reason, sha256=digest)
-            loaded[item["id"]] = run
+            run, digest = load_saved_run(path)
         except (OSError, ValueError, KeyError, TypeError, AttributeError) as exc:
-            item["reason"] = f"Unreadable saved run: {exc}"
+            item["reason"] = f"unreadable saved run: {exc}"
+        else:
+            item.update(commit=run.commit, tests=len(run.tests), failures=len(run.failing_tests),
+                        duration_seconds=run.duration_seconds, sha256=digest)
+            if _same_repository(run, repo):
+                loaded[item["id"]] = run
+            else:
+                item["reason"] = ("saved for another repository; import it explicitly "
+                                  "to use a clone's results here")
         records.append(item)
-    return records, loaded, len(paths) > 1000
+    return records, loaded, truncated
 
 
-def _complete(run, expected):
-    return bool(expected) and set(run.tests) == expected
+def _check(repo: Path, records: list[dict], loaded: dict[str, TestRunResult]):
+    """Mark each record with the D-053 rules; returns (run, expected tests) pairs that pass."""
+    line = first_parent_line(repo)
+    expected: dict[str, list[str]] = {}
+    eligible = []
+    for item in records:
+        run = loaded.get(item["id"])
+        if run is None:
+            continue
+        if run.commit not in line:
+            item["reason"] = NOT_ON_LINE
+            continue
+        if run.commit not in expected:
+            expected[run.commit] = [t.id for t in discover_tests(repo, run.commit).tests
+                                    if t.runs_by_default]
+        item["reason"] = refusal(run, expected[run.commit], line)
+        item["candidate"] = item["reason"] is None
+        if item["candidate"]:
+            eligible.append((item, run, expected[run.commit]))
+    return eligible
 
 
-def project_history(repo_path, base, *, max_commits=500):
-    repo, tip, ancestors = _context(repo_path, base, max_commits)
-    records, loaded, truncated = _scan(repo, set(ancestors))
-    expected = {t.id for t in discover_tests(repo, tip).tests if t.runs_by_default}
-    base_ready = any(item["candidate"] and item["commit"] == tip
-                     and _complete(loaded[item["id"]], expected) for item in records)
-    return {"repository": str(repo), "base_commit": tip, "max_commits": max_commits,
-            "commits_considered": len(ancestors), "runs": records,
+def list_runs(repo_path: str | Path) -> dict:
+    """Every saved run (newest first) and whether it can become history."""
+    repo = resolve_repository(repo_path)
+    records, loaded, truncated = _scan(repo)
+    _check(repo, records, loaded)
+    history = repo / ".codedna/history.csv"
+    return {"repository": str(repo), "runs": records[::-1],
+            "candidate_runs": sum(r["candidate"] for r in records),
             "candidate_commits": len({r["commit"] for r in records if r["candidate"]}),
-            "base_has_complete_run": base_ready, "base_tests": len(expected),
-            "history_csv": str(repo / ".codedna/history.csv")
-            if (repo / ".codedna/history.csv").is_file() else None,
-            "warnings": ["Only the latest 1000 saved runs are shown."] if truncated else [],
-            "note": "Coverage is checked against statically discovered default test classes; "
-                    "preparing history does not itself validate a risk estimate."}
+            "history_csv": str(history) if history.is_file() else None,
+            "warnings": [f"Only the latest {MAX_RUNS} saved runs are listed."] if truncated else [],
+            "note": "A run can be history when every test class the build runs by default at "
+                    "its commit has a result and the commit is on the current branch. "
+                    "Runs with failing tests count; partial runs never do."}
 
 
-def run_detail(repo_path, run_id):
+def record_saved_runs(repo_path: str | Path) -> dict:
+    """Add every eligible saved run to the project history (one rebuild, oldest first)."""
+    repo = resolve_repository(repo_path)
+    records, loaded, truncated = _scan(repo)
+    eligible = _check(repo, records, loaded)
+    report = record_runs(repo, [(run, expected) for _, run, expected in eligible])
+    for (item, _, _), result in zip(eligible, report["runs"]):
+        item["candidate"] = result["recorded"]
+        item["reason"] = result["reason"]
+    return {"repository": str(repo), "recorded_runs": report["recorded"],
+            "commits_with_results": report["commits_with_results"],
+            "history_csv": report["history_csv"],
+            "skipped": [{"id": r["id"], "reason": r["reason"]} for r in records
+                        if r["reason"] is not None],
+            "warnings": [f"Only the latest {MAX_RUNS} saved runs were considered."] if truncated else [],
+            "note": "Only complete saved runs were added; no tests were executed. "
+                    "The risk gate still has to validate this history before it is used."}
+
+
+def run_detail(repo_path: str | Path, run_id: str) -> dict:
     repo = resolve_repository(repo_path)
     if not isinstance(run_id, str) or not _ID.fullmatch(run_id):
-        raise ProjectHistoryError("Invalid saved run identifier")
-    folder = repo / ".codedna/runs" / run_id
+        raise ProjectHistoryError("invalid saved run identifier")
+    folder = repo / RUNS / run_id
     try:
-        run, _ = _load(folder / "results.json")
+        run, _ = load_saved_run(folder / RESULTS_FILE)
     except (OSError, ValueError, KeyError, TypeError, AttributeError) as exc:
-        raise ProjectHistoryError(f"Cannot read saved run: {exc}") from exc
-    if Path(run.repository).resolve() != repo:
-        raise ProjectHistoryError("Saved run belongs to another repository")
+        raise ProjectHistoryError(f"cannot read saved run: {exc}") from exc
+    if not _same_repository(run, repo):
+        raise ProjectHistoryError("saved run belongs to another repository")
     logs = [p.relative_to(repo).as_posix() for p in sorted((folder / "logs").glob("*.log"))][:50]
     return {"id": run_id, "results": run.to_dict(), "logs": logs,
-            "result_path": (folder / "results.json").relative_to(repo).as_posix()}
+            "result_path": (folder / RESULTS_FILE).relative_to(repo).as_posix()}
 
 
-def import_project_run(repo_path, source):
+def import_run(repo_path: str | Path, source: str | Path) -> dict:
+    """Copy a ``results.json`` (file or run folder) into this repository's saved runs.
+
+    The commit must exist here, so results from another project fail; the
+    original path and file hash are kept in ``record.json``. Importing does not
+    record history by itself (``record_saved_runs`` does).
+    """
     repo = resolve_repository(repo_path)
     source = Path(source).expanduser()
     if source.is_dir():
-        source = source / "results.json"
+        source = source / RESULTS_FILE
     try:
-        run, digest = _load(source)
+        run, digest = load_saved_run(source)
     except (OSError, ValueError, KeyError, TypeError, AttributeError) as exc:
-        raise ProjectHistoryError(f"Cannot import results.json: {exc}") from exc
-    original_repository = run.repository
-    run.commit = resolve_commit(repo, run.commit)
-    run.repository = str(repo)  # explicit import binds another clone's path to this repo
-    ensure_local_output_ignore(repo)
-    folder = repo / ".codedna/runs" / uuid4().hex
-    save_json(run.to_dict(), folder / "results.json")
+        raise ProjectHistoryError(f"cannot import {RESULTS_FILE}: {exc}") from exc
+    commit = resolve_commit(repo, run.commit)
+    if commit.lower() != run.commit.lower():
+        raise ProjectHistoryError("the run's commit is not in this repository")
+    original = run.repository
+    run.repository = str(repo)
+    ignore_outputs(repo)
+    folder = repo / RUNS / uuid4().hex
+    save_json(run.to_dict(), folder / RESULTS_FILE)
     save_json({"kind": "explicit-import", "source": str(source.resolve()),
-               "source_sha256": digest, "source_repository": original_repository,
+               "source_sha256": digest, "source_repository": original,
                "imported_at": datetime.now(timezone.utc).isoformat()}, folder / "record.json")
     return {"id": folder.name, "commit": run.commit, "tests": len(run.tests),
-            "failures": len(run.failing_tests), "result_path": str(folder / "results.json")}
-
-
-def prepare_project_history(repo_path, base, *, max_commits=500):
-    repo, tip, ancestors = _context(repo_path, base, max_commits)
-    records, loaded, truncated = _scan(repo, set(ancestors))
-    expected, accepted, excluded = {}, [], []
-    for item in records:
-        if not item["candidate"]:
-            excluded.append({"id": item["id"], "reason": item["reason"]})
-            continue
-        commit = item["commit"]
-        if commit not in expected:
-            expected[commit] = {t.id for t in discover_tests(repo, commit).tests if t.runs_by_default}
-        if not _complete(loaded[item["id"]], expected[commit]):
-            excluded.append({"id": item["id"],
-                             "reason": "Run does not cover exactly the discovered default test classes."})
-            continue
-        accepted.append(item)
-    if not any(item["commit"] == tip for item in accepted):
-        raise ProjectHistoryError("No complete recorded run at BASE. Run the full suite at that commit "
-                                  "or choose a BASE with recorded full-suite results.")
-    ensure_local_output_ignore(repo)
-    snapshot = repo / ".codedna/history-exports" / uuid4().hex
-    snapshot.mkdir(parents=True)
-    with HistoryStore(snapshot / "history.db") as store:
-        mine_history(repo, store, revision=tip, max_commits=max_commits)
-        for item in accepted:
-            store.add_run(loaded[item["id"]], item["id"])
-        dataset = build_dataset(store, repo, structural=False)
-    csv = snapshot / "history.csv"
-    dataset.to_csv(csv)
-    report = {"repository": str(repo), "base_commit": tip, "rows": len(dataset.rows),
-              "commits": len(dataset.commits), "failing_commits": sum(
-                  any(r.label for r in rows) for rows in dataset.rows_by_commit().values()),
-              "imported_runs": len(accepted), "excluded": excluded,
-              "csv_path": str(csv), "database_path": str(snapshot / "history.db"),
-              "automatic_csv_path": str(repo / ".codedna/history.csv"),
-              "sources": [{"id": x["id"], "sha256": x["sha256"]} for x in accepted],
-              "warnings": dataset.warnings + (["Saved runs were limited to the latest 1000."]
-                                                if truncated else []),
-              "note": "Only observed complete runs were imported. No tests were executed. "
-                      "Repeated complete runs merge conservatively: a failure wins. "
-                      "The recommendation gate still has to validate this history."}
-    save_json(report, snapshot / "manifest.json")
-    automatic = repo / ".codedna/history.csv"
-    if automatic.exists():
-        shutil.copy2(automatic, snapshot / "previous-history.csv")
-    temporary = automatic.with_name(f"history-{snapshot.name}.csv.partial")
-    shutil.copy2(csv, temporary)
-    temporary.replace(automatic)
-    return report
+            "failures": len(run.failing_tests),
+            "result_path": (folder / RESULTS_FILE).relative_to(repo).as_posix()}

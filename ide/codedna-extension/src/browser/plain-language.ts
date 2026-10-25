@@ -28,6 +28,13 @@ export function friendlyError(message: string): FriendlyError {
             details: message
         };
     }
+    if (/language plugin .* is not installed/i.test(message)) {
+        return {
+            title: 'Java support isn’t installed',
+            help: 'Run start.bat once (it installs the Java plugin), then try again. The Language plugins view shows what CodeDNA found.',
+            details: message
+        };
+    }
     if (/Open a folder/i.test(message)) {
         return { title: 'No project open', help: 'Open your project folder first (File → Open Folder…).', details: '' };
     }
@@ -39,6 +46,10 @@ export function friendlyWarning(warning: string): string | undefined {
     if (match) {
         const n = Number(match[1]);
         return `${n} changed file${n === 1 ? ' isn’t' : 's aren’t'} Java code, so CodeDNA can’t tell what ${n === 1 ? 'it affects' : 'they affect'}.`;
+    }
+    match = warning.match(/^(\d+) changed \.java file\(s\) not analysed: the java plugin/);
+    if (match) {
+        return 'Java support isn’t installed, so CodeDNA can list these files but not analyse them. Run start.bat once to install it.';
     }
     match = warning.match(/^(\d+) test class\(es\) outside Surefire's default includes/);
     if (match) {

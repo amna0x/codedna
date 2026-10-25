@@ -23,7 +23,7 @@ from dataclasses import dataclass, field
 from pathlib import Path, PurePosixPath
 
 from codedna.git_analysis.git import CodeDNAGitError, resolve_repository
-from codedna.dependency_graph.builder import BoundedParseCache
+from codedna.dependency_graph import BoundedParseCache
 from codedna.impact_analysis import compute_impact
 from codedna.test_history.store import HistoryStore
 

@@ -22,10 +22,10 @@ from pathlib import Path
 
 from codedna.git_analysis.blobs import export_commit, list_files, read_blobs
 from codedna.git_analysis.git import CodeDNAGitError, resolve_commit, resolve_repository
-from codedna.java_analysis.parser import TYPE_NODES, JavaParseResult, parse_java
-from codedna.test_mapping.build import detect_build
-from codedna.test_mapping.discovery import discover_tests_for_commit
-from codedna.test_mapping.reports import (
+from codedna_java.parser import TYPE_NODES, JavaParseResult, parse_java
+from codedna_java.build import detect_build
+from codedna_java.discovery import discover_tests_for_commit
+from codedna_java.reports import (
     JacocoCoverage,
     ReportError,
     parse_jacoco_report,

@@ -1,9 +1,8 @@
-"""The built-in Java plugin (Maven, JUnit 4/5, JaCoCo).
+"""The Java language plugin (Maven/Gradle, JUnit 4/5, JaCoCo).
 
-Step 1 of the plugin refactor (D-018): the Java implementation still lives
-in ``java_analysis``, ``dependency_graph``, ``test_mapping``; this class is the
-single entry point the core uses to reach it. Moving the code into a
-separately installable ``codedna-java`` package is planned for Milestone 7.
+Registered under the ``codedna.languages`` entry point (D-018, D-054). The
+core reaches Java only through this class, so CodeDNA starts and analyses Git
+changes without it; Java files are then reported as not analysed.
 """
 
 from __future__ import annotations
@@ -11,26 +10,32 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from codedna import __version__
-from codedna.dependency_graph.builder import build_graph_for_commit
-from codedna.java_analysis.parser import parse_java
 from codedna.plugins.base import PLUGIN_API_VERSION
-from codedna.test_mapping.discovery import discover_tests_for_commit
-from codedna.test_mapping.maven import run_maven_tests
+
+from codedna_java import __version__
+from codedna_java.builder import build_graph_for_commit
+from codedna_java.discovery import discover_tests_for_commit
+from codedna_java.mapping import attach_java_declarations
+from codedna_java.maven import run_maven_tests
+from codedna_java.parser import TYPE_NODES, parse_java
 
 
 class JavaPlugin:
     name = "java"
-    display_name = "Java (Maven, JUnit 4/5, JaCoCo)"
+    display_name = "Java (Maven, Gradle, JUnit 4/5, JaCoCo)"
     version = __version__
     api_version = PLUGIN_API_VERSION
     file_suffixes = (".java",)
+    type_kinds = frozenset(TYPE_NODES.values())
 
     def handles(self, path: str) -> bool:
         return path.endswith(self.file_suffixes)
 
     def parse(self, source: bytes):
         return parse_java(source)
+
+    def attach_declarations(self, report) -> None:
+        attach_java_declarations(report)
 
     def build_graph(self, repo: Path, commit: str, *, include_members: bool = True,
                     cache: dict | None = None):
@@ -44,8 +49,7 @@ class JavaPlugin:
         return run_maven_tests(repo_path, revision, output_dir, allow_build=allow_build,
                                per_test_coverage=per_test_coverage, **options)
 
-
     def risk_select(self, repo_path, base, head, **options):
-        """Optional additive capability; Java live-feature construction stays here."""
-        from codedna.plugins.java_live import recommend
-        return recommend(repo_path,base,head,**options)
+        """Optional capability: live risk-based selection (D-041)."""
+        from codedna_java.live import recommend
+        return recommend(repo_path, base, head, **options)

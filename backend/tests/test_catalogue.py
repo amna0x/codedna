@@ -6,7 +6,6 @@ import copy
 from pathlib import Path
 
 import pytest
-
 from codedna import __version__
 from codedna.plugins.catalogue import (
     OFFICIAL_RELEASES,
@@ -22,7 +21,7 @@ DOWNLOAD = {"version": "1.2.3", "api_version": "1.0", "url": OFFICIAL_RELEASES +
 
 def catalogue(**version):
     return {"schema_version": 1, "plugins": [{
-        "id": "python", "name": "Python", "description": "d", "licence": "MIT",
+        "id": "python", "package": "codedna-python", "name": "Python", "description": "d", "licence": "MIT",
         "source": "https://example.org/src", "versions": [{**DOWNLOAD, **version}]}]}
 
 
