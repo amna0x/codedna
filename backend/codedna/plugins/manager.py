@@ -11,6 +11,7 @@ Nothing here accepts a URL or file from the caller.
 from __future__ import annotations
 
 import hashlib
+import importlib
 import json
 import re
 import subprocess
@@ -48,7 +49,11 @@ def _canonical(name: str) -> str:
 
 
 def fetch_catalogue(download: Download | None = None) -> dict:
-    data = json.loads((download or _download)(OFFICIAL_CATALOGUE).decode("utf-8"))
+    try:
+        data = json.loads((download or _download)(OFFICIAL_CATALOGUE).decode("utf-8"))
+    except (OSError, ValueError) as exc:  # offline, not hosted yet, or not JSON
+        raise CatalogueError(f"could not read the official catalogue {OFFICIAL_CATALOGUE}: "
+                             f"{exc}") from exc
     validate_catalogue(data)
     return data
 
@@ -96,6 +101,7 @@ def install(catalogue: dict, plugin: str, version: str, *, confirmed: bool,
         raise CatalogueError(
             f"{plugin} {version} was removed again because its dependencies are not installed: "
             f"{'; '.join(missing)}. Install them in CodeDNA's environment, then retry")
+    importlib.invalidate_caches()  # a running server should see the new package
     return {"plugin": plugin, "version": version, "sha256": digest, "status": "installed"}
 
 
@@ -121,4 +127,5 @@ def remove(catalogue: dict, plugin: str, *, confirmed: bool, pip: Runner | None 
     result = run(["uninstall", "--yes", package])
     if result.returncode != 0:
         raise CatalogueError(f"pip could not remove {package}: {result.stderr.strip()}")
+    importlib.invalidate_caches()
     return {"plugin": plugin, "status": "removed"}

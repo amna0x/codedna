@@ -34,7 +34,8 @@ from codedna.models.replay import (
     replay_from_file,
     replay_overview,
 )
-from codedna.plugins import load_plugins
+from codedna.plugins import load_plugins, manager
+from codedna.plugins.catalogue import CatalogueError
 from codedna.plugins.languages import (
     PluginMissingError,
     analyze_changes,
@@ -122,6 +123,17 @@ class ReplayOverviewRequest(ReplaySourcesRequest):
     seed: int | None = None
 
 
+class PluginInstallRequest(BaseModel):
+    plugin: str = Field(pattern=r"^[a-z][a-z0-9-]{1,40}$")
+    version: str = Field(pattern=r"^\d+\.\d+\.\d+$", description="Exact catalogue version.")
+    confirm: bool = Field(False, description="Installing runs the plugin's code; must be true.")
+
+
+class PluginRemoveRequest(BaseModel):
+    plugin: str = Field(pattern=r"^[a-z][a-z0-9-]{1,40}$")
+    confirm: bool = Field(False, description="Removing changes CodeDNA's environment; must be true.")
+
+
 class RunTestsRequest(RevRequest):
     output_dir: str
     allow_build: bool = False
@@ -170,6 +182,10 @@ def create_app(token: str, *, allow_build: bool = False,
     async def plugin_missing(_request: Request, exc: PluginMissingError):
         return JSONResponse({"error": str(exc)}, status_code=400)
 
+    @app.exception_handler(CatalogueError)
+    async def catalogue_error(_request: Request, exc: CatalogueError):
+        return JSONResponse({"error": str(exc)}, status_code=400)
+
     @app.exception_handler(ReplayError)
     async def replay_error(_request: Request, exc: ReplayError):
         return JSONResponse({"error": str(exc)}, status_code=400)
@@ -188,6 +204,24 @@ def create_app(token: str, *, allow_build: bool = False,
     @app.get("/api/plugins", dependencies=secured)
     def plugins() -> dict:
         return load_plugins().describe()
+
+    @app.get("/api/plugins/catalogue", dependencies=secured)
+    def plugin_catalogue() -> dict:
+        """The official catalogue (fixed URL, validated) next to what is installed."""
+        return {"catalogue": manager.fetch_catalogue(), "installed": load_plugins().describe()}
+
+    @app.post("/api/plugins/install", dependencies=secured)
+    def plugin_install(body: PluginInstallRequest) -> dict:
+        # The plugin and version come from the request; the URL and checksum only
+        # from the official catalogue, fetched here (D-020, D-048).
+        result = manager.install(manager.fetch_catalogue(), body.plugin, body.version,
+                                 confirmed=body.confirm)
+        return {**result, "installed": load_plugins().describe()}
+
+    @app.post("/api/plugins/remove", dependencies=secured)
+    def plugin_remove(body: PluginRemoveRequest) -> dict:
+        result = manager.remove(manager.fetch_catalogue(), body.plugin, confirmed=body.confirm)
+        return {**result, "installed": load_plugins().describe()}
 
     @app.get("/api/capabilities", dependencies=secured)
     def capabilities() -> dict:

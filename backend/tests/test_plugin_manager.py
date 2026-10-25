@@ -213,3 +213,64 @@ def test_wheel_of_another_version_is_refused_before_download():
     with pytest.raises(CatalogueError, match="is not version 1.0.0"):
         manager.install(data, "python", "1.0.0", confirmed=True,
                         download=lambda url: pytest.fail("downloaded"), pip=FakePip())
+
+
+def test_unreachable_catalogue_is_a_catalogue_error():
+    def offline(url):
+        raise OSError("network is unreachable")
+    with pytest.raises(CatalogueError, match="could not read the official catalogue"):
+        manager.fetch_catalogue(download=offline)
+    with pytest.raises(CatalogueError, match="could not read"):
+        manager.fetch_catalogue(download=lambda url: b"<html>404</html>")
+
+
+def test_api_lists_installs_and_removes_through_the_catalogue(monkeypatch):
+    pytest.importorskip("fastapi")
+    from fastapi.testclient import TestClient
+
+    from codedna.api.app import create_app
+
+    pip = FakePip()
+    monkeypatch.setattr(manager, "_download",
+                        lambda url: json.dumps(catalogue()).encode() if url == manager.OFFICIAL_CATALOGUE
+                        else WHEEL)
+    monkeypatch.setattr(manager, "_pip", pip)
+    token = "t" * 32
+    client = TestClient(create_app(token), base_url="http://127.0.0.1:8765")
+    headers = {"X-CodeDNA-Token": token}
+
+    listing = client.get("/api/plugins/catalogue", headers=headers).json()
+    assert [p["id"] for p in listing["catalogue"]["plugins"]] == ["java", "python"]
+    assert listing["installed"]["plugins"][0]["name"] == "java"
+
+    refused = client.post("/api/plugins/install", json={"plugin": "python", "version": "1.0.0"},
+                          headers=headers)
+    assert refused.status_code == 400 and "confirm" in refused.json()["error"]
+    assert pip.calls == []
+    assert client.post("/api/plugins/install", json={"plugin": "python", "version": "1.0",
+                                                     "confirm": True},
+                       headers=headers).status_code == 422  # versions are pinned
+    installed = client.post("/api/plugins/install", json={"plugin": "python", "version": "1.0.0",
+                                                          "confirm": True}, headers=headers)
+    assert installed.status_code == 200 and installed.json()["status"] == "installed"
+    removed = client.post("/api/plugins/remove", json={"plugin": "python", "confirm": True},
+                          headers=headers)
+    assert removed.status_code == 200 and removed.json()["status"] == "removed"
+    assert client.post("/api/plugins/remove", json={"plugin": "java", "confirm": True},
+                       headers=headers).json()["error"].endswith("cannot be removed here")
+    assert client.get("/api/plugins/catalogue").status_code == 401
+
+
+def test_api_reports_an_unreachable_catalogue_as_json(monkeypatch):
+    pytest.importorskip("fastapi")
+    from fastapi.testclient import TestClient
+
+    from codedna.api.app import create_app
+
+    def offline(url):
+        raise OSError("no route")
+    monkeypatch.setattr(manager, "_download", offline)
+    token = "t" * 32
+    client = TestClient(create_app(token), base_url="http://127.0.0.1:8765")
+    response = client.get("/api/plugins/catalogue", headers={"X-CodeDNA-Token": token})
+    assert response.status_code == 400 and "no route" in response.json()["error"]

@@ -375,3 +375,9 @@
 .codedna-view .cd-replay-commit { padding: 10px; display: grid; gap: 6px; }
 .codedna-view .cd-replay-events ul { margin: 4px 0 0; padding-left: 18px; display: grid; gap: 2px; }
 .codedna-view .cd-replay-provenance { font-size: 12px; }
+
+/* --- language plugins (D-054) ---------------------------------------------------- */
+
+.codedna-view .cd-plugin-list { list-style: none; margin: 4px 0 12px; padding: 0; }
+.codedna-view .cd-plugin-list > li { padding: 8px 0; border-top: 1px solid var(--cd-line); }
+.codedna-view .cd-plugin-list p { margin: 2px 0; }
