@@ -882,7 +882,7 @@ none yet.
 
 ## D-049 — History replay from experiment reports
 
-The IDE's **History replay** view (`Ctrl+Alt+R`) plays a project's test
+The IDE's **History replay** view (`Ctrl+Shift+Alt+R`) plays a project's test
 split back commit by commit: per commit, the test time each policy spent and
 whether it skipped a failing test, with running totals, against the risk
 target. It is built only from saved experiment reports, so it shows the

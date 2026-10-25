@@ -13,7 +13,7 @@ export class ChangeViewContribution extends AbstractViewContribution<ChangeViewW
             widgetName: ChangeViewWidget.LABEL,
             defaultWidgetOptions: { area: 'left', rank: 300 },
             toggleCommandId: 'codedna.changes.toggle',
-            toggleKeybinding: 'ctrlcmd+alt+d'
+            toggleKeybinding: 'ctrlcmd+shift+alt+d'
         });
     }
 }
@@ -26,7 +26,7 @@ export class TestsViewContribution extends AbstractViewContribution<TestsViewWid
             widgetName: TestsViewWidget.LABEL,
             defaultWidgetOptions: { area: 'right', rank: 300 },
             toggleCommandId: 'codedna.tests.toggle',
-            toggleKeybinding: 'ctrlcmd+alt+t'
+            toggleKeybinding: 'ctrlcmd+shift+alt+t'
         });
     }
 }
@@ -39,7 +39,7 @@ export class GraphViewContribution extends AbstractViewContribution<GraphViewWid
             widgetName: GraphViewWidget.LABEL,
             defaultWidgetOptions: { area: 'main' },
             toggleCommandId: 'codedna.graph.toggle',
-            toggleKeybinding: 'ctrlcmd+alt+g'
+            toggleKeybinding: 'ctrlcmd+shift+alt+g'
         });
     }
 }
@@ -52,7 +52,7 @@ export class ReplayViewContribution extends AbstractViewContribution<ReplayViewW
             widgetName: ReplayViewWidget.LABEL,
             defaultWidgetOptions: { area: 'main' },
             toggleCommandId: 'codedna.replay.toggle',
-            toggleKeybinding: 'ctrlcmd+alt+r'
+            toggleKeybinding: 'ctrlcmd+shift+alt+r'
         });
     }
 }
