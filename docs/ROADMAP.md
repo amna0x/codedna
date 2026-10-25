@@ -181,6 +181,8 @@ May start in parallel (Student C) once the analysis JSON formats are stable.
 - ✅ History replay view (D-049): the study's test commits played back one by
   one, CodeDNA vs run-everything / dependency / simple rules, running totals
   checked against the saved reports, all-projects overview
+- ✅ Must-run (pinned) tests policy read from BASE, fail-safe, add-on rule
+  hook for later checks (D-050)
 - ⏳ GitHub PR demonstration and final experimental report
 
 - ✅ IDE: risk status/audit evidence, explicit execution confirmation, actual

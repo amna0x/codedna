@@ -10,7 +10,9 @@ Usage:
                     [--per-test-coverage] [--mvn PATH] [--gradle PATH] [--timeout SECONDS] [--keep-checkout]
     codedna select  --repo PATH --base SHA --head SHA --strategy all|dependency|coverage
                     [--coverage-map FILE] [--durations FILE] [--non-java retest-all|ignore]
+                    [--must-run PATTERN ...]
     codedna risk-select --repo PATH --base SHA --head SHA [--history-csv FILE] [--risk-target F]
+                    [--must-run PATTERN ...]
     codedna compare --repo PATH --base SHA --head SHA --ground-truth FILE
                     [--coverage-map FILE] [--non-java retest-all|ignore]
     codedna plugins
@@ -161,6 +163,7 @@ def build_parser() -> argparse.ArgumentParser:
     _add_change_args(risk_select)
     risk_select.add_argument('--history-csv', help='Target history CSV; default REPO/.codedna/history.csv')
     risk_select.add_argument('--risk-target', type=float, default=.05)
+    _add_must_run_arg(risk_select)
 
     select = subcommands.add_parser(
         "select", help="Select regression tests for a change with a baseline strategy.")
@@ -173,6 +176,7 @@ def build_parser() -> argparse.ArgumentParser:
     select.add_argument("--durations",
                         help="results.json (or its run directory) used to estimate test time.")
     _add_non_java_arg(select)
+    _add_must_run_arg(select)
     select.add_argument("--output", help="Write JSON to this file instead of standard output.")
 
     compare = subcommands.add_parser(
@@ -327,6 +331,13 @@ def _add_change_args(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--head", required=True, help="Head/target commit to compare against base.")
 
 
+def _add_must_run_arg(subparser: argparse.ArgumentParser) -> None:
+    subparser.add_argument(
+        "--must-run", action="append", default=[], metavar="PATTERN",
+        help="Never skip tests matching this ID or fnmatch pattern (repeatable); adds to "
+             ".codedna/policy.toml at BASE (D-050).")
+
+
 def _add_non_java_arg(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--non-java", choices=("retest-all", "ignore"), default="retest-all",
                         help="What to do when non-Java files changed (default: retest-all).")
@@ -366,7 +377,8 @@ def main(argv: list[str] | None = None) -> int:
         elif args.command == 'risk-select':
             from codedna.selection.live import recommend
             return _write_json(recommend(args.repo,args.base,args.head,
-                history_csv=args.history_csv,risk_target=args.risk_target),None)
+                history_csv=args.history_csv,risk_target=args.risk_target,
+                must_run=args.must_run),None)
         elif args.command == "run-tests":
             return _run_tests(args)
         elif args.command == "plugins":
@@ -404,7 +416,7 @@ def main(argv: list[str] | None = None) -> int:
                 args.repo, args.base, args.head, args.strategy,
                 coverage_map=load_coverage_map(coverage) if coverage else None,
                 durations=load_results(durations) if durations else None,
-                non_java=args.non_java)
+                non_java=args.non_java, must_run=args.must_run)
         else:
             coverage = _json_file(args.coverage_map, COVERAGE_MAP_FILE)
             return _write_json(compare_strategies(

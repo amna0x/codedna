@@ -134,12 +134,15 @@ def test_validation_rejects_partial_audit_history(change,tmp_path,monkeypatch):
     assert not r['skipped']
 
 
-def test_live_acceptance_uses_only_real_prior_target_ancestors(repo,tmp_path):
+def validated_change(repo,tmp_path,policy_text=None):
+    """240 recorded target commits, then one unobserved change of Core."""
     from codedna.git_analysis.git import run_git_bytes
     repo.write('pom.xml','<project/>')
     repo.write('src/main/java/a/Core.java',JAVA)
     repo.write('src/test/java/a/CoreTest.java',TEST)
     repo.write('src/test/java/a/OtherTest.java',TEST.replace('CoreTest','OtherTest'))
+    if policy_text:
+        repo.write('.codedna/policy.toml',policy_text)
     initial=repo.commit('initial')
     branch=repo.git('symbolic-ref','--short','HEAD')
     commands=[]
@@ -152,6 +155,11 @@ def test_live_acceptance_uses_only_real_prior_target_ancestors(repo,tmp_path):
     path=tmp_path/'history.csv';dataset(shas).to_csv(path)
     repo.write('src/main/java/a/Core.java',JAVA.replace('return 1','return 2'))
     head=repo.commit('unobserved change')
+    return base,head,path
+
+
+def test_live_acceptance_uses_only_real_prior_target_ancestors(repo,tmp_path):
+    base,head,path=validated_change(repo,tmp_path)
     result=recommend(repo.path,base,head,history_csv=path)
     assert result['risk']['status']=='validated_history',result['risk']
     assert result['risk']['validation']['accepted']
@@ -159,6 +167,28 @@ def test_live_acceptance_uses_only_real_prior_target_ancestors(repo,tmp_path):
     assert result['skipped']==['a.OtherTest']
     assert head not in result['risk']['provenance']['audit_commits']
     assert result['risk']['estimated_skip_risk']==0.
+
+
+def test_validated_selection_never_skips_must_run_tests(repo,tmp_path):
+    policy='[[must_run]]\ntests = ["a.OtherTest"]\nreason = "smoke suite"\n'
+    base,head,path=validated_change(repo,tmp_path,policy)
+    result=recommend(repo.path,base,head,history_csv=path)
+    assert result['risk']['status']=='validated_history',result['risk']
+    assert [t['test'] for t in result['selected']]==['a.CoreTest','a.OtherTest']
+    assert result['skipped']==[] and result['policy']['pinned']==['a.OtherTest']
+    other=result['selected'][1]
+    assert other['reasons'][0]=='must-run: smoke suite'
+    # Request patterns add to the project policy.
+    both=recommend(repo.path,base,head,history_csv=path,must_run=['a.Core*'])
+    assert both['policy']['pinned']==['a.CoreTest','a.OtherTest']
+
+
+def test_fallback_keeps_must_run_reasons(change):
+    repo,base,head=change
+    r=recommend(repo.path,base,head,must_run=['a.CoreTest'])
+    assert r['risk']['status']=='unvalidated'
+    assert r['selected'][0]['reasons']==['risk unvalidated: run the full suite',
+                                         'must-run: pinned by request']
 
 
 @pytest.mark.parametrize('value',[0.,1.,float('nan'),float('inf')])

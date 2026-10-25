@@ -917,3 +917,35 @@ study's own measurements and never retrains or runs code.
 Limitation: the replay is a simulation on recorded history (what each policy
 would have run, given the recorded test outcomes), not a live run; it cannot
 show effects such as tests that would have behaved differently if run alone.
+
+## D-050 — Must-run (pinned) tests policy
+
+Some tests must run on every change whatever the risk estimate says (smoke
+tests, release checks, later security checks). A project lists them in
+`.codedna/policy.toml` as `[[must_run]]` groups with `tests` (test IDs or
+case-sensitive `fnmatch` patterns) and an optional `reason`; the CLI
+(`--must-run PATTERN`, repeatable) and API (`must_run`) add patterns for one
+request. Implemented in the language-neutral `codedna.selection.policy`.
+
+- **Read from BASE**, never from HEAD or the working tree, so a change (for
+  example from an AI agent) cannot loosen its own checks. A change that edits
+  the policy is analysed under the old one, with a warning.
+- **Fail safe:** a malformed or unreadable policy, or a failing add-on rule,
+  pins every test. A pattern matching no test is reported as a warning.
+- **Only adds tests.** `select_tests` adds pinned tests to every strategy;
+  `risk-select` passes them to `decide(always=...)`, which counts them as run
+  when computing the skip risk. The audit gate is evaluated without pins;
+  pins can only lower the miss rate it measures.
+- **Research numbers unchanged:** `compare_strategies` and all experiments
+  ignore the policy.
+- **Extension hook:** add-on rules register in the `codedna.policies` entry-point
+  group (zero-argument factory returning an object with `name` and
+  `pinned(context) -> {test_id: reason}`; `context` has repo, BASE, HEAD, test
+  IDs and changed paths). Rules come only from installed packages, never from
+  the analysed repository. This is the place for the post-defence security
+  rules (for example "changes under `auth/` pin the security suite").
+
+Limitation: patterns match test IDs as the plugin reports them (Java: test
+classes); a pinned test that Surefire does not run by default stays outside
+the universe and is not added.
+

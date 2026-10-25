@@ -101,7 +101,8 @@ codedna graph   --repo PATH [--rev REV] [--no-members] [--output FILE]
 codedna impact  --repo PATH --base BASE_REV --head HEAD_REV [--max-depth N] [--confirmed-only] [--output FILE]
 codedna tests   --repo PATH [--rev REV] [--output FILE]
 codedna run-tests --repo PATH [--rev REV] --output-dir DIR --allow-build [--per-test-coverage] [--mvn PATH] [--gradle PATH] [--timeout S]
-codedna select  --repo PATH --base BASE_REV --head HEAD_REV --strategy all|dependency|coverage [--coverage-map F] [--durations F] [--non-java retest-all|ignore]
+codedna select  --repo PATH --base BASE_REV --head HEAD_REV --strategy all|dependency|coverage [--coverage-map F] [--durations F] [--non-java retest-all|ignore] [--must-run PATTERN ...]
+codedna risk-select --repo PATH --base BASE_REV --head HEAD_REV [--history-csv F] [--risk-target F] [--must-run PATTERN ...]
 codedna compare --repo PATH --base BASE_REV --head HEAD_REV --ground-truth F [--coverage-map F] [--non-java retest-all|ignore]
 codedna plugins
 codedna serve   [--host 127.0.0.1] [--port 8765] [--allow-build]
@@ -418,6 +419,21 @@ Use `codedna risk-select --repo PATH --base BASE --head HEAD` for the same core
 recommendation. Without adequate history, risk stays unvalidated and all tests
 are recommended. See [Java workflow](docs/JAVA_WORKFLOW.md) for history preparation,
 validation limits, selected Maven execution and the IDE workflow.
+
+### Must-run tests
+
+Tests listed in `.codedna/policy.toml` are never skipped by `select` or
+`risk-select` (D-050):
+
+```toml
+[[must_run]]
+tests = ["example.OrderServiceTest", "example.security.*"]
+reason = "checkout and security checks run on every change"
+```
+
+The file is read from the BASE commit, so a change cannot loosen its own
+policy; a broken file makes every test run. `--must-run PATTERN` adds
+patterns for one run.
 
 The [fixed DANTE-H/B10 extension protocol](docs/DANTE_B10_PROTOCOL.md) and
 [related-work comparison](docs/RELATED_WORK_COMPARISON.md) describe the independent

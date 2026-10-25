@@ -86,11 +86,13 @@ class SelectRequest(ChangeRequest):
     coverage_map: str | None = None
     durations: str | None = None
     non_java: Literal["retest-all", "ignore"] = "retest-all"
+    must_run: list[str] = Field(default_factory=list, description="Extra must-run patterns (D-050).")
 
 
 class RiskRequest(ChangeRequest):
     history_csv: str | None = None
     risk_target: float = Field(default=.05, gt=0, lt=1)
+    must_run: list[str] = Field(default_factory=list, description="Extra must-run patterns (D-050).")
 
 
 class RunSelectionRequest(RiskRequest):
@@ -212,13 +214,13 @@ def create_app(token: str, *, allow_build: bool = False,
             body.repo, body.base, body.head, body.strategy,
             coverage_map=load_coverage_map(coverage) if coverage else None,
             durations=load_results(durations) if durations else None,
-            non_java=body.non_java).to_dict()
+            non_java=body.non_java, must_run=body.must_run).to_dict()
 
     @app.post('/api/risk-select', dependencies=secured)
     def risk_select(body: RiskRequest) -> dict:
         from codedna.selection.live import recommend
         return recommend(body.repo,body.base,body.head,history_csv=body.history_csv,
-                         risk_target=body.risk_target)
+                         risk_target=body.risk_target,must_run=body.must_run)
 
     @app.post('/api/run-selection', dependencies=secured)
     def run_selection(body: RunSelectionRequest) -> dict:
@@ -231,7 +233,8 @@ def create_app(token: str, *, allow_build: bool = False,
         if body.strategy == 'risk':
             selection = risk_select(body)
         else:
-            selection = select_tests(body.repo,body.base,body.head,body.strategy).to_dict()
+            selection = select_tests(body.repo,body.base,body.head,body.strategy,
+                                     must_run=body.must_run).to_dict()
         repo = resolve_repository(body.repo)
         output = repo/'.codedna/runs'/uuid4().hex
         plugin = load_plugins().get('java')

@@ -89,6 +89,7 @@ calibration/
     ├── calibrators.py     none / Platt / isotonic
     └── metrics.py         Brier, ECE, reliability bins
 selection/risk.py          risk-per-second selection, skip risk, fallback
+selection/policy.py        must-run tests policy read from BASE, add-on rule hook
 api/
     ├── app.py             FastAPI app: endpoints, token + Host checks, build opt-in
     └── server.py          `codedna serve` (loopback-only, prints URL + token)
@@ -219,6 +220,12 @@ imports changed or whose changes are unresolved, and every test without
 coverage data. `compare_strategies` evaluates each strategy against a
 ground-truth `results.json` of HEAD: `failing_tests`, `caught`, `missed`,
 `safe` (nothing missed), selection ratio, estimated time.
+
+`selection.policy` (D-050): must-run tests from `.codedna/policy.toml` at BASE,
+request patterns and add-on rules (`codedna.policies` entry points) are added
+to every product selection (`select_tests`, `risk-select`); an unreadable
+policy or failing rule pins everything. `compare_strategies` and the
+experiments ignore it.
 
 ### `plugins`
 

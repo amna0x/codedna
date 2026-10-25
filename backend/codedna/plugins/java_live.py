@@ -54,15 +54,19 @@ def prediction_rows(dataset, changes, test_ids):
     return rows
 
 
-def recommend(repo_path, base, head, *, history_csv=None, risk_target=.05):
+def recommend(repo_path, base, head, *, history_csv=None, risk_target=.05, must_run=None):
     import math
     if not math.isfinite(risk_target) or not 0 < risk_target < 1:
         raise ValueError('Risk target must lie strictly between zero and one')
     started = perf_counter()
     repo = resolve_repository(repo_path)
     # Discover the full candidate universe, including changed classes and warnings.
-    result = select_tests(repo, base, head, 'all').to_dict()
+    result = select_tests(repo, base, head, 'all', must_run=must_run).to_dict()
     result['strategy'] = 'risk'
+    # Must-run tests (D-050) are never skipped; their reasons survive every path.
+    pinned = set(result['policy']['pinned'])
+    pin_reasons = {item['test']:[r for r in item['reasons'] if r != 'retest-all']
+                   for item in result['selected'] if item['test'] in pinned}
     risk = {'status':'unvalidated', 'target':risk_target, 'estimated_skip_risk':None,
             'proposed_skip_risk':None, 'validation':None, 'reasons':[],
             'note':'Historical validation is not a guarantee; full-suite audits must refresh evidence.'}
@@ -70,7 +74,7 @@ def recommend(repo_path, base, head, *, history_csv=None, risk_target=.05):
     def fallback(reason):
         risk['reasons'].append(reason)
         for item in result['selected']:
-            item['reasons'] = ['risk unvalidated: run the full suite']
+            item['reasons'] = ['risk unvalidated: run the full suite']+pin_reasons.get(item['test'],[])
         risk['analysis_seconds'] = round(perf_counter()-started,4)
         return result
     path = Path(history_csv) if history_csv else repo/'.codedna/history.csv'
@@ -115,14 +119,15 @@ def recommend(repo_path, base, head, *, history_csv=None, risk_target=.05):
         rows = prediction_rows(dataset,changes,ids)
         probabilities = calibrator.transform(model.predict_proba(rows))
         decision = decide(rows,probabilities,RiskPolicy(budget=None,risk_target=risk_target),
-                          order=order_by_baseline('recent_failures',rows))
+                          order=order_by_baseline('recent_failures',rows),always=pinned)
         risk['proposed_skip_risk'] = decision.estimated_skip_risk
         if not evidence.accepted:
             return fallback('Prior target audit failed: '+ '; '.join(evidence.reasons))
         risk.update(status='validated_history',estimated_skip_risk=decision.estimated_skip_risk,
                     analysis_seconds=round(perf_counter()-started,4))
         score = {r.test_id:p for r,p in zip(rows,probabilities)}
-        result['selected'] = [{'test':t,'reasons':['recent-failure order with calibrated risk stopping'],
+        result['selected'] = [{'test':t,'reasons':pin_reasons.get(t) or
+                               ['recent-failure order with calibrated risk stopping'],
                                'estimated_failure_probability':score[t]} for t in decision.selected]
         by_id = {r.test_id:r for r in rows}
         for item in result['selected']:
