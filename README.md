@@ -58,7 +58,7 @@ Windows (PowerShell):
 py -3.12 -m venv .venv
 .venv\Scripts\Activate.ps1
 python -m pip install -e ".[dev]"
-python -m pip install -e plugins/codedna-java
+python -m pip install -e plugins/codedna-java -e plugins/codedna-python
 ```
 
 macOS / Linux:
@@ -67,7 +67,7 @@ macOS / Linux:
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -e ".[dev]"
-python -m pip install -e plugins/codedna-java
+python -m pip install -e plugins/codedna-java -e plugins/codedna-python
 ```
 
 Java support is a separate plugin, `plugins/codedna-java` (D-054). Without it
@@ -76,6 +76,13 @@ Installing the plugin needs internet once (it downloads the `tree-sitter` and
 `tree-sitter-java` wheels, which include the compiled Java grammar). After
 that, analysis and tests run fully offline. `start.bat` installs the plugin by
 itself if it is missing.
+
+Python support is the `plugins/codedna-python` plugin (D-060). It needs only
+the standard library. Both plugins can work on one repository: in a mixed
+Java + Python project each analyses its own files, their graphs and tests
+are joined, and `run-tests` runs Maven/Gradle and pytest and joins the
+results. Dependencies between the two languages are not followed, so a
+change in a language that has no tests falls back to running everything.
 
 ## Run the tests
 
@@ -143,13 +150,14 @@ codedna replay  (--list | --overview) FOLDER [FOLDER ...] [--seed N]
   `DIR/coverage-map.json` (slow: one Maven run per test class).
 - `select` picks tests for a change: `all` (retest-all), `dependency` (static
   graph) or `coverage` (needs a coverage map recorded at BASE). Changed tests
-  are always selected; a changed non-Java file falls back to retest-all unless
-  `--non-java ignore`. `--durations` adds a time estimate.
+  are always selected; a changed file no plugin analyses (or one in a language
+  with no tests) falls back to retest-all unless `--non-java ignore`. `--durations` adds a time estimate.
 - `compare` runs all strategies against a full run of HEAD (`--ground-truth`)
   and reports selection ratio, estimated time, and failing tests caught/missed.
   Files and run directories are both accepted for `--coverage-map`,
   `--durations` and `--ground-truth`.
-- `plugins` lists installed language plugins (Java comes from `plugins/codedna-java`).
+- `plugins` lists installed language plugins (Java comes from `plugins/codedna-java`,
+  Python from `plugins/codedna-python`).
 - `serve` starts the **local API for the CodeDNA IDE** (needs
   `pip install -e ".[api]"`, included in `.[dev]`). It listens on loopback
   only and prints one JSON line with the URL and a session token
@@ -357,6 +365,8 @@ backend/codedna/          Python package
   api/                    local FastAPI server for the CodeDNA IDE
 plugins/codedna-java/     Java plugin: Tree-sitter parser, change mapping, graph builder,
                           JUnit discovery, Maven/Gradle runner, Surefire/JaCoCo parsers
+plugins/codedna-python/   Python plugin: ast parser, change mapping, import graph,
+                          pytest discovery and runner
 ide/                      CodeDNA IDE (Theia + Electron, TypeScript)
 backend/tests/            pytest suite (temporary Git repos, no network)
 examples/                 sample Java/Maven project
@@ -397,8 +407,8 @@ CODEDNA_STARTER.md        original project brief
 
 ## Scope
 
-Java only for now (Maven/JUnit): it is the first language plugin, and other
-languages come later through the plugin interface (D-013, D-018). Other files
+Java (Maven/Gradle, JUnit) and Python (pytest), each a language plugin
+(D-013, D-018, D-054, D-060); the research track is Java only. Other files
 are reported, not analysed. Software engineering only: no vulnerability detection
 or security scoring.
 CodeDNA does not claim novelty for established techniques, and reports no

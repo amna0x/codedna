@@ -66,6 +66,10 @@ export interface ChangedFile {
     is_binary: boolean;
     changed_lines: number[][];
     java: JavaFileAnalysis | null;
+    /** Installed plugin that handles the file ("java", "python"), null if none does. */
+    language?: string | null;
+    /** Declaration mapping from a plugin other than Java; same shape. */
+    analysis?: JavaFileAnalysis | null;
 }
 
 export interface AnalyzeReport {

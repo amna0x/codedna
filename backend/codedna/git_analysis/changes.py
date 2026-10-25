@@ -62,6 +62,18 @@ class ChangedFile:
     # Declaration-level mapping; filled by the Java plugin (codedna-java) for Java
     # files when analysis_level is "method", otherwise None.
     java: Any = None  # codedna_java.mapping.JavaFileAnalysis
+    # Name of the installed language plugin that handles this file (None: no
+    # plugin does, so the file is not analysed). Set by
+    # ``codedna.plugins.languages.analyze_changes``.
+    language: str | None = None
+    # Declaration-level mapping from any other plugin, same shape as ``java``
+    # (package, declarations, outside_declarations, unresolved).
+    analysis: Any = None
+
+    @property
+    def mapping(self) -> Any:
+        """The declaration mapping, whichever plugin produced it (None if unmapped)."""
+        return self.java if self.java is not None else self.analysis
 
 
 @dataclass

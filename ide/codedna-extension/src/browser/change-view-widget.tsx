@@ -3,7 +3,7 @@ import { inject, injectable, postConstruct } from '@theia/core/shared/inversify'
 import { ProgressService } from '@theia/core/lib/common/progress-service';
 import { ReactWidget } from '@theia/core/lib/browser/widgets/react-widget';
 import {
-    AnalyzeReport, ChangedFile, CodeDnaService, DeclarationChange, ImpactReport, ImpactedNode
+    AnalyzeReport, ChangedFile, CodeDnaService, DeclarationChange, ImpactReport, ImpactedNode, JavaFileAnalysis
 } from '../common/codedna-protocol';
 import { CodeDnaComparison } from './comparison';
 import { CodeDnaWorkspace } from './codedna-workspace';
@@ -90,7 +90,7 @@ export class ChangeViewWidget extends ReactWidget {
     }
 
     protected renderResults(changes: AnalyzeReport): React.ReactNode {
-        const declarations = changes.changed_files.flatMap(f => f.java?.declarations ?? []);
+        const declarations = changes.changed_files.flatMap(f => mappingOf(f)?.declarations ?? []);
         const codeChanges = declarations.filter(d => d.code_changed !== false);
         const impacted = this.impact?.impacted ?? [];
         const notes = unique([...changes.warnings, ...(this.impact?.warnings ?? [])]
@@ -121,7 +121,8 @@ export class ChangeViewWidget extends ReactWidget {
 
     protected renderFile(file: ChangedFile): React.ReactNode {
         const status = fileStatusLabel(file.status);
-        const declarations = file.java?.declarations ?? [];
+        const mapping = mappingOf(file);
+        const declarations = mapping?.declarations ?? [];
         const folder = file.path.includes('/') ? file.path.slice(0, file.path.lastIndexOf('/')) : '';
         return <div className='cd-card' key={file.path}>
             <div className='cd-card-header'>
@@ -133,12 +134,14 @@ export class ChangeViewWidget extends ReactWidget {
                     </span>}
                 </span>
             </div>
-            {!file.is_java && <p className='cd-row-note'>Not Java code, so CodeDNA doesn’t look inside it.</p>}
+            {!file.language && <p className='cd-row-note'>No installed language plugin reads this file, so CodeDNA doesn’t look inside it.</p>}
             {declarations.map(d => this.renderDeclaration(file, d))}
-            {file.java?.outside_declarations.some(o => o.code_changed !== false) &&
-                <p className='cd-row-note'>Imports or the package line changed too.</p>}
-            {file.java?.unresolved.length ? <p className='cd-row-note cd-modified'>
-                Some lines couldn’t be matched to methods ({file.java.unresolved[0].reason}).</p> : undefined}
+            {mapping?.outside_declarations.some(o => o.code_changed !== false) &&
+                <p className='cd-row-note'>{file.language === 'python'
+                    ? 'Imports or other module-level code changed too.'
+                    : 'Imports or the package line changed too.'}</p>}
+            {mapping?.unresolved.length ? <p className='cd-row-note cd-modified'>
+                Some lines couldn’t be matched to {file.language === 'python' ? 'functions' : 'methods'} ({mapping.unresolved[0].reason}).</p> : undefined}
         </div>;
     }
 
@@ -178,4 +181,9 @@ export class ChangeViewWidget extends ReactWidget {
 
 function unique(values: string[]): string[] {
     return [...new Set(values)];
+}
+
+/** The declaration mapping of a changed file, whichever language plugin made it. */
+export function mappingOf(file: ChangedFile): JavaFileAnalysis | null {
+    return file.java ?? file.analysis ?? null;
 }

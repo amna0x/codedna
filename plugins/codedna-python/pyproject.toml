@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "codedna-python"
+version = "0.1.0"
+description = "Python language plugin for CodeDNA: change mapping, import graph, pytest discovery and runs."
+readme = "README.md"
+requires-python = ">=3.11"
+# Parsing uses the standard library's ast module, so the plugin adds no
+# third-party dependency (D-060). pytest is needed only by the analysed
+# project's own interpreter, when its tests are run with --allow-build.
+dependencies = [
+    "codedna>=0.1,<0.2",
+]
+
+[project.entry-points."codedna.languages"]
+python = "codedna_python:PythonPlugin"
+
+[tool.setuptools.packages.find]
+include = ["codedna_python*"]

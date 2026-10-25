@@ -120,10 +120,11 @@ def test_api_reports_a_missing_plugin_as_a_json_error(no_plugins, change):
 
 
 def test_the_core_never_imports_the_java_plugin():
-    """Importing every core module with ``codedna_java`` blocked must work."""
+    """Importing every core module with the language plugins blocked must work."""
     probe = (
         "import sys, pkgutil, importlib\n"
         "sys.modules['codedna_java'] = sys.modules['tree_sitter'] = None\n"  # imports now fail
+        "sys.modules['codedna_python'] = None\n"
         "import codedna\n"
         "for m in pkgutil.walk_packages(codedna.__path__, 'codedna.'):\n"
         "    if not m.name.endswith('__main__'): importlib.import_module(m.name)\n"

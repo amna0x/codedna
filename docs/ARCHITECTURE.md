@@ -111,6 +111,21 @@ plugins/codedna-java/          pip install -e plugins/codedna-java
     └── live.py                live risk features for risk-select (D-041)
 ```
 
+Python is a second plugin, also bundled (D-060). It needs only the standard
+library:
+
+```
+plugins/codedna-python/        pip install -e plugins/codedna-python
+├── pyproject.toml             entry point codedna.languages: python = codedna_python:PythonPlugin
+└── codedna_python/
+    ├── plugin.py              PythonPlugin
+    ├── parser.py              ast -> declarations (py: IDs), imports, class bases
+    ├── mapping.py             line ranges -> DeclarationChange (same shape as Java's)
+    ├── builder.py             module/class graph: imports, uses, extends (confirmed/heuristic)
+    ├── discovery.py           pytest test modules, settings from the root config file
+    └── runner.py              opt-in pytest runner (JUnit XML -> results.json)
+```
+
 ### `git_analysis.git`
 
 - `run_git(repo, *args)` runs Git with an argument list (no shell), UTF-8
@@ -251,13 +266,21 @@ import, or that do not implement the protocol are skipped and listed in
 `problems`.
 
 `plugins.languages` is the only way the core reaches language code:
-`analyze_changes` runs `extract_changes` and then each plugin's
-`attach_declarations`; `build_graph`, `discover_tests` and `require` find the
-plugin. Without the Java plugin, `analyze` still lists changed files (level
+`analyze_changes` runs `extract_changes`, then each plugin's
+`attach_declarations`, and sets `ChangedFile.language` to the plugin that
+handles each file. Several plugins work on one repository (D-060):
+`build_graph`/`commit_graph` join every plugin's graph (`union_graphs`; no
+edge crosses languages), `discover_tests`/`commit_tests` return a
+`CombinedDiscovery`, and `run_tests` splits the selected tests by the plugin
+that discovered them (one language runs exactly as before; several write to
+`OUTPUT_DIR/<language>` and are joined). Impact and selection use these, so
+a change is analysed by whichever plugin handles its file; selection treats
+a change in a language without tests as unanalysed (retest-all), because
+cross-language dependencies are not followed. Without the Java plugin, `analyze` still lists changed files (level
 `file`) and warns that `.java` files were not analysed; commands that need a
 graph or test discovery raise `PluginMissingError` naming the package (CLI
-exit 1, API 400). A test imports every core module with `codedna_java` and
-`tree_sitter` blocked, so the core cannot start depending on them again.
+exit 1, API 400). A test imports every core module with `codedna_java`,
+`codedna_python` and `tree_sitter` blocked, so the core cannot start depending on them again.
 
 `plugins.manager` installs a catalogue wheel with `pip --no-deps`, then runs
 `pip check`; if the plugin's own dependencies are missing it is uninstalled
@@ -424,16 +447,17 @@ electron-app/package.json           product config: Theia packages, default them
         │                              │ install (pinned, checksum-verified)
         ▼                              ▼
  Analysis core (Python) ◄──── Language plugins (entry points "codedna.languages")
-   git_analysis, graph model,     codedna-java (first; parse, resolve,
-   impact, selection, history,    discover tests, run tests, coverage)
-   ML, calibration, CLI           [future: other languages]
+   git_analysis, graph model,     codedna-java (parse, resolve, discover
+   impact, selection, history,    tests, run tests, coverage), codedna-python
+   ML, calibration, CLI           (ast, pytest); several per repository
 ```
 
 - The core never imports language-specific code; it asks the registry for
-  the plugin (D-054). Java lives in `plugins/codedna-java`.
+  the plugin (D-054). Java lives in `plugins/codedna-java`, Python in
+  `plugins/codedna-python` (D-060).
 - The IDE and website contain no analysis logic; they display core JSON.
 - Locations: `backend/codedna/plugins/` (interface, registry, catalogue,
-  manager), `plugins/codedna-java/` (Java plugin), `ide/` (Theia
+  manager), `plugins/codedna-java/` and `plugins/codedna-python/`, `ide/` (Theia
   application), `website/` (static site + catalogue index).
 
 ## Planned module boundaries

@@ -48,7 +48,8 @@ from codedna.git_analysis import CodeDNAGitError, extract_changes
 from codedna.impact_analysis import compute_impact
 from codedna.models.rankers import BASELINES, ML_MODELS
 from codedna.plugins import load_plugins
-from codedna.plugins.languages import analyze_changes, build_graph, discover_tests, require
+from codedna.plugins.languages import analyze_changes, build_graph, discover_tests
+from codedna.plugins.languages import run_tests as run_language_tests
 from codedna.selection import STRATEGIES, SelectionError, compare_strategies, select_tests
 from codedna.test_mapping.results import (
     COVERAGE_MAP_FILE,
@@ -122,7 +123,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     tests = subcommands.add_parser(
         "tests",
-        help="List JUnit test classes of one commit (static discovery, nothing is run).",
+        help="List the tests of one commit: JUnit classes, pytest modules (static discovery, nothing is run).",
     )
     tests.add_argument("--repo", required=True, help="Path to a local Git repository.")
     tests.add_argument("--rev", default="HEAD", help="Commit to analyse (default: HEAD).")
@@ -130,12 +131,14 @@ def build_parser() -> argparse.ArgumentParser:
 
     run_tests = subcommands.add_parser(
         "run-tests",
-        help="Run the Maven or Gradle test suite of one commit (executes project code; needs --allow-build).",
+        help="Run the test suite of one commit with Maven, Gradle or pytest (executes project code; needs --allow-build).",
         description=(
             "Export the commit into OUTPUT_DIR/checkout with git archive, run 'mvn test' there and "
-            "save results.json (Gradle projects: 'gradle test'). With --per-test-coverage, run each test class separately under "
-            "JaCoCo and also save coverage-map.json. This EXECUTES the project's code and build "
-            "plugins, and Maven may download dependencies: only use it on projects you trust."
+            "save results.json (Gradle projects: 'gradle test'; Python: 'python -m pytest'). With --per-test-coverage, run each test class separately under "
+            "JaCoCo and also save coverage-map.json (Java only). A repository with tests in several "
+            "languages runs each language into OUTPUT_DIR/<language> and joins the results. This "
+            "EXECUTES the project's code and build plugins, and Maven may download dependencies: "
+            "only use it on projects you trust."
         ),
     )
     run_tests.add_argument("--repo", required=True, help="Path to a local Git repository.")
@@ -150,13 +153,17 @@ def build_parser() -> argparse.ArgumentParser:
     run_tests.add_argument("--gradle",
                            help="Path to the Gradle executable (default: gradle on PATH; "
                                 "the repository's gradlew is never used).")
+    run_tests.add_argument("--python",
+                           help="Python interpreter that runs pytest (default: python3 or python "
+                                "on PATH); it needs pytest and the project's dependencies.")
     run_tests.add_argument("--timeout", type=_non_negative_int, default=1800,
                            help="Timeout per build invocation in seconds (default: 1800).")
     run_tests.add_argument("--keep-checkout", action="store_true",
                            help="Keep OUTPUT_DIR/checkout after the run (for debugging).")
 
     run_tests.add_argument('--tests', nargs='*', default=None,
-                           help='Only run these discovered test classes; empty list runs nothing.')
+                           help='Only run these discovered tests (Java classes, Python py:<module> IDs); '
+                                'empty list runs nothing.')
     risk_select = subcommands.add_parser('risk-select', help='Target-validated calibrated stopping or full-suite fallback.')
     _add_change_args(risk_select)
     risk_select.add_argument('--history-csv', help='Target history CSV; default REPO/.codedna/history.csv')
@@ -473,11 +480,12 @@ def _run_tests(args: argparse.Namespace) -> int:
         return EXIT_ANALYSIS_ERROR
     print(f"warning: running the build of {args.repo} (project code will execute)",
           file=sys.stderr)
-    run, coverage = require("java").run_tests(
+    run, coverage = run_language_tests(
         args.repo, args.rev, args.output_dir, allow_build=True,
         per_test_coverage=args.per_test_coverage,
         maven_command=[args.mvn] if args.mvn else None,
-        gradle_command=[args.gradle] if args.gradle else None, timeout=args.timeout,
+        gradle_command=[args.gradle] if args.gradle else None,
+        python_command=[args.python] if args.python else None, timeout=args.timeout,
         keep_checkout=args.keep_checkout, selected_tests=args.tests)
     summary = {
         "results": str(Path(args.output_dir) / RESULTS_FILE),
@@ -561,8 +569,7 @@ def _record_run(args: argparse.Namespace) -> int:
     path = Path(args.results)
     run = load_results(path / RESULTS_FILE if path.is_dir() else path)
     repo = resolve_repository(args.repo)
-    expected = [t.id for t in require("java").discover_tests(repo, run.commit).tests
-                if t.runs_by_default]
+    expected = [t.id for t in discover_tests(repo, run.commit).tests if t.runs_by_default]
     report = record_run(repo, run, expected_tests=expected)
     _write_json(report, None)
     return EXIT_OK if report["recorded"] else EXIT_ANALYSIS_ERROR

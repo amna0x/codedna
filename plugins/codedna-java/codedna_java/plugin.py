@@ -7,6 +7,7 @@ changes without it; Java files are then reported as not analysed.
 
 from __future__ import annotations
 
+import inspect
 from pathlib import Path
 from typing import Any
 
@@ -46,8 +47,11 @@ class JavaPlugin:
 
     def run_tests(self, repo_path: str | Path, revision: str, output_dir: str | Path, *,
                   allow_build: bool, per_test_coverage: bool = False, **options: Any):
+        # Options meant for other plugins (python_command, say) are ignored.
+        known = inspect.signature(run_maven_tests).parameters
         return run_maven_tests(repo_path, revision, output_dir, allow_build=allow_build,
-                               per_test_coverage=per_test_coverage, **options)
+                               per_test_coverage=per_test_coverage,
+                               **{k: v for k, v in options.items() if k in known})
 
     def risk_select(self, repo_path, base, head, **options):
         """Optional capability: live risk-based selection (D-041)."""

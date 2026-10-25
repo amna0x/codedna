@@ -35,6 +35,8 @@ def test_analyze_file_level_prints_json_report(repo, capsys):
             "changed_lines": [[1, 1]],
             "removed_lines": [[1, 1]],
             "java": None,
+            "language": None,  # file level asks no plugin
+            "analysis": None,
         }
     ]
     assert report["warnings"] == []

@@ -160,6 +160,35 @@ class CodeGraph:
         }
 
 
+def union_graphs(graphs: list[CodeGraph]) -> CodeGraph:
+    """One graph of a commit from the graphs several language plugins built for it.
+
+    Plugins prefix their declaration IDs (Python uses ``py:``) so their nodes
+    do not collide; a node or edge that several plugins emit (a shared
+    ``package:`` node, say) is kept once, with the first plugin's attributes.
+    No edges are added between languages: cross-language dependencies are
+    not analysed.
+    """
+    if len(graphs) == 1:
+        return graphs[0]
+    union = CodeGraph(graphs[0].repository, graphs[0].commit)
+    for graph in graphs:
+        for node in graph.nodes.values():
+            union.nodes.setdefault(node.id, node)
+        for key, edge in graph.edges.items():
+            existing = union.edges.get(key)
+            if existing is None:
+                union.edges[key] = edge
+                continue
+            for evidence in edge.evidence:
+                existing.add_evidence(evidence)
+        for key, ref in graph.unresolved.items():
+            union.unresolved.setdefault(key, ref)
+        union.external_reference_count += graph.external_reference_count
+        union.warnings.extend(graph.warnings)
+    return union
+
+
 def merge_graphs(base: CodeGraph, head: CodeGraph) -> CodeGraph:
     """Union of two graphs; every node and edge records which versions contain it.
 

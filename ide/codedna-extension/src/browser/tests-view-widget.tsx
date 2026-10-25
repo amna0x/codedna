@@ -89,7 +89,7 @@ export class TestsViewWidget extends ReactWidget {
         if (!report || this.loading) { return; }
         const confirmed = await new ConfirmDialog({
             title: 'Run project tests?',
-            msg: 'This executes this project’s code and Maven plugins. Maven may download dependencies. Run only projects you trust.',
+            msg: 'This executes this project’s code and build plugins (Maven, Gradle or pytest). Maven may download dependencies. Run only projects you trust.',
             ok: 'Run tests', cancel: 'Cancel'
         }).open();
         if (!confirmed || this.report !== report) { return; }
@@ -98,7 +98,7 @@ export class TestsViewWidget extends ReactWidget {
         this.execution = undefined;
         this.update();
         try {
-            this.execution = await withProgress(this.progress, 'CodeDNA: running selected tests with Maven',
+            this.execution = await withProgress(this.progress, 'CodeDNA: running selected tests',
                 () => this.codedna.runSelection(report.repository,
                     report.base_commit, report.head_commit, this.reportStrategy, this.reportHistory));
             this.report = this.execution.selection;
@@ -180,7 +180,7 @@ export class TestsViewWidget extends ReactWidget {
             <p className='cd-meta'>Compared commits: {report.base_commit.slice(0, 8)} → {report.head_commit.slice(0, 8)}</p>
             <p className='cd-lede'>
                 {report.total_tests === 0
-                    ? 'No JUnit tests were found in this project.'
+                    ? 'No JUnit or pytest tests were found in this project.'
                     : report.selected.length === 0
                         ? 'No tests are recommended by the current selection policy.'
                         : <>Run {report.selected.length} of {plural(report.total_tests, 'test class', 'test classes')}.
@@ -231,7 +231,11 @@ export class TestsViewWidget extends ReactWidget {
     }
 }
 
+/** Best guess at a test's file from its ID (Python: `py:tests.test_x` → `tests/test_x.py`). */
 function testPath(testId: string): string {
+    if (testId.startsWith('py:')) {
+        return `${testId.slice(3).replace(/\./g, '/')}.py`;
+    }
     return `src/test/java/${testId.replace(/\./g, '/')}.java`;
 }
 

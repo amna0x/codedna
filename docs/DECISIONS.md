@@ -1133,3 +1133,76 @@ D-018/D-024: the core has no built-in language and no Tree-sitter dependency.
   `plugins/codedna-java/codedna_java/live.py`, so a rolling-evidence run
   started before this change will not resume after it; restart it instead.
   The module's code is unchanged.
+
+## D-060 — Python as the second language plugin (`codedna-python`), several plugins per repository
+
+`plugins/codedna-python` adds Python (`python = codedna_python:PythonPlugin`,
+plugin API 1.1). It uses only the standard library's `ast`, so it adds no
+dependency. The core now runs every installed plugin on one repository, so a
+mixed Java + Python project is analysed by both at once.
+
+- **Rule conflict, on purpose:** AGENTS.md says no second language plugin
+  before Milestone 5 is complete. The owners approved the remaining-work plan
+  (step 8) with this plugin in it on 2026-10-25, ahead of that milestone. The
+  Java research track is untouched: `codedna_java/live.py`, the study scripts
+  and the frozen protocol do not change, and nothing Java selects changes in
+  a repository without Python files.
+- **IDs and graph (shared schema):** every Python ID starts with `py:` so it
+  cannot collide with Java's. A module is `type:py:<module>` (kind `module`,
+  parent `file:<path>`), a class `type:py:<module>.<Class>`, a function
+  `member:py:<module>#f()`, a method `member:py:<module>.<Class>#m()`. Module
+  names come from the path, with a leading `src/` dropped. Type kinds are
+  `module` and `class`, so a changed function seeds its module and a changed
+  method seeds its class. The test unit is the test module (`py:tests.test_x`),
+  as the JUnit class is for Java.
+- **Edges:** `imports` (module → module), `uses` (module → class imported by
+  name; module → each class it defines, so importers of the module reach the
+  class) and `extends`. *Confirmed* when the import names a repository
+  module exactly (relative imports resolved first) or the base class is in
+  the same module or imported by name; *heuristic* when a module matches only
+  as a dotted suffix (the source root is not the repository root or `src/`)
+  or a base class only by a unique simple name. Standard-library and other
+  outside imports are counted as external. A relative import above the
+  top-level package and an ambiguous base name are kept as unresolved.
+  Dynamic imports, `sys.path` changes, re-exports through `__init__` and
+  attribute use of imported modules are not followed.
+- **Change mapping:** same algorithm and result shape as Java (D-008), stored
+  in `ChangedFile.analysis`; `ChangedFile.language` names the plugin that
+  handled each file (null at `--level file` or when no plugin handles it).
+  `code_changed` compares `ast.dump`, so comment/formatting-only edits are
+  ignored; docstrings count as code. A syntax error (judged by the Python
+  that runs CodeDNA, 3.11+) leaves the file unresolved, and impact treats the
+  whole file as changed.
+- **No cross-language edges.** A Python change never reaches Java tests
+  through the graph, and the other way round. To stay safe, selection treats
+  a changed file of a language with **no tests in the universe** as
+  unanalysed, so it falls back to retest-all exactly like a build file
+  (a Python release script in a Java project keeps today's behaviour).
+  `non_java="ignore"` keeps its name and now means "unanalysed files".
+- **Discovery:** pytest's own settings from the root config (`pytest.ini`,
+  `pyproject.toml`, `tox.ini`, `setup.cfg`, in pytest's order):
+  `python_files`, `python_classes`, `python_functions`, `testpaths` and
+  `norecursedirs`. Tests outside `testpaths` are listed but do not run by
+  default. `unittest.TestCase` subclasses count. Inherited test methods from
+  other files and conftest hooks are not seen.
+- **Running (only with `--allow-build`, D-014):** the commit is exported and
+  `python -m pytest -p no:cacheprovider --junitxml=…` runs there, with the
+  interpreter from `--python` (default `python3`/`python` on PATH, which needs
+  pytest and the project's dependencies; CodeDNA installs nothing into it).
+  Selected tests are passed as file paths after `--`, never as expressions.
+  Results are kept per test module. Per-test coverage stays Java-only.
+- **Several plugins at once (`codedna.plugins.languages`):** `build_graph`,
+  `discover_tests` and impact join every plugin's graph and tests
+  (`union_graphs`, `CombinedDiscovery`; JSON adds `language` per test and a
+  `languages` summary). `run_tests` splits selected tests by the plugin that
+  discovered them; with one language it runs exactly as before, with several
+  each writes to `OUTPUT_DIR/<language>` and the results are joined into
+  `OUTPUT_DIR/results.json` (tool e.g. `maven+pytest`). Plugins ignore run
+  options meant for others. A shared parse cache is safe: Python keys its
+  entries `("py", blob, path)`.
+- **Risk-based selection stays Java-only (D-041):** in a mixed repository its
+  universe includes the Python tests, and any Python change makes it fall
+  back to the full suite.
+- **Installing:** `start.bat`, CI and the developer setup install both plugins;
+  the catalogue lists Python as bundled. The PyInstaller desktop bundle (PR
+  #17) has to include `codedna_python` too.
