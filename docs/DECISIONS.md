@@ -949,3 +949,30 @@ Limitation: patterns match test IDs as the plugin reports them (Java: test
 classes); a pinned test that Surefire does not run by default stays outside
 the universe and is not added.
 
+## D-051 — Impact graph: package lanes, highlighted change, depth controls
+
+On a real project (HikariCP) a typical one-commit impact graph has about 60
+nodes in 9 packages; the D-043 drawing (one breadth-first tree) was too
+crowded to read. Changes:
+
+- **Core:** `explanation_graph` adds each node's `package` (`""` = default
+  package, `null` for files outside the graph), a `packages` list (label,
+  whether it holds changed code, counts per category) and a `summary` of
+  counts. Additive JSON fields; no API version change.
+- **IDE layout:** a "lane" layout (`graph-layout.ts`, pure placement of core
+  data): one horizontal band per package, columns by the core's `distance`
+  (links from the change), bands with changed code first. Package boxes are
+  drawn when the change spans more than one package. Cytoscape's force layout
+  (`cose`) was tried with package boxes and produced overlapping boxes on the
+  HikariCP graphs, so it was rejected.
+- **Changed code stands out:** larger, outlined nodes with bold labels;
+  package boxes that contain changed code have a coloured border. A one-line
+  summary gives the counts per category and packages.
+- **Controls:** "Follow" (all links, or 1/2/3 links from the change) and
+  "Direct links only" pass the existing `max_depth` / `confirmed_only` options
+  to the core; no filtering happens in TypeScript.
+
+Checked by rendering the compiled layout with Cytoscape in headless Chromium
+on HikariCP commits 086bf183 (13 nodes, 4 packages) and 93c71780 (63 nodes,
+9 packages); not yet checked inside the packaged Windows app.
+

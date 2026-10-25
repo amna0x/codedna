@@ -174,6 +174,8 @@ May start in parallel (Student C) once the analysis JSON formats are stable.
   shared "Compare" picker, friendly errors, first-run guide (D-031)
 - ✅ Impact graph view (Cytoscape.js, D-043): changed code → affected parts →
   tests, confidence-labelled edges, click-to-explain paths
+- ✅ Impact graph on real projects: package lanes and boxes, highlighted
+  change, counts, depth and direct-links controls (D-051)
 - 🔄 Java editor support, progress notifications, Windows installer (D-044);
   needs a Windows build check
 - ✅ Uncommitted-change analysis: `WORKTREE` revision + "My uncommitted

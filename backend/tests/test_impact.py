@@ -202,3 +202,29 @@ def test_explanation_graph_keeps_edges_of_different_kinds_apart():
     assert edges["type:x.A->type:x.B:same_package"]["confidence"] == "heuristic"
     nodes = {n["id"]: n for n in graph["nodes"]}
     assert nodes["type:x.C"]["path_edges"][-1] == "type:x.A->type:x.B:same_package"
+
+
+def test_explanation_graph_groups_nodes_by_package_and_counts_them(repo):
+    files = {
+        "a/Core.java": "package a;\npublic class Core {\n    int value() { return 1; }\n}\n",
+        "b/Service.java": "package b;\nimport a.Core;\npublic class Service {\n    Core core;\n}\n",
+        "Root.java": "public class Root {\n    b.Service service;\n}\n",
+        "src/test/java/b/ServiceTest.java": "package b;\nclass ServiceTest {\n    Service s;\n}\n",
+    }
+    base = commit_files(repo, {**files, "pom.xml": "<project/>\n"}, "base")
+    head = commit_files(repo, {"a/Core.java": files["a/Core.java"].replace("1", "2"),
+                               "pom.xml": "<project></project>\n"}, "head")
+
+    graph = compute_impact(repo.path, base, head).to_dict()["explanation_graph"]
+
+    nodes = {n["id"]: n for n in graph["nodes"]}
+    assert nodes["type:a.Core"]["package"] == "a"
+    assert nodes["type:b.ServiceTest"]["package"] == "b"
+    assert nodes["file:pom.xml"]["package"] is None
+    groups = {g["name"]: g for g in graph["packages"]}
+    assert groups["a"] == {"id": "package:a", "name": "a", "label": "a", "changed": True,
+                           "counts": {"changed": 1, "impacted": 0, "test": 0}}
+    assert groups["b"]["counts"] == {"changed": 0, "impacted": 1, "test": 1}
+    assert not groups["b"]["changed"]
+    assert groups[""]["label"] == "(default package)"
+    assert graph["summary"] == {"changed": 1, "impacted": 2, "test": 1, "unanalysed": 1}

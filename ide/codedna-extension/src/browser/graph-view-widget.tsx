@@ -3,14 +3,23 @@ import { inject, injectable, postConstruct } from '@theia/core/shared/inversify'
 import { ProgressService } from '@theia/core/lib/common/progress-service';
 import { ReactWidget } from '@theia/core/lib/browser/widgets/react-widget';
 import cytoscape from 'cytoscape';
-import { CodeDnaService, ExplanationGraph } from '../common/codedna-protocol';
+import { CodeDnaService, ExplanationGraph, ImpactOptions } from '../common/codedna-protocol';
 import { CodeDnaComparison } from './comparison';
 import { CodeDnaWorkspace } from './codedna-workspace';
+import { lanePositions } from './graph-layout';
 import { withProgress } from './progress';
 import { confidenceLabel, friendlyWarning, readableName } from './plain-language';
 import { Chip, ComparePicker, ErrorNotice, FirstRun, Spinner } from './ui';
 
 type GraphNode = ExplanationGraph['nodes'][number];
+
+/** Depth choices offered for the traversal; undefined = follow every link. */
+const DEPTHS: { label: string; value: number | undefined }[] = [
+    { label: 'All links', value: undefined },
+    { label: '1 link away', value: 1 },
+    { label: '2 links away', value: 2 },
+    { label: '3 links away', value: 3 }
+];
 
 const CATEGORY: Record<GraphNode['category'], { label: string; color: string }> = {
     changed: { label: 'Changed', color: '--cd-modified' },
@@ -40,6 +49,7 @@ export class GraphViewWidget extends ReactWidget {
     protected graph: ExplanationGraph | undefined;
     protected warnings: string[] = [];
     protected selected: GraphNode | undefined;
+    protected options: ImpactOptions = {};
     protected cy: cytoscape.Core | undefined;
     protected canvas: HTMLDivElement | null = null;
 
@@ -77,7 +87,9 @@ export class GraphViewWidget extends ReactWidget {
         this.update();
         try {
             const { base, head } = this.comparison;
-            const impact = await withProgress(this.progress, 'CodeDNA: building the impact graph', () => this.codedna.impact(repo, base, head));
+            const options = { ...this.options };
+            const impact = await withProgress(this.progress, 'CodeDNA: building the impact graph',
+                () => this.codedna.impact(repo, base, head, options));
             if (base !== this.comparison.base || head !== this.comparison.head) {
                 this.error = 'The comparison changed. Show the graph again.';
                 return;
@@ -116,22 +128,46 @@ export class GraphViewWidget extends ReactWidget {
         }
         const style = getComputedStyle(this.node);
         const color = (name: string) => style.getPropertyValue(name).trim() || '#888';
+        // One box per package once the change spans several; a single box adds nothing.
+        const grouped = this.graph.packages.length > 1;
+        const layout = lanePositions(this.graph);
+        // Grow the canvas with the graph (within limits) so labels stay readable; scroll/zoom for more.
+        this.canvas.style.height = `${Math.min(760, Math.max(360, layout.height * 0.75 + 80))}px`;
         this.cy = cytoscape({
             container: this.canvas,
             elements: [
+                ...(grouped ? this.graph.packages.map(g => ({ data: {
+                    id: g.id, label: g.label, kind: 'package', changed: g.changed } })) : []),
                 ...this.graph.nodes.map(n => ({ data: {
                     id: n.id, label: nodeLabel(n.id),
-                    color: color(CATEGORY[n.category].color), category: n.category } })),
+                    color: color(CATEGORY[n.category].color), category: n.category, changed: n.changed,
+                    ...(grouped && n.package !== null ? { parent: `package:${n.package}` } : {}) } })),
                 // Core edges read "dependent depends on target"; draw them the way the change travels.
                 ...this.graph.edges.map(e => ({ data: {
                     id: e.id, source: e.target, target: e.source, confidence: e.confidence } }))
             ],
-            layout: { name: 'breadthfirst', directed: true, spacingFactor: 1.1,
-                roots: this.graph.nodes.filter(n => n.changed).map(n => n.id) },
+            // Lanes: one band per package, columns by links from the change (graph-layout.ts).
+            layout: { name: 'preset', positions: layout.positions, fit: true, padding: 24 },
             style: [
                 { selector: 'node', style: {
                     'background-color': 'data(color)', label: 'data(label)', color: color('--cd-text'),
-                    'font-size': 11, 'text-valign': 'bottom', 'text-margin-y': 4, width: 18, height: 18 } },
+                    'font-size': 11, 'text-valign': 'center', 'text-halign': 'right', 'text-margin-x': 6,
+                    // Labels sit on the canvas colour so edges passing behind them stay readable.
+                    'text-background-color': color('--cd-bg'), 'text-background-opacity': 0.85,
+                    'text-background-padding': '2px', width: 14, height: 14 } },
+                // The change itself stands out: larger, outlined, bold label.
+                { selector: 'node[?changed][category != "unanalysed"]', style: {
+                    width: 22, height: 22, 'border-width': 3, 'border-color': color('--cd-text'),
+                    'font-weight': 'bold', 'font-size': 12 } },
+                { selector: 'node[kind = "package"]', style: {
+                    'background-color': color('--cd-muted'), 'background-opacity': 0.06,
+                    'border-width': 1, 'border-color': color('--cd-line'), shape: 'round-rectangle',
+                    label: 'data(label)', 'text-valign': 'top', 'text-halign': 'center',
+                    'text-background-opacity': 0, 'font-size': 11, color: color('--cd-muted'),
+                    // Compound padding is valid Cytoscape style but missing from @types/cytoscape 3.21.
+                    padding: '14px' } as cytoscape.Css.Node },
+                { selector: 'node[kind = "package"][?changed]', style: {
+                    'border-color': color('--cd-modified'), 'border-width': 2 } },
                 { selector: 'node[category = "unanalysed"]', style: {
                     'border-width': 2, 'border-style': 'dashed', 'border-color': color('--cd-deleted'),
                     'background-opacity': 0.2 } },
@@ -162,7 +198,8 @@ export class GraphViewWidget extends ReactWidget {
                     path.merge(edge).merge(edge.connectedNodes());
                 }
                 path.merge(cy.getElementById(this.selected.id));
-                cy.elements().not(path).addClass('cd-faded');
+                // Package boxes stay visible: fading a box would fade everything inside it.
+                cy.elements().not(path).not('node[kind = "package"]').addClass('cd-faded');
                 path.edges().addClass('cd-path');
                 cy.getElementById(this.selected.id).addClass('cd-selected');
             }
@@ -188,6 +225,18 @@ export class GraphViewWidget extends ReactWidget {
             </header>
             <form className='cd-controls' onSubmit={e => { e.preventDefault(); this.load(); }}>
                 <ComparePicker comparison={this.comparison} disabled={this.loading} />
+                <label className='cd-field'>
+                    <span className='cd-field-label'>Follow</span>
+                    <select value={String(this.options.maxDepth ?? '')} disabled={this.loading}
+                        onChange={e => { this.options = { ...this.options, maxDepth: e.currentTarget.value ? Number(e.currentTarget.value) : undefined }; this.update(); }}>
+                        {DEPTHS.map(d => <option key={d.label} value={d.value ?? ''}>{d.label}</option>)}
+                    </select>
+                </label>
+                <label className='cd-check'>
+                    <input type='checkbox' checked={!!this.options.confirmedOnly} disabled={this.loading}
+                        onChange={e => { this.options = { ...this.options, confirmedOnly: e.currentTarget.checked }; this.update(); }} />
+                    Direct links only
+                </label>
                 <button className='cd-button' type='submit' disabled={this.loading} aria-busy={this.loading}>
                     {this.loading ? <><Spinner /> Building graph…</> : 'Show graph'}
                 </button>
@@ -196,11 +245,13 @@ export class GraphViewWidget extends ReactWidget {
             {!graph && !this.loading && !this.error && <FirstRun action='Show graph' />}
             {graph && graph.nodes.length === 0 && <p className='cd-lede'>No code changes to show between these commits.</p>}
             {graph && graph.nodes.length > 0 && <>
+                <p className='cd-help' aria-live='polite'>{summaryText(graph)}</p>
                 <ul className='cd-legend' aria-label='Legend'>
                     {Object.entries(CATEGORY).map(([key, c]) =>
                         <li key={key}><span className={`cd-dot cd-dot-${key}`} />{c.label}</li>)}
                     <li><span className='cd-line-solid' />Direct link</li>
                     <li><span className='cd-line-dashed' />Likely link</li>
+                    {graph.packages.length > 1 && <li><span className='cd-box' />Package</li>}
                 </ul>
                 <div className='cd-graph-canvas' ref={el => { this.canvas = el; }}
                     role='img' aria-label={`Impact graph with ${graph.nodes.length} parts. Use the list below to explain a part.`} />
@@ -250,4 +301,14 @@ export class GraphViewWidget extends ReactWidget {
 /** Type ids read as class names; unanalysed files keep their path (`file:pom.xml` → `pom.xml`). */
 function nodeLabel(id: string): string {
     return id.startsWith('file:') ? id.slice('file:'.length) : readableName(id);
+}
+
+function summaryText(graph: ExplanationGraph): string {
+    const { changed, impacted, test, unanalysed } = graph.summary;
+    const parts = [`${changed} changed`, `${impacted} may be affected`, `${test} related test${test === 1 ? '' : 's'}`];
+    if (unanalysed) {
+        parts.push(`${unanalysed} not analysed`);
+    }
+    const packages = graph.packages.length;
+    return parts.join(' · ') + (packages > 1 ? `, across ${packages} packages` : '');
 }
