@@ -3,6 +3,15 @@
 Read this first, then AGENTS.md (rules), docs/ROADMAP.md (status) and
 docs/DECISIONS.md (decision history and tradeoffs).
 Last updated: 2026-10-25 (desktop delivery and queued fresh-project study).
+Branch `claude/project-thread-info38` (PR #17, stacked on #16): full suite
+`python -m pytest --run-maven` on Linux: 388 passed, 7 skipped (Windows-only
+start.bat tests, run by Windows CI), 2026-10-25. The counts below (334, 322,
+315 ...) were reported by Codex on the laptop's older uncommitted tree; they
+were not reproduced on this branch. Codex's first project-history draft
+dropped failing runs, kept a second history and edited .git/info/exclude;
+D-057 replaced it, so do not port those parts back from the laptop.
+
+Codex's laptop notes (2026-10-25):
 Latest full validation: **334 passed, zero skipped**, Maven and Gradle included;
 897.94 seconds, one existing Starlette/httpx deprecation warning. Three Node
 runtime tests also passed. No commits or pushes were requested/performed.
