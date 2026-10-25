@@ -90,6 +90,13 @@ actions show a progress notification with the elapsed time.
   from the table above. `npm run build` and `npm run package` run this step
   first.
 
+- `Could not resolve path of module: @vscode/windows-ca-certs`: fixed in
+  `electron-app/esbuild.mjs`, which now leaves this optional module out
+  when npm could not compile it (Node 24 headers ask for the ClangCL
+  toolset). The app then only skips reading the Windows certificate store
+  for proxied extension downloads. To include it, add the "C++ Clang
+  Compiler for Windows" and "MSBuild support for LLVM (clang-cl) toolset"
+  Build Tools components and rerun `npm install`.
 - `UNABLE_TO_GET_ISSUER_CERT` while rebuilding native modules on Windows:
   if `NODE_USE_SYSTEM_CA=1` is set and the Windows store lacks
   ISRG Root X2, Node cannot verify `artifacts.electronjs.org`. Run the build
