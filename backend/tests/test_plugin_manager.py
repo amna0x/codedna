@@ -29,11 +29,13 @@ def catalogue(sha=WHEEL_SHA, api="1.0"):
 
 
 class FakePip:
-    def __init__(self, code=0):
-        self.calls, self.code = [], code
+    def __init__(self, code=0, check=""):
+        self.calls, self.code, self.check = [], code, check
 
     def __call__(self, args):
         self.calls.append(args)
+        if args[0] == "check":  # pip check exits 1 for any broken package in the environment
+            return subprocess.CompletedProcess(args, 1 if self.check else 0, self.check, "")
         return subprocess.CompletedProcess(args, self.code, "", "boom" if self.code else "")
 
 
@@ -46,9 +48,25 @@ def test_install_verifies_checksum_then_installs_one_wheel_without_index():
     pip = FakePip()
     result = manager.install(catalogue(), "python", "1.0.0", confirmed=True, download=fetch, pip=pip)
     assert result["status"] == "installed"
-    [args] = pip.calls
+    args, check = pip.calls
     assert args[:4] == ["install", "--no-index", "--no-deps", "--disable-pip-version-check"]
     assert args[-1].endswith("codedna_python-1.0.0-py3-none-any.whl")
+    assert check[0] == "check"
+
+
+def test_install_is_rolled_back_when_the_plugin_dependencies_are_missing():
+    pip = FakePip(check="codedna_python 1.0.0 requires tree-sitter, which is not installed.\n"
+                        "otherpkg 2.0 requires zlib, which is not installed.\n")
+    with pytest.raises(CatalogueError, match="removed again.*requires tree-sitter") as error:
+        manager.install(catalogue(), "python", "1.0.0", confirmed=True, download=fetch, pip=pip)
+    assert "otherpkg" not in str(error.value)  # other packages' problems are not reported
+    assert pip.calls[-1] == ["uninstall", "--yes", "codedna-python"]
+
+
+def test_unrelated_broken_packages_do_not_block_an_install():
+    pip = FakePip(check="otherpkg 2.0 requires zlib, which is not installed.\n")
+    assert manager.install(catalogue(), "python", "1.0.0", confirmed=True, download=fetch,
+                           pip=pip)["status"] == "installed"
 
 
 @pytest.mark.parametrize("kwargs, message", [
@@ -75,7 +93,7 @@ def test_unknown_version_incompatible_api_and_builtin_are_handled():
     with pytest.raises(CatalogueError, match="plugin API"):
         manager.install(catalogue(api="2.0"), "python", "1.0.0", confirmed=True,
                         download=fetch, pip=FakePip())
-    assert "built-in" in manager.install(catalogue(), "java", "0.1.0", confirmed=True,
+    assert "bundled" in manager.install(catalogue(), "java", "0.1.0", confirmed=True,
                                           download=fetch, pip=FakePip())["status"]
 
 
@@ -83,7 +101,7 @@ def test_remove_uses_the_catalogue_package_name_and_refuses_builtins():
     pip = FakePip()
     assert manager.remove(catalogue(), "python", confirmed=True, pip=pip)["status"] == "removed"
     assert pip.calls == [["show", "--quiet", "codedna-python"], ["uninstall", "--yes", "codedna-python"]]
-    with pytest.raises(CatalogueError, match="built in"):
+    with pytest.raises(CatalogueError, match="bundled"):
         manager.remove(catalogue(), "java", confirmed=True, pip=pip)
 
 
@@ -117,17 +135,17 @@ def test_cli_catalogue_and_confirmed_install(monkeypatch, capsys):
     assert json.loads(capsys.readouterr().out)["schema_version"] == 1
     assert main(["plugins", "install", "python", "1.0.0", "--yes"]) == 0
     assert json.loads(capsys.readouterr().out)["status"] == "installed"
-    assert len(pip.calls) == 1
+    assert [call[0] for call in pip.calls] == ["install", "check"]
 
 
-def make_wheel(path):
+def make_wheel(path, requires=b""):
     """A minimal real wheel (no build tools needed) registering a codedna.languages entry point."""
     import base64
     import zipfile
     files = {
         "codedna_python/__init__.py": b"class PythonPlugin:\n    pass\n",
         "codedna_python-1.0.0.dist-info/METADATA":
-            b"Metadata-Version: 2.1\nName: codedna-python\nVersion: 1.0.0\n",
+            b"Metadata-Version: 2.1\nName: codedna-python\nVersion: 1.0.0\n" + requires,
         "codedna_python-1.0.0.dist-info/WHEEL":
             b"Wheel-Version: 1.0\nGenerator: test\nRoot-Is-Purelib: true\nTag: py3-none-any\n",
         "codedna_python-1.0.0.dist-info/entry_points.txt":
@@ -168,6 +186,24 @@ def test_real_pip_installs_and_removes_the_verified_wheel_offline(tmp_path):
         manager.remove(index, "python", confirmed=True, pip=pip)
     assert "codedna_python" not in subprocess.run(
         [str(python), "-m", "pip", "list"], capture_output=True, text=True, check=True).stdout
+
+
+def test_real_pip_rolls_back_a_plugin_whose_dependency_is_missing(tmp_path):
+    import sys
+    import venv
+    env = tmp_path / "env"
+    venv.EnvBuilder(with_pip=True).create(env)
+    python = env / ("Scripts/python.exe" if sys.platform == "win32" else "bin/python")
+    pip = lambda args: subprocess.run([str(python), "-m", "pip", *args],
+                                      capture_output=True, text=True, check=False)
+    data = make_wheel(tmp_path / "codedna_python-1.0.0-py3-none-any.whl",
+                      requires=b"Requires-Dist: codedna-no-such-dependency>=1\n")
+    index = catalogue(sha=hashlib.sha256(data).hexdigest())
+
+    with pytest.raises(CatalogueError, match="codedna-no-such-dependency"):
+        manager.install(index, "python", "1.0.0", confirmed=True, download=lambda url: data,
+                        pip=pip)
+    assert pip(["show", "codedna-python"]).returncode != 0  # nothing left behind
 
 
 def test_wheel_of_another_version_is_refused_before_download():

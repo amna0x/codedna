@@ -64,7 +64,7 @@ def install(catalogue: dict, plugin: str, version: str, *, confirmed: bool,
             download: Download | None = None, pip: Runner | None = None) -> dict:
     entry = find_version(catalogue, plugin, version)
     if entry.builtin:
-        return {"plugin": plugin, "version": version, "status": "built-in; nothing to install"}
+        return {"plugin": plugin, "version": version, "status": "bundled with CodeDNA; nothing to install"}
     if not entry.compatible:
         raise CatalogueError(f"{plugin} {version} needs plugin API {entry.api_version}")
     if not confirmed:
@@ -88,7 +88,22 @@ def install(catalogue: dict, plugin: str, version: str, *, confirmed: bool,
                       str(wheel)])
     if result.returncode != 0:
         raise CatalogueError(f"pip could not install {plugin} {version}: {result.stderr.strip()}")
+    missing = _unmet_requirements(entry.package or "", pip or _pip)
+    if missing:
+        # --no-deps never fetches anything else, so a plugin whose own dependencies
+        # are absent would fail to load; take it out again rather than leave it broken.
+        (pip or _pip)(["uninstall", "--yes", entry.package])
+        raise CatalogueError(
+            f"{plugin} {version} was removed again because its dependencies are not installed: "
+            f"{'; '.join(missing)}. Install them in CodeDNA's environment, then retry")
     return {"plugin": plugin, "version": version, "sha256": digest, "status": "installed"}
+
+
+def _unmet_requirements(package: str, run: Runner) -> list[str]:
+    """``pip check`` lines about ``package`` (other packages' problems are not ours)."""
+    result = run(["check", "--disable-pip-version-check"])
+    return [line.strip() for line in (result.stdout or "").splitlines()
+            if line.strip() and _canonical(line.split(" ", 1)[0]) == _canonical(package)]
 
 
 def remove(catalogue: dict, plugin: str, *, confirmed: bool, pip: Runner | None = None) -> dict:
@@ -97,7 +112,7 @@ def remove(catalogue: dict, plugin: str, *, confirmed: bool, pip: Runner | None 
         raise CatalogueError(f"{plugin} is not in the official catalogue")
     package = next((e.package for e in entries if e.package), None)
     if package is None:
-        raise CatalogueError(f"{plugin} is built in and cannot be removed")
+        raise CatalogueError(f"{plugin} is bundled with CodeDNA and cannot be removed here")
     if not confirmed:
         raise CatalogueError("removing a plugin changes CodeDNA's environment; confirm explicitly")
     run = pip or _pip
