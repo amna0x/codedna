@@ -31,9 +31,9 @@ def fit_audited(dataset, feature_names, risk_target=.05):
 
 
 def recommend(repo_path,base,head,*,history_csv=None,risk_target=.05,language='java',must_run=None):
-    from codedna.plugins import load_plugins
+    from codedna.plugins.languages import require
     from codedna.selection import SelectionError
-    plugin=load_plugins().get(language)
+    plugin=require(language)
     select=getattr(plugin,'risk_select',None)
     if select is None:
         raise SelectionError(f'Language plugin {language!r} does not provide risk selection')

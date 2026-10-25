@@ -200,20 +200,23 @@ def test_history_evaluate_command(history, tmp_path, capsys):
 # --- plugins -----------------------------------------------------------------------------
 
 
-def test_builtin_java_plugin_is_registered():
-    registry = load_plugins(include_entry_points=False)
+def test_java_plugin_is_found_through_its_entry_point():
+    registry = load_plugins()
     java = registry.get("java")
     assert java.handles("src/A.java") and not java.handles("README.md")
     assert registry.for_path("x/B.java") is java
     assert registry.describe()["plugins"][0]["name"] == "java"
+    assert "class" in java.type_kinds and "method" not in java.type_kinds
 
 
 def test_incompatible_and_broken_plugins_are_rejected(monkeypatch):
     class Old:
         name, display_name, version, api_version, file_suffixes = "old", "Old", "1", "0.9", (".old",)
+        type_kinds = frozenset({"class"})
 
         def handles(self, path): return path.endswith(".old")
         def parse(self, source): ...
+        def attach_declarations(self, report): ...
         def build_graph(self, repo, commit, **kw): ...
         def discover_tests(self, repo, commit): ...
         def run_tests(self, *a, **kw): ...
@@ -227,14 +230,22 @@ def test_incompatible_and_broken_plugins_are_rejected(monkeypatch):
                 raise ImportError("missing module")
             return self._factory
 
-    fake = [EntryPoint("old", Old), EntryPoint("broken", None), EntryPoint("junk", object)]
+    class Newer(Old):
+        name, api_version = "newer", "1.9"  # needs members a 1.1 core may not have
+
+    class Current(Old):
+        name, api_version = "current", "1.0"  # older minor: still compatible
+
+    fake = [EntryPoint("old", Old), EntryPoint("broken", None), EntryPoint("junk", object),
+            EntryPoint("newer", Newer), EntryPoint("current", Current)]
     monkeypatch.setattr("codedna.plugins.registry.entry_points",
                         lambda group: fake if group == ENTRY_POINT_GROUP else [])
 
     registry = load_plugins()
 
-    assert list(registry.plugins) == ["java"]
+    assert list(registry.plugins) == ["current"]
     problems = " ".join(registry.problems)
+    assert "newer: plugin API 1.9 is incompatible" in problems
     assert "incompatible" in problems and "failed to load" in problems and "does not implement" in problems
 
 

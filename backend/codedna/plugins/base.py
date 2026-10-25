@@ -12,9 +12,11 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any, Protocol, runtime_checkable
 
-# Major version of the plugin API. Plugins declaring another major version are
-# refused; bump it only for incompatible interface changes.
-PLUGIN_API_VERSION = "1.0"
+# Plugin API version. Plugins declaring another major version are refused;
+# bump the major only for incompatible interface changes. 1.1 (D-054) adds
+# ``type_kinds`` and ``attach_declarations``, which the core now needs because
+# it no longer imports any language code itself.
+PLUGIN_API_VERSION = "1.1"
 
 
 @runtime_checkable
@@ -24,12 +26,16 @@ class LanguagePlugin(Protocol):
     version: str  # plugin version
     api_version: str  # plugin API version it was written for, e.g. "1.0"
     file_suffixes: tuple[str, ...]  # e.g. (".java",)
+    type_kinds: frozenset[str]  # graph node kinds that are types, e.g. {"class", "enum"}
 
     def handles(self, path: str) -> bool:
         """True if this plugin analyses the file at ``path``."""
 
     def parse(self, source: bytes) -> Any:
         """Declarations with line ranges for one source file."""
+
+    def attach_declarations(self, report: Any) -> None:
+        """Fill the declaration mapping of the files it handles in a ``ChangeReport`` (in place)."""
 
     def build_graph(self, repo: Path, commit: str, *, include_members: bool = True,
                     cache: dict | None = None) -> Any:
@@ -41,3 +47,13 @@ class LanguagePlugin(Protocol):
     def run_tests(self, repo_path: str | Path, revision: str, output_dir: str | Path, *,
                   allow_build: bool, per_test_coverage: bool = False, **options: Any) -> Any:
         """Run tests (executes project code; only with ``allow_build``, D-014)."""
+
+
+def api_compatible(version: str) -> bool:
+    """Same major as the core, and no newer minor (it could rely on members the core lacks)."""
+    try:
+        major, minor = (int(part) for part in str(version).split(".")[:2])
+        core_major, core_minor = (int(part) for part in PLUGIN_API_VERSION.split("."))
+    except ValueError:
+        return False
+    return major == core_major and minor <= core_minor

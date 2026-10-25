@@ -44,19 +44,16 @@ import sys
 from pathlib import Path
 
 from codedna import __version__
-from codedna.dependency_graph import build_graph
 from codedna.git_analysis import CodeDNAGitError, extract_changes
 from codedna.impact_analysis import compute_impact
-from codedna.java_analysis import analyze_changes
 from codedna.models.rankers import BASELINES, ML_MODELS
 from codedna.plugins import load_plugins
+from codedna.plugins.languages import analyze_changes, build_graph, discover_tests, require
 from codedna.selection import STRATEGIES, SelectionError, compare_strategies, select_tests
-from codedna.test_mapping.discovery import discover_tests
-from codedna.test_mapping.maven import run_maven_tests
-from codedna.test_mapping.reports import ReportError
 from codedna.test_mapping.results import (
     COVERAGE_MAP_FILE,
     RESULTS_FILE,
+    ReportError,
     load_coverage_map,
     load_results,
 )
@@ -476,7 +473,7 @@ def _run_tests(args: argparse.Namespace) -> int:
         return EXIT_ANALYSIS_ERROR
     print(f"warning: running the build of {args.repo} (project code will execute)",
           file=sys.stderr)
-    run, coverage = run_maven_tests(
+    run, coverage = require("java").run_tests(
         args.repo, args.rev, args.output_dir, allow_build=True,
         per_test_coverage=args.per_test_coverage,
         maven_command=[args.mvn] if args.mvn else None,
@@ -559,13 +556,12 @@ def _run_on_dataset(args: argparse.Namespace, dataset) -> int:
 def _record_run(args: argparse.Namespace) -> int:
     from codedna.git_analysis.git import resolve_repository
     from codedna.test_history.recording import record_run
-    from codedna.test_mapping.discovery import discover_tests_for_commit
     from codedna.test_mapping.results import RESULTS_FILE, load_results
 
     path = Path(args.results)
     run = load_results(path / RESULTS_FILE if path.is_dir() else path)
     repo = resolve_repository(args.repo)
-    expected = [t.id for t in discover_tests_for_commit(repo, run.commit).tests
+    expected = [t.id for t in require("java").discover_tests(repo, run.commit).tests
                 if t.runs_by_default]
     report = record_run(repo, run, expected_tests=expected)
     _write_json(report, None)

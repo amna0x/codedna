@@ -2,7 +2,8 @@
 
 This is the first stage of the CodeDNA pipeline. It answers: *which files
 changed between BASE and HEAD, how, and on which lines?* Class- and
-method-level mapping is added on top by ``codedna.java_analysis``.
+method-level mapping is added on top by the language plugin
+(``codedna.plugins.languages.analyze_changes``).
 
 Line-range conventions:
 
@@ -19,7 +20,7 @@ from __future__ import annotations
 import re
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import Any
 
 from codedna.git_analysis.git import (
     GitCommandError,
@@ -27,9 +28,6 @@ from codedna.git_analysis.git import (
     resolve_repository,
     run_git,
 )
-
-if TYPE_CHECKING:
-    from codedna.java_analysis.mapping import JavaFileAnalysis
 
 # Diff flags shared by every diff call: detect renames, never run external
 # diff drivers or textconv filters configured in the analysed repository.
@@ -61,9 +59,9 @@ class ChangedFile:
     is_binary: bool = False
     changed_lines: list[LineRange] = field(default_factory=list)
     removed_lines: list[LineRange] = field(default_factory=list)
-    # Declaration-level mapping; filled by codedna.java_analysis for Java
+    # Declaration-level mapping; filled by the Java plugin (codedna-java) for Java
     # files when analysis_level is "method", otherwise None.
-    java: JavaFileAnalysis | None = None
+    java: Any = None  # codedna_java.mapping.JavaFileAnalysis
 
 
 @dataclass

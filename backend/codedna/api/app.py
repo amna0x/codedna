@@ -26,10 +26,8 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
 from codedna import __version__
-from codedna.dependency_graph import build_graph
 from codedna.git_analysis import CodeDNAGitError, extract_changes
 from codedna.impact_analysis import compute_impact
-from codedna.java_analysis import analyze_changes
 from codedna.models.replay import (
     ReplayError,
     find_replay_sources,
@@ -37,13 +35,18 @@ from codedna.models.replay import (
     replay_overview,
 )
 from codedna.plugins import load_plugins
+from codedna.plugins.languages import (
+    PluginMissingError,
+    analyze_changes,
+    build_graph,
+    discover_tests,
+    require,
+)
 from codedna.selection import SelectionError, compare_strategies, select_tests
-from codedna.test_mapping.discovery import discover_tests
-from codedna.test_mapping.maven import run_maven_tests
-from codedna.test_mapping.reports import ReportError
 from codedna.test_mapping.results import (
     COVERAGE_MAP_FILE,
     RESULTS_FILE,
+    ReportError,
     load_coverage_map,
     load_results,
 )
@@ -163,6 +166,10 @@ def create_app(token: str, *, allow_build: bool = False,
     async def report_error(_request: Request, exc: ReportError):
         return JSONResponse({"error": str(exc)}, status_code=400)
 
+    @app.exception_handler(PluginMissingError)
+    async def plugin_missing(_request: Request, exc: PluginMissingError):
+        return JSONResponse({"error": str(exc)}, status_code=400)
+
     @app.exception_handler(ReplayError)
     async def replay_error(_request: Request, exc: ReplayError):
         return JSONResponse({"error": str(exc)}, status_code=400)
@@ -239,9 +246,7 @@ def create_app(token: str, *, allow_build: bool = False,
         from codedna.test_history.recording import ignore_outputs, record_run
         ignore_outputs(repo)
         output = repo/'.codedna/runs'/uuid4().hex
-        plugin = load_plugins().get('java')
-        if plugin is None:
-            raise SelectionError('Java test execution plugin is unavailable')
+        plugin = require('java')
         run,_ = plugin.run_tests(repo,selection['head_commit'],output,allow_build=True,
             selected_tests=[t['test'] for t in selection['selected']],
             maven_command=maven_command,timeout=body.timeout)
@@ -284,7 +289,7 @@ def create_app(token: str, *, allow_build: bool = False,
         if not body.allow_build:
             raise HTTPException(status_code=400, detail=(
                 "running tests executes project code; send allow_build: true to confirm"))
-        run, coverage = run_maven_tests(
+        run, coverage = require("java").run_tests(
             body.repo, body.rev, body.output_dir, allow_build=True,
             per_test_coverage=body.per_test_coverage, maven_command=maven_command,
             timeout=body.timeout)

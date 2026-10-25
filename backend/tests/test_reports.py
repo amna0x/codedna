@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from codedna.test_mapping.reports import (
+from codedna_java.reports import (
     ReportError,
     jvm_class_to_type_id,
     parse_jacoco_report,

@@ -10,7 +10,7 @@ import pytest
 
 from codedna.cli import EXIT_ANALYSIS_ERROR, main
 from codedna.git_analysis.blobs import export_commit
-from codedna.test_mapping.maven import BuildError, run_maven_tests
+from codedna_java.maven import BuildError, run_maven_tests
 from codedna.test_mapping.results import load_coverage_map, load_results
 
 FAKE_MVN = [sys.executable, str(Path(__file__).with_name("fake_mvn.py"))]
@@ -124,7 +124,7 @@ def test_project_without_root_pom_is_rejected(repo, tmp_path):
 
 
 def test_missing_maven_is_reported(project, tmp_path, monkeypatch):
-    monkeypatch.setattr("codedna.test_mapping.maven.shutil.which", lambda name: None)
+    monkeypatch.setattr("codedna_java.maven.shutil.which", lambda name: None)
     with pytest.raises(BuildError, match="Maven"):
         run_maven_tests(project.path, "HEAD", tmp_path / "out", allow_build=True)
 

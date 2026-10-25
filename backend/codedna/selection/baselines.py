@@ -29,14 +29,12 @@ from pathlib import Path
 
 from codedna.git_analysis.git import resolve_commit, resolve_repository
 from codedna.impact_analysis import compute_impact
-from codedna.java_analysis import analyze_changes
-from codedna.java_analysis.parser import TYPE_NODES
 from codedna.plugins import load_plugins
+from codedna.plugins.languages import analyze_changes, require
 from codedna.selection.policy import apply_policy
 from codedna.test_mapping.results import CoverageMap, TestRunResult
 
 STRATEGIES = ("all", "dependency", "coverage")
-_TYPE_KINDS = frozenset(TYPE_NODES.values())
 
 
 class SelectionError(ValueError):
@@ -89,10 +87,12 @@ def select_tests(repo_path: str | Path, base: str, head: str, strategy: str, *,
     repo = resolve_repository(repo_path)
     base_sha, head_sha = resolve_commit(repo, base), resolve_commit(repo, head)
 
-    discovery = load_plugins().get("java").discover_tests(repo, head_sha)
+    registry = load_plugins()
+    java = require("java", registry)
+    discovery = java.discover_tests(repo, head_sha)
     universe = sorted(t.id for t in discovery.tests if t.runs_by_default)
     test_files = {t.id: t.file for t in discovery.tests}
-    changes = analyze_changes(repo, base_sha, head_sha)
+    changes = analyze_changes(repo, base_sha, head_sha, registry=registry)
     warnings = list(changes.warnings)
     chosen: dict[str, SelectedTest] = {}
 
@@ -124,7 +124,7 @@ def select_tests(repo_path: str | Path, base: str, head: str, strategy: str, *,
         if coverage_map.commit != base_sha:
             warnings.append(f"coverage map is from commit {coverage_map.commit[:12]}, not BASE "
                             f"{base_sha[:12]}; selection may miss or over-select tests")
-        _select_by_coverage(changes, coverage_map, universe, pick)
+        _select_by_coverage(changes, coverage_map, universe, pick, java.type_kinds)
 
     if non_java_changes and non_java == "ignore":
         warnings.append(f"{len(non_java_changes)} non-Java change(s) ignored by request: "
@@ -156,7 +156,8 @@ def select_tests(repo_path: str | Path, base: str, head: str, strategy: str, *,
     )
 
 
-def _select_by_coverage(changes, coverage_map: CoverageMap, universe: list[str], pick) -> None:
+def _select_by_coverage(changes, coverage_map: CoverageMap, universe: list[str], pick,
+                        type_kinds: frozenset[str]) -> None:
     for test_id in universe:
         if test_id not in coverage_map.tests:
             pick(test_id, "no coverage data for this test")
@@ -174,7 +175,7 @@ def _select_by_coverage(changes, coverage_map: CoverageMap, universe: list[str],
         for declaration in java.declarations:
             if declaration.code_changed is False:
                 continue
-            is_type = declaration.kind in _TYPE_KINDS
+            is_type = declaration.kind in type_kinds
             for test_id, cov in coverage_map.tests.items():
                 if is_type and declaration.id in cov.types:
                     pick(test_id, f"covers changed type {declaration.id}")

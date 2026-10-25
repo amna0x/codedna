@@ -12,43 +12,15 @@ import xml.etree.ElementTree as ElementTree
 from dataclasses import dataclass, field
 from pathlib import Path
 
-PASSED, FAILED, ERROR, SKIPPED = "passed", "failed", "error", "skipped"
-# Worst status wins when combining test cases into a class result.
-_SEVERITY = {SKIPPED: 0, PASSED: 1, FAILED: 2, ERROR: 3}
-
-
-class ReportError(Exception):
-    """A Surefire or JaCoCo report could not be read."""
-
-
-@dataclass
-class TestCaseResult:
-    __test__ = False  # not a pytest test class
-
-    name: str  # method name; "Nested.method" for @Nested classes
-    status: str
-    time: float
-    message: str | None = None
-
-
-@dataclass
-class TestClassResult:
-    __test__ = False  # not a pytest test class
-
-    id: str  # top-level class, e.g. "example.PriceCalculatorTest"
-    status: str = SKIPPED
-    time: float = 0.0
-    cases: list[TestCaseResult] = field(default_factory=list)
-
-    def add(self, case: TestCaseResult) -> None:
-        self.cases.append(case)
-        self.time = round(self.time + case.time, 6)
-        if _SEVERITY[case.status] > _SEVERITY[self.status]:
-            self.status = case.status
-
-    @property
-    def failed(self) -> bool:
-        return self.status in (FAILED, ERROR)
+from codedna.test_mapping.results import (
+    ERROR,
+    FAILED,
+    PASSED,
+    SKIPPED,
+    ReportError,
+    TestCaseResult,
+    TestClassResult,
+)
 
 
 def top_level_class(binary_name: str) -> str:
