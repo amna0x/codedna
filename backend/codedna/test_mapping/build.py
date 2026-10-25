@@ -4,7 +4,10 @@ Read from committed build files only; no build tool runs here. Maven modules
 come from ``<modules>`` (followed recursively); custom Surefire ``<includes>``
 and ``<excludes>`` come from each module's own ``pom.xml`` (inherited parent
 configuration and profiles are not resolved; modules listed only inside
-profiles are reported, not followed). Gradle modules come from ``include`` lines in
+profiles are reported, not followed). A module's test sources are its
+``<testSourceDirectory>`` (default ``src/test/java``) plus any directory added
+with build-helper-maven-plugin's ``add-test-source`` goal, which projects use
+to share one test folder between modules (HikariCP 2.x does this). Gradle modules come from ``include`` lines in
 ``settings.gradle(.kts)`` (a syntactic reading, recorded as such); Gradle runs
 every class in the ``test`` source set by default, so no name filter applies.
 """
@@ -36,24 +39,38 @@ class BuildLayout:
     includes: dict[str, list[str]] = field(default_factory=dict)  # module → Surefire includes
     excludes: dict[str, list[str]] = field(default_factory=dict)  # module → Surefire excludes
     warnings: list[str] = field(default_factory=list)
+    # module → test source roots ("dir/", repository-relative); default <module>/src/test/java/
+    test_roots: dict[str, list[str]] = field(default_factory=dict)
 
-    def module_of(self, path: str) -> str | None:
-        """Deepest module whose ``src/test/java`` contains ``path``."""
+    def roots(self, module: str) -> list[str]:
+        return self.test_roots.get(module) or [f"{module}/src/test/java/" if module else "src/test/java/"]
+
+    def _match(self, path: str) -> tuple[str, str] | None:
+        """(module, root) of the most specific test root containing ``path``.
+
+        A folder shared by several modules (build-helper) belongs to the first
+        of them in sorted order; its tests run in each, under the same ID.
+        """
         best = None
         for module in self.modules:
-            root = f"{module}/src/test/java/" if module else "src/test/java/"
-            if path.startswith(root) and (best is None or len(module) > len(best)):
-                best = module
+            for root in self.roots(module):
+                if path.startswith(root) and (best is None or len(root) > len(best[1])):
+                    best = (module, root)
         return best
+
+    def module_of(self, path: str) -> str | None:
+        """Module whose test sources contain ``path`` (most specific root wins)."""
+        match = self._match(path)
+        return match[0] if match else None
 
     def runs_by_default(self, path: str) -> bool:
         """Would the build tool run this test file without extra configuration?"""
-        module = self.module_of(path)
-        if module is None:
+        match = self._match(path)
+        if match is None:
             return False
         if self.tool == "gradle":
             return True
-        root = f"{module}/src/test/java/" if module else "src/test/java/"
+        module, root = match
         relative = path.removeprefix(root)
         patterns = self.includes.get(module) or SUREFIRE_DEFAULTS
         return (any(_matches(relative, p) for p in patterns)
@@ -61,8 +78,14 @@ class BuildLayout:
 
 
 def _matches(relative: str, pattern: str) -> bool:
-    """Surefire include pattern; "**/Name*.java" matches the file name at any depth."""
+    """Surefire include pattern; "**/Name*.java" matches the file name at any depth.
+
+    Surefire treats ``.class`` and ``.java`` endings alike (both name test
+    classes), so ``**/*.class`` selects every test class.
+    """
     pattern = pattern.strip().lstrip("/")
+    if pattern.endswith(".class"):
+        pattern = pattern.removesuffix(".class") + ".java"
     rest = pattern.removeprefix("**/")
     if rest != pattern and "/" not in rest:
         return fnmatch(PurePosixPath(relative).name, rest)
@@ -106,6 +129,9 @@ def _maven(repo: Path, files: dict[str, str]) -> BuildLayout:
                 pending.append("" if path == "." else path)
         if _all(root, "profiles", "profile", "modules", "module"):
             layout.warnings.append(f"{pom}: modules inside <profiles> are not followed")
+        roots = _maven_test_roots(root, module, pom, layout.warnings)
+        if roots:
+            layout.test_roots[module] = roots
         surefire = [plugin for plugin in _all(root, "build", "plugins", "plugin")
                     if (_child_text(plugin, "artifactId") or "") == "maven-surefire-plugin"]
         for name, store in (("include", layout.includes), ("exclude", layout.excludes)):
@@ -116,6 +142,36 @@ def _maven(repo: Path, files: dict[str, str]) -> BuildLayout:
                 store[module] = patterns
     layout.modules.sort()
     return layout
+
+
+def _maven_test_roots(pom_root: ElementTree.Element, module: str, pom: str,
+                      warnings: list[str]) -> list[str]:
+    """Test source roots of one module; [] means the default ``src/test/java``."""
+    configured = [(_child_text(b, "testSourceDirectory") or "").strip()
+                  for b in _all(pom_root, "build")]
+    main = next((d for d in configured if d), "src/test/java")
+    extra = [s.text.strip() for plugin in _all(pom_root, "build", "plugins", "plugin")
+             if (_child_text(plugin, "artifactId") or "") == "build-helper-maven-plugin"
+             for execution in _all(plugin, "executions", "execution")
+             if any((g.text or "").strip() == "add-test-source"
+                    for g in _all(execution, "goals", "goal"))
+             for s in _all(execution, "configuration", "sources", "source")
+             if s.text and s.text.strip()]
+    if main == "src/test/java" and not extra:
+        return []
+    roots = []
+    for directory in [main, *extra]:
+        if "${" in directory:
+            warnings.append(f"{pom}: test source {directory!r} uses a property; not followed")
+            continue
+        path = posixpath.normpath(posixpath.join(module, directory))
+        if path == ".." or path.startswith("../") or posixpath.isabs(path):
+            warnings.append(f"{pom}: test source {directory!r} is outside the repository; not followed")
+            continue
+        root = "" if path == "." else path + "/"
+        if root not in roots:
+            roots.append(root)
+    return roots
 
 
 def _gradle(repo: Path, files: dict[str, str]) -> BuildLayout:

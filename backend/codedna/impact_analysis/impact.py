@@ -40,6 +40,7 @@ class Seed:
     file: str | None
     in_head: bool  # False for types deleted by the change
     reasons: list[str] = field(default_factory=list)
+    package: str | None = None  # "" = default package; None = not in the graph
 
 
 @dataclass
@@ -61,6 +62,7 @@ class ImpactedNode:
     confidence: str  # "confirmed" only if every edge on the path is confirmed
     seed: str
     path: list[PathStep]
+    package: str | None = None
 
 
 @dataclass
@@ -91,6 +93,10 @@ def explanation_graph(report: dict) -> dict:
     Only edges on an explanation path are kept (the shortest path the traversal
     found), each labelled confirmed or heuristic. Non-Java changes become
     ``unresolved`` nodes with no edges: their impact is unknown, not absent.
+
+    Each node carries its ``package`` (``""`` = default package, ``None`` for
+    files outside the graph); ``packages`` groups them for display, and
+    ``summary`` counts nodes per category.
     """
     tests = {t["type"] for t in report["candidate_tests"]}
     nodes: dict[str, dict] = {}
@@ -102,7 +108,8 @@ def explanation_graph(report: dict) -> dict:
     for seed in report["seeds"]:
         nodes[seed["node"]] = {"id": seed["node"], "category": category(seed["node"], "changed"),
                                "changed": True, "file": seed["file"], "confidence": "confirmed",
-                               "distance": 0, "reasons": seed["reasons"], "path_edges": []}
+                               "distance": 0, "reasons": seed["reasons"], "path_edges": [],
+                               "package": seed.get("package")}
     for item in report["impacted"]:
         ids = []
         for step in item["path"]:
@@ -116,14 +123,29 @@ def explanation_graph(report: dict) -> dict:
         nodes[item["node"]] = {"id": item["node"], "category": category(item["node"], "impacted"),
                                "changed": False, "file": item["file"],
                                "confidence": item["confidence"], "distance": item["distance"],
-                               "seed": item["seed"], "reasons": [], "path_edges": ids}
+                               "seed": item["seed"], "reasons": [], "path_edges": ids,
+                               "package": item.get("package")}
     for change in report["unanalysed_changes"]:
         node_id = "file:" + change["path"]
         nodes[node_id] = {"id": node_id, "category": "unanalysed", "changed": True,
                           "file": change["path"], "confidence": "unresolved", "distance": None,
-                          "reasons": [change["reason"]], "path_edges": []}
+                          "reasons": [change["reason"]], "path_edges": [], "package": None}
+    packages: dict[str, dict] = {}
+    for node in nodes.values():
+        if node["package"] is None:
+            continue
+        group = packages.setdefault(node["package"], {
+            "id": f'package:{node["package"]}', "name": node["package"],
+            "label": node["package"] or "(default package)", "changed": False,
+            "counts": {"changed": 0, "impacted": 0, "test": 0}})
+        group["changed"] |= node["changed"]
+        group["counts"][node["category"]] += 1
+    summary = {key: sum(n["category"] == key for n in nodes.values())
+               for key in ("changed", "impacted", "test", "unanalysed")}
     return {"nodes": sorted(nodes.values(), key=lambda n: n["id"]),
-            "edges": sorted(edges.values(), key=lambda e: e["id"])}
+            "edges": sorted(edges.values(), key=lambda e: e["id"]),
+            "packages": sorted(packages.values(), key=lambda g: g["name"]),
+            "summary": summary}
 
 
 def compute_impact(repo_path: str | Path, base: str, head: str, *,
@@ -172,7 +194,8 @@ def _collect_seeds(changes, graph: CodeGraph) -> tuple[dict[str, Seed], list[dic
         node_id = f"type:{type_id}"
         node = graph.nodes.get(node_id)
         seed = seeds.setdefault(node_id, Seed(
-            node_id, node.file if node else None, bool(node and "head" in node.versions)))
+            node_id, node.file if node else None, bool(node and "head" in node.versions),
+            package=node.package if node else None))
         if reason not in seed.reasons:
             seed.reasons.append(reason)
 
@@ -256,7 +279,7 @@ def _impacted(graph: CodeGraph, node_id: str, parent: dict, distance: int) -> Im
     return ImpactedNode(
         node=node_id, kind=node.kind if node else "unknown", file=node.file if node else None,
         role=node.role if node else None, distance=distance, confidence=confidence,
-        seed=current, path=steps,
+        seed=current, path=steps, package=node.package if node else None,
     )
 
 

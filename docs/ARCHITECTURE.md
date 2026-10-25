@@ -79,6 +79,7 @@ backend/codedna/
 │   ├── mining.py          first-parent history + numstat
 │   ├── collection.py      import results.json / opt-in per-commit runs
 │   ├── rtptorrent.py      RTPTorrent importer (real CI results, no builds)
+│   ├── recording.py       full-suite runs kept as .codedna/history.csv (D-053)
 │   └── features.py        leakage-free (commit, test) rows
 └── models/
     ├── metrics.py         APFD, APFDc, recall@budget, time to first failure
@@ -89,6 +90,7 @@ calibration/
     ├── calibrators.py     none / Platt / isotonic
     └── metrics.py         Brier, ECE, reliability bins
 selection/risk.py          risk-per-second selection, skip risk, fallback
+selection/policy.py        must-run tests policy read from BASE, add-on rule hook
 api/
     ├── app.py             FastAPI app: endpoints, token + Host checks, build opt-in
     └── server.py          `codedna serve` (loopback-only, prints URL + token)
@@ -220,6 +222,12 @@ coverage data. `compare_strategies` evaluates each strategy against a
 ground-truth `results.json` of HEAD: `failing_tests`, `caught`, `missed`,
 `safe` (nothing missed), selection ratio, estimated time.
 
+`selection.policy` (D-050): must-run tests from `.codedna/policy.toml` at BASE,
+request patterns and add-on rules (`codedna.policies` entry points) are added
+to every product selection (`select_tests`, `risk-select`); an unreadable
+policy or failing rule pins everything. `compare_strategies` and the
+experiments ignore it.
+
 ### `plugins`
 
 `load_plugins()` registers the built-in `JavaPlugin` and every factory in the
@@ -305,6 +313,7 @@ codedna-extension/src
     ├── change-view-widget.tsx      "Changed code" (analyze + impact)
     ├── tests-view-widget.tsx       "Recommended tests" (select)
     ├── graph-view-widget.tsx       "Impact graph" (impact.explanation_graph, Cytoscape.js)
+    ├── graph-layout.ts             package lanes x links-from-change placement (D-051)
     ├── replay-view-widget.tsx      "History replay" (replay timelines, D-049)
     ├── codedna-workspace.ts        repo path = first workspace root; open file at line
     ├── theme/codedna-theme.ts      CodeDNA Dark colour theme + shell class toggle

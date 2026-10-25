@@ -918,6 +918,147 @@ Limitation: the replay is a simulation on recorded history (what each policy
 would have run, given the recorded test outcomes), not a live run; it cannot
 show effects such as tests that would have behaved differently if run alone.
 
+## D-050 — Must-run (pinned) tests policy
+
+Some tests must run on every change whatever the risk estimate says (smoke
+tests, release checks, later security checks). A project lists them in
+`.codedna/policy.toml` as `[[must_run]]` groups with `tests` (test IDs or
+case-sensitive `fnmatch` patterns) and an optional `reason`; the CLI
+(`--must-run PATTERN`, repeatable) and API (`must_run`) add patterns for one
+request. Implemented in the language-neutral `codedna.selection.policy`.
+
+- **Read from BASE**, never from HEAD or the working tree, so a change (for
+  example from an AI agent) cannot loosen its own checks. A change that edits
+  the policy is analysed under the old one, with a warning.
+- **Fail safe:** a malformed or unreadable policy, or a failing add-on rule,
+  pins every test. A pattern matching no test is reported as a warning.
+- **Only adds tests.** `select_tests` adds pinned tests to every strategy;
+  `risk-select` passes them to `decide(always=...)`, which counts them as run
+  when computing the skip risk. The audit gate is evaluated without pins;
+  pins can only lower the miss rate it measures.
+- **Research numbers unchanged:** `compare_strategies` and all experiments
+  ignore the policy.
+- **Extension hook:** add-on rules register in the `codedna.policies` entry-point
+  group (zero-argument factory returning an object with `name` and
+  `pinned(context) -> {test_id: reason}`; `context` has repo, BASE, HEAD, test
+  IDs and changed paths). Rules come only from installed packages, never from
+  the analysed repository. This is the place for the post-defence security
+  rules (for example "changes under `auth/` pin the security suite").
+
+Limitation: patterns match test IDs as the plugin reports them (Java: test
+classes); a pinned test that Surefire does not run by default stays outside
+the universe and is not added.
+
+## D-051 — Impact graph: package lanes, highlighted change, depth controls
+
+On a real project (HikariCP) a typical one-commit impact graph has about 60
+nodes in 9 packages; the D-043 drawing (one breadth-first tree) was too
+crowded to read. Changes:
+
+- **Core:** `explanation_graph` adds each node's `package` (`""` = default
+  package, `null` for files outside the graph), a `packages` list (label,
+  whether it holds changed code, counts per category) and a `summary` of
+  counts. Additive JSON fields; no API version change.
+- **IDE layout:** a "lane" layout (`graph-layout.ts`, pure placement of core
+  data): one horizontal band per package, columns by the core's `distance`
+  (links from the change), bands with changed code first. Package boxes are
+  drawn when the change spans more than one package. Cytoscape's force layout
+  (`cose`) was tried with package boxes and produced overlapping boxes on the
+  HikariCP graphs, so it was rejected.
+- **Changed code stands out:** larger, outlined nodes with bold labels;
+  package boxes that contain changed code have a coloured border. A one-line
+  summary gives the counts per category and packages.
+- **Controls:** "Follow" (all links, or 1/2/3 links from the change) and
+  "Confirmed links only" (drops heuristic links; depth is set separately) pass the existing `max_depth` / `confirmed_only` options
+  to the core; no filtering happens in TypeScript.
+
+Checked by rendering the compiled layout with Cytoscape in headless Chromium
+on HikariCP commits 086bf183 (13 nodes, 4 packages) and 93c71780 (63 nodes,
+9 packages); not yet checked inside the packaged Windows app.
+
+## D-052 — Real-project demo, two discovery fixes and what the live gate does on public CI history
+
+**Demo.** `scripts/make_hikaricp_demo.py DEST` clones HikariCP from the
+RTPTorrent bare repository, checks out a real tested change (default
+dd7c9a9a, chosen from `--list` for the demonstration, not as evidence),
+writes `.codedna/history.csv` with the study's rows for tested commits on
+BASE's first-parent line up to BASE (nothing from the change or later), and
+`.codedna/demo.json` with CodeDNA's dependency selection and risk
+recommendation next to RTPTorrent's CI record of the change. `.codedna/` is
+added to `.git/info/exclude`. No project code is built or run.
+
+**Discovery fixes found on the way** (both made the test universe smaller
+than what CI ran, so even "run everything" missed failures):
+
+- build-helper-maven-plugin `add-test-source` folders and a module's own
+  `<testSourceDirectory>` are now test roots (`BuildLayout.test_roots`).
+  HikariCP 2.x shares `hikaricp-common/src/test/java` between two modules;
+  before the fix 2 of its 21 CI test classes were discovered. A folder shared
+  by several modules belongs to the first in sorted order. Property
+  (`${...}`) paths and paths outside the repository are reported, not followed.
+- Surefire include/exclude patterns ending in `.class` are treated like
+  `.java` (Surefire's rule). wicket-bootstrap's core module includes
+  `**/*.class`; before the fix none of its tests ran by default.
+
+Study numbers are unaffected: the study uses RTPTorrent's recorded tests,
+not discovery.
+
+**Live gate on public CI history (finding, not changed).** HikariCP has 89
+consecutive tested first-parent pairs whose CI run failed; every Java-only one
+was run through `risk-select` with history up to its BASE, as were the failing
+Java-only changes on wicket-bootstrap's master line. The D-041 gate never
+accepted. HikariCP's audit windows always contain a commit
+whose CI record lacks a current test class (for example TestMetrics missing
+at 8a20f775), and the gate requires complete outcomes. Dropping incomplete
+commits would leave too few failing audit commits and the gate still refuses
+(upper bound above target, recall below 90%). wicket-bootstrap's CI records
+cover 41 of the 72 test classes its build runs. The gate behaves as designed:
+without complete evidence it recommends the full suite. The gate was not
+loosened for the demo; the calibrated stopping is shown in the History replay
+view instead. A product change for this (for example, always run tests
+without history and validate the rest) would need its own pre-registered
+check.
+
+## D-053 — Record full-suite runs as project history ("record as you go")
+
+**Why.** D-052 showed the live gate (D-041) never turns on from public CI
+records, because they are incomplete. A project using CodeDNA can build
+complete records itself: every whole-suite run CodeDNA starts is a full,
+labelled outcome of one commit.
+
+**What.** `test_history/recording.py` `record_run(repo, run, expected_tests)`
+stores the run in `.codedna/history.db` (first-parent history mined again,
+source `codedna-run`) and rebuilds `.codedna/history.csv` from it
+(`structural=False`; the live predictor does not use those features). The
+CSV is written to a `.partial` file and then replaced. Used by
+`/api/run-selection` (IDE) when nothing was skipped, and by
+`codedna history record --repo PATH RESULTS` for a saved run, whose expected
+tests are the classes the build runs by default at that commit.
+
+**Refused, with a reason, never guessed:**
+
+- selected (partial) runs: a skipped test's outcome is unknown and the gate
+  audits complete outcomes;
+- runs where an expected test class has no result (the build stopped early);
+- commits not on HEAD's first-parent line (working-tree snapshots, other
+  branches);
+- a `history.csv` CodeDNA did not write (no database, or its SHA-256 differs
+  from the one stored after the last recording), e.g. the HikariCP demo or a
+  hand-edited file.
+
+A second run of the same commit replaces that commit's earlier result.
+
+**Git hygiene.** A self-ignoring `.codedna/.gitignore` (only if none exists)
+ignores `runs/` and the history files; a committed `policy.toml` is
+unaffected. `snapshot_worktree` also leaves those paths out, for run folders
+created before the ignore file existed.
+
+**What it does not do.** It does not loosen the gate. With the default 5%
+target the gate needs at least 10 failure-bearing audit commits (the last 25%
+of recorded commits) and a Wilson upper bound at or under 5%, so in practice
+a few hundred recorded commits. A synthetic check (240 commits, one test failing every
+third commit, scratch script only, not evidence) reached `validated_history`
+from recorded runs alone; real projects will differ.
 ## D-055 — Bundle the Python core in the Windows desktop installer
 
 The desktop installer must support analysis without a separate Python/CodeDNA

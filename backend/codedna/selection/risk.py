@@ -7,7 +7,8 @@ real duration of this run is unknown when selecting).
 1. Tests are ordered by ``p / cost`` (most risk removed per second first),
    or by a caller-supplied order (e.g. a simple rule such as recent failures
    first, so the probabilities only decide *how many* tests to run);
-   changed test classes are always selected.
+   changed test classes and ``always`` tests (must-run policy, D-050) are
+   always selected; they count as run when the skip risk is computed.
 2. **Budget**: take the prefix that fits ``budget × total estimated time``.
 3. **Risk target**: estimated *skip risk* = probability that at least one
    skipped test fails, ``1 − Π(1 − p)`` over skipped tests. This assumes
@@ -51,7 +52,8 @@ class SelectionDecision:
 
 
 def decide(rows: list[Row], probabilities: list[float], policy: RiskPolicy, *,
-           order: list[str] | None = None) -> SelectionDecision:
+           order: list[str] | None = None,
+           always: frozenset[str] | set[str] = frozenset()) -> SelectionDecision:
     if not rows:
         return SelectionDecision([], [], 0.0, 0.0, 0.0)
     prob = {row.test_id: min(max(p, 0.0), 1.0) for row, p in zip(rows, probabilities)}
@@ -75,6 +77,10 @@ def decide(rows: list[Row], probabilities: list[float], policy: RiskPolicy, *,
     selected = {r.test_id for r in rows if r.features.get("test_file_changed")}
     if selected:
         reasons.append(f"{len(selected)} changed test class(es) always run")
+    pinned = {t for t in always if t in prob} - selected
+    if pinned:
+        selected |= pinned
+        reasons.append(f"{len(pinned)} must-run test class(es) always run")
 
     spent = sum(cost[t] for t in selected)
     if policy.budget is not None:

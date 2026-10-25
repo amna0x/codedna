@@ -101,7 +101,8 @@ codedna graph   --repo PATH [--rev REV] [--no-members] [--output FILE]
 codedna impact  --repo PATH --base BASE_REV --head HEAD_REV [--max-depth N] [--confirmed-only] [--output FILE]
 codedna tests   --repo PATH [--rev REV] [--output FILE]
 codedna run-tests --repo PATH [--rev REV] --output-dir DIR --allow-build [--per-test-coverage] [--mvn PATH] [--gradle PATH] [--timeout S]
-codedna select  --repo PATH --base BASE_REV --head HEAD_REV --strategy all|dependency|coverage [--coverage-map F] [--durations F] [--non-java retest-all|ignore]
+codedna select  --repo PATH --base BASE_REV --head HEAD_REV --strategy all|dependency|coverage [--coverage-map F] [--durations F] [--non-java retest-all|ignore] [--must-run PATTERN ...]
+codedna risk-select --repo PATH --base BASE_REV --head HEAD_REV [--history-csv F] [--risk-target F] [--must-run PATTERN ...]
 codedna compare --repo PATH --base BASE_REV --head HEAD_REV --ground-truth F [--coverage-map F] [--non-java retest-all|ignore]
 codedna plugins
 codedna serve   [--host 127.0.0.1] [--port 8765] [--allow-build]
@@ -109,6 +110,7 @@ codedna history mine     --repo PATH --db FILE [--rev REV] [--max-commits N]
 codedna history import   --db FILE RESULTS [RESULTS ...] [--source NAME]
 codedna history collect  --repo PATH --db FILE --output-dir DIR --allow-build [--max-commits N]
 codedna history status   --db FILE
+codedna history record   --repo PATH RESULTS
 codedna history evaluate --db FILE [--repo PATH] [--rankers ...] [--no-structural] [--dataset-csv F]
 codedna history import-rtptorrent --dataset DIR (--list | --project NAME --db FILE) [--max-commits N]
 codedna history experiment --db FILE [--repo PATH] [--model M] [--calibration none|platt|isotonic] [--budget F] [--risk-target F] [--replay]
@@ -300,6 +302,24 @@ and the calm CodeDNA Dark theme. See [ide/README.md](ide/README.md) for prerequi
 run, points it at the `.venv` core and the JDK, and opens a demo project
 (`start.bat C:\path\to\repo` opens another folder).
 
+### Demo on a real project (HikariCP)
+
+With the RTPTorrent HikariCP data in `experiments/` (see DATASET_PLAN.md):
+
+```bat
+.venv\Scripts\python scripts\make_hikaricp_demo.py %USERPROFILE%\codedna-hikaricp
+start.bat %USERPROFILE%\codedna-hikaricp
+```
+
+The folder's last commit is a real HikariCP change (dd7c9a9a) whose CI run
+failed 17 of 21 test classes; `.codedna/history.csv` holds the project's
+recorded test history up to the commit before it, and `.codedna/demo.json`
+puts CodeDNA's answers next to the real CI outcome. Dependency selection picks
+19 of 21 classes and catches all 17 failures in 24% of the CI test time; the
+risk view falls back to the full suite because the history fails the gate
+(D-052). The commit was picked for the demonstration (`--list` shows the
+others); it is not evidence.
+
 ![CodeDNA IDE](docs/ide-screenshot.png)
 
 ## Sample Java project
@@ -418,6 +438,31 @@ Use `codedna risk-select --repo PATH --base BASE --head HEAD` for the same core
 recommendation. Without adequate history, risk stays unvalidated and all tests
 are recommended. See [Java workflow](docs/JAVA_WORKFLOW.md) for history preparation,
 validation limits, selected Maven execution and the IDE workflow.
+
+### Must-run tests
+
+Tests listed in `.codedna/policy.toml` are never skipped by `select` or
+`risk-select` (D-050):
+
+```toml
+[[must_run]]
+tests = ["example.OrderServiceTest", "example.security.*"]
+reason = "checkout and security checks run on every change"
+```
+
+The file is read from the BASE commit, so a change cannot loosen its own
+policy; a broken file makes every test run. `--must-run PATTERN` adds
+patterns for one run.
+
+### History builds up as you use it
+
+Every run of the whole suite that CodeDNA starts (IDE **Run**, when nothing
+is skipped) is saved in `.codedna/history.db` and `.codedna/history.csv`
+(D-053). `codedna history record --repo PATH RESULTS` adds a saved
+`results.json`. Partial runs, other branches and uncommitted states are not
+recorded, and a `history.csv` you supplied is never overwritten. Risk
+selection turns on only when this history passes the audit, which takes many
+recorded commits with failures; until then it recommends the full suite.
 
 The [fixed DANTE-H/B10 extension protocol](docs/DANTE_B10_PROTOCOL.md) and
 [related-work comparison](docs/RELATED_WORK_COMPARISON.md) describe the independent
