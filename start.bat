@@ -14,7 +14,7 @@ if not exist ".venv\Scripts\codedna.exe" (
 )
 rem The IDE starts "codedna serve" itself; point it at the project venv.
 set "CODEDNA_EXECUTABLE=%~dp0.venv\Scripts\codedna.exe"
-rem The History replay view (Ctrl+Alt+R) opens the study results in this checkout.
+rem The History replay view (Ctrl+Shift+Alt+R) opens the study results in this checkout.
 set "CODEDNA_REPLAY_FOLDERS=%~dp0experiments\results\replay-2026-10-25;%~dp0experiments\results\study11-2026-10-21"
 
 rem Java support in the editor needs a JDK. Use the portable JDK if one is

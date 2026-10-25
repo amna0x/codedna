@@ -23,7 +23,7 @@ jooq, jsprit, optiq) had no dataset here and replay from their compact study
 reports, which have no commit SHAs, test names, seconds or per-commit
 estimated risk. Rerun the command after rebuilding their datasets to add them.
 
-Open them in the IDE with **History replay** (`Ctrl+Alt+R`), or:
+Open them in the IDE with **History replay** (`Ctrl+Shift+Alt+R`), or:
 
 ```bash
 codedna replay experiments/results/replay-2026-10-25/hikaricp/replay-seed0.json
