@@ -4,18 +4,18 @@ A desktop IDE built on [Eclipse Theia](https://theia-ide.org) 1.76.0
 (Electron 42) with CodeDNA views. Theia provides the editor, file explorer,
 terminal and preferences; the `codedna-extension` package adds:
 
-- **Changes** (left panel, `Ctrl+Alt+D`): what changed in your code
+- **Changes** (left panel, `Ctrl+Shift+Alt+D`): what changed in your code
   (New / Changed / Removed) and which other classes might be affected, each
   with a one-line reason ("Direct" or "Likely" link). Click a row to open
   the file at that line.
-- **Tests to run** (right panel, `Ctrl+Alt+T`): the test classes your change
+- **Tests to run** (right panel, `Ctrl+Shift+Alt+T`): the test classes your change
   can affect (or all tests), each with the reason in plain words, and which
   ones were not selected. The risk strategy shows calibrated estimates only
   after a separate target-history audit; otherwise it recommends the full suite.
-- **Impact graph** (main area, `Ctrl+Alt+G`): changed code → parts that may be
+- **Impact graph** (main area, `Ctrl+Shift+Alt+G`): changed code → parts that may be
   affected → related tests. Solid lines are direct links, dashed lines likely
   ones. Click a dot, or pick a part from the list, to see why it is included.
-- **History replay** (main area, `Ctrl+Alt+R`): plays a real project's history
+- **History replay** (main area, `Ctrl+Shift+Alt+R`): plays a real project's history
   back commit by commit from the saved study results. Per commit it shows
   what "run every test", "dependency only", "simple rules at the same time"
   and CodeDNA would have run, how much test time that took, and which
@@ -55,7 +55,8 @@ On Windows, `start.bat` in the repository root does all of this: it builds
 the IDE if needed, sets `CODEDNA_EXECUTABLE` to `.venv\Scripts\codedna.exe`
 and `JAVA_HOME` to the portable JDK when one is recorded, and opens a demo
 repository (created in `%USERPROFILE%\codedna-demo`) or the folder given as
-its argument. It also points **History replay** at the study results. By hand:
+its argument. It also points **History replay** at the study results, and it
+rebuilds the IDE after a `git pull` that changed `ide/` (needs `git` on PATH). By hand:
 
 ```bash
 cd ide
@@ -66,7 +67,7 @@ npm start
 
 Open a folder that is a Git repository with Java code (e.g. a repository made
 by `python scripts/make_demo_repo.py ../codedna-demo`), then press
-`Ctrl+Alt+D` (**Changes**) and `Ctrl+Alt+T` (**Tests to run**).
+`Ctrl+Shift+Alt+D` (**Changes**) and `Ctrl+Shift+Alt+T` (**Tests to run**).
 If panels look narrow from an earlier session, run **View → Reset Workbench
 Layout** (command palette).
 

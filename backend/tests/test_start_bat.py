@@ -117,3 +117,34 @@ def test_missing_core_stops_with_setup_instructions(tmp_path):
     assert result.returncode == 1
     assert "pip install" in result.stdout
     assert not log.exists()
+
+
+def test_rebuilds_once_after_a_pull_that_changed_the_ide(tmp_path):
+    repo, env, log = checkout(tmp_path, built=True)
+    git = ["git", "-C", str(repo), "-c", "user.name=t", "-c", "user.email=t@example.com"]
+    (repo / "ide" / "package.json").write_text("{}\n")
+    subprocess.run([*git, "init", "-q"], check=True)
+    subprocess.run([*git, "add", "ide/package.json"], check=True)
+    subprocess.run([*git, "commit", "-q", "-m", "ide"], check=True)
+    builds = lambda: sum(line == "npm run build" for line in log.read_text().splitlines())  # noqa: E731
+
+    assert run(repo, env).returncode == 0  # built before, but by an unknown revision
+    assert builds() == 1
+    stamp = repo / "ide" / "electron-app" / "lib" / "codedna-build.txt"
+    head = subprocess.run([*git, "rev-parse", "HEAD"], capture_output=True, text=True,
+                          check=True).stdout.strip()
+    assert stamp.read_text().strip() == head
+
+    assert run(repo, env).returncode == 0  # nothing changed: no rebuild
+    assert builds() == 1
+
+    (repo / "README.md").write_text("docs only\n")  # outside ide/: no rebuild
+    subprocess.run([*git, "add", "README.md"], check=True)
+    subprocess.run([*git, "commit", "-q", "-m", "docs"], check=True)
+    assert run(repo, env).returncode == 0
+    assert builds() == 1
+
+    (repo / "ide" / "package.json").write_text('{"v": 2}\n')
+    subprocess.run([*git, "commit", "-q", "-am", "ide change"], check=True)
+    assert run(repo, env).returncode == 0
+    assert builds() == 2
