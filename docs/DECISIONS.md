@@ -1141,3 +1141,30 @@ correct. The brake is language-neutral and uses the installed language
 plugin (Java first). Whether agents finish with fewer broken changes when
 they use it is a research question still to be measured (planned SWE-bench
 Java study); no result is claimed here.
+
+## D-061 — Predictive Test Selection baseline (B11)
+
+(D-060 is taken by the agent brake study protocol on another branch.)
+
+**Why.** The closest prior work, Predictive Test Selection at Facebook
+(Machalica et al., ICSE-SEIP 2019), also uses a learned model, a holdout and
+a recall target. The report's difference from it (a per-commit risk target
+checked per project, against aggregate recall targets) had only been argued.
+
+**What.** `codedna.selection.pts` implements the published rule: tests with
+an uncalibrated score at or above a score cutoff, plus the N highest-scoring
+tests, plus changed test classes. The cutoffs are tuned on the calibration
+window to test recall 0.95 and change recall 0.999. `scripts/run_pts_check.py`
+runs it inside the rolling-origin design without editing the scripts frozen
+by the confirmatory job. The rules were fixed in
+`docs/PTS_BASELINE_PROTOCOL.md` before the run.
+
+**Result (exploratory, four inspected projects).** B10 minus time-matched B11
+safety is +0.007 [−0.063, 0.091]: inconclusive. B10 is cheaper and safer on
+HikariCP (where B11 cannot be made as cheap); B11 is safer on LittleProxy.
+B11 kept its test-recall target on 2 of 4 projects and its change-recall
+target on none; B10 kept its miss target on 3 of 4. Details:
+`experiments/results/pts-check-2026-10-25/FINDINGS.md`.
+
+**Not changed.** B11 is a research baseline only. The live product keeps
+B10 with the D-041 gate.

@@ -14,9 +14,11 @@ record were available; claims of absence for those works are marked
 CodeDNA turns calibrated per-test failure probabilities into a **per-commit
 estimate of omitted-failure risk** (the probability that at least one
 skipped test would fail), uses that estimate as a **stopping rule on top of
-a simple history ordering** (B10, D-036), and **checks the estimate on the
-target project's own recent history before trusting it**, recommending the
-full suite otherwise (D-041). It evaluates this against simple rules at
+a simple history ordering** (B10, D-036), and **uses it only when a replay
+on the target project's recent audit history kept the miss target**
+(Wilson upper bound, at least ten failing commits, at least 90 % recall),
+recommending the full suite otherwise (D-041). The gate checks outcomes
+against the target; it does not test the calibration of each estimate. It evaluates this against simple rules at
 matched test time and reports where it does not help.
 
 None of the parts is new on its own. Industrial tools already stop at an
@@ -41,7 +43,7 @@ it.
 | Continuous test suite failure prediction [18] | Abstract | Predicts whether the whole suite will fail | Not reported | Skip the whole suite run | *Unverified* | *Unverified* |
 | TDAD [21] | Abstract + method summary | No | No | Static code-to-test map queried by the agent | No | No |
 | TestPrune [22] | Abstract | No | No | Minimised regression subset for the agent | No | No |
-| **CodeDNA (B10 + D-041)** | — | **Yes**, `1 − Π(1 − p)` over skipped tests, shown with reasons | Platt / isotonic on a held-out window; ECE, Brier, reliability bins | Skip-risk target on top of a rules ordering | **Yes, per project and per time block**: risk estimate must match observed misses on recent history | **Yes**, whenever the check fails or the change is outside what was analysed |
+| **CodeDNA (B10 + D-041)** | — | **Yes**, `1 − Π(1 − p)` over skipped tests, shown with reasons | Platt / isotonic on a held-out window; ECE, Brier, reliability bins | Skip-risk target on top of a rules ordering | **Yes, per project and per time block**: the stopping rule must have kept its miss target on recent audit history | **Yes**, whenever the check fails or the change is outside what was analysed |
 
 ## Where the claim is weakest
 
@@ -49,8 +51,12 @@ it.
    a learned model, a holdout and a recall target, and it gates model
    deployment. The difference is real but narrow: its targets are aggregate
    and its probabilities are not checked, while CodeDNA gives a per-commit
-   number and checks that number per project. An examiner may call this an
-   incremental refinement. That is a fair description.
+   number and accepts it only where stopping on it kept the target on
+   that project's recent history. An examiner may call this an
+   incremental refinement. That is a fair description. Measured with B11
+   (D-061, exploratory): no difference in safety at matched time
+   (+0.007 [−0.063, 0.091]); B11's aggregate targets held less often (test
+   recall on 2 of 4 projects, change recall on none; B10's target on 3 of 4).
 2. **Commercial tools [11, 12] already sell "run until X % confidence".**
    Their confidence is an aggregate historical rate, not a per-change
    estimate, and they are closed. CodeDNA's evaluation is open and
@@ -64,7 +70,8 @@ it.
    calibration B10 broke its target on 3 of 9 projects.
 4. **The independence assumption** in `1 − Π(1 − p)` is shared with the
    Mozilla batching work [17]. One fault can fail several tests, so the
-   estimate is checked against observed misses rather than trusted.
+   estimate is not trusted on its own: the gate accepts it only where the
+   observed miss rate stayed within the target.
 5. **The stopping rule does not beat a fixed budget.** In the exploratory
    rolling-origin study, B10 minus a matched fixed budget is −0.003
    [−0.036, 0.029] in safety. The value claimed is a *checked* risk number

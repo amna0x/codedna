@@ -91,6 +91,7 @@ calibration/
     └── metrics.py         Brier, ECE, reliability bins
 selection/risk.py          risk-per-second selection, skip risk, fallback
 selection/policy.py        must-run tests policy read from BASE, add-on rule hook
+selection/pts.py           Predictive Test Selection baseline B11 (research only, D-061)
 api/
     ├── app.py             FastAPI app: endpoints, token + Host checks, build opt-in
     └── server.py          `codedna serve` (loopback-only, prints URL + token)

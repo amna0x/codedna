@@ -22,9 +22,9 @@ Most research answers the first question: it ranks or selects tests from
 dependencies, coverage or failure history [2, 24]. Industrial predictive test
 selection answers part of the second with an *aggregate* target, such as
 "catch 95 % of failing tests across past changes" [9, 11, 12]. What is
-rarely given is a risk number for *this* change, checked against the
-project's own history, with the full suite recommended whenever that check
-fails.
+rarely given is a risk number for *this* change, used only after the
+project's own recent history shows that stopping on it keeps its target,
+with the full suite recommended otherwise.
 
 ### 1.2 Aim
 
@@ -69,9 +69,13 @@ evaluates is a narrower combination:
   probabilities and used as the stopping rule on top of a simple history
   ordering (policy B10, D-036). Simple rules choose *which* tests run; the
   model chooses only *how many*;
-- a **per-project validation gate** (D-041) that accepts the estimate only
-  when it matched observed misses on the project's own recent history, and
-  otherwise recommends the full suite with a reason;
+- a **per-project validation gate** (D-041) that accepts the stopping rule
+  only when, replayed on the project's recent audit history, it kept the
+  miss target (one-sided 95 % Wilson upper bound on the commit miss rate at
+  or below the target, at least ten failing commits, at least 90 %
+  failing-test recall), and otherwise recommends the full suite with a
+  reason. This is an outcome check of the target, not a calibration test of
+  each estimate;
 - an **open, matched-time evaluation** on public CI data that reports where
   the approach does not help, and an implementation that keeps unverified
   relationships and missing outcomes visible.
@@ -81,7 +85,8 @@ The evaluation chapter finds that the per-commit estimate is usable (with a
 projects; pooled estimate 2.6 %, observed 2.8 %) but that stopping on it does not catch more failures than a well-chosen
 fixed budget at the same test time: the exploratory rolling-origin
 difference is −0.003 [−0.036, 0.029] in safety. The value claimed is
-therefore a *checked* risk statement and a safe refusal, not a faster or
+therefore a stated risk target that is used only where it held on the
+project's recent history, and a safe refusal elsewhere, not a faster or
 safer selection. Models trained on one project do not reliably transfer to
 another (D-039).
 
@@ -142,8 +147,9 @@ and flaky tests [12].
 These targets are *aggregate*: they promise a catch rate over many past
 changes, not a risk for the current one, and the per-test scores are not
 checked as probabilities. CodeDNA differs in two narrow ways. It reports an
-estimated omitted-failure risk for each change, and it checks that estimate
-against observed misses on the target project before using it (D-041). Its
+estimated omitted-failure risk for each change, and it uses that estimate as
+a stopping rule only after a replay on the target project's recent history
+kept the miss target (D-041). Its
 must-run policy (D-050) plays the same role as Develocity's always-run rules.
 
 ### 2.4 Recent research closest to CodeDNA
@@ -210,12 +216,16 @@ no claim that it improves agents, because no paid agent runs were made.
 ### 2.7 Position
 
 CodeDNA sits between safe RTS, which never skips a possibly affected test,
-and predictive selection, which skips tests to meet an aggregate target. It
+and predictive selection, which skips tests to meet an aggregate target. A
+re-implementation of the Predictive Test Selection rule (evaluation section
+4.9) neither beats nor loses to CodeDNA's stopping rule at the same test
+time on four projects, but its aggregate targets held less often out of
+sample. It
 keeps a simple history ordering, adds a per-change risk estimate that must
-pass a per-project check, and falls back to the full suite when it does not.
+pass a per-project outcome check, and falls back to the full suite when it does not.
 The report never claims to be the first to do this, and section 4 shows that
-the approach buys a trustworthy risk statement rather than extra failures
-caught.
+the approach buys a risk target that has been shown to hold on the
+project, rather than extra failures caught.
 
 ## 3. Requirements
 
