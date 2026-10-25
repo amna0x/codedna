@@ -141,12 +141,20 @@ _SNAPSHOT_ENV = {
 }
 
 
+# CodeDNA's own outputs are not part of the user's change, even in folders
+# created before .codedna/.gitignore existed (D-053).
+_OUTPUT_EXCLUDES = tuple(f":(exclude){path}" for path in (
+    ".codedna/runs", ".codedna/history.db", ".codedna/history.csv",
+    ".codedna/history.csv.partial"))
+
+
 def snapshot_worktree(repo: Path) -> str:
     """Commit object for the working tree on top of HEAD, without touching refs or the index.
 
     A copy of the real index (its file stat cache means unchanged files are
     not hashed again; HEAD's tree if there is no index) receives
-    ``git add -A`` (so ``.gitignore`` applies). The tree and an unreferenced
+    ``git add -A`` (so ``.gitignore`` applies; CodeDNA's own run folders and
+    history files are left out). The tree and an unreferenced
     commit are written to the object store, where ``git gc`` eventually
     removes them. The real index and every ref stay untouched. Repositories whose attributes name a
     filter driver (e.g. Git LFS) are refused: ``git add`` would run that
@@ -177,7 +185,7 @@ def snapshot_worktree(repo: Path) -> str:
             shutil.copyfile(real, index)
         except OSError:  # no index yet (or unreadable): start from HEAD's tree
             _run(repo, ("read-tree", head), env=env)
-        _run(repo, ("add", "-A", "--", "."), env=env)
+        _run(repo, ("add", "-A", "--", ".", *_OUTPUT_EXCLUDES), env=env)
         tree = _run(repo, ("write-tree",), env=env).decode().strip()
         return _run(repo, ("commit-tree", tree, "-p", head, "-m", "CodeDNA working-tree snapshot"),
                     env=env).decode().strip()

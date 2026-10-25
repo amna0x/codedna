@@ -174,6 +174,8 @@ May start in parallel (Student C) once the analysis JSON formats are stable.
   shared "Compare" picker, friendly errors, first-run guide (D-031)
 - ✅ Impact graph view (Cytoscape.js, D-043): changed code → affected parts →
   tests, confidence-labelled edges, click-to-explain paths
+- ✅ Impact graph on real projects: package lanes and boxes, highlighted
+  change, counts, depth and direct-links controls (D-051)
 - 🔄 Java editor support, progress notifications, Windows installer (D-044);
   needs a Windows build check
 - ✅ Uncommitted-change analysis: `WORKTREE` revision + "My uncommitted
@@ -181,6 +183,12 @@ May start in parallel (Student C) once the analysis JSON formats are stable.
 - ✅ History replay view (D-049): the study's test commits played back one by
   one, CodeDNA vs run-everything / dependency / simple rules, running totals
   checked against the saved reports, all-projects overview
+- ✅ Must-run (pinned) tests policy read from BASE, fail-safe, add-on rule
+  hook for later checks (D-050)
+- ✅ Real-project demo on HikariCP history (`scripts/make_hikaricp_demo.py`);
+  discovery follows build-helper test folders and `.class` includes (D-052)
+- ✅ Record as you go: full-suite runs build the project's own history so
+  the risk gate can turn on without external data (D-053)
 - ⏳ GitHub PR demonstration and final experimental report
 
 - ✅ IDE: risk status/audit evidence, explicit execution confirmation, actual

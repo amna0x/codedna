@@ -10,7 +10,9 @@ Usage:
                     [--per-test-coverage] [--mvn PATH] [--gradle PATH] [--timeout SECONDS] [--keep-checkout]
     codedna select  --repo PATH --base SHA --head SHA --strategy all|dependency|coverage
                     [--coverage-map FILE] [--durations FILE] [--non-java retest-all|ignore]
+                    [--must-run PATTERN ...]
     codedna risk-select --repo PATH --base SHA --head SHA [--history-csv FILE] [--risk-target F]
+                    [--must-run PATTERN ...]
     codedna compare --repo PATH --base SHA --head SHA --ground-truth FILE
                     [--coverage-map FILE] [--non-java retest-all|ignore]
     codedna plugins
@@ -20,6 +22,7 @@ Usage:
     codedna history collect  --repo PATH --db FILE --output-dir DIR --allow-build
                              [--max-commits N] [--mvn PATH] [--timeout SECONDS]
     codedna history status   --db FILE
+    codedna history record   --repo PATH RESULTS
     codedna history import-rtptorrent --dataset DIR (--project NAME --db FILE | --list)
                              [--max-commits N]
     codedna history evaluate --db FILE [--repo PATH] [--rankers NAME ...]
@@ -161,6 +164,7 @@ def build_parser() -> argparse.ArgumentParser:
     _add_change_args(risk_select)
     risk_select.add_argument('--history-csv', help='Target history CSV; default REPO/.codedna/history.csv')
     risk_select.add_argument('--risk-target', type=float, default=.05)
+    _add_must_run_arg(risk_select)
 
     select = subcommands.add_parser(
         "select", help="Select regression tests for a change with a baseline strategy.")
@@ -173,6 +177,7 @@ def build_parser() -> argparse.ArgumentParser:
     select.add_argument("--durations",
                         help="results.json (or its run directory) used to estimate test time.")
     _add_non_java_arg(select)
+    _add_must_run_arg(select)
     select.add_argument("--output", help="Write JSON to this file instead of standard output.")
 
     compare = subcommands.add_parser(
@@ -235,6 +240,15 @@ def build_parser() -> argparse.ArgumentParser:
     collect.add_argument("--mvn", help="Path to the Maven executable (default: mvn on PATH).")
     collect.add_argument("--timeout", type=_non_negative_int, default=1800,
                          help="Timeout per build invocation in seconds (default: 1800).")
+
+    record = history_commands.add_parser(
+        "record",
+        help="Add a full-suite run to REPO/.codedna/history.csv (nothing is built).",
+        description="Stores a complete run of the whole suite at a commit on the current "
+                    "branch as project history for risk selection (D-053). Incomplete "
+                    "runs and other branches are refused with a reason.")
+    record.add_argument("--repo", required=True, help="Path to a local Git repository.")
+    record.add_argument("results", help="results.json file or run directory.")
 
     rtp = history_commands.add_parser(
         "import-rtptorrent",
@@ -327,6 +341,13 @@ def _add_change_args(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--head", required=True, help="Head/target commit to compare against base.")
 
 
+def _add_must_run_arg(subparser: argparse.ArgumentParser) -> None:
+    subparser.add_argument(
+        "--must-run", action="append", default=[], metavar="PATTERN",
+        help="Never skip tests matching this ID or fnmatch pattern (repeatable); adds to "
+             ".codedna/policy.toml at BASE (D-050).")
+
+
 def _add_non_java_arg(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--non-java", choices=("retest-all", "ignore"), default="retest-all",
                         help="What to do when non-Java files changed (default: retest-all).")
@@ -366,7 +387,8 @@ def main(argv: list[str] | None = None) -> int:
         elif args.command == 'risk-select':
             from codedna.selection.live import recommend
             return _write_json(recommend(args.repo,args.base,args.head,
-                history_csv=args.history_csv,risk_target=args.risk_target),None)
+                history_csv=args.history_csv,risk_target=args.risk_target,
+                must_run=args.must_run),None)
         elif args.command == "run-tests":
             return _run_tests(args)
         elif args.command == "plugins":
@@ -404,7 +426,7 @@ def main(argv: list[str] | None = None) -> int:
                 args.repo, args.base, args.head, args.strategy,
                 coverage_map=load_coverage_map(coverage) if coverage else None,
                 durations=load_results(durations) if durations else None,
-                non_java=args.non_java)
+                non_java=args.non_java, must_run=args.must_run)
         else:
             coverage = _json_file(args.coverage_map, COVERAGE_MAP_FILE)
             return _write_json(compare_strategies(
@@ -453,6 +475,8 @@ def _run_history(args: argparse.Namespace) -> int:
     command = args.history_command
     if command == "import-rtptorrent":
         return _import_rtptorrent(args)
+    if command == "record":
+        return _record_run(args)
     if command == "collect" and not args.allow_build:
         print("error: history collect runs every commit's build (project code executes); "
               "re-run with --allow-build if you trust this project", file=sys.stderr)
@@ -502,6 +526,22 @@ def _run_on_dataset(args: argparse.Namespace, dataset) -> int:
     if args.dataset_csv:
         dataset.to_csv(args.dataset_csv)
     return _write_json(evaluate(dataset, rankers=args.rankers, seed=args.seed), args.output)
+
+
+def _record_run(args: argparse.Namespace) -> int:
+    from codedna.git_analysis.git import resolve_repository
+    from codedna.test_history.recording import record_run
+    from codedna.test_mapping.discovery import discover_tests_for_commit
+    from codedna.test_mapping.results import RESULTS_FILE, load_results
+
+    path = Path(args.results)
+    run = load_results(path / RESULTS_FILE if path.is_dir() else path)
+    repo = resolve_repository(args.repo)
+    expected = [t.id for t in discover_tests_for_commit(repo, run.commit).tests
+                if t.runs_by_default]
+    report = record_run(repo, run, expected_tests=expected)
+    _write_json(report, None)
+    return EXIT_OK if report["recorded"] else EXIT_ANALYSIS_ERROR
 
 
 def _import_rtptorrent(args: argparse.Namespace) -> int:

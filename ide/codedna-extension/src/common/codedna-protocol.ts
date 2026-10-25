@@ -20,7 +20,7 @@ export interface CodeDnaStatus {
 export interface CodeDnaService {
     status(): Promise<CodeDnaStatus>;
     analyze(repo: string, base: string, head: string): Promise<AnalyzeReport>;
-    impact(repo: string, base: string, head: string): Promise<ImpactReport>;
+    impact(repo: string, base: string, head: string, options?: ImpactOptions): Promise<ImpactReport>;
     select(repo: string, base: string, head: string, strategy: SelectionStrategy, historyCsv?: string): Promise<SelectionReport>;
     runSelection(repo: string, base: string, head: string, strategy: SelectionStrategy, historyCsv?: string): Promise<SelectionRun>;
     /** Folders to look for experiment reports in (CODEDNA_REPLAY_FOLDERS), may be empty. */
@@ -98,6 +98,14 @@ export interface ImpactReport {
     explanation_graph: ExplanationGraph;
 }
 
+/** Limits passed to the core's traversal (`max_depth`, `confirmed_only`). */
+export interface ImpactOptions {
+    /** Links followed from a changed part; undefined = no limit. */
+    maxDepth?: number;
+    /** Follow only confirmed links. */
+    confirmedOnly?: boolean;
+}
+
 /** Built by the core (impact_analysis.explanation_graph); the IDE only draws it. */
 export interface ExplanationGraph {
     nodes: {
@@ -110,9 +118,14 @@ export interface ExplanationGraph {
         seed?: string;
         reasons: string[];
         path_edges: string[];
+        /** Java package ('' = default package); null for files outside the graph. */
+        package: string | null;
     }[];
     edges: { id: string; source: string; target: string; kind: string;
         confidence: 'confirmed' | 'heuristic'; evidence: string }[];
+    packages: { id: string; name: string; label: string; changed: boolean;
+        counts: { changed: number; impacted: number; test: number } }[];
+    summary: { changed: number; impacted: number; test: number; unanalysed: number };
 }
 
 // --- select --------------------------------------------------------------------
@@ -122,6 +135,8 @@ export interface SelectionRun {
     results: { tests: { id: string; status: string; time: number }[];
         failing_tests: string[]; warnings: string[]; duration_seconds: number; exit_codes: number[] };
     output_dir: string;
+    /** Whole-suite runs are kept as project history for risk selection (D-053). */
+    recording?: { recorded: boolean; reason: string | null; commits_with_results?: number };
 }
 
 export interface SelectionReport {

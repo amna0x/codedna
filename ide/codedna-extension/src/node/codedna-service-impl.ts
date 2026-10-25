@@ -5,7 +5,7 @@ import { delimiter } from 'path';
 import { injectable } from '@theia/core/shared/inversify';
 import { BackendApplicationContribution } from '@theia/core/lib/node';
 import {
-    AnalyzeReport, CodeDnaService, CodeDnaStatus, ImpactReport, ReplayOverview, ReplaySources, ReplayTimeline,
+    AnalyzeReport, CodeDnaService, CodeDnaStatus, ImpactOptions, ImpactReport, ReplayOverview, ReplaySources, ReplayTimeline,
     SelectionReport, SelectionStrategy, SelectionRun
 } from '../common/codedna-protocol';
 
@@ -55,8 +55,9 @@ export class CodeDnaServiceImpl implements CodeDnaService, BackendApplicationCon
         return this.post('/api/analyze', { repo, base, head, level: 'method' });
     }
 
-    impact(repo: string, base: string, head: string): Promise<ImpactReport> {
-        return this.post('/api/impact', { repo, base, head });
+    impact(repo: string, base: string, head: string, options: ImpactOptions = {}): Promise<ImpactReport> {
+        return this.post('/api/impact', { repo, base, head,
+            max_depth: options.maxDepth, confirmed_only: options.confirmedOnly ?? false });
     }
 
     select(repo: string, base: string, head: string, strategy: SelectionStrategy, historyCsv?: string): Promise<SelectionReport> {

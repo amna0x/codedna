@@ -110,3 +110,55 @@ def test_gradle_multi_line_include_and_comments(repo):
     layout = detect_build(repo.path, resolve_commit(repo.path, head))
 
     assert layout.modules == ["", "core", "tools/cli", "web"]
+
+
+def test_shared_and_custom_test_source_folders_are_followed(repo):
+    # HikariCP 2.x layout: two modules add one shared test folder with build-helper.
+    helper = ("<plugin><artifactId>build-helper-maven-plugin</artifactId><executions>"
+              "<execution><goals><goal>add-source</goal></goals><configuration><sources>"
+              "<source>../common/src/main/java</source></sources></configuration></execution>"
+              "<execution><goals><goal>add-test-source</goal></goals><configuration><sources>"
+              "<source>../common/src/test/java</source><source>${extra.dir}</source>"
+              "<source>../../outside</source></sources></configuration></execution>"
+              "</executions></plugin>")
+    head = commit(repo, {
+        "pom.xml": f"<project {POM_NS}><modules><module>java8</module><module>java6</module>"
+                   "<module>legacy</module></modules></project>\n",
+        "java8/pom.xml": f"<project {POM_NS}><build><plugins>{helper}</plugins></build></project>\n",
+        "java6/pom.xml": f"<project {POM_NS}><build><plugins>{helper}</plugins></build></project>\n",
+        "legacy/pom.xml": f"<project {POM_NS}><build><testSourceDirectory>tests</testSourceDirectory>"
+                          "</build></project>\n",
+        "common/src/test/java/a/SharedTest.java": junit_class("a", "SharedTest"),
+        "common/src/main/java/a/NotATest.java": junit_class("a", "NotATest"),
+        "java6/src/test/java/a/OnlySixTest.java": junit_class("a", "OnlySixTest"),
+        "legacy/tests/l/OldTest.java": junit_class("l", "OldTest"),
+        "legacy/src/test/java/l/IgnoredTest.java": junit_class("l", "IgnoredTest"),
+    })
+
+    layout = detect_build(repo.path, resolve_commit(repo.path, head))
+
+    assert layout.roots("java8") == ["java8/src/test/java/", "common/src/test/java/"]
+    assert layout.roots("legacy") == ["legacy/tests/"]
+    assert any("${extra.dir}" in w for w in layout.warnings)
+    assert any("'../../outside' is outside the repository" in w for w in layout.warnings)
+    tests = {t.id: t for t in discover_tests(repo.path, head).tests}
+    assert tests["a.SharedTest"].runs_by_default and tests["a.SharedTest"].module == "java6"
+    assert tests["a.OnlySixTest"].module == "java6"
+    assert tests["l.OldTest"].runs_by_default and tests["l.OldTest"].module == "legacy"
+    assert not tests["l.IgnoredTest"].runs_by_default  # legacy moved its test folder
+    assert not tests["a.NotATest"].runs_by_default  # main sources are not test sources
+
+
+def test_class_patterns_in_surefire_includes_select_test_classes(repo):
+    head = commit(repo, {
+        "pom.xml": f"<project {POM_NS}><build><plugins><plugin>"
+                   "<artifactId>maven-surefire-plugin</artifactId><configuration>"
+                   "<includes><include>**/*.class</include></includes><excludes>"
+                   "<exclude>**/Slow*.class</exclude></excludes>"
+                   "</configuration></plugin></plugins></build></project>\n",
+        "src/test/java/a/Checks.java": junit_class("a", "Checks"),
+        "src/test/java/a/SlowChecks.java": junit_class("a", "SlowChecks"),
+    })
+    tests = {t.id: t for t in discover_tests(repo.path, head).tests}
+    assert tests["a.Checks"].runs_by_default  # wicket-bootstrap configures **/*.class
+    assert not tests["a.SlowChecks"].runs_by_default

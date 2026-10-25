@@ -86,11 +86,13 @@ class SelectRequest(ChangeRequest):
     coverage_map: str | None = None
     durations: str | None = None
     non_java: Literal["retest-all", "ignore"] = "retest-all"
+    must_run: list[str] = Field(default_factory=list, description="Extra must-run patterns (D-050).")
 
 
 class RiskRequest(ChangeRequest):
     history_csv: str | None = None
     risk_target: float = Field(default=.05, gt=0, lt=1)
+    must_run: list[str] = Field(default_factory=list, description="Extra must-run patterns (D-050).")
 
 
 class RunSelectionRequest(RiskRequest):
@@ -212,13 +214,13 @@ def create_app(token: str, *, allow_build: bool = False,
             body.repo, body.base, body.head, body.strategy,
             coverage_map=load_coverage_map(coverage) if coverage else None,
             durations=load_results(durations) if durations else None,
-            non_java=body.non_java).to_dict()
+            non_java=body.non_java, must_run=body.must_run).to_dict()
 
     @app.post('/api/risk-select', dependencies=secured)
     def risk_select(body: RiskRequest) -> dict:
         from codedna.selection.live import recommend
         return recommend(body.repo,body.base,body.head,history_csv=body.history_csv,
-                         risk_target=body.risk_target)
+                         risk_target=body.risk_target,must_run=body.must_run)
 
     @app.post('/api/run-selection', dependencies=secured)
     def run_selection(body: RunSelectionRequest) -> dict:
@@ -231,8 +233,11 @@ def create_app(token: str, *, allow_build: bool = False,
         if body.strategy == 'risk':
             selection = risk_select(body)
         else:
-            selection = select_tests(body.repo,body.base,body.head,body.strategy).to_dict()
+            selection = select_tests(body.repo,body.base,body.head,body.strategy,
+                                     must_run=body.must_run).to_dict()
         repo = resolve_repository(body.repo)
+        from codedna.test_history.recording import ignore_outputs, record_run
+        ignore_outputs(repo)
         output = repo/'.codedna/runs'/uuid4().hex
         plugin = load_plugins().get('java')
         if plugin is None:
@@ -240,7 +245,14 @@ def create_app(token: str, *, allow_build: bool = False,
         run,_ = plugin.run_tests(repo,selection['head_commit'],output,allow_build=True,
             selected_tests=[t['test'] for t in selection['selected']],
             maven_command=maven_command,timeout=body.timeout)
-        return {'selection':selection,'results':run.to_dict(),'output_dir':str(output)}
+        # Whole-suite runs become project history so the risk gate can turn on (D-053).
+        if selection['skipped']:
+            recording = {'recorded':False,'reason':'selected runs are not recorded; '
+                         'the risk gate needs complete outcomes'}
+        else:
+            recording = record_run(repo,run,expected_tests=[t['test'] for t in selection['selected']])
+        return {'selection':selection,'results':run.to_dict(),'output_dir':str(output),
+                'recording':recording}
 
     @app.post("/api/compare", dependencies=secured)
     def compare(body: CompareRequest) -> dict:

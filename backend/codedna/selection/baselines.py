@@ -12,6 +12,7 @@ Strategies (names follow docs/RESEARCH_PLAN.md):
 Rules shared by all strategies, chosen to stay *safe*:
 
 * changed or new test classes are always selected;
+* must-run tests of the project policy are always selected (D-050);
 * for ``coverage``, tests without coverage data are selected;
 * when a non-Java file changed, every test is selected unless
   ``non_java="ignore"`` (build files and resources can change behaviour,
@@ -31,6 +32,7 @@ from codedna.impact_analysis import compute_impact
 from codedna.java_analysis import analyze_changes
 from codedna.java_analysis.parser import TYPE_NODES
 from codedna.plugins import load_plugins
+from codedna.selection.policy import apply_policy
 from codedna.test_mapping.results import CoverageMap, TestRunResult
 
 STRATEGIES = ("all", "dependency", "coverage")
@@ -59,6 +61,7 @@ class SelectionReport:
     selection_ratio: float
     estimated_time: dict | None
     warnings: list[str]
+    policy: dict | None = None  # must-run tests (D-050); None when the policy was not applied
 
     @property
     def selected_ids(self) -> set[str]:
@@ -72,7 +75,13 @@ class SelectionReport:
 
 def select_tests(repo_path: str | Path, base: str, head: str, strategy: str, *,
                  coverage_map: CoverageMap | None = None, durations: TestRunResult | None = None,
-                 non_java: str = "retest-all") -> SelectionReport:
+                 non_java: str = "retest-all", must_run: list[str] | None = None,
+                 policy: bool = True) -> SelectionReport:
+    """Select tests for BASE..HEAD.
+
+    With ``policy`` (default), tests pinned by the project's must-run policy
+    or by ``must_run`` patterns are always selected (D-050).
+    """
     if strategy not in STRATEGIES:
         raise SelectionError(f"unknown strategy {strategy!r}; choose from {STRATEGIES}")
     if strategy == "coverage" and coverage_map is None:
@@ -125,6 +134,17 @@ def select_tests(repo_path: str | Path, base: str, head: str, strategy: str, *,
         warnings.append(f"{len(hidden)} test class(es) outside Surefire's default includes are "
                         f"not considered: {hidden[:5]}")
 
+    policy_report = None
+    if policy:
+        pins = apply_policy(repo, base_sha, head_sha, universe, changed_paths, extra=must_run)
+        for test_id, reasons in pins.pinned.items():
+            for reason in reasons:
+                pick(test_id, reason)
+        warnings.extend(pins.warnings)
+        policy_report = pins.to_dict()
+    elif must_run:
+        raise SelectionError("must-run patterns need the policy to be applied")
+
     selected = [chosen[t] for t in universe if t in chosen]
     skipped = [t for t in universe if t not in chosen]
     return SelectionReport(
@@ -132,7 +152,7 @@ def select_tests(repo_path: str | Path, base: str, head: str, strategy: str, *,
         total_tests=len(universe), selected=selected, skipped=skipped,
         selection_ratio=round(len(selected) / len(universe), 4) if universe else 0.0,
         estimated_time=_estimate_time(selected, universe, durations),
-        warnings=warnings,
+        warnings=warnings, policy=policy_report,
     )
 
 
@@ -207,8 +227,9 @@ def compare_strategies(repo_path: str | Path, base: str, head: str, ground_truth
     if coverage_map is None:
         warnings.append("no coverage map given; the coverage strategy was not evaluated")
     for strategy in strategies:
+        # Baselines are compared as published: no must-run policy (D-050).
         report = select_tests(repo, base, head, strategy, coverage_map=coverage_map,
-                              durations=ground_truth, non_java=non_java)
+                              durations=ground_truth, non_java=non_java, policy=False)
         universe = set(report.skipped) | report.selected_ids
         failing = sorted(t for t in ground_truth.failing_tests if t in universe)
         caught = [t for t in failing if t in report.selected_ids]
