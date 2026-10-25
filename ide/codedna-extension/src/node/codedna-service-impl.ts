@@ -6,6 +6,7 @@ import { injectable } from '@theia/core/shared/inversify';
 import { BackendApplicationContribution } from '@theia/core/lib/node';
 import {
     AnalyzeReport, CodeDnaService, CodeDnaStatus, ImpactReport, ReplayOverview, ReplaySources, ReplayTimeline,
+    ProjectHistory, PreparedHistory, SavedRun,
     SelectionReport, SelectionStrategy, SelectionRun
 } from '../common/codedna-protocol';
 
@@ -75,6 +76,22 @@ export class CodeDnaServiceImpl implements CodeDnaService, BackendApplicationCon
         return this.post('/api/run-selection', {
             repo, base, head, strategy, history_csv: historyCsv || undefined, allow_build: true
         });
+    }
+
+    projectHistory(repo: string, base: string): Promise<ProjectHistory> {
+        return this.post('/api/project-history', { repo, base });
+    }
+
+    prepareHistory(repo: string, base: string): Promise<PreparedHistory> {
+        return this.post('/api/project-history/prepare', { repo, base });
+    }
+
+    importRun(repo: string, source: string): Promise<{ id: string; tests: number; failures: number }> {
+        return this.post('/api/project-history/import', { repo, source });
+    }
+
+    savedRun(repo: string, runId: string): Promise<SavedRun> {
+        return this.post('/api/project-history/run', { repo, run_id: runId });
     }
 
     async replayFolders(): Promise<string[]> {

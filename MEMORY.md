@@ -1,8 +1,113 @@
 # MEMORY.md: handoff notes for the next agent
 
 Read this first, then AGENTS.md (rules), docs/ROADMAP.md (status) and
-docs/DECISIONS.md (D-001 to D-041, why things are the way they are).
-Last updated: 2026-10-24 (DANTE-history extension, target audit gate and live IDE execution).
+docs/DECISIONS.md (decision history and tradeoffs).
+Last updated: 2026-10-25 (desktop delivery and queued fresh-project study).
+Latest full validation: **334 passed, zero skipped**, Maven and Gradle included;
+897.94 seconds, one existing Starlette/httpx deprecation warning. Three Node
+runtime tests also passed. No commits or pushes were requested/performed.
+
+## Current next step — fresh-project continuation is queued
+
+- The installer remains at `ide/electron-app/dist/CodeDNA IDE Setup 0.1.0.exe`
+  (339,622,119 bytes, SHA-256
+  `88d486030d66a450edd1763df68f611aaa8806104a9ec92dd6fabc6f96140f93`, unsigned).
+  Exact packaged-core checks passed without external Python: Java analysis,
+  synthetic model/calibration, API, risk fallback, real Maven passing tests and
+  a deliberate regression with exactly one requested failing class executed.
+  All 1,354 core file hashes matched. Pinned editor VSIXs matched 577 shipped
+  files; one TypeScript declaration is deliberately removed by the packager.
+- D-051: `prepare_confirmatory --no-structural` avoids three unused graph
+  columns while preserving all 15 live model inputs. Verified row by row on
+  all 70,485 existing four-project rows. Preparation guards project identity,
+  inspected-project exclusion, output-name collisions, extractor/profile drift.
+- An earlier `prepare_confirmatory.py` producer was already running for all
+  nine fresh projects under `experiments/datasets/confirmatory/raw` (base
+  Python PID 17936, launcher 19284 when inspected). Preserve that producer.
+  It had verified 41/74 entries, about 2.5 GB, and was downloading the next
+  repository pack. Zenodo transfers are slow. The duplicate fetch started in
+  this session was stopped after two raw result CSVs; it produced no new DBs
+  or feature CSVs. Its old config is preserved as
+  `preparation-duplicate-fetch-stopped.json` in the separate live-output folder.
+- `scripts/continue_confirmatory.py --wait` is now running as a ONE-TIME local
+  continuation (PID 17704 when queued; exec session 74625). No AI service,
+  notifications, recurring scheduler, duplicate HTTP download or third-party
+  build is used. It waits for all 74 entries including the last shared map,
+  rechecks every SHA-256, reuses raw files read-only through `raw_dir`, builds
+  all nine DBs and 16-column feature CSVs in the separate live-output folder,
+  then runs the unchanged fixed D-042 rolling study. No fresh verdict exists yet.
+- Status: `experiments/datasets/confirmatory-live-2026-10-25/continuation-status.json`.
+  Log: `build/confirmatory-continuation.log`. Expected final results:
+  `experiments/results/rolling-evidence-confirmatory-2026-10-25/summary.md`.
+  The source download must finish; if it stops, resume that producer first.
+- IMPORTANT: `continuation-code.json` freezes relevant preparation/model/code,
+  the fixed protocol, Python/ML-library versions and equivalence proof. Changing
+  those files/versions before fitting causes a safe failure and requires a new
+  output folder; do not silently alter the queued study. The OS output lock is
+  released automatically on exit. Do not start a duplicate worker or downloader.
+- Details: `docs/CONFIRMATORY_PREPARATION_2026-10-25.md` and implementation handoff.
+  Latest full suite: 334 passed / 0 skipped / 897.94 s. New preparation/continuation
+  tests: 15 passed. Final Graphify AST refresh: 2,138 nodes, 5,373 edges,
+  123 communities; no document semantic extraction.
+- Interactive editor/progress acceptance and clean-machine installer testing
+  remain unverified. Computer Use recovery returned minimized-window / user
+  input detected errors; do not claim UI click-through passed. Final report,
+  manual graph-precision review and supervisor sign-off remain roadmap work.
+
+## Initial review batch — 2026-10-25
+
+- Started from clean HEAD `97c3be7`, with the newer graph, replay, WORKTREE,
+  multi-module, launcher and website changes already merged. Earlier notes
+  describing those features as remaining or remote authentication as broken
+  are historical; use the roadmap for current scope.
+- Replay readers now reject malformed/non-finite/impossible outcomes with
+  ReplayError (API 400); discovery skips invalid files. Saved study results
+  are not edited. Added 15 offline regression cases; replay suite: 32 passed.
+- `npm run build:extension` passed. Full Maven-inclusive suite: 315 passed, 1 skipped (missing Gradle at collection),
+  1 existing Starlette/httpx warning, 690.91 seconds. The skipped Gradle test
+  subsequently passed after installing its runtime, covering all 316 tests.
+- Graphify refreshed locally with AST-only extraction: 2,063 nodes, 5,201 edges,
+  120 communities. Documents were not semantically re-extracted.
+- Installed portable Gradle 8.14.3 from the official distribution, verified
+  SHA-256 `bd71102213493060956ec229d946beee57158dbd89d0e62b91bca0fa2c5f3531`.
+  Runtime metadata: `C:/Users/hp/.codex/tools/gradle/runtime.json`.
+  Add `C:/Users/hp/.codex/tools/gradle/gradle-8.14.3/bin` to the process PATH
+  for future full runs; set GRADLE_USER_HOME to its sibling `cache` folder.
+  The previously skipped Gradle multi-project integration test passed separately
+  in 193.76 seconds (all tests, selected tests, build-excluded test reporting).
+- No commit or push requested or performed in this review.
+
+## Desktop continuation — 2026-10-25
+
+- Owner requested continued autonomous work while AFK, with careful validation;
+  additional languages remain deferred. No commit or push was requested.
+- Completed D-050 bundled Windows core, verified a full NSIS build and preserved
+  explicit executable overrides. New build-only extra: `.[desktop]` pins
+  PyInstaller 6.22.0. See `docs/IMPLEMENTATION_HANDOFF.md` for details.
+- The final installer is `ide/electron-app/dist/CodeDNA IDE Setup 0.1.0.exe`,
+  339,622,119 bytes, SHA-256
+  `88d486030d66a450edd1763df68f611aaa8806104a9ec92dd6fabc6f96140f93` (unsigned).
+  Packaged-core hashes verified: 1,354 files. Local evidence: `dist/validation.json`.
+- Frozen core and the exact packaged copy passed Java analysis, synthetic
+  model/calibration fitting, API graph, risk fallback and actual sample Maven
+  execution without Python on child PATH. Proof under `build/desktop-core/`.
+- Packaged app reached the ready workbench and deployed two Java extensions.
+  Interactive UI acceptance remains unverified: repeated minimized-window and
+  user-input-detected errors persisted through Computer Use recovery. Do not
+  claim Java completion, progress controls or clean-machine installation passed.
+- Launcher now loads portable Gradle metadata/cache and preserves custom cache
+  paths; six launcher tests passed. Metadata reads avoid quoting user paths into
+  PowerShell source. The no-JDK/no-completion warning was corrected.
+- Full suite after the desktop helpers: 320 passed, zero skipped, one existing
+  Starlette/httpx warning, 4960.82 seconds. Final validation after the launcher
+  changes: 322 passed, zero skipped, 814.16 seconds, one existing warning.
+  OMP/OPENBLAS/MKL thread counts were set to 1 for the final run.
+- Graphify code refresh before the final launcher additions: 2,099 nodes,
+  5,264 edges, 126 communities. Final refresh including launcher tests:
+  2,102 nodes, 5,270 edges, 129 communities (AST only).
+- The obsolete IDE-only packaging attempt and broad scientific test-suite
+  freezing attempt were stopped, not completed. The later bundled installer
+  build and exact packaged-core smoke checks are the valid results.
 
 ## What the project is
 
@@ -29,8 +134,9 @@ Deadline: approximately May or June (presumed 2027 from the current October 2026
 - Never fabricate numbers. Every result must come from files under
   `experiments/results/`. Report negative results honestly.
 - The owner explicitly requests Maven coverage in full local validation.
-  Run `python -m pytest --run-maven`: 245 passed, zero skipped locally on
-  2026-10-24. The real Maven/JUnit/JaCoCo integration test passed.
+  Run `python -m pytest --run-maven`; see the current review/desktop continuation
+  for the latest local results. Real Maven/JaCoCo and Gradle integration are
+  included when their runtimes are on PATH.
 - Update FINDINGS / DECISIONS / ROADMAP / report draft when results change.
 - `docs/PROGRESS_REPORT.md` and `.pdf` are a plain-language report the user
   forwards. They are **local only** (listed in `.git/info/exclude`); keep

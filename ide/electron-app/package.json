@@ -32,7 +32,9 @@
     "start": "theia start",
     "watch": "npm run rebuild && theia build --watch --mode development",
     "download:plugins": "theia download:plugins --rate-limit=15 --parallel=false",
-    "package": "npm run rebuild && npm run download:plugins && theia build --mode production && electron-builder --win"
+    "package": "npm run build:core && npm run build --workspace codedna-extension && npm run rebuild && npm run download:plugins && theia build --mode production && electron-builder --win",
+    "build:core": "node scripts/build-core.cjs",
+    "test:runtime": "node --test scripts/desktop-runtime.test.cjs"
   },
   "theia": {
     "target": "electron",
@@ -60,5 +62,6 @@
   "theiaPlugins": {
     "vscode.java": "https://open-vsx.org/api/vscode/java/1.95.3/file/vscode.java-1.95.3.vsix",
     "redhat.java": "https://open-vsx.org/api/redhat/java/win32-x64/1.36.0/file/redhat.java-1.36.0@win32-x64.vsix"
-  }
+  },
+  "description": "CodeDNA Java change-impact analysis, regression test selection and history replay desktop IDE"
 }

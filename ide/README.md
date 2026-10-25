@@ -42,11 +42,14 @@ enables selected Maven execution; analysis never triggers a build.
 
 ## Prerequisites
 
+These are source-development prerequisites. The packaged app includes Electron,
+Node and Python; end users still need Git and any project build tools they use.
+
 | Tool | Version | Why |
 |------|---------|-----|
 | Node.js | 22 (tested 22.21); Theia recommends 24 | build and run |
 | npm | 10+ | install |
-| Python | 3.11+ with CodeDNA installed: `pip install -e "..[api]"` | the analysis core (`codedna` on PATH, or set `CODEDNA_EXECUTABLE`) |
+| Python (source builds) | 3.11+ with CodeDNA installed: `pip install -e "..[ml,api]"` | the analysis core (`codedna` on PATH, or set `CODEDNA_EXECUTABLE`) |
 | Windows | Visual Studio Build Tools with "Desktop development with C++" | native modules (node-pty, keytar, drivelist, native-keymap, ffmpeg) |
 
 ## Build and run
@@ -56,7 +59,8 @@ the IDE if needed, sets `CODEDNA_EXECUTABLE` to `.venv\Scripts\codedna.exe`
 and `JAVA_HOME` to the portable JDK when one is recorded, and opens a demo
 repository (created in `%USERPROFILE%\codedna-demo`) or the folder given as
 its argument. It also points **History replay** at the study results, and it
-rebuilds the IDE after a `git pull` that changed `ide/` (needs `git` on PATH). By hand:
+rebuilds the IDE after a `git pull` that changed `ide/` (needs `git` on PATH).
+It also loads the portable Gradle runtime/cache when metadata is present. By hand:
 
 ```bash
 cd ide
@@ -92,9 +96,20 @@ npm run build
 npm run package --workspace electron-app   # → electron-app/dist/CodeDNA IDE Setup 0.1.0.exe
 ```
 
-The installer contains the IDE only. The Python core is installed separately
-(`pip install -e "..[api]"`, or set `CODEDNA_EXECUTABLE`). Long CodeDNA
-actions show a progress notification with the elapsed time.
+The installer bundles the analysis core, Python and its ML/API dependencies
+(D-050), so end users do not need Python or `pip`. Git and project build tools
+(JDK plus Maven or Gradle) remain prerequisites. `CODEDNA_EXECUTABLE` can override
+the bundled core for development. Long actions show elapsed-time progress.
+
+Before packaging, install the build-only freezer into the project environment:
+`python -m pip install -e ".[ml,api,desktop]"` from the repository root.
+`npm run package --workspace electron-app` freezes the core, compiles the
+extension, rebuilds native modules and produces the Windows installer. Each
+core bundle includes `bundle-manifest.json` with versions and file hashes.
+
+On a checkout inside OneDrive, stage the installer outside the synced tree:
+`npm run package --workspace electron-app -- --config.directories.output=C:/Temp/codedna-dist`.
+This changes the generated output location, not the checkout or project data.
 
 ### Troubleshooting
 
@@ -123,9 +138,8 @@ actions show a progress notification with the elapsed time.
 
 ## Not yet
 
-A bundled Python core (the installer still needs CodeDNA installed
-separately), installers for macOS and Linux, and full Java language support
-outside Windows x64.
+Installers for macOS and Linux, full Java language support outside Windows
+x64, and automatic installation of Git/JDK/project build tools.
 
 
 ## Risk and test execution

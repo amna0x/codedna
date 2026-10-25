@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parents[2]
 
 # Each stub appends one line to %STUB_LOG%, so the test can see what ran.
 THEIA = r"""@echo off
->>"%STUB_LOG%" echo theia cwd=%CD% args=%* exe=%CODEDNA_EXECUTABLE% java=%JAVA_HOME% replay=%CODEDNA_REPLAY_FOLDERS%
+>>"%STUB_LOG%" echo theia cwd=%CD% args=%* exe=%CODEDNA_EXECUTABLE% java=%JAVA_HOME% gradle=%GRADLE_HOME% gradlecache=%GRADLE_USER_HOME% replay=%CODEDNA_REPLAY_FOLDERS%
 """
 PYTHON = r"""@echo off
 >>"%STUB_LOG%" echo python %*
@@ -148,3 +148,23 @@ def test_rebuilds_once_after_a_pull_that_changed_the_ide(tmp_path):
     subprocess.run([*git, "commit", "-q", "-am", "ide change"], check=True)
     assert run(repo, env).returncode == 0
     assert builds() == 2
+
+
+@pytest.mark.parametrize("custom_cache", [False, True])
+def test_launcher_reuses_portable_gradle_and_preserves_custom_cache(tmp_path, custom_cache):
+    repo, env, log = checkout(tmp_path, built=True)
+    metadata = Path(env["USERPROFILE"]) / ".codex" / "tools" / "gradle"
+    metadata.mkdir()
+    gradle = tmp_path / "gradle with spaces"
+    (metadata / "runtime.json").write_text(json.dumps({"home": str(gradle)}))
+    env.pop("GRADLE_HOME", None)
+    env.pop("GRADLE_USER_HOME", None)
+    expected_cache = metadata / "cache"
+    if custom_cache:
+        expected_cache = tmp_path / "my gradle cache"
+        env["GRADLE_USER_HOME"] = str(expected_cache)
+    result = run(repo, env)
+    assert result.returncode == 0, result.stdout + result.stderr
+    launched = log.read_text().splitlines()[-1]
+    assert f"gradle={gradle}" in launched
+    assert f"gradlecache={expected_cache}" in launched

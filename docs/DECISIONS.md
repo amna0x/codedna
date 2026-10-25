@@ -917,3 +917,42 @@ study's own measurements and never retrains or runs code.
 Limitation: the replay is a simulation on recorded history (what each policy
 would have run, given the recorded test outcomes), not a live run; it cannot
 show effects such as tests that would have behaved differently if run alone.
+
+## D-050 — Bundle the Python core in the Windows desktop installer
+
+The desktop installer must support analysis without a separate Python/CodeDNA
+installation. A build-only `desktop` extra pins PyInstaller 6.22.0; the installed
+analysis runtime gains no new dependency. `scripts/build_desktop_core.py` builds
+a console-mode, one-directory executable with the Java parser, SQLite history,
+ML/calibration and local API dependencies. The IDE hides its console and keeps
+the existing stdout/token handshake and explicit build-consent flow.
+
+Electron Builder copies that generated folder into `resources/core`. The main
+entry chooses an explicit `CODEDNA_EXECUTABLE` override first, then the bundled
+core, then `codedna` on PATH for development. Generated executables and caches
+are ignored. Each bundle records Python/package versions and SHA-256 hashes of
+its files; no saved datasets, credentials, historical model files or developer
+configuration are included intentionally. Git and project build tools remain
+external prerequisites. Packaging stays Windows x64; this is not a cross-platform
+installer or an in-app plugin installation mechanism.
+
+## D-051 — Confirmatory preparation skips unused graph work, guards data identity
+
+The existing `structural=False` extraction path is exposed as an explicit
+`prepare_confirmatory --no-structural` option, with full extraction still the
+default. Before preparing new projects, all 70,485 existing four-project rows
+were checked to retain identical identities, labels, durations and the 15 live
+model inputs. Only the three unused graph columns are omitted. Experimental
+rules/model/gate remain D-042; this does not change the statistical analysis.
+
+Preparation records project names, extraction option and extractor SHA-256 and
+refuses mixed or unfingerprinted resume data. The CLI refuses previously
+inspected projects and output-name collisions. The dated preparation note fixes
+the full nine-project set before fresh results. No old report is overwritten.
+
+The one-time `continue_confirmatory.py --wait` command reuses an existing active
+raw-subset producer. It verifies complete-cache hashes before importing and
+never starts a network download. A `raw_dir` option separates shared raw inputs
+from projected CSV/DB outputs. Queue-time code/library/equivalence fingerprints,
+a single-worker OS lock, a full-set check and local phase status guard unattended
+execution. No paid AI calls, notifications or recurring scheduler are used.

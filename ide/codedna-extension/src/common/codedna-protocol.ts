@@ -19,6 +19,10 @@ export interface CodeDnaStatus {
 
 export interface CodeDnaService {
     status(): Promise<CodeDnaStatus>;
+    projectHistory(repo: string, base: string): Promise<ProjectHistory>;
+    prepareHistory(repo: string, base: string): Promise<PreparedHistory>;
+    importRun(repo: string, source: string): Promise<{ id: string; tests: number; failures: number }>;
+    savedRun(repo: string, runId: string): Promise<SavedRun>;
     analyze(repo: string, base: string, head: string): Promise<AnalyzeReport>;
     impact(repo: string, base: string, head: string): Promise<ImpactReport>;
     select(repo: string, base: string, head: string, strategy: SelectionStrategy, historyCsv?: string): Promise<SelectionReport>;
@@ -254,4 +258,49 @@ export interface ReplayOverview {
     overall: Record<string, Record<ReplayMetric, { mean: number | null; projects: number }>>;
     within_risk_target: { projects: number; of: number };
     note: string;
+}
+
+
+// --- project history: recorded executions, not saved research simulations ------
+export interface ProjectRun {
+    id: string;
+    commit: string | null;
+    tests: number;
+    failures: number;
+    duration_seconds: number;
+    recorded_at: string;
+    result_path: string;
+    candidate: boolean;
+    reason: string | null;
+}
+export interface ProjectHistory {
+    repository: string;
+    base_commit: string;
+    commits_considered: number;
+    runs: ProjectRun[];
+    candidate_commits: number;
+    base_has_complete_run: boolean;
+    base_tests: number;
+    history_csv: string | null;
+    warnings: string[];
+    note: string;
+}
+export interface PreparedHistory {
+    base_commit: string;
+    rows: number;
+    commits: number;
+    failing_commits: number;
+    imported_runs: number;
+    excluded: { id: string; reason: string }[];
+    csv_path: string;
+    database_path: string;
+    automatic_csv_path: string;
+    warnings: string[];
+    note: string;
+}
+export interface SavedRun {
+    id: string;
+    results: SelectionRun['results'];
+    logs: string[];
+    result_path: string;
 }

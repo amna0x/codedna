@@ -48,6 +48,9 @@ from codedna.test_mapping.results import (
     load_results,
 )
 
+from codedna.test_history.project import (project_history, prepare_project_history,
+                                           import_project_run, run_detail, ensure_local_output_ignore)
+
 TOKEN_HEADER = "X-CodeDNA-Token"
 LOOPBACK_HOSTS = frozenset({"127.0.0.1", "localhost", "[::1]", "::1"})
 
@@ -115,6 +118,19 @@ class ReplaySourcesRequest(BaseModel):
 
 class ReplayOverviewRequest(ReplaySourcesRequest):
     seed: int | None = None
+
+
+class ProjectHistoryRequest(RepoRequest):
+    base: str = "HEAD~1"
+    max_commits: int = Field(default=500, ge=1, le=2000)
+
+
+class ImportProjectRunRequest(RepoRequest):
+    source: str
+
+
+class ProjectRunRequest(RepoRequest):
+    run_id: str
 
 
 class RunTestsRequest(RevRequest):
@@ -233,6 +249,7 @@ def create_app(token: str, *, allow_build: bool = False,
         else:
             selection = select_tests(body.repo,body.base,body.head,body.strategy).to_dict()
         repo = resolve_repository(body.repo)
+        ensure_local_output_ignore(repo)
         output = repo/'.codedna/runs'/uuid4().hex
         plugin = load_plugins().get('java')
         if plugin is None:
@@ -240,6 +257,8 @@ def create_app(token: str, *, allow_build: bool = False,
         run,_ = plugin.run_tests(repo,selection['head_commit'],output,allow_build=True,
             selected_tests=[t['test'] for t in selection['selected']],
             maven_command=maven_command,timeout=body.timeout)
+        from codedna.test_mapping.results import save_json
+        save_json(selection, output / 'selection.json')
         return {'selection':selection,'results':run.to_dict(),'output_dir':str(output)}
 
     @app.post("/api/compare", dependencies=secured)
@@ -250,6 +269,22 @@ def create_app(token: str, *, allow_build: bool = False,
             load_results(_json_file(body.ground_truth, RESULTS_FILE)),
             coverage_map=load_coverage_map(coverage) if coverage else None,
             non_java=body.non_java)
+
+    @app.post("/api/project-history", dependencies=secured)
+    def project_history_(body: ProjectHistoryRequest) -> dict:
+        return project_history(body.repo, body.base, max_commits=body.max_commits)
+
+    @app.post("/api/project-history/prepare", dependencies=secured)
+    def prepare_project_history_(body: ProjectHistoryRequest) -> dict:
+        return prepare_project_history(body.repo, body.base, max_commits=body.max_commits)
+
+    @app.post("/api/project-history/import", dependencies=secured)
+    def import_project_run_(body: ImportProjectRunRequest) -> dict:
+        return import_project_run(body.repo, body.source)
+
+    @app.post("/api/project-history/run", dependencies=secured)
+    def project_run_(body: ProjectRunRequest) -> dict:
+        return run_detail(body.repo, body.run_id)
 
     @app.post("/api/replay", dependencies=secured)
     def replay(body: ReplayRequest) -> dict:
