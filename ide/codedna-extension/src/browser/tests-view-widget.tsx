@@ -1,3 +1,4 @@
+import { CommandService } from '@theia/core/lib/common/command';
 import * as React from '@theia/core/shared/react';
 import { inject, injectable, postConstruct } from '@theia/core/shared/inversify';
 import { ConfirmDialog } from '@theia/core/lib/browser/dialogs';
@@ -31,6 +32,7 @@ export class TestsViewWidget extends ReactWidget {
     @inject(CodeDnaWorkspace) protected readonly workspace: CodeDnaWorkspace;
     @inject(CodeDnaComparison) protected readonly comparison: CodeDnaComparison;
     @inject(ProgressService) protected readonly progress: ProgressService;
+    @inject(CommandService) protected readonly commands: CommandService;
 
     protected strategy: SelectionStrategy = 'risk';
     protected loading = false;
@@ -133,6 +135,9 @@ export class TestsViewWidget extends ReactWidget {
                 </label>}
                 <button className='cd-button' type='submit'  disabled={this.loading} aria-busy={this.loading}>
                     {this.loading ? <><Spinner /> Finding tests…</> : 'Suggest tests'}
+                </button>
+                <button className='cd-button' type='button' onClick={() => this.commands.executeCommand('codedna.history.open')}>
+                    Open project history
                 </button>
             </form>
             {this.error && <ErrorNotice message={this.error} />}

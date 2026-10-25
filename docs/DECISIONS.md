@@ -1207,6 +1207,12 @@ partial runs never are. API: `/api/project-history` (read-only),
 `/record`, `/import`, `/run`. Outputs stay ignored through
 `.codedna/.gitignore` (D-053); nothing is written inside `.git`.
 
-**Not done.** No IDE view uses these yet (protocol methods only); the gate
-(D-041) still decides whether the history is good enough.
+**IDE.** A **Project history** view (Ctrl+Shift+Alt+H, or "Open project
+history" in Tests to run) lists the saved runs with their reasons, opens a
+run's outcomes and logs, imports a `results.json` and adds saved runs to the
+history. Codex drafted the view on the laptop; it was moved onto this API (no
+BASE picker: eligibility follows the current branch, as in D-053).
+
+**Not decided here.** The gate (D-041) still decides whether the history is
+good enough.
 

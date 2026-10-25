@@ -19,6 +19,10 @@ terminal and preferences; the `codedna-extension` package adds:
   the language plugins CodeDNA found, load problems, and the official
   catalogue with licence and source. Install, update and remove ask first;
   the core checks the SHA-256 and pins the version (D-054).
+- **Project history** (main area, `Ctrl+Shift+Alt+H`, or *Open project history*
+  in Tests to run): this project's saved test runs, each with whether it can be
+  history and why not, its outcomes and logs; import a `results.json` from a
+  clone and add complete saved runs to the history risk selection uses (D-057).
 - **History replay** (main area, `Ctrl+Shift+Alt+R`): plays a real project's history
   back commit by commit from the saved study results. Per commit it shows
   what "run every test", "dependency only", "simple rules at the same time"
