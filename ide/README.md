@@ -97,7 +97,7 @@ npm run package --workspace electron-app   # → electron-app/dist/CodeDNA IDE S
 ```
 
 The installer bundles the analysis core, Python and its ML/API dependencies
-(D-050), so end users do not need Python or `pip`. Git and project build tools
+(D-055), so end users do not need Python or `pip`. Git and project build tools
 (JDK plus Maven or Gradle) remain prerequisites. `CODEDNA_EXECUTABLE` can override
 the bundled core for development. Long actions show elapsed-time progress.
 

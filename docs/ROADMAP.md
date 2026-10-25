@@ -150,7 +150,7 @@ Product track, alongside:
 - 🔄 Rolling-origin evidence study with pre-fixed rules (D-042): on the four
   inspected projects B10 shows no meaningful safety difference from matched B3;
   the gate accepts few blocks but those miss rarely. New-project confirmation
-  is queued for all nine fresh projects (D-051). The existing Zenodo raw download
+  is queued for all nine fresh projects (D-056). The existing Zenodo raw download
   continues; a tested one-time continuation verifies the full cache, reuses it
   read-only, builds projected CSVs/DBs and runs the fixed study. No fresh verdict
   yet. See `docs/CONFIRMATORY_PREPARATION_2026-10-25.md` and the continuation
@@ -178,7 +178,7 @@ May start in parallel (Student C) once the analysis JSON formats are stable.
 - ✅ Impact graph view (Cytoscape.js, D-043): changed code → affected parts →
   tests, confidence-labelled edges, click-to-explain paths
 - ✅ Windows x64 production build and NSIS installer checked locally (D-044,
-  D-050). Installer now includes Python plus the ML/API core. Packaged-core
+  D-055). Installer now includes Python plus the ML/API core. Packaged-core
   analysis, model/calibration fitting, API and actual Maven execution passed
   without Python on PATH; all 1,354 core files matched their recorded hashes.
 - 🔄 Java editor/progress interactive acceptance and clean-machine installer

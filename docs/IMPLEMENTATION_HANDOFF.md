@@ -30,7 +30,7 @@ supervisor review still need attention.
 
 ## Standalone desktop continuation — 2026-10-25
 
-- D-050: build-only PyInstaller 6.22.0 extra; Windows onedir Python/ML/API core,
+- D-055: build-only PyInstaller 6.22.0 extra; Windows onedir Python/ML/API core,
   file-hash/version manifest, Electron resources integration, explicit executable
   override before bundled-core lookup, normal PATH fallback for source builds.
 - The first broad scientific-package collection was stopped because it dragged
@@ -93,7 +93,7 @@ feature CSVs, then evaluate the fixed study. See the status JSON under
 `experiments/datasets/confirmatory-live-2026-10-25/` and the log
 `build/confirmatory-continuation.log`. At queue time 41/74 raw entries (~2.5 GB)
 were verified. No new confirmatory verdict is claimed. Preserve the existing
-producer and the continuation's frozen code/protocol/library set. D-051 and the
+producer and the continuation's frozen code/protocol/library set. D-056 and the
 dated preparation note document row-level input equivalence and cache reuse.
 
 The installer is unsigned; clean-machine installation and interactive Java

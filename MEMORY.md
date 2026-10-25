@@ -17,7 +17,7 @@ runtime tests also passed. No commits or pushes were requested/performed.
   a deliberate regression with exactly one requested failing class executed.
   All 1,354 core file hashes matched. Pinned editor VSIXs matched 577 shipped
   files; one TypeScript declaration is deliberately removed by the packager.
-- D-051: `prepare_confirmatory --no-structural` avoids three unused graph
+- D-056: `prepare_confirmatory --no-structural` avoids three unused graph
   columns while preserving all 15 live model inputs. Verified row by row on
   all 70,485 existing four-project rows. Preparation guards project identity,
   inspected-project exclusion, output-name collisions, extractor/profile drift.
@@ -81,7 +81,7 @@ runtime tests also passed. No commits or pushes were requested/performed.
 
 - Owner requested continued autonomous work while AFK, with careful validation;
   additional languages remain deferred. No commit or push was requested.
-- Completed D-050 bundled Windows core, verified a full NSIS build and preserved
+- Completed D-055 bundled Windows core, verified a full NSIS build and preserved
   explicit executable overrides. New build-only extra: `.[desktop]` pins
   PyInstaller 6.22.0. See `docs/IMPLEMENTATION_HANDOFF.md` for details.
 - The final installer is `ide/electron-app/dist/CodeDNA IDE Setup 0.1.0.exe`,

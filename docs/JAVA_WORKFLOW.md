@@ -87,7 +87,7 @@ means no Maven invocation; omitting `--tests` means the full suite.
 
 The IDE now includes the interactive graph, history replay, uncommitted-change
 analysis and selected execution. Windows packaging includes the Python core
-(D-050); Git and project build tools remain prerequisites. The packaged core
+(D-055); Git and project build tools remain prerequisites. The packaged core
 has been checked without Python on PATH, including real sample Maven execution.
 Interactive Java editor/progress acceptance and clean-machine installer testing
 remain. See `ide/README.md` for packaging and `docs/ROADMAP.md` for scope.

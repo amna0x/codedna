@@ -918,7 +918,7 @@ Limitation: the replay is a simulation on recorded history (what each policy
 would have run, given the recorded test outcomes), not a live run; it cannot
 show effects such as tests that would have behaved differently if run alone.
 
-## D-050 — Bundle the Python core in the Windows desktop installer
+## D-055 — Bundle the Python core in the Windows desktop installer
 
 The desktop installer must support analysis without a separate Python/CodeDNA
 installation. A build-only `desktop` extra pins PyInstaller 6.22.0; the installed
@@ -936,7 +936,7 @@ configuration are included intentionally. Git and project build tools remain
 external prerequisites. Packaging stays Windows x64; this is not a cross-platform
 installer or an in-app plugin installation mechanism.
 
-## D-051 — Confirmatory preparation skips unused graph work, guards data identity
+## D-056 — Confirmatory preparation skips unused graph work, guards data identity
 
 The existing `structural=False` extraction path is exposed as an explicit
 `prepare_confirmatory --no-structural` option, with full extraction still the

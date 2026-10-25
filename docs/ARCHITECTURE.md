@@ -461,7 +461,7 @@ without invoking Maven. The UI displays actual result statuses and evidence
 without implementing model/selection logic. See JAVA_WORKFLOW.md.
 
 
-## Windows desktop runtime (D-050)
+## Windows desktop runtime (D-055)
 
 The Windows installer includes the Python analysis core as a PyInstaller
 one-directory bundle under Electron's `resources/core/`. The Electron main
