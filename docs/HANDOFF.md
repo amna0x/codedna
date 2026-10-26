@@ -78,6 +78,53 @@ Node tests pass. The simplest route is to merge this one PR (§3.1).
 
 ---
 
+## 0.5 Where Claude stopped — resume here (kept current; last update 2026-10-26 09:20Z)
+
+If Claude ran out mid-task, start from this list. Check each branch on
+GitHub first: newer commits may have landed after this was written.
+
+| Task | Owner / place | Branch | Status file / output folder | State | How to resume |
+|---|---|---|---|---|---|
+| **Integration of all PRs** | this file's PR | `claude/project-thread-lo3rpw` | — | done and tested (471 passed with Maven) | if any PR branch below got new commits, `git merge origin/<branch>` into this branch, resolve, `python -m pytest --run-maven`, push |
+| **B13 tuned gate, B12f and B11 reruns on the 9 confirmatory projects** | novelty thread, running on the laptop | `claude/project-thread-71arlo` (#18's branch) in worktree `C:\Users\hp\codedna-b13`, data copied to `C:\Users\hp\codedna-b13-data\<project>\dataset.csv` | `experiments/results/tuned-gate-confirmatory-2026-10-26/`, `crc-conditional-confirmatory-2026-10-26/`, `pts-check-confirmatory-2026-10-26/` (protocol for B13: commit `2ac7ac7` on that branch) | started 09:11Z; may take hours | if the laptop slept, rerun the same commands from the worktree (they resume per project): `$env:PYTHONPATH="C:\Users\hp\codedna-b13\backend"; $env:OMP_NUM_THREADS="1"` then `python scripts/run_tuned_gate_check.py C:\Users\hp\codedna-b13-data --out experiments/results/tuned-gate-confirmatory-2026-10-26`, then `run_crc_check.py ... --conditional --out experiments/results/crc-conditional-confirmatory-2026-10-26`, then `run_pts_check.py ... --out experiments/results/pts-check-confirmatory-2026-10-26`. Commit only those three folders on that branch and push (no force). **B13 is exploratory** (designed after seeing #20). **Read the B12f 9-project verdict by hand:** that branch's `run_crc_check.py` still uses the 3-of-4 rule; apply 7 of 9 (§6.1) |
+| After those results land | whoever merges | `claude/project-thread-lo3rpw` | — | not started | `git merge origin/claude/project-thread-71arlo` into this branch (expect `run_crc_check.py` conflicts: keep this branch's `required_keeps`, `--protocol` and the `codedna_java.live` import), rerun tests, push; then write `FINDINGS.md` for each folder and report §4.12 |
+| Merging into main | owner | — | — | waiting on the owner | §3.2 (one PR) or §3.3 (one by one); click-by-click below |
+| Laptop clean-up | owner at the laptop | main checkout | backup `C:\Users\hp\codedna-backup-2026-10-26\` | GPT edits not yet stashed | §4.1 command; **only after the B13 run above finishes** run §4.2–4.4 |
+| Everything else | Codex / next agent | new branch per task | — | not started | §17 prompt, task list at the end of §17 |
+
+### Click-by-click: merging on GitHub
+
+**Route A (one PR, recommended).**
+1. Open the repository on github.com → **Pull requests** → the PR titled
+   "Integrate PRs #15–#20 in order, fix cross-PR breakage, add the handoff blueprint".
+2. Scroll to the bottom. Wait until the checks show green ticks (all
+   7 jobs). If one is red, do not merge; give the failing job's log to the
+   next agent.
+3. Click the arrow next to the green button and choose **Create a merge
+   commit** (not squash, not rebase). Click **Merge pull request**, then
+   **Confirm merge**.
+4. Open #15, #16, #17, #18, #19 and #20. Each should now say **Merged**
+   (GitHub notices their commits are in `main`). If one still says Open,
+   it got new commits after the integration; see the "Integration" row
+   above.
+5. Open #8 → **Close pull request** with the comment "Included in #16".
+
+**Route B (one at a time).** For each PR in the order #15, #18, #16, #17,
+#19, #20: open it, check its **base** at the top ("wants to merge into
+`main`"). If the base is not `main`, retarget it (below). If GitHub says
+"This branch has conflicts", stop and let an agent resolve them as §3.3
+describes. When checks are green: **Create a merge commit** → **Confirm
+merge**.
+
+**Retargeting a stacked PR's base** (needed for #18 after #15, and for #17
+and #19 after #16): open the PR → click **Edit** next to the title → the
+**base** dropdown appears under the title → choose `main` → confirm
+**Change base**. If the old base branch was deleted after its merge,
+GitHub usually retargets automatically. A draft PR (#17) needs **Ready for
+review** first.
+
+---
+
 ## 1. Ground rules (read before touching anything)
 
 1. **Never commit, push or merge GPT/Codex's uncommitted laptop edits.**
