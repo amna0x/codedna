@@ -72,6 +72,8 @@ the way an agent might, and talks to `codedna mcp` over stdio. With
 - Java only for now (through the language plugin). Maven and Gradle
   layouts are read; other builds may show no tests.
 - The offline study on public agent patches is described in
-  [AGENT_BRAKE_STUDY_PROTOCOL.md](AGENT_BRAKE_STUDY_PROTOCOL.md). Whether
-  agents finish with fewer broken changes when they use the brake has not
-  been measured.
+  [AGENT_BRAKE_STUDY_PROTOCOL.md](AGENT_BRAKE_STUDY_PROTOCOL.md), with
+  results in [REPORT_AGENT_BRAKE.md](REPORT_AGENT_BRAKE.md): on public
+  SWE-bench Java patches the plan held a failing test whenever the full suite
+  did. Whether agents finish with fewer broken changes when they use the
+  brake has not been measured.
