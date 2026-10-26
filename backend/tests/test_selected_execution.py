@@ -4,7 +4,7 @@ from pathlib import Path
 import pytest
 from fastapi.testclient import TestClient
 from codedna.api.app import create_app
-from codedna.test_mapping.maven import run_maven_tests,BuildError
+from codedna_java.maven import run_maven_tests,BuildError
 FAKE=[sys.executable,str(Path(__file__).with_name('fake_mvn.py'))]
 
 @pytest.fixture

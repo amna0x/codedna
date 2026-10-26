@@ -13,6 +13,7 @@ Design rules (see docs/DECISIONS.md, D-003):
 
 from __future__ import annotations
 
+import errno
 import os
 import shutil
 import subprocess
@@ -77,10 +78,17 @@ def _run(repo: Path, args: tuple[str, ...], stdin: bytes | None = None,
             check=False,
             env={**os.environ, **env} if env else None,
         )
-    except FileNotFoundError as exc:
-        raise GitCommandError("git executable not found on PATH") from exc
     except OSError as exc:
-        raise GitCommandError(f"could not run git: {exc}") from exc
+        # Windows reports an oversized argv as FileNotFoundError/WinError 206,
+        # even though git exists. Preserve that cause instead of blaming PATH.
+        if getattr(exc, "winerror", None) == 206 or exc.errno == errno.E2BIG:
+            message = f"could not run git: command line or path is too long: {exc}"
+        elif isinstance(exc, FileNotFoundError):
+            message = ("git executable not found on PATH" if repo.is_dir()
+                       else f"git working directory does not exist: {repo}")
+        else:
+            message = f"could not run git: {exc}"
+        raise GitCommandError(message) from exc
 
     if completed.returncode != 0:
         stderr = completed.stderr.decode("utf-8", errors="replace").strip()
@@ -142,10 +150,22 @@ _SNAPSHOT_ENV = {
 
 
 # CodeDNA's own outputs are not part of the user's change, even in folders
-# created before .codedna/.gitignore existed (D-053).
-_OUTPUT_EXCLUDES = tuple(f":(exclude){path}" for path in (
-    ".codedna/runs", ".codedna/history.db", ".codedna/history.csv",
-    ".codedna/history.csv.partial"))
+# created before .codedna/.gitignore existed (D-053). Same list as
+# test_history.recording.OUTPUTS (a test keeps them equal; Git code must not
+# import the history package).
+_OUTPUTS = (".codedna/runs", ".codedna/history.db", ".codedna/history.csv",
+            ".codedna/history.csv.partial")
+
+
+def _output_excludes(listed: bytes) -> list[str]:
+    """Exclude pathspecs for CodeDNA outputs that ``git add`` would otherwise pick up.
+
+    Only outputs Git lists (not ignored) are named: ``git add`` fails when an
+    exclude pathspec names an ignored path.
+    """
+    names = [name.decode("utf-8", "replace") for name in listed.split(b"\0") if name]
+    return [f":(exclude){path}" for path in _OUTPUTS
+            if any(name == path or name.startswith(path + "/") for name in names)]
 
 
 def snapshot_worktree(repo: Path) -> str:
@@ -185,7 +205,7 @@ def snapshot_worktree(repo: Path) -> str:
             shutil.copyfile(real, index)
         except OSError:  # no index yet (or unreadable): start from HEAD's tree
             _run(repo, ("read-tree", head), env=env)
-        _run(repo, ("add", "-A", "--", ".", *_OUTPUT_EXCLUDES), env=env)
+        _run(repo, ("add", "-A", "--", ".", *_output_excludes(listed)), env=env)
         tree = _run(repo, ("write-tree",), env=env).decode().strip()
         return _run(repo, ("commit-tree", tree, "-p", head, "-m", "CodeDNA working-tree snapshot"),
                     env=env).decode().strip()

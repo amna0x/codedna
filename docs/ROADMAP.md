@@ -13,6 +13,17 @@ CodeDNA has two tracks (D-017):
 
 Java stays the only supported language until Milestone 5 is complete.
 
+## Verified follow-up status - 2026-10-26
+
+- Done: nine-project B10 confirmation and B12f/B11/B13/B13f follow-ups,
+  with per-study findings and preserved source/output hashes (report 4.11/4.12).
+- Done: live CRC opt-in and real Maven end-to-end demo (D-068).
+- Done: exact-decision risk-prefix performance repair (D-069).
+- Default remains B10; B12f caveats and failed PTS cost match are explicit (D-067).
+- Next: brake structural_plan, Python/mixed-repo fallback, then remaining
+  IDE/manual/clean-PC checks and final report. Public catalogue hosting is
+  still outstanding; implemented plugin management is not public hosting.
+
 ## Milestone 0 — Repository bootstrap ✅
 
 - ✅ Python package + `pyproject.toml`, editable install
@@ -53,8 +64,9 @@ Java stays the only supported language until Milestone 5 is complete.
   `--confirmed-only`
 - ✅ Class-level dependency-only candidate tests (preview of baseline B4)
 - ⏳ Method-level call edges (deferred: needs type resolution; see D-010)
-- ⏳ Manual precision check of extracted edges on a real project (needed for
-  the "graph correctness" metric)
+- ✅ Precision check of extracted edges on HikariCP and LittleProxy: 160 of
+  160 sampled edges correct; four missed-reference causes fixed (D-058).
+  Labels still need a student spot check.
 
 ## Milestone 3 — Test mapping ✅
 
@@ -116,8 +128,8 @@ Product track, alongside:
 - ✅ Language-plugin interface, registry (`codedna.languages` entry points)
   and built-in Java plugin; core impact/selection/collection go through it;
   `codedna plugins` (D-018, D-024)
-- ⏳ Physically move Java code into a separate `codedna-java` package
-  (Milestone 7)
+- ✅ Java code moved into a separate `codedna-java` package
+  (`plugins/codedna-java`, D-054); the core has no built-in language
 
 ## Milestone 5 — Research contribution 🔄 (tooling done)
 
@@ -150,8 +162,11 @@ Product track, alongside:
 - 🔄 Rolling-origin evidence study with pre-fixed rules (D-042): on the four
   inspected projects B10 shows no meaningful safety difference from matched B3;
   the gate accepts few blocks but those miss rarely. New-project confirmation
-  pending data access: `scripts/prepare_confirmatory.py` fetches, imports and
-  builds the projects outside study11 on a machine that reaches Zenodo.
+  is queued for all nine fresh projects (D-056). The existing Zenodo raw download
+  continues; a tested one-time continuation verifies the full cache, reuses it
+  read-only, builds projected CSVs/DBs and runs the fixed study. No fresh verdict
+  yet. See `docs/CONFIRMATORY_PREPARATION_2026-10-25.md` and the continuation
+  status under `experiments/datasets/confirmatory-live-2026-10-25/`.
 
 ## Milestone 6 — CodeDNA IDE and FYP demo ⏳
 
@@ -176,8 +191,14 @@ May start in parallel (Student C) once the analysis JSON formats are stable.
   tests, confidence-labelled edges, click-to-explain paths
 - ✅ Impact graph on real projects: package lanes and boxes, highlighted
   change, counts, depth and direct-links controls (D-051)
-- 🔄 Java editor support, progress notifications, Windows installer (D-044);
-  needs a Windows build check
+- ✅ Windows x64 production build and NSIS installer checked locally (D-044,
+  D-055). Installer now includes Python plus the ML/API core. Packaged-core
+  analysis, model/calibration fitting, API and actual Maven execution passed
+  without Python on PATH; all 1,354 core files matched their recorded hashes.
+- 🔄 Java editor/progress interactive acceptance and clean-machine installer
+  testing remain. Bundled Java extensions deploy, but the local UI automation
+  could not complete click-through checks after repeated minimization/user-input
+  errors. The local installer is unsigned.
 - ✅ Uncommitted-change analysis: `WORKTREE` revision + "My uncommitted
   changes" in the IDE (D-046)
 - ✅ History replay view (D-049): the study's test commits played back one by
@@ -201,13 +222,20 @@ May start in parallel (Student C) once the analysis JSON formats are stable.
   hosting (e.g. GitHub Pages) still to switch on
 - ✅ Plugin catalogue index `website/catalogue/index.json` with a core
   validator (`codedna.plugins.catalogue`: pinned, SHA-256, official URLs)
-- ⏳ In-app plugin manager: browse, install, update, remove — official
-  catalogue only, checksums verified, versions pinned (D-020)
-- ⏳ Package the Java plugin through the catalogue
+- ✅ Plugin manager: `codedna plugins catalogue|install|remove` (D-048), API
+  endpoints and the IDE "Language plugins" view (D-054): official catalogue
+  only, SHA-256 checked before pip, exact versions, dependency check with
+  roll back. Open: a public place to host the catalogue and wheels
+- 🔄 Package the Java plugin through the catalogue: it is a separate
+  distribution (`plugins/codedna-java`), listed as bundled; publishing a
+  wheel waits for public hosting
 
 ## Later (only if Milestones 4–7 are on track)
 
-- ⏳ Second language plugin (e.g. Python or JavaScript) to show the plugin
-  interface generalises
+- ✅ Second language plugin: Python (`plugins/codedna-python`, D-060), built
+  early by the owners' plan of 2026-10-25. Works next to Java in one
+  repository (joined graphs, one test universe, split test runs); no
+  cross-language edges. Open: risk-based selection and graceful brake fallback for Python; both
+  plugins are included by the desktop bundle builder
 - ⏳ File-level history fallback (co-change) for languages without a plugin,
   always labelled heuristic

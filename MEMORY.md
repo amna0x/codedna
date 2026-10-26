@@ -1,8 +1,160 @@
 # MEMORY.md: handoff notes for the next agent
 
 Read this first, then AGENTS.md (rules), docs/ROADMAP.md (status) and
-docs/DECISIONS.md (D-001 to D-041, why things are the way they are).
-Last updated: 2026-10-24 (DANTE-history extension, target audit gate and live IDE execution).
+docs/DECISIONS.md (decision history and tradeoffs).
+Last updated: 2026-10-26 (completed studies and PR #21 integration review).
+
+## Current verified state - 2026-10-26
+
+The nine-project confirmation and all four laptop follow-ups are complete.
+New results: `experiments/results/*confirmatory-perf-2026-10-26/`, each with
+9 project reports, config, summary, FINDINGS and SHA-256 audit manifest.
+B12f reaches 95% safety on 8/9 but reduces mean safety relative to the gated
+product; the missing pre-run nine-project addendum is disclosed. B10 stays
+default, CRC opt-in (D-067/D-068). B13/B13f are exploratory; PTS cost match
+failed. See report sections 4.11/4.12. Do not rerun completed studies.
+
+D-069 fixes the quadratic risk loop with exact-decision binary search.
+Study-worktree checks: 59 focused tests, full Maven-inclusive 405 passed /
+zero skips, plus 46 updated study tests; exact real-project replay passed.
+Integration full-suite counts must be recorded separately.
+
+Study changes were pushed on `claude/project-thread-71arlo` and integrated
+locally into PR #21's branch. Preserve all stashes: never pop, apply or drop.
+The old local main is preserved by `keep/local-main-before-pr21-20261026`
+and `keep/graphify-97c3be7`; original local confirmation files were moved
+with all 45 file hashes verified to
+`C:/Users/hp/codedna-backup-2026-10-26/original-confirmatory-before-pr21`.
+Main was safely aligned to origin/main before integration; no old buggy
+stash changes were brought back. Merge/push outcome and latest test counts
+must be checked before claiming PR #21 has landed.
+
+Next build after integration: HANDOFF 6.4 structural_plan, then Python brake
+fallback. CRC opt-in and the end-to-end demo already exist; do not rebuild.
+The historical notes below describe earlier checkouts and counts.
+
+Branch `claude/project-thread-info38` (PR #17, stacked on #16): full suite
+`python -m pytest --run-maven` on Linux: 388 passed, 7 skipped (Windows-only
+start.bat tests, run by Windows CI), 2026-10-25. The counts below (334, 322,
+315 ...) were reported by Codex on the laptop's older uncommitted tree; they
+were not reproduced on this branch. Codex's first project-history draft
+dropped failing runs, kept a second history and edited .git/info/exclude;
+D-057 replaced it, so do not port those parts back from the laptop.
+
+2026-10-26: Codex's later laptop work is ported as D-065 (Windows-safe Git
+ancestry for big RTPTorrent pushes; the old run failed at Sling with WinError
+206) and D-066 (IDE opens discovered test files, ignores stale responses).
+The live confirmatory run now uses
+`experiments/datasets/confirmatory-windowsfix-2026-10-26`, results to
+`experiments/results/rolling-evidence-confirmatory-windowsfix-2026-10-26`;
+the old `confirmatory-live-2026-10-25` status says failed and is superseded.
+
+Codex's laptop notes (2026-10-25):
+Latest full validation: **334 passed, zero skipped**, Maven and Gradle included;
+897.94 seconds, one existing Starlette/httpx deprecation warning. Three Node
+runtime tests also passed. No commits or pushes were requested/performed.
+
+## Historical next step (superseded) — fresh-project continuation was queued
+
+- The installer remains at `ide/electron-app/dist/CodeDNA IDE Setup 0.1.0.exe`
+  (339,622,119 bytes, SHA-256
+  `88d486030d66a450edd1763df68f611aaa8806104a9ec92dd6fabc6f96140f93`, unsigned).
+  Exact packaged-core checks passed without external Python: Java analysis,
+  synthetic model/calibration, API, risk fallback, real Maven passing tests and
+  a deliberate regression with exactly one requested failing class executed.
+  All 1,354 core file hashes matched. Pinned editor VSIXs matched 577 shipped
+  files; one TypeScript declaration is deliberately removed by the packager.
+- D-056: `prepare_confirmatory --no-structural` avoids three unused graph
+  columns while preserving all 15 live model inputs. Verified row by row on
+  all 70,485 existing four-project rows. Preparation guards project identity,
+  inspected-project exclusion, output-name collisions, extractor/profile drift.
+- An earlier `prepare_confirmatory.py` producer was already running for all
+  nine fresh projects under `experiments/datasets/confirmatory/raw` (base
+  Python PID 17936, launcher 19284 when inspected). Preserve that producer.
+  It had verified 41/74 entries, about 2.5 GB, and was downloading the next
+  repository pack. Zenodo transfers are slow. The duplicate fetch started in
+  this session was stopped after two raw result CSVs; it produced no new DBs
+  or feature CSVs. Its old config is preserved as
+  `preparation-duplicate-fetch-stopped.json` in the separate live-output folder.
+- `scripts/continue_confirmatory.py --wait` is now running as a ONE-TIME local
+  continuation (PID 17704 when queued; exec session 74625). No AI service,
+  notifications, recurring scheduler, duplicate HTTP download or third-party
+  build is used. It waits for all 74 entries including the last shared map,
+  rechecks every SHA-256, reuses raw files read-only through `raw_dir`, builds
+  all nine DBs and 16-column feature CSVs in the separate live-output folder,
+  then runs the unchanged fixed D-042 rolling study. No fresh verdict exists yet.
+- Status: `experiments/datasets/confirmatory-live-2026-10-25/continuation-status.json`.
+  Log: `build/confirmatory-continuation.log`. Expected final results:
+  `experiments/results/rolling-evidence-confirmatory-2026-10-25/summary.md`.
+  The source download must finish; if it stops, resume that producer first.
+- IMPORTANT: `continuation-code.json` freezes relevant preparation/model/code,
+  the fixed protocol, Python/ML-library versions and equivalence proof. Changing
+  those files/versions before fitting causes a safe failure and requires a new
+  output folder; do not silently alter the queued study. The OS output lock is
+  released automatically on exit. Do not start a duplicate worker or downloader.
+- Details: `docs/CONFIRMATORY_PREPARATION_2026-10-25.md` and implementation handoff.
+  Latest full suite: 334 passed / 0 skipped / 897.94 s. New preparation/continuation
+  tests: 15 passed. Final Graphify AST refresh: 2,138 nodes, 5,373 edges,
+  123 communities; no document semantic extraction.
+- Interactive editor/progress acceptance and clean-machine installer testing
+  remain unverified. Computer Use recovery returned minimized-window / user
+  input detected errors; do not claim UI click-through passed. Final report,
+  manual graph-precision review and supervisor sign-off remain roadmap work.
+
+## Initial review batch — 2026-10-25
+
+- Started from clean HEAD `97c3be7`, with the newer graph, replay, WORKTREE,
+  multi-module, launcher and website changes already merged. Earlier notes
+  describing those features as remaining or remote authentication as broken
+  are historical; use the roadmap for current scope.
+- Replay readers now reject malformed/non-finite/impossible outcomes with
+  ReplayError (API 400); discovery skips invalid files. Saved study results
+  are not edited. Added 15 offline regression cases; replay suite: 32 passed.
+- `npm run build:extension` passed. Full Maven-inclusive suite: 315 passed, 1 skipped (missing Gradle at collection),
+  1 existing Starlette/httpx warning, 690.91 seconds. The skipped Gradle test
+  subsequently passed after installing its runtime, covering all 316 tests.
+- Graphify refreshed locally with AST-only extraction: 2,063 nodes, 5,201 edges,
+  120 communities. Documents were not semantically re-extracted.
+- Installed portable Gradle 8.14.3 from the official distribution, verified
+  SHA-256 `bd71102213493060956ec229d946beee57158dbd89d0e62b91bca0fa2c5f3531`.
+  Runtime metadata: `C:/Users/hp/.codex/tools/gradle/runtime.json`.
+  Add `C:/Users/hp/.codex/tools/gradle/gradle-8.14.3/bin` to the process PATH
+  for future full runs; set GRADLE_USER_HOME to its sibling `cache` folder.
+  The previously skipped Gradle multi-project integration test passed separately
+  in 193.76 seconds (all tests, selected tests, build-excluded test reporting).
+- No commit or push requested or performed in this review.
+
+## Desktop continuation — 2026-10-25
+
+- Owner requested continued autonomous work while AFK, with careful validation;
+  additional languages remain deferred. No commit or push was requested.
+- Completed D-055 bundled Windows core, verified a full NSIS build and preserved
+  explicit executable overrides. New build-only extra: `.[desktop]` pins
+  PyInstaller 6.22.0. See `docs/IMPLEMENTATION_HANDOFF.md` for details.
+- The final installer is `ide/electron-app/dist/CodeDNA IDE Setup 0.1.0.exe`,
+  339,622,119 bytes, SHA-256
+  `88d486030d66a450edd1763df68f611aaa8806104a9ec92dd6fabc6f96140f93` (unsigned).
+  Packaged-core hashes verified: 1,354 files. Local evidence: `dist/validation.json`.
+- Frozen core and the exact packaged copy passed Java analysis, synthetic
+  model/calibration fitting, API graph, risk fallback and actual sample Maven
+  execution without Python on child PATH. Proof under `build/desktop-core/`.
+- Packaged app reached the ready workbench and deployed two Java extensions.
+  Interactive UI acceptance remains unverified: repeated minimized-window and
+  user-input-detected errors persisted through Computer Use recovery. Do not
+  claim Java completion, progress controls or clean-machine installation passed.
+- Launcher now loads portable Gradle metadata/cache and preserves custom cache
+  paths; six launcher tests passed. Metadata reads avoid quoting user paths into
+  PowerShell source. The no-JDK/no-completion warning was corrected.
+- Full suite after the desktop helpers: 320 passed, zero skipped, one existing
+  Starlette/httpx warning, 4960.82 seconds. Final validation after the launcher
+  changes: 322 passed, zero skipped, 814.16 seconds, one existing warning.
+  OMP/OPENBLAS/MKL thread counts were set to 1 for the final run.
+- Graphify code refresh before the final launcher additions: 2,099 nodes,
+  5,264 edges, 126 communities. Final refresh including launcher tests:
+  2,102 nodes, 5,270 edges, 129 communities (AST only).
+- The obsolete IDE-only packaging attempt and broad scientific test-suite
+  freezing attempt were stopped, not completed. The later bundled installer
+  build and exact packaged-core smoke checks are the valid results.
 
 ## What the project is
 
@@ -29,8 +181,9 @@ Deadline: approximately May or June (presumed 2027 from the current October 2026
 - Never fabricate numbers. Every result must come from files under
   `experiments/results/`. Report negative results honestly.
 - The owner explicitly requests Maven coverage in full local validation.
-  Run `python -m pytest --run-maven`: 245 passed, zero skipped locally on
-  2026-10-24. The real Maven/JUnit/JaCoCo integration test passed.
+  Run `python -m pytest --run-maven`; see the current review/desktop continuation
+  for the latest local results. Real Maven/JaCoCo and Gradle integration are
+  included when their runtimes are on PATH.
 - Update FINDINGS / DECISIONS / ROADMAP / report draft when results change.
 - `docs/PROGRESS_REPORT.md` and `.pdf` are a plain-language report the user
   forwards. They are **local only** (listed in `.git/info/exclude`); keep
@@ -39,11 +192,21 @@ Deadline: approximately May or June (presumed 2027 from the current October 2026
 ## Environment (Windows 11)
 
 - Python 3.12 venv at `.venv` (`.venv/Scripts/python`). Install:
-  `pip install -e ".[ml,api,dev]"`.
+  `pip install -e ".[ml,api,dev]"`, then the Java plugin:
+  `pip install -e plugins/codedna-java` (D-054; start.bat does it if missing).
+  Java code (parser, graph builder, discovery, Maven runner, live risk) now
+  lives in `plugins/codedna-java/codedna_java/`; the core reaches it only via
+  `codedna.plugins.languages`.
+- Python plugin: `pip install -e plugins/codedna-python` (D-060; start.bat
+  installs it too). Stdlib `ast` only. Mixed Java + Python repos: the core
+  runs every installed plugin (`plugins.languages`: `commit_graph`,
+  `commit_tests`, `run_tests`); no cross-language edges. The PyInstaller
+  desktop bundle must include `codedna_python` as well as `codedna_java`.
 - Set `PYTHONIOENCODING=utf-8` when scripts print "−" or "Δ".
 - In Git Bash, heredocs containing apostrophes sometimes fail ("unexpected
   EOF"); write a Python script to a file and run it instead.
-- tree-sitter is pinned `>=0.25,<0.26`: 0.26.0 crashes (D-033).
+- tree-sitter is pinned `>=0.25,<0.26` in `plugins/codedna-java/pyproject.toml`:
+  0.26.0 crashes (D-033).
 - IDE builds need `env -u NODE_USE_SYSTEM_CA` (certificate issue).
 - Markdown to PDF: render HTML with the `markdown` package, then
   `chrome.exe --headless=new --no-pdf-header-footer --print-to-pdf=...`.

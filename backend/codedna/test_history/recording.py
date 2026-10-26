@@ -57,40 +57,83 @@ def ignore_outputs(repo: Path) -> None:
 
 def record_run(repo_path: str | Path, run: TestRunResult, *, expected_tests: list[str]) -> dict:
     """Store ``run`` as history when it is a complete full-suite run; say why not otherwise."""
-    repo = resolve_repository(repo_path)
-    csv_path, db_path = repo / HISTORY_CSV, repo / HISTORY_DB
+    report = record_runs(repo_path, [(run, expected_tests)])
+    result = report["runs"][0]
+    if result["recorded"]:
+        return {"recorded": True, "reason": None, "history_csv": report["history_csv"],
+                "commit": run.commit, "commits_with_results": report["commits_with_results"]}
+    return {"recorded": False, "reason": result["reason"], "history_csv": report["history_csv"]}
 
-    def skipped(reason: str) -> dict:
-        return {"recorded": False, "reason": reason, "history_csv": str(csv_path)}
 
+def refusal(run: TestRunResult, expected_tests: list[str], line: set[str]) -> str | None:
+    """Why ``run`` cannot be history (``None`` if it can); ``line`` is HEAD's first-parent line.
+
+    A run with failing tests is complete evidence: Maven and Gradle exit
+    non-zero when a test fails, so the exit code is not a refusal reason.
+    """
     if not expected_tests:
-        return skipped("no test classes were expected; nothing to record")
+        return "no test classes were expected; nothing to record"
     missing = sorted(set(expected_tests) - set(run.tests))
     if missing:
-        return skipped(f"{len(missing)} expected test class(es) have no result "
-                       f"(e.g. {missing[0]}); only complete runs are recorded")
-    line = set(run_git(repo, "rev-list", "--first-parent", "HEAD").split())
+        return (f"{len(missing)} expected test class(es) have no result "
+                f"(e.g. {missing[0]}); only complete runs are recorded")
     if run.commit not in line:
-        return skipped("the tested commit is not on the current branch's first-parent "
-                       "history (e.g. uncommitted changes); it is not recorded")
-    foreign = skipped(f"{HISTORY_CSV} was not written by CodeDNA's recording; "
-                      "it is left unchanged")
+        return NOT_ON_LINE
+    return None
+
+
+NOT_ON_LINE = ("the tested commit is not on the current branch's first-parent "
+               "history (e.g. uncommitted changes); it is not recorded")
+
+
+def first_parent_line(repo: Path) -> set[str]:
+    return set(run_git(repo, "rev-list", "--first-parent", "HEAD").split())
+
+
+def record_runs(repo_path: str | Path, runs: list[tuple[TestRunResult, list[str]]]) -> dict:
+    """Record several runs (oldest first) with one history rebuild.
+
+    Each entry pairs a run with the test classes its build runs by default at
+    that commit. A later run of the same commit replaces an earlier one.
+    """
+    repo = resolve_repository(repo_path)
+    csv_path, db_path = repo / HISTORY_CSV, repo / HISTORY_DB
+    line = first_parent_line(repo)
+    results = [{"commit": run.commit, "recorded": False,
+                "reason": refusal(run, expected, line)} for run, expected in runs]
+    report = {"history_csv": str(csv_path), "runs": results, "recorded": 0,
+              "commits_with_results": None, "reason": None}
+    accepted = [run for (run, _), result in zip(runs, results) if result["reason"] is None]
+    if not accepted:
+        return report
+    foreign = f"{HISTORY_CSV} was not written by CodeDNA's recording; it is left unchanged"
     if csv_path.is_file() and not db_path.is_file():
-        return foreign
+        return _refuse_all(report, accepted, foreign)
     ignore_outputs(repo)
     with HistoryStore(db_path) as store:
         if csv_path.is_file() and _digest(csv_path) != store.get_meta(_CSV_DIGEST):
-            return foreign
+            return _refuse_all(report, accepted, foreign)
         mine_history(repo, store, revision="HEAD")
-        store.add_run(run, SOURCE)
+        for run in accepted:
+            store.add_run(run, SOURCE)
         dataset = build_dataset(store, repo, structural=False)
         partial = csv_path.with_name(csv_path.name + ".partial")
         dataset.to_csv(partial)
         os.replace(partial, csv_path)
         store.set_meta(_CSV_DIGEST, _digest(csv_path))
-        commits = len(dataset.commits)
-    return {"recorded": True, "reason": None, "history_csv": str(csv_path),
-            "commit": run.commit, "commits_with_results": commits}
+        report["commits_with_results"] = len(dataset.commits)
+    for result in results:
+        result["recorded"] = result["reason"] is None
+    report["recorded"] = len(accepted)
+    return report
+
+
+def _refuse_all(report: dict, accepted: list[TestRunResult], reason: str) -> dict:
+    for result in report["runs"]:
+        if result["reason"] is None:
+            result["reason"] = reason
+    report["reason"] = reason
+    return report
 
 
 def _digest(path: Path) -> str:

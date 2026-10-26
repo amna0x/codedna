@@ -10,11 +10,16 @@ files:
   - lib/**
   - src-gen/**
   - scripts/**
+  - "!scripts/**/*.test.cjs"
   - plugins/**
   - package.json
   - "!**/*.map"
 # Extensions run from disk, not from an asar archive.
 asar: false
+# The frozen core includes its own Python and ML/API dependencies.
+extraResources:
+  - from: resources/codedna-core
+    to: core
 # `npm run rebuild` (theia rebuild:electron) already built the native modules
 # for Electron; a second rebuild by electron-builder needs Electron headers
 # from the internet and fails on @parcel/watcher.

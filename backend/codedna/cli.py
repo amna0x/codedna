@@ -12,17 +12,18 @@ Usage:
                     [--coverage-map FILE] [--durations FILE] [--non-java retest-all|ignore]
                     [--must-run PATTERN ...]
     codedna risk-select --repo PATH --base SHA --head SHA [--history-csv FILE] [--risk-target F]
-                    [--must-run PATTERN ...]
+                    [--must-run PATTERN ...] [--method b10|crc]
     codedna compare --repo PATH --base SHA --head SHA --ground-truth FILE
                     [--coverage-map FILE] [--non-java retest-all|ignore]
-    codedna plugins
+    codedna plugins [catalogue | install ID VERSION --yes | remove ID --yes]
     codedna serve   [--host 127.0.0.1] [--port 8765] [--allow-build]
+    codedna mcp     [--repo PATH] [--allow-build] [--mvn PATH] [--gradle PATH]
     codedna history mine     --repo PATH --db FILE [--rev REV] [--max-commits N]
     codedna history import   --db FILE RESULTS [RESULTS ...] [--source NAME]
     codedna history collect  --repo PATH --db FILE --output-dir DIR --allow-build
                              [--max-commits N] [--mvn PATH] [--timeout SECONDS]
     codedna history status   --db FILE
-    codedna history record   --repo PATH RESULTS
+    codedna history record   --repo PATH (RESULTS | --saved)
     codedna history import-rtptorrent --dataset DIR (--project NAME --db FILE | --list)
                              [--max-commits N]
     codedna history evaluate --db FILE [--repo PATH] [--rankers NAME ...]
@@ -44,19 +45,17 @@ import sys
 from pathlib import Path
 
 from codedna import __version__
-from codedna.dependency_graph import build_graph
 from codedna.git_analysis import CodeDNAGitError, extract_changes
 from codedna.impact_analysis import compute_impact
-from codedna.java_analysis import analyze_changes
 from codedna.models.rankers import BASELINES, ML_MODELS
 from codedna.plugins import load_plugins
+from codedna.plugins.languages import analyze_changes, build_graph, discover_tests
+from codedna.plugins.languages import run_tests as run_language_tests
 from codedna.selection import STRATEGIES, SelectionError, compare_strategies, select_tests
-from codedna.test_mapping.discovery import discover_tests
-from codedna.test_mapping.maven import run_maven_tests
-from codedna.test_mapping.reports import ReportError
 from codedna.test_mapping.results import (
     COVERAGE_MAP_FILE,
     RESULTS_FILE,
+    ReportError,
     load_coverage_map,
     load_results,
 )
@@ -125,7 +124,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     tests = subcommands.add_parser(
         "tests",
-        help="List JUnit test classes of one commit (static discovery, nothing is run).",
+        help="List the tests of one commit: JUnit classes, pytest modules (static discovery, nothing is run).",
     )
     tests.add_argument("--repo", required=True, help="Path to a local Git repository.")
     tests.add_argument("--rev", default="HEAD", help="Commit to analyse (default: HEAD).")
@@ -133,12 +132,14 @@ def build_parser() -> argparse.ArgumentParser:
 
     run_tests = subcommands.add_parser(
         "run-tests",
-        help="Run the Maven or Gradle test suite of one commit (executes project code; needs --allow-build).",
+        help="Run the test suite of one commit with Maven, Gradle or pytest (executes project code; needs --allow-build).",
         description=(
             "Export the commit into OUTPUT_DIR/checkout with git archive, run 'mvn test' there and "
-            "save results.json (Gradle projects: 'gradle test'). With --per-test-coverage, run each test class separately under "
-            "JaCoCo and also save coverage-map.json. This EXECUTES the project's code and build "
-            "plugins, and Maven may download dependencies: only use it on projects you trust."
+            "save results.json (Gradle projects: 'gradle test'; Python: 'python -m pytest'). With --per-test-coverage, run each test class separately under "
+            "JaCoCo and also save coverage-map.json (Java only). A repository with tests in several "
+            "languages runs each language into OUTPUT_DIR/<language> and joins the results. This "
+            "EXECUTES the project's code and build plugins, and Maven may download dependencies: "
+            "only use it on projects you trust."
         ),
     )
     run_tests.add_argument("--repo", required=True, help="Path to a local Git repository.")
@@ -153,17 +154,24 @@ def build_parser() -> argparse.ArgumentParser:
     run_tests.add_argument("--gradle",
                            help="Path to the Gradle executable (default: gradle on PATH; "
                                 "the repository's gradlew is never used).")
+    run_tests.add_argument("--python",
+                           help="Python interpreter that runs pytest (default: python3 or python "
+                                "on PATH); it needs pytest and the project's dependencies.")
     run_tests.add_argument("--timeout", type=_non_negative_int, default=1800,
                            help="Timeout per build invocation in seconds (default: 1800).")
     run_tests.add_argument("--keep-checkout", action="store_true",
                            help="Keep OUTPUT_DIR/checkout after the run (for debugging).")
 
     run_tests.add_argument('--tests', nargs='*', default=None,
-                           help='Only run these discovered test classes; empty list runs nothing.')
+                           help='Only run these discovered tests (Java classes, Python py:<module> IDs); '
+                                'empty list runs nothing.')
     risk_select = subcommands.add_parser('risk-select', help='Target-validated calibrated stopping or full-suite fallback.')
     _add_change_args(risk_select)
     risk_select.add_argument('--history-csv', help='Target history CSV; default REPO/.codedna/history.csv')
     risk_select.add_argument('--risk-target', type=float, default=.05)
+    risk_select.add_argument('--method', choices=('b10', 'crc'), default='b10',
+                             help='b10: calibrated stop behind the history audit (default); '
+                                  'crc: conformal stop bounding misses among failing commits (D-068)')
     _add_must_run_arg(risk_select)
 
     select = subcommands.add_parser(
@@ -191,7 +199,18 @@ def build_parser() -> argparse.ArgumentParser:
     _add_non_java_arg(compare)
     compare.add_argument("--output", help="Write JSON to this file instead of standard output.")
 
-    subcommands.add_parser("plugins", help="List installed language plugins.")
+    plugins = subcommands.add_parser(
+        "plugins", help="List installed language plugins, or manage them from the official catalogue.")
+    plugin_actions = plugins.add_subparsers(dest="plugin_action")
+    plugin_actions.add_parser("catalogue", help="Show the official plugin catalogue.")
+    install = plugin_actions.add_parser(
+        "install", help="Install one exact catalogue version (runs the plugin's code later).")
+    install.add_argument("plugin")
+    install.add_argument("version", help="Exact version, e.g. 1.0.0")
+    install.add_argument("--yes", action="store_true", help="Confirm the installation.")
+    remove = plugin_actions.add_parser("remove", help="Remove an installed catalogue plugin.")
+    remove.add_argument("plugin")
+    remove.add_argument("--yes", action="store_true", help="Confirm the removal.")
 
     serve = subcommands.add_parser(
         "serve",
@@ -208,6 +227,20 @@ def build_parser() -> argparse.ArgumentParser:
                        help="Port (default: 8765).")
     serve.add_argument("--allow-build", action="store_true",
                        help="Allow /api/run-tests (executes project code on request).")
+
+    mcp = subcommands.add_parser(
+        "mcp",
+        help="Test brake for AI coding agents: an MCP server on stdin/stdout (D-059).",
+        description=(
+            "Serves codedna_plan_tests and codedna_impact to a coding agent over the Model "
+            "Context Protocol (stdio). With --allow-build and --repo it also serves "
+            "codedna_check, which runs the planned tests of that one repository."),
+    )
+    mcp.add_argument("--repo", help="Repository the agent works on (required with --allow-build).")
+    mcp.add_argument("--allow-build", action="store_true",
+                     help="Offer codedna_check (executes the project's build when the agent asks).")
+    mcp.add_argument("--mvn", help="Path to the Maven executable (default: mvn on PATH).")
+    mcp.add_argument("--gradle", help="Path to the Gradle executable (default: the wrapper or gradle).")
 
     history = subcommands.add_parser(
         "history", help="Mine commit history, store test results, evaluate test ordering.")
@@ -246,9 +279,13 @@ def build_parser() -> argparse.ArgumentParser:
         help="Add a full-suite run to REPO/.codedna/history.csv (nothing is built).",
         description="Stores a complete run of the whole suite at a commit on the current "
                     "branch as project history for risk selection (D-053). Incomplete "
-                    "runs and other branches are refused with a reason.")
+                    "runs and other branches are refused with a reason. --saved adds "
+                    "every eligible run saved under REPO/.codedna/runs (D-057).")
     record.add_argument("--repo", required=True, help="Path to a local Git repository.")
-    record.add_argument("results", help="results.json file or run directory.")
+    recorded = record.add_mutually_exclusive_group(required=True)
+    recorded.add_argument("results", nargs="?", help="results.json file or run directory.")
+    recorded.add_argument("--saved", action="store_true",
+                          help="Add every eligible saved run of REPO instead.")
 
     rtp = history_commands.add_parser(
         "import-rtptorrent",
@@ -388,11 +425,11 @@ def main(argv: list[str] | None = None) -> int:
             from codedna.selection.live import recommend
             return _write_json(recommend(args.repo,args.base,args.head,
                 history_csv=args.history_csv,risk_target=args.risk_target,
-                must_run=args.must_run),None)
+                must_run=args.must_run,method=args.method),None)
         elif args.command == "run-tests":
             return _run_tests(args)
         elif args.command == "plugins":
-            return _write_json(load_plugins().describe(), None)
+            return _plugins(args)
         elif args.command == "serve":
             try:
                 from codedna.api.server import serve
@@ -402,6 +439,14 @@ def main(argv: list[str] | None = None) -> int:
                 return EXIT_ANALYSIS_ERROR
             return serve(args.host, args.port, token=os.environ.get("CODEDNA_API_TOKEN"),
                          allow_build=args.allow_build)
+        elif args.command == "mcp":
+            from codedna.agent.mcp_server import main as mcp_main
+            build_options = {}
+            if args.mvn:
+                build_options["maven_command"] = [args.mvn]
+            if args.gradle:
+                build_options["gradle_command"] = [args.gradle]
+            return mcp_main(args.repo, args.allow_build, build_options or None)
         elif args.command == "history":
             return _run_history(args)
         elif args.command == "replay":
@@ -441,6 +486,23 @@ def main(argv: list[str] | None = None) -> int:
     return _write_json(report.to_dict(), args.output)
 
 
+def _plugins(args: argparse.Namespace) -> int:
+    if args.plugin_action is None:
+        return _write_json(load_plugins().describe(), None)
+    from codedna.plugins import manager
+    catalogue = manager.fetch_catalogue()
+    if args.plugin_action == "catalogue":
+        return _write_json(catalogue, None)
+    if args.plugin_action == "install":
+        details = next((p for p in catalogue["plugins"] if p["id"] == args.plugin), None)
+        if details is not None:  # shown before anything runs, even with --yes
+            print(f"{details['name']} {args.version}: licence {details['licence']}; "
+                  f"source {details['source']}", file=sys.stderr)
+        return _write_json(manager.install(catalogue, args.plugin, args.version,
+                                           confirmed=args.yes), None)
+    return _write_json(manager.remove(catalogue, args.plugin, confirmed=args.yes), None)
+
+
 def _run_tests(args: argparse.Namespace) -> int:
     if not args.allow_build:
         print("error: run-tests executes the project's code and build plugins; "
@@ -448,11 +510,12 @@ def _run_tests(args: argparse.Namespace) -> int:
         return EXIT_ANALYSIS_ERROR
     print(f"warning: running the build of {args.repo} (project code will execute)",
           file=sys.stderr)
-    run, coverage = run_maven_tests(
+    run, coverage = run_language_tests(
         args.repo, args.rev, args.output_dir, allow_build=True,
         per_test_coverage=args.per_test_coverage,
         maven_command=[args.mvn] if args.mvn else None,
-        gradle_command=[args.gradle] if args.gradle else None, timeout=args.timeout,
+        gradle_command=[args.gradle] if args.gradle else None,
+        python_command=[args.python] if args.python else None, timeout=args.timeout,
         keep_checkout=args.keep_checkout, selected_tests=args.tests)
     summary = {
         "results": str(Path(args.output_dir) / RESULTS_FILE),
@@ -531,14 +594,17 @@ def _run_on_dataset(args: argparse.Namespace, dataset) -> int:
 def _record_run(args: argparse.Namespace) -> int:
     from codedna.git_analysis.git import resolve_repository
     from codedna.test_history.recording import record_run
-    from codedna.test_mapping.discovery import discover_tests_for_commit
     from codedna.test_mapping.results import RESULTS_FILE, load_results
 
+    if args.saved:
+        from codedna.test_history.project import record_saved_runs
+        report = record_saved_runs(args.repo)
+        _write_json(report, None)
+        return EXIT_OK if report["recorded_runs"] else EXIT_ANALYSIS_ERROR
     path = Path(args.results)
     run = load_results(path / RESULTS_FILE if path.is_dir() else path)
     repo = resolve_repository(args.repo)
-    expected = [t.id for t in discover_tests_for_commit(repo, run.commit).tests
-                if t.runs_by_default]
+    expected = [t.id for t in discover_tests(repo, run.commit).tests if t.runs_by_default]
     report = record_run(repo, run, expected_tests=expected)
     _write_json(report, None)
     return EXIT_OK if report["recorded"] else EXIT_ANALYSIS_ERROR

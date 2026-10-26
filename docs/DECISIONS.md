@@ -880,6 +880,29 @@ validator. Java is listed as a built-in version with no download until it
 moves into its own package. No licence is claimed because the repository has
 none yet.
 
+## D-048 — Plugin install and remove through the official catalogue
+
+`codedna.plugins.manager` and `codedna plugins catalogue | install ID VERSION
+--yes | remove ID --yes`. The catalogue is fetched only from the fixed
+official URL and validated (D-047); the caller names a plugin and an exact
+version and cannot pass a URL or file. Catalogue entries with a download gain
+a pip `package` name. Install order: compatibility (plugin API major), explicit
+confirmation (the CLI first prints the plugin's licence and source, even with
+`--yes`), wheel file name must be that package at that exact version, download (50 MB
+cap), SHA-256 compared before pip sees the file, then `python -m pip install
+--no-index --no-deps` of that one wheel into CodeDNA's own interpreter. Remove
+needs confirmation, refuses built-ins and plugins that are not installed, and
+runs `pip uninstall`. Installed plugins are found by the existing entry-point
+registry, which reports a plugin that fails to load instead of breaking the
+core. `--no-deps` means a plugin must not need extra packages. Tests are
+offline: fakes for the rule checks plus one real pip install and removal of a
+generated wheel in a throwaway virtual environment.
+
+Limit: the repository is private, so the official catalogue URL (GitHub Pages)
+and release assets are not publicly downloadable yet. Until a public host is
+chosen, install works only against a reachable copy, which the code does not
+allow by design.
+
 ## D-049 — History replay from experiment reports
 
 The IDE's **History replay** view (`Ctrl+Shift+Alt+R`) plays a project's test
@@ -1059,3 +1082,553 @@ of recorded commits) and a Wilson upper bound at or under 5%, so in practice
 a few hundred recorded commits. A synthetic check (240 commits, one test failing every
 third commit, scratch script only, not evidence) reached `validated_history`
 from recorded runs alone; real projects will differ.
+
+## D-054 — Java as a separate plugin package (`codedna-java`) and the plugin manager view
+
+The Java implementation moves out of the core into `plugins/codedna-java`, a
+separate distribution registered under the `codedna.languages` entry point
+(`java = codedna_java:JavaPlugin`). This finishes the refactor planned in
+D-018/D-024: the core has no built-in language and no Tree-sitter dependency.
+
+- **What moved:** the Java parser and change mapping (`java_analysis`), the
+  graph builder and reference walker, build-layout detection, JUnit
+  discovery, Surefire/JaCoCo parsers, the Maven/Gradle runner, the Java plugin
+  class and the live risk adapter (`plugins.java_live` → `codedna_java.live`).
+- **What stays in the core:** the shared schemas (`dependency_graph.model`,
+  `test_mapping.results` including `TestClassResult` and `ReportError`), the
+  generic `BoundedParseCache`, and everything language-neutral.
+- **One way in:** `codedna.plugins.languages` (`require`, `analyze_changes`,
+  `build_graph`, `discover_tests`, `type_kinds`). Plugin API 1.1 adds two
+  optional members, `type_kinds` and `attach_declarations`, read with
+  `getattr`, so a 1.0 plugin still loads (its changes stay at file level).
+  A plugin with a newer minor than the core is refused, because it may rely
+  on members the core lacks. A test imports every core module with `codedna_java` and
+  `tree_sitter` blocked.
+- **Without the Java plugin** `analyze` still lists changed files and warns
+  which `.java` files were not analysed. Commands that need a graph or test
+  discovery fail with `PluginMissingError`, which names the install command
+  (CLI exit 1, API 400). Nothing guesses.
+- **JSON is unchanged:** `is_java` and `java` stay in the change report so the
+  IDE and saved reports keep working. Renaming them would be a format change
+  for a later decision.
+- **Installing:** developers and `start.bat` run
+  `pip install -e plugins/codedna-java` (start.bat does it once for an
+  existing `.venv`). The catalogue lists Java as bundled (`builtin: true`,
+  package `codedna-java`, API 1.1); no wheel is published while the repository
+  is private (D-048). This is not a D-020 catalogue install: the plugin's
+  code comes from the checked-out repository itself, like `pip install -e
+  backend`, and its dependencies (Tree-sitter) are resolved from PyPI by pip
+  exactly as the core's own are, pinned by `pyproject.toml` ranges but not by
+  hash. D-020's checksum and exact-version rules apply to wheels fetched from
+  the catalogue, which is the only path that downloads plugin code.
+- **Manager:** catalogue wheels are installed with `--no-deps`. Before the
+  real install the manager runs a `pip install --dry-run --no-index` of the
+  verified wheel; if the plugin's dependencies are not already installed it
+  stops there, names them and changes nothing. After installing it still runs
+  `pip check`: a fresh install with unmet dependencies is uninstalled again,
+  but an update is never rolled back by uninstalling, because that would also
+  remove the version that worked; the error says so. Python cannot reload a
+  plugin module safely, so an update or removal returns
+  `restart_required: true` and the IDE asks for a restart of the CodeDNA
+  server. An unreachable catalogue is a normal `CatalogueError`, not a crash.
+- **Review fixes (PR #16):** an API 1.0 plugin reports no type kinds, so
+  impact marks its changed files as not analysed and `dependency` selection
+  falls back to retest-all instead of silently picking no tests; a plugin
+  without `attach_declarations` adds a warning; `require` only shows load
+  problems of the requested language's entry point; the catalogue endpoint
+  adds `compatible` to each version so the IDE no longer re-implements the
+  API check; and `dependency` selection reuses the change report instead of
+  analysing the commits twice.
+- **API and IDE:** `GET /api/plugins/catalogue`, `POST /api/plugins/install`
+  and `POST /api/plugins/remove`. Install and remove need `"confirm": true`,
+  and versions must be exact. The IDE's "Language plugins" view shows
+  installed plugins and load problems, and the catalogue with licence and
+  source. Install, update and remove each ask for confirmation. The view
+  sends only a plugin id and version; the URL and checksum come from the
+  official catalogue inside the core.
+- **Research reproducibility:** `docs/EVIDENCE_STUDY_PROTOCOL.md` is frozen
+  and keeps its old module name (`plugins.java_live`). The fingerprint list in
+  `scripts/run_rolling_evidence.py` now points at
+  `plugins/codedna-java/codedna_java/live.py`, so a rolling-evidence run
+  started before this change will not resume after it; restart it instead.
+  The module's code is unchanged.
+
+## D-055 — Bundle the Python core in the Windows desktop installer
+
+The desktop installer must support analysis without a separate Python/CodeDNA
+installation. A build-only `desktop` extra pins PyInstaller 6.22.0; the installed
+analysis runtime gains no new dependency. `scripts/build_desktop_core.py` builds
+a console-mode, one-directory executable with the Java parser, SQLite history,
+ML/calibration and local API dependencies. The IDE hides its console and keeps
+the existing stdout/token handshake and explicit build-consent flow.
+
+Electron Builder copies that generated folder into `resources/core`. The main
+entry chooses an explicit `CODEDNA_EXECUTABLE` override first, then the bundled
+core, then `codedna` on PATH for development. Generated executables and caches
+are ignored. Each bundle records Python/package versions and SHA-256 hashes of
+its files; no saved datasets, credentials, historical model files or developer
+configuration are included intentionally. Git and project build tools remain
+external prerequisites. Packaging stays Windows x64; this is not a cross-platform
+installer or an in-app plugin installation mechanism.
+
+## D-056 — Confirmatory preparation skips unused graph work, guards data identity
+
+The existing `structural=False` extraction path is exposed as an explicit
+`prepare_confirmatory --no-structural` option, with full extraction still the
+default. Before preparing new projects, all 70,485 existing four-project rows
+were checked to retain identical identities, labels, durations and the 15 live
+model inputs. Only the three unused graph columns are omitted. Experimental
+rules/model/gate remain D-042; this does not change the statistical analysis.
+
+Preparation records project names, extraction option and extractor SHA-256 and
+refuses mixed or unfingerprinted resume data. The CLI refuses previously
+inspected projects and output-name collisions. The dated preparation note fixes
+the full nine-project set before fresh results. No old report is overwritten.
+
+The one-time `continue_confirmatory.py --wait` command reuses an existing active
+raw-subset producer. It verifies complete-cache hashes before importing and
+never starts a network download. A `raw_dir` option separates shared raw inputs
+from projected CSV/DB outputs. Queue-time code/library/equivalence fingerprints,
+a single-worker OS lock, a full-set check and local phase status guard unattended
+execution. No paid AI calls, notifications or recurring scheduler are used.
+
+## D-057 — Saved runs join the one recorded history (finishing the Codex draft)
+
+**Why.** Codex (2026-10-25, laptop) drafted `test_history/project.py`: list the
+saved runs under `.codedna/runs/`, import a clone's `results.json`, and build
+history from saved runs. The draft had no tests and three problems against
+D-053: it wrote a second history (`.codedna/history-exports/…`) and then
+overwrote `.codedna/history.csv`, so the next D-053 recording refused that
+file as foreign; it excluded every run with a non-zero build exit code,
+which drops all runs with a failing test (Maven/Gradle exit 1 then), so the
+history would have held passes only; and it edited `.git/info/exclude` in the
+user's repository.
+
+**What.** One history, one set of rules. `recording.py` gains
+`record_runs(repo, [(run, expected_tests), …])` (one rebuild for many runs,
+oldest first; `record_run` is now the one-run case) and `refusal()`, the D-053
+rules on their own. `project.py` uses them:
+
+- `list_runs` shows every saved run, newest first, with `candidate` and the
+  refusal reason (unreadable file, another repository, off the first-parent
+  line, an expected test class without a result);
+- `record_saved_runs` adds every eligible saved run to `.codedna/history.db`
+  and rebuilds `history.csv` like D-053 (a CSV CodeDNA did not write is still
+  left unchanged); recording twice is idempotent;
+- `import_run` copies a clone's `results.json` into `.codedna/runs/` bound to
+  this repository, only if its commit exists here, keeping the source path and
+  SHA-256 in `record.json`; it does not record by itself;
+- `run_detail` returns one saved run and its log files.
+
+Expected tests per commit come from the language plugin
+(`plugins.languages.discover_tests`, D-054). Failing runs are evidence;
+partial runs never are. API: `/api/project-history` (read-only),
+`/record`, `/import`, `/run`. Outputs stay ignored through
+`.codedna/.gitignore` (D-053); nothing is written inside `.git`.
+
+**IDE.** A **Project history** view (Ctrl+Shift+Alt+H, or "Open project
+history" in Tests to run) lists the saved runs with their reasons, opens a
+run's outcomes and logs, imports a `results.json` and adds saved runs to the
+history. Codex drafted the view on the laptop; it was moved onto this API (no
+BASE picker: eligibility follows the current branch, as in D-053).
+
+**Not decided here.** The gate (D-041) still decides whether the history is
+good enough.
+
+
+**Fix (with D-059).** Once `.codedna/.gitignore` existed, a worktree
+snapshot failed: Git refuses an `:(exclude)` pathspec that names an ignored
+path. The snapshot now excludes only outputs that `git ls-files` actually
+lists (outputs from before the ignore file existed).
+
+## D-058 — Graph precision check and four resolution fixes
+
+(D-054 to D-057 are taken by open branches: the `codedna-java` plugin split
+and the project-history fixes.)
+
+**Check (M2).** 160 dependency edges (40 confirmed + 40 heuristic from each
+of HikariCP a4d93f4f and LittleProxy 70edbe1c, seed 0) were labelled against
+the source: 160 correct, so precision is 1.00 with a 95 % Wilson interval of
+[0.954, 1.00] for each label. Missed references were found by sorting every
+unresolved name into groups. Method, data and the AI-made labels (to be
+spot-checked by a student) are in
+`experiments/results/graph-precision-2026-10-25/`; tools are
+`scripts/sample_graph_edges.py` and `scripts/score_graph_sample.py`.
+
+**Fixes to D-010 found by the check** (`dependency_graph/builder.py`):
+
+- `var` is skipped. It infers a local variable's type and names no type; it
+  was 260 of HikariCP's 546 unresolved references.
+- `java.lang` is the full list of public top-level types in JDK 21 (107
+  names) instead of 42, so names like `ClassNotFoundException` count as
+  external, not unresolved.
+- Static imports bring member types: `import static a.T.*` makes `T`'s
+  member types candidates on the same footing as type wildcards (heuristic);
+  `import static a.T.Nested` resolves `Nested` like a single-type import
+  (confirmed).
+- Member types inherited from repository supertypes are in scope, after the
+  type's own members, at each enclosing level, transitively; generic
+  arguments are ignored and cycles stop. These edges are heuristic because
+  hiding rules and library supertypes are not checked. As in Java, an
+  inherited member type shadows a `java.lang` name. HikariCP's
+  `SQLExceptionOverride.Override` was silently resolved to the JDK annotation
+  before.
+
+Review follow-ups (same PR): a single static import of a library name
+(`import static java.util.Map.Entry`) can shadow a same-package type, so that
+edge is heuristic, not confirmed; and the `java.lang` names added after Java 8
+(`Record`, `Module`, `StackWalker`, ...) give way to a single wildcard-imported
+repository type of the same name (heuristic), because on Java 8 that is what
+the code means.
+
+Effect: the unresolved rate goes from 0.264 to 0.139 (HikariCP) and from
+0.103 to 0.070 (LittleProxy), and dependency edges go from 668 to 676 and
+from 479 to 502. Structural features (`dep_reachable`, `dep_distance`,
+`dep_confirmed`) of datasets built from now on can differ slightly from the
+saved study datasets. The saved study results and the live risk gate are
+unaffected: the gate uses no structural features (D-041). Local classes stay
+unresolved by design (D-009).
+
+## D-059 — Test brake for AI coding agents (`codedna mcp`)
+
+**What.** `codedna mcp` is a Model Context Protocol server on stdin/stdout,
+so coding agents (Claude Code, Cursor, Codex and others) can ask CodeDNA
+before they say a change is done. Tools:
+
+- `codedna_plan_tests` — the tests that must run for BASE..HEAD (default:
+  uncommitted changes), a reason for each, and the skip risk. It is the live
+  recommendation (D-041) with the must-run policy (D-050): without validated
+  history it lists every test, so the brake never skips on a guess.
+- `codedna_impact` — the impact report with confirmed and heuristic links
+  apart and the changed files CodeDNA cannot analyse.
+- `codedna_check` — runs the planned tests and gives one verdict: `passed`,
+  `blocked` (a listed test failed), `incomplete` (a listed test has no
+  result, the build exited with an error or timed out, or every listed test
+  was skipped), `nothing_to_run` (validated history says no test needs to
+  run) or `no_tests` (the build runs no tests). A whole-suite check
+  of a commit on the first-parent line is recorded as history (D-053);
+  uncommitted states never are.
+
+**Consent.** `plan` and `impact` read Git objects only. `check` executes the
+project's build, so it is listed only when the person starts the server with
+`--allow-build --repo PATH`, and it then serves that one repository whatever
+path the agent sends. `brake.check` itself also refuses to run without
+`allow_build=True`, so other callers cannot skip the consent. An agent cannot turn it on (same rule as D-014).
+
+**No dependency.** Only the part of MCP that tools need is implemented
+(`initialize` with version negotiation, `ping`, `tools/list`, `tools/call`;
+newline-delimited JSON-RPC 2.0), so the core needs no MCP SDK. Errors in a
+tool come back as tool results with `isError`, protocol errors as JSON-RPC
+errors. Logs go to stderr.
+
+**Limits.** The verdict covers the listed test classes only; `passed` with
+unvalidated history means the whole suite passed, not that the change is
+correct. The brake is language-neutral and uses the installed language
+plugin (Java first). Whether agents finish with fewer broken changes when
+they use it is a research question still to be measured (planned SWE-bench
+Java study); no result is claimed here.
+
+## D-060 — Python as the second language plugin (`codedna-python`), several plugins per repository
+
+`plugins/codedna-python` adds Python (`python = codedna_python:PythonPlugin`,
+plugin API 1.1). It uses only the standard library's `ast`, so it adds no
+dependency. The core now runs every installed plugin on one repository, so a
+mixed Java + Python project is analysed by both at once.
+
+- **Rule conflict, on purpose:** AGENTS.md says no second language plugin
+  before Milestone 5 is complete. The owners approved the remaining-work plan
+  (step 8) with this plugin in it on 2026-10-25, ahead of that milestone. The
+  Java research track is untouched: `codedna_java/live.py`, the study scripts
+  and the frozen protocol do not change, and nothing Java selects changes in
+  a repository without Python files.
+- **IDs and graph (shared schema):** every Python ID starts with `py:` so it
+  cannot collide with Java's. A module is `type:py:<module>` (kind `module`,
+  parent `file:<path>`), a class `type:py:<module>.<Class>`, a function
+  `member:py:<module>#f()`, a method `member:py:<module>.<Class>#m()`. Module
+  names come from the path, with a leading `src/` dropped. Type kinds are
+  `module` and `class`, so a changed function seeds its module and a changed
+  method seeds its class. The test unit is the test module (`py:tests.test_x`),
+  as the JUnit class is for Java.
+- **Edges:** `imports` (module → module), `uses` (module → class imported by
+  name; module → each class it defines, so importers of the module reach the
+  class) and `extends`. *Confirmed* when the import names a repository
+  module exactly (relative imports resolved first) or the base class is in
+  the same module or imported by name; *heuristic* when a module matches only
+  as a dotted suffix (the source root is not the repository root or `src/`)
+  or a base class only by a unique simple name. Standard-library and other
+  outside imports are counted as external. A relative import above the
+  top-level package and an ambiguous base name are kept as unresolved.
+  Dynamic imports, `sys.path` changes, re-exports through `__init__` and
+  attribute use of imported modules are not followed.
+- **Change mapping:** same algorithm and result shape as Java (D-008), stored
+  in `ChangedFile.analysis`; `ChangedFile.language` names the plugin that
+  handled each file (null at `--level file` or when no plugin handles it).
+  `code_changed` compares `ast.dump`, so comment/formatting-only edits are
+  ignored; docstrings count as code. A syntax error (judged by the Python
+  that runs CodeDNA, 3.11+) leaves the file unresolved, and impact treats the
+  whole file as changed.
+- **No cross-language edges.** A Python change never reaches Java tests
+  through the graph, and the other way round. To stay safe, selection treats
+  a changed file of a language with **no tests in the universe** as
+  unanalysed, so it falls back to retest-all exactly like a build file
+  (a Python release script in a Java project keeps today's behaviour).
+  `non_java="ignore"` keeps its name and now means "unanalysed files".
+- **Discovery:** pytest's own settings from the root config (`pytest.ini`, `.pytest.ini`,
+  `pyproject.toml`, `tox.ini`, `setup.cfg`, in pytest's order):
+  `python_files`, `python_classes`, `python_functions`, `testpaths` and
+  `norecursedirs`. Tests outside `testpaths` are listed but do not run by
+  default. `unittest.TestCase` subclasses count. Inherited test methods from
+  other files and conftest hooks are not seen.
+- **Running (only with `--allow-build`, D-014):** the commit is exported and
+  `python -m pytest -p no:cacheprovider --junitxml=…` runs there, with the
+  interpreter from `--python` (default `python3`/`python` on PATH, which needs
+  pytest and the project's dependencies; CodeDNA installs nothing into it).
+  Selected tests are passed as file paths after `--`, never as expressions.
+  Results are kept per test module. Per-test coverage stays Java-only.
+- **Several plugins at once (`codedna.plugins.languages`):** `build_graph`,
+  `discover_tests` and impact join every plugin's graph and tests
+  (`union_graphs`, `CombinedDiscovery`; JSON adds `language` per test and a
+  `languages` summary). `run_tests` splits selected tests by the plugin that
+  discovered them; with one language it runs exactly as before, with several
+  each writes to `OUTPUT_DIR/<language>` and the results are joined into
+  `OUTPUT_DIR/results.json` (tool e.g. `maven+pytest`). Plugins ignore run
+  options meant for others. A shared parse cache is safe: Python keys its
+  entries `("py", blob, path)`.
+- **Risk-based selection stays Java-only (D-041):** in a mixed repository its
+  universe includes the Python tests, and any Python change makes it fall
+  back to the full suite.
+- **Installing:** `start.bat`, CI and the developer setup install both plugins;
+  the catalogue lists Python as bundled. The PyInstaller desktop bundle (PR
+  #17) has to include `codedna_python` too.
+
+## D-061 — Predictive Test Selection baseline (B11)
+
+(D-060 is not used; the agent brake study is D-062.)
+
+**Why.** The closest prior work, Predictive Test Selection at Facebook
+(Machalica et al., ICSE-SEIP 2019), also uses a learned model, a holdout and
+a recall target. The report's difference from it (a per-commit risk target
+checked per project, against aggregate recall targets) had only been argued.
+
+**What.** `codedna.selection.pts` implements the published rule: tests with
+an uncalibrated score at or above a score cutoff, plus the N highest-scoring
+tests, plus changed test classes. The cutoffs are tuned on the calibration
+window to test recall 0.95 and change recall 0.999. `scripts/run_pts_check.py`
+runs it inside the rolling-origin design without editing the scripts frozen
+by the confirmatory job. The rules were fixed in
+`docs/PTS_BASELINE_PROTOCOL.md` before the run.
+
+**Result (exploratory, four inspected projects).** B10 minus time-matched B11
+safety is +0.007 [−0.063, 0.091]: inconclusive. B10 is cheaper and safer on
+HikariCP (where B11 cannot be made as cheap); B11 is safer on LittleProxy.
+B11 kept its test-recall target on 2 of 4 projects and its change-recall
+target on none; B10 kept its miss target on 3 of 4. Details:
+`experiments/results/pts-check-2026-10-25/FINDINGS.md`.
+
+**Not changed.** B11 is a research baseline only. The live product keeps
+B10 with the D-041 gate.
+
+## D-062 — Agent brake study on public SWE-bench Java patches
+
+**What.** An offline check of the brake (D-059) on agent patches that are
+already public: the SWE-bench Multilingual Java instances (gson, druid,
+lucene, lombok, RxJava, javaparser) of every submission in
+`SWE-bench/experiments` (14 mini-SWE-agent runs with different models). For
+each patch the harness applied, CodeDNA computes the test plan for the
+agent's change and checks whether it contains the benchmark test classes the
+harness saw fail. Protocol fixed before results:
+[AGENT_BRAKE_STUDY_PROTOCOL.md](AGENT_BRAKE_STUDY_PROTOCOL.md); tool:
+`scripts/swebench_brake_study.py`.
+
+**Why this way.** It needs no paid API and no build: patches and harness
+reports are public, and CodeDNA reads Git objects only (`eval.sh` is parsed
+as text, never run). Paying for our own agent runs is out of budget.
+
+**What it cannot show.** Whether agents end with fewer broken changes when
+they use the brake; the harness runs only the benchmark's test files, so
+other regressions are unknown. Downloaded data stays out of Git
+(`experiments/datasets/swebench-multilingual/`); every file's SHA-256 and
+the `SWE-bench/experiments` commit are recorded.
+
+## D-063 — Conformal risk control for the stopping threshold (B12, B12f)
+
+**Why.** B10's fixed 5 % estimated risk assumes independent failures and a
+correct probability level, and the D-041 gate that guards it is a
+hand-picked rule. Conformal risk control (Angelopoulos et al., ICLR 2024)
+picks the threshold from held-out outcomes with a bound that needs only
+exchangeability.
+
+**What.** `codedna.selection.conformal.threshold` chooses the largest
+stopping threshold λ on a fixed grid with `(n·R̂ + 1)/(n + 1) ≤ α`, scanning
+upwards and stopping at the first violation. `scripts/run_crc_check.py`
+tunes it on `fit_audited`'s audit window inside the rolling-origin design.
+B12 uses every audit commit (`docs/CRC_STOP_PROTOCOL.md`). B12f
+(`--conditional`, `docs/CRC_CONDITIONAL_PROTOCOL.md`) uses only failing audit
+commits, so the bound is on misses among failing commits. Both protocols
+were committed before their runs.
+
+**Result (exploratory, four inspected projects).** B12 saved 36 % of test
+time against the gated product. Its target (5 % of *all* commits) still
+let half of HikariCP's failing commits be missed: the target was too weak,
+not the method. B12f kept commit safety ≥ 0.95 on 4 of 4 projects (B10 2 of
+4). It used 4.7 % [4.0, 5.4] less time than the gated product, almost all on
+wicket-bootstrap. Details are in `experiments/results/crc-check-2026-10-26/`
+and `crc-conditional-2026-10-26/`.
+
+**Not changed yet.** The live product keeps B10 with the D-041 gate.
+Replacing the gate with B12f needs the confirmatory datasets first;
+`run_crc_check.py --conditional` is ready to rerun on them.
+
+**Prior art.** An open-source project applies conformal risk control to the
+share of missed failing tests on the industrial Westermo dataset
+(github.com/l-k-1-2/Predictive-test-selection). B12f differs in its loss
+(commit-level, conditional on failure), its data (open Java CI history) and
+its use as the brake's rule. It is not claimed as the first use of
+conformal risk control for test selection.
+
+## D-064 — JUnit 3 tests and moved Gradle test folders in discovery
+
+**What.** Test discovery (`test_mapping/discovery.py`) also finds JUnit 3
+style tests: in a class that extends `junit.framework.TestCase` (imported,
+by wildcard, or fully qualified), or whose repository ancestor does, every
+`public void test*()` method without parameters, not static or abstract, is
+a test method. The same holds below a repository base class annotated
+`@TestMethodProviders` with a JUnit 3 method provider (randomizedtesting,
+which Lucene uses). Such classes get framework `junit3` unless their file
+uses JUnit 4/5 annotations. The Gradle layout (`test_mapping/build.py`) reads
+`test.java.srcDirs = [...]`, `+= [...]` and `test.java.srcDir(...)` from the
+`.gradle` scripts: in a module's own build script for that module, in any
+other script for every module, with a warning that the reading is syntactic.
+
+**Why.** The agent brake study (D-062) showed that every catch the plan
+missed was a test CodeDNA did not see, not a wrong selection: gson's tests
+before 2023 are JUnit 3, and Lucene's tests use JUnit 3 naming under
+`src/test` set by a shared Gradle script, so discovery found 1 to 20 gson
+classes and no Lucene classes. Surefire and Gradle run these tests by
+default, so the plan and the full-suite fallback (D-041) left them out.
+
+**Limits.** Syntactic, like the rest of discovery: a `TestCase` imported
+from elsewhere under the same name is not told apart from a same-package
+class of that name; Gradle source sets set programmatically or inside
+`sourceSets { test { java { ... } } }` blocks are not read. Results computed
+before this change (the D-062 primary run records its CodeDNA commit) keep
+the old discovery; the study's follow-up run is labelled as post hoc.
+
+## D-065 — Windows-safe RTPTorrent ancestry queries and audited resume
+
+An RTPTorrent push can list enough commits to exceed Windows CreateProcess's
+command-line limit. `_tips` previously sent every SHA to `merge-base
+--independent`, unlike the importer's other bounded Git requests. Windows raised
+FileNotFoundError/WinError 206; the Git wrapper incorrectly reported missing Git.
+
+Keep the normal independent-tip query up to the existing 400-SHA limit. Above
+that limit, pass the revisions on stdin to `rev-list --parents --stdin`. Among
+the supplied candidates, exactly those never named as a parent in the complete
+reachable ancestry are independent. Walking all ancestors covers gaps between
+candidate commits and merge branches. This preserves the tested-commit rule;
+naively calculating independent tips separately per chunk would not preserve it.
+The Git wrapper distinguishes oversized requests, missing Git, missing working
+directories and other operating-system failures, retaining the original cause.
+
+Offline regression tests cover a real 1,000-commit import with bounded argv,
+branch/merge/gapped/duplicate inputs compared to Git's ordinary independent-tip
+query, and Windows/POSIX launch-error classification. No dependency or statistical
+rule changes. The fixed feature generator, model, gate, project set and protocol
+remain unchanged.
+
+The failed output folder and frozen sources remain intact. Resume into
+`experiments/datasets/confirmatory-windowsfix-2026-10-26` with results destined for
+`experiments/results/rolling-evidence-confirmatory-windowsfix-2026-10-26`.
+Copy and SHA-256-verify the three completed DB/CSV pairs (Cloudify, DSpace,
+SonarQube), configuration and feature-equivalence proof. `resume-provenance.json`
+records parent fingerprints, the two source changes and every reused file hash;
+`resume-code-change.patch` records the technical fix. The continuation creates new
+fingerprints and re-verifies the existing raw cache. No downloads or completed
+feature extractions are repeated. Partial Sling data is not treated as complete.
+
+Written by Codex on the laptop as "D-054"; renumbered because D-054 is the
+Java plugin split and D-058 to D-064 are taken by open PRs.
+
+## D-066 — Use discovered test files and discard obsolete IDE responses
+
+Recommended-test links now request the existing `/api/tests` JSON at the
+selection's immutable HEAD and open its reported file relative to the canonical
+repository. The frontend caches discovery for that selection. It never derives
+a source path from a package name: module layouts, Gradle projects, custom file
+locations and workspaces opened below the Git root must work. Missing locations
+produce an explanation rather than opening an invented path.
+
+A comparison/input generation prevents late recommendation, execution and file
+lookup responses from restoring results for an obsolete comparison, including
+switching away and back. Completed older executions remain available in Project
+History; the view reports where to find them. Consent is checked again against
+the same selection before execution. Build wording now covers Maven and Gradle.
+
+Eight offline Node tests exercise the actual TypeScript widget methods, with a
+throwaway Git repository and mocked core/progress/editor boundaries. They cover
+file navigation, missing paths, obsolete responses, pending consent and duplicate
+analysis clicks. CI runs them after extension compilation. No new dependency,
+core API, language plugin, model or fixed-study change is introduced.
+
+
+Written by Codex on the laptop as "D-053" (renumbered, see D-065).
+
+## D-067 - Nine-project follow-ups reviewed; keep the default conservative
+
+All four laptop follow-ups completed on 2026-10-26; artifacts and findings
+are in `experiments/results/*confirmatory-perf-2026-10-26/` (report 4.12).
+B12f meets 95% conditional commit safety on 8/9 projects (required 7),
+saves 16.20 recorded-time points against the gated product, but lowers
+mean safety by 1.79 points [0.84, 2.72]. Cloudify safety is 87.84%.
+The nine-project addendum was not committed before the runs, and no
+pre-specified pooled absolute-safety lower interval was recorded. Do not
+retroactively call these prerequisites satisfied. B10 remains the default;
+CRC remains opt-in under D-068. B13f is exploratory, not a replacement default.
+The PTS cost match failed and is reported as a trade-off, not equal-time evidence.
+No threshold, model or result has been retuned to improve this verdict.
+
+## D-068 — Conformal stop (B12f) as an opt-in method in the live brake
+
+The live risk recommendation and the agent brake take `method="b10"`
+(default, unchanged: calibrated stop behind the D-041 Wilson gate) or
+`method="crc"` (failure-conditional conformal risk control, D-063). With
+`crc` the product uses the same 50/25/25 fit/calibrate/audit split; on the
+**failing** audit commits it picks the largest stopping value whose
+corrected bound `(n·R̂ + 1)/(n + 1)` stays at or below the risk target. The
+function is `selection/conformal.failing_commit_threshold`, and
+`scripts/run_crc_check.py` now uses the same `conformal.stopper`, so the
+study and the product pick the same threshold on the same data (tested).
+
+Fewer than 19 failing audit commits, or no value passing the bound, gives
+the full suite with that reason. Must-run policy tests are always kept. The
+response carries `risk.method`, and for `crc` a `risk.conformal` block
+(`alpha`, `threshold`, `failing_audit_commits`, `audit_miss_rate`,
+`corrected_bound`) plus the note that the bound assumes exchangeable failing
+commits and is not a guarantee.
+
+Exposed as `codedna risk-select --method`, `POST /api/risk` `method`, and the
+MCP tools' `method` argument. `scripts/demo_brake_end_to_end.py` shows the
+whole path over MCP on a synthetic history: a partial plan, `blocked` for a
+breaking edit and `passed` for a harmless one (real Maven, tested under
+`--run-maven`).
+
+**Why opt-in:** whether B12f becomes the default is the pre-registered
+decision D-067, which waits for the B12f result on the nine confirmatory
+projects (7-of-9 rule). Until then the default stays B10 and no report text
+may say the product uses conformal control by default. No new dependency.
+
+## D-069 - Preserve risk decisions while removing quadratic prefix work
+
+The target-only risk loop now binary-searches the shortest acceptable
+ordered prefix. Adding candidates cannot increase skip risk. Each probe
+calls the original risk arithmetic in the same probability order, preserving
+floating-point threshold behavior, pins, budgets, partial/duplicate orders,
+fallbacks and report fields. This uses O(log n) full risk scans rather than
+one per selected test. There is no model or protocol change.
+Exact randomized/boundary parity tests and a complete real-project replay
+passed. The 4,000-test benchmark improved from 6.62s to 0.030s (221x for
+that benchmark only). The study-worktree full suite passed 405 tests with
+Maven and zero skips; integration validation is recorded separately.
+Original outputs stay immutable. B13's seven reused reports are byte-identical,
+and new folders disclose both fingerprints and portable source snapshots.
+The result paths are marked -text to preserve their SHA-256 bytes on every OS.

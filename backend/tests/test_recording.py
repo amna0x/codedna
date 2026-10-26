@@ -14,7 +14,7 @@ from codedna.cli import EXIT_ANALYSIS_ERROR, EXIT_OK, main
 from codedna.git_analysis.git import run_git, snapshot_worktree
 from codedna.test_history.features import Dataset
 from codedna.test_history.recording import HISTORY_CSV, record_run
-from codedna.test_mapping.reports import TestClassResult
+from codedna.test_mapping.results import TestClassResult
 from codedna.test_mapping.results import TestRunResult
 
 FAKE = [sys.executable, str(Path(__file__).with_name("fake_mvn.py"))]
@@ -128,6 +128,24 @@ def test_snapshot_leaves_out_codedna_outputs_only(repo):
     snapshot = snapshot_worktree(repo.path)
     names = run_git(repo.path, "diff", "--name-only", "HEAD", snapshot).split()
     assert names == [".codedna/policy.toml", "b.txt"]
+
+
+def test_snapshot_and_ignore_file_list_the_same_outputs():
+    from codedna.git_analysis import git
+    from codedna.test_history import recording
+    assert {p.removeprefix(".codedna/") for p in git._OUTPUTS} == \
+        {name.rstrip("/") for name in recording.OUTPUTS}
+
+
+def test_snapshot_works_once_outputs_are_ignored(repo):
+    from codedna.test_history.recording import ignore_outputs
+    repo.write("a.txt", "one\n")
+    repo.commit("base")
+    ignore_outputs(repo.path)
+    repo.write(".codedna/runs/x/results.json", "output\n")
+    repo.write("b.txt", "new\n")
+    snapshot = snapshot_worktree(repo.path)  # used to fail: exclude pathspec on an ignored path
+    assert run_git(repo.path, "diff", "--name-only", "HEAD", snapshot).split() == ["b.txt"]
 
 
 def test_cli_records_a_saved_run(project, tmp_path, capsys):

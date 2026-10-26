@@ -1,0 +1,54 @@
+{
+  "config": {
+    "protocol": "docs/EVIDENCE_STUDY_PROTOCOL.md",
+    "blocks": 5,
+    "min_failing_commits": 20,
+    "risk_target": 0.05,
+    "python": "3.12.14",
+    "packages": {
+      "scikit-learn": "1.9.1",
+      "numpy": "2.5.4"
+    },
+    "input_sha256": {
+      "buck": "5827f566de535952fc7e374fe7c6702c80ef821e957a6ef4bba31ae1ca03bded",
+      "cloudify": "710e40af316aff83aa4391578df2c1cf0c733b8c533f331b14bd9122a9adc9bb",
+      "deeplearning4j": "f6ae51a6cce0fd703111138ce28e3bb2398872ba11af53224b724401158d5a14",
+      "dspace": "1933cd2d43d7dd5daccba9599db81b288e810f40a774c57b0401aac36a9f548c",
+      "jetty.project": "3f3aa331d38a7e3c737a2620234fe4981d0b9528cd98cbad2b7c4f00b7b1a0d4",
+      "okhttp": "fdbae90190c8cc92f7b83d3e9a0a496a4635121570af32301acba2683273fe22",
+      "sling": "1849f0d25abe7c7abe36ffe22c4814fd3e48b1dfa96e2332bae55316d5e4b4d0",
+      "sonarqube": "71345204989db0d621435dac92c59bd97ebdd0799f4e357b52b69ad3905e41bc",
+      "titan": "cb6f11e494e4c295efc08d0088768c4055289c520a90789e903afa1ff809f837"
+    },
+    "code_sha256": {
+      "scripts/run_rolling_evidence.py": "782ab3d759df9266a411fc82c76e7017cd2dab59f425f1a29a2774e5d09e400b",
+      "docs/EVIDENCE_STUDY_PROTOCOL.md": "338ed8ccb1a4f4acc4a6cc979a1a84d95c60c173ba1e088994523472019ec606",
+      "backend/codedna/selection/live.py": "f4d5d1594646302134c8b6d75a37da32043352475ff2b33ccbd21db366e3c38a",
+      "backend/codedna/selection/validation.py": "34f9fcbf7ac0d42ca217ecc214ab4d26dbe60beca0359cf315e58a24bc09a0f3",
+      "backend/codedna/selection/risk.py": "be5b074d1c43def00305ca62a6909198eaac7e571e65f075e19219bf1bf971a5",
+      "backend/codedna/plugins/java_live.py": "d36cc8abbd7aa3d3d4c34f44a046612912c5cb9ab85b8c9ed13eb975f20bce83",
+      "backend/codedna/models/rankers.py": "79c0a6f7fb67803009addffc13086db2762e28b2f829c1cc106299711b239f10",
+      "backend/codedna/models/experiment.py": "507c87f8f368e69993598deb9a35d76e7b8ed8608bad4cf16b09c003d2c0f90d",
+      "backend/codedna/models/uncertainty.py": "bfcda9e1da26ea79525b7678a520eb01042ef91da8ca8f8f85bf5786295db792",
+      "backend/codedna/calibration/calibrators.py": "1a182cea9040ecb7258af3e0a1c031e73161e96a15f3e1561b66b67c07023ddc",
+      "backend/codedna/test_history/features.py": "3a9ecfe884716b489e2193b1f379eb1c39eb193fea915b8ccf2d09ca76748572",
+      "scripts/run_study.py": "65f67f18d87f89e87cb899daf487f86a2610dee24694d3c61afa193360b7aa47"
+    }
+  },
+  "outputs": {
+    "buck.json": "ba40c8b256c09f287e56b68eb616448e5f0dae0e43cf2fb0369b9dc2de361830",
+    "cloudify.json": "538e30ee9b2e1d9e417dae745e41e44a4274517045a336a8fb7ea052dcb5db4a",
+    "config.json": "3c1140d06b45ac44594157395bd95f2126987cc224739e3a864cc94dfedc7fad",
+    "CONFIRMATORY_PREPARATION_2026-10-25.md": "94feb7d6249229287ca536787974bff12828315af1697ed688b343b032270183",
+    "deeplearning4j.json": "6619dd342f80274ad346ef1c6fb1022d53e0ca8bccda7c94ca1ee50cd0ccf4de",
+    "dspace.json": "cff0d34333c01d46215b57464079b227281c67e302cbceca3108bab321ff6b30",
+    "jetty.project.json": "821cbc5699b9a1938b789b4a9e246a3df3f04ae63152f717ef09fcab1db6bd1b",
+    "okhttp.json": "b45e6cababdcd99762e0fb72ffecc3102d6471c2b84c3d3594748d458e777278",
+    "preparation-provenance.json": "586ca7ab0b93ee8d63ffdaf3f28c847a2d75124ae3eaf57aa45606e0f184950c",
+    "sling.json": "030d63d710ef77b2b07b860cbb364b6ea4a980325a7843d2754a631d01029383",
+    "sonarqube.json": "f5433fb2ca875e57e4d5d8bf2d4b1332436038bbf6a4f41044c7e6083bd930fc",
+    "summary.json": "b944b38b42f0a2badda46c1a6e370819965389b831dc68fdc40e85e74ea748ef",
+    "summary.md": "08fa69b109dc3db51263030850ca48f089912ae8f77fc9704dbcd64ad1cf9a18",
+    "titan.json": "1959dee8edb425bff66095d1e4f50266f9f22852660330161718f7173af39a59"
+  }
+}

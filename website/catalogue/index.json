@@ -3,12 +3,24 @@
   "plugins": [
     {
       "id": "java",
+      "package": "codedna-java",
       "name": "Java",
-      "description": "Java change analysis, dependency graph, JUnit 4/5 test discovery, Maven and Gradle test runs, validated risk-based selection.",
+      "description": "Java change analysis, dependency graph, JUnit 4/5 test discovery, Maven and Gradle test runs, validated risk-based selection. Bundled with CodeDNA (plugins/codedna-java).",
       "licence": "Not chosen yet (private FYP repository)",
       "source": "https://github.com/mohibk0004-del/codedna",
       "versions": [
-        {"version": "0.1.0", "api_version": "1.0", "builtin": true, "url": null, "sha256": null}
+        {"version": "0.1.0", "api_version": "1.1", "builtin": true, "url": null, "sha256": null}
+      ]
+    },
+    {
+      "id": "python",
+      "package": "codedna-python",
+      "name": "Python",
+      "description": "Python change analysis, import and inheritance graph, pytest test discovery and pytest runs. Works next to the Java plugin in mixed repositories. Bundled with CodeDNA (plugins/codedna-python).",
+      "licence": "Not chosen yet (private FYP repository)",
+      "source": "https://github.com/mohibk0004-del/codedna",
+      "versions": [
+        {"version": "0.1.0", "api_version": "1.1", "builtin": true, "url": null, "sha256": null}
       ]
     }
   ]

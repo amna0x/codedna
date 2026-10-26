@@ -26,27 +26,35 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
 from codedna import __version__
-from codedna.dependency_graph import build_graph
 from codedna.git_analysis import CodeDNAGitError, extract_changes
 from codedna.impact_analysis import compute_impact
-from codedna.java_analysis import analyze_changes
 from codedna.models.replay import (
     ReplayError,
     find_replay_sources,
     replay_from_file,
     replay_overview,
 )
-from codedna.plugins import load_plugins
+from codedna.plugins import load_plugins, manager
+from codedna.plugins.base import api_compatible
+from codedna.plugins.catalogue import CatalogueError
+from codedna.plugins.languages import (
+    PluginMissingError,
+    analyze_changes,
+    build_graph,
+    discover_tests,
+)
+from codedna.plugins.languages import run_tests as run_language_tests
 from codedna.selection import SelectionError, compare_strategies, select_tests
-from codedna.test_mapping.discovery import discover_tests
-from codedna.test_mapping.maven import run_maven_tests
-from codedna.test_mapping.reports import ReportError
 from codedna.test_mapping.results import (
     COVERAGE_MAP_FILE,
     RESULTS_FILE,
+    ReportError,
     load_coverage_map,
     load_results,
 )
+
+from codedna.test_history.project import (import_run, list_runs, record_saved_runs,
+                                           run_detail)
 
 TOKEN_HEADER = "X-CodeDNA-Token"
 LOOPBACK_HOSTS = frozenset({"127.0.0.1", "localhost", "[::1]", "::1"})
@@ -93,6 +101,7 @@ class RiskRequest(ChangeRequest):
     history_csv: str | None = None
     risk_target: float = Field(default=.05, gt=0, lt=1)
     must_run: list[str] = Field(default_factory=list, description="Extra must-run patterns (D-050).")
+    method: Literal['b10', 'crc'] = Field(default='b10', description="Stopping rule on validated history (D-068).")
 
 
 class RunSelectionRequest(RiskRequest):
@@ -119,6 +128,25 @@ class ReplayOverviewRequest(ReplaySourcesRequest):
     seed: int | None = None
 
 
+class ImportProjectRunRequest(RepoRequest):
+    source: str
+
+
+class ProjectRunRequest(RepoRequest):
+    run_id: str
+
+
+class PluginInstallRequest(BaseModel):
+    plugin: str = Field(pattern=r"^[a-z][a-z0-9-]{1,40}$")
+    version: str = Field(pattern=r"^\d+\.\d+\.\d+$", description="Exact catalogue version.")
+    confirm: bool = Field(False, description="Installing runs the plugin's code; must be true.")
+
+
+class PluginRemoveRequest(BaseModel):
+    plugin: str = Field(pattern=r"^[a-z][a-z0-9-]{1,40}$")
+    confirm: bool = Field(False, description="Removing changes CodeDNA's environment; must be true.")
+
+
 class RunTestsRequest(RevRequest):
     output_dir: str
     allow_build: bool = False
@@ -134,7 +162,8 @@ def new_token() -> str:
 
 
 def create_app(token: str, *, allow_build: bool = False,
-               maven_command: list[str] | None = None) -> FastAPI:
+               maven_command: list[str] | None = None,
+               python_command: list[str] | None = None) -> FastAPI:
     if len(token) < 16:
         raise ValueError("API token must be at least 16 characters")
     app = FastAPI(title="CodeDNA local API", version=__version__,
@@ -163,6 +192,14 @@ def create_app(token: str, *, allow_build: bool = False,
     async def report_error(_request: Request, exc: ReportError):
         return JSONResponse({"error": str(exc)}, status_code=400)
 
+    @app.exception_handler(PluginMissingError)
+    async def plugin_missing(_request: Request, exc: PluginMissingError):
+        return JSONResponse({"error": str(exc)}, status_code=400)
+
+    @app.exception_handler(CatalogueError)
+    async def catalogue_error(_request: Request, exc: CatalogueError):
+        return JSONResponse({"error": str(exc)}, status_code=400)
+
     @app.exception_handler(ReplayError)
     async def replay_error(_request: Request, exc: ReplayError):
         return JSONResponse({"error": str(exc)}, status_code=400)
@@ -181,6 +218,32 @@ def create_app(token: str, *, allow_build: bool = False,
     @app.get("/api/plugins", dependencies=secured)
     def plugins() -> dict:
         return load_plugins().describe()
+
+    @app.get("/api/plugins/catalogue", dependencies=secured)
+    def plugin_catalogue() -> dict:
+        """The official catalogue (fixed URL, validated) next to what is installed.
+
+        Each version says whether this core can load it (``compatible``), so the
+        IDE only displays the core's answer.
+        """
+        catalogue = manager.fetch_catalogue()
+        for plugin in catalogue.get("plugins", []):
+            for version in plugin.get("versions", []):
+                version["compatible"] = api_compatible(str(version.get("api_version", "")))
+        return {"catalogue": catalogue, "installed": load_plugins().describe()}
+
+    @app.post("/api/plugins/install", dependencies=secured)
+    def plugin_install(body: PluginInstallRequest) -> dict:
+        # The plugin and version come from the request; the URL and checksum only
+        # from the official catalogue, fetched here (D-020, D-048).
+        result = manager.install(manager.fetch_catalogue(), body.plugin, body.version,
+                                 confirmed=body.confirm)
+        return {**result, "installed": load_plugins().describe()}
+
+    @app.post("/api/plugins/remove", dependencies=secured)
+    def plugin_remove(body: PluginRemoveRequest) -> dict:
+        result = manager.remove(manager.fetch_catalogue(), body.plugin, confirmed=body.confirm)
+        return {**result, "installed": load_plugins().describe()}
 
     @app.get("/api/capabilities", dependencies=secured)
     def capabilities() -> dict:
@@ -220,7 +283,7 @@ def create_app(token: str, *, allow_build: bool = False,
     def risk_select(body: RiskRequest) -> dict:
         from codedna.selection.live import recommend
         return recommend(body.repo,body.base,body.head,history_csv=body.history_csv,
-                         risk_target=body.risk_target,must_run=body.must_run)
+                         risk_target=body.risk_target,must_run=body.must_run,method=body.method)
 
     @app.post('/api/run-selection', dependencies=secured)
     def run_selection(body: RunSelectionRequest) -> dict:
@@ -239,12 +302,11 @@ def create_app(token: str, *, allow_build: bool = False,
         from codedna.test_history.recording import ignore_outputs, record_run
         ignore_outputs(repo)
         output = repo/'.codedna/runs'/uuid4().hex
-        plugin = load_plugins().get('java')
-        if plugin is None:
-            raise SelectionError('Java test execution plugin is unavailable')
-        run,_ = plugin.run_tests(repo,selection['head_commit'],output,allow_build=True,
+        run,_ = run_language_tests(repo,selection['head_commit'],output,allow_build=True,
             selected_tests=[t['test'] for t in selection['selected']],
-            maven_command=maven_command,timeout=body.timeout)
+            maven_command=maven_command,python_command=python_command,timeout=body.timeout)
+        from codedna.test_mapping.results import save_json
+        save_json(selection, output / 'selection.json')
         # Whole-suite runs become project history so the risk gate can turn on (D-053).
         if selection['skipped']:
             recording = {'recorded':False,'reason':'selected runs are not recorded; '
@@ -262,6 +324,23 @@ def create_app(token: str, *, allow_build: bool = False,
             load_results(_json_file(body.ground_truth, RESULTS_FILE)),
             coverage_map=load_coverage_map(coverage) if coverage else None,
             non_java=body.non_java)
+
+    @app.post("/api/project-history", dependencies=secured)
+    def project_history_(body: RepoRequest) -> dict:
+        """Read-only: saved runs and whether each can be history (D-057)."""
+        return list_runs(body.repo)
+
+    @app.post("/api/project-history/record", dependencies=secured)
+    def record_saved_runs_(body: RepoRequest) -> dict:
+        return record_saved_runs(body.repo)
+
+    @app.post("/api/project-history/import", dependencies=secured)
+    def import_project_run_(body: ImportProjectRunRequest) -> dict:
+        return import_run(body.repo, body.source)
+
+    @app.post("/api/project-history/run", dependencies=secured)
+    def project_run_(body: ProjectRunRequest) -> dict:
+        return run_detail(body.repo, body.run_id)
 
     @app.post("/api/replay", dependencies=secured)
     def replay(body: ReplayRequest) -> dict:
@@ -284,10 +363,10 @@ def create_app(token: str, *, allow_build: bool = False,
         if not body.allow_build:
             raise HTTPException(status_code=400, detail=(
                 "running tests executes project code; send allow_build: true to confirm"))
-        run, coverage = run_maven_tests(
+        run, coverage = run_language_tests(
             body.repo, body.rev, body.output_dir, allow_build=True,
             per_test_coverage=body.per_test_coverage, maven_command=maven_command,
-            timeout=body.timeout)
+            python_command=python_command, timeout=body.timeout)
         return {"results": run.to_dict(),
                 "coverage_map": coverage.to_dict() if coverage else None}
 

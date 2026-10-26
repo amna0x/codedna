@@ -6,9 +6,9 @@ entry-point group ``codedna.languages`` in their ``pyproject.toml``::
     [project.entry-points."codedna.languages"]
     python = "codedna_python:PythonPlugin"
 
-The built-in Java plugin is always available. Plugins with an incompatible
-API major version, or that fail to load, are skipped and reported — never
-silently half-loaded.
+Java is a plugin too (``codedna-java``, D-054): the core has no built-in
+language. Plugins with an incompatible API version, or that fail to load, are
+skipped and reported, never silently half-loaded.
 """
 
 from __future__ import annotations
@@ -16,8 +16,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from importlib.metadata import entry_points
 
-from codedna.plugins.base import PLUGIN_API_VERSION, LanguagePlugin
-from codedna.plugins.java import JavaPlugin
+from codedna.plugins.base import PLUGIN_API_VERSION, LanguagePlugin, api_compatible
 
 ENTRY_POINT_GROUP = "codedna.languages"
 
@@ -31,7 +30,7 @@ class PluginRegistry:
         if not isinstance(plugin, LanguagePlugin):
             self.problems.append(f"{source}: does not implement the LanguagePlugin interface")
             return
-        if _major(plugin.api_version) != _major(PLUGIN_API_VERSION):
+        if not api_compatible(plugin.api_version):
             self.problems.append(
                 f"{source}: plugin API {plugin.api_version} is incompatible with "
                 f"core API {PLUGIN_API_VERSION}")
@@ -59,18 +58,12 @@ class PluginRegistry:
         }
 
 
-def load_plugins(include_entry_points: bool = True) -> PluginRegistry:
+def load_plugins() -> PluginRegistry:
     registry = PluginRegistry()
-    registry.register(JavaPlugin(), "built-in java")
-    if include_entry_points:
-        for entry_point in entry_points(group=ENTRY_POINT_GROUP):
-            try:
-                factory = entry_point.load()
-                registry.register(factory(), f"entry point {entry_point.name}")
-            except Exception as exc:  # a broken plugin must not break the core
-                registry.problems.append(f"entry point {entry_point.name}: failed to load ({exc})")
+    for entry_point in sorted(entry_points(group=ENTRY_POINT_GROUP), key=lambda e: e.name):
+        try:
+            factory = entry_point.load()
+            registry.register(factory(), f"entry point {entry_point.name}")
+        except Exception as exc:  # a broken plugin must not break the core
+            registry.problems.append(f"entry point {entry_point.name}: failed to load ({exc})")
     return registry
-
-
-def _major(version: str) -> str:
-    return str(version).split(".", 1)[0]

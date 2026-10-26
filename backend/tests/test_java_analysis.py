@@ -6,7 +6,8 @@ import subprocess
 import sys
 from pathlib import Path
 
-from codedna.java_analysis import analyze_changes, parse_java
+from codedna.plugins.languages import analyze_changes
+from codedna_java.parser import parse_java
 
 ROOT = Path(__file__).resolve().parents[2]
 PATH = "src/main/java/p/A.java"
@@ -376,3 +377,11 @@ def test_tree_sitter_version_avoids_known_crash():
 
     major, minor = (int(part) for part in version("tree-sitter").split(".")[:2])
     assert (major, minor) < (0, 26)
+
+
+def test_deeply_nested_expressions_do_not_exceed_the_recursion_limit():
+    # Generated code can chain thousands of operators; this used to raise RecursionError.
+    source = ("package a; class Deep { String s = " + " + ".join(['"x"'] * 6000) + "; }").encode()
+    result = parse_java(source)
+    field = next(d for d in result.declarations if d.id == "a.Deep#s")
+    assert field.kind == "field"

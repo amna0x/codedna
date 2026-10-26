@@ -11,7 +11,19 @@ if not exist ".venv\Scripts\codedna.exe" (
     echo The CodeDNA core is not installed in .venv. Run these once, then start.bat again:
     echo   python -m venv .venv
     echo   .venv\Scripts\python -m pip install -e ".[ml,api,dev]"
+    echo   .venv\Scripts\python -m pip install -e plugins\codedna-java -e plugins\codedna-python
     exit /b 1
+)
+rem Java and Python support are the codedna-java (D-054) and codedna-python
+rem (D-060) plugins. Install each once from this checkout, so an older .venv
+rem keeps working after the pull that added it.
+if not exist ".venv\Lib\site-packages\codedna_java-*.dist-info" (
+    echo Installing the Java plugin from plugins\codedna-java ...
+    call ".venv\Scripts\python" -m pip install --disable-pip-version-check -e plugins\codedna-java || exit /b 1
+)
+if not exist ".venv\Lib\site-packages\codedna_python-*.dist-info" (
+    echo Installing the Python plugin from plugins\codedna-python ...
+    call ".venv\Scripts\python" -m pip install --disable-pip-version-check -e plugins\codedna-python || exit /b 1
 )
 rem The IDE starts "codedna serve" itself; point it at the project venv.
 set "CODEDNA_EXECUTABLE=%~dp0.venv\Scripts\codedna.exe"
@@ -22,12 +34,19 @@ rem Java support in the editor needs a JDK. Use the portable JDK if one is
 rem recorded; otherwise keep whatever JAVA_HOME is already set.
 set "TOOLS_JSON=%USERPROFILE%\.codex\tools\java-maven.json"
 if exist "%TOOLS_JSON%" (
-    for /f "usebackq delims=" %%j in (`powershell -NoProfile -Command "(Get-Content -Raw '%TOOLS_JSON%' | ConvertFrom-Json).java_home"`) do set "JAVA_HOME=%%j"
-    for /f "usebackq delims=" %%m in (`powershell -NoProfile -Command "(Get-Content -Raw '%TOOLS_JSON%' | ConvertFrom-Json).maven_home"`) do set "MAVEN_HOME=%%m"
+    for /f "usebackq delims=" %%j in (`powershell -NoProfile -Command "(Get-Content -LiteralPath $env:TOOLS_JSON -Raw | ConvertFrom-Json).java_home"`) do set "JAVA_HOME=%%j"
+    for /f "usebackq delims=" %%m in (`powershell -NoProfile -Command "(Get-Content -LiteralPath $env:TOOLS_JSON -Raw | ConvertFrom-Json).maven_home"`) do set "MAVEN_HOME=%%m"
 )
 if defined JAVA_HOME set "PATH=%JAVA_HOME%\bin;%PATH%"
 if defined MAVEN_HOME set "PATH=%MAVEN_HOME%\bin;%PATH%"
-if not defined JAVA_HOME echo Note: no JDK found, so Java code completion will not start. CodeDNA itself still works.
+rem Reuse the portable Gradle runtime and cache when one has been installed.
+set "GRADLE_TOOLS_JSON=%USERPROFILE%\.codex\tools\gradle\runtime.json"
+if exist "%GRADLE_TOOLS_JSON%" (
+    for /f "usebackq delims=" %%g in (`powershell -NoProfile -Command "(Get-Content -LiteralPath $env:GRADLE_TOOLS_JSON -Raw | ConvertFrom-Json).home"`) do set "GRADLE_HOME=%%g"
+    if not defined GRADLE_USER_HOME set "GRADLE_USER_HOME=%USERPROFILE%\.codex\tools\gradle\cache"
+)
+if defined GRADLE_HOME set "PATH=%GRADLE_HOME%\bin;%PATH%"
+if not defined JAVA_HOME echo Note: JAVA_HOME is not set. Running project builds may need a JDK.
 
 set "TARGET=%~1"
 if "%TARGET%"=="" (

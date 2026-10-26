@@ -29,7 +29,7 @@ Today CodeDNA can:
   `confirmed` or `heuristic` and unresolved names listed separately (`graph`);
 - list types **potentially impacted** by a change, each with an explanation
   path, plus the test classes that depend on them (`impact`);
-- discover JUnit 4/5 test classes statically (`tests`);
+- discover JUnit 3/4/5 test classes statically (`tests`);
 - run a commit's Maven test suite in an isolated export, optionally with
   **per-test JaCoCo coverage** (`run-tests`, only with `--allow-build`);
 - select tests with three baselines — retest-all, dependency-only and
@@ -58,6 +58,7 @@ Windows (PowerShell):
 py -3.12 -m venv .venv
 .venv\Scripts\Activate.ps1
 python -m pip install -e ".[dev]"
+python -m pip install -e plugins/codedna-java -e plugins/codedna-python
 ```
 
 macOS / Linux:
@@ -66,11 +67,22 @@ macOS / Linux:
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -e ".[dev]"
+python -m pip install -e plugins/codedna-java -e plugins/codedna-python
 ```
 
-Installing needs internet once (it downloads the `tree-sitter` and
+Java support is a separate plugin, `plugins/codedna-java` (D-054). Without it
+CodeDNA still lists changed files but says that Java files were not analysed.
+Installing the plugin needs internet once (it downloads the `tree-sitter` and
 `tree-sitter-java` wheels, which include the compiled Java grammar). After
-that, analysis and tests run fully offline.
+that, analysis and tests run fully offline. `start.bat` installs the plugin by
+itself if it is missing.
+
+Python support is the `plugins/codedna-python` plugin (D-060). It needs only
+the standard library. Both plugins can work on one repository: in a mixed
+Java + Python project each analyses its own files, their graphs and tests
+are joined, and `run-tests` runs Maven/Gradle and pytest and joins the
+results. Dependencies between the two languages are not followed, so a
+change in a language that has no tests falls back to running everything.
 
 ## Run the tests
 
@@ -104,8 +116,12 @@ codedna run-tests --repo PATH [--rev REV] --output-dir DIR --allow-build [--per-
 codedna select  --repo PATH --base BASE_REV --head HEAD_REV --strategy all|dependency|coverage [--coverage-map F] [--durations F] [--non-java retest-all|ignore] [--must-run PATTERN ...]
 codedna risk-select --repo PATH --base BASE_REV --head HEAD_REV [--history-csv F] [--risk-target F] [--must-run PATTERN ...]
 codedna compare --repo PATH --base BASE_REV --head HEAD_REV --ground-truth F [--coverage-map F] [--non-java retest-all|ignore]
-codedna plugins
+codedna plugins                                     # installed plugins and load problems
+codedna plugins catalogue                           # the official catalogue
+codedna plugins install ID VERSION --yes            # exact version, SHA-256 checked first
+codedna plugins remove ID --yes
 codedna serve   [--host 127.0.0.1] [--port 8765] [--allow-build]
+codedna mcp     [--repo PATH] [--allow-build] [--mvn PATH] [--gradle PATH]
 codedna history mine     --repo PATH --db FILE [--rev REV] [--max-commits N]
 codedna history import   --db FILE RESULTS [RESULTS ...] [--source NAME]
 codedna history collect  --repo PATH --db FILE --output-dir DIR --allow-build [--max-commits N]
@@ -135,13 +151,14 @@ codedna replay  (--list | --overview) FOLDER [FOLDER ...] [--seed N]
   `DIR/coverage-map.json` (slow: one Maven run per test class).
 - `select` picks tests for a change: `all` (retest-all), `dependency` (static
   graph) or `coverage` (needs a coverage map recorded at BASE). Changed tests
-  are always selected; a changed non-Java file falls back to retest-all unless
-  `--non-java ignore`. `--durations` adds a time estimate.
+  are always selected; a changed file no plugin analyses (or one in a language
+  with no tests) falls back to retest-all unless `--non-java ignore`. `--durations` adds a time estimate.
 - `compare` runs all strategies against a full run of HEAD (`--ground-truth`)
   and reports selection ratio, estimated time, and failing tests caught/missed.
   Files and run directories are both accepted for `--coverage-map`,
   `--durations` and `--ground-truth`.
-- `plugins` lists installed language plugins (Java is built in).
+- `plugins` lists installed language plugins (Java comes from `plugins/codedna-java`,
+  Python from `plugins/codedna-python`).
 - `serve` starts the **local API for the CodeDNA IDE** (needs
   `pip install -e ".[api]"`, included in `.[dev]`). It listens on loopback
   only and prints one JSON line with the URL and a session token
@@ -338,16 +355,19 @@ mvn verify
 backend/codedna/          Python package
   cli.py                  `codedna` command
   git_analysis/           Git wrapper + file-level change extraction
-  java_analysis/          Tree-sitter Java parser + line-to-declaration mapping
-  dependency_graph/       code graph model, reference extraction, name resolution
+  dependency_graph/       shared code-graph schema (any language plugin)
   impact_analysis/        reverse-dependency traversal with explanation paths
-  test_mapping/           JUnit discovery, Maven runner, Surefire/JaCoCo parsers
+  test_mapping/           shared test-results and coverage-map schema
   selection/              retest-all / dependency / coverage baselines, compare
-  plugins/                language-plugin interface, registry, built-in Java plugin
+  plugins/                language-plugin interface, registry, catalogue, plugin manager
   test_history/           SQLite history store, mining, result collection, features
   models/                 ranking baselines, ML models, metrics, evaluation, experiment
   calibration/            Platt / isotonic calibration, Brier, ECE, reliability
   api/                    local FastAPI server for the CodeDNA IDE
+plugins/codedna-java/     Java plugin: Tree-sitter parser, change mapping, graph builder,
+                          JUnit discovery, Maven/Gradle runner, Surefire/JaCoCo parsers
+plugins/codedna-python/   Python plugin: ast parser, change mapping, import graph,
+                          pytest discovery and runner
 ide/                      CodeDNA IDE (Theia + Electron, TypeScript)
 backend/tests/            pytest suite (temporary Git repos, no network)
 examples/                 sample Java/Maven project
@@ -388,8 +408,8 @@ CODEDNA_STARTER.md        original project brief
 
 ## Scope
 
-Java only for now (Maven/JUnit): it is the first language plugin, and other
-languages come later through the plugin interface (D-013, D-018). Other files
+Java (Maven/Gradle, JUnit) and Python (pytest), each a language plugin
+(D-013, D-018, D-054, D-060); the research track is Java only. Other files
 are reported, not analysed. Software engineering only: no vulnerability detection
 or security scoring.
 CodeDNA does not claim novelty for established techniques, and reports no
@@ -438,6 +458,9 @@ Use `codedna risk-select --repo PATH --base BASE --head HEAD` for the same core
 recommendation. Without adequate history, risk stays unvalidated and all tests
 are recommended. See [Java workflow](docs/JAVA_WORKFLOW.md) for history preparation,
 validation limits, selected Maven execution and the IDE workflow.
+`--method crc` uses the failure-conditional conformal stop instead of the
+default calibrated stop (opt-in, D-068); it needs at least 19 failing audit
+commits and otherwise recommends the full suite.
 
 ### Must-run tests
 
@@ -459,10 +482,32 @@ patterns for one run.
 Every run of the whole suite that CodeDNA starts (IDE **Run**, when nothing
 is skipped) is saved in `.codedna/history.db` and `.codedna/history.csv`
 (D-053). `codedna history record --repo PATH RESULTS` adds a saved
-`results.json`. Partial runs, other branches and uncommitted states are not
+`results.json`; `--saved` instead adds every eligible run under `.codedna/runs`,
+for example selected or older IDE runs (D-057). Partial runs, other branches and
+uncommitted states are not
 recorded, and a `history.csv` you supplied is never overwritten. Risk
 selection turns on only when this history passes the audit, which takes many
 recorded commits with failures; until then it recommends the full suite.
+
+### Test brake for AI coding agents
+
+`codedna mcp` is an MCP server (stdin/stdout) that coding agents call before
+they say a change is done (D-059). `codedna_plan_tests` lists the tests the
+change must run, with reasons and the skip risk; `codedna_impact` shows what
+the change can affect. Neither runs project code. With Claude Code:
+
+```bash
+claude mcp add codedna -- codedna mcp --repo /path/to/project
+```
+
+`codedna_check` also runs those tests and answers `passed`, `blocked`,
+`incomplete` or `no_tests`. It executes the project's build, so it is only
+offered when **you** start the server with `--allow-build --repo PATH`, and
+then only for that repository. Without validated history the plan is the
+whole suite.
+Setup for Cursor and Codex, the agent instruction to add, and a demo
+(`python scripts/demo_agent_brake.py DEST [--check]`) are in
+[docs/AGENT_BRAKE.md](docs/AGENT_BRAKE.md).
 
 The [fixed DANTE-H/B10 extension protocol](docs/DANTE_B10_PROTOCOL.md) and
 [related-work comparison](docs/RELATED_WORK_COMPARISON.md) describe the independent

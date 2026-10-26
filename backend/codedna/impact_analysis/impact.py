@@ -1,10 +1,12 @@
 """Change-impact analysis: which types may be affected by a change?
 
-1. ``analyze_changes`` maps the diff to changed Java declarations.
+1. ``analyze_changes`` maps the diff to changed declarations (language plugins;
+   several can work on one repository, each on its own files).
 2. Every changed declaration becomes a *seed*: the type itself, or the type
    that owns a changed member. Comment/formatting-only changes are ignored.
-3. The code graphs of BASE and HEAD are built and merged (so dependencies
-   removed by the change are still followed).
+3. The code graphs of BASE and HEAD are built (every installed plugin's,
+   joined) and merged, so dependencies removed by the change are still
+   followed. No edge joins two languages.
 4. A breadth-first search walks dependency edges *backwards* (from a type to
    the types that depend on it). Confirmed edges are explored first; only
    types not reachable through confirmed edges are then reached through
@@ -27,11 +29,9 @@ from codedna.dependency_graph import (
     Edge,
     merge_graphs,
 )
-from codedna.java_analysis import analyze_changes
-from codedna.java_analysis.parser import TYPE_NODES
 from codedna.plugins import load_plugins
-
-_TYPE_KINDS = frozenset(TYPE_NODES.values())
+from codedna.git_analysis.changes import ChangeReport
+from codedna.plugins.languages import analyze_changes, commit_graph, installed, plugin_type_kinds
 
 
 @dataclass
@@ -91,8 +91,8 @@ def explanation_graph(report: dict) -> dict:
     """Display graph of a report: changed → impacted → test, with explanation paths.
 
     Only edges on an explanation path are kept (the shortest path the traversal
-    found), each labelled confirmed or heuristic. Non-Java changes become
-    ``unresolved`` nodes with no edges: their impact is unknown, not absent.
+    found), each labelled confirmed or heuristic. Changes no installed plugin
+    analyses become ``unresolved`` nodes with no edges: their impact is unknown, not absent.
 
     Each node carries its ``package`` (``""`` = default package, ``None`` for
     files outside the graph); ``packages`` groups them for display, and
@@ -150,22 +150,31 @@ def explanation_graph(report: dict) -> dict:
 
 def compute_impact(repo_path: str | Path, base: str, head: str, *,
                    max_depth: int | None = None, include_heuristic: bool = True,
-                   cache: dict | None = None) -> ImpactReport:
-    changes = analyze_changes(repo_path, base, head)
+                   cache: dict | None = None, changes: ChangeReport | None = None,
+                   registry=None) -> ImpactReport:
+    """``changes`` and ``registry`` let a caller that already has them skip the work again."""
+    registry = registry or load_plugins()
+    installed(registry)  # fails early, naming the plugin to install, if there is none
+    if changes is None:
+        changes = analyze_changes(repo_path, base, head, registry=registry)
     repo = Path(changes.repository)
-    cache = {} if cache is None else cache  # parses keyed by blob SHA (may be shared)
-    java = load_plugins().get("java")  # only language analysed so far (D-013)
+    cache = {} if cache is None else cache  # parses keyed per plugin by blob SHA (may be shared)
     graph = merge_graphs(
-        java.build_graph(repo, changes.base_commit, cache=cache),
-        java.build_graph(repo, changes.head_commit, cache=cache),
+        commit_graph(repo, changes.base_commit, registry=registry, cache=cache),
+        commit_graph(repo, changes.head_commit, registry=registry, cache=cache),
     )
 
-    seeds, ignored, unanalysed = _collect_seeds(changes, graph)
+    seeds, ignored, unanalysed = _collect_seeds(changes, graph, registry)
     warnings = list(changes.warnings) + list(graph.warnings)
-    if unanalysed:
+    no_plugin = [u for u in unanalysed if u["reason"].startswith("no installed")]
+    if no_plugin:
         warnings.append(
-            f"{len(unanalysed)} changed non-Java file(s) not analysed; their impact is unknown "
-            "and a broader test run may be needed")
+            f"{len(no_plugin)} changed file(s) not analysed by any installed language plugin; "
+            "their impact is unknown and a broader test run may be needed")
+    if len(unanalysed) > len(no_plugin):
+        warnings.append(
+            f"{len(unanalysed) - len(no_plugin)} changed file(s) not analysed: their plugin uses "
+            "plugin API 1.0, which does not report type kinds; update it")
 
     impacted = _traverse(graph, seeds, max_depth, include_heuristic)
     return ImpactReport(
@@ -185,7 +194,8 @@ def compute_impact(repo_path: str | Path, base: str, head: str, *,
     )
 
 
-def _collect_seeds(changes, graph: CodeGraph) -> tuple[dict[str, Seed], list[dict], list[dict]]:
+def _collect_seeds(changes, graph: CodeGraph,
+                   registry) -> tuple[dict[str, Seed], list[dict], list[dict]]:
     seeds: dict[str, Seed] = {}
     ignored: list[dict] = []
     unanalysed: list[dict] = []
@@ -200,39 +210,47 @@ def _collect_seeds(changes, graph: CodeGraph) -> tuple[dict[str, Seed], list[dic
             seed.reasons.append(reason)
 
     for changed in changes.changed_files:
-        if not changed.is_java:
+        if changed.language is None:
             unanalysed.append({"path": changed.path, "status": changed.status,
-                               "reason": "non-Java file; impact not analysed"})
+                               "reason": "no installed language plugin analyses this file; "
+                                         "impact not analysed"})
+            continue
+        kinds = plugin_type_kinds(registry.get(changed.language))  # this file's plugin
+        if not kinds:  # a plugin API 1.0 plugin: no way to tell types from members
+            unanalysed.append({"path": changed.path, "status": changed.status,
+                               "reason": "the language plugin does not report which graph nodes "
+                                         "are types (plugin API 1.0); impact not analysed"})
             continue
         paths = {changed.path, changed.old_path} - {None}
-        file_types = [n for n in graph.nodes.values() if n.kind in _TYPE_KINDS and n.file in paths]
+        file_types = [n for n in graph.nodes.values() if n.kind in kinds and n.file in paths]
         all_types = [n.id.removeprefix("type:") for n in file_types]
         top_types = [n.id.removeprefix("type:") for n in file_types
                      if n.parent and n.parent.startswith("file:")]
-        java = changed.java
-        if java is None:
+        mapping = changed.mapping
+        if mapping is None:
             for type_id in all_types:
                 add(type_id, f"file {changed.status} (declarations not mapped)")
             continue
 
-        for declaration in java.declarations:
+        for declaration in mapping.declarations:
             if declaration.code_changed is False:
                 ignored.append({"id": declaration.id, "file": changed.path,
                                 "reason": "only comments or formatting changed"})
                 continue
-            owner = declaration.id if declaration.kind in _TYPE_KINDS else declaration.parent
+            owner = declaration.id if declaration.kind in kinds else declaration.parent
             if owner is not None:
                 add(owner, f"{declaration.kind} {declaration.id} {declaration.change}")
-        for outside in java.outside_declarations:
+        for outside in mapping.outside_declarations:
             if outside.code_changed is False:
                 ignored.append({"id": f"file:{changed.path}", "file": changed.path,
                                 "reason": f"only comments or formatting changed ({outside.side} "
                                           f"lines {outside.lines})"})
                 continue
-            # Imports/package affect every top-level type of the file.
+            # Imports/package (Java) or module-level code (Python) affect every
+            # top-level type of the file.
             for type_id in top_types:
                 add(type_id, f"{'/'.join(outside.parts)} changed in {changed.path}")
-        for unresolved in java.unresolved:
+        for unresolved in mapping.unresolved:
             for type_id in all_types:
                 add(type_id, f"unresolved change ({unresolved.reason}); whole file treated as changed")
     return seeds, ignored, unanalysed

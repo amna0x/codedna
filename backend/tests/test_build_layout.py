@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 from codedna.git_analysis.git import resolve_commit
-from codedna.test_mapping.build import detect_build
-from codedna.test_mapping.discovery import discover_tests
+from codedna_java.build import detect_build
+from codedna_java.discovery import discover_tests
 
 JUNIT = "import org.junit.jupiter.api.Test;\n"
 POM_NS = 'xmlns="http://maven.apache.org/POM/4.0.0"'
@@ -162,3 +162,26 @@ def test_class_patterns_in_surefire_includes_select_test_classes(repo):
     tests = {t.id: t for t in discover_tests(repo.path, head).tests}
     assert tests["a.Checks"].runs_by_default  # wicket-bootstrap configures **/*.class
     assert not tests["a.SlowChecks"].runs_by_default
+
+
+def test_gradle_test_source_sets_moved_by_scripts(repo):
+    head = commit(repo, {
+        "settings.gradle": 'include "core"\ninclude "extra"\n',
+        "build.gradle": "allprojects { apply from: rootProject.file('gradle/layout.gradle') }\n",
+        # A shared script, as in Lucene: applied to every module.
+        "gradle/layout.gradle": "sourceSets {\n  test.java.srcDirs = ['src/test']\n}\n",
+        "extra/build.gradle": "sourceSets { test.java.srcDirs += ['src/it'] }\n",
+        "core/src/test/a/Checks.java": junit_class("a", "Checks"),
+        "extra/src/it/b/Flow.java": junit_class("b", "Flow"),
+        "extra/src/test/b/Unit.java": junit_class("b", "Unit"),
+    })
+
+    layout = detect_build(repo.path, head)
+    report = discover_tests(repo.path, head)
+
+    assert layout.test_roots["core"] == ["core/src/test/"]
+    assert layout.test_roots["extra"] == ["extra/src/test/", "extra/src/it/"]
+    tests = {t.id: t for t in report.tests}
+    assert tests["a.Checks"].runs_by_default and tests["a.Checks"].module == "core"
+    assert tests["b.Flow"].runs_by_default and tests["b.Unit"].runs_by_default
+    assert any("gradle/layout.gradle" in w and "every Gradle module" in w for w in report.warnings)

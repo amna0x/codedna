@@ -17,10 +17,18 @@ ROOT = Path(__file__).resolve().parents[2]
 
 # Each stub appends one line to %STUB_LOG%, so the test can see what ran.
 THEIA = r"""@echo off
->>"%STUB_LOG%" echo theia cwd=%CD% args=%* exe=%CODEDNA_EXECUTABLE% java=%JAVA_HOME% replay=%CODEDNA_REPLAY_FOLDERS%
+>>"%STUB_LOG%" echo theia cwd=%CD% args=%* exe=%CODEDNA_EXECUTABLE% java=%JAVA_HOME% gradle=%GRADLE_HOME% gradlecache=%GRADLE_USER_HOME% replay=%CODEDNA_REPLAY_FOLDERS%
 """
 PYTHON = r"""@echo off
 >>"%STUB_LOG%" echo python %*
+if "%1"=="-m" (
+    if "%6"=="plugins\codedna-python" (
+        mkdir ".venv\Lib\site-packages\codedna_python-0.1.0.dist-info"
+    ) else (
+        mkdir ".venv\Lib\site-packages\codedna_java-0.1.0.dist-info"
+    )
+    exit /b 0
+)
 mkdir "%~2"
 """
 NPM = r"""@echo off
@@ -36,7 +44,8 @@ if "%1"=="run" (
 """
 
 
-def checkout(tmp_path: Path, *, built: bool) -> tuple[Path, dict[str, str], Path]:
+def checkout(tmp_path: Path, *, built: bool,
+             plugins: tuple[str, ...] = ("java", "python")) -> tuple[Path, dict[str, str], Path]:
     repo = tmp_path / "code dna"  # a space, as in many Windows paths
     (repo / "ide" / "electron-app").mkdir(parents=True)
     shutil.copy(ROOT / "start.bat", repo / "start.bat")
@@ -44,6 +53,9 @@ def checkout(tmp_path: Path, *, built: bool) -> tuple[Path, dict[str, str], Path
     scripts.mkdir(parents=True)
     (scripts / "codedna.exe").write_bytes(b"")
     (scripts / "python.cmd").write_text(PYTHON)
+    for plugin in plugins:
+        (repo / ".venv" / "Lib" / "site-packages" / f"codedna_{plugin}-0.1.0.dist-info").mkdir(
+            parents=True)
 
     stubs = tmp_path / "stubs"
     stubs.mkdir()
@@ -119,6 +131,27 @@ def test_missing_core_stops_with_setup_instructions(tmp_path):
     assert not log.exists()
 
 
+def test_installs_the_java_plugin_once_into_an_older_venv(tmp_path):
+    repo, env, log = checkout(tmp_path, built=True, plugins=("python",))
+    (Path(env["USERPROFILE"]) / "codedna-demo").mkdir()  # no demo creation in this run
+    assert run(repo, env).returncode == 0
+    assert run(repo, env).returncode == 0
+    installs = [line for line in log.read_text().splitlines() if line.startswith("python -m pip")]
+    assert installs == [
+        "python -m pip install --disable-pip-version-check -e plugins\\codedna-java"]
+
+
+def test_installs_both_language_plugins_once_into_a_venv_without_them(tmp_path):
+    repo, env, log = checkout(tmp_path, built=True, plugins=())
+    (Path(env["USERPROFILE"]) / "codedna-demo").mkdir()  # no demo creation in this run
+    assert run(repo, env).returncode == 0
+    assert run(repo, env).returncode == 0
+    installs = [line for line in log.read_text().splitlines() if line.startswith("python -m pip")]
+    assert installs == [
+        "python -m pip install --disable-pip-version-check -e plugins\\codedna-java",
+        "python -m pip install --disable-pip-version-check -e plugins\\codedna-python"]
+
+
 def test_rebuilds_once_after_a_pull_that_changed_the_ide(tmp_path):
     repo, env, log = checkout(tmp_path, built=True)
     git = ["git", "-C", str(repo), "-c", "user.name=t", "-c", "user.email=t@example.com"]
@@ -148,3 +181,23 @@ def test_rebuilds_once_after_a_pull_that_changed_the_ide(tmp_path):
     subprocess.run([*git, "commit", "-q", "-am", "ide change"], check=True)
     assert run(repo, env).returncode == 0
     assert builds() == 2
+
+
+@pytest.mark.parametrize("custom_cache", [False, True])
+def test_launcher_reuses_portable_gradle_and_preserves_custom_cache(tmp_path, custom_cache):
+    repo, env, log = checkout(tmp_path, built=True)
+    metadata = Path(env["USERPROFILE"]) / ".codex" / "tools" / "gradle"
+    metadata.mkdir()
+    gradle = tmp_path / "gradle with spaces"
+    (metadata / "runtime.json").write_text(json.dumps({"home": str(gradle)}))
+    env.pop("GRADLE_HOME", None)
+    env.pop("GRADLE_USER_HOME", None)
+    expected_cache = metadata / "cache"
+    if custom_cache:
+        expected_cache = tmp_path / "my gradle cache"
+        env["GRADLE_USER_HOME"] = str(expected_cache)
+    result = run(repo, env)
+    assert result.returncode == 0, result.stdout + result.stderr
+    launched = log.read_text().splitlines()[-1]
+    assert f"gradle={gradle}" in launched
+    assert f"gradlecache={expected_cache}" in launched

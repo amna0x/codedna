@@ -1,6 +1,10 @@
-"""Code graph of a Java repository: packages, files, types, members and typed edges."""
+"""Shared code-graph schema: packages, files, types, members and typed edges.
 
-from codedna.dependency_graph.builder import build_graph, build_graph_for_commit, file_role
+Language plugins build graphs in this schema (D-018); the Java builder lives in
+``codedna-java`` (D-054).
+"""
+
+from codedna.dependency_graph.cache import BoundedParseCache
 from codedna.dependency_graph.model import (
     CONFIRMED,
     DEPENDENCY_KINDS,
@@ -11,10 +15,12 @@ from codedna.dependency_graph.model import (
     Node,
     UnresolvedReference,
     merge_graphs,
+    union_graphs,
 )
 
 __all__ = [
     "CONFIRMED",
+    "BoundedParseCache",
     "DEPENDENCY_KINDS",
     "HEURISTIC",
     "CodeGraph",
@@ -22,8 +28,6 @@ __all__ = [
     "Evidence",
     "Node",
     "UnresolvedReference",
-    "build_graph",
-    "build_graph_for_commit",
-    "file_role",
     "merge_graphs",
+    "union_graphs",
 ]

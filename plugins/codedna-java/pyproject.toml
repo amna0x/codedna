@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "codedna-java"
+version = "0.1.0"
+description = "Java language plugin for CodeDNA: change mapping, code graph, JUnit discovery, Maven/Gradle runs."
+readme = "README.md"
+requires-python = ">=3.11"
+# Tree-sitter: Java parsing (D-008, pinned below 0.26 by D-033). Moved here
+# from the core when Java became a separate plugin (D-054).
+dependencies = [
+    "codedna>=0.1,<0.2",
+    "tree-sitter>=0.25,<0.26",
+    "tree-sitter-java>=0.23.5,<0.24",
+]
+
+[project.entry-points."codedna.languages"]
+java = "codedna_java:JavaPlugin"
+
+[tool.setuptools.packages.find]
+include = ["codedna_java*"]

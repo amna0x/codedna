@@ -19,6 +19,11 @@ export interface CodeDnaStatus {
 
 export interface CodeDnaService {
     status(): Promise<CodeDnaStatus>;
+    tests(repo: string, revision: string): Promise<TestDiscovery>;
+    projectHistory(repo: string): Promise<ProjectHistory>;
+    recordSavedRuns(repo: string): Promise<RecordedHistory>;
+    importRun(repo: string, source: string): Promise<{ id: string; tests: number; failures: number }>;
+    savedRun(repo: string, runId: string): Promise<SavedRun>;
     analyze(repo: string, base: string, head: string): Promise<AnalyzeReport>;
     impact(repo: string, base: string, head: string, options?: ImpactOptions): Promise<ImpactReport>;
     select(repo: string, base: string, head: string, strategy: SelectionStrategy, historyCsv?: string): Promise<SelectionReport>;
@@ -28,6 +33,20 @@ export interface CodeDnaService {
     replaySources(folders: string[]): Promise<ReplaySources>;
     replayOverview(folders: string[], seed?: number): Promise<ReplayOverview>;
     replay(path: string): Promise<ReplayTimeline>;
+    /** Language plugins CodeDNA's engine found (D-018, D-054). */
+    installedPlugins(): Promise<InstalledPlugins>;
+    /** The official catalogue (fixed URL in the core) plus what is installed. */
+    pluginCatalogue(): Promise<PluginCatalogueView>;
+    /** Only after the view's explicit confirmation: installing runs the plugin's code. */
+    installPlugin(plugin: string, version: string): Promise<PluginChange>;
+    removePlugin(plugin: string): Promise<PluginChange>;
+}
+
+/** File locations returned by the core's existing test-discovery endpoint. */
+export interface TestDiscovery {
+    repository: string;
+    commit: string;
+    tests: { id: string; file: string }[];
 }
 
 export type SelectionStrategy = 'dependency' | 'all' | 'risk';
@@ -59,6 +78,10 @@ export interface ChangedFile {
     is_binary: boolean;
     changed_lines: number[][];
     java: JavaFileAnalysis | null;
+    /** Installed plugin that handles the file ("java", "python"), null if none does. */
+    language?: string | null;
+    /** Declaration mapping from a plugin other than Java; same shape. */
+    analysis?: JavaFileAnalysis | null;
 }
 
 export interface AnalyzeReport {
@@ -152,7 +175,7 @@ export interface SelectionReport {
     };
     strategy: string;
     total_tests: number;
-    selected: { test: string; reasons: string[] }[];
+    selected: { test: string; reasons: string[]; file?: string | null }[];
     skipped: string[];
     selection_ratio: number;
     estimated_time: { selected_seconds: number; all_seconds: number; saved_ratio: number } | null;
@@ -269,4 +292,92 @@ export interface ReplayOverview {
     overall: Record<string, Record<ReplayMetric, { mean: number | null; projects: number }>>;
     within_risk_target: { projects: number; of: number };
     note: string;
+}
+
+
+// --- project history: recorded executions, not saved research simulations ------
+export interface ProjectRun {
+    id: string;
+    commit: string | null;
+    tests: number;
+    failures: number;
+    duration_seconds: number;
+    recorded_at: string;
+    result_path: string;
+    /** True when the run meets the D-053 recording rules. */
+    candidate: boolean;
+    reason: string | null;
+}
+export interface ProjectHistory {
+    repository: string;
+    runs: ProjectRun[];
+    candidate_runs: number;
+    candidate_commits: number;
+    history_csv: string | null;
+    warnings: string[];
+    note: string;
+}
+export interface RecordedHistory {
+    repository: string;
+    recorded_runs: number;
+    commits_with_results: number | null;
+    history_csv: string;
+    skipped: { id: string; reason: string }[];
+    warnings: string[];
+    note: string;
+}
+export interface SavedRun {
+    id: string;
+    results: SelectionRun['results'];
+    logs: string[];
+    result_path: string;
+}
+
+// --- language plugins and the catalogue (codedna.plugins, D-020, D-048, D-054) -------
+
+export interface InstalledPlugin {
+    name: string;
+    display_name: string;
+    version: string;
+    api_version: string;
+    file_suffixes: string[];
+}
+
+export interface InstalledPlugins { api_version: string; plugins: InstalledPlugin[]; problems: string[] }
+
+export interface CatalogueVersion {
+    version: string;
+    api_version: string;
+    /** Bundled with CodeDNA (installed from the repository), no download. */
+    builtin: boolean;
+    url: string | null;
+    sha256: string | null;
+    /** Whether this CodeDNA core can load it (decided by the core). */
+    compatible?: boolean;
+}
+
+export interface CataloguePlugin {
+    id: string;
+    package?: string;
+    name: string;
+    description: string;
+    licence: string;
+    source: string;
+    versions: CatalogueVersion[];
+}
+
+export interface PluginCatalogueView {
+    catalogue: { schema_version: number; plugins: CataloguePlugin[] };
+    installed: InstalledPlugins;
+}
+
+export interface PluginChange {
+    plugin: string;
+    version?: string;
+    sha256?: string;
+    status: string;
+    /** Set after an update or removal: the old plugin code stays loaded until the server restarts. */
+    restart_required?: boolean;
+    previous_version?: string;
+    installed: InstalledPlugins;
 }

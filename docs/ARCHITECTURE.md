@@ -9,16 +9,16 @@ Git repository / pull request
 Git change extractor          ← implemented (file level)   codedna.git_analysis
         │
         ▼
-Java declaration mapper       ← implemented (method level) codedna.java_analysis
+Java declaration mapper       ← implemented (method level) codedna_java.mapping (plugin)
         │
         ▼
-Dependency graph builder      ← implemented (type level)   codedna.dependency_graph
+Dependency graph builder      ← implemented (type level)   codedna_java.builder → codedna.dependency_graph schema
         │
         ▼
 Change-impact analyzer        ← implemented                codedna.impact_analysis
         │
         ▼
-Candidate test generator      ← implemented (baselines)    codedna.test_mapping, .selection
+Candidate test generator      ← implemented (baselines)    codedna_java.discovery, codedna.selection
         │
         ▼
 History + feature generator   ← Milestone 4                 codedna.test_history
@@ -54,32 +54,29 @@ backend/codedna/
 ├── git_analysis/
 │   ├── git.py             safe Git subprocess wrapper + validation + errors
 │   └── changes.py         ChangedFile / ChangeReport, extract_changes()
-├── java_analysis/
-│   ├── parser.py          Tree-sitter Java -> Declaration list, parse_java()
-│   └── mapping.py         line ranges -> DeclarationChange, analyze_changes()
 ├── dependency_graph/
-│   ├── model.py           Node / Edge / Evidence / CodeGraph, merge_graphs()
-│   ├── references.py      Tree-sitter walk: imports + type names per type
-│   └── builder.py         read commit from Git, build nodes, resolve names
+│   ├── model.py           shared schema: Node / Edge / Evidence / CodeGraph, merge_graphs()
+│   └── cache.py           BoundedParseCache (LRU by blob SHA) any plugin can reuse
 ├── impact_analysis/
 │   └── impact.py          seeds from analyze, reverse BFS, explanation paths
 ├── test_mapping/
-│   ├── discovery.py       static JUnit 4/5 test-class discovery
-│   ├── reports.py         Surefire + JaCoCo XML parsers
-│   ├── results.py         results.json / coverage-map.json models
-│   └── maven.py           opt-in Maven runner, per-test JaCoCo, coverage mapping
+│   └── results.py         shared results schema: TestRunResult, TestClassResult, CoverageMap
 ├── selection/
 │   └── baselines.py       all / dependency / coverage strategies, compare
 ├── plugins/
-│   ├── base.py            LanguagePlugin protocol, PLUGIN_API_VERSION
-│   ├── registry.py        built-in + entry-point plugins, compatibility checks
-│   └── java.py            built-in Java plugin (wraps the modules above)
+│   ├── base.py            LanguagePlugin protocol (1.1 adds optional members), api_compatible()
+│   ├── registry.py        entry-point plugins ("codedna.languages"), compatibility checks
+│   ├── languages.py       the core's only way into a language: require(), analyze_changes(),
+│   │                      build_graph(), discover_tests(), PluginMissingError
+│   ├── catalogue.py       official catalogue index validator (D-047)
+│   └── manager.py         install/remove from the official catalogue (D-048)
 ├── test_history/
 │   ├── store.py           SQLite: commits, changed_files, test_results
 │   ├── mining.py          first-parent history + numstat
 │   ├── collection.py      import results.json / opt-in per-commit runs
 │   ├── rtptorrent.py      RTPTorrent importer (real CI results, no builds)
 │   ├── recording.py       full-suite runs kept as .codedna/history.csv (D-053)
+│   ├── project.py         saved runs listed, imported, added to that history (D-057)
 │   └── features.py        leakage-free (commit, test) rows
 └── models/
     ├── metrics.py         APFD, APFDc, recall@budget, time to first failure
@@ -91,10 +88,48 @@ calibration/
     └── metrics.py         Brier, ECE, reliability bins
 selection/risk.py          risk-per-second selection, skip risk, fallback
 selection/policy.py        must-run tests policy read from BASE, add-on rule hook
+selection/pts.py           Predictive Test Selection baseline B11 (research only, D-061)
+selection/conformal.py     conformal-risk-control stopping threshold B12/B12f (D-063; live opt-in D-068)
 api/
     ├── app.py             FastAPI app: endpoints, token + Host checks, build opt-in
     └── server.py          `codedna serve` (loopback-only, prints URL + token)
+agent/
+    ├── brake.py           plan / check verdicts for AI coding agents (D-059)
+    └── mcp_server.py      `codedna mcp`: dependency-free MCP over stdio
 git_analysis/blobs.py      ls-tree + cat-file --batch readers, git archive export
+```
+
+The Java implementation is a separate distribution (D-054):
+
+```
+plugins/codedna-java/          pip install -e plugins/codedna-java
+├── pyproject.toml             entry point codedna.languages: java = codedna_java:JavaPlugin
+└── codedna_java/
+    ├── plugin.py              JavaPlugin (the LanguagePlugin the core sees)
+    ├── parser.py              Tree-sitter Java -> Declaration list, parse_java()
+    ├── mapping.py             line ranges -> DeclarationChange, attach_java_declarations()
+    ├── references.py          Tree-sitter walk: imports + type names per type
+    ├── builder.py             read commit from Git, build nodes, resolve names
+    ├── build.py               Maven/Gradle layout (modules, test roots)
+    ├── discovery.py           static JUnit 3/4/5 test-class discovery
+    ├── reports.py             Surefire + JaCoCo XML parsers
+    ├── maven.py               opt-in Maven/Gradle runner, per-test JaCoCo, coverage mapping
+    └── live.py                live risk features for risk-select (D-041)
+```
+
+Python is a second plugin, also bundled (D-060). It needs only the standard
+library:
+
+```
+plugins/codedna-python/        pip install -e plugins/codedna-python
+├── pyproject.toml             entry point codedna.languages: python = codedna_python:PythonPlugin
+└── codedna_python/
+    ├── plugin.py              PythonPlugin
+    ├── parser.py              ast -> declarations (py: IDs), imports, class bases
+    ├── mapping.py             line ranges -> DeclarationChange (same shape as Java's)
+    ├── builder.py             module/class graph: imports, uses, extends (confirmed/heuristic)
+    ├── discovery.py           pytest test modules, settings from the root config file
+    └── runner.py              opt-in pytest runner (JUnit XML -> results.json)
 ```
 
 ### `git_analysis.git`
@@ -124,7 +159,7 @@ git_analysis/blobs.py      ls-tree + cat-file --batch readers, git archive expor
 One Git call per changed file is simple and robust; it may need batching for
 very large diffs (see Known limitations).
 
-### `java_analysis.parser`
+### `codedna_java.parser`
 
 `parse_java(source_bytes)` parses one file with Tree-sitter Java (D-008) and
 returns a `JavaParseResult`: package, a flat list of `Declaration`s (types and
@@ -134,7 +169,7 @@ declaration's own non-comment tokens), the top-level parts outside types
 does not understand (`unsupported`). Nothing is resolved: IDs use names and
 parameter types exactly as written (D-009).
 
-### `java_analysis.mapping`
+### `codedna_java.mapping`
 
 `analyze_changes(repo, base, head)` = `extract_changes` +
 `attach_java_declarations`, which sets `analysis_level = "method"` and fills
@@ -166,7 +201,7 @@ once (cache keyed by blob SHA). Then:
 2. **References** (`references.py`) — every type name written inside a type
    (fields, parameters, `new X()`, generics, annotations, `extends`,
    `implements`), plus capitalised `X.member` receivers as `static_access`.
-3. **Resolution** (`builder.py`, D-010) — each name becomes an edge
+3. **Resolution** (`builder.py`, D-010, D-058) — each name becomes an edge
    (`confirmed`/`heuristic`, with `file:line` evidence, max 10 kept per edge),
    an external reference (counted), or an `unresolved` entry with a reason.
 
@@ -230,12 +265,35 @@ experiments ignore it.
 
 ### `plugins`
 
-`load_plugins()` registers the built-in `JavaPlugin` and every factory in the
-`codedna.languages` entry-point group; plugins whose API major version differs
-from `PLUGIN_API_VERSION`, that fail to import, or that do not implement the
-protocol are skipped and listed in `problems`. `impact`, `selection` and
-history collection obtain the Java implementation through the registry
-(D-024).
+`load_plugins()` registers every factory in the `codedna.languages`
+entry-point group; there is no built-in language (D-054). Plugins whose API
+major differs from `PLUGIN_API_VERSION`, whose minor is newer, that fail to
+import, or that do not implement the protocol are skipped and listed in
+`problems`.
+
+`plugins.languages` is the only way the core reaches language code:
+`analyze_changes` runs `extract_changes`, then each plugin's
+`attach_declarations`, and sets `ChangedFile.language` to the plugin that
+handles each file. Several plugins work on one repository (D-060):
+`build_graph`/`commit_graph` join every plugin's graph (`union_graphs`; no
+edge crosses languages), `discover_tests`/`commit_tests` return a
+`CombinedDiscovery`, and `run_tests` splits the selected tests by the plugin
+that discovered them (one language runs exactly as before; several write to
+`OUTPUT_DIR/<language>` and are joined). Impact and selection use these, so
+a change is analysed by whichever plugin handles its file; selection treats
+a change in a language without tests as unanalysed (retest-all), because
+cross-language dependencies are not followed. Without the Java plugin, `analyze` still lists changed files (level
+`file`) and warns that `.java` files were not analysed; commands that need a
+graph or test discovery raise `PluginMissingError` naming the package (CLI
+exit 1, API 400). A test imports every core module with `codedna_java`,
+`codedna_python` and `tree_sitter` blocked, so the core cannot start depending on them again.
+
+`plugins.manager` installs a catalogue wheel with `pip --no-deps`, then runs
+`pip check`; if the plugin's own dependencies are missing it is uninstalled
+again and the missing packages are named. The API exposes this as
+`GET /api/plugins/catalogue`, `POST /api/plugins/install` and
+`POST /api/plugins/remove` (each needs `"confirm": true`); the IDE's
+"Language plugins" view sends only a plugin id and exact version.
 
 ### `test_history` and `models` (Milestone 4)
 
@@ -288,6 +346,8 @@ same JSON:
 |---------------|----------------|
 | `GET /api/health` | — (no token) |
 | `GET /api/plugins`, `GET /api/capabilities` | `plugins` |
+| `GET /api/plugins/catalogue` | `plugins catalogue` |
+| `POST /api/plugins/install`, `POST /api/plugins/remove` | `plugins install ID VERSION --yes`, `plugins remove ID --yes` — need `"confirm": true` |
 | `POST /api/analyze` | `analyze` |
 | `POST /api/graph` | `graph` |
 | `POST /api/impact` | `impact` |
@@ -301,6 +361,19 @@ same JSON:
 
 Errors are JSON: 400 `{"error": ...}` for analysis errors, 401 bad token,
 403 host/build not allowed, 422 invalid request body.
+
+### `agent` (test brake for AI coding agents, D-059)
+
+`codedna mcp` speaks newline-delimited JSON-RPC 2.0 (MCP `initialize`,
+`ping`, `tools/list`, `tools/call`) on stdin/stdout. `codedna_plan_tests`
+wraps the live recommendation (`selection.live`), `codedna_impact` the impact
+report; both only read Git objects. `codedna_check` runs the planned tests
+through the language plugin and maps the result to `passed` / `blocked` /
+`incomplete` / `nothing_to_run` / `no_tests`; it exists only when the server was started with
+`--allow-build --repo PATH` and then serves that repository only.
+Plan and check take `method` (`b10` default, or `crc`: the failure-conditional
+conformal stop from `selection.conformal.failing_commit_threshold`, D-068),
+passed through `selection.live` to the language plugin's `risk_select`.
 
 ### `ide/` — CodeDNA IDE (Theia 1.76, Electron)
 
@@ -393,17 +466,18 @@ electron-app/package.json           product config: Theia packages, default them
         │                              │ install (pinned, checksum-verified)
         ▼                              ▼
  Analysis core (Python) ◄──── Language plugins (entry points "codedna.languages")
-   git_analysis, graph model,     codedna-java (first; parse, resolve,
-   impact, selection, history,    discover tests, run tests, coverage)
-   ML, calibration, CLI           [future: other languages]
+   git_analysis, graph model,     codedna-java (parse, resolve, discover
+   impact, selection, history,    tests, run tests, coverage), codedna-python
+   ML, calibration, CLI           (ast, pytest); several per repository
 ```
 
-- The core never imports language-specific code directly once the plugin
-  refactor lands; it asks the registry for the plugin that handles a file.
+- The core never imports language-specific code; it asks the registry for
+  the plugin (D-054). Java lives in `plugins/codedna-java`, Python in
+  `plugins/codedna-python` (D-060).
 - The IDE and website contain no analysis logic; they display core JSON.
-- Planned locations: `backend/codedna/plugins/` (interface + registry),
-  `ide/` (Theia application), `website/` (static site + catalogue index).
-  Each is created when its first implementation lands.
+- Locations: `backend/codedna/plugins/` (interface, registry, catalogue,
+  manager), `plugins/codedna-java/` and `plugins/codedna-python/`, `ide/` (Theia
+  application), `website/` (static site + catalogue index).
 
 ## Planned module boundaries
 
@@ -453,7 +527,7 @@ outside version control.
 
 `selection.live` provides shared audited fitting and dispatches through the
 installed language plugin’s optional `risk_select` capability. The Java adapter
-(`plugins.java_live`) binds CSV rows to first-parent ancestry and constructs
+(`codedna_java.live`) binds CSV rows to first-parent ancestry and constructs
 Java change/history features without observing target outcomes.
 A separately fitted/calibrated/audited model feeds `selection.validation`'s
 conservative empirical gate. Missing or inadequate evidence yields full-suite
@@ -468,3 +542,27 @@ confirmation, preserving the per-request consent check. `run_maven_tests` accept
 optional discovered test IDs, includes nested classes, and handles empty lists
 without invoking Maven. The UI displays actual result statuses and evidence
 without implementing model/selection logic. See JAVA_WORKFLOW.md.
+
+
+## Windows desktop runtime (D-055)
+
+The Windows installer includes the Python analysis core as a PyInstaller
+one-directory bundle under Electron's `resources/core/`. The Electron main
+entry resolves an explicit executable override, then that bundled executable,
+then the development PATH fallback. The existing Node service still starts a
+loopback-only token-authenticated API and forwards shared JSON; no analysis
+moves into TypeScript. Git and Java build tools remain external.
+
+`scripts/build_desktop_core.py` is build tooling only. Its optional `desktop`
+extra is separate from application dependencies. Generated binaries, dependency
+caches and core file-hash manifests are ignored; datasets are not bundled.
+
+## Exact risk-prefix search and follow-up evidence (D-067/D-069)
+
+Risk selection binary-searches the shortest acceptable ordered prefix using
+the unchanged skip-risk calculation. Candidate inclusion is monotone; pins,
+budgets and fallback semantics are preserved. No selection logic moves into
+the frontend and no dependency is added. B10 remains the default; the live
+failure-conditional CRC method remains opt-in (D-068), following the evidence
+and limitations in D-067. The four nine-project follow-ups preserve original
+reports and disclose reused/new code fingerprints in their audit manifests.

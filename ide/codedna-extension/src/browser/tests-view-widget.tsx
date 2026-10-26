@@ -1,9 +1,10 @@
+import { CommandService } from '@theia/core/lib/common/command';
 import * as React from '@theia/core/shared/react';
 import { inject, injectable, postConstruct } from '@theia/core/shared/inversify';
 import { ConfirmDialog } from '@theia/core/lib/browser/dialogs';
 import { ProgressService } from '@theia/core/lib/common/progress-service';
 import { ReactWidget } from '@theia/core/lib/browser/widgets/react-widget';
-import { CodeDnaService, SelectionReport, SelectionStrategy, SelectionRun } from '../common/codedna-protocol';
+import { CodeDnaService, SelectionReport, SelectionStrategy, SelectionRun, TestDiscovery } from '../common/codedna-protocol';
 import { CodeDnaComparison } from './comparison';
 import { CodeDnaWorkspace } from './codedna-workspace';
 import { withProgress } from './progress';
@@ -31,6 +32,7 @@ export class TestsViewWidget extends ReactWidget {
     @inject(CodeDnaWorkspace) protected readonly workspace: CodeDnaWorkspace;
     @inject(CodeDnaComparison) protected readonly comparison: CodeDnaComparison;
     @inject(ProgressService) protected readonly progress: ProgressService;
+    @inject(CommandService) protected readonly commands: CommandService;
 
     protected strategy: SelectionStrategy = 'risk';
     protected loading = false;
@@ -40,6 +42,9 @@ export class TestsViewWidget extends ReactWidget {
     protected historyCsv = '';
     protected reportHistory = '';
     protected reportStrategy: SelectionStrategy = 'risk';
+    protected generation = 0;
+    protected notice: string | undefined;
+    protected discovery: { report: SelectionReport; result: Promise<TestDiscovery> } | undefined;
 
     @postConstruct()
     protected init(): void {
@@ -49,35 +54,41 @@ export class TestsViewWidget extends ReactWidget {
         this.title.iconClass = 'codicon codicon-beaker';
         this.title.closable = true;
         this.addClass('codedna-view');
-        this.toDispose.push(this.comparison.onDidChange(() => { this.report = undefined; this.execution = undefined; this.update(); }));
+        this.toDispose.push(this.comparison.onDidChange(() => this.invalidate()));
+        this.update();
+    }
+
+    protected invalidate(): void {
+        this.generation++;
+        this.report = undefined;
+        this.execution = undefined;
+        this.discovery = undefined;
+        this.error = undefined;
+        this.notice = undefined;
         this.update();
     }
 
     protected async suggest(): Promise<void> {
-        const repo = await this.workspace.repositoryPath();
-        if (!repo) {
-            this.error = 'Open a folder first.';
-            this.update();
-            return;
-        }
+        if (this.loading) { return; }
+        this.invalidate();
+        const generation = this.generation;
+        const base = this.comparison.base, head = this.comparison.head;
+        const strategy = this.strategy, history = this.historyCsv;
         this.loading = true;
-        this.report = undefined;
-        this.execution = undefined;
-        this.error = undefined;
         this.update();
         try {
-            const base = this.comparison.base, head = this.comparison.head;
-            const result = await withProgress(this.progress, this.strategy === 'risk' ? 'CodeDNA: checking history and choosing tests' : 'CodeDNA: choosing tests',
-                () => this.codedna.select(repo, base, head, this.strategy, this.historyCsv));
-            if (base !== this.comparison.base || head !== this.comparison.head) {
-                this.error = 'The comparison changed. Suggest tests again.';
-                return;
-            }
+            const repo = await this.workspace.repositoryPath();
+            if (!repo) { throw new Error('Open a folder first.'); }
+            const result = await withProgress(this.progress, strategy === 'risk' ? 'CodeDNA: checking history and choosing tests' : 'CodeDNA: choosing tests',
+                () => this.codedna.select(repo, base, head, strategy, history));
+            if (generation !== this.generation) { return; }
             this.report = result;
-            this.reportHistory = this.historyCsv;
-            this.reportStrategy = this.strategy;
+            this.reportHistory = history;
+            this.reportStrategy = strategy;
         } catch (error) {
-            this.error = error instanceof Error ? error.message : String(error);
+            if (generation === this.generation) {
+                this.error = error instanceof Error ? error.message : String(error);
+            }
         } finally {
             this.loading = false;
             this.update();
@@ -85,28 +96,56 @@ export class TestsViewWidget extends ReactWidget {
     }
 
     protected async runSelected(): Promise<void> {
-        const report = this.report;
+        const report = this.report, generation = this.generation;
         if (!report || this.loading) { return; }
         const confirmed = await new ConfirmDialog({
             title: 'Run project tests?',
-            msg: 'This executes this project’s code and Maven plugins. Maven may download dependencies. Run only projects you trust.',
+            msg: 'This executes this project’s code and build plugins (Maven, Gradle or pytest). Maven may download dependencies. Run only projects you trust.',
             ok: 'Run tests', cancel: 'Cancel'
         }).open();
-        if (!confirmed || this.report !== report) { return; }
+        if (!confirmed || this.report !== report || generation !== this.generation) { return; }
         this.loading = true;
         this.error = undefined;
+        this.notice = undefined;
         this.execution = undefined;
         this.update();
         try {
-            this.execution = await withProgress(this.progress, 'CodeDNA: running selected tests with Maven',
+            const execution = await withProgress(this.progress, 'CodeDNA: running selected tests',
                 () => this.codedna.runSelection(report.repository,
                     report.base_commit, report.head_commit, this.reportStrategy, this.reportHistory));
-            this.report = this.execution.selection;
+            if (generation !== this.generation || this.report !== report) {
+                this.notice = 'Tests finished for the previous comparison. Open Project history to inspect the saved results.';
+                return;
+            }
+            this.execution = execution;
+            this.report = execution.selection;
         } catch (error) {
-            this.error = error instanceof Error ? error.message : String(error);
+            if (generation === this.generation) {
+                this.error = error instanceof Error ? error.message : String(error);
+            }
         } finally {
             this.loading = false;
             this.update();
+        }
+    }
+
+    protected async openTest(report: SelectionReport, test: string): Promise<void> {
+        if (this.report !== report) { return; }
+        try {
+            if (this.discovery?.report !== report) {
+                this.discovery = { report, result: this.codedna.tests(report.repository, report.head_commit) };
+            }
+            const discovery = await this.discovery.result;
+            if (this.report !== report) { return; }
+            const file = discovery.tests.find(item => item.id === test)?.file;
+            if (!file) { throw new Error(`No source file was discovered for ${test} at this commit.`); }
+            await this.workspace.openRepositoryFile(discovery.repository, file);
+        } catch (error) {
+            if (this.report === report) {
+                this.discovery = undefined; // allow a retry after a temporary core failure
+                this.error = error instanceof Error ? error.message : String(error);
+                this.update();
+            }
         }
     }
 
@@ -121,7 +160,7 @@ export class TestsViewWidget extends ReactWidget {
                 <label className='cd-field'>
                     <span className='cd-field-label'>Which tests</span>
                     <select value={this.strategy} disabled={this.loading}
-                        onChange={e => { this.strategy = e.target.value as SelectionStrategy; this.report = undefined; this.execution = undefined; this.update(); }}>
+                        onChange={e => { this.strategy = e.target.value as SelectionStrategy; this.invalidate(); }}>
                         {STRATEGIES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
                     </select>
                 </label>
@@ -129,13 +168,17 @@ export class TestsViewWidget extends ReactWidget {
                     <span className='cd-field-label'>Test history file (optional)</span>
                     <input value={this.historyCsv} disabled={this.loading}
                         placeholder='Use this project’s saved history'
-                        onChange={e => { this.historyCsv = e.target.value; this.report = undefined; this.execution = undefined; this.update(); }} />
+                        onChange={e => { this.historyCsv = e.target.value; this.invalidate(); }} />
                 </label>}
                 <button className='cd-button' type='submit'  disabled={this.loading} aria-busy={this.loading}>
                     {this.loading ? <><Spinner /> Finding tests…</> : 'Suggest tests'}
                 </button>
+                <button className='cd-button' type='button' onClick={() => this.commands.executeCommand('codedna.history.open')}>
+                    Open project history
+                </button>
             </form>
             {this.error && <ErrorNotice message={this.error} />}
+            {this.notice && <p className='cd-notice' role='status'>{this.notice}</p>}
             {this.report ? this.renderReport(this.report) : !this.loading && !this.error && <FirstRun action='Suggest tests' />}
         </div>;
     }
@@ -180,7 +223,7 @@ export class TestsViewWidget extends ReactWidget {
             <p className='cd-meta'>Compared commits: {report.base_commit.slice(0, 8)} → {report.head_commit.slice(0, 8)}</p>
             <p className='cd-lede'>
                 {report.total_tests === 0
-                    ? 'No JUnit tests were found in this project.'
+                    ? 'No JUnit or pytest tests were found in this project.'
                     : report.selected.length === 0
                         ? 'No tests are recommended by the current selection policy.'
                         : <>Run {report.selected.length} of {plural(report.total_tests, 'test class', 'test classes')}.
@@ -200,7 +243,7 @@ export class TestsViewWidget extends ReactWidget {
                 <div className='cd-card'>
                     {report.selected.map(item => <button className='cd-row' key={item.test}
                         title={`Open ${item.test}`}
-                        onClick={() => this.workspace.openFile(testPath(item.test))}>
+                        onClick={() => this.openTest(report, item.test)}>
                         <span className='cd-code'>{simpleName(item.test)}</span>
                         <span className='cd-row-meta'>
                             <Chip tone='added'>Run</Chip>
@@ -229,10 +272,6 @@ export class TestsViewWidget extends ReactWidget {
             </p>
         </div>;
     }
-}
-
-function testPath(testId: string): string {
-    return `src/test/java/${testId.replace(/\./g, '/')}.java`;
 }
 
 function unique(values: string[]): string[] {

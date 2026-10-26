@@ -28,6 +28,13 @@ export function friendlyError(message: string): FriendlyError {
             details: message
         };
     }
+    if (/language plugin .* is not installed/i.test(message)) {
+        return {
+            title: 'Java support isn’t installed',
+            help: 'Run start.bat once (it installs the Java plugin), then try again. The Language plugins view shows what CodeDNA found.',
+            details: message
+        };
+    }
     if (/Open a folder/i.test(message)) {
         return { title: 'No project open', help: 'Open your project folder first (File → Open Folder…).', details: '' };
     }
@@ -35,21 +42,31 @@ export function friendlyError(message: string): FriendlyError {
 }
 
 export function friendlyWarning(warning: string): string | undefined {
-    let match = warning.match(/^(\d+) changed non-Java file\(s\) not analysed/);
+    // Older reports said "non-Java file(s)"; current ones name no language.
+    let match = warning.match(/^(\d+) changed (?:non-Java file\(s\) not analysed|file\(s\) not analysed by any installed language plugin)/);
     if (match) {
         const n = Number(match[1]);
-        return `${n} changed file${n === 1 ? ' isn’t' : 's aren’t'} Java code, so CodeDNA can’t tell what ${n === 1 ? 'it affects' : 'they affect'}.`;
+        return `${n} changed file${n === 1 ? ' isn’t' : 's aren’t'} code CodeDNA reads, so it can’t tell what ${n === 1 ? 'it affects' : 'they affect'}.`;
     }
-    match = warning.match(/^(\d+) test class\(es\) outside Surefire's default includes/);
+    match = warning.match(/^(\d+) changed \.\w+ file\(s\) not analysed: the (\w+) plugin/);
     if (match) {
-        return 'Some tests wouldn’t run with Maven’s default settings, so they aren’t listed.';
+        return `${languageName(match[2])} support isn’t installed, so CodeDNA can list these files but not analyse them. Run start.bat once to install it.`;
     }
-    if (/non-Java change\(s\) ignored by request/.test(warning)) {
+    match = warning.match(/^(\d+) changed (\w+) file\(s\) count as unanalysed: no \w+ tests were found/);
+    if (match) {
+        const language = languageName(match[2]);
+        return `CodeDNA found no ${language} tests and doesn’t follow links between languages, so ${language} changes make it suggest every test.`;
+    }
+    match = warning.match(/^(\d+) test class\(es\) (?:outside Surefire's default includes|the build does not run by default)/);
+    if (match) {
+        return 'Some tests wouldn’t run with the build’s default settings, so they aren’t listed.';
+    }
+    if (/(?:non-Java|unanalysed) change\(s\) ignored by request/.test(warning)) {
         return undefined; // the user asked for this; nothing to warn about
     }
-    match = warning.match(/^(.+?): (Java syntax error.*)$/);
+    match = warning.match(/^(.+?): ((?:Java|Python) syntax error.*)$/);
     if (match) {
-        return `${match[1]} has a syntax error, so its changes couldn’t be matched to methods.`;
+        return `${match[1]} has a syntax error, so its changes couldn’t be matched to ${match[2].startsWith('Python') ? 'functions' : 'methods'}.`;
     }
     return warning;
 }
@@ -64,6 +81,10 @@ export function friendlyReason(reason: string): string {
     let match = reason.match(/^non-Java file changed \((.+?)(?: and others)?\)/);
     if (match) {
         return `${match[1]} changed and isn’t Java code, so every test is suggested to be safe.`;
+    }
+    match = reason.match(/^unanalysed file changed \((.+?)(?: and others)?\)/);
+    if (match) {
+        return `${match[1]} changed and CodeDNA can’t follow what it affects, so every test is suggested to be safe.`;
     }
     match = reason.match(/^depends on changed type:(\S+) \(distance (\d+)\)/);
     if (match) {
@@ -103,7 +124,8 @@ export function confidenceLabel(confidence: string): { text: string; tone: strin
 export function kindLabel(kind: string): string {
     return ({ constructor: 'constructor', method: 'method', field: 'field', class: 'class',
         interface: 'interface', enum: 'enum', record: 'record', initializer: 'setup block',
-        enum_constant: 'enum value', annotation_type: 'annotation', annotation_element: 'annotation value' } as Record<string, string>)[kind] ?? kind;
+        enum_constant: 'enum value', annotation_type: 'annotation', annotation_element: 'annotation value',
+        module: 'module', function: 'function' } as Record<string, string>)[kind] ?? kind;
 }
 
 /** `example.PriceCalculator#applyDiscount(double)` → `PriceCalculator.applyDiscount()`. */
@@ -119,12 +141,17 @@ export function readableName(id: string): string {
     return `${simple}.${member.replace(/\(.*\)$/, '()')}`;
 }
 
+/** Graph and test IDs without their `type:` and language (`py:`) prefixes. */
+function bareId(typeId: string): string {
+    return typeId.replace(/^type:/, '').replace(/^py:/, '');
+}
+
 export function simpleName(typeId: string): string {
-    return typeId.replace(/^type:/, '').split('.').slice(-1)[0];
+    return bareId(typeId).split('.').slice(-1)[0];
 }
 
 export function packageName(typeId: string): string {
-    const parts = typeId.replace(/^type:/, '').split('.');
+    const parts = bareId(typeId).split('.');
     return parts.slice(0, -1).join('.');
 }
 
@@ -135,4 +162,9 @@ export function breakable(name: string): string {
 
 export function plural(n: number, one: string, many: string): string {
     return `${n} ${n === 1 ? one : many}`;
+}
+
+/** "java" → "Java", "python" → "Python". */
+export function languageName(language: string): string {
+    return language.charAt(0).toUpperCase() + language.slice(1);
 }

@@ -1,0 +1,31 @@
+{
+  "protocol": "docs/PTS_BASELINE_PROTOCOL.md",
+  "risk_target": 0.05,
+  "test_recall_target": 0.95,
+  "change_recall_target": 0.999,
+  "python": "3.13.17",
+  "packages": {
+    "scikit-learn": "1.9.1",
+    "numpy": "2.5.4"
+  },
+  "input_sha256": {
+    "hikaricp": "f2c4ce350b858f2daec1ccc1a3f017ca5c2c95e1ff534720155b12b16414ec7b",
+    "jade4j": "d2399798e36770594a19a23ea247a99c7d34c6f227d3861fea68f5e1e90a3e65",
+    "littleproxy": "868dbdd676ce04f2186afd2720ffe196db8603b93e8e338069995826803a3bfe",
+    "wicket-bootstrap": "376ccf886d411c25b1ee534fa9bea969dc62f97ad09392c93dcad485eb829199"
+  },
+  "code_sha256": {
+    "scripts/run_pts_check.py": "a405c86e1d81207f2c2109eea67c15614ec99f5534968ed7f98a85579182b73d",
+    "docs/PTS_BASELINE_PROTOCOL.md": "0ba177535b4b2a9b62a711456b8b655f721f7c22448de9863e112461bc3f6317",
+    "backend/codedna/selection/pts.py": "264b76dae203889db163be1e23d2ffc88b2a2716d9bb6fe41c775ad57df593c2",
+    "scripts/run_rolling_evidence.py": "782ab3d759df9266a411fc82c76e7017cd2dab59f425f1a29a2774e5d09e400b",
+    "backend/codedna/selection/live.py": "0361de6c11f50b6d63225adbf31e03c2defbe0f267f352cbba5eea923137cd39",
+    "backend/codedna/selection/risk.py": "858cfafd1e7a1e6421c32c8be4fb8b18453e0c70d2d1a9e17e1a196c9206c3e3",
+    "backend/codedna/plugins/java_live.py": "77cf359dd97daa017a0481ad18eec5cf76963a82079417ffcea396ccfb255863",
+    "backend/codedna/models/rankers.py": "79c0a6f7fb67803009addffc13086db2762e28b2f829c1cc106299711b239f10",
+    "backend/codedna/models/uncertainty.py": "bfcda9e1da26ea79525b7678a520eb01042ef91da8ca8f8f85bf5786295db792",
+    "backend/codedna/calibration/calibrators.py": "1a182cea9040ecb7258af3e0a1c031e73161e96a15f3e1561b66b67c07023ddc",
+    "backend/codedna/test_history/features.py": "3a9ecfe884716b489e2193b1f379eb1c39eb193fea915b8ccf2d09ca76748572",
+    "scripts/run_study.py": "65f67f18d87f89e87cb899daf487f86a2610dee24694d3c61afa193360b7aa47"
+  }
+}
