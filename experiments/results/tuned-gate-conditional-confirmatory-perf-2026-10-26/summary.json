@@ -1,0 +1,317 @@
+{
+  "projects": {
+    "buck": {
+      "set": "confirmatory",
+      "evaluation_failing_commits": 169,
+      "eligible": true,
+      "fit_failures": 0,
+      "thresholds": [
+        "full",
+        "full",
+        0.002,
+        0.01,
+        0.0002
+      ],
+      "gate_accepted_blocks": 0,
+      "b13_tuned_blocks": 3,
+      "b13": {
+        "time": 0.7652409952606635,
+        "recall": 0.9906976744186047,
+        "safety": 0.9881656804733728,
+        "miss_rate": 0.004739336492890996
+      },
+      "product": {
+        "time": 1.0,
+        "recall": 1.0,
+        "safety": 1.0,
+        "miss_rate": 0.0
+      }
+    },
+    "cloudify": {
+      "set": "confirmatory",
+      "evaluation_failing_commits": 148,
+      "eligible": true,
+      "fit_failures": 0,
+      "thresholds": [
+        0.0005,
+        0.002,
+        0.0005,
+        "full",
+        "full"
+      ],
+      "gate_accepted_blocks": 0,
+      "b13_tuned_blocks": 3,
+      "b13": {
+        "time": 0.83652545750305,
+        "recall": 0.9493670886075949,
+        "safety": 0.9459459459459459,
+        "miss_rate": 0.0032533550223668157
+      },
+      "product": {
+        "time": 1.0,
+        "recall": 1.0,
+        "safety": 1.0,
+        "miss_rate": 0.0
+      }
+    },
+    "deeplearning4j": {
+      "set": "confirmatory",
+      "evaluation_failing_commits": 205,
+      "eligible": true,
+      "fit_failures": 0,
+      "thresholds": [
+        0.05,
+        0.02,
+        0.005,
+        "full",
+        "full"
+      ],
+      "gate_accepted_blocks": 1,
+      "b13_tuned_blocks": 3,
+      "b13": {
+        "time": 0.8082933486238533,
+        "recall": 0.9807692307692307,
+        "safety": 0.9707317073170731,
+        "miss_rate": 0.013761467889908258
+      },
+      "product": {
+        "time": 0.8838543577981651,
+        "recall": 0.9903846153846154,
+        "safety": 0.9853658536585366,
+        "miss_rate": 0.006880733944954129
+      }
+    },
+    "dspace": {
+      "set": "confirmatory",
+      "evaluation_failing_commits": 59,
+      "eligible": true,
+      "fit_failures": 1,
+      "thresholds": [
+        "full",
+        "full",
+        "full",
+        "full",
+        "full"
+      ],
+      "gate_accepted_blocks": 1,
+      "b13_tuned_blocks": 0,
+      "b13": {
+        "time": 1.0,
+        "recall": 1.0,
+        "safety": 1.0,
+        "miss_rate": 0.0
+      },
+      "product": {
+        "time": 0.9762647932131495,
+        "recall": 0.9993894993894994,
+        "safety": 0.9830508474576272,
+        "miss_rate": 0.0010604453870625664
+      }
+    },
+    "jetty.project": {
+      "set": "confirmatory",
+      "evaluation_failing_commits": 86,
+      "eligible": true,
+      "fit_failures": 0,
+      "thresholds": [
+        "full",
+        "full",
+        "full",
+        "full",
+        "full"
+      ],
+      "gate_accepted_blocks": 0,
+      "b13_tuned_blocks": 0,
+      "b13": {
+        "time": 1.0,
+        "recall": 1.0,
+        "safety": 1.0,
+        "miss_rate": 0.0
+      },
+      "product": {
+        "time": 1.0,
+        "recall": 1.0,
+        "safety": 1.0,
+        "miss_rate": 0.0
+      }
+    },
+    "okhttp": {
+      "set": "confirmatory",
+      "evaluation_failing_commits": 238,
+      "eligible": true,
+      "fit_failures": 0,
+      "thresholds": [
+        0.005,
+        0.005,
+        0.005,
+        0.01,
+        "full"
+      ],
+      "gate_accepted_blocks": 3,
+      "b13_tuned_blocks": 4,
+      "b13": {
+        "time": 0.7420848754448398,
+        "recall": 0.9886792452830189,
+        "safety": 0.9873949579831933,
+        "miss_rate": 0.0026690391459074734
+      },
+      "product": {
+        "time": 0.6909937722419929,
+        "recall": 0.9207547169811321,
+        "safety": 0.9117647058823529,
+        "miss_rate": 0.018683274021352312
+      }
+    },
+    "sling": {
+      "set": "confirmatory",
+      "evaluation_failing_commits": 285,
+      "eligible": true,
+      "fit_failures": 0,
+      "thresholds": [
+        0.002,
+        0.01,
+        "full",
+        "full",
+        0.0002
+      ],
+      "gate_accepted_blocks": 2,
+      "b13_tuned_blocks": 3,
+      "b13": {
+        "time": 0.9571492877492878,
+        "recall": 0.9968253968253968,
+        "safety": 0.9964912280701754,
+        "miss_rate": 0.0014245014245014246
+      },
+      "product": {
+        "time": 0.9118913105413106,
+        "recall": 0.9809523809523809,
+        "safety": 0.9789473684210527,
+        "miss_rate": 0.008547008547008548
+      }
+    },
+    "sonarqube": {
+      "set": "confirmatory",
+      "evaluation_failing_commits": 116,
+      "eligible": true,
+      "fit_failures": 0,
+      "thresholds": [
+        "full",
+        "full",
+        0.0005,
+        0.0001,
+        "full"
+      ],
+      "gate_accepted_blocks": 0,
+      "b13_tuned_blocks": 2,
+      "b13": {
+        "time": 0.9962955006337135,
+        "recall": 1.0,
+        "safety": 1.0,
+        "miss_rate": 0.0
+      },
+      "product": {
+        "time": 1.0,
+        "recall": 1.0,
+        "safety": 1.0,
+        "miss_rate": 0.0
+      }
+    },
+    "titan": {
+      "set": "confirmatory",
+      "evaluation_failing_commits": 53,
+      "eligible": true,
+      "fit_failures": 0,
+      "thresholds": [
+        "full",
+        "full",
+        "full",
+        "full",
+        "full"
+      ],
+      "gate_accepted_blocks": 1,
+      "b13_tuned_blocks": 0,
+      "b13": {
+        "time": 1.0,
+        "recall": 1.0,
+        "safety": 1.0,
+        "miss_rate": 0.0
+      },
+      "product": {
+        "time": 0.9671863874345549,
+        "recall": 0.967391304347826,
+        "safety": 0.9811320754716981,
+        "miss_rate": 0.005235602094240838
+      }
+    }
+  },
+  "confirmatory": {
+    "projects": [
+      "buck",
+      "cloudify",
+      "deeplearning4j",
+      "dspace",
+      "jetty.project",
+      "okhttp",
+      "sling",
+      "sonarqube",
+      "titan"
+    ],
+    "b13_minus_product": {
+      "time": {
+        "estimate": -0.0361,
+        "ci": [
+          -0.0414,
+          -0.0308
+        ]
+      },
+      "recall": {
+        "estimate": 0.0053,
+        "ci": [
+          -0.0026,
+          0.0153
+        ]
+      },
+      "safety": {
+        "estimate": 0.0054,
+        "ci": [
+          -0.0025,
+          0.0142
+        ]
+      }
+    },
+    "projects_keeping_target": {
+      "b13": 8,
+      "needed": 7,
+      "product": 8
+    },
+    "tuned_blocks": {
+      "commits": 3941,
+      "miss_rate": 0.005074854097944684,
+      "wilson_upper": 0.007306264027031162,
+      "failing_commits": 745,
+      "failing_miss_rate": 0.026845637583892617,
+      "failing_wilson_upper": 0.038430082001398747
+    },
+    "verdict": "B13f saves time",
+    "pooled_commits": {
+      "b13": {
+        "time": 0.8854911583448624,
+        "recall": 0.9939265107804434,
+        "safety": 0.9852832965415746,
+        "miss_rate": 0.002515406867060747
+      },
+      "product": {
+        "time": 0.9385656521192303,
+        "recall": 0.9896750683267537,
+        "safety": 0.9764532744665195,
+        "miss_rate": 0.004024650987297196
+      }
+    },
+    "note": "exploratory: the B13 design used the confirmatory gate evidence"
+  },
+  "exploratory": {
+    "projects": [],
+    "verdict": "inconclusive",
+    "note": "exploratory: the B13 design used the confirmatory gate evidence"
+  }
+}

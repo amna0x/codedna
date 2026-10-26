@@ -1,0 +1,7 @@
+{
+  "tests": 4000,
+  "old_seconds": 6.621856400000979,
+  "new_seconds": 0.02990450000652345,
+  "speedup": 221.4334430790172,
+  "full_decision_exactly_equal": true
+}

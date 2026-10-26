@@ -96,10 +96,7 @@ def decide(rows: list[Row], probabilities: list[float], policy: RiskPolicy, *,
     if target is not None and _skip_risk(prob, selected) > target:
         before = _skip_risk(prob, selected)
         if policy.budget is None or policy.fallback:
-            for row in order:
-                if _skip_risk(prob, selected) <= target:
-                    break
-                selected.add(row.test_id)
+            _extend_to_risk_target(prob, selected, order, target)
             if policy.budget is None:
                 reasons.append(f"added tests until estimated skip risk ≤ {target:.3f}")
             else:
@@ -110,6 +107,27 @@ def decide(rows: list[Row], probabilities: list[float], policy: RiskPolicy, *,
             reasons.append(f"estimated skip risk {before:.3f} is above target {target:.3f} "
                            "(fallback disabled)")
     return _decision(rows, selected, prob, cost, total_cost, fallback, reasons)
+
+
+def _extend_to_risk_target(prob, selected, order, target):
+    """Find the shortest acceptable prefix without rescanning once per test.
+
+    Adding a test cannot increase skip risk. Binary search therefore chooses
+    the same prefix as the original forward scan, using O(log n) risk scans.
+    Each probe keeps the original probability iteration and arithmetic, so
+    comparisons at floating-point threshold boundaries remain unchanged.
+    An incomplete caller order is exhausted if it cannot meet the target.
+    """
+    ids = [row.test_id for row in order]
+    low, high = 0, len(ids)
+    while low < high:
+        middle = (low + high) // 2
+        candidate = selected.union(ids[:middle])
+        if _skip_risk(prob, candidate) <= target:
+            high = middle
+        else:
+            low = middle + 1
+    selected.update(ids[:low])
 
 
 def _unfamiliar(rows: list[Row], policy: RiskPolicy) -> str | None:
