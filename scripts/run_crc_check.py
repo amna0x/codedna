@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import importlib.util
 import json
+import math
 import platform
 import random
 from importlib.metadata import version
@@ -22,6 +23,8 @@ from codedna.selection.risk import RiskPolicy, decide
 from codedna.test_history.features import Dataset
 
 ALPHA = .05
+# "Saves time" needs the target kept on this share of projects (the protocols' 3 of 4).
+KEEP_SHARE = .75
 CODE = ['scripts/run_crc_check.py', 'docs/CRC_STOP_PROTOCOL.md',
         'backend/codedna/selection/conformal.py', 'scripts/run_rolling_evidence.py',
         'backend/codedna/selection/live.py', 'backend/codedna/selection/risk.py',
@@ -93,16 +96,24 @@ def evaluate(dataset, rolling, conditional=False):
     return report
 
 
-def run(root, inputs, out, conditional=False):
+def required_keeps(projects, share=KEEP_SHARE):
+    """Projects that must keep the target for "saves time": 3 of 4, 7 of 9 (rounded up)."""
+    return math.ceil(share * projects)
+
+
+def run(root, inputs, out, conditional=False, protocol=None):
     rolling, study = load(root, 'run_rolling_evidence'), load(root, 'run_study')
     out.mkdir(parents=True, exist_ok=True)
-    config = {'protocol': 'docs/CRC_CONDITIONAL_PROTOCOL.md' if conditional
-              else 'docs/CRC_STOP_PROTOCOL.md', 'conditional': conditional, 'alpha': ALPHA,
+    protocol = protocol or ('docs/CRC_CONDITIONAL_PROTOCOL.md' if conditional
+                            else 'docs/CRC_STOP_PROTOCOL.md')
+    code = CODE + ([protocol] if protocol not in CODE else [])
+    config = {'protocol': protocol, 'conditional': conditional, 'alpha': ALPHA,
+              'keep_share': KEEP_SHARE,
               'grid': ['full' if v is None else v for v in conformal.GRID],
               'python': platform.python_version(),
               'packages': {n: version(n) for n in ['scikit-learn', 'numpy']},
               'input_sha256': {n: digest(p) for n, p in sorted(inputs.items())},
-              'code_sha256': {n: digest(root / n) for n in CODE}}
+              'code_sha256': {n: digest(root / n) for n in code}}
     config_path = out / 'config.json'
     if config_path.exists() and json.loads(config_path.read_text()) != config:
         raise ValueError('Protocol, code or inputs changed; use a new output folder')
@@ -145,7 +156,7 @@ def run(root, inputs, out, conditional=False):
             ci = entry['b12_minus_product']['time']['ci']
             if len(names) < 3 or ci is None:
                 entry['verdict'] = 'inconclusive'
-            elif ci[1] < 0 and keeps['b12'] >= 3:
+            elif ci[1] < 0 and keeps['b12'] >= required_keeps(len(names)):
                 entry['verdict'] = f'{label} saves time'
             elif ci[0] > 0:
                 entry['verdict'] = f'{label} costs time'
@@ -188,11 +199,13 @@ if __name__ == '__main__':
     parser.add_argument('--out', type=Path)
     parser.add_argument('--conditional', action='store_true',
                         help='B12f: tune on failing audit commits only')
+    parser.add_argument('--protocol',
+                        help='protocol file fixed before this run (recorded and fingerprinted)')
     args = parser.parse_args()
     args.out = args.out or Path('experiments/results/' + (
         'crc-conditional-2026-10-26' if args.conditional else 'crc-check-2026-10-26'))
     found = {p.parent.name: p for p in sorted(args.datasets.glob('*/dataset.csv'))}
     if not found:
         parser.error('no <project>/dataset.csv files found')
-    run(Path.cwd(), found, args.out, args.conditional)
+    run(Path.cwd(), found, args.out, args.conditional, args.protocol)
     print('Completed ' + str(args.out / 'summary.md'), flush=True)

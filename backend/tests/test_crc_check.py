@@ -64,6 +64,13 @@ def test_runner_refuses_changed_protocol(repo):
         check.run(repo.path, {'newproject': new}, out)
 
 
+def test_saves_time_needs_the_target_on_three_quarters_of_projects():
+    check = load()
+    assert check.required_keeps(4) == 3  # the 4-project protocols' rule
+    assert check.required_keeps(9) == 7  # 3 of 9 is not enough
+    assert check.required_keeps(1) == 1
+
+
 def test_conditional_mode_tunes_on_failing_audit_commits_only(monkeypatch):
     check = load()
     rolling = check.load(ROOT, 'run_rolling_evidence')
