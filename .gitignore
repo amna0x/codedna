@@ -45,3 +45,6 @@ node_modules/
 
 # Target-project history and local execution output
 .codedna/
+
+# Agent brake study checkpoints (rebuilt by `run`)
+experiments/results/agent-brake-swebench-*/partial/
