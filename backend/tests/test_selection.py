@@ -84,6 +84,16 @@ def test_dependency_strategy_follows_static_graph(history):
     assert report.selection_ratio == pytest.approx(2 / 3, abs=1e-4)
 
 
+def test_shared_parse_cache_gives_the_same_selection(history):
+    repo, base, head, _ = history
+    cache: dict = {}
+    first = select_tests(repo.path, base, head, "dependency", cache=cache)
+    assert cache  # parses were stored by blob SHA
+    again = select_tests(repo.path, base, head, "dependency", cache=cache)
+    plain = select_tests(repo.path, base, head, "dependency")
+    assert first.to_dict() == again.to_dict() == plain.to_dict()
+
+
 def test_coverage_strategy_is_method_precise(history):
     repo, base, head, cov = history
     report = select_tests(repo.path, base, head, "coverage", coverage_map=cov)

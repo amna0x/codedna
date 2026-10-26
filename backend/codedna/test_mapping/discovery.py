@@ -1,10 +1,16 @@
-"""Static discovery of JUnit 4/5 test classes in one commit.
+"""Static discovery of JUnit 3/4/5 test classes in one commit.
 
 A *test class* is a top-level, non-abstract class that has test methods
 (annotated ``@Test``, ``@ParameterizedTest``, ``@RepeatedTest``,
 ``@TestFactory`` or ``@TestTemplate``), either declared directly, in
 ``@Nested`` inner classes, or inherited from a test base class found through
 the dependency graph's ``extends`` edges.
+
+JUnit 3 style (D-064): in a class that extends ``junit.framework.TestCase``,
+or a repository base class annotated ``@TestMethodProviders`` with a JUnit 3
+method provider (randomizedtesting, used by Lucene), directly or through
+repository ancestors, every ``public void test*()`` method with no
+parameters is a test method too, as JUnit 3 and Surefire run them.
 
 Discovery is syntactic. It also reports whether the build would run the class
 by default, from the static build layout (``build.py``): Maven modules with
@@ -79,6 +85,8 @@ class _TypeInfo:
     is_class: bool
     nested_annotation: bool
     test_methods: list[str]
+    junit3_methods: list[str] = field(default_factory=list)  # public void test*() candidates
+    junit3_root: bool = False  # extends junit.framework.TestCase or declares a JUnit 3 provider
 
 
 def discover_tests(repo_path: str | Path, revision: str = "HEAD") -> DiscoveryReport:
@@ -87,7 +95,8 @@ def discover_tests(repo_path: str | Path, revision: str = "HEAD") -> DiscoveryRe
     return discover_tests_for_commit(repo, commit)
 
 
-def discover_tests_for_commit(repo: Path, commit: str) -> DiscoveryReport:
+def discover_tests_for_commit(repo: Path, commit: str, *, cache: dict | None = None) -> DiscoveryReport:
+    """``cache``: optional parse cache keyed by blob SHA, shared with graph builds."""
     files = list_files(repo, commit, ".java")
     contents = read_blobs(repo, sorted({blob for _, blob in files}))
     types: dict[str, _TypeInfo] = {}
@@ -105,28 +114,39 @@ def discover_tests_for_commit(repo: Path, commit: str) -> DiscoveryReport:
     layout = detect_build(repo, commit)
     if layout.tool:
         warnings.extend(layout.warnings)
-    superclasses = _superclasses(repo, commit)
+    superclasses = _superclasses(repo, commit, cache)
     tests: list[DiscoveredTest] = []
     for info in types.values():
         if info.id != info.top_level or not info.is_class or info.is_abstract:
             continue
+        ancestors = _ancestors(info.id, superclasses)
+        junit3 = info.junit3_root or any(
+            types[base].junit3_root for base in ancestors if base in types)
         methods = list(info.test_methods)
+        if junit3:
+            methods.extend(m for m in info.junit3_methods if m not in methods)
         # @Nested inner classes run as part of their top-level class.
         for nested in types.values():
             if nested.top_level == info.id and nested.id != info.id and nested.nested_annotation:
                 prefix = nested.id.removeprefix(f"{info.id}.")
                 methods.extend(f"{prefix}.{m}" for m in nested.test_methods)
         inherited_from = []
-        for base in _ancestors(info.id, superclasses):
+        for base in ancestors:
             base_info = types.get(base)
-            if base_info is not None and base_info.test_methods:
+            if base_info is None:
+                continue
+            base_methods = list(base_info.test_methods)
+            if junit3:
+                base_methods.extend(m for m in base_info.junit3_methods if m not in base_methods)
+            if base_methods:
                 inherited_from.append(base)
-                methods.extend(f"{base}#{m}" for m in base_info.test_methods)
+                methods.extend(f"{base}#{m}" for m in base_methods)
         if not methods:
             continue
         name = PurePosixPath(info.file).stem
         tests.append(DiscoveredTest(
-            id=info.id, file=info.file, framework=frameworks.get(info.file, "unknown"),
+            id=info.id, file=info.file,
+            framework=_framework(frameworks.get(info.file, "unknown"), junit3, info.test_methods),
             methods=methods, inherited_from=inherited_from,
             in_test_sources="/src/test/java/" in f"/{info.file}"
             or bool(layout.tool and layout.module_of(info.file) is not None),
@@ -142,8 +162,8 @@ def discover_tests_for_commit(repo: Path, commit: str) -> DiscoveryReport:
                            layout.tool)
 
 
-def _superclasses(repo: Path, commit: str) -> dict[str, list[str]]:
-    graph = build_graph_for_commit(repo, commit, include_members=False)
+def _superclasses(repo: Path, commit: str, cache: dict | None = None) -> dict[str, list[str]]:
+    graph = build_graph_for_commit(repo, commit, include_members=False, cache=cache)
     parents: dict[str, list[str]] = {}
     for edge in graph.edges.values():
         if edge.kind == "extends":
@@ -168,11 +188,17 @@ def _scan_file(path: str, source: bytes) -> tuple[str, list[_TypeInfo]]:
     root = Parser(_LANGUAGE).parse(source).root_node
     package = None
     framework = "unknown"
+    junit3_imports = set()  # "TestCase" (single import) or "*" (junit.framework.*)
     for child in root.children:
         if child.type == "package_declaration":
             package = "".join(_text(child).removeprefix("package").rstrip(";").split())
         elif child.type == "import_declaration":
             text = _text(child)
+            imported = "".join(text.removeprefix("import").rstrip(";").split())
+            if imported == "junit.framework.TestCase":
+                junit3_imports.add("TestCase")
+            elif imported == "junit.framework.*":
+                junit3_imports.add("*")
             if "org.junit.jupiter" in text:
                 framework = "junit5"
             elif "org.junit." in text and framework == "unknown":
@@ -190,14 +216,18 @@ def _scan_file(path: str, source: bytes) -> tuple[str, list[_TypeInfo]]:
             id=type_id, file=path, top_level=top_level or type_id,
             is_abstract="abstract" in modifiers, is_class=node.type == "class_declaration",
             nested_annotation="Nested" in annotations, test_methods=[],
+            junit3_root=_extends_junit3(node, junit3_imports) or _junit3_provider(node),
         )
         found.append(info)
         body = node.child_by_field_name("body")
         for member in body.children if body is not None else ():
             if member.type == "method_declaration":
-                method_annotations, _ = _modifiers(member)
+                method_annotations, method_modifiers = _modifiers(member)
+                method_name = _text(member.child_by_field_name("name"))
                 if method_annotations & TEST_ANNOTATIONS:
-                    info.test_methods.append(_text(member.child_by_field_name("name")))
+                    info.test_methods.append(method_name)
+                elif _junit3_candidate(member, method_name, method_modifiers):
+                    info.junit3_methods.append(method_name)
             elif member.type in TYPE_NODES:
                 visit(member, type_id, info.top_level)
 
@@ -205,6 +235,43 @@ def _scan_file(path: str, source: bytes) -> tuple[str, list[_TypeInfo]]:
         if child.type in TYPE_NODES:
             visit(child, None, None)
     return framework, found
+
+
+def _framework(file_framework: str, junit3: bool, annotated: list[str]) -> str:
+    if junit3 and file_framework == "unknown" and not annotated:
+        return "junit3"
+    return file_framework
+
+
+def _extends_junit3(node: Node, junit3_imports: set[str]) -> bool:
+    """Does this class directly extend ``junit.framework.TestCase``?"""
+    superclass = node.child_by_field_name("superclass")
+    if node.type != "class_declaration" or superclass is None:
+        return False
+    name = "".join(_text(superclass).removeprefix("extends").split()).split("<", 1)[0]
+    return name == "junit.framework.TestCase" or (name == "TestCase" and bool(junit3_imports))
+
+
+def _junit3_provider(node: Node) -> bool:
+    """``@TestMethodProviders({...JUnit3MethodProvider...})`` (randomizedtesting)."""
+    for child in node.children:
+        if child.type != "modifiers":
+            continue
+        for item in child.children:
+            if (item.type == "annotation"
+                    and _text(item.child_by_field_name("name")).rsplit(".", 1)[-1] == "TestMethodProviders"
+                    and "JUnit3MethodProvider" in _text(item.child_by_field_name("arguments"))):
+                return True
+    return False
+
+
+def _junit3_candidate(method: Node, name: str, modifiers: set[str]) -> bool:
+    """JUnit 3 test method shape: ``public void test*()``, not static or abstract."""
+    parameters = method.child_by_field_name("parameters")
+    return (name.startswith("test") and "public" in modifiers
+            and not modifiers & {"static", "abstract"}
+            and _text(method.child_by_field_name("type")) == "void"
+            and parameters is not None and parameters.named_child_count == 0)
 
 
 def _modifiers(node: Node) -> tuple[set[str], set[str]]:

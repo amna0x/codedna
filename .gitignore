@@ -28,6 +28,7 @@ experiments/datasets/raw/
 experiments/datasets/private/
 experiments/datasets/derived/
 experiments/datasets/confirmatory/
+experiments/datasets/swebench-multilingual/
 # Study feature datasets are rebuilt by scripts/run_study.py (SHA-256 in each report)
 experiments/results/study*/*/dataset.csv
 *.sqlite
@@ -44,3 +45,6 @@ node_modules/
 
 # Target-project history and local execution output
 .codedna/
+
+# Agent brake study checkpoints (rebuilt by `run`)
+experiments/results/agent-brake-swebench-*/partial/

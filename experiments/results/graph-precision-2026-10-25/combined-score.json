@@ -1,0 +1,38 @@
+{
+  "samples": [
+    "experiments/results/graph-precision-2026-10-25/hikari-sample.csv",
+    "experiments/results/graph-precision-2026-10-25/littleproxy-sample.csv"
+  ],
+  "by_confidence": {
+    "confirmed": {
+      "correct": 80,
+      "incorrect": 0,
+      "unclear": 0,
+      "precision": 1.0,
+      "wilson_95": [
+        0.9542,
+        1.0
+      ]
+    },
+    "all": {
+      "correct": 160,
+      "incorrect": 0,
+      "unclear": 0,
+      "precision": 1.0,
+      "wilson_95": [
+        0.9766,
+        1.0
+      ]
+    },
+    "heuristic": {
+      "correct": 80,
+      "incorrect": 0,
+      "unclear": 0,
+      "precision": 1.0,
+      "wilson_95": [
+        0.9542,
+        1.0
+      ]
+    }
+  }
+}

@@ -1059,3 +1059,145 @@ of recorded commits) and a Wilson upper bound at or under 5%, so in practice
 a few hundred recorded commits. A synthetic check (240 commits, one test failing every
 third commit, scratch script only, not evidence) reached `validated_history`
 from recorded runs alone; real projects will differ.
+
+**Fix (with D-059).** Once `.codedna/.gitignore` existed, a worktree
+snapshot failed: Git refuses an `:(exclude)` pathspec that names an ignored
+path. The snapshot now excludes only outputs that `git ls-files` actually
+lists (outputs from before the ignore file existed).
+
+## D-058 — Graph precision check and four resolution fixes
+
+(D-054 to D-057 are taken by open branches: the `codedna-java` plugin split
+and the project-history fixes.)
+
+**Check (M2).** 160 dependency edges (40 confirmed + 40 heuristic from each
+of HikariCP a4d93f4f and LittleProxy 70edbe1c, seed 0) were labelled against
+the source: 160 correct, so precision is 1.00 with a 95 % Wilson interval of
+[0.954, 1.00] for each label. Missed references were found by sorting every
+unresolved name into groups. Method, data and the AI-made labels (to be
+spot-checked by a student) are in
+`experiments/results/graph-precision-2026-10-25/`; tools are
+`scripts/sample_graph_edges.py` and `scripts/score_graph_sample.py`.
+
+**Fixes to D-010 found by the check** (`dependency_graph/builder.py`):
+
+- `var` is skipped. It infers a local variable's type and names no type; it
+  was 260 of HikariCP's 546 unresolved references.
+- `java.lang` is the full list of public top-level types in JDK 21 (107
+  names) instead of 42, so names like `ClassNotFoundException` count as
+  external, not unresolved.
+- Static imports bring member types: `import static a.T.*` makes `T`'s
+  member types candidates on the same footing as type wildcards (heuristic);
+  `import static a.T.Nested` resolves `Nested` like a single-type import
+  (confirmed).
+- Member types inherited from repository supertypes are in scope, after the
+  type's own members, at each enclosing level, transitively; generic
+  arguments are ignored and cycles stop. These edges are heuristic because
+  hiding rules and library supertypes are not checked. As in Java, an
+  inherited member type shadows a `java.lang` name. HikariCP's
+  `SQLExceptionOverride.Override` was silently resolved to the JDK annotation
+  before.
+
+Review follow-ups (same PR): a single static import of a library name
+(`import static java.util.Map.Entry`) can shadow a same-package type, so that
+edge is heuristic, not confirmed; and the `java.lang` names added after Java 8
+(`Record`, `Module`, `StackWalker`, ...) give way to a single wildcard-imported
+repository type of the same name (heuristic), because on Java 8 that is what
+the code means.
+
+Effect: the unresolved rate goes from 0.264 to 0.139 (HikariCP) and from
+0.103 to 0.070 (LittleProxy), and dependency edges go from 668 to 676 and
+from 479 to 502. Structural features (`dep_reachable`, `dep_distance`,
+`dep_confirmed`) of datasets built from now on can differ slightly from the
+saved study datasets. The saved study results and the live risk gate are
+unaffected: the gate uses no structural features (D-041). Local classes stay
+unresolved by design (D-009).
+
+## D-059 — Test brake for AI coding agents (`codedna mcp`)
+
+**What.** `codedna mcp` is a Model Context Protocol server on stdin/stdout,
+so coding agents (Claude Code, Cursor, Codex and others) can ask CodeDNA
+before they say a change is done. Tools:
+
+- `codedna_plan_tests` — the tests that must run for BASE..HEAD (default:
+  uncommitted changes), a reason for each, and the skip risk. It is the live
+  recommendation (D-041) with the must-run policy (D-050): without validated
+  history it lists every test, so the brake never skips on a guess.
+- `codedna_impact` — the impact report with confirmed and heuristic links
+  apart and the changed files CodeDNA cannot analyse.
+- `codedna_check` — runs the planned tests and gives one verdict: `passed`,
+  `blocked` (a listed test failed), `incomplete` (a listed test has no
+  result, the build exited with an error or timed out, or every listed test
+  was skipped), `nothing_to_run` (validated history says no test needs to
+  run) or `no_tests` (the build runs no tests). A whole-suite check
+  of a commit on the first-parent line is recorded as history (D-053);
+  uncommitted states never are.
+
+**Consent.** `plan` and `impact` read Git objects only. `check` executes the
+project's build, so it is listed only when the person starts the server with
+`--allow-build --repo PATH`, and it then serves that one repository whatever
+path the agent sends. `brake.check` itself also refuses to run without
+`allow_build=True`, so other callers cannot skip the consent. An agent cannot turn it on (same rule as D-014).
+
+**No dependency.** Only the part of MCP that tools need is implemented
+(`initialize` with version negotiation, `ping`, `tools/list`, `tools/call`;
+newline-delimited JSON-RPC 2.0), so the core needs no MCP SDK. Errors in a
+tool come back as tool results with `isError`, protocol errors as JSON-RPC
+errors. Logs go to stderr.
+
+**Limits.** The verdict covers the listed test classes only; `passed` with
+unvalidated history means the whole suite passed, not that the change is
+correct. The brake is language-neutral and uses the installed language
+plugin (Java first). Whether agents finish with fewer broken changes when
+they use it is a research question still to be measured (planned SWE-bench
+Java study); no result is claimed here.
+
+## D-062 — Agent brake study on public SWE-bench Java patches
+
+**What.** An offline check of the brake (D-059) on agent patches that are
+already public: the SWE-bench Multilingual Java instances (gson, druid,
+lucene, lombok, RxJava, javaparser) of every submission in
+`SWE-bench/experiments` (14 mini-SWE-agent runs with different models). For
+each patch the harness applied, CodeDNA computes the test plan for the
+agent's change and checks whether it contains the benchmark test classes the
+harness saw fail. Protocol fixed before results:
+[AGENT_BRAKE_STUDY_PROTOCOL.md](AGENT_BRAKE_STUDY_PROTOCOL.md); tool:
+`scripts/swebench_brake_study.py`.
+
+**Why this way.** It needs no paid API and no build: patches and harness
+reports are public, and CodeDNA reads Git objects only (`eval.sh` is parsed
+as text, never run). Paying for our own agent runs is out of budget.
+
+**What it cannot show.** Whether agents end with fewer broken changes when
+they use the brake; the harness runs only the benchmark's test files, so
+other regressions are unknown. Downloaded data stays out of Git
+(`experiments/datasets/swebench-multilingual/`); every file's SHA-256 and
+the `SWE-bench/experiments` commit are recorded.
+
+## D-064 — JUnit 3 tests and moved Gradle test folders in discovery
+
+**What.** Test discovery (`test_mapping/discovery.py`) also finds JUnit 3
+style tests: in a class that extends `junit.framework.TestCase` (imported,
+by wildcard, or fully qualified), or whose repository ancestor does, every
+`public void test*()` method without parameters, not static or abstract, is
+a test method. The same holds below a repository base class annotated
+`@TestMethodProviders` with a JUnit 3 method provider (randomizedtesting,
+which Lucene uses). Such classes get framework `junit3` unless their file
+uses JUnit 4/5 annotations. The Gradle layout (`test_mapping/build.py`) reads
+`test.java.srcDirs = [...]`, `+= [...]` and `test.java.srcDir(...)` from the
+`.gradle` scripts: in a module's own build script for that module, in any
+other script for every module, with a warning that the reading is syntactic.
+
+**Why.** The agent brake study (D-062) showed that every catch the plan
+missed was a test CodeDNA did not see, not a wrong selection: gson's tests
+before 2023 are JUnit 3, and Lucene's tests use JUnit 3 naming under
+`src/test` set by a shared Gradle script, so discovery found 1 to 20 gson
+classes and no Lucene classes. Surefire and Gradle run these tests by
+default, so the plan and the full-suite fallback (D-041) left them out.
+
+**Limits.** Syntactic, like the rest of discovery: a `TestCase` imported
+from elsewhere under the same name is not told apart from a same-package
+class of that name; Gradle source sets set programmatically or inside
+`sourceSets { test { java { ... } } }` blocks are not read. Results computed
+before this change (the D-062 primary run records its CodeDNA commit) keep
+the old discovery; the study's follow-up run is labelled as post hoc.

@@ -1,0 +1,747 @@
+{
+  "statuses": {
+    "analysed": 509,
+    "no_patch": 62,
+    "instance_error": 14,
+    "not_applied": 3
+  },
+  "all": {
+    "pairs": 509,
+    "failing_pairs": 149,
+    "failing_pairs_mapped": 149,
+    "a1_catch": [
+      108,
+      149
+    ],
+    "a1_catch_ci": [
+      0.6482,
+      0.7902
+    ],
+    "a2_catch": [
+      108,
+      149
+    ],
+    "a2_catch_ci": [
+      0.6482,
+      0.7902
+    ],
+    "a2_ratio_median": 0.875,
+    "a2_ratio_iqr": [
+      0.0149,
+      0.8901
+    ],
+    "a2_retest_all_share": 0.0059,
+    "pairs_without_tests": 180,
+    "a2_reach": [
+      221,
+      360
+    ],
+    "a2_reach_ci": [
+      0.5626,
+      0.6627
+    ],
+    "unmapped_tests": 0
+  },
+  "by_repository": {
+    "apache/druid": {
+      "pairs": 67,
+      "failing_pairs": 32,
+      "failing_pairs_mapped": 32,
+      "a1_catch": [
+        32,
+        32
+      ],
+      "a1_catch_ci": [
+        0.8928,
+        1.0
+      ],
+      "a2_catch": [
+        32,
+        32
+      ],
+      "a2_catch_ci": [
+        0.8928,
+        1.0
+      ],
+      "a2_ratio_median": 0.1812,
+      "a2_ratio_iqr": [
+        0.0722,
+        0.2968
+      ],
+      "a2_retest_all_share": 0.0448,
+      "pairs_without_tests": 0,
+      "a2_reach": [
+        35,
+        35
+      ],
+      "a2_reach_ci": [
+        0.9011,
+        1.0
+      ],
+      "unmapped_tests": 0
+    },
+    "apache/lucene": {
+      "pairs": 123,
+      "failing_pairs": 23,
+      "failing_pairs_mapped": 23,
+      "a1_catch": [
+        23,
+        23
+      ],
+      "a1_catch_ci": [
+        0.8569,
+        1.0
+      ],
+      "a2_catch": [
+        23,
+        23
+      ],
+      "a2_catch_ci": [
+        0.8569,
+        1.0
+      ],
+      "a2_ratio_median": 0.0132,
+      "a2_ratio_iqr": [
+        0.0013,
+        0.9981
+      ],
+      "a2_retest_all_share": 0.0,
+      "pairs_without_tests": 0,
+      "a2_reach": [
+        100,
+        100
+      ],
+      "a2_reach_ci": [
+        0.963,
+        1.0
+      ],
+      "unmapped_tests": 0
+    },
+    "google/gson": {
+      "pairs": 113,
+      "failing_pairs": 53,
+      "failing_pairs_mapped": 53,
+      "a1_catch": [
+        53,
+        53
+      ],
+      "a1_catch_ci": [
+        0.9324,
+        1.0
+      ],
+      "a2_catch": [
+        53,
+        53
+      ],
+      "a2_catch_ci": [
+        0.9324,
+        1.0
+      ],
+      "a2_ratio_median": 0.8814,
+      "a2_ratio_iqr": [
+        0.875,
+        0.8871
+      ],
+      "a2_retest_all_share": 0.0,
+      "pairs_without_tests": 0,
+      "a2_reach": [
+        60,
+        60
+      ],
+      "a2_reach_ci": [
+        0.9398,
+        1.0
+      ],
+      "unmapped_tests": 0
+    },
+    "javaparser/javaparser": {
+      "pairs": 26,
+      "failing_pairs": 0,
+      "failing_pairs_mapped": 0,
+      "a1_catch": [
+        0,
+        0
+      ],
+      "a1_catch_ci": null,
+      "a2_catch": [
+        0,
+        0
+      ],
+      "a2_catch_ci": null,
+      "a2_ratio_median": 0.7537,
+      "a2_ratio_iqr": [
+        0.5204,
+        0.987
+      ],
+      "a2_retest_all_share": 0.0,
+      "pairs_without_tests": 0,
+      "a2_reach": [
+        26,
+        26
+      ],
+      "a2_reach_ci": [
+        0.8713,
+        1.0
+      ],
+      "unmapped_tests": 0
+    },
+    "projectlombok/lombok": {
+      "pairs": 180,
+      "failing_pairs": 41,
+      "failing_pairs_mapped": 41,
+      "a1_catch": [
+        0,
+        41
+      ],
+      "a1_catch_ci": [
+        -0.0,
+        0.0857
+      ],
+      "a2_catch": [
+        0,
+        41
+      ],
+      "a2_catch_ci": [
+        -0.0,
+        0.0857
+      ],
+      "a2_ratio_median": null,
+      "a2_ratio_iqr": null,
+      "a2_retest_all_share": 0.0,
+      "pairs_without_tests": 180,
+      "a2_reach": [
+        0,
+        139
+      ],
+      "a2_reach_ci": [
+        0.0,
+        0.0269
+      ],
+      "unmapped_tests": 0
+    }
+  },
+  "by_submission": {
+    "20260213_mini-v2.0.0a0_claude-4-5-haiku": {
+      "pairs": 41,
+      "failing_pairs": 14,
+      "failing_pairs_mapped": 14,
+      "a1_catch": [
+        10,
+        14
+      ],
+      "a1_catch_ci": [
+        0.4535,
+        0.8828
+      ],
+      "a2_catch": [
+        10,
+        14
+      ],
+      "a2_catch_ci": [
+        0.4535,
+        0.8828
+      ],
+      "a2_ratio_median": 0.875,
+      "a2_ratio_iqr": [
+        0.0427,
+        0.8962
+      ],
+      "a2_retest_all_share": 0.0,
+      "pairs_without_tests": 16,
+      "a2_reach": [
+        15,
+        27
+      ],
+      "a2_reach_ci": [
+        0.3731,
+        0.7241
+      ],
+      "unmapped_tests": 0
+    },
+    "20260213_mini-v2.0.0a0_claude-4-5-opus": {
+      "pairs": 38,
+      "failing_pairs": 6,
+      "failing_pairs_mapped": 6,
+      "a1_catch": [
+        5,
+        6
+      ],
+      "a1_catch_ci": [
+        0.4365,
+        0.9699
+      ],
+      "a2_catch": [
+        5,
+        6
+      ],
+      "a2_catch_ci": [
+        0.4365,
+        0.9699
+      ],
+      "a2_ratio_median": 0.875,
+      "a2_ratio_iqr": [
+        0.0427,
+        0.8962
+      ],
+      "a2_retest_all_share": 0.0,
+      "pairs_without_tests": 13,
+      "a2_reach": [
+        20,
+        32
+      ],
+      "a2_reach_ci": [
+        0.4525,
+        0.7707
+      ],
+      "unmapped_tests": 0
+    },
+    "20260213_mini-v2.0.0a0_claude-4-5-sonnet": {
+      "pairs": 41,
+      "failing_pairs": 11,
+      "failing_pairs_mapped": 11,
+      "a1_catch": [
+        6,
+        11
+      ],
+      "a1_catch_ci": [
+        0.2801,
+        0.7873
+      ],
+      "a2_catch": [
+        6,
+        11
+      ],
+      "a2_catch_ci": [
+        0.2801,
+        0.7873
+      ],
+      "a2_ratio_median": 0.875,
+      "a2_ratio_iqr": [
+        0.0427,
+        0.8962
+      ],
+      "a2_retest_all_share": 0.0,
+      "pairs_without_tests": 16,
+      "a2_reach": [
+        19,
+        30
+      ],
+      "a2_reach_ci": [
+        0.4551,
+        0.7813
+      ],
+      "unmapped_tests": 0
+    },
+    "20260213_mini-v2.0.0a0_claude-4-6-opus": {
+      "pairs": 39,
+      "failing_pairs": 10,
+      "failing_pairs_mapped": 10,
+      "a1_catch": [
+        9,
+        10
+      ],
+      "a1_catch_ci": [
+        0.5958,
+        0.9821
+      ],
+      "a2_catch": [
+        9,
+        10
+      ],
+      "a2_catch_ci": [
+        0.5958,
+        0.9821
+      ],
+      "a2_ratio_median": 0.875,
+      "a2_ratio_iqr": [
+        0.0427,
+        0.8962
+      ],
+      "a2_retest_all_share": 0.0,
+      "pairs_without_tests": 14,
+      "a2_reach": [
+        16,
+        29
+      ],
+      "a2_reach_ci": [
+        0.3755,
+        0.7159
+      ],
+      "unmapped_tests": 0
+    },
+    "20260213_mini-v2.0.0a0_deepseek-3-2": {
+      "pairs": 29,
+      "failing_pairs": 15,
+      "failing_pairs_mapped": 15,
+      "a1_catch": [
+        13,
+        15
+      ],
+      "a1_catch_ci": [
+        0.6212,
+        0.9626
+      ],
+      "a2_catch": [
+        13,
+        15
+      ],
+      "a2_catch_ci": [
+        0.6212,
+        0.9626
+      ],
+      "a2_ratio_median": 0.875,
+      "a2_ratio_iqr": [
+        0.0279,
+        0.9628
+      ],
+      "a2_retest_all_share": 0.0345,
+      "pairs_without_tests": 5,
+      "a2_reach": [
+        11,
+        14
+      ],
+      "a2_reach_ci": [
+        0.5241,
+        0.9243
+      ],
+      "unmapped_tests": 0
+    },
+    "20260213_mini-v2.0.0a0_gemini-3-flash": {
+      "pairs": 40,
+      "failing_pairs": 7,
+      "failing_pairs_mapped": 7,
+      "a1_catch": [
+        2,
+        7
+      ],
+      "a1_catch_ci": [
+        0.0822,
+        0.6411
+      ],
+      "a2_catch": [
+        2,
+        7
+      ],
+      "a2_catch_ci": [
+        0.0822,
+        0.6411
+      ],
+      "a2_ratio_median": 0.875,
+      "a2_ratio_iqr": [
+        0.0279,
+        0.8992
+      ],
+      "a2_retest_all_share": 0.0,
+      "pairs_without_tests": 16,
+      "a2_reach": [
+        22,
+        33
+      ],
+      "a2_reach_ci": [
+        0.4961,
+        0.8025
+      ],
+      "unmapped_tests": 0
+    },
+    "20260213_mini-v2.0.0a0_gemini-3-pro": {
+      "pairs": 38,
+      "failing_pairs": 9,
+      "failing_pairs_mapped": 9,
+      "a1_catch": [
+        7,
+        9
+      ],
+      "a1_catch_ci": [
+        0.4526,
+        0.9368
+      ],
+      "a2_catch": [
+        7,
+        9
+      ],
+      "a2_catch_ci": [
+        0.4526,
+        0.9368
+      ],
+      "a2_ratio_median": 0.5968,
+      "a2_ratio_iqr": [
+        0.014,
+        0.8888
+      ],
+      "a2_retest_all_share": 0.0,
+      "pairs_without_tests": 14,
+      "a2_reach": [
+        17,
+        29
+      ],
+      "a2_reach_ci": [
+        0.4074,
+        0.7449
+      ],
+      "unmapped_tests": 0
+    },
+    "20260213_mini-v2.0.0a0_glm-5": {
+      "pairs": 14,
+      "failing_pairs": 2,
+      "failing_pairs_mapped": 2,
+      "a1_catch": [
+        2,
+        2
+      ],
+      "a1_catch_ci": [
+        0.3424,
+        1.0
+      ],
+      "a2_catch": [
+        2,
+        2
+      ],
+      "a2_catch_ci": [
+        0.3424,
+        1.0
+      ],
+      "a2_ratio_median": 0.1267,
+      "a2_ratio_iqr": [
+        0.0011,
+        0.998
+      ],
+      "a2_retest_all_share": 0.0,
+      "pairs_without_tests": 0,
+      "a2_reach": [
+        12,
+        12
+      ],
+      "a2_reach_ci": [
+        0.7575,
+        1.0
+      ],
+      "unmapped_tests": 0
+    },
+    "20260213_mini-v2.0.0a0_gpt-5-2-high": {
+      "pairs": 38,
+      "failing_pairs": 15,
+      "failing_pairs_mapped": 15,
+      "a1_catch": [
+        12,
+        15
+      ],
+      "a1_catch_ci": [
+        0.5481,
+        0.9295
+      ],
+      "a2_catch": [
+        12,
+        15
+      ],
+      "a2_catch_ci": [
+        0.5481,
+        0.9295
+      ],
+      "a2_ratio_median": 0.875,
+      "a2_ratio_iqr": [
+        0.0722,
+        0.9022
+      ],
+      "a2_retest_all_share": 0.0,
+      "pairs_without_tests": 15,
+      "a2_reach": [
+        11,
+        23
+      ],
+      "a2_reach_ci": [
+        0.2924,
+        0.6704
+      ],
+      "unmapped_tests": 0
+    },
+    "20260213_mini-v2.0.0a0_gpt-5-mini": {
+      "pairs": 34,
+      "failing_pairs": 18,
+      "failing_pairs_mapped": 18,
+      "a1_catch": [
+        11,
+        18
+      ],
+      "a1_catch_ci": [
+        0.3862,
+        0.7969
+      ],
+      "a2_catch": [
+        11,
+        18
+      ],
+      "a2_catch_ci": [
+        0.3862,
+        0.7969
+      ],
+      "a2_ratio_median": 0.5968,
+      "a2_ratio_iqr": [
+        0.0157,
+        0.8878
+      ],
+      "a2_retest_all_share": 0.0,
+      "pairs_without_tests": 12,
+      "a2_reach": [
+        11,
+        16
+      ],
+      "a2_reach_ci": [
+        0.444,
+        0.8584
+      ],
+      "unmapped_tests": 0
+    },
+    "20260213_mini-v2.0.0a0_kimi-k2-5": {
+      "pairs": 37,
+      "failing_pairs": 9,
+      "failing_pairs_mapped": 9,
+      "a1_catch": [
+        9,
+        9
+      ],
+      "a1_catch_ci": [
+        0.7009,
+        1.0
+      ],
+      "a2_catch": [
+        9,
+        9
+      ],
+      "a2_catch_ci": [
+        0.7009,
+        1.0
+      ],
+      "a2_ratio_median": 0.875,
+      "a2_ratio_iqr": [
+        0.0427,
+        0.9446
+      ],
+      "a2_retest_all_share": 0.027,
+      "pairs_without_tests": 12,
+      "a2_reach": [
+        16,
+        28
+      ],
+      "a2_reach_ci": [
+        0.3907,
+        0.7349
+      ],
+      "unmapped_tests": 0
+    },
+    "20260216_mini-v2.0.0a0_minimax-2-5": {
+      "pairs": 40,
+      "failing_pairs": 9,
+      "failing_pairs_mapped": 9,
+      "a1_catch": [
+        5,
+        9
+      ],
+      "a1_catch_ci": [
+        0.2667,
+        0.8112
+      ],
+      "a2_catch": [
+        5,
+        9
+      ],
+      "a2_catch_ci": [
+        0.2667,
+        0.8112
+      ],
+      "a2_ratio_median": 0.875,
+      "a2_ratio_iqr": [
+        0.0427,
+        0.9446
+      ],
+      "a2_retest_all_share": 0.025,
+      "pairs_without_tests": 15,
+      "a2_reach": [
+        20,
+        31
+      ],
+      "a2_reach_ci": [
+        0.4695,
+        0.7888
+      ],
+      "unmapped_tests": 0
+    },
+    "20260220_mini-v2.0.0_gpt-5-2-codex": {
+      "pairs": 41,
+      "failing_pairs": 15,
+      "failing_pairs_mapped": 15,
+      "a1_catch": [
+        13,
+        15
+      ],
+      "a1_catch_ci": [
+        0.6212,
+        0.9626
+      ],
+      "a2_catch": [
+        13,
+        15
+      ],
+      "a2_catch_ci": [
+        0.6212,
+        0.9626
+      ],
+      "a2_ratio_median": 0.875,
+      "a2_ratio_iqr": [
+        0.0427,
+        0.8962
+      ],
+      "a2_retest_all_share": 0.0,
+      "pairs_without_tests": 16,
+      "a2_reach": [
+        12,
+        26
+      ],
+      "a2_reach_ci": [
+        0.2876,
+        0.6454
+      ],
+      "unmapped_tests": 0
+    },
+    "20260902_mini-v2.4.6_gemini-3-5-flash": {
+      "pairs": 39,
+      "failing_pairs": 9,
+      "failing_pairs_mapped": 9,
+      "a1_catch": [
+        4,
+        9
+      ],
+      "a1_catch_ci": [
+        0.1888,
+        0.7333
+      ],
+      "a2_catch": [
+        4,
+        9
+      ],
+      "a2_catch_ci": [
+        0.1888,
+        0.7333
+      ],
+      "a2_ratio_median": 0.875,
+      "a2_ratio_iqr": [
+        0.0132,
+        0.8901
+      ],
+      "a2_retest_all_share": 0.0,
+      "pairs_without_tests": 16,
+      "a2_reach": [
+        19,
+        30
+      ],
+      "a2_reach_ci": [
+        0.4551,
+        0.7813
+      ],
+      "unmapped_tests": 0
+    }
+  },
+  "experiments_commit": "40f164d5b8f1d249bf95a6df8b74b577fd8e519d",
+  "manifest_sha256": "5c4d8c5f36603e82fdbbc5f45377517fb16bcb7009202676bfe4e0ffb81e10ee",
+  "codedna_commit": "5aae3f91710cbc99c6df50d25c08c229fc1b77cc",
+  "codedna_worktree_clean": true
+}

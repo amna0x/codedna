@@ -76,11 +76,13 @@ class SelectionReport:
 def select_tests(repo_path: str | Path, base: str, head: str, strategy: str, *,
                  coverage_map: CoverageMap | None = None, durations: TestRunResult | None = None,
                  non_java: str = "retest-all", must_run: list[str] | None = None,
-                 policy: bool = True) -> SelectionReport:
+                 policy: bool = True, cache: dict | None = None) -> SelectionReport:
     """Select tests for BASE..HEAD.
 
     With ``policy`` (default), tests pinned by the project's must-run policy
-    or by ``must_run`` patterns are always selected (D-050).
+    or by ``must_run`` patterns are always selected (D-050). ``cache`` is an
+    optional parse cache keyed by blob SHA, reused across calls on one
+    repository (results are the same; only parsing is skipped).
     """
     if strategy not in STRATEGIES:
         raise SelectionError(f"unknown strategy {strategy!r}; choose from {STRATEGIES}")
@@ -89,7 +91,9 @@ def select_tests(repo_path: str | Path, base: str, head: str, strategy: str, *,
     repo = resolve_repository(repo_path)
     base_sha, head_sha = resolve_commit(repo, base), resolve_commit(repo, head)
 
-    discovery = load_plugins().get("java").discover_tests(repo, head_sha)
+    java = load_plugins().get("java")
+    discovery = (java.discover_tests(repo, head_sha) if cache is None
+                 else java.discover_tests(repo, head_sha, cache=cache))
     universe = sorted(t.id for t in discovery.tests if t.runs_by_default)
     test_files = {t.id: t.file for t in discovery.tests}
     changes = analyze_changes(repo, base_sha, head_sha)
@@ -117,7 +121,7 @@ def select_tests(repo_path: str | Path, base: str, head: str, strategy: str, *,
                           f"{' and others' if len(non_java_changes) > 1 else ''}); "
                           "falling back to retest-all")
     elif strategy == "dependency":
-        impact = compute_impact(repo, base_sha, head_sha)
+        impact = compute_impact(repo, base_sha, head_sha, cache=cache)
         for candidate in impact.candidate_tests:
             pick(candidate["type"].removeprefix("type:"), candidate["reason"])
     else:

@@ -247,25 +247,33 @@ def _package_name(node: Node) -> str:
 
 
 def _tokens(node: Node) -> list[str]:
-    """Leaf tokens under ``node`` excluding comments (whitespace is never a token)."""
-    if node.type in COMMENT_NODES:
-        return []
-    if node.child_count == 0:
-        return [_text(node)]
+    """Leaf tokens under ``node`` excluding comments (whitespace is never a token).
+
+    Iterative, so deeply nested code (e.g. long generated ``a + b + ...``
+    chains) cannot exceed Python's recursion limit.
+    """
     tokens: list[str] = []
-    for child in node.children:
-        tokens.extend(_tokens(child))
+    stack = [node]
+    while stack:
+        current = stack.pop()
+        if current.type in COMMENT_NODES:
+            continue
+        if current.child_count == 0:
+            tokens.append(_text(current))
+        else:
+            stack.extend(reversed(current.children))
     return tokens
 
 
 def _error_lines(node: Node) -> set[int]:
     lines: set[int] = set()
-    if node.is_error or node.is_missing:
-        lines.add(_start(node))
-        return lines
-    for child in node.children:
-        if child.has_error or child.is_missing:
-            lines |= _error_lines(child)
+    stack = [node]
+    while stack:
+        current = stack.pop()
+        if current.is_error or current.is_missing:
+            lines.add(_start(current))
+            continue
+        stack.extend(c for c in current.children if c.has_error or c.is_missing)
     return lines
 
 

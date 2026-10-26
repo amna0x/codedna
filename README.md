@@ -29,7 +29,7 @@ Today CodeDNA can:
   `confirmed` or `heuristic` and unresolved names listed separately (`graph`);
 - list types **potentially impacted** by a change, each with an explanation
   path, plus the test classes that depend on them (`impact`);
-- discover JUnit 4/5 test classes statically (`tests`);
+- discover JUnit 3/4/5 test classes statically (`tests`);
 - run a commit's Maven test suite in an isolated export, optionally with
   **per-test JaCoCo coverage** (`run-tests`, only with `--allow-build`);
 - select tests with three baselines — retest-all, dependency-only and
@@ -106,6 +106,7 @@ codedna risk-select --repo PATH --base BASE_REV --head HEAD_REV [--history-csv F
 codedna compare --repo PATH --base BASE_REV --head HEAD_REV --ground-truth F [--coverage-map F] [--non-java retest-all|ignore]
 codedna plugins
 codedna serve   [--host 127.0.0.1] [--port 8765] [--allow-build]
+codedna mcp     [--repo PATH] [--allow-build] [--mvn PATH] [--gradle PATH]
 codedna history mine     --repo PATH --db FILE [--rev REV] [--max-commits N]
 codedna history import   --db FILE RESULTS [RESULTS ...] [--source NAME]
 codedna history collect  --repo PATH --db FILE --output-dir DIR --allow-build [--max-commits N]
@@ -463,6 +464,26 @@ is skipped) is saved in `.codedna/history.db` and `.codedna/history.csv`
 recorded, and a `history.csv` you supplied is never overwritten. Risk
 selection turns on only when this history passes the audit, which takes many
 recorded commits with failures; until then it recommends the full suite.
+
+### Test brake for AI coding agents
+
+`codedna mcp` is an MCP server (stdin/stdout) that coding agents call before
+they say a change is done (D-059). `codedna_plan_tests` lists the tests the
+change must run, with reasons and the skip risk; `codedna_impact` shows what
+the change can affect. Neither runs project code. With Claude Code:
+
+```bash
+claude mcp add codedna -- codedna mcp --repo /path/to/project
+```
+
+`codedna_check` also runs those tests and answers `passed`, `blocked`,
+`incomplete` or `no_tests`. It executes the project's build, so it is only
+offered when **you** start the server with `--allow-build --repo PATH`, and
+then only for that repository. Without validated history the plan is the
+whole suite.
+Setup for Cursor and Codex, the agent instruction to add, and a demo
+(`python scripts/demo_agent_brake.py DEST [--check]`) are in
+[docs/AGENT_BRAKE.md](docs/AGENT_BRAKE.md).
 
 The [fixed DANTE-H/B10 extension protocol](docs/DANTE_B10_PROTOCOL.md) and
 [related-work comparison](docs/RELATED_WORK_COMPARISON.md) describe the independent

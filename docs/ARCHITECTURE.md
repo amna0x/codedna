@@ -64,7 +64,7 @@ backend/codedna/
 ├── impact_analysis/
 │   └── impact.py          seeds from analyze, reverse BFS, explanation paths
 ├── test_mapping/
-│   ├── discovery.py       static JUnit 4/5 test-class discovery
+│   ├── discovery.py       static JUnit 3/4/5 test-class discovery
 │   ├── reports.py         Surefire + JaCoCo XML parsers
 │   ├── results.py         results.json / coverage-map.json models
 │   └── maven.py           opt-in Maven runner, per-test JaCoCo, coverage mapping
@@ -94,6 +94,9 @@ selection/policy.py        must-run tests policy read from BASE, add-on rule hoo
 api/
     ├── app.py             FastAPI app: endpoints, token + Host checks, build opt-in
     └── server.py          `codedna serve` (loopback-only, prints URL + token)
+agent/
+    ├── brake.py           plan / check verdicts for AI coding agents (D-059)
+    └── mcp_server.py      `codedna mcp`: dependency-free MCP over stdio
 git_analysis/blobs.py      ls-tree + cat-file --batch readers, git archive export
 ```
 
@@ -166,7 +169,7 @@ once (cache keyed by blob SHA). Then:
 2. **References** (`references.py`) — every type name written inside a type
    (fields, parameters, `new X()`, generics, annotations, `extends`,
    `implements`), plus capitalised `X.member` receivers as `static_access`.
-3. **Resolution** (`builder.py`, D-010) — each name becomes an edge
+3. **Resolution** (`builder.py`, D-010, D-058) — each name becomes an edge
    (`confirmed`/`heuristic`, with `file:line` evidence, max 10 kept per edge),
    an external reference (counted), or an `unresolved` entry with a reason.
 
@@ -301,6 +304,16 @@ same JSON:
 
 Errors are JSON: 400 `{"error": ...}` for analysis errors, 401 bad token,
 403 host/build not allowed, 422 invalid request body.
+
+### `agent` (test brake for AI coding agents, D-059)
+
+`codedna mcp` speaks newline-delimited JSON-RPC 2.0 (MCP `initialize`,
+`ping`, `tools/list`, `tools/call`) on stdin/stdout. `codedna_plan_tests`
+wraps the live recommendation (`selection.live`), `codedna_impact` the impact
+report; both only read Git objects. `codedna_check` runs the planned tests
+through the language plugin and maps the result to `passed` / `blocked` /
+`incomplete` / `nothing_to_run` / `no_tests`; it exists only when the server was started with
+`--allow-build --repo PATH` and then serves that repository only.
 
 ### `ide/` — CodeDNA IDE (Theia 1.76, Electron)
 
