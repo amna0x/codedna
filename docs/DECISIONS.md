@@ -1200,3 +1200,39 @@ they use the brake; the harness runs only the benchmark's test files, so
 other regressions are unknown. Downloaded data stays out of Git
 (`experiments/datasets/swebench-multilingual/`); every file's SHA-256 and
 the `SWE-bench/experiments` commit are recorded.
+
+## D-063 — Conformal risk control for the stopping threshold (B12, B12f)
+
+**Why.** B10's fixed 5 % estimated risk assumes independent failures and a
+correct probability level, and the D-041 gate that guards it is a
+hand-picked rule. Conformal risk control (Angelopoulos et al., ICLR 2024)
+picks the threshold from held-out outcomes with a bound that needs only
+exchangeability.
+
+**What.** `codedna.selection.conformal.threshold` chooses the largest
+stopping threshold λ on a fixed grid with `(n·R̂ + 1)/(n + 1) ≤ α`, scanning
+upwards and stopping at the first violation. `scripts/run_crc_check.py`
+tunes it on `fit_audited`'s audit window inside the rolling-origin design.
+B12 uses every audit commit (`docs/CRC_STOP_PROTOCOL.md`). B12f
+(`--conditional`, `docs/CRC_CONDITIONAL_PROTOCOL.md`) uses only failing audit
+commits, so the bound is on misses among failing commits. Both protocols
+were committed before their runs.
+
+**Result (exploratory, four inspected projects).** B12 saved 36 % of test
+time against the gated product. Its target (5 % of *all* commits) still
+let half of HikariCP's failing commits be missed: the target was too weak,
+not the method. B12f kept commit safety ≥ 0.95 on 4 of 4 projects (B10 2 of
+4). It used 4.7 % [4.0, 5.4] less time than the gated product, almost all on
+wicket-bootstrap. Details are in `experiments/results/crc-check-2026-10-26/`
+and `crc-conditional-2026-10-26/`.
+
+**Not changed yet.** The live product keeps B10 with the D-041 gate.
+Replacing the gate with B12f needs the confirmatory datasets first;
+`run_crc_check.py --conditional` is ready to rerun on them.
+
+**Prior art.** An open-source project applies conformal risk control to the
+share of missed failing tests on the industrial Westermo dataset
+(github.com/l-k-1-2/Predictive-test-selection). B12f differs in its loss
+(commit-level, conditional on failure), its data (open Java CI history) and
+its use as the brake's rule. It is not claimed as the first use of
+conformal risk control for test selection.

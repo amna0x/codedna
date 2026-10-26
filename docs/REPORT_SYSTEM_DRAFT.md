@@ -189,7 +189,10 @@ A property-by-property comparison is kept in
 A predicted probability is calibrated when, among tests given probability p,
 a fraction p actually fail. Platt scaling and isotonic regression are the
 standard post-hoc methods [20]; conformal prediction gives distribution-free
-coverage sets instead of probabilities [23]. In software engineering,
+coverage sets instead of probabilities [23], and conformal risk control
+extends this to bounding the expected value of any monotone loss [26]. One
+open-source project applies conformal risk control to the share of missed
+failing tests on an industrial dataset [27]. In software engineering,
 just-in-time defect predictors were found miscalibrated (ECE 7–35 %), and
 post-hoc calibration did not consistently help [19]. CodeDNA fits Platt or
 isotonic calibration on a held-out window and reports Brier score, expected
@@ -520,9 +523,11 @@ GitHub Actions (`.github/workflows/ci.yml`) runs on every pull request:
 - Method-level call edges in the graph.
 - A guard for AI coding agents: an interface through which an agent asks
   CodeDNA which tests must run before accepting its change.
+- Replace the D-041 gate with failure-conditional conformal risk control
+  (B12f, D-063) if the confirmatory datasets support it, and expose its
+  bound through the agent brake.
 - A risk estimate that does not assume independent test failures, for
-  example by grouping tests that fail together, or a conformal risk-control
-  bound [23] instead of a calibrated point estimate.
+  example by grouping tests that fail together.
 
 ## References
 
@@ -588,3 +593,7 @@ GitHub Actions (`.github/workflows/ci.yml`) runs on every pull request:
 25. A. S. Yaraghi, M. Bagherzadeh, N. Kahani and L. Briand. Scalable and
     accurate test case prioritization in continuous integration contexts.
     *IEEE Transactions on Software Engineering* 49(4), 2023.
+26. A. N. Angelopoulos, S. Bates, A. Fisch, L. Lei and T. Schuster.
+    Conformal risk control. *ICLR* 2024.
+27. l-k-1-2. Predictive-test-selection: conformal risk control on the
+    Enhanced Westermo dataset. GitHub repository, accessed 2026-10-26.

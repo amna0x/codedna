@@ -478,6 +478,41 @@ level is wrong for those selections: it is mostly far too high. The
 probabilities are informative about which commits are risky; their level is
 trustworthy only where it was checked.
 
+### 4.10 Additional validation: conformal risk control for the stop (D-063, exploratory)
+
+Conformal risk control [26 in the system chapters] chooses a threshold from
+held-out outcomes so that the expected loss on new data is at most α,
+assuming only exchangeability. Here the threshold is B10's stopping risk λ,
+chosen on a fixed grid from `fit_audited`'s audit window, with the loss 1
+when a commit misses any failure. Two protocols were each committed before
+their run: B12 bounds misses over all commits
+(`docs/CRC_STOP_PROTOCOL.md`); B12f, written after B12's result, bounds
+misses among failing commits only (`docs/CRC_CONDITIONAL_PROTOCOL.md`).
+
+| Project | B10 safety / time | B12 safety / time | B12f safety / time | Gated product safety / time |
+|---|---|---|---|---|
+| HikariCP | 0.827 / 0.339 | 0.506 / 0.110 | 1.000 / 1.000 | 1.000 / 1.000 |
+| jade4j | 1.000 / 0.915 | 0.929 / 0.700 | 1.000 / 0.965 | 1.000 / 0.984 |
+| LittleProxy | 0.711 / 0.913 | 1.000 / 0.932 | 1.000 / 0.998 | 1.000 / 0.998 |
+| wicket-bootstrap | 0.992 / 0.941 | 0.976 / 0.728 | 0.976 / 0.774 | 0.992 / 0.941 |
+
+B12 kept its target (at most 5 % of all commits missing a failure) on 3 of
+4 projects and cut test time by 36 % against the gated product
+([−0.379, −0.348] in time ratio). The target itself was the problem: only
+11 % of HikariCP's commits fail, so 5 % of all commits allowed half its
+failing commits to be missed. B10's 5 % target shares this weakness.
+
+B12f fixes the target. It kept commit safety at or above 0.95 on all four
+projects, where B10 did so on two. It used slightly less time than the
+gated product: −0.047 [−0.054, −0.040], almost all of it on
+wicket-bootstrap. On the other projects B12f ran nearly the whole suite,
+because at least 19 failing audit commits are needed before it allows any
+skipping. B12f therefore replaces a hand-picked gate with a stated
+statistical rule that behaved at least as well here, but it does not make
+selection cheap where failures are rare. Time-ordered commits are not
+exchangeable, so the bound is an assumption checked on four projects, not a
+guarantee.
+
 ## 5. Threats to validity
 
 - **Construct.** Results are per test class, not per test method. "Commit
@@ -535,7 +570,11 @@ saved outside one project. A Predictive Test Selection baseline with aggregate
 recall targets neither beats B10 nor loses to it at matched time; the
 measured difference is that its targets held less often out of sample
 (test recall on 2 of 4 projects, change recall on none, against B10's miss
-target on 3 of 4).
+target on 3 of 4). A miss target over all commits proved too weak where
+failures are rare. Conformal risk control conditioned on failing commits
+(B12f) kept 95 % commit safety on all four projects at slightly less time
+than the gated product, and is the strongest candidate to replace the
+hand-picked gate once the confirmatory data exist.
 These statements concern within-project fitting; the additional four-project
 transfer check does not establish a generally reliable source-trained model
 or risk estimate, and the confirmatory study is still pending.

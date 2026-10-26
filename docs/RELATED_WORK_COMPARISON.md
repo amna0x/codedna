@@ -43,6 +43,7 @@ it.
 | Continuous test suite failure prediction [18] | Abstract | Predicts whether the whole suite will fail | Not reported | Skip the whole suite run | *Unverified* | *Unverified* |
 | TDAD [21] | Abstract + method summary | No | No | Static code-to-test map queried by the agent | No | No |
 | TestPrune [22] | Abstract | No | No | Minimised regression subset for the agent | No | No |
+| Westermo CRC project [27] | README and code docs | No; bounds the expected share of missed failing tests | Conformal risk control (+ adaptive variant) | Threshold chosen by CRC at α = 0.05 / 0.10 | Marginal CRC bound; exceeded on 2 systems under drift | No |
 | **CodeDNA (B10 + D-041)** | — | **Yes**, `1 − Π(1 − p)` over skipped tests, shown with reasons | Platt / isotonic on a held-out window; ECE, Brier, reliability bins | Skip-risk target on top of a rules ordering | **Yes, per project and per time block**: the stopping rule must have kept its miss target on recent audit history | **Yes**, whenever the check fails or the change is outside what was analysed |
 
 ## Where the claim is weakest
@@ -79,6 +80,15 @@ it.
 6. **DANTE [15] was read from the abstract only.** Its full paper should be
    checked for a stopping rule before the report states that it has none.
 
+## Conformal risk control (D-063)
+
+A conformal-risk-control stop was added and measured (B12, B12f). B12f
+bounds misses among failing commits and kept 95 % commit safety on 4 of 4
+exploratory projects, against 2 of 4 for B10. One open-source project [27]
+already applies conformal risk control to test selection with a test-level
+loss, so CodeDNA's claim is limited to the commit-level, failure-conditional
+loss on open Java data and its use in the brake.
+
 ## Agents
 
 The two agent works found [21, 22] choose tests for coding agents from a
@@ -99,5 +109,7 @@ agent runs, so the report claims nothing about agents improving.
 - [17] https://arxiv.org/abs/2604.00222
 - [18] https://doi.org/10.1145/3460319.3464840
 - [19] https://2025.msrconf.org/details/msr-2025-technical-papers/25/On-the-calibration-of-Just-in-time-Defect-Prediction
+- [26] https://arxiv.org/abs/2208.02814
+- [27] https://github.com/l-k-1-2/Predictive-test-selection
 - [21] https://arxiv.org/abs/2603.17973
 - [22] https://arxiv.org/abs/2510.18270
