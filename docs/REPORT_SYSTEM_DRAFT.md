@@ -240,7 +240,7 @@ project, rather than extra failures caught.
 | F2 | Map changed lines to Java declarations; mark comment-only changes; record unmapped lines with a reason | `java_analysis`, D-008, D-009 |
 | F3 | Build a dependency graph with confirmed / heuristic edges, evidence and unresolved names | `dependency_graph`, D-010 |
 | F4 | Compute impacted types with distance, confidence and explanation path | `impact_analysis`, D-012 |
-| F5 | Discover JUnit 4/5 test classes the build runs by default, for single and multi-module Maven and Gradle projects | `test_mapping`, D-045, D-052 |
+| F5 | Discover JUnit 3/4/5 test classes the build runs by default, for single and multi-module Maven and Gradle projects | `test_mapping`, D-045, D-052, D-064 |
 | F6 | Select tests by strategy (all, dependency, coverage, risk) and compare strategies against real outcomes | `selection`, D-016 |
 | F7 | Never skip tests the project marks as must-run | `selection/policy.py`, D-050 |
 | F8 | Store commit history and test outcomes; build leakage-free feature rows | `test_history`, D-021 to D-023 |

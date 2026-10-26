@@ -64,7 +64,7 @@ backend/codedna/
 ├── impact_analysis/
 │   └── impact.py          seeds from analyze, reverse BFS, explanation paths
 ├── test_mapping/
-│   ├── discovery.py       static JUnit 4/5 test-class discovery
+│   ├── discovery.py       static JUnit 3/4/5 test-class discovery
 │   ├── reports.py         Surefire + JaCoCo XML parsers
 │   ├── results.py         results.json / coverage-map.json models
 │   └── maven.py           opt-in Maven runner, per-test JaCoCo, coverage mapping

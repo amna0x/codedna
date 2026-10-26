@@ -32,6 +32,8 @@ def test_parsers_read_harness_files():
               "git apply --verbose --reject - <<'EOF_1'\ndiff --git a/x b/x\n+line\nEOF_1\n"
               "echo done\n")
     assert study.test_patch(script) == "diff --git a/x b/x\n+line\n"
+    crlf = script.replace("+line\n", "+line\r\n")  # files with CRLF endings stay byte-exact
+    assert study.test_patch(crlf) == "diff --git a/x b/x\n+line\r\n"
     assert study.base_commit(script, "") == "a" * 40
     no_reset = "echo 'No test files to reset'\n"
     assert study.base_commit(no_reset, "+ git -c core.fileMode=false diff " + "b" * 40) == "b" * 40
@@ -79,9 +81,9 @@ def test_run_builds_harness_states_and_scores_the_plan(repo, tmp_path):
     data = tmp_path / "data"
     instance = "acme__proj-1"
     (data / "instances" / instance).mkdir(parents=True)
-    (data / "instances" / instance / "eval.sh").write_text(
+    (data / "instances" / instance / "eval.sh").write_bytes((
         f"git checkout {base} src/test/java/a/CoreTest.java\n"
-        f"git apply --verbose --reject - <<'EOF_9'\n{tests_patch}EOF_9\n")
+        f"git apply --verbose --reject - <<'EOF_9'\n{tests_patch}EOF_9\n").encode())
     (data / "instances" / instance / "test_output_head.txt").write_text("")
     reports = {
         "broke": {"resolved": False, "FAIL_TO_PASS": {"success": [], "failure": ["a.CoreTest#y"]},
@@ -92,7 +94,7 @@ def test_run_builds_harness_states_and_scores_the_plan(repo, tmp_path):
     for name, outcome in reports.items():
         folder = data / "submissions" / name / instance
         folder.mkdir(parents=True)
-        (folder / "patch.diff").write_text(agent_patch)
+        (folder / "patch.diff").write_bytes(agent_patch.encode())
         resolved = outcome.pop("resolved")
         (folder / "report.json").write_text(json.dumps({instance: {
             "patch_is_None": False, "patch_successfully_applied": True, "infra_failure": False,

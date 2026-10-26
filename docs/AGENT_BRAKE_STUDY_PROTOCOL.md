@@ -130,3 +130,20 @@ whose base commit cannot be fetched. All exclusions are counted.
   verdict gaps in D-059. They were fixed, everything was committed, and the
   run was restarted from scratch on that commit, which `summary.json`
   records (`codedna_commit`).
+- 2026-10-26, during the third run (no summary computed): patches were read
+  as text, which turns CRLF line endings into LF, so a patch for a file with
+  CRLF endings could fail to apply (one instance, gson-2479, has such a
+  test patch; Windows CI also caught it). Patches are now kept byte-exact,
+  and the run was restarted from scratch.
+
+- 2026-10-26, after the primary run finished (results in
+  `experiments/results/agent-brake-swebench-2026-10-25/`, CodeDNA commit
+  `dc5339c`; 21 of its 42 instances were computed before a container
+  restart by the same code at `a794d05`, which differs only in committed
+  result files): every pair the plan missed was missed by the full suite (A1)
+  too, so the misses were discovery gaps. Two were fixed (D-064: JUnit 3
+  style tests, moved Gradle test folders) and the study was run again,
+  unchanged otherwise, into `agent-brake-swebench-2026-10-26-discovery/`.
+  **That run is post hoc**: the fix was made after seeing the primary
+  results. The primary run stays the pre-registered result and both are
+  reported. lombok (Ant build, data-driven tests) is not addressed.

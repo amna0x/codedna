@@ -10,6 +10,11 @@ with build-helper-maven-plugin's ``add-test-source`` goal, which projects use
 to share one test folder between modules (HikariCP 2.x does this). Gradle modules come from ``include`` lines in
 ``settings.gradle(.kts)`` (a syntactic reading, recorded as such); Gradle runs
 every class in the ``test`` source set by default, so no name filter applies.
+A Gradle test source set moved with ``test.java.srcDirs = [...]`` (or
+``+=``, ``srcDir``) is read syntactically from the ``.gradle`` scripts: in a
+module's own build script it applies to that module, in any other script
+(such as a shared ``gradle/*.gradle`` applied to all projects) to every
+module, which is reported as a warning (D-064).
 """
 
 from __future__ import annotations
@@ -30,6 +35,9 @@ _GRADLE_BUILD = ("build.gradle", "build.gradle.kts")
 _INCLUDE = re.compile(r"""^[ \t]*include\b[ \t]*(\([^)]*\)|[^\n]*)""", re.MULTILINE)
 _QUOTED = re.compile(r"""["']([^"']+)["']""")
 _COMMENT = re.compile(r"""//[^\n]*|/\*.*?\*/""", re.DOTALL)
+# test.java.srcDirs = ['src/test'], += [...], test.java.srcDir 'x', test.java.srcDir("x")
+_TEST_SRC = re.compile(
+    r"""\btest\.java\.(srcDirs?)\s*(\+?=)?\s*\(?\s*(\[[^\]]*\]|["'][^"']*["'])""")
 
 
 @dataclass
@@ -191,7 +199,35 @@ def _gradle(repo: Path, files: dict[str, str]) -> BuildLayout:
             layout.warnings.append(f"{settings} moves project directories (projectDir); "
                                    "those modules may be placed wrongly")
     layout.modules.sort()
+    _gradle_test_roots(repo, files, layout)
     return layout
+
+
+def _gradle_test_roots(repo: Path, files: dict[str, str], layout: BuildLayout) -> None:
+    """Apply ``test.java.srcDirs`` settings; shared scripts first, then module scripts."""
+    scripts = sorted(path for path in files if path.endswith((".gradle", ".gradle.kts"))
+                     and PurePosixPath(path).name not in _GRADLE_SETTINGS)
+    contents = read_blobs(repo, [files[path] for path in scripts])
+    shared: list[tuple[bool, list[str]]] = []  # (replaces the defaults, directories)
+    own: dict[str, list[tuple[bool, list[str]]]] = {}
+    for script in scripts:
+        text = _COMMENT.sub("", contents[files[script]].decode("utf-8", "replace"))
+        for kind, operator, value in _TEST_SRC.findall(text):
+            rule = (kind == "srcDirs" and operator == "=", _QUOTED.findall(value))
+            folder = posixpath.dirname(script)
+            if PurePosixPath(script).name in _GRADLE_BUILD and folder in layout.modules:
+                own.setdefault(folder, []).append(rule)
+            else:
+                shared.append(rule)
+                layout.warnings.append(f"{script} sets the test sources to {rule[1]}; read "
+                                       "syntactically and applied to every Gradle module")
+    for module in layout.modules:
+        roots = ["src/test/java"]
+        for replace, dirs in shared + own.get(module, []):
+            dirs = [d.strip("/") for d in dirs]
+            roots = dirs if replace else roots + [d for d in dirs if d not in roots]
+        if roots != ["src/test/java"]:
+            layout.test_roots[module] = [posixpath.join(module, root) + "/" for root in roots]
 
 
 def _all(element: ElementTree.Element, *names: str) -> list[ElementTree.Element]:
