@@ -11,22 +11,24 @@ Read in this order: §0 (one page), §1 (rules), §3 (merging), §4 (laptop),
 
 ---
 
-## Latest verified override - 2026-10-26 (read before older rows)
+## Latest verified override - 2026-10-26 (read first)
 
-All four laptop runs are complete, pushed from the novelty branch and
-integrated into PR #21 locally. Results use `*confirmatory-perf-2026-10-26/`
-folders with FINDINGS and audit manifests. Do not rerun the old output paths.
-The performance fix, reused seven B13 reports, exact parity, and source
-fingerprints are documented in `docs/PERFORMANCE_RESUME_2026-10-26.md`.
-See report 4.11/4.12 and D-067/D-069. CRC is implemented as opt-in (D-068);
-the opening historical claim that B12f is absent from the product is stale.
-B10 remains default; B12f is not an unconditional guarantee. PTS cost match
-failed. The nine-project addendum was not committed before the runs.
+PR #21 is merged as main 8183d2d. Both CI runs are green (7/7 each).
+Post-pull full suite: 533 passed, zero skipped, Maven included; the full
+IDE rebuild/start succeeded. #8 was already closed. Stacked #17/#18/#19
+still show open against old bases, but their heads are included in main.
+No further merges of those PRs are required. Preserve every stash.
 
-Resume: finish PR #21 integration validation/CI and authorized merge, then
-6.4 structural_plan, then Python brake fallback. Preserve existing stashes;
-never apply/pop/drop them. Old main refs and original confirmation data are
-backed up (MEMORY.md). The older table below is historical and superseded.
+All four nine-project laptop runs finished and their findings/hashes are
+published in *confirmatory-perf-2026-10-26 folders. D-067 keeps B10 default,
+CRC opt-in (D-068), with missing protocol addendum and negative results
+explicit. The older rows and opening "B12f absent" claim are superseded.
+
+Next build is implemented on codex/brake-structural-python (D-070): section
+6.4 structural_plan plus Python/mixed full-suite fallback and neutral
+execution. Finish full branch validation, publish its review PR, and await
+separate authorization before merging that PR. Do not repeat the studies,
+CRC implementation, or the dependency/Python implementation once validated.
 
 ## 0. One-page summary
 
@@ -104,7 +106,7 @@ GitHub first: newer commits may have landed after this was written.
 |---|---|---|---|---|---|
 | Last finished step | Claude | `claude/project-thread-lo3rpw` | `scripts/demo_brake_end_to_end.py` | **§6.3 + §6.5 done:** conformal stop is a live opt-in method (`--method crc`, MCP `method`, D-068) and the end-to-end demo gives `blocked`/`passed` with real Maven | next (B13f commits up to `8c1b87f` already merged, 495 passed): §6.4 `structural_plan`, then §7 bug 2 (Python brake fallback) |
 | **Integration of all PRs** | this file's PR | `claude/project-thread-lo3rpw` | — | done and tested (494 passed with Maven, 8 Windows-only skips, after the row below), includes #18's B13 commits up to `cec75ff` | if any PR branch below got new commits, `git merge origin/<branch>` into this branch, resolve, `python -m pytest --run-maven`, push |
-| **START HERE (next agent)** | GPT/Codex | `claude/project-thread-lo3rpw` (PR #21), last Claude commit is the one that edits this row | — | Claude stopped after §6.3 + §6.5 (done, 495 passed with Maven). Nothing half-done is uncommitted. | do §6.4 next: in `backend/codedna/agent/brake.py` add `structural_plan` = `select_tests(repo, base, head, "dependency")` (labelled "structural only, no probability"), union it into `must_run`, add a test that it equals the dependency selection; then §7 bug 2 (Python brake fallback); run `python -m pytest --run-maven`, update this row, push |
+| **START HERE (next agent)** | Codex | `codex/brake-structural-python` (D-070) | local validation log / next PR | PR #21 merged; studies finished; structural/Python implementation done, validation in progress | finish full branch tests and CI, publish for review; do not merge a new PR without authorization; then remaining manual/clean-PC/report tasks |
 | **B13 tuned gate, B12f and B11 reruns on the 9 confirmatory projects** | novelty thread, running on the laptop | `claude/project-thread-71arlo` (#18's branch) in worktree `C:\Users\hp\codedna-b13`, data copied to `C:\Users\hp\codedna-b13-data\<project>\dataset.csv` | `experiments/results/tuned-gate-confirmatory-2026-10-26/`, `crc-conditional-confirmatory-2026-10-26/`, `pts-check-confirmatory-2026-10-26/` (protocol for B13: commit `2ac7ac7` on that branch) | started 09:11Z; may take hours. At 09:26Z still running a (B13), b (B12f), c (B11); a fourth run d was queued after them: `git merge --ff-only origin/claude/project-thread-71arlo` in the worktree, then `run_tuned_gate_check.py C:\Users\hp\codedna-b13-data --conditional --out experiments/results/tuned-gate-conditional-confirmatory-2026-10-26` (B13f, exploratory), committed with the other three folders. Nothing from this run is on GitHub yet | if the laptop slept, rerun the same commands from the worktree (they resume per project): `$env:PYTHONPATH="C:\Users\hp\codedna-b13\backend"; $env:OMP_NUM_THREADS="1"` then `python scripts/run_tuned_gate_check.py C:\Users\hp\codedna-b13-data --out experiments/results/tuned-gate-confirmatory-2026-10-26`, then `run_crc_check.py ... --conditional --out experiments/results/crc-conditional-confirmatory-2026-10-26`, then `run_pts_check.py ... --out experiments/results/pts-check-confirmatory-2026-10-26`. Commit only those three folders on that branch and push (no force). **B13 is exploratory** (designed after seeing #20). **Read the B12f 9-project verdict by hand:** that branch's `run_crc_check.py` still uses the 3-of-4 rule; apply 7 of 9 (§6.1) |
 | After those results land | whoever merges | `claude/project-thread-lo3rpw` | — | not started | `git merge origin/claude/project-thread-71arlo` into this branch (expect `run_crc_check.py` conflicts: keep this branch's `required_keeps`, `--protocol` and the `codedna_java.live` import), rerun tests, push; then write `FINDINGS.md` for each folder and report §4.12 |
 | Merging into main | owner via GPT/Codex on the laptop (owner chose this, 09:17Z) | `claude/project-thread-lo3rpw` = PR #21 | — | not started; Claude did not merge | paste the §17.1 prompt to Codex, or click PR #21's merge button (below) |

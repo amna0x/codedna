@@ -6,32 +6,37 @@ Last updated: 2026-10-26 (completed studies and PR #21 integration review).
 
 ## Current verified state - 2026-10-26
 
-The nine-project confirmation and all four laptop follow-ups are complete.
-New results: `experiments/results/*confirmatory-perf-2026-10-26/`, each with
-9 project reports, config, summary, FINDINGS and SHA-256 audit manifest.
-B12f reaches 95% safety on 8/9 but reduces mean safety relative to the gated
-product; the missing pre-run nine-project addendum is disclosed. B10 stays
-default, CRC opt-in (D-067/D-068). B13/B13f are exploratory; PTS cost match
-failed. See report sections 4.11/4.12. Do not rerun completed studies.
+PR #21 merged to main as 8183d2d139b3b64b83cfd0456a632ef2ee6f36c2.
+All seven integration CI checks and all seven merged-main CI checks passed.
+Full local Maven-inclusive suite: 533 passed, zero skipped before merge
+(961.26s) and after pull (833.36s); one existing Starlette warning. Complete
+IDE rebuild passed and start.bat reached a ready workbench. Extension
+compile and 3 runtime + 8 workflow Node tests passed. Installer/clean-PC
+acceptance remains separate. #8 was already closed. #15/#16/#20 are marked
+merged; stacked #17/#18/#19 remain open against their old base branches,
+although all six PR heads are ancestors of main. Do not create extra merges.
 
-D-069 fixes the quadratic risk loop with exact-decision binary search.
-Study-worktree checks: 59 focused tests, full Maven-inclusive 405 passed /
-zero skips, plus 46 updated study tests; exact real-project replay passed.
-Integration full-suite counts must be recorded separately.
+All four nine-project follow-ups are complete and published under
+`experiments/results/*confirmatory-perf-2026-10-26/`; 125 artifact hashes
+verified. B12f reaches 95% safety on 8/9 but decreases mean safety against
+the gated product; missing pre-run nine-project addendum is disclosed.
+B10 remains default, CRC opt-in. B13/B13f exploratory; PTS cost match failed.
+See report 4.11/4.12 and D-067/D-069. Never rerun these completed studies
+or overwrite original reports to change their machine verdicts.
 
-Study changes were pushed on `claude/project-thread-71arlo` and integrated
-locally into PR #21's branch. Preserve all stashes: never pop, apply or drop.
-The old local main is preserved by `keep/local-main-before-pr21-20261026`
-and `keep/graphify-97c3be7`; original local confirmation files were moved
-with all 45 file hashes verified to
-`C:/Users/hp/codedna-backup-2026-10-26/original-confirmatory-before-pr21`.
-Main was safely aligned to origin/main before integration; no old buggy
-stash changes were brought back. Merge/push outcome and latest test counts
-must be checked before claiming PR #21 has landed.
+Current build branch: codex/brake-structural-python (D-070), adds the
+structural_plan union and explicit Python/mixed full-suite fallback with
+neutral execution dispatch. Implementation and focused tests are done;
+full branch-suite and CI counts must be recorded before claiming complete.
+Do not rebuild the CRC opt-in/end-to-end demo; they already exist (D-068).
+No authorization to merge the new feature PR is implied by permission for #21.
 
-Next build after integration: HANDOFF 6.4 structural_plan, then Python brake
-fallback. CRC opt-in and the end-to-end demo already exist; do not rebuild.
-The historical notes below describe earlier checkouts and counts.
+All stashes are preserved: never pop, apply or drop them. Old local main
+ca7fac6/97c3be7 is preserved by keep/local-main-before-pr21-20261026 and
+keep/graphify-97c3be7. Original local confirmation files are backed up at
+C:/Users/hp/codedna-backup-2026-10-26/original-confirmatory-before-pr21
+with 45 file hashes verified. Do not restore old buggy edits into main.
+Historical notes and validation counts below describe older checkouts.
 
 Branch `claude/project-thread-info38` (PR #17, stacked on #16): full suite
 `python -m pytest --run-maven` on Linux: 388 passed, 7 skipped (Windows-only

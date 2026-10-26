@@ -47,9 +47,11 @@ _RISK = {
 TOOLS = {
     "codedna_plan_tests": {
         "description": (
-            "Before finishing a code change, ask which test classes must run for it. "
-            "Returns the tests, a reason for each, and the risk of skipping the rest. "
-            "Without validated project history it lists every test. Runs no code."),
+            "Before finishing a code change, ask which tests must run for it. "
+            "Returns required tests, reasons, skip risk, and a separate structural_plan "
+            "labelled structural only, no probability. Structural tests are always required. "
+            "Without validated risk support/history it lists every test, including Python "
+            "and mixed-language suites. Runs no code."),
         "inputSchema": {"type": "object", "properties": {**_CHANGE, **_RISK},
                         "additionalProperties": False},
     },

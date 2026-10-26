@@ -566,3 +566,17 @@ the frontend and no dependency is added. B10 remains the default; the live
 failure-conditional CRC method remains opt-in (D-068), following the evidence
 and limitations in D-067. The four nine-project follow-ups preserve original
 reports and disclose reused/new code fingerprints in their audit manifests.
+
+## Brake structural view and language fallback (D-070)
+
+`agent.brake.plan` exposes the existing dependency SelectionReport under
+structural_plan, then broadens required tests with it. Both reports share
+immutable revisions; a later WORKTREE edit cannot mix comparisons. The
+structural report has no probability and does not include request-only pins.
+A retained risk estimate after broadening is identified as a conservative
+model bound; no skipped tests means zero skip risk on validated plans.
+`selection.live.recommend(language=None)` detects the test language and
+returns an explicit full-suite fallback for missing risk capability or a
+mixed-language universe. `brake.check` delegates execution to the existing
+`plugins.languages.run_tests`, preserving consent and combined results.
+The core imports no language-specific package for this behavior.

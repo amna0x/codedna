@@ -1632,3 +1632,32 @@ Maven and zero skips; integration validation is recorded separately.
 Original outputs stay immutable. B13's seven reused reports are byte-identical,
 and new folders disclose both fingerprints and portable source snapshots.
 The result paths are marked -text to preserve their SHA-256 bytes on every OS.
+
+## D-070 - Return the structural plan and fail safe across brake languages
+
+The brake returns `structural_plan`, the existing dependency selection at the
+risk recommendation's immutable BASE/HEAD, labelled `structural only, no
+probability`. Requested extra pins stay in must_run, not in this independent
+structural view. Required tests are the union of the risk plan, structural
+selection and existing policy pins. Structural evidence never authorizes
+skipping without validated project history. When this broadens a partial
+risk plan, the original model estimate is explicitly labelled a conservative
+bound; selecting every discovered test makes skip risk zero. This does not
+turn the model estimate into a guarantee of real-world safety.
+
+The brake detects the installed test language rather than assuming Java.
+Python has no risk selector, so it returns an unvalidated full-suite plan
+with a clear reason and no invented probability. Mixed test universes also
+fall back to all discovered tests because there is no joint validated
+selector. Unknown plugins, invalid methods and invalid targets still error.
+`check` dispatches through the existing language-neutral runner, splitting
+Java/Python tests and joining actual results. Consent, immutable snapshots,
+missing-result verdicts and history recording remain enforced. The direct
+Python API accepts an explicit python_command; MCP keeps server-side build
+consent and cannot grant it from tool arguments.
+
+No dependency, model, research threshold, or CRC default changes. Regression
+coverage uses temporary Git repositories and includes real passing/failing
+pytest runs, mixed fake-Maven/real-pytest execution, MCP, pins, immutable
+snapshots, and conservative partial-plan estimates. Main's prior merge and
+post-pull validation are separate from validation of this feature branch.

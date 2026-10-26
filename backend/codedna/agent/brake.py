@@ -6,7 +6,8 @@ it is done:
 * ``plan`` — which tests must run for this change, and how risky is skipping
   the others? This is the product's own risk recommendation (D-041) with the
   project's must-run policy (D-050): without validated history every test is
-  listed, so the brake never skips on a guess.
+  listed, so the brake never skips on a guess. The labelled structural
+  dependency plan is returned separately and can only broaden required tests.
 * ``check`` — run exactly those tests and give one verdict:
 
   - ``passed``: every listed test class has a result and none failed;
@@ -39,18 +40,49 @@ from codedna.selection import SelectionError
 
 def plan(repo_path: str | Path, *, base: str = "HEAD", head: str = WORKTREE,
          risk_target: float = 0.05, must_run: list[str] | None = None,
-         language: str = "java", method: str = "b10") -> dict:
+         language: str | None = None, method: str = "b10") -> dict:
     """Tests that must run for BASE..HEAD (default: uncommitted changes)."""
     from codedna.selection.live import recommend
 
     result = recommend(resolve_repository(repo_path), base, head, risk_target=risk_target,
                        must_run=must_run, language=language, method=method)
-    risk = result["risk"]
+    from codedna.selection import select_tests
+
+    # Both views use the recommendation's immutable revisions, even if an
+    # agent edits WORKTREE again while this request is in progress.
+    structural = select_tests(result["repository"], result["base_commit"],
+                              result["head_commit"], "dependency").to_dict()
+    selected = {item["test"]: {**item, "reasons": list(item["reasons"])}
+                for item in result["selected"]}
+    added = []
+    for item in structural["selected"]:
+        test = item["test"]
+        if test not in selected:
+            selected[test] = {**item, "reasons": list(item["reasons"])}
+            added.append(test)
+        else:
+            selected[test]["reasons"].extend(
+                reason for reason in item["reasons"] if reason not in selected[test]["reasons"])
+    remaining = [test for test in result["skipped"] if test not in selected]
+    risk = {**result["risk"], "reasons": list(result["risk"]["reasons"])}
     validated = risk["status"] == "validated_history"
+    if added and validated:
+        # More tests cannot increase skip risk. The original estimate is a
+        # conservative bound; it is not silently relabelled as a new fit.
+        if not remaining:
+            risk["estimated_skip_risk"] = 0.0
+        else:
+            risk["estimate_is_conservative"] = True
+            risk["reasons"].append(
+                "Structural tests broadened the risk plan; its original skip-risk "
+                "estimate is a conservative bound for the remaining tests.")
+    result = {**result, "selected": list(selected.values()), "skipped": remaining, "risk": risk}
+    warnings = list(dict.fromkeys([*result["warnings"], *structural["warnings"]]))
     return {
         "repository": result["repository"],
         "base_commit": result["base_commit"],
         "head_commit": result["head_commit"],
+        "structural_plan": {**structural, "note": "structural only, no probability"},
         "must_run": [item["test"] for item in result["selected"]],
         "reasons": {item["test"]: item["reasons"] for item in result["selected"]},
         "skipped": result["skipped"],
@@ -63,19 +95,21 @@ def plan(repo_path: str | Path, *, base: str = "HEAD", head: str = WORKTREE,
             "estimated_skip_risk": risk["estimated_skip_risk"],
             "reasons": risk["reasons"],
             **({"conformal": risk["conformal"]} if risk.get("conformal") else {}),
+            **({"estimate_is_conservative": True} if risk.get("estimate_is_conservative") else {}),
         },
         "summary": _plan_summary(result, validated),
-        "warnings": result["warnings"],
+        "warnings": warnings,
     }
 
 
 def check(repo_path: str | Path, *, base: str = "HEAD", head: str = WORKTREE,
           risk_target: float = 0.05, must_run: list[str] | None = None,
-          timeout: int = 1800, language: str = "java", method: str = "b10",
+          timeout: int = 1800, language: str | None = None, method: str = "b10",
           maven_command: list[str] | None = None,
-          gradle_command: list[str] | None = None, allow_build: bool = False) -> dict:
+          gradle_command: list[str] | None = None,
+          python_command: list[str] | None = None, allow_build: bool = False) -> dict:
     """Run the planned tests and return one verdict. Executes project code."""
-    from codedna.plugins import load_plugins
+    from codedna.plugins.languages import run_tests
     from codedna.test_history.recording import ignore_outputs, record_run
 
     if not allow_build:
@@ -93,9 +127,6 @@ def check(repo_path: str | Path, *, base: str = "HEAD", head: str = WORKTREE,
             verdict = _verdict("no_tests", "the build runs no tests here; nothing was checked")
         return {**verdict, "plan": planned, "results": None, "output_dir": None,
                 "recording": None}
-    plugin = load_plugins().get(language)
-    if plugin is None:
-        raise SelectionError(f"language plugin {language!r} is not installed")
     ignore_outputs(repo)
     output = repo / ".codedna/runs" / uuid4().hex
     options = {"timeout": timeout}
@@ -103,7 +134,9 @@ def check(repo_path: str | Path, *, base: str = "HEAD", head: str = WORKTREE,
         options["maven_command"] = maven_command
     if gradle_command:
         options["gradle_command"] = gradle_command
-    run, _ = plugin.run_tests(repo, planned["head_commit"], output, allow_build=True,
+    if python_command:
+        options["python_command"] = python_command
+    run, _ = run_tests(repo, planned["head_commit"], output, allow_build=True,
                               selected_tests=tests, **options)
     verdict = _run_verdict(tests, run)
     recording = None
@@ -148,11 +181,16 @@ def _plan_summary(result: dict, validated: bool) -> str:
     if validated:
         risk = result["risk"]["estimated_skip_risk"]
         crc = result["risk"].get("conformal")
+        conservative = result["risk"].get("estimate_is_conservative", False)
+        estimate_label = "conservative model skip-risk bound" if conservative else "estimated skip risk"
         if crc:
             return (f"Run {selected} of {total} test classes. Conformal stop: at most "
                     f"{crc['alpha']:.0%} of this project's {crc['failing_audit_commits']} past "
                     f"failing commits would have missed a failure (corrected bound "
-                    f"{crc['corrected_bound']:.1%}); estimated skip risk {risk:.1%}.")
+                    f"{crc['corrected_bound']:.1%}); {estimate_label} {risk:.1%}.")
+        if conservative:
+            return (f"Run {selected} of {total} test classes. Conservative bound on the model's "
+                    f"skip-risk estimate after structural broadening: {risk:.1%}.")
         return (f"Run {selected} of {total} test classes. Estimated chance that a skipped "
                 f"class would fail: {risk:.1%} (validated on this project's history).")
     return (f"Run all {total} test classes: skipping is not validated for this project "
