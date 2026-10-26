@@ -162,9 +162,9 @@ def run(root, inputs, out, conditional=False):
         summary[group] = entry
     (out / 'summary.json').write_text(json.dumps(summary, indent=2, allow_nan=False) + '\n')
     fmt = lambda v: 'n/a' if v is None else f'{v:.4f}' if isinstance(v, float) else str(v)
-    lines = ['# Conformal-risk-control stopping (B12) against B10 and the gated product', '',
-             'Rules fixed in docs/CRC_STOP_PROTOCOL.md before results.', '',
-             '| Project | B10 time | B10 miss | B12 time | B12 miss | B12 safety | Product time | '
+    lines = [f'# Conformal-risk-control stopping ({label}) against B10 and the gated product', '',
+             f"Rules fixed in {config['protocol']} before results.", '',
+             f'| Project | B10 time | B10 miss | {label} time | {label} miss | {label} safety | Product time | '
              'Product miss | Thresholds |', '|' + '---|' * 9]
     for n, r in summary['projects'].items():
         if 'b12' not in r:
