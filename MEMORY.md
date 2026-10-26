@@ -27,7 +27,7 @@ or overwrite original reports to change their machine verdicts.
 Current build branch: codex/brake-structural-python (D-070), adds the
 structural_plan union and explicit Python/mixed full-suite fallback with
 neutral execution dispatch. Implementation and focused tests are done;
-full branch-suite and CI counts must be recorded before claiming complete.
+full branch suite passed 554 tests with zero skips, Maven included (1953.04s). The branch was not pushed: automatic approval review requires explicit owner approval to publish its private source/tests/docs/Graphify outputs. No feature CI or review PR exists yet. Prepare the PR after that approval; do not merge it without separate authorization.
 Do not rebuild the CRC opt-in/end-to-end demo; they already exist (D-068).
 No authorization to merge the new feature PR is implied by permission for #21.
 

@@ -1667,3 +1667,11 @@ test could be skipped. The demo now adds a genuinely unrelated third test;
 required dependency tests remain in the plan. The history is still labelled
 synthetic. MCP startup accepts --python for the project's interpreter, without
 changing build consent or allowing an agent to override the interpreter.
+
+Final D-070 local validation: `python -m pytest --run-maven -q`:
+554 passed, zero failed/skipped, 1953.04s; 1 existing warning(s).
+Runtime and test file hashes match the recorded final-source snapshot.
+The branch remains local because automatic approval review rejected the
+private-source push without explicit payload/destination approval. No new
+feature PR or CI result is claimed. Main's separately verified #21 merge
+and the preserved stash remain unchanged.
