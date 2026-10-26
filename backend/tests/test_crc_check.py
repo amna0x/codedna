@@ -87,3 +87,23 @@ def test_conditional_mode_tunes_on_failing_audit_commits_only(monkeypatch):
         failing = sum(any(r.label for r in groups[c])
                       for c in data.commits[int(block['start'] * .75):block['start']])
         assert size == {failing}
+
+
+def test_crc_script_cli_runs_on_tiny_synthetic_history(repo, tmp_path):
+    import json
+    import os
+    import subprocess
+    import sys
+    inputs = repo.path / "synthetic/smoke/dataset.csv"
+    inputs.parent.mkdir(parents=True)
+    dataset([f"smoke{i}" for i in range(120)]).to_csv(inputs)
+    output = tmp_path / "crc-smoke-output"
+    env = {**os.environ, "OMP_NUM_THREADS": "1", "OPENBLAS_NUM_THREADS": "1", "MKL_NUM_THREADS": "1"}
+    result = subprocess.run([sys.executable, str(ROOT / "scripts/run_crc_check.py"),
+                             str(inputs.parent.parent), "--conditional", "--out", str(output)],
+                            cwd=ROOT, env=env, text=True, capture_output=True, timeout=120)
+    assert result.returncode == 0, result.stderr
+    assert "Completed" in result.stdout
+    summary = json.loads((output / "summary.json").read_text())
+    assert "smoke" in summary["projects"]
+    assert summary["confirmatory"]["verdict"] == "inconclusive"

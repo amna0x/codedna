@@ -1,17 +1,17 @@
-# Graph Report - codedna  (2026-10-26)
+# Graph Report - codedna  (2026-10-27)
 
 ## Corpus Check
-- 224 files · ~199,158 words
+- 231 files · ~204,803 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 8 file(s) not represented in the graph (top: (none) 3, .css 3, .example 1)
 
 ## Summary
-- 3199 nodes · 8117 edges · 184 communities (149 shown, 35 thin omitted)
-- Extraction: 91% EXTRACTED · 9% INFERRED · 0% AMBIGUOUS · INFERRED: 717 edges (avg confidence: 0.89)
+- 3256 nodes · 8195 edges · 184 communities (150 shown, 34 thin omitted)
+- Extraction: 91% EXTRACTED · 9% INFERRED · 0% AMBIGUOUS · INFERRED: 722 edges (avg confidence: 0.89)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `7e7e7e73`
+- Built from commit: `45821b49`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -19,16 +19,16 @@
 - argparse
 - impact.py
 - select_tests
-- languages.py
+- pathlib
 - CI Workflow Config
 - API Request Models
-- experiment.py
+- selection/live.py
 - maven.py
 - test_test_discovery.py
 - Probability Calibrators
 - IDE Extension Package
 - HistoryStore
-- TestRunResult
+- test_recording.py
 - Java Change Analysis
 - codedna-protocol.ts
 - change-view-widget.tsx
@@ -36,16 +36,16 @@
 - .commit
 - Study Runner
 - org.junit.jupiter.api.Test
-- RTPTorrent Import
-- mine_history
-- Cross-Project Transfer Model
+- TestRunResult
+- with
+- Dataset
 - compute_impact
 - Dependency Graph Tests
 - codedna-frontend-module.ts
 - TypeScript Config
 - mcp_server.py
-- Git Change Extraction Tests
-- features.py
+- CodeDNAGitError
+- test_tuned_gate_check.py
 - Row
 - Research Plan Questions
 - Project Rules & Plans
@@ -61,7 +61,7 @@
 - IDE Root Package
 - references.py
 - IDE Screenshot UI
-- .handle
+- test_large_git_requests.py
 - Transfer Protocol Docs
 - Theia Dependencies
 - git.py
@@ -90,10 +90,10 @@
 - hashlib
 - D-020 Platform website and plugin distribution
 - IDE & Local API Milestone
-- cli.py
+- test_history.py
 - sys
 - RTPTorrent & SQLite Decisions
-- CodeGraph
+- Blueprint completion ledger - 2026-10-27
 - Validation & Demo Setup
 - Package Scripts
 - Platform Website Milestone
@@ -117,27 +117,27 @@
 - codedna_python/mapping.py
 - app.py
 - build.py
-- test_policy.py
+- Nine-project confirmatory results — 2026-10-26
 - codedna_java/discovery.py
 - create_app
 - policy.py
-- test_prepare_confirmatory.py
+- 4. Design
 - JavaPlugin
 - electron-builder.yml
 - codedna_python/discovery.py
 - CodeDNA: system chapters (draft)
-- validated_change
+- 3. The open PRs and how to merge them
 - test_pts_check.py
 - RiskPolicy
 - demo_brake_end_to_end.py
 - _CodeIndex
 - resolve_commit
-- codedna_java/builder.py
+- BoundedParseCache
 - test_desktop_bundle.py
 - continue_confirmatory.py
 - make_hikaricp_demo.py
 - test_start_bat.py
-- _Resolver
+- codedna_python/builder.py
 - workflow.test.cjs
 - build-core.cjs
 - runner.py
@@ -145,43 +145,43 @@
 - Java workflow handoff
 - CodeDNA as a test brake for AI coding agents (report chapter draft)
 - codedna-theme.ts
-- PythonPlugin
-- recommend
+- 4. Laptop steps (Windows, `C:\Users\hp\OneDrive\Documents\GitHub\codedna`)
 - test_live_risk.py
-- pathlib
+- dataset
+- 1. Introduction
 - CodeDNA README
 - RiskPolicy
 - test_confirmatory_continuation.py
-- .handle
-- test_incompatible_and_broken_plugins_are_rejected
+- csv
+- 5. The novelty claim
 - CodeDNA FYP Starter brief
 - Agent brake study on public SWE-bench Java patches — protocol
 - Nine-project confirmatory results — 2026-10-26
 - devDependencies
 - CombinedDiscovery
-- blobs.py
-- test_history.py
+- 5. Implementation
+- sample_graph_edges.py
 - _Resolver
-- ChangeReport
+- 10. The report
 - test_agent_brake.py
 - test_demo_agent_brake.py
 - Conformal risk control stopping protocol — 2026-10-26
-- Predictive Test Selection baseline protocol — 2026-10-25
+- 11. Defence preparation (target ~May 2027; finish coding much earlier)
 - CodeDNA compared with closely related work (updated 2026-10-25)
-- Cross-Project Transfer Test (D-039)
+- 2. Where everything stands (verified 2026-10-26)
 - Tuned-threshold gate protocol — 2026-10-26
 - CodeDNA Roadmap
 - test_multi_module_integration.py
 - load_plugins
 - Confirmatory data preparation — 2026-10-25
 - Failure-conditional conformal stopping protocol — 2026-10-26
-- Dependency Graph Builder (dependency_graph)
+- IDE acceptance script
 - Failure-conditional tuned gate protocol (B13f) — 2026-10-26
 - scripts
 - Recovered Claude work and next priorities — 2026-10-24
 - Fixed DANTE-H / B10 extension protocol — 2026-10-24
 - Rolling-origin evidence study protocol — 2026-10-24
-- test_transfer_download.py
+- plugins
 - shutil
 - theiaPlugins
 - @theia/monaco@1.76.0
@@ -192,6 +192,7 @@
 - codedna-java/README.md
 - codedna-python/README.md
 - 6. Making the novelty claim true end to end (highest priority)
+- REPORT_ABSTRACT.md
 - SpyRanker
 
 ## God Nodes (most connected - your core abstractions)
@@ -211,12 +212,12 @@
   docs/HANDOFF.md → backend/codedna/git_analysis/git.py
 - `Policies per block` --references--> `match_budget()`  [INFERRED]
   docs/EVIDENCE_STUDY_PROTOCOL.md → backend/codedna/models/uncertainty.py
-- `Analyses` --references--> `match_budget()`  [INFERRED]
-  docs/PTS_BASELINE_PROTOCOL.md → backend/codedna/models/uncertainty.py
 - `4.2 Platform structure (D-017, D-018)` --references--> `LanguagePlugin`  [INFERRED]
   docs/REPORT_SYSTEM_DRAFT.md → backend/codedna/plugins/base.py
 - `Data and design` --references--> `fit_audited()`  [INFERRED]
   docs/CRC_STOP_PROTOCOL.md → backend/codedna/selection/live.py
+- `Rolling-origin design` --references--> `fit_audited()`  [INFERRED]
+  docs/EVIDENCE_STUDY_PROTOCOL.md → backend/codedna/selection/live.py
 
 ## Import Cycles
 - None detected.
@@ -233,23 +234,23 @@
 - **Calibrated risk-based stopping flow (model -> calibration -> skip risk -> B10)** — docs_architecture_failure_probability_model, docs_architecture_probability_calibration, docs_architecture_skip_risk_formula, docs_report_draft_b10_hybrid_policy [INFERRED 0.85]
 - **Temporal leakage prevention across features, splits and transfer** — docs_architecture_leakage_guard, docs_report_draft_chronological_split, docs_cross_project_protocol_source_prefix_restriction [INFERRED 0.85]
 
-## Communities (184 total, 35 thin omitted)
+## Communities (184 total, 34 thin omitted)
 
 ### Community 0 - "argparse"
-Cohesion: 0.17
-Nodes (10): _add_change_args(), _add_must_run_arg(), _add_non_java_arg(), build_parser(), _fraction(), _non_negative_int(), main(), prepare() (+2 more)
+Cohesion: 0.13
+Nodes (9): _add_change_args(), _add_must_run_arg(), _add_non_java_arg(), build_parser(), _fraction(), _json_file(), _non_negative_int(), ReportError (+1 more)
 
 ### Community 1 - "impact.py"
-Cohesion: 0.16
-Nodes (13): CodeGraph, union_graphs(), _candidate_tests(), _collect_seeds(), add(), _impacted(), _impacted_files(), ImpactedNode (+5 more)
+Cohesion: 0.17
+Nodes (12): CodeGraph, _candidate_tests(), _collect_seeds(), add(), _impacted(), _impacted_files(), ImpactedNode, ImpactReport (+4 more)
 
 ### Community 2 - "select_tests"
-Cohesion: 0.09
-Nodes (30): compare_strategies(), _estimate_time(), _select_by_coverage(), select_tests(), pick(), SelectedTest, SelectionError, SelectionReport (+22 more)
+Cohesion: 0.08
+Nodes (39): compare_strategies(), _estimate_time(), select_tests(), pick(), SelectedTest, SelectionError, SelectionReport, TestCoverage (+31 more)
 
-### Community 3 - "languages.py"
-Cohesion: 0.10
-Nodes (13): plugin_catalogue(), api_compatible(), LanguagePlugin, commit_tests(), discover(), file_language(), _has_files(), installed() (+5 more)
+### Community 3 - "pathlib"
+Cohesion: 0.06
+Nodes (17): plugin_catalogue(), _attach_line_ranges(), ChangedFile, ChangeReport, _to_range(), resolve_repository(), api_compatible(), LanguagePlugin (+9 more)
 
 ### Community 4 - "CI Workflow Config"
 Cohesion: 0.06
@@ -259,37 +260,37 @@ Nodes (43): run, defaults, name, runs-on, steps, jobs, ide-extension, maven-inte
 Cohesion: 0.14
 Nodes (15): loopback_host_only(), _hostname(), new_token(), is_loopback(), serve(), client(), test_analysis_endpoints_return_cli_json(), test_catalogue_versions_carry_the_core_compatibility_answer() (+7 more)
 
-### Community 6 - "experiment.py"
-Cohesion: 0.08
-Nodes (26): Calibrator, _logit(), brier_score(), expected_calibration_error(), reliability_bins(), _ablations(), _avg(), _calibration_section() (+18 more)
+### Community 6 - "selection/live.py"
+Cohesion: 0.12
+Nodes (10): Calibrator, _logit(), validate_outcomes(), ValidationEvidence, digest(), evaluate(), load(), miss_rate() (+2 more)
 
 ### Community 7 - "maven.py"
-Cohesion: 0.13
-Nodes (21): test_build_failure_is_reported_as_warning(), test_build_requires_explicit_permission(), test_cli_refuses_without_allow_build(), test_full_suite_run_writes_results_and_keeps_worktree_clean(), test_missing_maven_is_reported(), test_output_directory_must_be_empty(), test_per_test_coverage_maps_lines_to_members(), test_project_without_root_pom_is_rejected() (+13 more)
+Cohesion: 0.16
+Nodes (19): test_coverage_mapping_and_strategy_comparison_with_real_maven(), test_build_failure_is_reported_as_warning(), test_build_requires_explicit_permission(), test_cli_refuses_without_allow_build(), test_full_suite_run_writes_results_and_keeps_worktree_clean(), test_missing_maven_is_reported(), test_output_directory_must_be_empty(), test_per_test_coverage_maps_lines_to_members() (+11 more)
 
 ### Community 8 - "test_test_discovery.py"
 Cohesion: 0.33
 Nodes (9): discover(), test_abstract_base_tests_are_inherited(), test_junit3_methods_through_repository_base_classes(), test_junit3_test_case_methods_are_discovered(), test_junit4_framework_detected(), test_junit5_test_class_with_methods(), test_nested_test_classes_belong_to_top_level_class(), test_testng_is_reported_as_unsupported() (+1 more)
 
 ### Community 9 - "Probability Calibrators"
-Cohesion: 0.14
-Nodes (21): _risk_only(), run_experiment(), probabilities(), _summary(), load_script(), test_record_script_writes_checked_traces_and_skips_the_rest(), test_trace_leaves_the_experiment_unchanged(), traced() (+13 more)
+Cohesion: 0.09
+Nodes (34): brier_score(), expected_calibration_error(), reliability_bins(), _ablations(), _avg(), _calibration_section(), _measure(), _ml_policy() (+26 more)
 
 ### Community 10 - "IDE Extension Package"
 Cohesion: 0.11
 Nodes (24): dependencies, cytoscape@3.30.4, @fontsource-variable/geist@^5.3.0, @fontsource-variable/geist-mono@^5.3.0, @theia/core@1.76.0, @theia/editor@1.76.0, @theia/filesystem@1.76.0, @theia/monaco@1.76.0 (+16 more)
 
 ### Community 11 - "HistoryStore"
-Cohesion: 0.10
-Nodes (15): build_dataset(), HistoryStore, ResultRecord, store(), test_failure_from_any_source_wins(), test_mine_first_parent_history_in_order(), test_import_large_push_keeps_the_correct_tip_with_bounded_git_arguments(), history() (+7 more)
+Cohesion: 0.06
+Nodes (33): _count(), mine_history(), _changed_files(), _commit_meta(), _existing_commits(), import_rtptorrent(), ImportReport, list_projects() (+25 more)
 
-### Community 12 - "TestRunResult"
-Cohesion: 0.12
-Nodes (18): run_selection(), _digest(), first_parent_line(), ignore_outputs(), record_run(), record_runs(), refusal(), _refuse_all() (+10 more)
+### Community 12 - "test_recording.py"
+Cohesion: 0.16
+Nodes (14): run_selection(), record_run(), TestCaseResult, TestClassResult, run_result(), change(), fake_run(), run_selection() (+6 more)
 
 ### Community 13 - "Java Change Analysis"
-Cohesion: 0.15
-Nodes (25): analyze_edit(), by_id(), edit(), java_of(), test_added_java_file_lists_all_declarations_as_added(), test_added_method_does_not_flag_the_class(), test_change_spanning_two_methods(), test_changes_outside_methods_are_reported_explicitly() (+17 more)
+Cohesion: 0.19
+Nodes (20): analyze_edit(), by_id(), edit(), test_added_method_does_not_flag_the_class(), test_change_spanning_two_methods(), test_changes_outside_methods_are_reported_explicitly(), test_class_rename_shows_added_and_deleted_types(), test_comment_only_change_inside_method() (+12 more)
 
 ### Community 14 - "codedna-protocol.ts"
 Cohesion: 0.07
@@ -304,32 +305,32 @@ Cohesion: 0.15
 Nodes (13): test_all_skipped_class_is_skipped_not_failed(), test_jacoco_report_gives_covered_types_and_lines(), test_jvm_class_names_map_to_type_ids(), test_malformed_report_raises_report_error(), test_surefire_results_are_aggregated_per_top_level_class(), _covered(), _float(), jvm_class_to_type_id() (+5 more)
 
 ### Community 17 - ".commit"
-Cohesion: 0.10
-Nodes (25): InvalidCommitError, test_project_without_tests_checks_nothing(), project(), java_project(), python_project(), test_graph_command_reports_bad_revision(), test_invalid_revision_is_rejected(), test_renamed_java_file_without_content_change() (+17 more)
+Cohesion: 0.07
+Nodes (54): extract_changes(), discover(), GitRepo, numbered_lines(), repo(), test_project_without_tests_checks_nothing(), project(), java_project() (+46 more)
 
 ### Community 18 - "Study Runner"
-Cohesion: 0.15
-Nodes (20): Primary analysis, _agg(), _ci(), _contributing(), _cost_matched(), _fmt(), _fmt_stats(), _graph_signal() (+12 more)
+Cohesion: 0.16
+Nodes (19): _agg(), _ci(), _contributing(), _cost_matched(), _fmt(), _fmt_stats(), _graph_signal(), _hierarchical_draws() (+11 more)
 
 ### Community 19 - "org.junit.jupiter.api.Test"
 Cohesion: 0.09
-Nodes (11): Connect an agent, Demo, Limits, Structural feedback and language support, Tell the agent to use it, Test brake for AI coding agents — setup guide, Tools, OrderService (+3 more)
+Nodes (12): Connect an agent, Demo, Limits, Required tests skipped by the build (D-071), Structural feedback and language support, Tell the agent to use it, Test brake for AI coding agents — setup guide, Tools (+4 more)
 
-### Community 20 - "RTPTorrent Import"
+### Community 20 - "TestRunResult"
 Cohesion: 0.16
-Nodes (17): _changed_files(), _commit_meta(), _existing_commits(), import_rtptorrent(), ImportReport, list_projects(), _push_base(), _read_built_commits() (+9 more)
+Nodes (12): project_history_(), _check(), list_runs(), _same_repository(), _scan(), _digest(), first_parent_line(), ignore_outputs() (+4 more)
 
-### Community 21 - "mine_history"
-Cohesion: 0.22
-Nodes (5): _count(), mine_history(), CommitRecord, FileChange, test_collect_runs_each_commit_once()
+### Community 21 - "with"
+Cohesion: 0.09
+Nodes (22): BASE_SHA, HEAD_SHA, jobs, plan, name, permissions, contents, runs-on (+14 more)
 
-### Community 22 - "Cross-Project Transfer Model"
-Cohesion: 0.11
-Nodes (19): chronological_split(), fit_project(), source_prefix_before(), Dataset, _warn_if_few_failures(), bare(), load_script(), test_demo_refuses_untested_commits_and_existing_folders() (+11 more)
+### Community 22 - "Dataset"
+Cohesion: 0.07
+Nodes (40): chronological_split(), _ordering_metrics(), _reproducibility(), apfd(), apfdc(), recall_at_budget(), time_to_first_failure(), evaluate_target() (+32 more)
 
 ### Community 23 - "compute_impact"
-Cohesion: 0.19
-Nodes (17): compute_impact(), explanation_graph(), commit_files(), impacted_by_id(), test_comment_only_change_has_no_impact(), test_confirmed_path_is_preferred_over_shorter_heuristic_path(), test_deleted_class_impacts_its_former_dependents(), test_deleted_test_is_not_a_candidate() (+9 more)
+Cohesion: 0.18
+Nodes (18): compute_impact(), explanation_graph(), commit_files(), impacted_by_id(), test_comment_only_change_has_no_impact(), test_confirmed_path_is_preferred_over_shorter_heuristic_path(), test_deleted_class_impacts_its_former_dependents(), test_deleted_test_is_not_a_candidate() (+10 more)
 
 ### Community 24 - "Dependency Graph Tests"
 Cohesion: 0.16
@@ -347,41 +348,41 @@ Nodes (23): compilerOptions, declaration, declarationMap, downlevelIteration, em
 Cohesion: 0.21
 Nodes (4): _impact(), _patterns(), _risk_target(), ToolError
 
-### Community 28 - "Git Change Extraction Tests"
-Cohesion: 0.18
-Nodes (20): extract_changes(), numbered_lines(), by_path(), test_added_java_file(), test_binary_file_is_flagged_with_warning(), test_comparison_across_several_commits(), test_deleted_java_file(), test_directory_that_is_not_a_repository_fails_clearly() (+12 more)
+### Community 28 - "CodeDNAGitError"
+Cohesion: 0.22
+Nodes (5): CodeDNAGitError, InvalidCommitError, InvalidRepositoryError, test_edits_inside_a_submodule_are_refused_not_lost(), test_filter_drivers_are_refused_rather_than_run()
 
-### Community 29 - "features.py"
-Cohesion: 0.12
-Nodes (10): _history_features(), _is_file_of(), _is_test_path(), _structural(), _TestState, test_prediction_uses_prior_outcomes_and_costs_only(), 9. Improvements (engineering), fit_audited() (+2 more)
+### Community 29 - "test_tuned_gate_check.py"
+Cohesion: 0.26
+Nodes (8): search(), load(), outcomes(), test_check_tunes_on_history_and_pairs_every_commit(), test_conditional_mode_checks_failing_audit_commits_only(), test_runner_refuses_changed_protocol(), test_search_falls_back_to_full_when_the_strictest_fails(), test_search_takes_the_largest_threshold_before_the_first_failure()
 
 ### Community 30 - "Row"
-Cohesion: 0.14
-Nodes (22): evaluate(), _ordering_metrics(), _probability_metrics(), _fit(), apfd(), apfdc(), recall_at_budget(), time_to_first_failure() (+14 more)
+Cohesion: 0.11
+Nodes (16): evaluate(), _probability_metrics(), class_weight_check(), _fit(), MLRanker, Row, _warn_if_few_failures(), bare() (+8 more)
 
 ### Community 31 - "Research Plan Questions"
-Cohesion: 0.16
-Nodes (14): Baselines B0-B9, Metrics (APFD/APFDc, PR-AUC, Brier, ECE), RQ1: Feature Prediction of Test Failures, RQ3: Calibration Reliability, RQ4: Uncertainty-Aware Fallback, Calibration None/Platt/Isotonic (D-025), Milestone 5: Research Contribution, Risk-Aware Selection (D-026) (+6 more)
+Cohesion: 0.17
+Nodes (13): Baselines B0-B9, Metrics (APFD/APFDc, PR-AUC, Brier, ECE), RQ1: Feature Prediction of Test Failures, RQ3: Calibration Reliability, RQ4: Uncertainty-Aware Fallback, Calibration None/Platt/Isotonic (D-025), Milestone 5: Research Contribution, Risk-Aware Selection (D-026) (+5 more)
 
 ### Community 32 - "Project Rules & Plans"
-Cohesion: 0.18
-Nodes (9): CodeDNA Research Plan, Evaluation Chapter Draft (REPORT_DRAFT.md), Language-Plugin Interface and Registry (D-018, D-024), Leakage-Free (commit, test) Features (D-023), Milestone 4: History and Predictive Ranking, Second Language Plugin (Later), SQLite History Store (D-021), Study11 (11 projects x 5 seeds) (+1 more)
+Cohesion: 0.10
+Nodes (16): CodeDNA Research Plan, Prior Art to Study, Evaluation Chapter Draft (REPORT_DRAFT.md), Language-Plugin Interface and Registry (D-018, D-024), Leakage-Free (commit, test) Features (D-023), Milestone 4: History and Predictive Ranking, Second Language Plugin (Later), SQLite History Store (D-021) (+8 more)
 
 ### Community 33 - "test_replay.py"
 Cohesion: 0.08
-Nodes (37): _candidates(), _check(), _commits_from_per_commit(), _commits_from_trace(), _cumulative(), _events(), _fill_from_report(), find_replay_sources() (+29 more)
+Nodes (39): replay(), replay_overview_(), replay_sources(), _candidates(), _check(), _commits_from_per_commit(), _commits_from_trace(), _cumulative() (+31 more)
 
 ### Community 34 - "main"
-Cohesion: 0.15
-Nodes (17): main(), test_analyze_defaults_to_method_level(), test_analyze_file_level_prints_json_report(), test_analyze_invalid_commit_exits_with_error(), test_analyze_invalid_repository_exits_with_error(), test_analyze_writes_output_file(), test_missing_required_argument_is_usage_error(), test_graph_command_exports_json() (+9 more)
+Cohesion: 0.12
+Nodes (22): _import_rtptorrent(), main(), _record_run(), _run_history(), _run_on_dataset(), _run_tests(), _write_json(), test_analyze_defaults_to_method_level() (+14 more)
 
 ### Community 35 - "Early Core Decisions"
 Cohesion: 0.10
 Nodes (9): CodeDNA Decision Log, Geist / Geist Mono fonts, codedna.git_analysis.git.run_git, HikariCP project, JaCoCo, JavaParser symbol solver, PyDriller, scikit-learn (+1 more)
 
 ### Community 36 - "Architecture Pipeline Docs"
-Cohesion: 0.24
-Nodes (9): Change-Impact Analyzer (compute_impact, D-012), CodeDNA Analysis Pipeline, Failure-Probability Model (models), Git Change Extractor (git_analysis.changes), Java Declaration Mapper (java_analysis), Known Limitations (class-level impact, no reflection/DI edges), Probability Calibration (Platt / isotonic), Risk-Aware Test Selector (decide / RiskPolicy) (+1 more)
+Cohesion: 0.15
+Nodes (16): Change-Impact Analyzer (compute_impact, D-012), CodeDNA Analysis Pipeline, Dependency Graph Builder (dependency_graph), Failure-Probability Model (models), Git Change Extractor (git_analysis.changes), Java Declaration Mapper (java_analysis), Known Limitations (class-level impact, no reflection/DI edges), Per-test JaCoCo Coverage Mapping (D-015) (+8 more)
 
 ### Community 38 - "Dataset & Leakage Guard"
 Cohesion: 0.14
@@ -392,8 +393,8 @@ Cohesion: 0.22
 Nodes (9): CI workflow (GitHub Actions), CI job: ide-extension (TypeScript build), CI job: maven-integration (real Maven/JaCoCo), CI job: python-tests (Ubuntu/Windows, py3.11/3.12), CI job: sample-java-project (Maven + JUnit 5), JaCoCo, Changes view, Tests to run view (+1 more)
 
 ### Community 40 - "pytest"
-Cohesion: 0.11
-Nodes (19): load(), project(), test_sample_is_seeded_stratified_and_never_overwrites(), test_score_counts_labels_and_rejects_unlabelled_rows(), test_calibrator_errors(), saved_study(), test_budget_averages_seeds_then_projects_without_zero_filling(), test_calibration_and_stopping_use_common_cohorts() (+11 more)
+Cohesion: 0.14
+Nodes (15): test_calibrator_errors(), saved_study(), test_budget_averages_seeds_then_projects_without_zero_filling(), test_different_risk_targets_cannot_share_a_target_line(), test_export_fingerprints_inputs_and_is_repeatable(), test_inconsistent_budget_grid_is_rejected(), test_missing_seed_does_not_silently_shrink_the_study(), test_nonfinite_numbers_are_rejected() (+7 more)
 
 ### Community 41 - "Complete Java recommendation/execution workflow"
 Cohesion: 0.33
@@ -404,16 +405,16 @@ Cohesion: 0.12
 Nodes (16): description, devDependencies, @theia/cli@1.76.0, engines, node, npm, @theia/cli, name (+8 more)
 
 ### Community 43 - "references.py"
-Cohesion: 0.30
-Nodes (10): _compact(), extract_references(), FileFacts, _first_named(), Import, _is_named_member_type(), _line(), _text() (+2 more)
+Cohesion: 0.31
+Nodes (9): _compact(), extract_references(), _first_named(), Import, _is_named_member_type(), _line(), _text(), TypeReference (+1 more)
 
 ### Community 44 - "IDE Screenshot UI"
 Cohesion: 0.16
 Nodes (13): Affected Tests Only Selection Mode, Changes Panel (left sidebar), CodeDNA IDE (screenshot), Compare Baseline Selector (My last commit), Editor Area (pom.xml open), Change Impact Summary (files changed, parts touched, classes affected), OrderTotalsTest, Per-Test Selection Reasons (+5 more)
 
-### Community 45 - ".handle"
-Cohesion: 0.21
-Nodes (6): _content(), _error(), main(), _result(), test_mcp_python_check_runs_with_server_selected_interpreter(), test_mcp_python_plan_is_not_an_error()
+### Community 45 - "test_large_git_requests.py"
+Cohesion: 0.20
+Nodes (4): test_empty_tip_set_does_not_launch_git(), test_launch_errors_keep_the_real_cause(), fail(), test_missing_working_directory_is_not_reported_as_missing_git()
 
 ### Community 46 - "Transfer Protocol Docs"
 Cohesion: 0.18
@@ -424,20 +425,20 @@ Cohesion: 0.12
 Nodes (17): dependencies, codedna-extension@0.1.0, @theia/core@1.76.0, @theia/editor@1.76.0, @theia/filesystem@1.76.0, @theia/markers@1.76.0, @theia/preferences@1.76.0, @theia/terminal@1.76.0 (+9 more)
 
 ### Community 48 - "git.py"
-Cohesion: 0.08
-Nodes (18): _attach_line_ranges(), ChangedFile, _list_changed_paths(), _to_range(), _dirty_submodules(), GitCommandError, _output_excludes(), _run() (+10 more)
+Cohesion: 0.11
+Nodes (13): export_commit(), list_files(), _list_changed_paths(), _dirty_submodules(), GitCommandError, _output_excludes(), _run(), run_git() (+5 more)
 
 ### Community 49 - "fetch_rtptorrent_subset.py"
-Cohesion: 0.11
-Nodes (6): fetch(), main(), remote_projects(), RemoteZip, safe_target(), selected_entry()
+Cohesion: 0.06
+Nodes (17): load(), test_explicit_project_selection_cannot_relabel_inspected_or_colliding_data(), test_nonstructural_preparation_preserves_live_inputs_and_refuses_mixed_resume(), test_only_projects_outside_study11_are_confirmatory(), test_preparation_reuses_external_raw_without_copy_or_download(), test_prepare_imports_builds_features_and_resumes(), test_remote_listing_reads_only_project_result_files(), test_unfingerprinted_existing_datasets_are_not_adopted() (+9 more)
 
 ### Community 50 - "demo_agent_brake.py"
 Cohesion: 0.27
 Nodes (5): Client, git(), main(), make_repo(), run_demo()
 
 ### Community 51 - ".from_csv"
-Cohesion: 0.09
-Nodes (24): run_project(), digest(), evaluate(), load(), miss_rate(), required_keeps(), run(), main() (+16 more)
+Cohesion: 0.08
+Nodes (29): main(), markdown(), _mean(), run(), _study_helpers(), summarise(), digest(), run() (+21 more)
 
 ### Community 52 - "Graph & Mapping Milestones"
 Cohesion: 0.20
@@ -472,8 +473,8 @@ Cohesion: 0.16
 Nodes (14): description, devDependencies, electron@42.8.1, electron-builder@26.0.12, @theia/cli@1.76.0, @theia/cli, main, name (+6 more)
 
 ### Community 60 - "check"
-Cohesion: 0.12
-Nodes (15): check(), plan(), _plan_summary(), _run_verdict(), _verdict(), test_brake_plans_part_of_the_suite_on_validated_history(), test_check_needs_explicit_build_consent(), test_check_of_a_commit_is_recorded_as_history() (+7 more)
+Cohesion: 0.07
+Nodes (25): check(), plan(), _plan_summary(), _run_verdict(), _verdict(), test_check_needs_explicit_build_consent(), test_check_of_a_commit_is_recorded_as_history(), test_plan_keeps_must_run_patterns() (+17 more)
 
 ### Community 61 - "IDE & API Decisions"
 Cohesion: 0.31
@@ -484,8 +485,8 @@ Cohesion: 0.15
 Nodes (11): Shared bounded LRU parse cache (4,000 blobs), B0 retest-all, B4 static dependency selection proxy, B6 change-features-only model, B7 trained ML model, B8 calibrated selector with time budget, B9 calibrated risk-aware fallback, B9n unfamiliar-change rule only (+3 more)
 
 ### Community 63 - "CodeDNA — full handoff blueprint (2026-10-26)"
-Cohesion: 0.05
-Nodes (42): plugins(), 0.5 Where Claude stopped — resume here (kept current; last update 2026-10-26 09:40Z), 0. One-page summary, 10.1 What exists, 10.2 What is left, 10. The report, 11.1 Demo script (10 minutes), 11.2 Questions to rehearse (+34 more)
+Cohesion: 0.12
+Nodes (16): 0.5 Where Claude stopped — resume here (kept current; last update 2026-10-26 09:40Z), 0. One-page summary, 12. Future features (after the core work), 13. Command cheat sheet, 14. Risks, 15. "Done" checklist, 17.1 Ready-to-paste prompt for GPT/Codex: do the merges, 17. Ready-to-paste prompt for Codex (or any coding agent) (+8 more)
 
 ### Community 64 - "Electron App Config"
 Cohesion: 0.12
@@ -496,44 +497,40 @@ Cohesion: 0.12
 Nodes (21): base_commit(), _download(), fetch(), _git(), log_base_url(), main(), _pair(), patch_paths() (+13 more)
 
 ### Community 66 - "TestRunResult"
-Cohesion: 0.12
-Nodes (24): CodeDNAGitError, InvalidRepositoryError, resolve_repository(), _check(), import_run(), list_runs(), load_saved_run(), ProjectHistoryError (+16 more)
+Cohesion: 0.18
+Nodes (19): import_project_run_(), project_run_(), import_run(), load_saved_run(), ProjectHistoryError, record_saved_runs(), run_detail(), run_of() (+11 more)
 
 ### Community 68 - "ReplayViewWidget"
 Cohesion: 0.13
 Nodes (13): plural(), COLOUR, CommitStrip(), duration(), LineChart(), pct(), ReplayViewWidget, Series (+5 more)
 
-### Community 69 - "conftest.py"
-Cohesion: 0.16
-Nodes (4): GitRepo, isolated_git_config(), repo(), test_mine_limits_and_binary_files()
-
 ### Community 70 - "codedna_java/mapping.py"
-Cohesion: 0.12
+Cohesion: 0.13
 Nodes (19): _add_declarations(), _add_outside(), _all_unresolved(), analyze_changes(), analyze_java_file(), attach_java_declarations(), _attribute(), DeclarationChange (+11 more)
 
 ### Community 71 - "hashlib"
-Cohesion: 0.08
-Nodes (46): plugin_install(), plugin_remove(), _plugins(), CatalogueError, load_catalogue(), PluginVersion, validate_catalogue(), _version() (+38 more)
+Cohesion: 0.07
+Nodes (47): plugin_install(), plugin_remove(), _plugins(), CatalogueError, load_catalogue(), PluginVersion, validate_catalogue(), _version() (+39 more)
 
 ### Community 73 - "IDE & Local API Milestone"
 Cohesion: 0.40
 Nodes (5): CodeDNA Dark Theme (D-030, D-031), Local API FastAPI (D-019, D-028), Milestone 6: CodeDNA IDE and FYP Demo, codedna serve (Local API), CodeDNA IDE (Theia 1.76 + Electron)
 
-### Community 74 - "cli.py"
-Cohesion: 0.17
-Nodes (9): _import_rtptorrent(), _json_file(), _record_run(), _run_history(), _run_on_dataset(), _run_tests(), _write_json(), collect_results() (+1 more)
+### Community 74 - "test_history.py"
+Cohesion: 0.23
+Nodes (7): collect_results(), import_results(), save_json(), test_collect_requires_allow_build(), test_collect_runs_each_commit_once(), test_history_cli_mine_import_status(), test_import_results_and_warn_about_unknown_commits()
 
 ### Community 75 - "sys"
-Cohesion: 0.23
-Nodes (4): _pip(), build_command(), main(), write_manifest()
+Cohesion: 0.16
+Nodes (6): test_api_recomputes_full_fallback_and_requires_consent(), test_empty_selection_never_invokes_maven(), test_run_one_selected_class(), build_command(), main(), write_manifest()
 
 ### Community 76 - "RTPTorrent & SQLite Decisions"
 Cohesion: 0.29
 Nodes (4): Bare repository support (resolve_repository), Mattis et al., MSR 2020 (doi:10.1145/3379597.3387458), Maven, SQLite (sqlite3)
 
-### Community 77 - "CodeGraph"
-Cohesion: 0.29
-Nodes (4): Edge, Evidence, merge_graphs(), _add_structure()
+### Community 77 - "Blueprint completion ledger - 2026-10-27"
+Cohesion: 0.20
+Nodes (7): Blueprint completion ledger - 2026-10-27, Blueprint reconciliation, Milestone status, Remaining owner/external evidence, Validation evidence, Verified fixes in this branch, Deferred feature backlog - owner instruction, 2026-10-27
 
 ### Community 78 - "Validation & Demo Setup"
 Cohesion: 0.40
@@ -544,8 +541,8 @@ Cohesion: 0.22
 Nodes (9): scripts, build:core, bundle, download:plugins, package, rebuild, start, test:runtime (+1 more)
 
 ### Community 81 - "test_python_plugin.py"
-Cohesion: 0.10
-Nodes (25): build_graph(), commit_graph(), discover_tests(), commit(), edges(), FakeJava, java_only_plugins(), mixed() (+17 more)
+Cohesion: 0.07
+Nodes (26): commit_graph(), discover_tests(), run_tests(), TestRunError, commit(), edges(), FakeJava, java_only_plugins() (+18 more)
 
 ### Community 82 - "Milestone 1 Analyze"
 Cohesion: 0.67
@@ -556,8 +553,8 @@ Cohesion: 0.10
 Nodes (15): CodeDnaWorkspace, GraphNode, LANE_COLUMN, LANE_ROW, lanePositions(), ORDER, CATEGORY, DEPTHS (+7 more)
 
 ### Community 90 - "run_rolling_evidence.py"
-Cohesion: 0.10
-Nodes (24): _cost_matched_and_bootstrap(), bootstrap(), _difference(), _interval(), match_budget(), metrics(), test_bootstrap_intervals_and_paired_differences(), test_bootstrap_reports_no_interval_without_failures() (+16 more)
+Cohesion: 0.11
+Nodes (21): _cost_matched_and_bootstrap(), _hybrid_vs_rules(), _rounded(), probabilities(), bootstrap(), _difference(), _interval(), match_budget() (+13 more)
 
 ### Community 91 - "Node"
 Cohesion: 0.20
@@ -576,60 +573,64 @@ Cohesion: 0.67
 Nodes (3): codedna, codedna-java, codedna-python
 
 ### Community 102 - "codedna_python/mapping.py"
-Cohesion: 0.15
-Nodes (19): _add_declarations(), _add_outside(), _all_unresolved(), analyze_python_file(), attach_python_declarations(), _attribute(), DeclarationChange, _extent() (+11 more)
+Cohesion: 0.16
+Nodes (18): _add_declarations(), _add_outside(), _all_unresolved(), analyze_python_file(), attach_python_declarations(), _attribute(), DeclarationChange, _extent() (+10 more)
 
 ### Community 103 - "app.py"
-Cohesion: 0.13
-Nodes (19): AnalyzeRequest, ChangeRequest, CompareRequest, GraphRequest, ImpactRequest, ImportProjectRunRequest, PluginInstallRequest, PluginRemoveRequest (+11 more)
+Cohesion: 0.15
+Nodes (18): AnalyzeRequest, ChangeRequest, CompareRequest, GraphRequest, ImpactRequest, ImportProjectRunRequest, PluginInstallRequest, PluginRemoveRequest (+10 more)
 
 ### Community 104 - "build.py"
 Cohesion: 0.13
 Nodes (10): read_blobs(), _all(), BuildLayout, _child_text(), _gradle(), _gradle_test_roots(), _local(), _matches() (+2 more)
 
-### Community 105 - "test_policy.py"
-Cohesion: 0.16
-Nodes (13): apply_policy(), change(), reasons(), test_a_change_cannot_loosen_or_tighten_its_own_policy(), test_api_select_accepts_must_run_patterns(), test_base_policy_pins_tests_the_strategy_would_skip(), test_compare_measures_baselines_without_the_policy(), test_installed_rules_add_pins_and_fail_safe() (+5 more)
+### Community 105 - "Nine-project confirmatory results — 2026-10-26"
+Cohesion: 0.22
+Nodes (8): Design and scope, Gate evidence, Limitations and claim boundaries, Nine-project confirmatory results — 2026-10-26, Per-project observations, Pooled result, Provenance check (2026-10-26), Reproducibility
 
 ### Community 106 - "codedna_java/discovery.py"
 Cohesion: 0.15
 Nodes (14): _ancestors(), discover_tests_for_commit(), DiscoveredTest, DiscoveryReport, _extends_junit3(), _framework(), _junit3_candidate(), _junit3_provider() (+6 more)
 
 ### Community 107 - "create_app"
-Cohesion: 0.07
-Nodes (19): create_app(), analyze(), compare(), graph(), impact(), import_project_run_(), project_history_(), project_run_() (+11 more)
+Cohesion: 0.09
+Nodes (12): create_app(), analyze(), compare(), graph(), impact(), record_saved_runs_(), select(), tests() (+4 more)
 
 ### Community 108 - "policy.py"
 Cohesion: 0.13
-Nodes (6): installed_rules(), PatternRule, PolicyContext, PolicyResult, PolicyRule, read_policy()
+Nodes (7): apply_policy(), installed_rules(), PatternRule, PolicyContext, PolicyResult, PolicyRule, read_policy()
 
-### Community 109 - "test_prepare_confirmatory.py"
-Cohesion: 0.24
-Nodes (8): load(), test_explicit_project_selection_cannot_relabel_inspected_or_colliding_data(), test_nonstructural_preparation_preserves_live_inputs_and_refuses_mixed_resume(), test_only_projects_outside_study11_are_confirmatory(), test_preparation_reuses_external_raw_without_copy_or_download(), test_prepare_imports_builds_features_and_resumes(), test_remote_listing_reads_only_project_result_files(), test_unfingerprinted_existing_datasets_are_not_adopted()
+### Community 109 - "4. Design"
+Cohesion: 0.25
+Nodes (8): 4.1 Pipeline, 4.2 Platform structure (D-017, D-018), 4.3 Graph model and confidence labels (D-010), 4.4 Learning and risk design, 4.5 Must-run policy (D-050), 4.6 Building history while in use (D-053), 4.7 Security of the local tool, 4. Design
+
+### Community 110 - "JavaPlugin"
+Cohesion: 0.09
+Nodes (3): _Api10Java, __getattr__(), JavaPlugin
 
 ### Community 111 - "electron-builder.yml"
 Cohesion: 0.09
 Nodes (21): appId, asar, directories, buildResources, output, electronDist, extraResources, from (+13 more)
 
 ### Community 112 - "codedna_python/discovery.py"
-Cohesion: 0.18
-Nodes (12): discover_tests(), discover_tests_for_commit(), DiscoveredTest, DiscoveryReport, _in_testpaths(), _ini(), _is_test_file(), _matches() (+4 more)
+Cohesion: 0.09
+Nodes (15): test_pytest_settings_change_what_is_discovered(), discover_tests(), discover_tests_for_commit(), DiscoveredTest, DiscoveryReport, _in_testpaths(), _ini(), _is_test_file() (+7 more)
 
 ### Community 113 - "CodeDNA: system chapters (draft)"
-Cohesion: 0.05
-Nodes (40): 1.1 Problem, 1.2 Aim, 1.3 Objectives, 1.4 Contribution and its limits, 1.5 Report structure, 1. Introduction, 2.1 Regression test selection and prioritisation, 2.2 History-based and learned approaches in CI (+32 more)
+Cohesion: 0.10
+Nodes (21): 2.1 Regression test selection and prioritisation, 2.2 History-based and learned approaches in CI, 2.3 Predictive test selection with a target, 2.4 Recent research closest to CodeDNA, 2.5 Calibration and uncertainty, 2.6 Test selection for AI coding agents, 2.7 Position, 2. Background and related work (+13 more)
 
-### Community 114 - "validated_change"
-Cohesion: 0.22
-Nodes (7): test_api_risk_select_passes_the_method(), test_conformal_stop_keeps_must_run_tests(), test_conformal_stop_needs_nineteen_failing_audit_commits(), test_conformal_stop_selects_on_validated_history(), test_live_acceptance_uses_only_real_prior_target_ancestors(), test_validated_selection_never_skips_must_run_tests(), validated_change()
+### Community 114 - "3. The open PRs and how to merge them"
+Cohesion: 0.33
+Nodes (6): 3.1 PR bases (checked on GitHub, 2026-10-26), 3.2 Route A (recommended): merge this one integration PR, 3.3 Route B: merge the PRs one by one, 3.4 Breakages fixed on this branch (Route B must repeat them), 3.5 After merging, 3. The open PRs and how to merge them
 
 ### Community 115 - "test_pts_check.py"
 Cohesion: 0.20
 Nodes (13): _count_cutoff(), Cutoffs, _score_cutoff(), select(), tune(), load(), row(), test_auc_counts_ties_as_half_and_needs_both_classes() (+5 more)
 
 ### Community 116 - "RiskPolicy"
-Cohesion: 0.10
-Nodes (18): _decision(), _extend_to_risk_target(), SelectionDecision, _skip_risk(), search(), validate_outcomes(), ValidationEvidence, test_audit_needs_failures_recall_and_an_upper_bound() (+10 more)
+Cohesion: 0.15
+Nodes (13): order_history(), _decision(), _estimated_costs(), _extend_to_risk_target(), SelectionDecision, _skip_risk(), candidates(), slow_extend() (+5 more)
 
 ### Community 117 - "demo_brake_end_to_end.py"
 Cohesion: 0.29
@@ -642,10 +643,6 @@ Nodes (3): _CodeIndex, _to_ranges(), JacocoCoverage
 ### Community 119 - "resolve_commit"
 Cohesion: 0.38
 Nodes (13): resolve_commit(), commit(), junit_class(), test_class_patterns_in_surefire_includes_select_test_classes(), test_gradle_multi_line_include_and_comments(), test_gradle_settings_modules_run_every_junit_class(), test_gradle_test_source_sets_moved_by_scripts(), test_maven_modules_are_followed_and_custom_includes_read() (+5 more)
-
-### Community 120 - "codedna_java/builder.py"
-Cohesion: 0.14
-Nodes (7): BoundedParseCache, test_bounded_cache_gives_identical_graphs(), _add_structure(), build_graph(), build_graph_for_commit(), file_role(), _parse_missing()
 
 ### Community 121 - "test_desktop_bundle.py"
 Cohesion: 0.22
@@ -660,8 +657,12 @@ Cohesion: 0.30
 Nodes (9): bare_repository(), candidates(), evaluate(), first_parents(), list_candidates(), main(), prior_history(), real_outcome() (+1 more)
 
 ### Community 124 - "test_start_bat.py"
-Cohesion: 0.31
-Nodes (9): checkout(), run(), test_default_run_creates_the_demo_and_opens_it(), test_given_folder_is_opened_and_first_run_installs_and_builds(), test_installs_both_language_plugins_once_into_a_venv_without_them(), test_installs_the_java_plugin_once_into_an_older_venv(), test_launcher_reuses_portable_gradle_and_preserves_custom_cache(), test_missing_core_stops_with_setup_instructions() (+1 more)
+Cohesion: 0.27
+Nodes (10): test_demo_repository_names_modified_method_and_added_class(), checkout(), run(), test_default_run_creates_the_demo_and_opens_it(), test_given_folder_is_opened_and_first_run_installs_and_builds(), test_installs_both_language_plugins_once_into_a_venv_without_them(), test_installs_the_java_plugin_once_into_an_older_venv(), test_launcher_reuses_portable_gradle_and_preserves_custom_cache() (+2 more)
+
+### Community 125 - "codedna_python/builder.py"
+Cohesion: 0.10
+Nodes (12): Edge, Evidence, merge_graphs(), union_graphs(), UnresolvedReference, _add_structure(), _Bindings, build_graph_for_commit() (+4 more)
 
 ### Community 126 - "workflow.test.cjs"
 Cohesion: 0.15
@@ -672,7 +673,7 @@ Cohesion: 0.22
 Nodes (4): localPython, result, root, resolveCoreExecutable()
 
 ### Community 128 - "runner.py"
-Cohesion: 0.23
+Cohesion: 0.24
 Nodes (8): _collect(), find_python(), _float(), _message(), PytestRunError, _run(), run_pytest(), _status()
 
 ### Community 129 - "class_weight_check.py"
@@ -691,29 +692,41 @@ Nodes (12): 1. Motivation, 2. Design, 3. Evaluation question, 4. Method, 5.1 Pri
 Cohesion: 0.20
 Nodes (5): C, CODEDNA_THEME_ID, CodeDnaThemeContribution, COLORS, TOKEN_COLORS
 
-### Community 134 - "recommend"
-Cohesion: 0.10
-Nodes (17): risk_select(), recommend(), _unvalidated_all(), test_mcp_cli_selects_python_without_granting_build_consent(), test_partial_broadening_labels_original_estimate_conservatively(), test_python_check_executes_pytest_and_reports_actual_verdict(), test_python_check_still_requires_consent(), test_python_fallback_keeps_policy_pins() (+9 more)
+### Community 133 - "4. Laptop steps (Windows, `C:\Users\hp\OneDrive\Documents\GitHub\codedna`)"
+Cohesion: 0.33
+Nodes (6): 4.1 Set GPT's uncommitted edits aside (do this first), 4.2 Pull after the merges (only after §3 is done), 4.3 Deal with 97c3be7 (graphify output, email privacy block), 4.4 Reinstall and rebuild, 4.5 Clean up after the confirmatory run, 4. Laptop steps (Windows, `C:\Users\hp\OneDrive\Documents\GitHub\codedna`)
 
-### Community 135 - "test_live_risk.py"
-Cohesion: 0.10
-Nodes (23): historical_scores(), order_history(), _estimated_costs(), load(), test_check_tunes_on_history_and_pairs_every_commit(), test_conditional_mode_tunes_on_failing_audit_commits_only(), test_runner_refuses_changed_protocol(), test_saves_time_needs_the_target_on_three_quarters_of_projects() (+15 more)
+### Community 134 - "test_live_risk.py"
+Cohesion: 0.12
+Nodes (21): risk_select(), historical_scores(), recommend(), _unvalidated_all(), test_api_gate_and_execution_permission(), test_api_risk_select_passes_the_method(), test_audit_needs_failures_recall_and_an_upper_bound(), test_cli_risk_select() (+13 more)
 
-### Community 136 - "pathlib"
-Cohesion: 0.14
-Nodes (4): _Bindings, build_graph_for_commit(), file_role(), parse_commit()
+### Community 135 - "dataset"
+Cohesion: 0.13
+Nodes (18): threshold(), load(), test_check_tunes_on_history_and_pairs_every_commit(), test_conditional_mode_tunes_on_failing_audit_commits_only(), test_crc_script_cli_runs_on_tiny_synthetic_history(), test_runner_refuses_changed_protocol(), test_saves_time_needs_the_target_on_three_quarters_of_projects(), test_threshold_needs_enough_commits_and_stops_at_first_violation() (+10 more)
+
+### Community 136 - "1. Introduction"
+Cohesion: 0.33
+Nodes (6): 1.1 Problem, 1.2 Aim, 1.3 Objectives, 1.4 Contribution and its limits, 1.5 Report structure, 1. Introduction
 
 ### Community 137 - "CodeDNA README"
 Cohesion: 0.33
 Nodes (3): Project Specification, CodeDNA IDE README, CodeDNA README
 
 ### Community 138 - "RiskPolicy"
-Cohesion: 0.12
-Nodes (26): _outcomes(), failing_commit_threshold(), stopper(), choose(), threshold(), choose(), decide(), RiskPolicy (+18 more)
+Cohesion: 0.11
+Nodes (29): _outcomes(), _rules_policy(), choose(), order_by_baseline(), failing_commit_threshold(), stopper(), choose(), fit_audited() (+21 more)
 
 ### Community 140 - "test_confirmatory_continuation.py"
+Cohesion: 0.24
+Nodes (10): cache_for_fixture(), load(), test_corrupt_source_file_is_rejected_before_preparation(), test_end_to_end_reuses_cache_and_freezes_model_code(), test_freezing_provenance_preserves_an_existing_conflicting_record(), test_incomplete_cli_records_status_without_waiting_or_downloading(), test_output_lock_prevents_duplicate_workers_and_allows_restart(), test_partial_and_wrong_project_caches_are_not_ready() (+2 more)
+
+### Community 141 - "csv"
+Cohesion: 0.29
+Nodes (5): load(), test_sample_is_seeded_stratified_and_never_overwrites(), test_score_counts_labels_and_rejects_unlabelled_rows(), score(), wilson()
+
+### Community 142 - "5. The novelty claim"
 Cohesion: 0.40
-Nodes (8): cache_for_fixture(), load(), test_corrupt_source_file_is_rejected_before_preparation(), test_end_to_end_reuses_cache_and_freezes_model_code(), test_freezing_provenance_preserves_an_existing_conflicting_record(), test_incomplete_cli_records_status_without_waiting_or_downloading(), test_output_lock_prevents_duplicate_workers_and_allows_restart(), test_partial_and_wrong_project_caches_are_not_ready()
+Nodes (5): 5.1 Claim wording to use, 5.2 Evidence table, 5.3 Comparison with Facebook Predictive Test Selection (Machalica et al., ICSE-SEIP 2019), 5.4 Prior work that must be cited (never claim "first"), 5. The novelty claim
 
 ### Community 143 - "CodeDNA FYP Starter brief"
 Cohesion: 0.22
@@ -724,28 +737,28 @@ Cohesion: 0.22
 Nodes (9): Agent brake study on public SWE-bench Java patches — protocol, Arms, Changes after fixing the protocol, Data, Exclusions, Known limits (stated in advance), Outcomes, Question (+1 more)
 
 ### Community 145 - "Nine-project confirmatory results — 2026-10-26"
-Cohesion: 0.14
-Nodes (13): Design and scope, Gate evidence, Limitations and claim boundaries, Nine-project confirmatory results — 2026-10-26, Per-project observations, Pooled result, Provenance check (2026-10-26), Reproducibility (+5 more)
+Cohesion: 0.31
+Nodes (5): main(), new_projects(), prepare(), _script(), short_name()
 
 ### Community 146 - "devDependencies"
 Cohesion: 0.22
 Nodes (9): devDependencies, rimraf@^5.0.0, @types/cytoscape@3.21.9, @types/react@^19.3.0, typescript@~5.4.5, rimraf, @types/cytoscape, @types/react (+1 more)
 
-### Community 149 - "test_history.py"
-Cohesion: 0.39
-Nodes (6): save_json(), TestCaseResult, run_result(), test_collect_requires_allow_build(), test_history_cli_mine_import_status(), test_import_results_and_warn_about_unknown_commits()
+### Community 148 - "5. Implementation"
+Cohesion: 0.40
+Nodes (5): 5.1 Technology choices, 5.2 Core modules, 5.3 CodeDNA IDE, 5.4 Real-project demonstration (D-052), 5. Implementation
 
 ### Community 150 - "_Resolver"
-Cohesion: 0.26
-Nodes (4): _FileContext, _Resolution, _Resolver, JavaParseResult
+Cohesion: 0.15
+Nodes (11): test_bounded_cache_gives_identical_graphs(), _add_structure(), build_graph(), build_graph_for_commit(), file_role(), _FileContext, _parse_missing(), _Resolution (+3 more)
 
-### Community 151 - "ChangeReport"
-Cohesion: 0.21
-Nodes (3): ChangeReport, api10_java(), no_plugins()
+### Community 151 - "10. The report"
+Cohesion: 0.67
+Nodes (3): 10.1 What exists, 10.2 What is left, 10. The report
 
 ### Community 152 - "test_agent_brake.py"
-Cohesion: 0.19
-Nodes (15): BrakeServer, junit_class(), project(), outcomes(), rpc(), test_brake_check_on_validated_history_gives_a_verdict(), test_build_errors_and_all_skipped_runs_are_incomplete(), test_check_is_offered_only_with_build_consent_for_one_repository() (+7 more)
+Cohesion: 0.11
+Nodes (22): BrakeServer, _content(), _error(), main(), _result(), junit_class(), project(), outcomes() (+14 more)
 
 ### Community 153 - "test_demo_agent_brake.py"
 Cohesion: 0.33
@@ -755,17 +768,17 @@ Nodes (3): load(), test_demo_plans_tests_for_the_agents_edit_without_building(),
 Cohesion: 0.29
 Nodes (6): Analyses, B12, Conformal risk control stopping protocol — 2026-10-26, Data and design, Outputs, Question
 
-### Community 155 - "Predictive Test Selection baseline protocol — 2026-10-25"
-Cohesion: 0.29
-Nodes (6): Analyses, B11: PTS-style selection, Data and design, Outputs, Predictive Test Selection baseline protocol — 2026-10-25, Question
+### Community 155 - "11. Defence preparation (target ~May 2027; finish coding much earlier)"
+Cohesion: 0.67
+Nodes (3): 11.1 Demo script (10 minutes), 11.2 Questions to rehearse, 11. Defence preparation (target ~May 2027; finish coding much earlier)
 
 ### Community 156 - "CodeDNA compared with closely related work (updated 2026-10-25)"
-Cohesion: 0.29
-Nodes (7): Agents, CodeDNA compared with closely related work (updated 2026-10-25), Comparison on the five properties that matter, Conformal risk control (D-063), Sources, The claim being checked, Where the claim is weakest
+Cohesion: 0.25
+Nodes (8): 2026-10-27 literature update, Agents, CodeDNA compared with closely related work (updated 2026-10-25), Comparison on the five properties that matter, Conformal risk control (D-063), Sources, The claim being checked, Where the claim is weakest
 
-### Community 157 - "Cross-Project Transfer Test (D-039)"
-Cohesion: 0.29
-Nodes (6): Prior Art to Study, Cross-Project Transfer Test (D-039), RTPTorrent v1.1 Four-Project Subset, codedna history import-rtptorrent, Reproduce Cross-Project Transfer Check, RTPTorrent Dataset (Mattis et al., MSR 2020)
+### Community 157 - "2. Where everything stands (verified 2026-10-26)"
+Cohesion: 0.67
+Nodes (3): 2.1 Feature status, 2.2 Decision numbers in use, 2. Where everything stands (verified 2026-10-26)
 
 ### Community 158 - "Tuned-threshold gate protocol — 2026-10-26"
 Cohesion: 0.29
@@ -780,8 +793,8 @@ Cohesion: 0.32
 Nodes (3): test_gradle_multi_project_runs_and_selects(), test_multi_module_maven_reports_every_module_and_selects_across_modules(), write()
 
 ### Community 161 - "load_plugins"
-Cohesion: 0.10
-Nodes (17): analyze_changes(), PluginMissingError, require(), type_kinds(), load_plugins(), _Api10Java, test_an_api_1_0_plugin_is_loaded_and_says_changes_stay_at_file_level(), test_changes_are_listed_and_java_files_reported_as_not_analysed() (+9 more)
+Cohesion: 0.08
+Nodes (17): analyze_changes(), build_graph(), PluginMissingError, require(), type_kinds(), load_plugins(), api10_java(), no_plugins() (+9 more)
 
 ### Community 162 - "Confirmatory data preparation — 2026-10-25"
 Cohesion: 0.33
@@ -790,10 +803,6 @@ Nodes (5): Confirmatory data preparation — 2026-10-25, Equivalent runtime inpu
 ### Community 163 - "Failure-conditional conformal stopping protocol — 2026-10-26"
 Cohesion: 0.33
 Nodes (5): Analyses, Failure-conditional conformal stopping protocol — 2026-10-26, Method (B12f), Outputs, Question
-
-### Community 164 - "Dependency Graph Builder (dependency_graph)"
-Cohesion: 0.29
-Nodes (7): Dependency Graph Builder (dependency_graph), Per-test JaCoCo Coverage Mapping (D-015), Selection Baselines: all / dependency / coverage (D-016), Static JUnit Test Discovery, Unresolved-Edge Rate Metric, B4 Dependency-Only Selection, RQ5: Value of Dependency-Graph Features
 
 ### Community 165 - "Failure-conditional tuned gate protocol (B13f) — 2026-10-26"
 Cohesion: 0.33
@@ -812,15 +821,11 @@ Cohesion: 0.40
 Nodes (5): Fixed DANTE-H / B10 extension protocol — 2026-10-24, Fixed experiment, Independent baseline and attribution, Operational gate (separate from this retrospective experiment), Revised adapter, frozen before its own results
 
 ### Community 169 - "Rolling-origin evidence study protocol — 2026-10-24"
-Cohesion: 0.25
-Nodes (7): Data and project sets, Gate analysis, Policies per block, Question, Reporting and reproducibility, Rolling-origin design, Rolling-origin evidence study protocol — 2026-10-24
-
-### Community 170 - "test_transfer_download.py"
-Cohesion: 0.29
-Nodes (3): test_archive_paths_cannot_escape_output(), test_subset_download_filters_shared_map_and_verifies_restart(), __init__()
+Cohesion: 0.22
+Nodes (8): Data and project sets, Gate analysis, Policies per block, Primary analysis, Question, Reporting and reproducibility, Rolling-origin design, Rolling-origin evidence study protocol — 2026-10-24
 
 ### Community 171 - "shutil"
-Cohesion: 0.48
+Cohesion: 0.53
 Nodes (3): git(), main(), write()
 
 ### Community 172 - "theiaPlugins"
@@ -834,34 +839,34 @@ Nodes (5): 6.1 Rerun PTS and B12f on the confirmatory data, 6.2 Decide whether t
 ## Ambiguous Edges - Review These
 - `Candidate Contribution: Hybrid Calibrated Selector with Fallback` → `Thesis Claim: Calibrated Stopping Rule on Simple Ordering`  [AMBIGUOUS]
   docs/RESEARCH_PLAN.md · relation: conceptually_related_to
-- `Shared bounded LRU parse cache (4,000 blobs)` → `D-011 Plain dictionaries, not NetworkX, for the graph`  [AMBIGUOUS]
-  docs/DECISIONS.md · relation: conceptually_related_to
 - `D-008 Tree-sitter Java for syntax-level declaration extraction` → `D-020 Platform website and plugin distribution`  [AMBIGUOUS]
+  docs/DECISIONS.md · relation: conceptually_related_to
+- `D-011 Plain dictionaries, not NetworkX, for the graph` → `Shared bounded LRU parse cache (4,000 blobs)`  [AMBIGUOUS]
   docs/DECISIONS.md · relation: conceptually_related_to
 
 ## Knowledge Gaps
 - **71 isolated node(s):** `example:sample-java-project`, `codedna-java`, `codedna-python`, `Cytoscape.js`, `Tree-sitter Java` (+66 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 1035 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **35 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 1070 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **34 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Study11 (11 projects x 5 seeds)` connect `Project Rules & Plans` to `class_weight_check.py`, `Study Runner`, `Research Plan Questions`?**
-  _High betweenness centrality (0.072) - this node is a cross-community bridge._
+- **Why does `Study11 (11 projects x 5 seeds)` connect `Project Rules & Plans` to `class_weight_check.py`, `Study Runner`?**
+  _High betweenness centrality (0.069) - this node is a cross-community bridge._
 - **Are the 5 inferred relationships involving `create_app()` (e.g. with `require_token()` and `ReplayError`) actually correct?**
   _`create_app()` has 5 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `example:sample-java-project`, `codedna-java`, `codedna-python` to the rest of the system?**
   _71 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `select_tests` be split into smaller, more focused modules?**
-  _Cohesion score 0.09219858156028368 - nodes in this community are weakly interconnected._
+- **Should `argparse` be split into smaller, more focused modules?**
+  _Cohesion score 0.13438735177865613 - nodes in this community are weakly interconnected._
 - **Why does `CodeDNA README` connect `CodeDNA README` to `Project Rules & Plans`, `CodeDNA Roadmap`?**
-  _High betweenness centrality (0.056) - this node is a cross-community bridge._
+  _High betweenness centrality (0.061) - this node is a cross-community bridge._
 
 ### Low-confidence Hints
 _AMBIGUOUS edges — the extractor was unsure. Verify before acting on these._
 
 - **What is the exact relationship between `Candidate Contribution: Hybrid Calibrated Selector with Fallback` and `Thesis Claim: Calibrated Stopping Rule on Simple Ordering`?**
   _Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low._
-- **What is the exact relationship between `Shared bounded LRU parse cache (4,000 blobs)` and `D-011 Plain dictionaries, not NetworkX, for the graph`?**
+- **What is the exact relationship between `D-008 Tree-sitter Java for syntax-level declaration extraction` and `D-020 Platform website and plugin distribution`?**
   _Edge tagged AMBIGUOUS (relation: conceptually_related_to) - confidence is low._

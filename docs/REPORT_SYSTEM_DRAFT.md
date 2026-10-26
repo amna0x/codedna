@@ -394,14 +394,15 @@ feature of the product):
 
 - `git_analysis`: safe Git calls, change extraction, blob readers,
   working-tree snapshots (D-046).
-- `java_analysis`: Tree-sitter parse and line-to-declaration mapping.
+- `codedna_java`: Tree-sitter parse and line-to-declaration mapping (separate plugin, D-054).
 - `dependency_graph`: one `git cat-file --batch` read per commit, parse cache
   by blob SHA, reference resolution with evidence.
 - `impact_analysis`: merged BASE/HEAD graph, reverse BFS, explanation graph
   with package grouping and summary counts (D-051).
-- `test_mapping`: build layout detection (Maven reactor, Gradle,
-  `testSourceDirectory`, build-helper test folders, Surefire includes),
-  test discovery, opt-in runner, JaCoCo per-test coverage.
+- `test_mapping`: shared test-result and coverage schemas. `codedna_java`
+  supplies Maven/Gradle layout detection, test discovery, execution and Maven
+  per-test JaCoCo coverage. `codedna_python` supplies AST analysis, static pytest
+  module discovery and execution through the same core plugin interface.
 - `selection`: strategies, comparison, risk decision, policy, live gate.
 - `test_history`, `models`, `calibration`: history store, dataset builder,
   rankers, experiment runner, calibrators and metrics; `recording.py` keeps

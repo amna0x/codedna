@@ -1,5 +1,16 @@
 # CodeDNA — Roadmap
 
+## Current continuation - 2026-10-27 (supersedes older status)
+
+PR #22 merged as 45821b4 after owner authorization and green checks. D-068 and
+D-070 are already on main. The studies are finished; preserve their reports.
+Work now continues on codex/blueprint-completion. Read
+[the current completion ledger](BLUEPRINT_COMPLETION.md) for remaining work
+and validation, and [the deferred backlog](DEFERRED_FEATURES.md). The owner
+asked to save extra proposals for later, not implement them now. Preserve all
+stashes. Publication/merge-pending notes below are historical, not current.
+
+
 Status legend: ✅ done · 🔄 in progress · ⏳ not started
 
 CodeDNA has two tracks (D-017):
@@ -11,7 +22,8 @@ CodeDNA has two tracks (D-017):
   plugins, and a platform website with a plugin catalogue — Milestones 6–7
   and the plugin refactor in Milestone 4. It must not delay Milestones 4–5.
 
-Java stays the only supported language until Milestone 5 is complete.
+Java and Python are implemented (D-060). Risk-model evidence remains Java-specific;
+Milestone 5 report review is still open.
 
 ## Verified follow-up status - 2026-10-26
 
@@ -160,14 +172,12 @@ Product track, alongside:
   five seeds; all calibrated observed targets hold, but matched-time safety
   difference +0.0460 [-0.0500, 0.2806] is not significant. Full-DANTE reproduction
   and general superiority are not claimed (D-040).
-- 🔄 Rolling-origin evidence study with pre-fixed rules (D-042): on the four
-  inspected projects B10 shows no meaningful safety difference from matched B3;
-  the gate accepts few blocks but those miss rarely. New-project confirmation
-  is queued for all nine fresh projects (D-056). The existing Zenodo raw download
-  continues; a tested one-time continuation verifies the full cache, reuses it
-  read-only, builds projected CSVs/DBs and runs the fixed study. No fresh verdict
-  yet. See `docs/CONFIRMATORY_PREPARATION_2026-10-25.md` and the continuation
-  status under `experiments/datasets/confirmatory-live-2026-10-25/`.
+- ✅ Nine-project rolling-origin confirmation and all four follow-ups are
+  complete (D-067/D-069); see report 4.11/4.12 and preserved findings. B10
+  remains default, CRC opt-in. PTS cost matching failed; B13/B13f exploratory.
+- 🔄 Final research report and supervisor review remain open. The current
+  retrospective replay assumes stored prior outcomes; partial-feedback
+  deployment performance is not established. New replay work is deferred.
 
 ## Milestone 6 — CodeDNA IDE and FYP demo ⏳
 
@@ -236,7 +246,7 @@ May start in parallel (Student C) once the analysis JSON formats are stable.
 - ✅ Second language plugin: Python (`plugins/codedna-python`, D-060), built
   early by the owners' plan of 2026-10-25. Works next to Java in one
   repository (joined graphs, one test universe, split test runs); no
-  cross-language edges. Open: risk-based selection and graceful brake fallback for Python; both
+  cross-language edges. Risk-based selection remains unsupported; graceful brake fallback is complete (D-070). Both
   plugins are included by the desktop bundle builder
 - ⏳ File-level history fallback (co-change) for languages without a plugin,
   always labelled heuristic

@@ -580,3 +580,20 @@ returns an explicit full-suite fallback for missing risk capability or a
 mixed-language universe. `brake.check` delegates execution to the existing
 `plugins.languages.run_tests`, preserving consent and combined results.
 The core imports no language-specific package for this behavior.
+
+
+## Blueprint completion repairs (D-071)
+
+`agent.brake.check` refuses a successful verdict if any required test class or
+module is skipped by the build. `test_history.recording` rejects such incomplete
+observations before replacing complete recorded evidence. Real failing test
+results remain recordable, including Maven/Gradle's failure exit code.
+
+`plugins.languages.commit_tests` forwards the shared parse cache when a plugin
+explicitly supports the optional argument. Legacy discovery signatures continue
+to work. Python pytest execution prefers the original project's `.venv`; the
+frozen analysis executable cannot be used as a Python interpreter.
+
+`scripts/pr_demo.py` and the PR-analysis workflow produce a read-only brake plan,
+not a test-run verdict. Website and optional new features remain separately
+tracked in the current completion ledger and deferred backlog.

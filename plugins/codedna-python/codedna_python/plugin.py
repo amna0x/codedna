@@ -42,8 +42,8 @@ class PythonPlugin:
                     cache: dict | None = None):
         return build_graph_for_commit(repo, commit, include_members=include_members, cache=cache)
 
-    def discover_tests(self, repo: Path, commit: str):
-        return discover_tests_for_commit(repo, commit)
+    def discover_tests(self, repo: Path, commit: str, cache: dict | None = None):
+        return discover_tests_for_commit(repo, commit, cache=cache)
 
     def run_tests(self, repo_path: str | Path, revision: str, output_dir: str | Path, *,
                   allow_build: bool, per_test_coverage: bool = False, **options: Any):

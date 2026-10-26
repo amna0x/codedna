@@ -13,7 +13,7 @@ it is done:
   - ``passed``: every listed test class has a result and none failed;
   - ``blocked``: at least one listed test class failed;
   - ``incomplete``: some listed class has no result, the build exited with
-    an error or timed out, or every listed class was skipped, so nothing can
+    an error or timed out, or a listed class was skipped, so nothing can
     be concluded;
   - ``nothing_to_run``: validated history says no test needs to run for this
     change (the skipped tests and the estimated risk are in the plan);
@@ -162,12 +162,12 @@ def _run_verdict(tests: list[str], run) -> dict:
         return _verdict("incomplete", "the build exited with an error or timed out "
                         f"(exit codes {run.exit_codes}); the results may be partial",
                         build_warnings=run.warnings)
-    if len(not_run) == len(tests):
-        return _verdict("incomplete", f"all {len(tests)} planned test class(es) were skipped "
-                        "by the build; nothing was checked", skipped_by_build=not_run)
-    note = f"; {len(not_run)} class(es) were skipped by the build" if not_run else ""
-    return _verdict("passed", f"all {len(tests)} planned test class(es) passed{note}",
-                    skipped_by_build=not_run)
+    if not_run:
+        return _verdict("incomplete", f"{len(not_run)} of {len(tests)} required test "
+                        "class(es) or module(s) were skipped by the build; required checks "
+                        "remain unverified", skipped_by_build=not_run)
+    return _verdict("passed", f"all {len(tests)} required test class(es) or module(s) passed",
+                    skipped_by_build=[])
 
 
 def _verdict(name: str, message: str, **details) -> dict:

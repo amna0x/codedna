@@ -16,7 +16,8 @@ CodeDNA is delivered as a platform:
 1. **Analysis core** (Python) — change extraction, code graph, impact,
    test selection, history/ML risk estimation, calibration; CLI + local API.
 2. **Language plugins** — one per language behind a common interface (D-018).
-   Java is the first and, until Milestone 5 is complete, the only one.
+   Java was first; Python is also implemented (D-060). Java remains the research
+   validation language; Python uses conservative risk fallback (D-070).
 3. **CodeDNA IDE** — a branded IDE built on Eclipse Theia with CodeDNA
    panels: changed methods, impacted code, recommended tests with risk,
    run-selected-tests, interactive code graph (D-019).

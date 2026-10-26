@@ -1,0 +1,9 @@
+{
+  "seed": 0,
+  "sampling": "10 per project x confidence stratum; 40 total",
+  "input_sha256": {
+    "experiments\\results\\graph-precision-2026-10-25\\hikari-sample.csv": "03a05fd4425d8caf4ac25dc149877a7e6054d5a28bee0bc6e668bf986237c248",
+    "experiments\\results\\graph-precision-2026-10-25\\littleproxy-sample.csv": "6ac81da125423fd7014141aed380c35f9082241e9c0e68e43cfe0924b87d5929"
+  },
+  "human_labels_complete": false
+}

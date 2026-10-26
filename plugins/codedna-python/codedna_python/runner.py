@@ -48,13 +48,25 @@ class PytestRunError(CodeDNAGitError):
     """pytest could not be started or its report could not be read."""
 
 
-def find_python() -> list[str]:
+def find_python(repo: Path | None = None) -> list[str]:
+    # The original project environment is outside the exported snapshot. Builds
+    # are already consented before this is called; never install dependencies.
+    if repo is not None:
+        relative = "Scripts/python.exe" if os.name == "nt" else "bin/python"
+        candidate = repo / ".venv" / relative
+        if candidate.is_file():
+            return [str(candidate)]
     # On Windows "python3" is often the Microsoft Store stub, so try "python" first.
     names = ("python", "python3") if os.name == "nt" else ("python3", "python")
     for name in names:
         executable = shutil.which(name)
         if executable:
             return [executable]
+    if getattr(sys, "frozen", False):
+        raise PytestRunError(
+            "No project Python interpreter found. Create PROJECT/.venv with pytest and "
+            "the project's dependencies, or configure --python with an existing interpreter. "
+            "The bundled CodeDNA executable is not a project Python interpreter.")
     return [sys.executable]
 
 
@@ -95,7 +107,7 @@ def run_pytest(repo_path: str | Path, revision: str, output_dir: str | Path, *,
             report.parent.mkdir(parents=True, exist_ok=True)
             # File paths, never "-k" expressions or node IDs built from repository text.
             targets = [files[t] for t in sorted(selected_tests)] if selected_tests else []
-            command = [*(python_command or find_python()), "-m", "pytest", "-q",
+            command = [*(python_command or find_python(repo)), "-m", "pytest", "-q",
                        "-p", "no:cacheprovider", "-o", "junit_family=xunit2",
                        f"--junitxml={report}", *(["--", *targets] if targets else [])]
             _run(command, checkout, output / "logs" / "pytest.log", run, timeout)

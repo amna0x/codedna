@@ -83,7 +83,8 @@ def test_build_errors_and_all_skipped_runs_are_incomplete(project):
 
     outcomes(**{"a.ATest": "passed", "a.BTest": "skipped"})
     some = brake.check(repo.path, maven_command=FAKE, allow_build=True)
-    assert some["verdict"] == "passed" and some["skipped_by_build"] == ["a.BTest"]
+    assert some["verdict"] == "incomplete" and some["skipped_by_build"] == ["a.BTest"]
+    assert "remain unverified" in some["message"]
 
 
 def test_check_needs_explicit_build_consent(project):

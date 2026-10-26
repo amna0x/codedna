@@ -632,3 +632,19 @@ equal-time comparison. The missing nine-project addendum and existing
 statistical limitations are explicit. Cross-project model transfer remains
 unestablished. The contribution is a working, inspectable brake with honest
 fallbacks and documented limits, not a universal fast or guaranteed selector.
+
+
+## Additional validity limit: feedback available after selection
+
+The retrospective feature builder correctly excludes current/future outcomes.
+It nevertheless uses all stored earlier results. In deployment, a skipped test
+may remain unobserved, so subsequent history features and audit eligibility can
+differ. Existing results describe full-history retrospective replay, not a
+validated closed-loop partial-feedback deployment. Live recording accepts only
+complete full-suite evidence; a passing subset is not a fully passing commit.
+A separate deployment-faithful evaluation is deferred, not claimed completed.
+
+Safety definitions also differ across prior work: CodeDNA counts a failing
+commit as safe only when no failing test was omitted. Build-escape measures
+count a miss only when no failure was caught. These numbers are not directly
+comparable. See NOVELTY_REVIEW_2026-10-27.md for the source comparison.

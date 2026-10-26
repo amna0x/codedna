@@ -48,8 +48,8 @@
     "semantic_hash": "2c226ebb7b1b4bee7206ccc5ca4d6553"
   },
   "backend/codedna/cli.py": {
-    "mtime": 1793034246.069387,
-    "seen": 1793034954.6013148,
+    "mtime": 1793038026.1347547,
+    "seen": 1793043692.409709,
     "ast_hash": "d2b69743c37820e1f4da9115b9b895ca",
     "semantic_hash": ""
   },
@@ -402,9 +402,9 @@
     "semantic_hash": ""
   },
   "ide/codedna-extension/src/browser/tests-view-widget.tsx": {
-    "mtime": 1793031514.1616857,
-    "seen": 1793033487.6411092,
-    "ast_hash": "b8fee518a873b6d7614e6b4cde7632e2",
+    "mtime": 1793042958.4358537,
+    "seen": 1793043692.4127212,
+    "ast_hash": "56f46da5260670ee8aa519b3e495f64c",
     "semantic_hash": ""
   },
   "ide/codedna-extension/src/browser/theme/codedna-theme.ts": {
@@ -510,20 +510,20 @@
     "semantic_hash": "143493fc0f69d7306bf0c787ca38fca9"
   },
   "MEMORY.md": {
-    "mtime": 1793033060.8205621,
-    "seen": 1793033487.6411092,
-    "ast_hash": "e52155e4dd8f92c63d6c6fc9da44c56f",
+    "mtime": 1793043498.7327237,
+    "seen": 1793043692.4127212,
+    "ast_hash": "c0a0af0b6c312819b890d1766e8e40fd",
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1793033060.8031108,
-    "seen": 1793033487.6411092,
+    "mtime": 1793038026.115751,
+    "seen": 1793043692.4127212,
     "ast_hash": "9feb9ba6c40c49c4a314cd1656faac2c",
     "semantic_hash": ""
   },
   "docs/ARCHITECTURE.md": {
-    "mtime": 1793033060.7669005,
-    "seen": 1793033487.6411092,
+    "mtime": 1793038026.1521769,
+    "seen": 1793043692.4127212,
     "ast_hash": "29e8070d379f68471d2575bc2d97422c",
     "semantic_hash": ""
   },
@@ -534,9 +534,9 @@
     "semantic_hash": "b56beff69c2cb266c8d2361408baa006"
   },
   "docs/DECISIONS.md": {
-    "mtime": 1793034246.069387,
-    "seen": 1793034954.6076317,
-    "ast_hash": "735e2f9c2284ecf4c14ed83e962bf4a9",
+    "mtime": 1793043498.7488437,
+    "seen": 1793043692.4127212,
+    "ast_hash": "1ce398c459acd08614407ba7c6ea6d6e",
     "semantic_hash": ""
   },
   "docs/PROJECT_SPEC.md": {
@@ -546,9 +546,9 @@
     "semantic_hash": ""
   },
   "docs/REPORT_DRAFT.md": {
-    "mtime": 1793031513.2892616,
-    "seen": 1793033487.6411092,
-    "ast_hash": "65e6250869d45e0d627ce680b1cb1e6c",
+    "mtime": 1793043498.7561922,
+    "seen": 1793043692.4127212,
+    "ast_hash": "e7beb02cda2027c609c85ba43d547507",
     "semantic_hash": ""
   },
   "docs/RESEARCH_PLAN.md": {
@@ -558,9 +558,9 @@
     "semantic_hash": "32a821de4b1178bef75683f2265b07a8"
   },
   "docs/ROADMAP.md": {
-    "mtime": 1793033060.8640652,
-    "seen": 1793033487.6411092,
-    "ast_hash": "6f58f4a773354f7d81a59eaad699eb31",
+    "mtime": 1793043498.7406812,
+    "seen": 1793043692.4127212,
+    "ast_hash": "7f5d3c55ec5fba88f79d8a3159bee3c3",
     "semantic_hash": ""
   },
   "ide/README.md": {
@@ -648,14 +648,14 @@
     "semantic_hash": ""
   },
   "backend/codedna/agent/brake.py": {
-    "mtime": 1793032937.3834178,
-    "seen": 1793033487.6411092,
-    "ast_hash": "803160639466a51849916274b9ad176f",
+    "mtime": 1793042958.403514,
+    "seen": 1793043692.409709,
+    "ast_hash": "252f45f9d3431aea73ba690a8c226823",
     "semantic_hash": ""
   },
   "backend/codedna/agent/mcp_server.py": {
-    "mtime": 1793032937.3834178,
-    "seen": 1793033487.6411092,
+    "mtime": 1793038026.1307206,
+    "seen": 1793043692.409709,
     "ast_hash": "6e184e97f14a06da44aecbfa12dce5ef",
     "semantic_hash": ""
   },
@@ -684,9 +684,9 @@
     "semantic_hash": ""
   },
   "backend/codedna/plugins/languages.py": {
-    "mtime": 1793031513.1819627,
-    "seen": 1793033487.6411092,
-    "ast_hash": "a23e42e42cd5d5b8c70763104d9bb562",
+    "mtime": 1793042958.43284,
+    "seen": 1793043692.409709,
+    "ast_hash": "55d73263cb480a6bc442d9fa3fe7613e",
     "semantic_hash": ""
   },
   "backend/codedna/plugins/manager.py": {
@@ -702,8 +702,8 @@
     "semantic_hash": ""
   },
   "backend/codedna/selection/live.py": {
-    "mtime": 1793032517.0437808,
-    "seen": 1793033487.6411092,
+    "mtime": 1793038026.138801,
+    "seen": 1793043692.409709,
     "ast_hash": "fbc308b69aef9750d5604cd229c71eb4",
     "semantic_hash": ""
   },
@@ -738,15 +738,15 @@
     "semantic_hash": ""
   },
   "backend/codedna/test_history/recording.py": {
-    "mtime": 1793031513.2001147,
-    "seen": 1793033487.6411092,
-    "ast_hash": "51b4f5590fb8a6d55d6f81275366dcc8",
+    "mtime": 1793042958.403514,
+    "seen": 1793043692.409709,
+    "ast_hash": "cec6c8b88c1b9fd089ab5a0f5016bcc6",
     "semantic_hash": ""
   },
   "backend/tests/test_agent_brake.py": {
-    "mtime": 1793031513.2095919,
-    "seen": 1793033487.6411092,
-    "ast_hash": "d43090c47826b20b9e54e4567c2bf539",
+    "mtime": 1793042958.403514,
+    "seen": 1793043692.409709,
+    "ast_hash": "96c93e8944d572d30857ca819cd1e047",
     "semantic_hash": ""
   },
   "backend/tests/test_build_layout.py": {
@@ -768,9 +768,9 @@
     "semantic_hash": ""
   },
   "backend/tests/test_crc_check.py": {
-    "mtime": 1793031513.2185154,
-    "seen": 1793033487.6411092,
-    "ast_hash": "e53ad03bcb26c3288f659c2a2822d4cf",
+    "mtime": 1793043209.893531,
+    "seen": 1793043692.409709,
+    "ast_hash": "64e02d7cd2d7d858848e20b0a63c6a5a",
     "semantic_hash": ""
   },
   "backend/tests/test_dante_runner.py": {
@@ -780,8 +780,8 @@
     "semantic_hash": ""
   },
   "backend/tests/test_demo_agent_brake.py": {
-    "mtime": 1793034246.0625615,
-    "seen": 1793034954.6067598,
+    "mtime": 1793038026.142835,
+    "seen": 1793043692.409709,
     "ast_hash": "68dac6f22ba8e7e579d1c7f30c3a3d72",
     "semantic_hash": ""
   },
@@ -858,15 +858,15 @@
     "semantic_hash": ""
   },
   "backend/tests/test_python_plugin.py": {
-    "mtime": 1793031513.2501283,
-    "seen": 1793033487.6411092,
-    "ast_hash": "36a9a6eac49dd21fcf1d5dec49a67e30",
+    "mtime": 1793043069.271416,
+    "seen": 1793043692.4127212,
+    "ast_hash": "e94d0ecb7165ee6ebeb0609344c0a610",
     "semantic_hash": ""
   },
   "backend/tests/test_recording.py": {
-    "mtime": 1793031513.2501283,
-    "seen": 1793033487.6411092,
-    "ast_hash": "252903d4810e92164c3ff6015c9c006e",
+    "mtime": 1793042958.4358537,
+    "seen": 1793043692.4127212,
+    "ast_hash": "0ece78c28ffb827449d7cd2a6750cfab",
     "semantic_hash": ""
   },
   "backend/tests/test_replay.py": {
@@ -1092,15 +1092,15 @@
     "semantic_hash": ""
   },
   "plugins/codedna-python/codedna_python/plugin.py": {
-    "mtime": 1793031514.2007542,
-    "seen": 1793033487.6411092,
-    "ast_hash": "f88023929473d683aba57f47416ccc1f",
+    "mtime": 1793042958.433725,
+    "seen": 1793043692.4127212,
+    "ast_hash": "b10ce0a91f612bb7830ad3f4375dfa5c",
     "semantic_hash": ""
   },
   "plugins/codedna-python/codedna_python/runner.py": {
-    "mtime": 1793031514.2025423,
-    "seen": 1793033487.6411092,
-    "ast_hash": "71a5cd686efc5760b2001d22536288f2",
+    "mtime": 1793043069.271416,
+    "seen": 1793043692.4127212,
+    "ast_hash": "f87de9ca68602b381b39df75dc174ebd",
     "semantic_hash": ""
   },
   "plugins/codedna-python/pyproject.toml": {
@@ -1128,8 +1128,8 @@
     "semantic_hash": ""
   },
   "scripts/demo_brake_end_to_end.py": {
-    "mtime": 1793034637.0484092,
-    "seen": 1793034954.6076317,
+    "mtime": 1793038026.3020928,
+    "seen": 1793043692.4127212,
     "ast_hash": "211589ae651bb5b6457039103d7a7ab3",
     "semantic_hash": ""
   },
@@ -1218,9 +1218,9 @@
     "semantic_hash": ""
   },
   "docs/AGENT_BRAKE.md": {
-    "mtime": 1793034637.1010888,
-    "seen": 1793034954.6076317,
-    "ast_hash": "d35f0cf0f5ab23d1f2b8a57f3d9a145b",
+    "mtime": 1793043498.7668648,
+    "seen": 1793043692.4127212,
+    "ast_hash": "2308e52ddb5522fb5bf3b4b41b7f5f78",
     "semantic_hash": ""
   },
   "docs/AGENT_BRAKE_STUDY_PROTOCOL.md": {
@@ -1272,9 +1272,9 @@
     "semantic_hash": ""
   },
   "docs/HANDOFF.md": {
-    "mtime": 1793033060.843651,
-    "seen": 1793033487.6411092,
-    "ast_hash": "70815d30bc80efaa7b545728a06374e6",
+    "mtime": 1793043498.7366323,
+    "seen": 1793043692.4127212,
+    "ast_hash": "d136aa6da97a093a4a1578161bda5115",
     "semantic_hash": ""
   },
   "docs/IMPLEMENTATION_HANDOFF.md": {
@@ -1302,9 +1302,9 @@
     "semantic_hash": ""
   },
   "docs/RELATED_WORK_COMPARISON.md": {
-    "mtime": 1793031513.2873597,
-    "seen": 1793033487.6411092,
-    "ast_hash": "3239eab88e632ac9e289513c33755aa7",
+    "mtime": 1793043498.7602105,
+    "seen": 1793043692.4127212,
+    "ast_hash": "1fef520310c1638dfedacef2fdc42c60",
     "semantic_hash": ""
   },
   "docs/REPORT_AGENT_BRAKE.md": {
@@ -1386,9 +1386,57 @@
     "semantic_hash": ""
   },
   "backend/tests/test_brake_planning.py": {
-    "mtime": 1793034246.069387,
-    "seen": 1793034954.6067598,
+    "mtime": 1793038026.1408186,
+    "seen": 1793043692.409709,
     "ast_hash": "aff936ebd00b246bf4dec3a41fe345e4",
+    "semantic_hash": ""
+  },
+  ".github/workflows/pr-analysis.yml": {
+    "mtime": 1793043209.8905272,
+    "seen": 1793043692.409709,
+    "ast_hash": "1a1847344b561625a1d1b786fe44943f",
+    "semantic_hash": ""
+  },
+  "backend/tests/test_pr_demo.py": {
+    "mtime": 1793043209.8925304,
+    "seen": 1793043692.409709,
+    "ast_hash": "210128fbe6614dea23c18b117a31ed73",
+    "semantic_hash": ""
+  },
+  "scripts/pr_demo.py": {
+    "mtime": 1793043209.8885267,
+    "seen": 1793043692.4127212,
+    "ast_hash": "2297f1151a2b289af69d01b03d27d54e",
+    "semantic_hash": ""
+  },
+  "docs/BLUEPRINT_COMPLETION.md": {
+    "mtime": 1793043498.7222989,
+    "seen": 1793043692.4127212,
+    "ast_hash": "c94cc959dd950ab2f71a5fc6aade0e3f",
+    "semantic_hash": ""
+  },
+  "docs/DEFERRED_FEATURES.md": {
+    "mtime": 1793043498.7183402,
+    "seen": 1793043692.4127212,
+    "ast_hash": "d5e7f1f0a95e1ee7af5e406a76aa5633",
+    "semantic_hash": ""
+  },
+  "docs/IDE_MANUAL_TEST.md": {
+    "mtime": 1793043498.720068,
+    "seen": 1793043692.4127212,
+    "ast_hash": "ad694c48ee47aac218c3d71c7d41b74d",
+    "semantic_hash": ""
+  },
+  "docs/REPORT_ABSTRACT.md": {
+    "mtime": 1793043498.7236943,
+    "seen": 1793043692.4127212,
+    "ast_hash": "1692be5b83e240d85ccd216f2fc0721a",
+    "semantic_hash": ""
+  },
+  "docs/NOVELTY_REVIEW_2026-10-27.md": {
+    "mtime": 1793043498.7267663,
+    "seen": 1793043692.4127212,
+    "ast_hash": "2c2231b32930521e009d011678d29e39",
     "semantic_hash": ""
   }
 }

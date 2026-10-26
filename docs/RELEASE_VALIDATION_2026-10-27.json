@@ -1,0 +1,70 @@
+{
+  "date": "2026-10-27",
+  "branch": "codex/blueprint-completion",
+  "base_main": "45821b4908bf3c17ff60cea28fd934c0dd55d8f1",
+  "command": "python -m pytest --run-maven -q",
+  "passed": 562,
+  "failed": 0,
+  "skipped": 0,
+  "warnings": 1,
+  "seconds": 1513.49,
+  "node_workflow_passed": 8,
+  "node_runtime_passed": 3,
+  "typescript_compile": "passed",
+  "tested_files_sha256": {
+    "backend/codedna/agent/brake.py": "6eb09ba057bafa1bf48268f10145a1a6a29810e9a6715cf603a2d3e3089a4ac1",
+    "backend/codedna/test_history/recording.py": "218ba8c156ad2f4a77a1398606f9618cc05c350120b7165d162170bfcde0608e",
+    "backend/codedna/plugins/languages.py": "854ee4e0f82027916e03b3911fffb6e43fc05fdea76750bb7d2abd89b834ff85",
+    "plugins/codedna-python/codedna_python/plugin.py": "504e1b1ced9a3830190c8f8ebddfe3e2f90fb5ecac63435953ca237b27051038",
+    "plugins/codedna-python/codedna_python/runner.py": "ac84f1b98f38370896c0dd9b35297cecb53fa93a28f2afe132baf202a7d80abf",
+    "ide/codedna-extension/src/browser/tests-view-widget.tsx": "f4bec5cc0528e6dcbe47c02c9387cfe0e9a1b3779b2d16121e969b0fc5bc94e3",
+    "scripts/pr_demo.py": "099d573d50cc0012d97eab2632fa7eed8a3ed8fb9a9b6e9e0e27a7723f85e641"
+  },
+  "installer": {
+    "installer": "C:\\Users\\hp\\OneDrive\\Documents\\GitHub\\codedna\\ide\\electron-app\\dist\\CodeDNA IDE Setup 0.1.0.exe",
+    "size_bytes": 316955711,
+    "sha256": "e1120f72bca9fedd61e4f459eb70790a946ee543fd88684b4b49a1b430228200",
+    "verified_packaged_core_files": 1389,
+    "scope": "produced installer and unpacked payload checked; not a clean-PC install"
+  },
+  "frozen_core": {
+    "scope": "frozen-core smoke with restricted PATH, not a clean-PC install",
+    "version": "codedna 0.1.0",
+    "checks": {
+      "bundled_plugins": [
+        "java",
+        "python"
+      ],
+      "mcp_python_pass": "passed",
+      "mcp_python_regression": "blocked",
+      "missing_project_interpreter": "actionable error, no self-launch"
+    },
+    "verified_bundle_files": 1389
+  },
+  "java_diagnostics": {
+    "probe_removed": true,
+    "diagnostic_seen": "Type mismatch: cannot convert from String to int",
+    "diagnostic_cleared": true
+  },
+  "mixed_ide": {
+    "scope": "Actual rebuilt IDE, new frozen core",
+    "comparison": "WORKTREE",
+    "languages": [
+      "java",
+      "python"
+    ],
+    "recommended_tests": 3,
+    "risk_status": "unvalidated",
+    "python_test_visible": true,
+    "wording": "Run 3 recommended tests",
+    "build_executed": false,
+    "probe_removed": true
+  },
+  "not_verified": [
+    "clean-PC installation",
+    "Python-only full IDE click-through",
+    "independent student graph labels",
+    "supervisor approval",
+    "defence recording"
+  ]
+}

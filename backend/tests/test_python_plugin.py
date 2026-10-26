@@ -472,3 +472,56 @@ def test_run_tests_cli_reports_a_missing_interpreter(mixed, tmp_path, capsys):
 
     assert code == EXIT_ANALYSIS_ERROR
     assert "Python interpreter not found" in capsys.readouterr().err
+
+
+def test_discovery_reuses_graph_parse_cache_and_supports_legacy_plugins(mixed, monkeypatch):
+    from codedna.plugins.languages import commit_graph, commit_tests
+    import codedna_python.builder as builder
+    repo, head = mixed
+    original = builder.parse_python
+    calls = []
+    def counted(*args, **kwargs):
+        calls.append(1)
+        return original(*args, **kwargs)
+    monkeypatch.setattr(builder, "parse_python", counted)
+    registry = load_plugins()
+    cache = {}
+    commit_graph(repo.path, head, registry=registry, cache=cache)
+    parsed = len(calls)
+    assert parsed > 0
+    first = commit_tests(repo.path, head, registry=registry, cache=cache)
+    again = commit_tests(repo.path, head, registry=registry, cache=cache)
+    assert first.to_dict() == again.to_dict()
+    assert len(calls) == parsed
+    class LegacyDiscovery:
+        name = "legacy"
+        def discover_tests(self, repo, commit):
+            return first.reports["python"]
+    legacy = PluginRegistry(plugins={"legacy": LegacyDiscovery()})
+    assert commit_tests(repo.path, head, registry=legacy, cache=cache).tests
+
+
+def test_runner_prefers_original_project_environment_without_executing_it(repo, monkeypatch):
+    import os
+    import codedna_python.runner as runner
+    relative = "Scripts/python.exe" if os.name == "nt" else "bin/python"
+    candidate = repo.path / ".venv" / relative
+    candidate.parent.mkdir(parents=True)
+    candidate.write_bytes(b"test interpreter placeholder; never executed")
+    monkeypatch.setattr(runner.shutil, "which", lambda _: "/unrelated/python")
+    assert runner.find_python(repo.path) == [str(candidate)]
+
+
+def test_frozen_core_cannot_masquerade_as_project_python(repo, monkeypatch):
+    import codedna_python.runner as runner
+    monkeypatch.setattr(runner.shutil, "which", lambda _: None)
+    monkeypatch.setattr(runner.sys, "frozen", True, raising=False)
+    with pytest.raises(runner.PytestRunError, match="not a project Python interpreter"):
+        runner.find_python(repo.path)
+
+
+def test_source_runner_keeps_interpreter_fallback(repo, monkeypatch):
+    import codedna_python.runner as runner
+    monkeypatch.setattr(runner.shutil, "which", lambda _: None)
+    monkeypatch.delattr(runner.sys, "frozen", raising=False)
+    assert runner.find_python(repo.path) == [sys.executable]

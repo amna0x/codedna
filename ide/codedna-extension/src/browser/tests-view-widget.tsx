@@ -203,13 +203,13 @@ export class TestsViewWidget extends ReactWidget {
             </section>
             <button className='cd-button' disabled={this.loading || !report.total_tests}
                 onClick={() => this.runSelected()}>
-                {this.loading ? 'Running…' : `Run ${report.selected.length} recommended test classes`}
+                {this.loading ? 'Running…' : `Run ${report.selected.length} recommended tests`}
             </button>
             {this.execution && <section aria-label='Test execution results'>
                 <h3>{this.execution.results.exit_codes.some(code => code !== 0)
                     ? 'Build did not complete successfully'
                     : this.execution.results.tests.length === 0 ? 'No test results recorded'
-                    : `${this.execution.results.failing_tests.length} failing test classes`}</h3>
+                    : `${this.execution.results.failing_tests.length} failing tests`}</h3>
                 <p>Finished in {this.execution.results.duration_seconds.toFixed(1)} seconds.</p>
                 <div className='cd-card'>{this.execution.results.tests.map(test => <div className='cd-row cd-static' key={test.id}>
                     <span className='cd-code'>{simpleName(test.id)}</span><span>{test.status}</span>
@@ -226,7 +226,7 @@ export class TestsViewWidget extends ReactWidget {
                     ? 'No JUnit or pytest tests were found in this project.'
                     : report.selected.length === 0
                         ? 'No tests are recommended by the current selection policy.'
-                        : <>Run {report.selected.length} of {plural(report.total_tests, 'test class', 'test classes')}.
+                        : <>Run {report.selected.length} of {plural(report.total_tests, 'test', 'tests')}.
                             {everything ? ' That’s all of them.' : ` You can skip ${report.skipped.length}.`}</>}
             </p>
             <p className='cd-help'>

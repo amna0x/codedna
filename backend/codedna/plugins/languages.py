@@ -16,6 +16,7 @@ analysed are reported as not analysed; commands that cannot work at all raise
 from __future__ import annotations
 
 import time
+from inspect import signature
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -216,9 +217,9 @@ def discover_tests(repo_path: str | Path, revision: str = "HEAD", *,
 
 def commit_tests(repo: Path, commit: str, *, registry: PluginRegistry,
                  cache: dict | None = None) -> CombinedDiscovery:
-    """Every installed plugin's tests at ``commit``; ``cache`` (parses by blob SHA) goes to Java."""
+    """Every plugin's tests; share parses when its optional cache argument is supported."""
     def discover(plugin: Any):
-        if cache is not None and plugin.name == "java":
+        if cache is not None and "cache" in signature(plugin.discover_tests).parameters:
             return plugin.discover_tests(repo, commit, cache=cache)
         return plugin.discover_tests(repo, commit)
     return CombinedDiscovery(str(repo), commit, {

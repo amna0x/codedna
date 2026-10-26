@@ -113,3 +113,15 @@ agent runs, so the report claims nothing about agents improving.
 - [27] https://github.com/l-k-1-2/Predictive-test-selection
 - [21] https://arxiv.org/abs/2603.17973
 - [22] https://arxiv.org/abs/2510.18270
+
+
+## 2026-10-27 literature update
+
+FaithfulCut's public research artifact already studies censored/delayed feedback,
+random full-suite audits, online risk control and monitoring. The author labels
+it under review. Its build-escape loss differs from CodeDNA's any-omitted-failure
+loss, but audits or drift monitoring alone cannot support a novelty claim.
+Source: https://github.com/TheDeadcoder/FaithfulCut (reviewed revision
+3e48eb578cfe11a876c7134d0e765147f073845a). No independent reproduction is claimed.
+Read NOVELTY_REVIEW_2026-10-27.md for reviewed sources and DEFERRED_FEATURES.md
+for proposals; no new method or superior result is claimed implemented.

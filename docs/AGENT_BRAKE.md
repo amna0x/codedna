@@ -130,3 +130,12 @@ component, unrelated to discount calculation. The
 breaking edit keeps both affected dependency tests and still skips the
 independent test. Its recorded history is explicitly synthetic; this is
 an end-to-end mechanism demonstration, not additional research evidence.
+
+
+## Required tests skipped by the build (D-071)
+
+Any required class/module skipped by the build leaves the verdict incomplete,
+even if the other required tests passed. A genuine failing test still blocks.
+Skipped outcomes are unknown and cannot replace complete project history.
+Python checks prefer the original project's .venv; explicit --python takes
+precedence. A packaged analysis core cannot run pytest as a Python interpreter.

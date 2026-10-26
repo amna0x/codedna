@@ -1,5 +1,16 @@
 # MEMORY.md: handoff notes for the next agent
 
+## Current continuation - 2026-10-27 (supersedes older status)
+
+PR #22 merged as 45821b4 after owner authorization and green checks. D-068 and
+D-070 are already on main. The studies are finished; preserve their reports.
+Work now continues on codex/blueprint-completion. Read
+[the current completion ledger](docs/BLUEPRINT_COMPLETION.md) for remaining work
+and validation, and [the deferred backlog](docs/DEFERRED_FEATURES.md). The owner
+asked to save extra proposals for later, not implement them now. Preserve all
+stashes. Publication/merge-pending notes below are historical, not current.
+
+
 Read this first, then AGENTS.md (rules), docs/ROADMAP.md (status) and
 docs/DECISIONS.md (decision history and tradeoffs).
 Last updated: 2026-10-26 (completed studies and PR #21 integration review).

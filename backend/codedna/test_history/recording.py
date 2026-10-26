@@ -77,6 +77,10 @@ def refusal(run: TestRunResult, expected_tests: list[str], line: set[str]) -> st
     if missing:
         return (f"{len(missing)} expected test class(es) have no result "
                 f"(e.g. {missing[0]}); only complete runs are recorded")
+    skipped = sorted(t for t in expected_tests if run.tests[t].status == "skipped")
+    if skipped:
+        return (f"{len(skipped)} expected test class(es) were skipped by the build "
+                f"(e.g. {skipped[0]}); their outcomes are unknown, not complete evidence")
     if run.commit not in line:
         return NOT_ON_LINE
     return None

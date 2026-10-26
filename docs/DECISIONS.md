@@ -1675,3 +1675,32 @@ The branch remains local because automatic approval review rejected the
 private-source push without explicit payload/destination approval. No new
 feature PR or CI result is claimed. Main's separately verified #21 merge
 and the preserved stash remain unchanged.
+
+
+## D-071 - Complete the existing blueprint before extra features (2026-10-27)
+
+Owner asks to finish existing functionality and verify the AI brake, while
+deferring the proposed replay/UI/audit features until a later explicit request.
+PR #22 is already merged (45821b4); historical publication restrictions are
+superseded by the completed authorized merge.
+
+Fix the false pass when a required test was skipped; reject such incomplete
+evidence before it replaces complete history. Preserve genuine failing-run
+evidence (including Maven/Gradle exit 1). Share Python discovery parses by
+optional capability, preserving legacy plugins. Prefer a project's .venv for
+pytest; a frozen core without an external interpreter gives an actionable error.
+Complete the existing read-only PR demo and add a tiny CRC CLI regression smoke.
+Keep B10 default, CRC opt-in, and all existing research outputs unchanged.
+Do not implement a Java risk model for Python without validation.
+
+The completion ledger records tests and remaining manual/external evidence.
+No clean-PC, student labeling, supervisor approval or public hosting is claimed
+without the corresponding evidence.
+
+D-071 verification: 562 passed, zero failed/skipped, Maven/Gradle enabled,
+1513.49 s. IDE compile plus 8 workflow and 3 runtime tests passed. Frozen-core
+MCP Python passing/blocked and missing-interpreter cases passed. All 1,389
+packaged core hashes verified; new installer SHA-256
+e1120f72bca9fedd61e4f459eb70790a946ee543fd88684b4b49a1b430228200.
+Java diagnostics and mixed-language IDE analysis verified; clean-PC installation
+remains separate. See RELEASE_VALIDATION_2026-10-27.json.
