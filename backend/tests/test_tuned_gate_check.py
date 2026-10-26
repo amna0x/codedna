@@ -74,3 +74,22 @@ def test_runner_refuses_changed_protocol(repo):
     (repo.path / 'docs/TUNED_GATE_PROTOCOL.md').write_text('changed protocol')
     with pytest.raises(ValueError, match='Protocol, code or inputs changed'):
         check.run(repo.path, {'newproject': new}, out)
+
+
+def test_conditional_mode_checks_failing_audit_commits_only(monkeypatch):
+    check = load()
+    rolling = check.load(ROOT, 'run_rolling_evidence')
+    crc = check.load(ROOT, 'run_crc_check')
+    data = dataset([f'c{i}' for i in range(120)])
+    sizes = []
+    real = check.tuned.search
+    monkeypatch.setattr(check.tuned, 'search', lambda outcomes_at, alpha: (
+        sizes.append(len(outcomes_at(.05))), real(outcomes_at, alpha))[1])
+    report = check.evaluate(data, rolling, crc, conditional=True)
+    fitted = [x for x in report['blocks'] if 'fit_error' not in x]
+    assert len(sizes) == len(fitted)
+    groups = data.rows_by_commit()
+    for size, block in zip(sizes, fitted):
+        failing = sum(any(r.label for r in groups[c])
+                      for c in data.commits[int(block['start'] * .75):block['start']])
+        assert size == block['audit_commits'] == failing
