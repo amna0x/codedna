@@ -64,6 +64,8 @@ jobs:
         run: npm run build:extension
       - name: Check packaged core discovery
         run: npm run test:runtime --workspace electron-app
+      - name: Check recommendation and execution workflow
+        run: npm test --workspace codedna-extension
 
   maven-integration:
     name: CodeDNA + real Maven/JaCoCo (integration)

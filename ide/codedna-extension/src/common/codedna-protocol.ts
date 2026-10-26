@@ -19,6 +19,7 @@ export interface CodeDnaStatus {
 
 export interface CodeDnaService {
     status(): Promise<CodeDnaStatus>;
+    tests(repo: string, revision: string): Promise<TestDiscovery>;
     projectHistory(repo: string): Promise<ProjectHistory>;
     recordSavedRuns(repo: string): Promise<RecordedHistory>;
     importRun(repo: string, source: string): Promise<{ id: string; tests: number; failures: number }>;
@@ -39,6 +40,13 @@ export interface CodeDnaService {
     /** Only after the view's explicit confirmation: installing runs the plugin's code. */
     installPlugin(plugin: string, version: string): Promise<PluginChange>;
     removePlugin(plugin: string): Promise<PluginChange>;
+}
+
+/** File locations returned by the core's existing test-discovery endpoint. */
+export interface TestDiscovery {
+    repository: string;
+    commit: string;
+    tests: { id: string; file: string }[];
 }
 
 export type SelectionStrategy = 'dependency' | 'all' | 'risk';

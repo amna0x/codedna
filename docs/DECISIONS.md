@@ -1216,3 +1216,62 @@ BASE picker: eligibility follows the current branch, as in D-053).
 **Not decided here.** The gate (D-041) still decides whether the history is
 good enough.
 
+
+## D-065 — Windows-safe RTPTorrent ancestry queries and audited resume
+
+An RTPTorrent push can list enough commits to exceed Windows CreateProcess's
+command-line limit. `_tips` previously sent every SHA to `merge-base
+--independent`, unlike the importer's other bounded Git requests. Windows raised
+FileNotFoundError/WinError 206; the Git wrapper incorrectly reported missing Git.
+
+Keep the normal independent-tip query up to the existing 400-SHA limit. Above
+that limit, pass the revisions on stdin to `rev-list --parents --stdin`. Among
+the supplied candidates, exactly those never named as a parent in the complete
+reachable ancestry are independent. Walking all ancestors covers gaps between
+candidate commits and merge branches. This preserves the tested-commit rule;
+naively calculating independent tips separately per chunk would not preserve it.
+The Git wrapper distinguishes oversized requests, missing Git, missing working
+directories and other operating-system failures, retaining the original cause.
+
+Offline regression tests cover a real 1,000-commit import with bounded argv,
+branch/merge/gapped/duplicate inputs compared to Git's ordinary independent-tip
+query, and Windows/POSIX launch-error classification. No dependency or statistical
+rule changes. The fixed feature generator, model, gate, project set and protocol
+remain unchanged.
+
+The failed output folder and frozen sources remain intact. Resume into
+`experiments/datasets/confirmatory-windowsfix-2026-10-26` with results destined for
+`experiments/results/rolling-evidence-confirmatory-windowsfix-2026-10-26`.
+Copy and SHA-256-verify the three completed DB/CSV pairs (Cloudify, DSpace,
+SonarQube), configuration and feature-equivalence proof. `resume-provenance.json`
+records parent fingerprints, the two source changes and every reused file hash;
+`resume-code-change.patch` records the technical fix. The continuation creates new
+fingerprints and re-verifies the existing raw cache. No downloads or completed
+feature extractions are repeated. Partial Sling data is not treated as complete.
+
+Written by Codex on the laptop as "D-054"; renumbered because D-054 is the
+Java plugin split and D-058 to D-064 are taken by open PRs.
+
+## D-066 — Use discovered test files and discard obsolete IDE responses
+
+Recommended-test links now request the existing `/api/tests` JSON at the
+selection's immutable HEAD and open its reported file relative to the canonical
+repository. The frontend caches discovery for that selection. It never derives
+a source path from a package name: module layouts, Gradle projects, custom file
+locations and workspaces opened below the Git root must work. Missing locations
+produce an explanation rather than opening an invented path.
+
+A comparison/input generation prevents late recommendation, execution and file
+lookup responses from restoring results for an obsolete comparison, including
+switching away and back. Completed older executions remain available in Project
+History; the view reports where to find them. Consent is checked again against
+the same selection before execution. Build wording now covers Maven and Gradle.
+
+Eight offline Node tests exercise the actual TypeScript widget methods, with a
+throwaway Git repository and mocked core/progress/editor boundaries. They cover
+file navigation, missing paths, obsolete responses, pending consent and duplicate
+analysis clicks. CI runs them after extension compilation. No new dependency,
+core API, language plugin, model or fixed-study change is introduced.
+
+
+Written by Codex on the laptop as "D-053" (renumbered, see D-065).

@@ -7,7 +7,7 @@ import { BackendApplicationContribution } from '@theia/core/lib/node';
 import {
     AnalyzeReport, CodeDnaService, CodeDnaStatus, ImpactOptions, ImpactReport, InstalledPlugins, PluginCatalogueView, PluginChange,
     ReplayOverview, ReplaySources, ReplayTimeline,
-    ProjectHistory, RecordedHistory, SavedRun,
+    ProjectHistory, RecordedHistory, SavedRun, TestDiscovery,
     SelectionReport, SelectionStrategy, SelectionRun
 } from '../common/codedna-protocol';
 
@@ -51,6 +51,10 @@ export class CodeDnaServiceImpl implements CodeDnaService, BackendApplicationCon
             return { running: false, executable: this.executable, error: String(error instanceof Error ? error.message : error) };
         }
         return { running: true, version: this.version, executable: this.executable };
+    }
+
+    tests(repo: string, revision: string): Promise<TestDiscovery> {
+        return this.post('/api/tests', { repo, rev: revision });
     }
 
     analyze(repo: string, base: string, head: string): Promise<AnalyzeReport> {

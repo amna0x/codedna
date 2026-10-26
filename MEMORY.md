@@ -11,6 +11,14 @@ were not reproduced on this branch. Codex's first project-history draft
 dropped failing runs, kept a second history and edited .git/info/exclude;
 D-057 replaced it, so do not port those parts back from the laptop.
 
+2026-10-26: Codex's later laptop work is ported as D-065 (Windows-safe Git
+ancestry for big RTPTorrent pushes; the old run failed at Sling with WinError
+206) and D-066 (IDE opens discovered test files, ignores stale responses).
+The live confirmatory run now uses
+`experiments/datasets/confirmatory-windowsfix-2026-10-26`, results to
+`experiments/results/rolling-evidence-confirmatory-windowsfix-2026-10-26`;
+the old `confirmatory-live-2026-10-25` status says failed and is superseded.
+
 Codex's laptop notes (2026-10-25):
 Latest full validation: **334 passed, zero skipped**, Maven and Gradle included;
 897.94 seconds, one existing Starlette/httpx deprecation warning. Three Node
