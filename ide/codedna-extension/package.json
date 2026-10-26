@@ -30,7 +30,8 @@
     "prepare": "npm run clean && npm run build",
     "clean": "rimraf lib",
     "build": "tsc",
-    "watch": "tsc -w"
+    "watch": "tsc -w",
+    "test": "node --test tests/workflow.test.cjs"
   },
   "theiaExtensions": [
     {

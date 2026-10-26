@@ -253,7 +253,18 @@ def _commit_meta(repo: Path, shas: list[str]) -> dict[str, tuple[str | None, int
 
 def _tips(repo: Path, shas: list[str]) -> list[str]:
     """Commits of ``shas`` that are not ancestors of another one in the set."""
-    return run_git(repo, "merge-base", "--independent", *shas).split()
+    if not shas:
+        return []
+    if len(shas) <= _CHUNK:
+        return run_git(repo, "merge-base", "--independent", *shas).split()
+    # A push can contain thousands of commits. Supplying those as argv exceeds
+    # Windows CreateProcess limits. Walk the same ancestry via stdin instead:
+    # a candidate is independent exactly when no reachable commit names it as
+    # a parent. Walking all ancestors also covers gaps between input commits.
+    output = run_git_bytes(repo, "rev-list", "--parents", "--stdin",
+                           stdin="".join(f"{sha}\n" for sha in shas).encode("ascii"))
+    ancestors = {parent for line in output.splitlines() for parent in line.split()[1:]}
+    return [sha for sha in dict.fromkeys(shas) if sha.encode("ascii") not in ancestors]
 
 
 def _push_base(tip: str, pushed: set[str], meta: dict[str, tuple[str | None, int]]) -> str | None:

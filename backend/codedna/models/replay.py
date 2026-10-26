@@ -24,6 +24,7 @@ Nothing is estimated here: missing values stay ``None``.
 from __future__ import annotations
 
 import json
+import math
 import re
 from pathlib import Path
 from typing import TYPE_CHECKING, Callable, Iterable
@@ -101,7 +102,7 @@ def load_report(path: str | Path) -> dict:
         raise FileNotFoundError(f"report not found: {file}")
     try:
         report = json.loads(file.read_text(encoding="utf-8"))
-    except json.JSONDecodeError as exc:
+    except (json.JSONDecodeError, UnicodeError) as exc:
         raise ReplayError(f"{file} is not JSON ({exc})") from exc
     if not isinstance(report, dict) or "policies" not in report or "config" not in report:
         raise ReplayError(f"{file} is not an experiment report (no 'policies'/'config')")
@@ -117,6 +118,7 @@ def replay_from_file(path: str | Path) -> dict:
 def replay_timeline(report: dict, *, project: str | None = None,
                     source_path: str | None = None) -> dict:
     """Normalise an experiment report into a replay timeline for the IDE."""
+    _validate_header(report)
     trace = report.get("replay")
     per_commit = report.get("per_commit") or {}
     if trace and trace.get("version") != TRACE_VERSION:
@@ -133,10 +135,20 @@ def replay_timeline(report: dict, *, project: str | None = None,
         if key not in available:
             notes.append(f"{label} ({key}) is not in this report, so it is not shown")
 
-    if trace:
-        commits = _commits_from_trace(trace, [key for key, _, _ in shown])
-    else:
-        commits = _commits_from_per_commit(per_commit, [key for key, _, _ in shown])
+    try:
+        if trace:
+            lengths = {len(trace["policies"][key]) for key, _, _ in shown}
+            if lengths != {len(trace["commits"])}:
+                raise ReplayError("trace policies have different commit counts")
+            commits = _commits_from_trace(trace, [key for key, _, _ in shown])
+        else:
+            commits = _commits_from_per_commit(per_commit, [key for key, _, _ in shown])
+        _validate_commits(commits)
+    except (KeyError, IndexError, TypeError, ValueError, OverflowError) as exc:
+        if isinstance(exc, ReplayError):
+            raise
+        raise ReplayError(f"invalid replay outcomes: {exc}") from exc
+    if not trace:
         notes.append("compact report: commit SHAs, test names, seconds and estimated risk "
                      "were not recorded (re-run the experiment with --replay for them)")
 
@@ -168,6 +180,88 @@ def replay_timeline(report: dict, *, project: str | None = None,
         "checks": checks,
         "notes": notes,
     }
+
+
+
+def _number(value: object, name: str, *, integer: bool = False,
+            maximum: float | None = None) -> None:
+    if (isinstance(value, bool) or not isinstance(value, (int, float))
+            or not math.isfinite(value) or value < 0
+            or (integer and not isinstance(value, int))
+            or (maximum is not None and value > maximum)):
+        raise ReplayError(f"{name}: expected a finite nonnegative "
+                          f"{'integer' if integer else 'number'}"
+                          + (f" at most {maximum}" if maximum is not None else ""))
+
+
+def _validate_header(report: dict) -> None:
+    if not isinstance(report, dict):
+        raise ReplayError("expected an experiment report object")
+    for name in ("config", "policies"):
+        if not isinstance(report.get(name), dict):
+            raise ReplayError(f"report {name} must be an object")
+    config = report["config"]
+    if config.get("risk_target") is not None:
+        _number(config["risk_target"], "risk_target", maximum=1)
+    if config.get("seed") is not None:
+        _number(config["seed"], "seed", integer=True)
+    for key, summary in report["policies"].items():
+        if not isinstance(summary, dict):
+            raise ReplayError(f"{key}: policy summary must be an object")
+        for metric in ("commits", "commits_with_failures", "missed_failures",
+                       "mean_time_ratio", "observed_miss_rate", "commit_safety_rate",
+                       "failing_test_recall", "mean_estimated_skip_risk", "fallback_rate"):
+            value = summary.get(metric)
+            if value is not None:
+                count = metric in ("commits", "commits_with_failures", "missed_failures")
+                _number(value, f"{key} {metric}", integer=count,
+                        maximum=None if count else 1)
+    trace = report.get("replay")
+    if trace is not None:
+        if (not isinstance(trace, dict) or not isinstance(trace.get("commits"), list)
+                or not isinstance(trace.get("policies"), dict)):
+            raise ReplayError("replay must contain commits and policies")
+        if not trace["commits"]:
+            raise ReplayError("replay contains no commits")
+    elif not isinstance(report.get("per_commit"), dict):
+        raise ReplayError("report has no per-commit outcomes to replay")
+
+
+def _validate_commits(commits: list[dict]) -> None:
+    if not commits:
+        raise ReplayError("replay contains no commits")
+    for commit in commits:
+        prefix = f"commit {commit['index']}"
+        _number(commit["failing"], f"{prefix} failing", integer=True)
+        if commit["tests"] is not None:
+            _number(commit["tests"], f"{prefix} tests", integer=True)
+            if commit["failing"] > commit["tests"]:
+                raise ReplayError(f"{prefix}: more failing tests than suite tests")
+            _number(commit["suite_seconds"], f"{prefix} suite_seconds")
+            names = commit["failing_tests"]
+            if (not isinstance(names, list) or any(not isinstance(t, str) for t in names)
+                    or len(set(names)) != len(names)):
+                raise ReplayError(f"{prefix}: failing test names must be distinct strings")
+        for key, outcome in commit["outcomes"].items():
+            label = f"{prefix} {key}"
+            _number(outcome["time_ratio"], f"{label} time_ratio", maximum=1)
+            _number(outcome["missed"], f"{label} missed", integer=True,
+                    maximum=commit["failing"])
+            if outcome["estimated_risk"] is not None:
+                _number(outcome["estimated_risk"], f"{label} estimated_risk", maximum=1)
+            if outcome["fallback"] is not None and not isinstance(outcome["fallback"], bool):
+                raise ReplayError(f"{label}: fallback must be boolean or null")
+            if commit["tests"] is not None:
+                _number(outcome["selected"], f"{label} selected", integer=True,
+                        maximum=commit["tests"])
+                _number(outcome["seconds"], f"{label} seconds",
+                        maximum=commit["suite_seconds"] + .001)
+                missed = outcome["missed_tests"]
+                if (not isinstance(missed, list)
+                        or any(not isinstance(t, str) for t in missed)
+                        or len(set(missed)) != len(missed)
+                        or not set(missed) <= set(commit["failing_tests"])):
+                    raise ReplayError(f"{label}: missed tests must be distinct failing tests")
 
 
 def _commits_from_trace(trace: dict, keys: list[str]) -> list[dict]:
@@ -421,6 +515,7 @@ def find_replay_sources(folders: str | Path | Iterable[str | Path]) -> dict:
             match = _REPORT_NAME.match(file.name)
             try:
                 report = load_report(file)
+                replay_timeline(report)
             except (ReplayError, OSError):
                 continue
             trace = report.get("replay")

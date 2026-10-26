@@ -29,12 +29,19 @@ rem Java support in the editor needs a JDK. Use the portable JDK if one is
 rem recorded; otherwise keep whatever JAVA_HOME is already set.
 set "TOOLS_JSON=%USERPROFILE%\.codex\tools\java-maven.json"
 if exist "%TOOLS_JSON%" (
-    for /f "usebackq delims=" %%j in (`powershell -NoProfile -Command "(Get-Content -Raw '%TOOLS_JSON%' | ConvertFrom-Json).java_home"`) do set "JAVA_HOME=%%j"
-    for /f "usebackq delims=" %%m in (`powershell -NoProfile -Command "(Get-Content -Raw '%TOOLS_JSON%' | ConvertFrom-Json).maven_home"`) do set "MAVEN_HOME=%%m"
+    for /f "usebackq delims=" %%j in (`powershell -NoProfile -Command "(Get-Content -LiteralPath $env:TOOLS_JSON -Raw | ConvertFrom-Json).java_home"`) do set "JAVA_HOME=%%j"
+    for /f "usebackq delims=" %%m in (`powershell -NoProfile -Command "(Get-Content -LiteralPath $env:TOOLS_JSON -Raw | ConvertFrom-Json).maven_home"`) do set "MAVEN_HOME=%%m"
 )
 if defined JAVA_HOME set "PATH=%JAVA_HOME%\bin;%PATH%"
 if defined MAVEN_HOME set "PATH=%MAVEN_HOME%\bin;%PATH%"
-if not defined JAVA_HOME echo Note: no JDK found, so Java code completion will not start. CodeDNA itself still works.
+rem Reuse the portable Gradle runtime and cache when one has been installed.
+set "GRADLE_TOOLS_JSON=%USERPROFILE%\.codex\tools\gradle\runtime.json"
+if exist "%GRADLE_TOOLS_JSON%" (
+    for /f "usebackq delims=" %%g in (`powershell -NoProfile -Command "(Get-Content -LiteralPath $env:GRADLE_TOOLS_JSON -Raw | ConvertFrom-Json).home"`) do set "GRADLE_HOME=%%g"
+    if not defined GRADLE_USER_HOME set "GRADLE_USER_HOME=%USERPROFILE%\.codex\tools\gradle\cache"
+)
+if defined GRADLE_HOME set "PATH=%GRADLE_HOME%\bin;%PATH%"
+if not defined JAVA_HOME echo Note: JAVA_HOME is not set. Running project builds may need a JDK.
 
 set "TARGET=%~1"
 if "%TARGET%"=="" (

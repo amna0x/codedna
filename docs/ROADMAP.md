@@ -151,8 +151,11 @@ Product track, alongside:
 - 🔄 Rolling-origin evidence study with pre-fixed rules (D-042): on the four
   inspected projects B10 shows no meaningful safety difference from matched B3;
   the gate accepts few blocks but those miss rarely. New-project confirmation
-  pending data access: `scripts/prepare_confirmatory.py` fetches, imports and
-  builds the projects outside study11 on a machine that reaches Zenodo.
+  is queued for all nine fresh projects (D-056). The existing Zenodo raw download
+  continues; a tested one-time continuation verifies the full cache, reuses it
+  read-only, builds projected CSVs/DBs and runs the fixed study. No fresh verdict
+  yet. See `docs/CONFIRMATORY_PREPARATION_2026-10-25.md` and the continuation
+  status under `experiments/datasets/confirmatory-live-2026-10-25/`.
 
 ## Milestone 6 — CodeDNA IDE and FYP demo ⏳
 
@@ -177,8 +180,14 @@ May start in parallel (Student C) once the analysis JSON formats are stable.
   tests, confidence-labelled edges, click-to-explain paths
 - ✅ Impact graph on real projects: package lanes and boxes, highlighted
   change, counts, depth and direct-links controls (D-051)
-- 🔄 Java editor support, progress notifications, Windows installer (D-044);
-  needs a Windows build check
+- ✅ Windows x64 production build and NSIS installer checked locally (D-044,
+  D-055). Installer now includes Python plus the ML/API core. Packaged-core
+  analysis, model/calibration fitting, API and actual Maven execution passed
+  without Python on PATH; all 1,354 core files matched their recorded hashes.
+- 🔄 Java editor/progress interactive acceptance and clean-machine installer
+  testing remain. Bundled Java extensions deploy, but the local UI automation
+  could not complete click-through checks after repeated minimization/user-input
+  errors. The local installer is unsigned.
 - ✅ Uncommitted-change analysis: `WORKTREE` revision + "My uncommitted
   changes" in the IDE (D-046)
 - ✅ History replay view (D-049): the study's test commits played back one by

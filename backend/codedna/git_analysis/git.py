@@ -13,6 +13,7 @@ Design rules (see docs/DECISIONS.md, D-003):
 
 from __future__ import annotations
 
+import errno
 import os
 import shutil
 import subprocess
@@ -77,10 +78,17 @@ def _run(repo: Path, args: tuple[str, ...], stdin: bytes | None = None,
             check=False,
             env={**os.environ, **env} if env else None,
         )
-    except FileNotFoundError as exc:
-        raise GitCommandError("git executable not found on PATH") from exc
     except OSError as exc:
-        raise GitCommandError(f"could not run git: {exc}") from exc
+        # Windows reports an oversized argv as FileNotFoundError/WinError 206,
+        # even though git exists. Preserve that cause instead of blaming PATH.
+        if getattr(exc, "winerror", None) == 206 or exc.errno == errno.E2BIG:
+            message = f"could not run git: command line or path is too long: {exc}"
+        elif isinstance(exc, FileNotFoundError):
+            message = ("git executable not found on PATH" if repo.is_dir()
+                       else f"git working directory does not exist: {repo}")
+        else:
+            message = f"could not run git: {exc}"
+        raise GitCommandError(message) from exc
 
     if completed.returncode != 0:
         stderr = completed.stderr.decode("utf-8", errors="replace").strip()

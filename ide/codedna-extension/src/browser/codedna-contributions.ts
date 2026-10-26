@@ -1,7 +1,9 @@
 import { injectable } from '@theia/core/shared/inversify';
 import { AbstractViewContribution } from '@theia/core/lib/browser';
+import { CommandRegistry } from '@theia/core/lib/common/command';
 import { ChangeViewWidget } from './change-view-widget';
 import { GraphViewWidget } from './graph-view-widget';
+import { HistoryViewWidget } from './history-view-widget';
 import { PluginsViewWidget } from './plugins-view-widget';
 import { ReplayViewWidget } from './replay-view-widget';
 import { TestsViewWidget } from './tests-view-widget';
@@ -67,5 +69,24 @@ export class PluginsViewContribution extends AbstractViewContribution<PluginsVie
             defaultWidgetOptions: { area: 'main' },
             toggleCommandId: 'codedna.plugins.toggle'
         });
+    }
+}
+
+@injectable()
+export class HistoryViewContribution extends AbstractViewContribution<HistoryViewWidget> {
+    constructor() {
+        super({
+            widgetId: HistoryViewWidget.ID,
+            widgetName: HistoryViewWidget.LABEL,
+            defaultWidgetOptions: { area: 'main' },
+            toggleCommandId: 'codedna.history.toggle',
+            toggleKeybinding: 'ctrlcmd+shift+alt+h'
+        });
+    }
+
+    override registerCommands(commands: CommandRegistry): void {
+        super.registerCommands(commands);
+        commands.registerCommand({ id: 'codedna.history.open', label: 'Project history', category: 'CodeDNA' },
+            { execute: () => this.openView({ activate: true, reveal: true }) });
     }
 }

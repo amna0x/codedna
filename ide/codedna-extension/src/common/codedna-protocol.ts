@@ -19,6 +19,11 @@ export interface CodeDnaStatus {
 
 export interface CodeDnaService {
     status(): Promise<CodeDnaStatus>;
+    tests(repo: string, revision: string): Promise<TestDiscovery>;
+    projectHistory(repo: string): Promise<ProjectHistory>;
+    recordSavedRuns(repo: string): Promise<RecordedHistory>;
+    importRun(repo: string, source: string): Promise<{ id: string; tests: number; failures: number }>;
+    savedRun(repo: string, runId: string): Promise<SavedRun>;
     analyze(repo: string, base: string, head: string): Promise<AnalyzeReport>;
     impact(repo: string, base: string, head: string, options?: ImpactOptions): Promise<ImpactReport>;
     select(repo: string, base: string, head: string, strategy: SelectionStrategy, historyCsv?: string): Promise<SelectionReport>;
@@ -35,6 +40,13 @@ export interface CodeDnaService {
     /** Only after the view's explicit confirmation: installing runs the plugin's code. */
     installPlugin(plugin: string, version: string): Promise<PluginChange>;
     removePlugin(plugin: string): Promise<PluginChange>;
+}
+
+/** File locations returned by the core's existing test-discovery endpoint. */
+export interface TestDiscovery {
+    repository: string;
+    commit: string;
+    tests: { id: string; file: string }[];
 }
 
 export type SelectionStrategy = 'dependency' | 'all' | 'risk';
@@ -276,6 +288,45 @@ export interface ReplayOverview {
     overall: Record<string, Record<ReplayMetric, { mean: number | null; projects: number }>>;
     within_risk_target: { projects: number; of: number };
     note: string;
+}
+
+
+// --- project history: recorded executions, not saved research simulations ------
+export interface ProjectRun {
+    id: string;
+    commit: string | null;
+    tests: number;
+    failures: number;
+    duration_seconds: number;
+    recorded_at: string;
+    result_path: string;
+    /** True when the run meets the D-053 recording rules. */
+    candidate: boolean;
+    reason: string | null;
+}
+export interface ProjectHistory {
+    repository: string;
+    runs: ProjectRun[];
+    candidate_runs: number;
+    candidate_commits: number;
+    history_csv: string | null;
+    warnings: string[];
+    note: string;
+}
+export interface RecordedHistory {
+    repository: string;
+    recorded_runs: number;
+    commits_with_results: number | null;
+    history_csv: string;
+    skipped: { id: string; reason: string }[];
+    warnings: string[];
+    note: string;
+}
+export interface SavedRun {
+    id: string;
+    results: SelectionRun['results'];
+    logs: string[];
+    result_path: string;
 }
 
 // --- language plugins and the catalogue (codedna.plugins, D-020, D-048, D-054) -------
