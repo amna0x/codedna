@@ -28,6 +28,13 @@ export interface CodeDnaService {
     replaySources(folders: string[]): Promise<ReplaySources>;
     replayOverview(folders: string[], seed?: number): Promise<ReplayOverview>;
     replay(path: string): Promise<ReplayTimeline>;
+    /** Language plugins CodeDNA's engine found (D-018, D-054). */
+    installedPlugins(): Promise<InstalledPlugins>;
+    /** The official catalogue (fixed URL in the core) plus what is installed. */
+    pluginCatalogue(): Promise<PluginCatalogueView>;
+    /** Only after the view's explicit confirmation: installing runs the plugin's code. */
+    installPlugin(plugin: string, version: string): Promise<PluginChange>;
+    removePlugin(plugin: string): Promise<PluginChange>;
 }
 
 export type SelectionStrategy = 'dependency' | 'all' | 'risk';
@@ -269,4 +276,53 @@ export interface ReplayOverview {
     overall: Record<string, Record<ReplayMetric, { mean: number | null; projects: number }>>;
     within_risk_target: { projects: number; of: number };
     note: string;
+}
+
+// --- language plugins and the catalogue (codedna.plugins, D-020, D-048, D-054) -------
+
+export interface InstalledPlugin {
+    name: string;
+    display_name: string;
+    version: string;
+    api_version: string;
+    file_suffixes: string[];
+}
+
+export interface InstalledPlugins { api_version: string; plugins: InstalledPlugin[]; problems: string[] }
+
+export interface CatalogueVersion {
+    version: string;
+    api_version: string;
+    /** Bundled with CodeDNA (installed from the repository), no download. */
+    builtin: boolean;
+    url: string | null;
+    sha256: string | null;
+    /** Whether this CodeDNA core can load it (decided by the core). */
+    compatible?: boolean;
+}
+
+export interface CataloguePlugin {
+    id: string;
+    package?: string;
+    name: string;
+    description: string;
+    licence: string;
+    source: string;
+    versions: CatalogueVersion[];
+}
+
+export interface PluginCatalogueView {
+    catalogue: { schema_version: number; plugins: CataloguePlugin[] };
+    installed: InstalledPlugins;
+}
+
+export interface PluginChange {
+    plugin: string;
+    version?: string;
+    sha256?: string;
+    status: string;
+    /** Set after an update or removal: the old plugin code stays loaded until the server restarts. */
+    restart_required?: boolean;
+    previous_version?: string;
+    installed: InstalledPlugins;
 }

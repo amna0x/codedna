@@ -2,6 +2,7 @@ import { injectable } from '@theia/core/shared/inversify';
 import { AbstractViewContribution } from '@theia/core/lib/browser';
 import { ChangeViewWidget } from './change-view-widget';
 import { GraphViewWidget } from './graph-view-widget';
+import { PluginsViewWidget } from './plugins-view-widget';
 import { ReplayViewWidget } from './replay-view-widget';
 import { TestsViewWidget } from './tests-view-widget';
 
@@ -53,6 +54,18 @@ export class ReplayViewContribution extends AbstractViewContribution<ReplayViewW
             defaultWidgetOptions: { area: 'main' },
             toggleCommandId: 'codedna.replay.toggle',
             toggleKeybinding: 'ctrlcmd+shift+alt+r'
+        });
+    }
+}
+
+@injectable()
+export class PluginsViewContribution extends AbstractViewContribution<PluginsViewWidget> {
+    constructor() {
+        super({
+            widgetId: PluginsViewWidget.ID,
+            widgetName: PluginsViewWidget.LABEL,
+            defaultWidgetOptions: { area: 'main' },
+            toggleCommandId: 'codedna.plugins.toggle'
         });
     }
 }

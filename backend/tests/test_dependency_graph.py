@@ -7,7 +7,8 @@ import json
 import pytest
 
 from codedna.cli import EXIT_ANALYSIS_ERROR, EXIT_OK, main
-from codedna.dependency_graph import CONFIRMED, HEURISTIC, build_graph, file_role
+from codedna.dependency_graph import CONFIRMED, HEURISTIC
+from codedna_java.builder import build_graph, file_role
 from codedna.git_analysis import InvalidCommitError
 
 

@@ -6,7 +6,8 @@ import subprocess
 import sys
 from pathlib import Path
 
-from codedna.java_analysis import analyze_changes, parse_java
+from codedna.plugins.languages import analyze_changes
+from codedna_java.parser import parse_java
 
 ROOT = Path(__file__).resolve().parents[2]
 PATH = "src/main/java/p/A.java"

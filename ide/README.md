@@ -15,6 +15,10 @@ terminal and preferences; the `codedna-extension` package adds:
 - **Impact graph** (main area, `Ctrl+Shift+Alt+G`): changed code → parts that may be
   affected → related tests. Solid lines are direct links, dashed lines likely
   ones. Click a dot, or pick a part from the list, to see why it is included.
+- **Language plugins** (command palette: *View: Toggle Language plugins*):
+  the language plugins CodeDNA found, load problems, and the official
+  catalogue with licence and source. Install, update and remove ask first;
+  the core checks the SHA-256 and pins the version (D-054).
 - **History replay** (main area, `Ctrl+Shift+Alt+R`): plays a real project's history
   back commit by commit from the saved study results. Per commit it shows
   what "run every test", "dependency only", "simple rules at the same time"
@@ -46,7 +50,7 @@ enables selected Maven execution; analysis never triggers a build.
 |------|---------|-----|
 | Node.js | 22 (tested 22.21); Theia recommends 24 | build and run |
 | npm | 10+ | install |
-| Python | 3.11+ with CodeDNA installed: `pip install -e "..[api]"` | the analysis core (`codedna` on PATH, or set `CODEDNA_EXECUTABLE`) |
+| Python | 3.11+ with CodeDNA and its Java plugin installed: `pip install -e "..[api]"` and `pip install -e ../plugins/codedna-java` | the analysis core (`codedna` on PATH, or set `CODEDNA_EXECUTABLE`) |
 | Windows | Visual Studio Build Tools with "Desktop development with C++" | native modules (node-pty, keytar, drivelist, native-keymap, ffmpeg) |
 
 ## Build and run
@@ -93,7 +97,8 @@ npm run package --workspace electron-app   # → electron-app/dist/CodeDNA IDE S
 ```
 
 The installer contains the IDE only. The Python core is installed separately
-(`pip install -e "..[api]"`, or set `CODEDNA_EXECUTABLE`). Long CodeDNA
+(`pip install -e "..[api]"` plus `pip install -e ../plugins/codedna-java`,
+or set `CODEDNA_EXECUTABLE`). Long CodeDNA
 actions show a progress notification with the elapsed time.
 
 ### Troubleshooting

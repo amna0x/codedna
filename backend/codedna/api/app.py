@@ -26,24 +26,29 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
 from codedna import __version__
-from codedna.dependency_graph import build_graph
 from codedna.git_analysis import CodeDNAGitError, extract_changes
 from codedna.impact_analysis import compute_impact
-from codedna.java_analysis import analyze_changes
 from codedna.models.replay import (
     ReplayError,
     find_replay_sources,
     replay_from_file,
     replay_overview,
 )
-from codedna.plugins import load_plugins
+from codedna.plugins import load_plugins, manager
+from codedna.plugins.base import api_compatible
+from codedna.plugins.catalogue import CatalogueError
+from codedna.plugins.languages import (
+    PluginMissingError,
+    analyze_changes,
+    build_graph,
+    discover_tests,
+    require,
+)
 from codedna.selection import SelectionError, compare_strategies, select_tests
-from codedna.test_mapping.discovery import discover_tests
-from codedna.test_mapping.maven import run_maven_tests
-from codedna.test_mapping.reports import ReportError
 from codedna.test_mapping.results import (
     COVERAGE_MAP_FILE,
     RESULTS_FILE,
+    ReportError,
     load_coverage_map,
     load_results,
 )
@@ -119,6 +124,17 @@ class ReplayOverviewRequest(ReplaySourcesRequest):
     seed: int | None = None
 
 
+class PluginInstallRequest(BaseModel):
+    plugin: str = Field(pattern=r"^[a-z][a-z0-9-]{1,40}$")
+    version: str = Field(pattern=r"^\d+\.\d+\.\d+$", description="Exact catalogue version.")
+    confirm: bool = Field(False, description="Installing runs the plugin's code; must be true.")
+
+
+class PluginRemoveRequest(BaseModel):
+    plugin: str = Field(pattern=r"^[a-z][a-z0-9-]{1,40}$")
+    confirm: bool = Field(False, description="Removing changes CodeDNA's environment; must be true.")
+
+
 class RunTestsRequest(RevRequest):
     output_dir: str
     allow_build: bool = False
@@ -163,6 +179,14 @@ def create_app(token: str, *, allow_build: bool = False,
     async def report_error(_request: Request, exc: ReportError):
         return JSONResponse({"error": str(exc)}, status_code=400)
 
+    @app.exception_handler(PluginMissingError)
+    async def plugin_missing(_request: Request, exc: PluginMissingError):
+        return JSONResponse({"error": str(exc)}, status_code=400)
+
+    @app.exception_handler(CatalogueError)
+    async def catalogue_error(_request: Request, exc: CatalogueError):
+        return JSONResponse({"error": str(exc)}, status_code=400)
+
     @app.exception_handler(ReplayError)
     async def replay_error(_request: Request, exc: ReplayError):
         return JSONResponse({"error": str(exc)}, status_code=400)
@@ -181,6 +205,32 @@ def create_app(token: str, *, allow_build: bool = False,
     @app.get("/api/plugins", dependencies=secured)
     def plugins() -> dict:
         return load_plugins().describe()
+
+    @app.get("/api/plugins/catalogue", dependencies=secured)
+    def plugin_catalogue() -> dict:
+        """The official catalogue (fixed URL, validated) next to what is installed.
+
+        Each version says whether this core can load it (``compatible``), so the
+        IDE only displays the core's answer.
+        """
+        catalogue = manager.fetch_catalogue()
+        for plugin in catalogue.get("plugins", []):
+            for version in plugin.get("versions", []):
+                version["compatible"] = api_compatible(str(version.get("api_version", "")))
+        return {"catalogue": catalogue, "installed": load_plugins().describe()}
+
+    @app.post("/api/plugins/install", dependencies=secured)
+    def plugin_install(body: PluginInstallRequest) -> dict:
+        # The plugin and version come from the request; the URL and checksum only
+        # from the official catalogue, fetched here (D-020, D-048).
+        result = manager.install(manager.fetch_catalogue(), body.plugin, body.version,
+                                 confirmed=body.confirm)
+        return {**result, "installed": load_plugins().describe()}
+
+    @app.post("/api/plugins/remove", dependencies=secured)
+    def plugin_remove(body: PluginRemoveRequest) -> dict:
+        result = manager.remove(manager.fetch_catalogue(), body.plugin, confirmed=body.confirm)
+        return {**result, "installed": load_plugins().describe()}
 
     @app.get("/api/capabilities", dependencies=secured)
     def capabilities() -> dict:
@@ -239,9 +289,7 @@ def create_app(token: str, *, allow_build: bool = False,
         from codedna.test_history.recording import ignore_outputs, record_run
         ignore_outputs(repo)
         output = repo/'.codedna/runs'/uuid4().hex
-        plugin = load_plugins().get('java')
-        if plugin is None:
-            raise SelectionError('Java test execution plugin is unavailable')
+        plugin = require('java')
         run,_ = plugin.run_tests(repo,selection['head_commit'],output,allow_build=True,
             selected_tests=[t['test'] for t in selection['selected']],
             maven_command=maven_command,timeout=body.timeout)
@@ -284,7 +332,7 @@ def create_app(token: str, *, allow_build: bool = False,
         if not body.allow_build:
             raise HTTPException(status_code=400, detail=(
                 "running tests executes project code; send allow_build: true to confirm"))
-        run, coverage = run_maven_tests(
+        run, coverage = require("java").run_tests(
             body.repo, body.rev, body.output_dir, allow_build=True,
             per_test_coverage=body.per_test_coverage, maven_command=maven_command,
             timeout=body.timeout)

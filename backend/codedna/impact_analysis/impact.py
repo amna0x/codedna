@@ -1,6 +1,6 @@
 """Change-impact analysis: which types may be affected by a change?
 
-1. ``analyze_changes`` maps the diff to changed Java declarations.
+1. ``analyze_changes`` maps the diff to changed declarations (language plugin).
 2. Every changed declaration becomes a *seed*: the type itself, or the type
    that owns a changed member. Comment/formatting-only changes are ignored.
 3. The code graphs of BASE and HEAD are built and merged (so dependencies
@@ -27,11 +27,9 @@ from codedna.dependency_graph import (
     Edge,
     merge_graphs,
 )
-from codedna.java_analysis import analyze_changes
-from codedna.java_analysis.parser import TYPE_NODES
 from codedna.plugins import load_plugins
-
-_TYPE_KINDS = frozenset(TYPE_NODES.values())
+from codedna.git_analysis.changes import ChangeReport
+from codedna.plugins.languages import analyze_changes, plugin_type_kinds, require
 
 
 @dataclass
@@ -150,22 +148,31 @@ def explanation_graph(report: dict) -> dict:
 
 def compute_impact(repo_path: str | Path, base: str, head: str, *,
                    max_depth: int | None = None, include_heuristic: bool = True,
-                   cache: dict | None = None) -> ImpactReport:
-    changes = analyze_changes(repo_path, base, head)
+                   cache: dict | None = None, changes: ChangeReport | None = None,
+                   registry=None) -> ImpactReport:
+    """``changes`` and ``registry`` let a caller that already has them skip the work again."""
+    registry = registry or load_plugins()
+    java = require("java", registry)  # only language analysed so far (D-013)
+    if changes is None:
+        changes = analyze_changes(repo_path, base, head, registry=registry)
     repo = Path(changes.repository)
     cache = {} if cache is None else cache  # parses keyed by blob SHA (may be shared)
-    java = load_plugins().get("java")  # only language analysed so far (D-013)
     graph = merge_graphs(
         java.build_graph(repo, changes.base_commit, cache=cache),
         java.build_graph(repo, changes.head_commit, cache=cache),
     )
 
-    seeds, ignored, unanalysed = _collect_seeds(changes, graph)
+    seeds, ignored, unanalysed = _collect_seeds(changes, graph, plugin_type_kinds(java))
     warnings = list(changes.warnings) + list(graph.warnings)
-    if unanalysed:
+    non_java = [u for u in unanalysed if u["reason"].startswith("non-Java")]
+    if non_java:
         warnings.append(
-            f"{len(unanalysed)} changed non-Java file(s) not analysed; their impact is unknown "
+            f"{len(non_java)} changed non-Java file(s) not analysed; their impact is unknown "
             "and a broader test run may be needed")
+    if len(unanalysed) > len(non_java):
+        warnings.append(
+            f"{len(unanalysed) - len(non_java)} changed file(s) not analysed: the installed "
+            "plugin uses plugin API 1.0, which does not report type kinds; update it")
 
     impacted = _traverse(graph, seeds, max_depth, include_heuristic)
     return ImpactReport(
@@ -185,7 +192,8 @@ def compute_impact(repo_path: str | Path, base: str, head: str, *,
     )
 
 
-def _collect_seeds(changes, graph: CodeGraph) -> tuple[dict[str, Seed], list[dict], list[dict]]:
+def _collect_seeds(changes, graph: CodeGraph,
+                   kinds: frozenset[str]) -> tuple[dict[str, Seed], list[dict], list[dict]]:
     seeds: dict[str, Seed] = {}
     ignored: list[dict] = []
     unanalysed: list[dict] = []
@@ -204,8 +212,13 @@ def _collect_seeds(changes, graph: CodeGraph) -> tuple[dict[str, Seed], list[dic
             unanalysed.append({"path": changed.path, "status": changed.status,
                                "reason": "non-Java file; impact not analysed"})
             continue
+        if not kinds:  # a plugin API 1.0 plugin: no way to tell types from members
+            unanalysed.append({"path": changed.path, "status": changed.status,
+                               "reason": "the language plugin does not report which graph nodes "
+                                         "are types (plugin API 1.0); impact not analysed"})
+            continue
         paths = {changed.path, changed.old_path} - {None}
-        file_types = [n for n in graph.nodes.values() if n.kind in _TYPE_KINDS and n.file in paths]
+        file_types = [n for n in graph.nodes.values() if n.kind in kinds and n.file in paths]
         all_types = [n.id.removeprefix("type:") for n in file_types]
         top_types = [n.id.removeprefix("type:") for n in file_types
                      if n.parent and n.parent.startswith("file:")]
@@ -220,7 +233,7 @@ def _collect_seeds(changes, graph: CodeGraph) -> tuple[dict[str, Seed], list[dic
                 ignored.append({"id": declaration.id, "file": changed.path,
                                 "reason": "only comments or formatting changed"})
                 continue
-            owner = declaration.id if declaration.kind in _TYPE_KINDS else declaration.parent
+            owner = declaration.id if declaration.kind in kinds else declaration.parent
             if owner is not None:
                 add(owner, f"{declaration.kind} {declaration.id} {declaration.change}")
         for outside in java.outside_declarations:

@@ -22,8 +22,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install CodeDNA
-        run: python -m pip install -e ".[dev]"
+      - name: Install CodeDNA and its Java plugin
+        run: |
+          python -m pip install -e ".[dev]"
+          python -m pip install -e plugins/codedna-java
       - name: Run tests
         run: python -m pytest
       - name: CLI smoke test
@@ -75,7 +77,9 @@ jobs:
           java-version: "17"
           cache: maven
           cache-dependency-path: examples/sample-java-project/pom.xml
-      - name: Install CodeDNA
-        run: python -m pip install -e ".[dev]"
+      - name: Install CodeDNA and its Java plugin
+        run: |
+          python -m pip install -e ".[dev]"
+          python -m pip install -e plugins/codedna-java
       - name: Run Maven integration tests
         run: python -m pytest -m maven --run-maven -v

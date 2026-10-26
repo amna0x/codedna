@@ -117,8 +117,8 @@ Product track, alongside:
 - ✅ Language-plugin interface, registry (`codedna.languages` entry points)
   and built-in Java plugin; core impact/selection/collection go through it;
   `codedna plugins` (D-018, D-024)
-- ⏳ Physically move Java code into a separate `codedna-java` package
-  (Milestone 7)
+- ✅ Java code moved into a separate `codedna-java` package
+  (`plugins/codedna-java`, D-054); the core has no built-in language
 
 ## Milestone 5 — Research contribution 🔄 (tooling done)
 
@@ -202,9 +202,13 @@ May start in parallel (Student C) once the analysis JSON formats are stable.
   hosting (e.g. GitHub Pages) still to switch on
 - ✅ Plugin catalogue index `website/catalogue/index.json` with a core
   validator (`codedna.plugins.catalogue`: pinned, SHA-256, official URLs)
-- ⏳ In-app plugin manager: browse, install, update, remove — official
-  catalogue only, checksums verified, versions pinned (D-020)
-- ⏳ Package the Java plugin through the catalogue
+- ✅ Plugin manager: `codedna plugins catalogue|install|remove` (D-048), API
+  endpoints and the IDE "Language plugins" view (D-054): official catalogue
+  only, SHA-256 checked before pip, exact versions, dependency check with
+  roll back. Open: a public place to host the catalogue and wheels
+- 🔄 Package the Java plugin through the catalogue: it is a separate
+  distribution (`plugins/codedna-java`), listed as bundled; publishing a
+  wheel waits for public hosting
 
 ## Later (only if Milestones 4–7 are on track)
 

@@ -15,7 +15,7 @@ Usage:
                     [--must-run PATTERN ...]
     codedna compare --repo PATH --base SHA --head SHA --ground-truth FILE
                     [--coverage-map FILE] [--non-java retest-all|ignore]
-    codedna plugins
+    codedna plugins [catalogue | install ID VERSION --yes | remove ID --yes]
     codedna serve   [--host 127.0.0.1] [--port 8765] [--allow-build]
     codedna mcp     [--repo PATH] [--allow-build] [--mvn PATH] [--gradle PATH]
     codedna history mine     --repo PATH --db FILE [--rev REV] [--max-commits N]
@@ -45,19 +45,16 @@ import sys
 from pathlib import Path
 
 from codedna import __version__
-from codedna.dependency_graph import build_graph
 from codedna.git_analysis import CodeDNAGitError, extract_changes
 from codedna.impact_analysis import compute_impact
-from codedna.java_analysis import analyze_changes
 from codedna.models.rankers import BASELINES, ML_MODELS
 from codedna.plugins import load_plugins
+from codedna.plugins.languages import analyze_changes, build_graph, discover_tests, require
 from codedna.selection import STRATEGIES, SelectionError, compare_strategies, select_tests
-from codedna.test_mapping.discovery import discover_tests
-from codedna.test_mapping.maven import run_maven_tests
-from codedna.test_mapping.reports import ReportError
 from codedna.test_mapping.results import (
     COVERAGE_MAP_FILE,
     RESULTS_FILE,
+    ReportError,
     load_coverage_map,
     load_results,
 )
@@ -192,7 +189,18 @@ def build_parser() -> argparse.ArgumentParser:
     _add_non_java_arg(compare)
     compare.add_argument("--output", help="Write JSON to this file instead of standard output.")
 
-    subcommands.add_parser("plugins", help="List installed language plugins.")
+    plugins = subcommands.add_parser(
+        "plugins", help="List installed language plugins, or manage them from the official catalogue.")
+    plugin_actions = plugins.add_subparsers(dest="plugin_action")
+    plugin_actions.add_parser("catalogue", help="Show the official plugin catalogue.")
+    install = plugin_actions.add_parser(
+        "install", help="Install one exact catalogue version (runs the plugin's code later).")
+    install.add_argument("plugin")
+    install.add_argument("version", help="Exact version, e.g. 1.0.0")
+    install.add_argument("--yes", action="store_true", help="Confirm the installation.")
+    remove = plugin_actions.add_parser("remove", help="Remove an installed catalogue plugin.")
+    remove.add_argument("plugin")
+    remove.add_argument("--yes", action="store_true", help="Confirm the removal.")
 
     serve = subcommands.add_parser(
         "serve",
@@ -407,7 +415,7 @@ def main(argv: list[str] | None = None) -> int:
         elif args.command == "run-tests":
             return _run_tests(args)
         elif args.command == "plugins":
-            return _write_json(load_plugins().describe(), None)
+            return _plugins(args)
         elif args.command == "serve":
             try:
                 from codedna.api.server import serve
@@ -464,6 +472,23 @@ def main(argv: list[str] | None = None) -> int:
     return _write_json(report.to_dict(), args.output)
 
 
+def _plugins(args: argparse.Namespace) -> int:
+    if args.plugin_action is None:
+        return _write_json(load_plugins().describe(), None)
+    from codedna.plugins import manager
+    catalogue = manager.fetch_catalogue()
+    if args.plugin_action == "catalogue":
+        return _write_json(catalogue, None)
+    if args.plugin_action == "install":
+        details = next((p for p in catalogue["plugins"] if p["id"] == args.plugin), None)
+        if details is not None:  # shown before anything runs, even with --yes
+            print(f"{details['name']} {args.version}: licence {details['licence']}; "
+                  f"source {details['source']}", file=sys.stderr)
+        return _write_json(manager.install(catalogue, args.plugin, args.version,
+                                           confirmed=args.yes), None)
+    return _write_json(manager.remove(catalogue, args.plugin, confirmed=args.yes), None)
+
+
 def _run_tests(args: argparse.Namespace) -> int:
     if not args.allow_build:
         print("error: run-tests executes the project's code and build plugins; "
@@ -471,7 +496,7 @@ def _run_tests(args: argparse.Namespace) -> int:
         return EXIT_ANALYSIS_ERROR
     print(f"warning: running the build of {args.repo} (project code will execute)",
           file=sys.stderr)
-    run, coverage = run_maven_tests(
+    run, coverage = require("java").run_tests(
         args.repo, args.rev, args.output_dir, allow_build=True,
         per_test_coverage=args.per_test_coverage,
         maven_command=[args.mvn] if args.mvn else None,
@@ -554,13 +579,12 @@ def _run_on_dataset(args: argparse.Namespace, dataset) -> int:
 def _record_run(args: argparse.Namespace) -> int:
     from codedna.git_analysis.git import resolve_repository
     from codedna.test_history.recording import record_run
-    from codedna.test_mapping.discovery import discover_tests_for_commit
     from codedna.test_mapping.results import RESULTS_FILE, load_results
 
     path = Path(args.results)
     run = load_results(path / RESULTS_FILE if path.is_dir() else path)
     repo = resolve_repository(args.repo)
-    expected = [t.id for t in discover_tests_for_commit(repo, run.commit).tests
+    expected = [t.id for t in require("java").discover_tests(repo, run.commit).tests
                 if t.runs_by_default]
     report = record_run(repo, run, expected_tests=expected)
     _write_json(report, None)

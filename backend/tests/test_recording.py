@@ -14,7 +14,7 @@ from codedna.cli import EXIT_ANALYSIS_ERROR, EXIT_OK, main
 from codedna.git_analysis.git import run_git, snapshot_worktree
 from codedna.test_history.features import Dataset
 from codedna.test_history.recording import HISTORY_CSV, record_run
-from codedna.test_mapping.reports import TestClassResult
+from codedna.test_mapping.results import TestClassResult
 from codedna.test_mapping.results import TestRunResult
 
 FAKE = [sys.executable, str(Path(__file__).with_name("fake_mvn.py"))]

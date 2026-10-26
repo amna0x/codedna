@@ -3,7 +3,7 @@
 All ``.java`` files of the commit are read straight from Git's object store
 (``git ls-tree`` + ``git cat-file --batch``): nothing is checked out, built or
 executed. Each file is parsed twice with Tree-sitter — once for declarations
-(``java_analysis.parser``) and once for type references (``references``) —
+(``codedna_java.parser``) and once for type references (``references``) —
 and then every reference is resolved against the types declared in the
 repository.
 
@@ -13,10 +13,10 @@ see docs/DECISIONS.md D-010 for exactly what is and is not handled.
 
 from __future__ import annotations
 
-from collections import OrderedDict
 from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
 
+from codedna.dependency_graph.cache import BoundedParseCache
 from codedna.dependency_graph.model import (
     CONFIRMED,
     HEURISTIC,
@@ -25,10 +25,10 @@ from codedna.dependency_graph.model import (
     Node,
     UnresolvedReference,
 )
-from codedna.dependency_graph.references import FileFacts, extract_references
+from codedna_java.references import FileFacts, extract_references
 from codedna.git_analysis.blobs import list_files, read_blobs
 from codedna.git_analysis.git import resolve_commit, resolve_repository
-from codedna.java_analysis.parser import TYPE_NODES, JavaParseResult, parse_java
+from codedna_java.parser import TYPE_NODES, JavaParseResult, parse_java
 
 _TYPE_KINDS = frozenset(TYPE_NODES.values())
 
@@ -123,30 +123,6 @@ def _parse_missing(repo: Path, files: list[tuple[str, str]],
             source = contents[blob]
             result[blob] = cache[blob] = (parse_java(source), extract_references(source))
     return result
-
-
-class BoundedParseCache(OrderedDict):
-    """Least-recently-used parse cache shared across many commits.
-
-    Consecutive commits share almost all files, so reusing parses by blob SHA
-    avoids re-parsing the whole repository for every commit; the bound keeps
-    memory flat on long histories.
-    """
-
-    def __init__(self, max_entries: int = 4000):
-        super().__init__()
-        self.max_entries = max_entries
-
-    def __getitem__(self, key):
-        value = super().__getitem__(key)
-        self.move_to_end(key)
-        return value
-
-    def __setitem__(self, key, value):
-        super().__setitem__(key, value)
-        self.move_to_end(key)
-        while len(self) > self.max_entries:
-            self.popitem(last=False)
 
 
 # --- structural nodes and "contains" edges ------------------------------------

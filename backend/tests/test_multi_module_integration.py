@@ -6,7 +6,7 @@ import shutil
 
 import pytest
 
-from codedna.test_mapping.maven import run_maven_tests
+from codedna_java.maven import run_maven_tests
 
 pytestmark = pytest.mark.maven
 

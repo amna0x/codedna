@@ -19,7 +19,7 @@ from pathlib import Path
 
 from codedna.git_analysis.changes import ChangedFile, ChangeReport, LineRange, extract_changes
 from codedna.git_analysis.git import run_git_bytes
-from codedna.java_analysis.parser import TYPE_NODES, Declaration, JavaParseResult, parse_java
+from codedna_java.parser import TYPE_NODES, Declaration, JavaParseResult, parse_java
 
 _TYPE_KINDS = frozenset(TYPE_NODES.values())
 

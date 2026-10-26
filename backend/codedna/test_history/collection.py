@@ -12,7 +12,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from codedna.git_analysis.git import CodeDNAGitError
-from codedna.plugins import load_plugins
+from codedna.plugins.languages import require
 from codedna.test_history.store import HistoryStore
 from codedna.test_mapping.results import RESULTS_FILE, load_results
 
@@ -38,7 +38,7 @@ def collect_results(repo_path: str | Path, store: HistoryStore, output_root: str
     """Run the suite for mined commits without results, oldest first."""
     if not allow_build:
         raise CodeDNAGitError("collecting results runs every commit's build; pass --allow-build")
-    java = load_plugins().get("java")
+    java = require("java")
     done = store.commits_with_results()
     pending = [c for c in store.commits() if c.sha not in done]
     if max_commits is not None:
