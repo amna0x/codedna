@@ -77,6 +77,7 @@ Full brief: [CODEDNA_STARTER.md](CODEDNA_STARTER.md). Current plan:
 |------|---------|
 | `backend/codedna/` | Python core package (CLI, API, language-neutral analysis) |
 | `plugins/codedna-java/` | Java language plugin (separate package, D-054) |
+| `plugins/codedna-python/` | Python language plugin (separate package, D-060) |
 | `backend/tests/` | pytest suite |
 | `examples/sample-java-project/` | Tiny Maven + JUnit 5 project for demos/tests |
 | `scripts/` | Developer helper scripts |

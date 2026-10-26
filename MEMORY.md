@@ -167,6 +167,11 @@ Deadline: approximately May or June (presumed 2027 from the current October 2026
   Java code (parser, graph builder, discovery, Maven runner, live risk) now
   lives in `plugins/codedna-java/codedna_java/`; the core reaches it only via
   `codedna.plugins.languages`.
+- Python plugin: `pip install -e plugins/codedna-python` (D-060; start.bat
+  installs it too). Stdlib `ast` only. Mixed Java + Python repos: the core
+  runs every installed plugin (`plugins.languages`: `commit_graph`,
+  `commit_tests`, `run_tests`); no cross-language edges. The PyInstaller
+  desktop bundle must include `codedna_python` as well as `codedna_java`.
 - Set `PYTHONIOENCODING=utf-8` when scripts print "−" or "Δ".
 - In Git Bash, heredocs containing apostrophes sometimes fail ("unexpected
   EOF"); write a Python script to a file and run it instead.

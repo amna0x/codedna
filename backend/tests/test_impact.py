@@ -143,7 +143,8 @@ def test_non_java_change_is_reported_as_unanalysed(repo):
 
     assert report.seeds == []
     assert report.unanalysed_changes == [
-        {"path": "pom.xml", "status": "modified", "reason": "non-Java file; impact not analysed"}]
+        {"path": "pom.xml", "status": "modified",
+         "reason": "no installed language plugin analyses this file; impact not analysed"}]
     assert any("not analysed" in w for w in report.warnings)
 
 

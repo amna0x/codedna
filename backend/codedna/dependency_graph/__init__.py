@@ -15,6 +15,7 @@ from codedna.dependency_graph.model import (
     Node,
     UnresolvedReference,
     merge_graphs,
+    union_graphs,
 )
 
 __all__ = [
@@ -28,4 +29,5 @@ __all__ = [
     "Node",
     "UnresolvedReference",
     "merge_graphs",
+    "union_graphs",
 ]

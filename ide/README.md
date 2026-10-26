@@ -18,7 +18,8 @@ terminal and preferences; the `codedna-extension` package adds:
 - **Language plugins** (command palette: *View: Toggle Language plugins*):
   the language plugins CodeDNA found, load problems, and the official
   catalogue with licence and source. Install, update and remove ask first;
-  the core checks the SHA-256 and pins the version (D-054).
+  the core checks the SHA-256 and pins the version (D-054). Java and Python
+  are bundled; in a mixed project both analyse their own files (D-060).
 - **Project history** (main area, `Ctrl+Shift+Alt+H`, or *Open project history*
   in Tests to run): this project's saved test runs, each with whether it can be
   history and why not, its outcomes and logs; import a `results.json` from a
@@ -57,7 +58,7 @@ Node and Python; end users still need Git and any project build tools they use.
 |------|---------|-----|
 | Node.js | 22 (tested 22.21); Theia recommends 24 | build and run |
 | npm | 10+ | install |
-| Python (source builds) | 3.11+ with CodeDNA installed: `pip install -e "..[ml,api]"` and `pip install -e ../plugins/codedna-java` | the analysis core (`codedna` on PATH, or set `CODEDNA_EXECUTABLE`) |
+| Python | 3.11+ with CodeDNA and its language plugins installed: `pip install -e "..[ml,api]"` and `pip install -e ../plugins/codedna-java -e ../plugins/codedna-python` | the analysis core (`codedna` on PATH, or set `CODEDNA_EXECUTABLE`) |
 | Windows | Visual Studio Build Tools with "Desktop development with C++" | native modules (node-pty, keytar, drivelist, native-keymap, ffmpeg) |
 
 ## Build and run
@@ -110,8 +111,8 @@ The installer bundles the analysis core, Python and its ML/API dependencies
 the bundled core for development. Long actions show elapsed-time progress.
 
 Before packaging, install the build-only freezer into the project environment:
-`python -m pip install -e ".[ml,api,desktop]"` and `python -m pip install -e plugins/codedna-java`
-from the repository root (the bundle includes the Java plugin, D-054).
+`python -m pip install -e ".[ml,api,desktop]"` and `python -m pip install -e plugins/codedna-java -e plugins/codedna-python`
+from the repository root (the bundle includes the Java and Python plugins, D-054, D-060).
 `npm run package --workspace electron-app` freezes the core, compiles the
 extension, rebuilds native modules and produces the Windows installer. Each
 core bundle includes `bundle-manifest.json` with versions and file hashes.

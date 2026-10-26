@@ -221,7 +221,10 @@ May start in parallel (Student C) once the analysis JSON formats are stable.
 
 ## Later (only if Milestones 4–7 are on track)
 
-- ⏳ Second language plugin (e.g. Python or JavaScript) to show the plugin
-  interface generalises
+- ✅ Second language plugin: Python (`plugins/codedna-python`, D-060), built
+  early by the owners' plan of 2026-10-25. Works next to Java in one
+  repository (joined graphs, one test universe, split test runs); no
+  cross-language edges. Open: risk-based selection for Python, Python in the
+  desktop bundle
 - ⏳ File-level history fallback (co-change) for languages without a plugin,
   always labelled heuristic

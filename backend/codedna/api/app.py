@@ -42,8 +42,8 @@ from codedna.plugins.languages import (
     analyze_changes,
     build_graph,
     discover_tests,
-    require,
 )
+from codedna.plugins.languages import run_tests as run_language_tests
 from codedna.selection import SelectionError, compare_strategies, select_tests
 from codedna.test_mapping.results import (
     COVERAGE_MAP_FILE,
@@ -161,7 +161,8 @@ def new_token() -> str:
 
 
 def create_app(token: str, *, allow_build: bool = False,
-               maven_command: list[str] | None = None) -> FastAPI:
+               maven_command: list[str] | None = None,
+               python_command: list[str] | None = None) -> FastAPI:
     if len(token) < 16:
         raise ValueError("API token must be at least 16 characters")
     app = FastAPI(title="CodeDNA local API", version=__version__,
@@ -300,10 +301,9 @@ def create_app(token: str, *, allow_build: bool = False,
         from codedna.test_history.recording import ignore_outputs, record_run
         ignore_outputs(repo)
         output = repo/'.codedna/runs'/uuid4().hex
-        plugin = require('java')
-        run,_ = plugin.run_tests(repo,selection['head_commit'],output,allow_build=True,
+        run,_ = run_language_tests(repo,selection['head_commit'],output,allow_build=True,
             selected_tests=[t['test'] for t in selection['selected']],
-            maven_command=maven_command,timeout=body.timeout)
+            maven_command=maven_command,python_command=python_command,timeout=body.timeout)
         from codedna.test_mapping.results import save_json
         save_json(selection, output / 'selection.json')
         # Whole-suite runs become project history so the risk gate can turn on (D-053).
@@ -362,10 +362,10 @@ def create_app(token: str, *, allow_build: bool = False,
         if not body.allow_build:
             raise HTTPException(status_code=400, detail=(
                 "running tests executes project code; send allow_build: true to confirm"))
-        run, coverage = require("java").run_tests(
+        run, coverage = run_language_tests(
             body.repo, body.rev, body.output_dir, allow_build=True,
             per_test_coverage=body.per_test_coverage, maven_command=maven_command,
-            timeout=body.timeout)
+            python_command=python_command, timeout=body.timeout)
         return {"results": run.to_dict(),
                 "coverage_map": coverage.to_dict() if coverage else None}
 

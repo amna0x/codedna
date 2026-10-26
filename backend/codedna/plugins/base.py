@@ -49,7 +49,12 @@ class LanguagePlugin(Protocol):
 
     def run_tests(self, repo_path: str | Path, revision: str, output_dir: str | Path, *,
                   allow_build: bool, per_test_coverage: bool = False, **options: Any) -> Any:
-        """Run tests (executes project code; only with ``allow_build``, D-014)."""
+        """Run tests (executes project code; only with ``allow_build``, D-014).
+
+        ``options`` may hold options for other plugins (``maven_command``,
+        ``python_command``...), because the core passes the same options to
+        every plugin of a mixed repository: ignore the ones you do not know.
+        """
 
 
 def api_compatible(version: str) -> bool:

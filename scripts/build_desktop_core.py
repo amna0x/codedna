@@ -17,10 +17,11 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 NAME = "codedna-core"
-# codedna_java is the Java language plugin (D-054); its metadata carries the
-# codedna.languages entry point, without which the bundled core finds no plugin.
-PACKAGES = ("codedna", "codedna_java", "uvicorn", "tree_sitter_java")
-VERSIONS = ("codedna", "codedna-java", "pyinstaller", "pyinstaller-hooks-contrib", "scikit-learn",
+# codedna_java and codedna_python are the language plugins (D-054, D-060); their
+# metadata carries the codedna.languages entry points, without which the bundled
+# core finds no plugin.
+PACKAGES = ("codedna", "codedna_java", "codedna_python", "uvicorn", "tree_sitter_java")
+VERSIONS = ("codedna", "codedna-java", "codedna-python", "pyinstaller", "pyinstaller-hooks-contrib", "scikit-learn",
             "scipy", "numpy", "tree-sitter", "tree-sitter-java", "fastapi", "uvicorn")
 
 
@@ -31,8 +32,9 @@ def build_command(root: Path) -> list[str]:
             "--distpath", str(root / "ide" / "electron-app" / "resources"),
             "--workpath", str(work / "work"), "--specpath", str(work),
             "--paths", str(root / "backend"),
-            "--paths", str(root / "plugins" / "codedna-java"), "--copy-metadata", "codedna",
-            "--copy-metadata", "codedna-java"]
+            "--paths", str(root / "plugins" / "codedna-java"),
+            "--paths", str(root / "plugins" / "codedna-python"), "--copy-metadata", "codedna",
+            "--copy-metadata", "codedna-java", "--copy-metadata", "codedna-python"]
     for package in PACKAGES:
         args += ["--collect-all", package]
     for module in ("matplotlib", "pytest", "IPython", "notebook", "sklearn.tests",
@@ -67,12 +69,13 @@ def main() -> int:
         print('Install build prerequisites: python -m pip install -e ".[ml,api,desktop]"',
               file=sys.stderr)
         return 1
-    try:
-        importlib.metadata.version("codedna-java")
-    except importlib.metadata.PackageNotFoundError:
-        print("Install the Java plugin first: python -m pip install -e plugins/codedna-java",
-              file=sys.stderr)
-        return 1
+    for plugin, label in (("codedna-java", "Java"), ("codedna-python", "Python")):
+        try:
+            importlib.metadata.version(plugin)
+        except importlib.metadata.PackageNotFoundError:
+            print(f"Install the {label} plugin first: python -m pip install -e plugins/{plugin}",
+                  file=sys.stderr)
+            return 1
     (ROOT / "build" / "desktop-core").mkdir(parents=True, exist_ok=True)
     subprocess.run(build_command(ROOT), cwd=ROOT, check=True)
     bundle = ROOT / "ide" / "electron-app" / "resources" / NAME

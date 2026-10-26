@@ -100,7 +100,7 @@ export class TestsViewWidget extends ReactWidget {
         if (!report || this.loading) { return; }
         const confirmed = await new ConfirmDialog({
             title: 'Run project tests?',
-            msg: 'This executes this project’s code and build plugins. Maven or Gradle may download dependencies. Run only projects you trust.',
+            msg: 'This executes this project’s code and build plugins (Maven, Gradle or pytest). Maven may download dependencies. Run only projects you trust.',
             ok: 'Run tests', cancel: 'Cancel'
         }).open();
         if (!confirmed || this.report !== report || generation !== this.generation) { return; }
@@ -223,7 +223,7 @@ export class TestsViewWidget extends ReactWidget {
             <p className='cd-meta'>Compared commits: {report.base_commit.slice(0, 8)} → {report.head_commit.slice(0, 8)}</p>
             <p className='cd-lede'>
                 {report.total_tests === 0
-                    ? 'No JUnit tests were found in this project.'
+                    ? 'No JUnit or pytest tests were found in this project.'
                     : report.selected.length === 0
                         ? 'No tests are recommended by the current selection policy.'
                         : <>Run {report.selected.length} of {plural(report.total_tests, 'test class', 'test classes')}.

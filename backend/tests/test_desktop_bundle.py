@@ -72,6 +72,27 @@ def test_bundle_includes_the_java_plugin_and_its_entry_point(tmp_path):
     assert ("--copy-metadata", "codedna-java") in pairs
 
 
+def test_bundle_includes_the_python_plugin_and_its_entry_point(tmp_path):
+    args = load_builder().build_command(tmp_path)
+    pairs = set(zip(args, args[1:]))
+    # Same as Java: the bundled core must find the Python plugin (D-060).
+    assert ("--collect-all", "codedna_python") in pairs
+    assert ("--copy-metadata", "codedna-python") in pairs
+    assert ("--paths", str(tmp_path / "plugins" / "codedna-python")) in pairs
+
+
+def test_missing_python_plugin_gives_install_command(monkeypatch, capsys):
+    builder = load_builder()
+    monkeypatch.setattr(builder.sys, "platform", "win32")
+    def version(name):
+        if name == "codedna-python":
+            raise builder.importlib.metadata.PackageNotFoundError(name)
+        return "test-version"
+    monkeypatch.setattr(builder.importlib.metadata, "version", version)
+    assert builder.main() == 1
+    assert "plugins/codedna-python" in capsys.readouterr().err
+
+
 def test_missing_java_plugin_gives_install_command(monkeypatch, capsys):
     builder = load_builder()
     monkeypatch.setattr(builder.sys, "platform", "win32")

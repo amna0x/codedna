@@ -14,12 +14,18 @@ Rules shared by all strategies, chosen to stay *safe*:
 * changed or new test classes are always selected;
 * must-run tests of the project policy are always selected (D-050);
 * for ``coverage``, tests without coverage data are selected;
-* when a non-Java file changed, every test is selected unless
-  ``non_java="ignore"`` (build files and resources can change behaviour,
-  and nothing here analyses them).
+* when a file no installed language plugin analyses changed, every test is
+  selected unless ``non_java="ignore"`` (build files and resources can
+  change behaviour, and nothing here analyses them). The option keeps its
+  historical name; it covers every unanalysed file, not only non-Java ones;
+* a changed file of a language that has no tests in the universe counts as
+  unanalysed too: dependencies between languages are not analysed (D-060),
+  so such a change (a Python build script in a Java project, say) could
+  only be caught by running everything.
 
-The universe is the set of test classes Maven Surefire runs by default in
-HEAD (see ``discovery``).
+The universe is the set of tests the build runs by default in HEAD, over
+every installed language plugin (Maven Surefire's for Java, pytest's for
+Python; see each plugin's discovery).
 """
 
 from __future__ import annotations
@@ -30,7 +36,7 @@ from pathlib import Path
 from codedna.git_analysis.git import resolve_commit, resolve_repository
 from codedna.impact_analysis import compute_impact
 from codedna.plugins import load_plugins
-from codedna.plugins.languages import analyze_changes, plugin_type_kinds, require
+from codedna.plugins.languages import analyze_changes, commit_tests, type_kinds
 from codedna.selection.policy import apply_policy
 from codedna.test_mapping.results import CoverageMap, TestRunResult
 
@@ -45,6 +51,7 @@ class SelectionError(ValueError):
 class SelectedTest:
     test: str
     reasons: list[str] = field(default_factory=list)
+    file: str | None = None  # where discovery found the test, for opening it
 
 
 @dataclass
@@ -90,18 +97,17 @@ def select_tests(repo_path: str | Path, base: str, head: str, strategy: str, *,
     base_sha, head_sha = resolve_commit(repo, base), resolve_commit(repo, head)
 
     registry = load_plugins()
-    java = require("java", registry)
-    discovery = (java.discover_tests(repo, head_sha) if cache is None
-                 else java.discover_tests(repo, head_sha, cache=cache))
+    discovery = commit_tests(repo, head_sha, registry=registry, cache=cache)
     universe = sorted(t.id for t in discovery.tests if t.runs_by_default)
     test_files = {t.id: t.file for t in discovery.tests}
+    tested_languages = {discovery.language_of(t) for t in universe}
     changes = analyze_changes(repo, base_sha, head_sha, registry=registry)
     warnings = list(changes.warnings)
     chosen: dict[str, SelectedTest] = {}
 
     def pick(test_id: str, reason: str) -> None:
         if test_id in universe:
-            entry = chosen.setdefault(test_id, SelectedTest(test_id))
+            entry = chosen.setdefault(test_id, SelectedTest(test_id, file=test_files[test_id]))
             if reason not in entry.reasons:
                 entry.reasons.append(reason)
 
@@ -110,14 +116,22 @@ def select_tests(repo_path: str | Path, base: str, head: str, strategy: str, *,
         if test_files[test_id] in changed_paths:
             pick(test_id, "test class changed")
 
-    non_java_changes = [c.path for c in changes.changed_files if not c.is_java]
+    unanalysed = [c.path for c in changes.changed_files
+                  if c.language is None or c.language not in tested_languages]
+    untested = sorted({c.language for c in changes.changed_files
+                       if c.language is not None and c.language not in tested_languages}
+                      if universe else ())
+    for language in untested:
+        count = sum(c.language == language for c in changes.changed_files)
+        warnings.append(f"{count} changed {language} file(s) count as unanalysed: no {language} "
+                        "tests were found, and dependencies between languages are not analysed")
     if strategy == "all":
         for test_id in universe:
             pick(test_id, "retest-all")
-    elif non_java_changes and non_java == "retest-all":
+    elif unanalysed and non_java == "retest-all":
         for test_id in universe:
-            pick(test_id, f"non-Java file changed ({non_java_changes[0]}"
-                          f"{' and others' if len(non_java_changes) > 1 else ''}); "
+            pick(test_id, f"unanalysed file changed ({unanalysed[0]}"
+                          f"{' and others' if len(unanalysed) > 1 else ''}); "
                           "falling back to retest-all")
     elif strategy == "dependency":
         impact = compute_impact(repo, base_sha, head_sha, cache=cache, changes=changes,
@@ -133,14 +147,14 @@ def select_tests(repo_path: str | Path, base: str, head: str, strategy: str, *,
         if coverage_map.commit != base_sha:
             warnings.append(f"coverage map is from commit {coverage_map.commit[:12]}, not BASE "
                             f"{base_sha[:12]}; selection may miss or over-select tests")
-        _select_by_coverage(changes, coverage_map, universe, pick, plugin_type_kinds(java))
+        _select_by_coverage(changes, coverage_map, universe, pick, type_kinds(registry))
 
-    if non_java_changes and non_java == "ignore":
-        warnings.append(f"{len(non_java_changes)} non-Java change(s) ignored by request: "
-                        f"{non_java_changes[:5]}")
+    if unanalysed and non_java == "ignore":
+        warnings.append(f"{len(unanalysed)} unanalysed change(s) ignored by request: "
+                        f"{unanalysed[:5]}")
     hidden = [t.id for t in discovery.tests if not t.runs_by_default]
     if hidden:
-        warnings.append(f"{len(hidden)} test class(es) outside Surefire's default includes are "
+        warnings.append(f"{len(hidden)} test class(es) the build does not run by default are "
                         f"not considered: {hidden[:5]}")
 
     policy_report = None
@@ -172,16 +186,16 @@ def _select_by_coverage(changes, coverage_map: CoverageMap, universe: list[str],
             pick(test_id, "no coverage data for this test")
 
     for changed in changes.changed_files:
-        if not changed.is_java:
+        if changed.language is None:
             continue
         base_path = changed.old_path or changed.path
-        java = changed.java
-        if java is None or java.unresolved:
+        mapping = changed.mapping
+        if mapping is None or mapping.unresolved:
             for test_id, cov in coverage_map.tests.items():
                 if base_path in cov.files:
                     pick(test_id, f"covers {base_path}, whose change could not be mapped")
             continue
-        for declaration in java.declarations:
+        for declaration in mapping.declarations:
             if declaration.code_changed is False:
                 continue
             is_type = declaration.kind in type_kinds
@@ -195,7 +209,7 @@ def _select_by_coverage(changes, coverage_map: CoverageMap, universe: list[str],
                     # A new member (e.g. an overload or override) can change
                     # behaviour of a class the test already uses.
                     pick(test_id, f"covers {declaration.parent}, which gained {declaration.id}")
-        if any(o.code_changed is not False for o in java.outside_declarations):
+        if any(o.code_changed is not False for o in mapping.outside_declarations):
             for test_id, cov in coverage_map.tests.items():
                 if base_path in cov.files:
                     pick(test_id, f"covers {base_path}, whose imports/package changed")

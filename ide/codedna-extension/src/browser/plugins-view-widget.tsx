@@ -111,7 +111,7 @@ export class PluginsViewWidget extends ReactWidget {
         return <div>
             <header className='cd-header'>
                 <h2>Language plugins</h2>
-                <p className='cd-subtitle'>Each language CodeDNA understands comes from a plugin. Java is bundled.</p>
+                <p className='cd-subtitle'>Each language CodeDNA understands comes from a plugin. Java and Python are bundled.</p>
             </header>
             <div className='cd-controls'>
                 <button className='theia-button secondary' disabled={this.loading} onClick={() => this.refresh()}>
@@ -133,7 +133,7 @@ export class PluginsViewWidget extends ReactWidget {
             <h3>Installed</h3>
             {installed.plugins.length === 0
                 ? <p className='cd-help'>No language plugin is installed, so CodeDNA can list changed files but not
-                    analyse them. Run start.bat once, or: <code>pip install -e plugins/codedna-java</code></p>
+                    analyse them. Run start.bat once, or: <code>pip install -e plugins/codedna-java -e plugins/codedna-python</code></p>
                 : <ul className='cd-plugin-list'>
                     {installed.plugins.map(p => <li key={p.name}>
                         <strong>{p.display_name}</strong> <Chip tone='muted'>v{p.version}</Chip>
