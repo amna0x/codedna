@@ -1,4 +1,4 @@
-# Nine-project confirmatory results â€” 2026-10-26
+# Nine-project confirmatory results — 2026-10-26
 
 The fixed stopping-rule verdict is **no meaningful difference**. The gate verdict is **gate supported**.
 
@@ -18,7 +18,7 @@ Projects supplied: **9**; eligible: **9**; with defined B10/B3 commit safety: **
 | recall | -0.092200 | [-0.113000, -0.072800] |
 | safety | -0.007200 | [-0.033900, 0.017900] |
 
-Differences above use proportions; multiply by 100 for percentage points. Projects receive equal weight. The fixed hierarchical bootstrap uses 2,000 draws and seed 0. The verdict uses the predeclared Â±0.05 safety margin and project-count/sign rules.
+Differences above use proportions; multiply by 100 for percentage points. Projects receive equal weight. The fixed hierarchical bootstrap uses 2,000 draws and seed 0. The verdict uses the predeclared ±0.05 safety margin and project-count/sign rules.
 
 ## Per-project observations
 
@@ -67,3 +67,26 @@ Every original output checksum was checked before rendering. The original report
 ![project safety](figures/confirmatory-2026-10-26/project-safety.png)
 
 ![pooled differences](figures/confirmatory-2026-10-26/pooled-differences.png)
+
+## Provenance check (2026-10-26)
+
+The run was made on the laptop from main at `ecd4f54` plus uncommitted
+changes. Every frozen source hash in the study's
+`preparation-provenance.json` was compared with the committed code:
+
+- All analysis code is byte-identical to `ecd4f54`: the protocol, the
+  study scripts, features, models, calibration, selection and the gate.
+- Three files differ from `ecd4f54`, and each is byte-identical (with
+  Windows line endings) to the version in PR #17:
+  - `test_history/rtptorrent.py`: the Windows-safe ancestry walk (D-065
+    there). It gives the same answer as `git merge-base --independent`.
+  - `scripts/prepare_confirmatory.py`: reuses the verified raw subset and
+    has the `--no-structural` option. The rolling study's 15 live features
+    use no structural columns, and the equivalence check reports them
+    identical.
+  - `scripts/continue_confirmatory.py`: the resume script, included here.
+- `git_analysis/git.py` changes only the error text for a too-long Git
+  command line.
+
+The laptop's other uncommitted edits, among them the project-history
+rewrite that PR #17 replaces, are not used by this study.
