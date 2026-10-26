@@ -513,6 +513,67 @@ selection cheap where failures are rare. Time-ordered commits are not
 exchangeable, so the bound is an assumption checked on four projects, not a
 guarantee.
 
+### 4.11 Nine-project confirmation of B10 and the gate
+
+The frozen nine-project study found no meaningful safety difference between
+B10 and the recent-failure ordering B3 at matched recorded test time:
+-0.72 percentage points, 95% interval [-3.39, +1.79]. Failing-test recall
+was lower by 9.22 points [-11.30, -7.28]. The observed-rate gate criterion
+was supported: accepted blocks missed failures on 2.52% of all
+evaluation commits, with one-sided Wilson upper bound 3.35%. This is an
+all-commit miss rate, not conditional failing-commit safety.
+Eight blocks accepted, 36 rejected, and one DSpace block could not fit.
+The gated product's equal-project mean recorded test-time fraction was
+93.67%. None of this establishes future calibration or CI wall-clock savings.
+
+The source report and all denominators are in
+`docs/CONFIRMATORY_RESULTS_2026-10-26.md` and
+`experiments/results/rolling-evidence-confirmatory-windowsfix-2026-10-26/`.
+
+### 4.12 Nine-project follow-ups: B12f, B11, B13 and B13f (D-067)
+
+Four fixed-method follow-ups completed on the nine datasets. The original
+protocols, code/input hashes, raw outcomes and exact findings are under
+`experiments/results/*confirmatory-perf-2026-10-26/`. B13 and B13f are
+exploratory because their design used the B10 confirmation evidence.
+The CRC/PTS nine-project addendum requested by the handoff was not committed
+before these runs. The four-project method protocols existed, but this
+does not justify calling every subsequent decision preregistered.
+
+| Comparison | Recorded time difference (pp) | Safety difference (pp) | Interpretation |
+|---|---|---|---|
+| B12f - gated product | -16.20 [-16.87, -15.53] | -1.79 [-2.72, -0.84] | More savings with lower mean safety |
+| B13 - gated product | -23.36 [-23.99, -22.77] | -4.17 [-5.34, -3.10] | Exploratory; non-inferiority criterion inconclusive |
+| B13f - gated product | -3.61 [-4.14, -3.08] | +0.54 [-0.25, +1.42] | Exploratory savings; safety advantage not established |
+| B10 - attempted matched B11 | -31.10 [-32.51, -29.73] | -16.13 [-19.03, -13.12] | Cost match failed; not a same-time comparison |
+
+Intervals are the saved 95% bootstrap intervals, with equal project weight
+and the existing serial-dependence/multiplicity limitations. These time
+fractions exclude model fitting, feature extraction, compilation and startup.
+
+B12f achieved conditional commit safety >=0.95 on 8/9 projects, exceeding
+the handoff's 7/9 rule. The novelty branch's saved script still used >=3;
+the findings apply the corrected count without changing frozen reports.
+Pooled B12f safety was 95.88%, while Cloudify achieved only 87.84%.
+The pooled point is not a lower confidence bound or a per-project guarantee.
+Because of the missing addendum/absolute-safety interval and the observed
+safety decrease, D-067 keeps B10 as default and CRC opt-in under D-068.
+
+B13's all-commit miss target and failing-commit safety use different
+denominators; passing the former on nine projects does not establish the
+latter. B13f met the conditional target on 8/9, with Cloudify below 95%.
+PTS tuning hit the lowest tested recall cutoff on all nine projects and
+left large residual costs: its machine verdict `harms` cannot be described
+as evidence at equal test time. The complete residuals remain in its findings.
+
+One DSpace fit failure was recorded in each run. The risk/gate policies
+fell back to the full suite; the PTS comparison excluded the unfit block.
+A performance repair replaced the quadratic prefix scan with binary search
+using the unchanged risk arithmetic. B13 reuses seven byte-identical old
+reports, with both source versions disclosed; a real-project full-report
+replay was exactly identical. All other new jobs used the optimized code.
+No model, threshold grid, split or success rule was tuned after these results.
+
 ## 5. Threats to validity
 
 - **Construct.** Results are per test class, not per test method. "Commit
@@ -544,7 +605,8 @@ guarantee.
   Predictive Test Selection rule but uses CodeDNA's 15 live features, not
   Facebook's, and omits its deployment check. The commercial tools [11, 12
   in the system chapters] are closed and are compared by documentation only.
-  B11 was run only on the four exploratory projects.
+  B11 was first run on four exploratory projects; its nine-project follow-up
+  did not achieve equal test time (section 4.12).
 - **Reliability.** Every number comes from the stored data and saved reports;
   dataset hashes, package versions and commands are recorded
   in each report, and rerunning the experiments reproduced earlier numbers
@@ -552,29 +614,21 @@ guarantee.
 
 ## 6. Conclusion
 
-CodeDNA's clearest contribution is an honest, checked estimate of the risk
-of skipping tests, together with an evaluation that compares selection
-policies at equal test time. Held-out calibration is what makes that
-estimate usable as a stopping rule, even though much of its gain in ECE
-only undoes class weighting. Learned models predict failures above chance
-but do not order tests better than simple rules, and fallback mainly buys
-safety with extra test time. Using simple rules to choose *which* tests run
-and the calibrated model to choose *how many* (B10) mostly keeps its stated
-risk, but in the rolling-origin study it catches no more failures than the
-same rule with a matched fixed budget (safety difference −0.003
-[−0.036, 0.029]). What B10 adds is not a better selection but a stated
-risk for the skipped tests, and the gate uses it only where stopping on it
-kept the miss target on the project's recent history, refusing otherwise: misses were 0.43 % in
-accepted blocks against 2.74 % in rejected ones, at the price of little time
-saved outside one project. A Predictive Test Selection baseline with aggregate
-recall targets neither beats B10 nor loses to it at matched time; the
-measured difference is that its targets held less often out of sample
-(test recall on 2 of 4 projects, change recall on none, against B10's miss
-target on 3 of 4). A miss target over all commits proved too weak where
-failures are rare. Conformal risk control conditioned on failing commits
-(B12f) kept 95 % commit safety on all four projects at slightly less time
-than the gated product, and is the strongest candidate to replace the
-hand-picked gate once the confirmatory data exist.
-These statements concern within-project fitting; the additional four-project
-transfer check does not establish a generally reliable source-trained model
-or risk estimate, and the confirmatory study is still pending.
+CodeDNA combines change-impact analysis, test selection, and an explicit
+refusal to skip tests without target-project evidence. Its research does
+not establish that ML orders tests better than simple rules, or that B10
+improves safety over recent-failure ordering at matched time: the nine-project
+confirmation found no meaningful safety difference and lower test recall.
+The audited gate's observed miss-rate criterion held, at the cost of modest
+recorded-test-time savings. These observations are not guarantees of future
+safety or measured CI wall-clock speedup.
+
+Failure-conditional CRC B12f reached 95% safety on eight of nine follow-up
+projects and saved more recorded test time, but mean safety was lower than
+the gated product and Cloudify missed the target. It remains an implemented
+opt-in method, not the default. B13f is promising exploratory evidence;
+the attempted PTS match leaves a large cost gap and cannot answer an
+equal-time comparison. The missing nine-project addendum and existing
+statistical limitations are explicit. Cross-project model transfer remains
+unestablished. The contribution is a working, inspectable brake with honest
+fallbacks and documented limits, not a universal fast or guaranteed selector.

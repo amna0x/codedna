@@ -1573,6 +1573,20 @@ core API, language plugin, model or fixed-study change is introduced.
 
 Written by Codex on the laptop as "D-053" (renumbered, see D-065).
 
+## D-067 - Nine-project follow-ups reviewed; keep the default conservative
+
+All four laptop follow-ups completed on 2026-10-26; artifacts and findings
+are in `experiments/results/*confirmatory-perf-2026-10-26/` (report 4.12).
+B12f meets 95% conditional commit safety on 8/9 projects (required 7),
+saves 16.20 recorded-time points against the gated product, but lowers
+mean safety by 1.79 points [0.84, 2.72]. Cloudify safety is 87.84%.
+The nine-project addendum was not committed before the runs, and no
+pre-specified pooled absolute-safety lower interval was recorded. Do not
+retroactively call these prerequisites satisfied. B10 remains the default;
+CRC remains opt-in under D-068. B13f is exploratory, not a replacement default.
+The PTS cost match failed and is reported as a trade-off, not equal-time evidence.
+No threshold, model or result has been retuned to improve this verdict.
+
 ## D-068 — Conformal stop (B12f) as an opt-in method in the live brake
 
 The live risk recommendation and the agent brake take `method="b10"`
@@ -1602,3 +1616,19 @@ breaking edit and `passed` for a harmless one (real Maven, tested under
 decision D-067, which waits for the B12f result on the nine confirmatory
 projects (7-of-9 rule). Until then the default stays B10 and no report text
 may say the product uses conformal control by default. No new dependency.
+
+## D-069 - Preserve risk decisions while removing quadratic prefix work
+
+The target-only risk loop now binary-searches the shortest acceptable
+ordered prefix. Adding candidates cannot increase skip risk. Each probe
+calls the original risk arithmetic in the same probability order, preserving
+floating-point threshold behavior, pins, budgets, partial/duplicate orders,
+fallbacks and report fields. This uses O(log n) full risk scans rather than
+one per selected test. There is no model or protocol change.
+Exact randomized/boundary parity tests and a complete real-project replay
+passed. The 4,000-test benchmark improved from 6.62s to 0.030s (221x for
+that benchmark only). The study-worktree full suite passed 405 tests with
+Maven and zero skips; integration validation is recorded separately.
+Original outputs stay immutable. B13's seven reused reports are byte-identical,
+and new folders disclose both fingerprints and portable source snapshots.
+The result paths are marked -text to preserve their SHA-256 bytes on every OS.

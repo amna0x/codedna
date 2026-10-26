@@ -11,6 +11,23 @@ Read in this order: §0 (one page), §1 (rules), §3 (merging), §4 (laptop),
 
 ---
 
+## Latest verified override - 2026-10-26 (read before older rows)
+
+All four laptop runs are complete, pushed from the novelty branch and
+integrated into PR #21 locally. Results use `*confirmatory-perf-2026-10-26/`
+folders with FINDINGS and audit manifests. Do not rerun the old output paths.
+The performance fix, reused seven B13 reports, exact parity, and source
+fingerprints are documented in `docs/PERFORMANCE_RESUME_2026-10-26.md`.
+See report 4.11/4.12 and D-067/D-069. CRC is implemented as opt-in (D-068);
+the opening historical claim that B12f is absent from the product is stale.
+B10 remains default; B12f is not an unconditional guarantee. PTS cost match
+failed. The nine-project addendum was not committed before the runs.
+
+Resume: finish PR #21 integration validation/CI and authorized merge, then
+6.4 structural_plan, then Python brake fallback. Preserve existing stashes;
+never apply/pop/drop them. Old main refs and original confirmation data are
+backed up (MEMORY.md). The older table below is historical and superseded.
+
 ## 0. One-page summary
 
 **What CodeDNA is.** A tool that looks at a Java (and now Python) code

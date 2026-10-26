@@ -13,6 +13,17 @@ CodeDNA has two tracks (D-017):
 
 Java stays the only supported language until Milestone 5 is complete.
 
+## Verified follow-up status - 2026-10-26
+
+- Done: nine-project B10 confirmation and B12f/B11/B13/B13f follow-ups,
+  with per-study findings and preserved source/output hashes (report 4.11/4.12).
+- Done: live CRC opt-in and real Maven end-to-end demo (D-068).
+- Done: exact-decision risk-prefix performance repair (D-069).
+- Default remains B10; B12f caveats and failed PTS cost match are explicit (D-067).
+- Next: brake structural_plan, Python/mixed-repo fallback, then remaining
+  IDE/manual/clean-PC checks and final report. Public catalogue hosting is
+  still outstanding; implemented plugin management is not public hosting.
+
 ## Milestone 0 — Repository bootstrap ✅
 
 - ✅ Python package + `pyproject.toml`, editable install
@@ -224,7 +235,7 @@ May start in parallel (Student C) once the analysis JSON formats are stable.
 - ✅ Second language plugin: Python (`plugins/codedna-python`, D-060), built
   early by the owners' plan of 2026-10-25. Works next to Java in one
   repository (joined graphs, one test universe, split test runs); no
-  cross-language edges. Open: risk-based selection for Python, Python in the
-  desktop bundle
+  cross-language edges. Open: risk-based selection and graceful brake fallback for Python; both
+  plugins are included by the desktop bundle builder
 - ⏳ File-level history fallback (co-change) for languages without a plugin,
   always labelled heuristic

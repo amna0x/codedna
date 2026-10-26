@@ -556,3 +556,13 @@ moves into TypeScript. Git and Java build tools remain external.
 `scripts/build_desktop_core.py` is build tooling only. Its optional `desktop`
 extra is separate from application dependencies. Generated binaries, dependency
 caches and core file-hash manifests are ignored; datasets are not bundled.
+
+## Exact risk-prefix search and follow-up evidence (D-067/D-069)
+
+Risk selection binary-searches the shortest acceptable ordered prefix using
+the unchanged skip-risk calculation. Candidate inclusion is monotone; pins,
+budgets and fallback semantics are preserved. No selection logic moves into
+the frontend and no dependency is added. B10 remains the default; the live
+failure-conditional CRC method remains opt-in (D-068), following the evidence
+and limitations in D-067. The four nine-project follow-ups preserve original
+reports and disclose reused/new code fingerprints in their audit manifests.
