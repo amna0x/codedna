@@ -1632,3 +1632,46 @@ Maven and zero skips; integration validation is recorded separately.
 Original outputs stay immutable. B13's seven reused reports are byte-identical,
 and new folders disclose both fingerprints and portable source snapshots.
 The result paths are marked -text to preserve their SHA-256 bytes on every OS.
+
+## D-070 - Return the structural plan and fail safe across brake languages
+
+The brake returns `structural_plan`, the existing dependency selection at the
+risk recommendation's immutable BASE/HEAD, labelled `structural only, no
+probability`. Requested extra pins stay in must_run, not in this independent
+structural view. Required tests are the union of the risk plan, structural
+selection and existing policy pins. Structural evidence never authorizes
+skipping without validated project history. When this broadens a partial
+risk plan, the original model estimate is explicitly labelled a conservative
+bound; selecting every discovered test makes skip risk zero. This does not
+turn the model estimate into a guarantee of real-world safety.
+
+The brake detects the installed test language rather than assuming Java.
+Python has no risk selector, so it returns an unvalidated full-suite plan
+with a clear reason and no invented probability. Mixed test universes also
+fall back to all discovered tests because there is no joint validated
+selector. Unknown plugins, invalid methods and invalid targets still error.
+`check` dispatches through the existing language-neutral runner, splitting
+Java/Python tests and joining actual results. Consent, immutable snapshots,
+missing-result verdicts and history recording remain enforced. The direct
+Python API accepts an explicit python_command; MCP keeps server-side build
+consent and cannot grant it from tool arguments.
+
+No dependency, model, research threshold, or CRC default changes. Regression
+coverage uses temporary Git repositories and includes real passing/failing
+pytest runs, mixed fake-Maven/real-pytest execution, MCP, pins, immutable
+snapshots, and conservative partial-plan estimates. Main's prior merge and
+post-pull validation are separate from validation of this feature branch.
+
+D-070 validation also caught the old two-test demo assuming that a dependency
+test could be skipped. The demo now adds a genuinely unrelated third test;
+required dependency tests remain in the plan. The history is still labelled
+synthetic. MCP startup accepts --python for the project's interpreter, without
+changing build consent or allowing an agent to override the interpreter.
+
+Final D-070 local validation: `python -m pytest --run-maven -q`:
+554 passed, zero failed/skipped, 1953.04s; 1 existing warning(s).
+Runtime and test file hashes match the recorded final-source snapshot.
+The branch remains local because automatic approval review rejected the
+private-source push without explicit payload/destination approval. No new
+feature PR or CI result is claimed. Main's separately verified #21 merge
+and the preserved stash remain unchanged.

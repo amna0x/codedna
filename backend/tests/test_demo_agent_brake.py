@@ -38,8 +38,13 @@ def test_end_to_end_demo_plans_part_of_the_suite_on_validated_history(tmp_path):
     for key in ("breaking_plan", "harmless_plan"):
         plan = result[key]
         assert plan["risk"]["status"] == "validated_history" and plan["risk"]["method"] == "crc"
-        assert plan["must_run"] == ["example.PriceCalculatorTest"]
-        assert plan["skipped"] == ["example.OrderServiceTest"]
+        expected = ({"example.PriceCalculatorTest", "example.OrderServiceTest"}
+                    if key == "breaking_plan" else {"example.PriceCalculatorTest"})
+        assert set(plan["must_run"]) == expected
+        assert set(plan["skipped"]) == set(e2e.TESTS) - expected
+        assert "example.IndependentTest" in plan["skipped"]
+        assert 0 < len(plan["must_run"]) < plan["total_tests"] == 3
+        assert {item["test"] for item in plan["structural_plan"]["selected"]} <= expected
         assert plan["risk"]["conformal"]["corrected_bound"] <= 0.05
 
 

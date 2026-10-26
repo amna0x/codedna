@@ -20,8 +20,9 @@ Java stays the only supported language until Milestone 5 is complete.
 - Done: live CRC opt-in and real Maven end-to-end demo (D-068).
 - Done: exact-decision risk-prefix performance repair (D-069).
 - Default remains B10; B12f caveats and failed PTS cost match are explicit (D-067).
-- Next: brake structural_plan, Python/mixed-repo fallback, then remaining
-  IDE/manual/clean-PC checks and final report. Public catalogue hosting is
+- Implemented on the next review branch: structural_plan and Python/mixed
+  fallback (D-070); full local validation passed (554, zero skips); publication approval pending. Remaining: IDE/manual/clean-PC
+  checks and final report. Public catalogue hosting is
   still outstanding; implemented plugin management is not public hosting.
 
 ## Milestone 0 — Repository bootstrap ✅

@@ -512,3 +512,12 @@ Setup for Cursor and Codex, the agent instruction to add, and a demo
 The [fixed DANTE-H/B10 extension protocol](docs/DANTE_B10_PROTOCOL.md) and
 [related-work comparison](docs/RELATED_WORK_COMPARISON.md) describe the independent
 history-only adaptation; it is not a reproduction of published full DANTE.
+
+### Brake structural feedback and Python fallback
+
+The MCP plan returns a labelled structural_plan alongside the mandatory
+union of risk, structural and policy tests. Structural evidence alone is
+not a probability and never permits skipping without validated history.
+Python and mixed-language projects safely receive a full-suite plan while
+risk selection is unsupported; execution uses the existing Java/Python
+plugin dispatcher. See [the brake guide](docs/AGENT_BRAKE.md).
