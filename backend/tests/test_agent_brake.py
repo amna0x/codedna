@@ -197,3 +197,59 @@ def test_stdio_loop_answers_requests_and_parse_errors(project):
     answers = [json.loads(line) for line in out.getvalue().splitlines()]
     assert [a.get("id") for a in answers] == [1, None, 2]
     assert answers[1]["error"]["code"] == -32700
+
+
+@pytest.fixture
+def validated(repo, tmp_path, monkeypatch):
+    """240 recorded commits in the project's own history, then a change of Core (D-068)."""
+    from test_live_risk import validated_change
+    base, head, path = validated_change(repo, tmp_path)
+    history = repo.path / HISTORY_CSV
+    history.parent.mkdir(parents=True, exist_ok=True)
+    history.write_bytes(path.read_bytes())
+    spec = tmp_path / "spec.json"
+
+    def outcomes(**tests):
+        spec.write_text(json.dumps({"exit_code": int("failed" in tests.values()), "tests": {
+            t: {"status": status, "time": 1.0, "cases": ["x"]} for t, status in tests.items()}}))
+
+    monkeypatch.setenv("CODEDNA_FAKE_MVN_SPEC", str(spec))
+    return repo, base, head, outcomes
+
+
+@pytest.mark.parametrize("method", ["b10", "crc"])
+def test_brake_plans_part_of_the_suite_on_validated_history(validated, method):
+    repo, base, head, _ = validated
+    planned = brake.plan(repo.path, base=base, head=head, method=method)
+    assert planned["risk"]["status"] == "validated_history", planned["risk"]
+    assert planned["risk"]["method"] == method
+    assert planned["must_run"] == ["a.CoreTest"] and planned["skipped"] == ["a.OtherTest"]
+    assert planned["summary"].startswith("Run 1 of 2 test classes")
+    if method == "crc":
+        assert planned["risk"]["conformal"]["failing_audit_commits"] >= 19
+        assert "Conformal stop" in planned["summary"]
+
+
+def test_brake_check_on_validated_history_gives_a_verdict(validated):
+    repo, base, head, outcomes = validated
+    outcomes(**{"a.CoreTest": "failed"})
+    blocked = brake.check(repo.path, base=base, head=head, method="crc",
+                          maven_command=FAKE, allow_build=True)
+    assert blocked["verdict"] == "blocked" and blocked["failed"] == ["a.CoreTest"]
+    assert blocked["recording"] is None  # a partial run is never history
+    outcomes(**{"a.CoreTest": "passed"})
+    passed = brake.check(repo.path, base=base, head=head, method="crc",
+                         maven_command=FAKE, allow_build=True)
+    assert passed["verdict"] == "passed" and passed["plan"]["skipped"] == ["a.OtherTest"]
+
+
+def test_mcp_plan_accepts_the_conformal_method(validated):
+    repo, base, head, _ = validated
+    server = BrakeServer(repo=repo.path)
+    answer = rpc(server, "tools/call", {"name": "codedna_plan_tests", "arguments": {
+        "base": base, "head": head, "method": "crc"}})["result"]
+    assert answer["isError"] is False
+    risk = answer["structuredContent"]["risk"]
+    assert risk["method"] == "crc" and risk["conformal"]["threshold"] is not None
+    bad = rpc(server, "tools/call", {"name": "codedna_plan_tests", "arguments": {"method": "x"}})
+    assert bad["result"]["isError"] is True

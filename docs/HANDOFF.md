@@ -78,14 +78,15 @@ Node tests pass. The simplest route is to merge this one PR (§3.1).
 
 ---
 
-## 0.5 Where Claude stopped — resume here (kept current; last update 2026-10-26 09:25Z)
+## 0.5 Where Claude stopped — resume here (kept current; last update 2026-10-26 10:40Z)
 
 If Claude ran out mid-task, start from this list. Check each branch on
 GitHub first: newer commits may have landed after this was written.
 
 | Task | Owner / place | Branch | Status file / output folder | State | How to resume |
 |---|---|---|---|---|---|
-| **Integration of all PRs** | this file's PR | `claude/project-thread-lo3rpw` | — | done and tested (475 passed with Maven, 8 Windows-only skips), includes #18's B13 commits up to `cec75ff` | if any PR branch below got new commits, `git merge origin/<branch>` into this branch, resolve, `python -m pytest --run-maven`, push |
+| Last finished step | Claude | `claude/project-thread-lo3rpw` | `scripts/demo_brake_end_to_end.py` | **§6.3 + §6.5 done:** conformal stop is a live opt-in method (`--method crc`, MCP `method`, D-068) and the end-to-end demo gives `blocked`/`passed` with real Maven | next: merge #18's new B13f commits (`cf7b017`, `b8a5175`, `8c1b87f`) into this branch, then §6.4 `structural_plan`, then §7 bug 2 (Python brake fallback) |
+| **Integration of all PRs** | this file's PR | `claude/project-thread-lo3rpw` | — | done and tested (494 passed with Maven, 8 Windows-only skips, after the row below), includes #18's B13 commits up to `cec75ff` | if any PR branch below got new commits, `git merge origin/<branch>` into this branch, resolve, `python -m pytest --run-maven`, push |
 | **B13 tuned gate, B12f and B11 reruns on the 9 confirmatory projects** | novelty thread, running on the laptop | `claude/project-thread-71arlo` (#18's branch) in worktree `C:\Users\hp\codedna-b13`, data copied to `C:\Users\hp\codedna-b13-data\<project>\dataset.csv` | `experiments/results/tuned-gate-confirmatory-2026-10-26/`, `crc-conditional-confirmatory-2026-10-26/`, `pts-check-confirmatory-2026-10-26/` (protocol for B13: commit `2ac7ac7` on that branch) | started 09:11Z; may take hours | if the laptop slept, rerun the same commands from the worktree (they resume per project): `$env:PYTHONPATH="C:\Users\hp\codedna-b13\backend"; $env:OMP_NUM_THREADS="1"` then `python scripts/run_tuned_gate_check.py C:\Users\hp\codedna-b13-data --out experiments/results/tuned-gate-confirmatory-2026-10-26`, then `run_crc_check.py ... --conditional --out experiments/results/crc-conditional-confirmatory-2026-10-26`, then `run_pts_check.py ... --out experiments/results/pts-check-confirmatory-2026-10-26`. Commit only those three folders on that branch and push (no force). **B13 is exploratory** (designed after seeing #20). **Read the B12f 9-project verdict by hand:** that branch's `run_crc_check.py` still uses the 3-of-4 rule; apply 7 of 9 (§6.1) |
 | After those results land | whoever merges | `claude/project-thread-lo3rpw` | — | not started | `git merge origin/claude/project-thread-71arlo` into this branch (expect `run_crc_check.py` conflicts: keep this branch's `required_keeps`, `--protocol` and the `codedna_java.live` import), rerun tests, push; then write `FINDINGS.md` for each folder and report §4.12 |
 | Merging into main | owner via GPT/Codex on the laptop (owner chose this, 09:17Z) | `claude/project-thread-lo3rpw` = PR #21 | — | not started; Claude did not merge | paste the §17.1 prompt to Codex, or click PR #21's merge button (below) |
@@ -204,7 +205,7 @@ review** first.
 
 D-001…D-066, with D-060 = Python plugin, D-061 = PTS, D-062 = brake study,
 D-063 = CRC, D-064 = JUnit 3/Gradle discovery, D-065 = Windows Git ancestry,
-D-066 = IDE test links. **The next free number is D-067.** (Commit
+D-066 = IDE test links, D-068 = conformal stop as an opt-in live method. **D-067 is reserved for the B12f default decision (§6.2); the next free number is D-069.** (Commit
 `d54f2cb`'s message says "D-054" for the graph precision work; the decision
 record correctly calls it D-058.)
 
@@ -525,7 +526,17 @@ confirmatory data, the live product uses B12f; otherwise it keeps B10 + gate
 and the report says B12f did not confirm.* Do not change the rule after
 seeing the numbers.
 
-### 6.3 Implement B12f in the live brake (if §6.2 says so)
+### 6.3 Implement B12f in the live brake — DONE as opt-in (D-068, 2026-10-26)
+
+**Status:** implemented as `method="crc"` (default still `b10`). Code:
+`selection/conformal.py` (`stopper`, `failing_commit_threshold`, `MIN_FAILING`),
+`codedna_java/live.py` (`METHODS`), `agent/brake.py`, `agent/mcp_server.py`,
+`cli.py risk-select --method`, `api/app.py RiskRequest.method`. The method is
+reported as `"crc"`, not `"crc_conditional"`. Tests in `test_live_risk.py`,
+`test_agent_brake.py`, `test_demo_agent_brake.py` cover every item listed
+below. **What is left:** only flipping the default, if D-067 says so (change
+the `method` defaults to `"crc"` and update README/AGENT_BRAKE). The original
+design is kept for reference:
 
 Files: `backend/codedna/selection/live.py` (shared), `plugins/codedna-java/codedna_java/live.py`
 (Java `risk_select`), `backend/codedna/agent/brake.py`, the IDE's Tests view.
@@ -582,7 +593,15 @@ measured. Rerunning the SWE-bench study is not needed for that sentence,
 but a smoke run on 2–3 instances with `scripts/swebench_brake_study.py run
 --instance …` is a good check.
 
-### 6.5 End-to-end proof (do this before the defence)
+### 6.5 End-to-end proof — DONE (2026-10-26)
+
+**Status:** `python scripts/demo_brake_end_to_end.py DEST --check` prints
+`validated_history`, a 1-of-2 plan, `blocked` on the wrong formula, `passed`
+on a harmless comment and `end-to-end result: as expected` (real Maven run
+in the container). Tested by `test_demo_agent_brake.py` (the Maven one runs
+under `--run-maven`). The history is **synthetic**; it proves the mechanism,
+not savings. A HikariCP version with real recorded history is optional. The
+original plan:
 
 Write `scripts/demo_brake_end_to_end.py` (or extend `demo_agent_brake.py`):
 
@@ -901,9 +920,10 @@ code-only graphs.
 - [ ] §3: all PRs merged in order, #8 closed, `main` green, laptop pulled.
 - [ ] §4: GPT edits stashed, 97c3be7 handled, plugins reinstalled, IDE rebuilt.
 - [ ] §6.1: CRC/PTS confirmatory reruns with the addendum and fixed verdict rule.
-- [ ] §6.2–6.3: D-067 decided and, if positive, B12f live with tests.
+- [x] §6.3: B12f live as opt-in `method="crc"` with tests (D-068).
+- [ ] §6.2: D-067 decided; if positive, flip the default to `crc`.
 - [ ] §6.4: brake returns the measured structural plan.
-- [ ] §6.5: end-to-end demo prints `validated_history`, partial plan, `blocked`, `passed`.
+- [x] §6.5: end-to-end demo prints `validated_history`, partial plan, `blocked`, `passed`.
 - [ ] §7: bugs 1–4 fixed; others fixed or stated as limits.
 - [ ] Graph labels spot-checked by a student.
 - [ ] Clean-PC installer test and IDE manual test written up.
@@ -992,8 +1012,8 @@ Suggested first tasks for Codex, in order (each is self-contained):
 3. §6.1 step 2: draft `docs/CRC_PTS_CONFIRMATORY_PROTOCOL.md` for the user
    to approve, then (separate task) run the three reruns.
 4. §6.4: brake `structural_plan` + tests.
-5. §6.3: B12f in the live product (only after §6.2's decision).
-6. §6.5: end-to-end demo script.
+5. §6.3: B12f in the live product: DONE as opt-in (D-068). Only flip the default if §6.2 says so.
+6. §6.5: end-to-end demo script: DONE (`scripts/demo_brake_end_to_end.py`).
 7. §7 bug 2 and 3: Python/mixed-repo brake fallbacks.
 
 ### 17.1 Ready-to-paste prompt for GPT/Codex: do the merges

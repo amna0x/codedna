@@ -206,3 +206,75 @@ def test_dante_history_adapter_isolates_test_windows_and_matches_fixed_score(rep
     assert values[('21','a.CoreTest')]==pytest.approx(expected)
     assert values[('21','a.OtherTest')]==0.
     assert values[('21','a.CoreTest')]>1.  # ranking score, never a probability
+
+
+def test_conformal_stop_selects_on_validated_history(repo,tmp_path):
+    base,head,path=validated_change(repo,tmp_path)
+    result=recommend(repo.path,base,head,history_csv=path,method='crc')
+    risk=result['risk']
+    assert risk['status']=='validated_history' and risk['method']=='crc',risk
+    crc=risk['conformal']
+    assert crc['failing_audit_commits']>=19 and crc['threshold'] is not None
+    assert crc['corrected_bound']<=0.05
+    assert [t['test'] for t in result['selected']]==['a.CoreTest']
+    assert result['skipped']==['a.OtherTest']
+    assert result['selected'][0]['reasons'][0].startswith('recent-failure order, conformal stop')
+
+
+def test_conformal_stop_keeps_must_run_tests(repo,tmp_path):
+    policy='[[must_run]]\ntests = ["a.OtherTest"]\nreason = "smoke suite"\n'
+    base,head,path=validated_change(repo,tmp_path,policy)
+    result=recommend(repo.path,base,head,history_csv=path,method='crc')
+    assert result['risk']['status']=='validated_history'
+    assert [t['test'] for t in result['selected']]==['a.CoreTest','a.OtherTest']
+    assert result['skipped']==[]
+
+
+def test_conformal_stop_needs_nineteen_failing_audit_commits(repo,tmp_path,monkeypatch):
+    from codedna.selection import conformal
+    base,head,path=validated_change(repo,tmp_path)
+    real=conformal.failing_commit_threshold
+    def few(audit,*args):  # keep only 18 failing audit commits
+        failing=[rows for rows in audit if any(r.label for r in rows)][:18]
+        return real(failing,*args)
+    monkeypatch.setattr(conformal,'failing_commit_threshold',few)
+    result=recommend(repo.path,base,head,history_csv=path,method='crc')
+    assert result['risk']['status']=='unvalidated' and result['skipped']==[]
+    assert result['risk']['conformal']['threshold'] is None
+    assert 'fewer than 19 failing audit commits' in result['risk']['reasons'][0]
+
+
+def test_conformal_threshold_matches_the_offline_check(repo,tmp_path):
+    """The live stop and scripts/run_crc_check.py use one function and agree."""
+    import importlib.util
+    from pathlib import Path
+    from codedna.selection import conformal
+    from codedna.models.experiment import _outcomes
+    base,head,path=validated_change(repo,tmp_path)
+    dataset_=Dataset.from_csv(path)
+    model,calibrator,_,info=fit_audited(dataset_)
+    groups=dataset_.rows_by_commit()
+    audit=[groups[c] for c in info['audit_commits']]
+    live,_=conformal.failing_commit_threshold(audit,model,calibrator,.05)
+    spec=importlib.util.spec_from_file_location('crc',Path(__file__).parents[2]/'scripts/run_crc_check.py')
+    crc=importlib.util.module_from_spec(spec); spec.loader.exec_module(crc)
+    failing=[rows for rows in audit if any(r.label for r in rows)]
+    losses={v:[float(o[2]>0) for o in _outcomes(failing,crc.stopper(model,calibrator,v))]
+            for v in conformal.GRID}
+    assert conformal.threshold(losses,.05)==live
+
+
+def test_unknown_risk_method_is_refused(change):
+    repo,base,head=change
+    with pytest.raises(ValueError,match='Unknown risk method'):
+        recommend(repo.path,base,head,method='magic')
+
+
+def test_api_risk_select_passes_the_method(repo,tmp_path):
+    base,head,path=validated_change(repo,tmp_path)
+    client=TestClient(create_app('t'*32),base_url='http://127.0.0.1')
+    response=client.post('/api/risk-select',headers={'X-CodeDNA-Token':'t'*32},
+                         json={'repo':str(repo.path),'base':base,'head':head,
+                               'history_csv':str(path),'method':'crc'})
+    assert response.status_code==200,response.text
+    assert response.json()['risk']['method']=='crc'

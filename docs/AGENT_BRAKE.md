@@ -19,6 +19,14 @@ agent's uncommitted edits. Without validated project history (D-041) the plan is
 the whole suite. Partial plans appear only once the project's own recorded
 runs pass the audit (D-053).
 
+`codedna_plan_tests` and `codedna_check` take an optional `method`:
+`"b10"` (default: calibrated stop behind the audit gate, D-041) or `"crc"`
+(failure-conditional conformal stop, D-068). With `crc` the plan's `risk`
+has a `conformal` block: the stopping value, the number of failing audit
+commits (at least 19 are needed, otherwise the whole suite runs) and the
+corrected bound. The bound assumes past failing commits are exchangeable
+with future ones; it is not a guarantee.
+
 ## Connect an agent
 
 Read-only (plan and impact only):
@@ -64,6 +72,17 @@ python scripts/demo_agent_brake.py /tmp/brake-demo2 --check   # also runs Maven:
 The demo copies `examples/sample-java-project`, makes a wrong discount edit
 the way an agent might, and talks to `codedna mcp` over stdio. With
 `--check` the verdict is `blocked`, because `PriceCalculatorTest` fails.
+That demo has no project history, so the plan is the whole suite.
+
+```bash
+python scripts/demo_brake_end_to_end.py /tmp/brake-e2e            # plans only
+python scripts/demo_brake_end_to_end.py /tmp/brake-e2e2 --check    # also runs Maven
+```
+
+This one adds 240 earlier commits and a **synthetic** recorded history, so
+the plan with `method: "crc"` is validated and partial (1 of 2 classes).
+With `--check` the wrong formula is `blocked` and a harmless comment is
+`passed`. The invented history proves the mechanism, not any time saving.
 
 ## Limits
 

@@ -14,12 +14,10 @@ from importlib.metadata import version
 from pathlib import Path
 
 from codedna.models.experiment import _outcomes
-from codedna.models.rankers import order_by_baseline
 from codedna.models.uncertainty import metrics
 from codedna_java.live import LIVE_FEATURES
 from codedna.selection import conformal
 from codedna.selection.live import fit_audited
-from codedna.selection.risk import RiskPolicy, decide
 from codedna.test_history.features import Dataset
 
 ALPHA = .05
@@ -44,16 +42,8 @@ def load(root, name):
     return module
 
 
-def stopper(ranker, calibrator, value):
-    """B10-style stop at estimated skip risk ``value``; ``FULL`` runs every test."""
-    def choose(rows):
-        if value is conformal.FULL:
-            return [r.test_id for r in rows], None
-        d = decide(rows, calibrator.transform(ranker.predict_proba(rows)),
-                   RiskPolicy(budget=None, risk_target=value),
-                   order=order_by_baseline('recent_failures', rows))
-        return d.selected, d
-    return choose
+# Shared with the live brake (D-068): the same threshold selects the same tests.
+stopper = conformal.stopper
 
 
 def miss_rate(outcomes):

@@ -39,12 +39,12 @@ from codedna.selection import SelectionError
 
 def plan(repo_path: str | Path, *, base: str = "HEAD", head: str = WORKTREE,
          risk_target: float = 0.05, must_run: list[str] | None = None,
-         language: str = "java") -> dict:
+         language: str = "java", method: str = "b10") -> dict:
     """Tests that must run for BASE..HEAD (default: uncommitted changes)."""
     from codedna.selection.live import recommend
 
     result = recommend(resolve_repository(repo_path), base, head, risk_target=risk_target,
-                       must_run=must_run, language=language)
+                       must_run=must_run, language=language, method=method)
     risk = result["risk"]
     validated = risk["status"] == "validated_history"
     return {
@@ -58,9 +58,11 @@ def plan(repo_path: str | Path, *, base: str = "HEAD", head: str = WORKTREE,
         "pinned_by_policy": result["policy"]["pinned"] if result.get("policy") else [],
         "risk": {
             "status": risk["status"],
+            "method": risk.get("method", method),
             "target": risk["target"],
             "estimated_skip_risk": risk["estimated_skip_risk"],
             "reasons": risk["reasons"],
+            **({"conformal": risk["conformal"]} if risk.get("conformal") else {}),
         },
         "summary": _plan_summary(result, validated),
         "warnings": result["warnings"],
@@ -69,7 +71,8 @@ def plan(repo_path: str | Path, *, base: str = "HEAD", head: str = WORKTREE,
 
 def check(repo_path: str | Path, *, base: str = "HEAD", head: str = WORKTREE,
           risk_target: float = 0.05, must_run: list[str] | None = None,
-          timeout: int = 1800, language: str = "java", maven_command: list[str] | None = None,
+          timeout: int = 1800, language: str = "java", method: str = "b10",
+          maven_command: list[str] | None = None,
           gradle_command: list[str] | None = None, allow_build: bool = False) -> dict:
     """Run the planned tests and return one verdict. Executes project code."""
     from codedna.plugins import load_plugins
@@ -79,7 +82,7 @@ def check(repo_path: str | Path, *, base: str = "HEAD", head: str = WORKTREE,
         raise SelectionError("check runs the project's build; pass allow_build=True to consent")
     repo = resolve_repository(repo_path)
     planned = plan(repo, base=base, head=head, risk_target=risk_target, must_run=must_run,
-                   language=language)
+                   language=language, method=method)
     tests = planned["must_run"]
     if not tests:
         if planned["skipped"]:
@@ -144,6 +147,12 @@ def _plan_summary(result: dict, validated: bool) -> str:
         return "No tests found that the build runs; a check cannot verify this change."
     if validated:
         risk = result["risk"]["estimated_skip_risk"]
+        crc = result["risk"].get("conformal")
+        if crc:
+            return (f"Run {selected} of {total} test classes. Conformal stop: at most "
+                    f"{crc['alpha']:.0%} of this project's {crc['failing_audit_commits']} past "
+                    f"failing commits would have missed a failure (corrected bound "
+                    f"{crc['corrected_bound']:.1%}); estimated skip risk {risk:.1%}.")
         return (f"Run {selected} of {total} test classes. Estimated chance that a skipped "
                 f"class would fail: {risk:.1%} (validated on this project's history).")
     return (f"Run all {total} test classes: skipping is not validated for this project "

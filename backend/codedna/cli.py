@@ -12,7 +12,7 @@ Usage:
                     [--coverage-map FILE] [--durations FILE] [--non-java retest-all|ignore]
                     [--must-run PATTERN ...]
     codedna risk-select --repo PATH --base SHA --head SHA [--history-csv FILE] [--risk-target F]
-                    [--must-run PATTERN ...]
+                    [--must-run PATTERN ...] [--method b10|crc]
     codedna compare --repo PATH --base SHA --head SHA --ground-truth FILE
                     [--coverage-map FILE] [--non-java retest-all|ignore]
     codedna plugins [catalogue | install ID VERSION --yes | remove ID --yes]
@@ -169,6 +169,9 @@ def build_parser() -> argparse.ArgumentParser:
     _add_change_args(risk_select)
     risk_select.add_argument('--history-csv', help='Target history CSV; default REPO/.codedna/history.csv')
     risk_select.add_argument('--risk-target', type=float, default=.05)
+    risk_select.add_argument('--method', choices=('b10', 'crc'), default='b10',
+                             help='b10: calibrated stop behind the history audit (default); '
+                                  'crc: conformal stop bounding misses among failing commits (D-068)')
     _add_must_run_arg(risk_select)
 
     select = subcommands.add_parser(
@@ -422,7 +425,7 @@ def main(argv: list[str] | None = None) -> int:
             from codedna.selection.live import recommend
             return _write_json(recommend(args.repo,args.base,args.head,
                 history_csv=args.history_csv,risk_target=args.risk_target,
-                must_run=args.must_run),None)
+                must_run=args.must_run,method=args.method),None)
         elif args.command == "run-tests":
             return _run_tests(args)
         elif args.command == "plugins":

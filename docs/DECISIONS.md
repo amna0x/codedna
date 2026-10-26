@@ -1572,3 +1572,33 @@ core API, language plugin, model or fixed-study change is introduced.
 
 
 Written by Codex on the laptop as "D-053" (renumbered, see D-065).
+
+## D-068 — Conformal stop (B12f) as an opt-in method in the live brake
+
+The live risk recommendation and the agent brake take `method="b10"`
+(default, unchanged: calibrated stop behind the D-041 Wilson gate) or
+`method="crc"` (failure-conditional conformal risk control, D-063). With
+`crc` the product uses the same 50/25/25 fit/calibrate/audit split; on the
+**failing** audit commits it picks the largest stopping value whose
+corrected bound `(n·R̂ + 1)/(n + 1)` stays at or below the risk target. The
+function is `selection/conformal.failing_commit_threshold`, and
+`scripts/run_crc_check.py` now uses the same `conformal.stopper`, so the
+study and the product pick the same threshold on the same data (tested).
+
+Fewer than 19 failing audit commits, or no value passing the bound, gives
+the full suite with that reason. Must-run policy tests are always kept. The
+response carries `risk.method`, and for `crc` a `risk.conformal` block
+(`alpha`, `threshold`, `failing_audit_commits`, `audit_miss_rate`,
+`corrected_bound`) plus the note that the bound assumes exchangeable failing
+commits and is not a guarantee.
+
+Exposed as `codedna risk-select --method`, `POST /api/risk` `method`, and the
+MCP tools' `method` argument. `scripts/demo_brake_end_to_end.py` shows the
+whole path over MCP on a synthetic history: a partial plan, `blocked` for a
+breaking edit and `passed` for a harmless one (real Maven, tested under
+`--run-maven`).
+
+**Why opt-in:** whether B12f becomes the default is the pre-registered
+decision D-067, which waits for the B12f result on the nine confirmatory
+projects (7-of-9 rule). Until then the default stays B10 and no report text
+may say the product uses conformal control by default. No new dependency.

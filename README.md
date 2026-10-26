@@ -458,6 +458,9 @@ Use `codedna risk-select --repo PATH --base BASE --head HEAD` for the same core
 recommendation. Without adequate history, risk stays unvalidated and all tests
 are recommended. See [Java workflow](docs/JAVA_WORKFLOW.md) for history preparation,
 validation limits, selected Maven execution and the IDE workflow.
+`--method crc` uses the failure-conditional conformal stop instead of the
+default calibrated stop (opt-in, D-068); it needs at least 19 failing audit
+commits and otherwise recommends the full suite.
 
 ### Must-run tests
 

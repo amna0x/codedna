@@ -37,6 +37,11 @@ _RISK = {
                     "description": "Highest accepted chance that a skipped test would fail (default 0.05)."},
     "must_run": {"type": "array", "items": {"type": "string"},
                  "description": "Extra test IDs or patterns that may never be skipped."},
+    "method": {"type": "string", "enum": ["b10", "crc"],
+               "description": ("How the stop is chosen on validated history: b10 (default) stops at "
+                               "risk_target estimated skip risk behind the history audit; crc picks "
+                               "the stop by conformal risk control so that at most risk_target of "
+                               "past failing commits would have missed a failure.")},
 }
 
 TOOLS = {
@@ -157,7 +162,11 @@ class BrakeServer:
         base, head = arguments.get("base", "HEAD"), arguments.get("head", WORKTREE)
         if not isinstance(base, str) or not isinstance(head, str):
             raise ToolError("base and head must be strings")
-        risk = {"risk_target": _risk_target(arguments), "must_run": _patterns(arguments)}
+        method = arguments.get("method", "b10")
+        if method not in ("b10", "crc"):
+            raise ToolError("method must be b10 or crc")
+        risk = {"risk_target": _risk_target(arguments), "must_run": _patterns(arguments),
+                "method": method}
         if name == "codedna_plan_tests":
             return brake.plan(repo, base=base, head=head, **risk)
         if name == "codedna_impact":

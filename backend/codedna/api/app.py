@@ -101,6 +101,7 @@ class RiskRequest(ChangeRequest):
     history_csv: str | None = None
     risk_target: float = Field(default=.05, gt=0, lt=1)
     must_run: list[str] = Field(default_factory=list, description="Extra must-run patterns (D-050).")
+    method: Literal['b10', 'crc'] = Field(default='b10', description="Stopping rule on validated history (D-068).")
 
 
 class RunSelectionRequest(RiskRequest):
@@ -282,7 +283,7 @@ def create_app(token: str, *, allow_build: bool = False,
     def risk_select(body: RiskRequest) -> dict:
         from codedna.selection.live import recommend
         return recommend(body.repo,body.base,body.head,history_csv=body.history_csv,
-                         risk_target=body.risk_target,must_run=body.must_run)
+                         risk_target=body.risk_target,must_run=body.must_run,method=body.method)
 
     @app.post('/api/run-selection', dependencies=secured)
     def run_selection(body: RunSelectionRequest) -> dict:

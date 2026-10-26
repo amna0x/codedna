@@ -54,10 +54,19 @@ def prediction_rows(dataset, changes, test_ids):
     return rows
 
 
-def recommend(repo_path, base, head, *, history_csv=None, risk_target=.05, must_run=None):
+METHODS = ('b10', 'crc')
+
+
+def recommend(repo_path, base, head, *, history_csv=None, risk_target=.05, must_run=None,
+              method='b10'):
+    """``method``: ``b10`` = stop at estimated skip risk ``risk_target`` behind the D-041 gate;
+    ``crc`` = B12f, the stop is chosen by conformal risk control so that at most
+    ``risk_target`` of failing audit commits miss a failure (D-063, D-068)."""
     import math
     if not math.isfinite(risk_target) or not 0 < risk_target < 1:
         raise ValueError('Risk target must lie strictly between zero and one')
+    if method not in METHODS:
+        raise ValueError(f'Unknown risk method {method!r}; choose from {METHODS}')
     started = perf_counter()
     repo = resolve_repository(repo_path)
     # Discover the full candidate universe, including changed classes and warnings.
@@ -67,7 +76,7 @@ def recommend(repo_path, base, head, *, history_csv=None, risk_target=.05, must_
     pinned = set(result['policy']['pinned'])
     pin_reasons = {item['test']:[r for r in item['reasons'] if r != 'retest-all']
                    for item in result['selected'] if item['test'] in pinned}
-    risk = {'status':'unvalidated', 'target':risk_target, 'estimated_skip_risk':None,
+    risk = {'status':'unvalidated', 'method':method, 'target':risk_target, 'estimated_skip_risk':None,
             'proposed_skip_risk':None, 'validation':None, 'reasons':[],
             'note':'Historical validation is not a guarantee; full-suite audits must refresh evidence.'}
     result['risk'] = risk
@@ -118,16 +127,26 @@ def recommend(repo_path, base, head, *, history_csv=None, risk_target=.05, must_
         risk['provenance'] = {**provenance,'history_sha256':sha256(path.read_bytes()).hexdigest()}
         rows = prediction_rows(dataset,changes,ids)
         probabilities = calibrator.transform(model.predict_proba(rows))
-        decision = decide(rows,probabilities,RiskPolicy(budget=None,risk_target=risk_target),
+        stop = risk_target
+        if method == 'crc':
+            from codedna.selection import conformal
+            audit = [groups[c] for c in provenance['audit_commits']]
+            stop, crc = conformal.failing_commit_threshold(audit,model,calibrator,risk_target)
+            risk['conformal'] = {**crc,'note':'Bound on missed failures among failing commits; '
+                                 'it assumes past and future failing commits are exchangeable.'}
+            if stop is conformal.FULL:
+                return fallback('Conformal stop needs the full suite: '+crc['reason']+'.')
+        decision = decide(rows,probabilities,RiskPolicy(budget=None,risk_target=stop),
                           order=order_by_baseline('recent_failures',rows),always=pinned)
         risk['proposed_skip_risk'] = decision.estimated_skip_risk
-        if not evidence.accepted:
+        if method == 'b10' and not evidence.accepted:
             return fallback('Prior target audit failed: '+ '; '.join(evidence.reasons))
         risk.update(status='validated_history',estimated_skip_risk=decision.estimated_skip_risk,
                     analysis_seconds=round(perf_counter()-started,4))
         score = {r.test_id:p for r,p in zip(rows,probabilities)}
-        result['selected'] = [{'test':t,'reasons':pin_reasons.get(t) or
-                               ['recent-failure order with calibrated risk stopping'],
+        rule = ('recent-failure order, conformal stop at estimated risk '+f'{stop:g}'
+                if method == 'crc' else 'recent-failure order with calibrated risk stopping')
+        result['selected'] = [{'test':t,'reasons':pin_reasons.get(t) or [rule],
                                'estimated_failure_probability':score[t]} for t in decision.selected]
         by_id = {r.test_id:r for r in rows}
         for item in result['selected']:

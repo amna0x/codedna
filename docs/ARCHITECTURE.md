@@ -89,7 +89,7 @@ calibration/
 selection/risk.py          risk-per-second selection, skip risk, fallback
 selection/policy.py        must-run tests policy read from BASE, add-on rule hook
 selection/pts.py           Predictive Test Selection baseline B11 (research only, D-061)
-selection/conformal.py     conformal-risk-control stopping threshold B12/B12f (research, D-063)
+selection/conformal.py     conformal-risk-control stopping threshold B12/B12f (D-063; live opt-in D-068)
 api/
     ├── app.py             FastAPI app: endpoints, token + Host checks, build opt-in
     └── server.py          `codedna serve` (loopback-only, prints URL + token)
@@ -371,6 +371,9 @@ report; both only read Git objects. `codedna_check` runs the planned tests
 through the language plugin and maps the result to `passed` / `blocked` /
 `incomplete` / `nothing_to_run` / `no_tests`; it exists only when the server was started with
 `--allow-build --repo PATH` and then serves that repository only.
+Plan and check take `method` (`b10` default, or `crc`: the failure-conditional
+conformal stop from `selection.conformal.failing_commit_threshold`, D-068),
+passed through `selection.live` to the language plugin's `risk_select`.
 
 ### `ide/` — CodeDNA IDE (Theia 1.76, Electron)
 
