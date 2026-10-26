@@ -1,4 +1,8 @@
-"""Conformal-risk-control stopping (B12) against B10; rules fixed in docs/CRC_STOP_PROTOCOL.md."""
+"""Conformal-risk-control stopping against B10.
+
+B12 (default): rules in docs/CRC_STOP_PROTOCOL.md. B12f (``--conditional``): tuned on
+failing audit commits only, rules in docs/CRC_CONDITIONAL_PROTOCOL.md.
+"""
 import argparse
 import hashlib
 import importlib.util
@@ -23,7 +27,8 @@ CODE = ['scripts/run_crc_check.py', 'docs/CRC_STOP_PROTOCOL.md',
         'backend/codedna/selection/live.py', 'backend/codedna/selection/risk.py',
         'backend/codedna/plugins/java_live.py', 'backend/codedna/models/rankers.py',
         'backend/codedna/models/uncertainty.py', 'backend/codedna/calibration/calibrators.py',
-        'backend/codedna/test_history/features.py', 'scripts/run_study.py']
+        'backend/codedna/test_history/features.py', 'scripts/run_study.py',
+        'docs/CRC_CONDITIONAL_PROTOCOL.md']
 
 
 def digest(p): return hashlib.sha256(Path(p).read_bytes()).hexdigest()
@@ -52,7 +57,7 @@ def miss_rate(outcomes):
     return sum(o[2] > 0 for o in outcomes) / len(outcomes) if outcomes else None
 
 
-def evaluate(dataset, rolling):
+def evaluate(dataset, rolling, conditional=False):
     """Per block: B12 tuned on the audit window, B10 and the gated product on the block."""
     groups = dataset.rows_by_commit()
     report = {'commits': len(dataset.commits), 'blocks': []}
@@ -69,6 +74,8 @@ def evaluate(dataset, rolling):
             report['blocks'].append(block)
             continue
         audit = [groups[c] for c in info['audit_commits']]
+        if conditional:  # B12f: bound the miss rate among failing commits
+            audit = [rows for rows in audit if any(r.label for r in rows)]
         losses = {v: [float(o[2] > 0) for o in _outcomes(audit, stopper(ranker, calibrator, v))]
                   for v in conformal.GRID}
         chosen = conformal.threshold(losses, ALPHA)
@@ -86,10 +93,11 @@ def evaluate(dataset, rolling):
     return report
 
 
-def run(root, inputs, out):
+def run(root, inputs, out, conditional=False):
     rolling, study = load(root, 'run_rolling_evidence'), load(root, 'run_study')
     out.mkdir(parents=True, exist_ok=True)
-    config = {'protocol': 'docs/CRC_STOP_PROTOCOL.md', 'alpha': ALPHA,
+    config = {'protocol': 'docs/CRC_CONDITIONAL_PROTOCOL.md' if conditional
+              else 'docs/CRC_STOP_PROTOCOL.md', 'conditional': conditional, 'alpha': ALPHA,
               'grid': ['full' if v is None else v for v in conformal.GRID],
               'python': platform.python_version(),
               'packages': {n: version(n) for n in ['scikit-learn', 'numpy']},
@@ -100,6 +108,7 @@ def run(root, inputs, out):
         raise ValueError('Protocol, code or inputs changed; use a new output folder')
     config_path.write_text(json.dumps(config, indent=2) + '\n')
     summary, reports = {'projects': {}}, {}
+    label = 'B12f' if conditional else 'B12'
     for name, path in sorted(inputs.items()):
         dataset = Dataset.from_csv(path)
         region = [c for a, b in rolling.blocks(dataset.commits) for c in dataset.commits[a:b]]
@@ -108,7 +117,7 @@ def run(root, inputs, out):
                   'evaluation_failing_commits': count, 'eligible': count >= rolling.MIN_FAILING}
         if record['eligible']:
             p = out / f'{name}.json'
-            report = json.loads(p.read_text()) if p.exists() else evaluate(dataset, rolling)
+            report = json.loads(p.read_text()) if p.exists() else evaluate(dataset, rolling, conditional)
             p.write_text(json.dumps(report, indent=2, allow_nan=False) + '\n')
             reports[name] = report
             record.update(
@@ -128,16 +137,18 @@ def run(root, inputs, out):
             entry['b12_minus_product'] = {m: {'estimate': point[m],
                                               'ci': study._percentile(draws[m])}
                                           for m in ('time', 'recall', 'safety')}
-            keeps = {k: sum(summary['projects'][n][k]['miss_rate'] <= ALPHA for n in names)
+            kept = (lambda m: (m['safety'] or 0) >= 1 - ALPHA) if conditional \
+                else (lambda m: m['miss_rate'] <= ALPHA)
+            keeps = {k: sum(kept(summary['projects'][n][k]) for n in names)
                      for k in ('b10', 'b12', 'product')}
             entry['projects_keeping_target'] = keeps
             ci = entry['b12_minus_product']['time']['ci']
             if len(names) < 3 or ci is None:
                 entry['verdict'] = 'inconclusive'
             elif ci[1] < 0 and keeps['b12'] >= 3:
-                entry['verdict'] = 'B12 saves time'
+                entry['verdict'] = f'{label} saves time'
             elif ci[0] > 0:
-                entry['verdict'] = 'B12 costs time'
+                entry['verdict'] = f'{label} costs time'
             else:
                 entry['verdict'] = 'inconclusive'
             entry['pooled_commits'] = {k: {**metrics([o for n in names for o in reports[n][k]]),
@@ -174,10 +185,14 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('datasets', type=Path,
                         help='folder holding <project>/dataset.csv for each project')
-    parser.add_argument('--out', type=Path, default=Path('experiments/results/crc-check-2026-10-26'))
+    parser.add_argument('--out', type=Path)
+    parser.add_argument('--conditional', action='store_true',
+                        help='B12f: tune on failing audit commits only')
     args = parser.parse_args()
+    args.out = args.out or Path('experiments/results/' + (
+        'crc-conditional-2026-10-26' if args.conditional else 'crc-check-2026-10-26'))
     found = {p.parent.name: p for p in sorted(args.datasets.glob('*/dataset.csv'))}
     if not found:
         parser.error('no <project>/dataset.csv files found')
-    run(Path.cwd(), found, args.out)
+    run(Path.cwd(), found, args.out, args.conditional)
     print('Completed ' + str(args.out / 'summary.md'), flush=True)
