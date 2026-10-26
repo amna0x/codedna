@@ -1,4 +1,8 @@
-"""Tuned-threshold gate (B13) against the gated product; rules in docs/TUNED_GATE_PROTOCOL.md."""
+"""Tuned-threshold gate against the gated product.
+
+B13 (default): rules in docs/TUNED_GATE_PROTOCOL.md. B13f (``--conditional``): the check
+uses failing audit commits only, rules in docs/TUNED_GATE_CONDITIONAL_PROTOCOL.md.
+"""
 import argparse
 import hashlib
 import importlib.util
@@ -24,7 +28,8 @@ CODE = ['scripts/run_tuned_gate_check.py', 'docs/TUNED_GATE_PROTOCOL.md',
         'backend/codedna/selection/live.py', 'backend/codedna/selection/risk.py',
         'backend/codedna/plugins/java_live.py', 'backend/codedna/models/rankers.py',
         'backend/codedna/models/uncertainty.py', 'backend/codedna/calibration/calibrators.py',
-        'backend/codedna/test_history/features.py', 'scripts/run_study.py']
+        'backend/codedna/test_history/features.py', 'scripts/run_study.py',
+        'docs/TUNED_GATE_CONDITIONAL_PROTOCOL.md']
 
 
 def digest(p): return hashlib.sha256(Path(p).read_bytes()).hexdigest()
@@ -41,7 +46,7 @@ def full(test):
     return [(1., sum(r.label for r in rows), 0) for rows in test]
 
 
-def evaluate(dataset, rolling, crc):
+def evaluate(dataset, rolling, crc, conditional=False):
     """Per block: B13's threshold from the audit window, B13 and the gated product on the block."""
     groups = dataset.rows_by_commit()
     report = {'commits': len(dataset.commits), 'blocks': []}
@@ -57,6 +62,8 @@ def evaluate(dataset, rolling, crc):
             report['blocks'].append(block)
             continue
         audit = [groups[c] for c in info['audit_commits']]
+        if conditional:  # B13f: check the miss rate among failing commits
+            audit = [rows for rows in audit if any(r.label for r in rows)]
         chosen, tested = tuned.search(
             lambda v: _outcomes(audit, crc.stopper(ranker, calibrator, v)), ALPHA)
         b13 = full(test) if chosen is tuned.FULL else \
@@ -73,11 +80,12 @@ def evaluate(dataset, rolling, crc):
     return report
 
 
-def run(root, inputs, out):
+def run(root, inputs, out, conditional=False):
     rolling, study, crc = (load(root, n) for n in ('run_rolling_evidence', 'run_study',
                                                     'run_crc_check'))
     out.mkdir(parents=True, exist_ok=True)
-    config = {'protocol': 'docs/TUNED_GATE_PROTOCOL.md', 'alpha': ALPHA, 'grid': list(tuned.GRID),
+    config = {'protocol': 'docs/TUNED_GATE_CONDITIONAL_PROTOCOL.md' if conditional
+              else 'docs/TUNED_GATE_PROTOCOL.md', 'conditional': conditional, 'alpha': ALPHA, 'grid': list(tuned.GRID),
               'python': platform.python_version(),
               'packages': {n: version(n) for n in ['scikit-learn', 'numpy']},
               'input_sha256': {n: digest(p) for n, p in sorted(inputs.items())},
@@ -87,6 +95,7 @@ def run(root, inputs, out):
         raise ValueError('Protocol, code or inputs changed; use a new output folder')
     config_path.write_text(json.dumps(config, indent=2) + '\n')
     summary, reports = {'projects': {}}, {}
+    label = 'B13f' if conditional else 'B13'
     for name, path in sorted(inputs.items()):
         dataset = Dataset.from_csv(path)
         region = [c for a, b in rolling.blocks(dataset.commits) for c in dataset.commits[a:b]]
@@ -95,7 +104,8 @@ def run(root, inputs, out):
                   'evaluation_failing_commits': count, 'eligible': count >= rolling.MIN_FAILING}
         if record['eligible']:
             p = out / f'{name}.json'
-            report = json.loads(p.read_text()) if p.exists() else evaluate(dataset, rolling, crc)
+            report = json.loads(p.read_text()) if p.exists() else evaluate(dataset, rolling, crc,
+                                                                               conditional)
             p.write_text(json.dumps(report, indent=2, allow_nan=False) + '\n')
             reports[name] = report
             record.update(
@@ -118,24 +128,29 @@ def run(root, inputs, out):
                                               'ci': study._percentile(draws[m])}
                                           for m in ('time', 'recall', 'safety')}
             need = math.ceil(.75 * len(names))
-            keeps = sum(summary['projects'][n]['b13']['miss_rate'] <= ALPHA for n in names)
+            kept = (lambda m: (m['safety'] or 0) >= 1 - ALPHA) if conditional \
+                else (lambda m: m['miss_rate'] <= ALPHA)
+            keeps = sum(kept(summary['projects'][n]['b13']) for n in names)
             entry['projects_keeping_target'] = {'b13': keeps, 'needed': need,
-                                                'product': sum(summary['projects'][n]['product']
-                                                               ['miss_rate'] <= ALPHA
+                                                'product': sum(kept(summary['projects'][n]['product'])
                                                                for n in names)}
             tuned_outcomes = [o for n in names for x in reports[n]['blocks']
                               if x['threshold'] != 'full' for o in x['b13']]
             if tuned_outcomes:
                 e = validate_outcomes(tuned_outcomes, ALPHA)
+                f = validate_outcomes([o for o in tuned_outcomes if o[1]], ALPHA)
                 entry['tuned_blocks'] = {'commits': e.commits, 'miss_rate': e.observed_miss_rate,
-                                         'wilson_upper': e.miss_upper_bound}
+                                         'wilson_upper': e.miss_upper_bound,
+                                         'failing_commits': f.commits,
+                                         'failing_miss_rate': f.observed_miss_rate,
+                                         'failing_wilson_upper': f.miss_upper_bound}
             time, safety = (entry['b13_minus_product'][m]['ci'] for m in ('time', 'safety'))
             if len(names) < 3 or time is None:
                 entry['verdict'] = 'inconclusive'
             elif time[1] < 0 and safety is not None and safety[0] >= -ALPHA and keeps >= need:
-                entry['verdict'] = 'B13 saves time'
+                entry['verdict'] = f'{label} saves time'
             elif time[0] > 0:
-                entry['verdict'] = 'B13 costs time'
+                entry['verdict'] = f'{label} costs time'
             else:
                 entry['verdict'] = 'inconclusive'
             entry['pooled_commits'] = {k: {**metrics([o for n in names for o in reports[n][k]]),
@@ -148,10 +163,10 @@ def run(root, inputs, out):
         summary[group] = entry
     (out / 'summary.json').write_text(json.dumps(summary, indent=2, allow_nan=False) + '\n')
     fmt = lambda v: 'n/a' if v is None else f'{v:.4f}' if isinstance(v, float) else str(v)
-    lines = ['# Tuned-threshold gate (B13) against the gated product', '',
+    lines = [f'# Tuned-threshold gate ({label}) against the gated product', '',
              f"Rules fixed in {config['protocol']} before results. Exploratory.", '',
              '| Project | Gate blocks | B13 blocks | Product time | Product miss | Product safety | '
-             'B13 time | B13 miss | B13 safety | Thresholds |', '|' + '---|' * 10]
+             f'{label} time | {label} miss | {label} safety | Thresholds |', '|' + '---|' * 10]
     for n, r in summary['projects'].items():
         if 'b13' not in r:
             lines.append(f'| {n} | not evaluated |' + ' |' * 8)
@@ -172,10 +187,14 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('datasets', type=Path,
                         help='folder holding <project>/dataset.csv for each project')
-    parser.add_argument('--out', type=Path, default=Path('experiments/results/tuned-gate-2026-10-26'))
+    parser.add_argument('--out', type=Path)
+    parser.add_argument('--conditional', action='store_true',
+                        help='B13f: check failing audit commits only')
     args = parser.parse_args()
+    args.out = args.out or Path('experiments/results/' + (
+        'tuned-gate-conditional-2026-10-26' if args.conditional else 'tuned-gate-2026-10-26'))
     found = {p.parent.name: p for p in sorted(args.datasets.glob('*/dataset.csv'))}
     if not found:
         parser.error('no <project>/dataset.csv files found')
-    run(Path.cwd(), found, args.out)
+    run(Path.cwd(), found, args.out, args.conditional)
     print('Completed ' + str(args.out / 'summary.md'), flush=True)
