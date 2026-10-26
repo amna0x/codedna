@@ -54,7 +54,7 @@ Latest full validation: **334 passed, zero skipped**, Maven and Gradle included;
 897.94 seconds, one existing Starlette/httpx deprecation warning. Three Node
 runtime tests also passed. No commits or pushes were requested/performed.
 
-## Current next step — fresh-project continuation is queued
+## Historical next step (superseded) — fresh-project continuation was queued
 
 - The installer remains at `ide/electron-app/dist/CodeDNA IDE Setup 0.1.0.exe`
   (339,622,119 bytes, SHA-256

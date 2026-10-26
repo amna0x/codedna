@@ -45,7 +45,7 @@ rule (B3):
 - Confirmatory study on 9 new projects (PR #20): stopping rule B10 minus
   matched-time B3, safety −0.7 points, 95 % interval −3.4 to +1.8. No
   meaningful difference. Do not claim B10 beats B3.
-- The audit gate works: blocks it accepted missed 2.5 % of failing commits
+- The audit gate works: blocks it accepted missed failures on 2.5 % of all evaluation commits
   (one-sided Wilson upper bound 3.35 %), under the 5 % target. Rejected
   blocks fall back to the full suite, so the product miss rate is at most
   1.87 % in every project.
