@@ -412,6 +412,107 @@ Source: `experiments/results/dante-history-check-2026-10-24/summary.json` and
 `FINDINGS.md`. The separate live 15-feature evidence gate is an engineering
 addition, not an empirically demonstrated abstention improvement from this study.
 
+### 4.8 Additional validation: rolling-origin study (D-042, exploratory)
+
+The comparisons above use one fixed chronological split. A rolling-origin
+study, with its rules fixed in `docs/EVIDENCE_STUDY_PROTOCOL.md` before it
+ran, refits on five successive blocks over the later half of each history
+and compares B10 with the rules order B3 under a budget matched to B10's
+actual test time. Only the four previously inspected projects were
+available, so by protocol this run is exploratory and gives no confirmatory
+verdict (source: `experiments/results/rolling-evidence-2026-10-24/`).
+
+| Project | Failing commits | Gate accepted blocks | B10 safety | B3 safety, matched time | Product time | Product commit miss rate |
+|---|---|---|---|---|---|---|
+| HikariCP | 81 | 0 / 5 | 0.827 | 0.753 | 1.000 | 0.000 |
+| jade4j | 28 | 1 / 5 | 1.000 | 1.000 | 0.984 | 0.000 |
+| LittleProxy | 38 | 1 / 5 | 0.711 | 0.789 | 0.998 | 0.000 |
+| wicket-bootstrap | 248 | 5 / 5 | 0.992 | 1.000 | 0.941 | 0.005 |
+
+B10 minus matched B3, equal project weight, hierarchical bootstrap: safety
+−0.003 [−0.036, 0.029], recall +0.008 [−0.005, 0.020]. By the protocol's rule
+this is **no meaningful difference**. B10 is less safe than the matched rule
+on LittleProxy and wicket-bootstrap, so the earlier wicket-bootstrap gain
+does not replicate in rolling blocks.
+
+The validation gate behaves as designed. In the 7 accepted blocks (467
+commits) B10 missed a failure on 0.43 % of commits (Wilson upper bound
+1.29 %); in the 12 rejected blocks (914 commits) it would have missed 2.74 %
+(upper bound 3.77 %). The cost is that the product saves little time: about
+6 % on wicket-bootstrap and 0–2 % elsewhere, and five of the seven accepted
+blocks come from that one project. A confirmatory run on new RTPTorrent
+projects (D-042) is pending.
+
+### 4.9 Additional validation: a Predictive Test Selection baseline (D-061, exploratory)
+
+The closest prior work, Predictive Test Selection [9 in the system
+chapters], also stops at a target, but an aggregate one. To measure rather
+than argue the difference, B11 implements its rule inside the rolling-origin
+design: tests whose uncalibrated score reaches a score cutoff, plus the N
+highest-scoring tests, plus changed test classes, with both cutoffs tuned on
+the calibration window to test recall 0.95 and change recall 0.999. The rules
+were fixed in `docs/PTS_BASELINE_PROTOCOL.md` before the run; B10 reproduced
+the rolling study's outcomes exactly (source:
+`experiments/results/pts-check-2026-10-25/`).
+
+| Project | B10 time | B10 safety | B11 time (matched) | B11 safety (matched) | B11 test recall at its target | B10 miss rate (target 0.05) |
+|---|---|---|---|---|---|---|
+| HikariCP | 0.339 | 0.827 | 0.757 | 0.704 | 0.949 | 0.020 |
+| jade4j | 0.915 | 1.000 | 0.911 | 0.875 | 0.875 | 0.000 |
+| LittleProxy | 0.913 | 0.711 | 0.913 | 0.947 | 0.985 | 0.084 |
+| wicket-bootstrap | 0.941 | 0.992 | 0.912 | 0.976 | 0.951 | 0.005 |
+
+At matched time, B10 minus B11 is +0.007 [−0.063, 0.091] in safety, which
+the protocol rates **inconclusive**. The comparison is project-dependent.
+On HikariCP, B11's count cutoff alone costs more time than B10 uses, so the
+two could not be matched: B10 is both cheaper (0.339 against 0.757) and
+safer. On LittleProxy, B11 is clearly safer at the same time.
+
+The stated targets differ more than the selections do. Tuned on a short
+holdout, B11 kept its 0.95 test-recall target on 2 of 4 projects and its
+0.999 change-recall target on none (0.875 to 0.996). B10 kept its 5 %
+commit-miss target on 3 of 4 (LittleProxy: 8.4 %). CodeDNA's calibrated skip
+risk computed for B11's selections ranks the commits where B11 missed a
+failure above the others on all four projects (AUC 0.56 to 0.90), but its
+level is wrong for those selections: it is mostly far too high. The
+probabilities are informative about which commits are risky; their level is
+trustworthy only where it was checked.
+
+### 4.10 Additional validation: conformal risk control for the stop (D-063, exploratory)
+
+Conformal risk control [26 in the system chapters] chooses a threshold from
+held-out outcomes so that the expected loss on new data is at most α,
+assuming only exchangeability. Here the threshold is B10's stopping risk λ,
+chosen on a fixed grid from `fit_audited`'s audit window, with the loss 1
+when a commit misses any failure. Two protocols were each committed before
+their run: B12 bounds misses over all commits
+(`docs/CRC_STOP_PROTOCOL.md`); B12f, written after B12's result, bounds
+misses among failing commits only (`docs/CRC_CONDITIONAL_PROTOCOL.md`).
+
+| Project | B10 safety / time | B12 safety / time | B12f safety / time | Gated product safety / time |
+|---|---|---|---|---|
+| HikariCP | 0.827 / 0.339 | 0.506 / 0.110 | 1.000 / 1.000 | 1.000 / 1.000 |
+| jade4j | 1.000 / 0.915 | 0.929 / 0.700 | 1.000 / 0.965 | 1.000 / 0.984 |
+| LittleProxy | 0.711 / 0.913 | 1.000 / 0.932 | 1.000 / 0.998 | 1.000 / 0.998 |
+| wicket-bootstrap | 0.992 / 0.941 | 0.976 / 0.728 | 0.976 / 0.774 | 0.992 / 0.941 |
+
+B12 kept its target (at most 5 % of all commits missing a failure) on 3 of
+4 projects and cut test time by 36 % against the gated product
+([−0.379, −0.348] in time ratio). The target itself was the problem: only
+11 % of HikariCP's commits fail, so 5 % of all commits allowed half its
+failing commits to be missed. B10's 5 % target shares this weakness.
+
+B12f fixes the target. It kept commit safety at or above 0.95 on all four
+projects, where B10 did so on two. It used slightly less time than the
+gated product: −0.047 [−0.054, −0.040], almost all of it on
+wicket-bootstrap. On the other projects B12f ran nearly the whole suite,
+because at least 19 failing audit commits are needed before it allows any
+skipping. B12f therefore replaces a hand-picked gate with a stated
+statistical rule that behaved at least as well here, but it does not make
+selection cheap where failures are rare. Time-ordered commits are not
+exchangeable, so the bound is an assumption checked on four projects, not a
+guarantee.
+
 ## 5. Threats to validity
 
 - **Construct.** Results are per test class, not per test method. "Commit
@@ -439,6 +540,11 @@ addition, not an empirically demonstrated abstention improvement from this study
   Travis CI. Two have no evaluable failures, several have very few, and one
   project (wicket-bootstrap) drives most selection differences. The results
   may not transfer to modern or industrial CI.
+- **Comparison with prior work.** B11 (section 4.9) follows the published
+  Predictive Test Selection rule but uses CodeDNA's 15 live features, not
+  Facebook's, and omits its deployment check. The commercial tools [11, 12
+  in the system chapters] are closed and are compared by documentation only.
+  B11 was run only on the four exploratory projects.
 - **Reliability.** Every number comes from the stored data and saved reports;
   dataset hashes, package versions and commands are recorded
   in each report, and rerunning the experiments reproduced earlier numbers
@@ -453,8 +559,22 @@ estimate usable as a stopping rule, even though much of its gain in ECE
 only undoes class weighting. Learned models predict failures above chance
 but do not order tests better than simple rules, and fallback mainly buys
 safety with extra test time. Using simple rules to choose *which* tests run
-and the calibrated model to choose *how many* (B10) is at least as good as
-either alone on every project studied and mostly keeps its stated risk,
-though the gain is not statistically clear on this data. These statements concern
-within-project fitting; the additional four-project transfer check does not
-establish a generally reliable source-trained model or risk estimate.
+and the calibrated model to choose *how many* (B10) mostly keeps its stated
+risk, but in the rolling-origin study it catches no more failures than the
+same rule with a matched fixed budget (safety difference −0.003
+[−0.036, 0.029]). What B10 adds is not a better selection but a stated
+risk for the skipped tests, and the gate uses it only where stopping on it
+kept the miss target on the project's recent history, refusing otherwise: misses were 0.43 % in
+accepted blocks against 2.74 % in rejected ones, at the price of little time
+saved outside one project. A Predictive Test Selection baseline with aggregate
+recall targets neither beats B10 nor loses to it at matched time; the
+measured difference is that its targets held less often out of sample
+(test recall on 2 of 4 projects, change recall on none, against B10's miss
+target on 3 of 4). A miss target over all commits proved too weak where
+failures are rare. Conformal risk control conditioned on failing commits
+(B12f) kept 95 % commit safety on all four projects at slightly less time
+than the gated product, and is the strongest candidate to replace the
+hand-picked gate once the confirmatory data exist.
+These statements concern within-project fitting; the additional four-project
+transfer check does not establish a generally reliable source-trained model
+or risk estimate, and the confirmatory study is still pending.

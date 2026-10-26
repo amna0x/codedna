@@ -1,0 +1,190 @@
+{
+  "projects": {
+    "hikaricp": {
+      "set": "exploratory",
+      "evaluation_failing_commits": 81,
+      "eligible": true,
+      "fit_failures": 0,
+      "thresholds": [
+        0.5,
+        0.1,
+        0.1,
+        0.2,
+        0.05
+      ],
+      "b10": {
+        "time": 0.3391628851540616,
+        "recall": 0.8930232558139535,
+        "safety": 0.8271604938271605,
+        "miss_rate": 0.0196078431372549
+      },
+      "b12": {
+        "time": 0.10979817927170868,
+        "recall": 0.43255813953488376,
+        "safety": 0.5061728395061729,
+        "miss_rate": 0.056022408963585436
+      },
+      "product": {
+        "time": 1.0,
+        "recall": 1.0,
+        "safety": 1.0,
+        "miss_rate": 0.0
+      }
+    },
+    "jade4j": {
+      "set": "exploratory",
+      "evaluation_failing_commits": 28,
+      "eligible": true,
+      "fit_failures": 1,
+      "thresholds": [
+        "full",
+        0.2,
+        0.1,
+        0.5,
+        0.5
+      ],
+      "b10": {
+        "time": 0.9146888888888889,
+        "recall": 1.0,
+        "safety": 1.0,
+        "miss_rate": 0.0
+      },
+      "b12": {
+        "time": 0.7000687898089172,
+        "recall": 0.9957081545064378,
+        "safety": 0.9285714285714286,
+        "miss_rate": 0.012738853503184714
+      },
+      "product": {
+        "time": 0.9837687898089171,
+        "recall": 1.0,
+        "safety": 1.0,
+        "miss_rate": 0.0
+      }
+    },
+    "littleproxy": {
+      "set": "exploratory",
+      "evaluation_failing_commits": 38,
+      "eligible": true,
+      "fit_failures": 0,
+      "thresholds": [
+        0.005,
+        0.02,
+        0.02,
+        0.1,
+        0.5
+      ],
+      "b10": {
+        "time": 0.9128190839694656,
+        "recall": 0.916030534351145,
+        "safety": 0.7105263157894737,
+        "miss_rate": 0.08396946564885496
+      },
+      "b12": {
+        "time": 0.9320480916030534,
+        "recall": 1.0,
+        "safety": 1.0,
+        "miss_rate": 0.0
+      },
+      "product": {
+        "time": 0.9976351145038168,
+        "recall": 1.0,
+        "safety": 1.0,
+        "miss_rate": 0.0
+      }
+    },
+    "wicket-bootstrap": {
+      "set": "exploratory",
+      "evaluation_failing_commits": 248,
+      "eligible": true,
+      "fit_failures": 0,
+      "thresholds": [
+        0.2,
+        0.3,
+        0.5,
+        0.5,
+        0.2
+      ],
+      "b10": {
+        "time": 0.9414421951219513,
+        "recall": 0.9997143265247822,
+        "safety": 0.9919354838709677,
+        "miss_rate": 0.004878048780487805
+      },
+      "b12": {
+        "time": 0.7283017073170732,
+        "recall": 0.9987144693615198,
+        "safety": 0.9758064516129032,
+        "miss_rate": 0.014634146341463415
+      },
+      "product": {
+        "time": 0.9414421951219513,
+        "recall": 0.9997143265247822,
+        "safety": 0.9919354838709677,
+        "miss_rate": 0.004878048780487805
+      }
+    }
+  },
+  "confirmatory": {
+    "projects": [],
+    "verdict": "inconclusive"
+  },
+  "exploratory": {
+    "projects": [
+      "hikaricp",
+      "jade4j",
+      "littleproxy",
+      "wicket-bootstrap"
+    ],
+    "b12_minus_product": {
+      "time": {
+        "estimate": -0.3632,
+        "ci": [
+          -0.379,
+          -0.3478
+        ]
+      },
+      "recall": {
+        "estimate": -0.1432,
+        "ci": [
+          -0.1731,
+          -0.1043
+        ]
+      },
+      "safety": {
+        "estimate": -0.1453,
+        "ci": [
+          -0.1849,
+          -0.1098
+        ]
+      }
+    },
+    "projects_keeping_target": {
+      "b10": 3,
+      "b12": 3,
+      "product": 4
+    },
+    "verdict": "B12 saves time",
+    "pooled_commits": {
+      "b10": {
+        "time": 0.6248976828385228,
+        "recall": 0.995105370496261,
+        "safety": 0.928,
+        "miss_rate": 0.01955104996379435
+      },
+      "b12": {
+        "time": 0.43130927762039656,
+        "recall": 0.9829770894662742,
+        "safety": 0.8784810126582279,
+        "miss_rate": 0.0339943342776204
+      },
+      "product": {
+        "time": 0.980972521246459,
+        "recall": 0.9997440163829515,
+        "safety": 0.9949367088607595,
+        "miss_rate": 0.00141643059490085
+      }
+    },
+    "note": "previously inspected projects; exploratory only"
+  }
+}
