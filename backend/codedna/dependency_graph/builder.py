@@ -61,6 +61,14 @@ _JAVA_LANG = frozenset({
     "UnsupportedClassVersionError", "UnsupportedOperationException", "VerifyError",
     "VirtualMachineError", "Void", "WrongThreadException",
 })
+# Added after Java 8. On an older JDK a wildcard-imported repository type with
+# the same name is what the code means, so those names are not taken as
+# java.lang when such a type exists (the edge is then heuristic).
+_JAVA_LANG_SINCE_9 = frozenset({
+    "IllegalCallerException", "LayerInstantiationException", "MatchException", "Module",
+    "ModuleLayer", "ProcessHandle", "Record", "ScopedValue", "StackWalker", "StringTemplate",
+    "WrongThreadException",
+})
 
 # Parsed files keyed by Git blob SHA, so identical files in two commits are
 # parsed only once.
@@ -365,23 +373,31 @@ class _Resolver:
             if imported in self.all_types:
                 return _Resolution("repo", imported, CONFIRMED, "single-type import")
             return _Resolution("external")
-        imported = context.static_single_imports.get(name)
-        if imported is not None and imported in self.all_types:
-            return _Resolution("repo", imported, CONFIRMED, "single static import")
+        static_import = context.static_single_imports.get(name)
+        if static_import is not None and static_import in self.all_types:
+            return _Resolution("repo", static_import, CONFIRMED, "single static import")
 
         # 3. Top-level types of the same package (including this file).
         same_package = f"{context.package}.{name}" if context.package else name
         if same_package in self.top_level:
+            if static_import is not None:
+                # `import static lib.T.Name` shadows the package's type if it names a library
+                # member type, but not if it names a static method or field.
+                return _Resolution("repo", same_package, HEURISTIC,
+                                   f"same package; static import {static_import} may shadow it")
             return _Resolution("repo", same_package, CONFIRMED, "same package")
-
-        # 4. java.lang (implicitly imported).
-        if name in _JAVA_LANG:
-            return _Resolution("external")
 
         # 5. On-demand (wildcard) imports.
         # `import static a.T.*` also imports T's static member types.
         candidates = [f"{p}.{name}" for p in context.wildcard_imports + context.static_wildcards
                       if f"{p}.{name}" in self.all_types]
+
+        # 4. java.lang (implicitly imported), checked before wildcards.
+        if name in _JAVA_LANG:
+            if name in _JAVA_LANG_SINCE_9 and len(candidates) == 1:
+                return _Resolution("repo", candidates[0], HEURISTIC,
+                                   f"wildcard import; java.lang.{name} exists only on Java 9+")
+            return _Resolution("external")
         if len(candidates) == 1:
             return _Resolution("repo", candidates[0], HEURISTIC,
                                "wildcard import; assumes no same-named library type")

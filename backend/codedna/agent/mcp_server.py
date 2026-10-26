@@ -59,7 +59,8 @@ TOOLS = {
     "codedna_check": {
         "description": (
             "Run the planned tests and get one verdict: passed, blocked (a test failed), "
-            "incomplete (no result for some tests, e.g. compile error) or no_tests. "
+            "incomplete (missing results, a build error or timeout, or every test skipped), "
+            "nothing_to_run (validated history: no test needed) or no_tests. "
             "Do not report the change as done unless the verdict is passed. "
             "Executes the project's build."),
         "inputSchema": {"type": "object", "properties": {
@@ -119,7 +120,7 @@ class BrakeServer:
 
     def _call(self, ident, params: dict) -> dict:
         name, arguments = params.get("name"), params.get("arguments") or {}
-        if name not in TOOLS or (name == "codedna_check" and not self.allow_build):
+        if not isinstance(name, str) or name not in TOOLS or (name == "codedna_check" and not self.allow_build):
             return _error(ident, -32602, f"unknown tool: {name}")
         if not isinstance(arguments, dict):
             return _error(ident, -32602, "arguments must be an object")
@@ -165,7 +166,7 @@ class BrakeServer:
         if not isinstance(timeout, int) or isinstance(timeout, bool) or timeout < 1:
             raise ToolError("timeout must be a positive integer")
         return brake.check(repo, base=base, head=head, timeout=timeout, **risk,
-                           **self.build_options)
+                           allow_build=self.allow_build, **self.build_options)
 
     # --- loop -------------------------------------------------------------------
 

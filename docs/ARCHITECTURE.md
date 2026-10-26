@@ -312,7 +312,7 @@ Errors are JSON: 400 `{"error": ...}` for analysis errors, 401 bad token,
 wraps the live recommendation (`selection.live`), `codedna_impact` the impact
 report; both only read Git objects. `codedna_check` runs the planned tests
 through the language plugin and maps the result to `passed` / `blocked` /
-`incomplete` / `no_tests`; it exists only when the server was started with
+`incomplete` / `nothing_to_run` / `no_tests`; it exists only when the server was started with
 `--allow-build --repo PATH` and then serves that repository only.
 
 ### `ide/` — CodeDNA IDE (Theia 1.76, Electron)

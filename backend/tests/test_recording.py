@@ -130,6 +130,13 @@ def test_snapshot_leaves_out_codedna_outputs_only(repo):
     assert names == [".codedna/policy.toml", "b.txt"]
 
 
+def test_snapshot_and_ignore_file_list_the_same_outputs():
+    from codedna.git_analysis import git
+    from codedna.test_history import recording
+    assert {p.removeprefix(".codedna/") for p in git._OUTPUTS} == \
+        {name.rstrip("/") for name in recording.OUTPUTS}
+
+
 def test_snapshot_works_once_outputs_are_ignored(repo):
     from codedna.test_history.recording import ignore_outputs
     repo.write("a.txt", "one\n")

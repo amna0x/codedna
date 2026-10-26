@@ -32,7 +32,9 @@ def wilson(correct: int, total: int) -> list[float] | None:
 def score(paths: list[Path]) -> dict:
     groups: dict[str, dict[str, int]] = {}
     for path in paths:
-        for row in csv.DictReader(open(path, encoding="utf-8")):
+        with open(path, encoding="utf-8", newline="") as handle:
+            rows = list(csv.DictReader(handle))
+        for row in rows:
             label = row["label"].strip()
             if label not in ("correct", "incorrect", "unclear"):
                 raise SystemExit(f"{path} row {row['row']}: label must be correct, incorrect "

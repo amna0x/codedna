@@ -11,14 +11,18 @@ it is done:
 
   - ``passed``: every listed test class has a result and none failed;
   - ``blocked``: at least one listed test class failed;
-  - ``incomplete``: some listed class has no result, or the build stopped
-    (a compile error, a timeout), so nothing can be concluded;
+  - ``incomplete``: some listed class has no result, the build exited with
+    an error or timed out, or every listed class was skipped, so nothing can
+    be concluded;
+  - ``nothing_to_run``: validated history says no test needs to run for this
+    change (the skipped tests and the estimated risk are in the plan);
   - ``no_tests``: the project has no tests the build runs, so nothing was
     checked.
 
-  Running tests executes project code, so ``check`` works only when the
-  person started the server with ``--allow-build`` for one repository. An
-  agent cannot turn that on.
+  Running tests executes project code, so ``check`` needs
+  ``allow_build=True``; the MCP server passes it only when the person
+  started it with ``--allow-build`` for one repository. An agent cannot turn
+  that on.
 
 This module is language-neutral: tests are discovered, chosen and run by the
 language plugin (Java first).
@@ -30,6 +34,7 @@ from pathlib import Path
 from uuid import uuid4
 
 from codedna.git_analysis.git import WORKTREE, resolve_repository
+from codedna.selection import SelectionError
 
 
 def plan(repo_path: str | Path, *, base: str = "HEAD", head: str = WORKTREE,
@@ -65,19 +70,26 @@ def plan(repo_path: str | Path, *, base: str = "HEAD", head: str = WORKTREE,
 def check(repo_path: str | Path, *, base: str = "HEAD", head: str = WORKTREE,
           risk_target: float = 0.05, must_run: list[str] | None = None,
           timeout: int = 1800, language: str = "java", maven_command: list[str] | None = None,
-          gradle_command: list[str] | None = None) -> dict:
+          gradle_command: list[str] | None = None, allow_build: bool = False) -> dict:
     """Run the planned tests and return one verdict. Executes project code."""
     from codedna.plugins import load_plugins
-    from codedna.selection import SelectionError
     from codedna.test_history.recording import ignore_outputs, record_run
 
+    if not allow_build:
+        raise SelectionError("check runs the project's build; pass allow_build=True to consent")
     repo = resolve_repository(repo_path)
     planned = plan(repo, base=base, head=head, risk_target=risk_target, must_run=must_run,
                    language=language)
     tests = planned["must_run"]
     if not tests:
-        return {**_verdict("no_tests", "the build runs no tests here; nothing was checked"),
-                "plan": planned, "results": None, "output_dir": None}
+        if planned["skipped"]:
+            message = (f"validated history: none of {planned['total_tests']} test class(es) "
+                       "needs to run for this change; nothing was run")
+            verdict = _verdict("nothing_to_run", message)
+        else:
+            verdict = _verdict("no_tests", "the build runs no tests here; nothing was checked")
+        return {**verdict, "plan": planned, "results": None, "output_dir": None,
+                "recording": None}
     plugin = load_plugins().get(language)
     if plugin is None:
         raise SelectionError(f"language plugin {language!r} is not installed")
@@ -90,24 +102,36 @@ def check(repo_path: str | Path, *, base: str = "HEAD", head: str = WORKTREE,
         options["gradle_command"] = gradle_command
     run, _ = plugin.run_tests(repo, planned["head_commit"], output, allow_build=True,
                               selected_tests=tests, **options)
-    failed = sorted(t for t in tests if t in run.tests and run.tests[t].failed)
-    missing = sorted(t for t in tests if t not in run.tests)
-    if failed:
-        verdict = _verdict("blocked", f"{len(failed)} of {len(tests)} test class(es) failed",
-                           failed=failed)
-    elif missing:
-        verdict = _verdict("incomplete", f"{len(missing)} of {len(tests)} test class(es) have "
-                           "no result; the build may have stopped early", missing=missing)
-    else:
-        not_run = sorted(t for t in tests if run.tests[t].status == "skipped")
-        note = f"; {len(not_run)} class(es) were skipped by the build" if not_run else ""
-        verdict = _verdict("passed", f"all {len(tests)} planned test class(es) passed{note}",
-                           skipped_by_build=not_run)
+    verdict = _run_verdict(tests, run)
     recording = None
     if not planned["skipped"]:  # a whole-suite run is project history (D-053)
         recording = record_run(repo, run, expected_tests=tests)
     return {**verdict, "plan": planned, "results": run.to_dict(), "output_dir": str(output),
             "recording": recording}
+
+
+def _run_verdict(tests: list[str], run) -> dict:
+    failed = sorted(t for t in tests if t in run.tests and run.tests[t].failed)
+    missing = sorted(t for t in tests if t not in run.tests)
+    build_errors = [code for code in run.exit_codes if code != 0]
+    not_run = sorted(t for t in tests if t in run.tests and run.tests[t].status == "skipped")
+    if failed:  # a failing test is decisive even if the build also reported errors
+        return _verdict("blocked", f"{len(failed)} of {len(tests)} test class(es) failed",
+                        failed=failed)
+    if missing:
+        return _verdict("incomplete", f"{len(missing)} of {len(tests)} test class(es) have no "
+                        "result; the build may have stopped early", missing=missing,
+                        build_warnings=run.warnings)
+    if build_errors:
+        return _verdict("incomplete", "the build exited with an error or timed out "
+                        f"(exit codes {run.exit_codes}); the results may be partial",
+                        build_warnings=run.warnings)
+    if len(not_run) == len(tests):
+        return _verdict("incomplete", f"all {len(tests)} planned test class(es) were skipped "
+                        "by the build; nothing was checked", skipped_by_build=not_run)
+    note = f"; {len(not_run)} class(es) were skipped by the build" if not_run else ""
+    return _verdict("passed", f"all {len(tests)} planned test class(es) passed{note}",
+                    skipped_by_build=not_run)
 
 
 def _verdict(name: str, message: str, **details) -> dict:

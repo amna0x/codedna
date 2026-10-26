@@ -211,6 +211,29 @@ def test_static_imports_bring_member_types(repo):
     assert graph.unresolved == {}
 
 
+def test_library_static_import_makes_same_package_type_heuristic(repo):
+    graph = build(repo, {
+        "p/Entry.java": "package p;\npublic class Entry {}\n",
+        "p/Use.java": "package p;\nimport static java.util.Map.Entry;\nclass Use { Entry e; }\n",
+    })
+    edge = dependency_edges(graph)[("type:p.Use", "type:p.Entry", "uses")]
+    assert edge.confidence == HEURISTIC and "may shadow" in edge.evidence[0].note
+
+
+def test_post_java8_lang_names_prefer_a_wildcard_imported_repository_type(repo):
+    graph = build(repo, {
+        "m/Record.java": "package m;\npublic class Record {}\n",
+        "m/Thread.java": "package m;\npublic class Thread {}\n",
+        "a/Use.java": "package a;\nimport m.*;\nclass Use { Record r; Thread t; }\n",
+    })
+    edges = dependency_edges(graph)
+    record = edges[("type:a.Use", "type:m.Record", "uses")]
+    assert record.confidence == HEURISTIC and "Java 9+" in record.evidence[0].note
+    # Thread is in java.lang on every JDK: with m.* too, javac reports an ambiguity,
+    # so compiling code cannot mean m.Thread here; it stays external.
+    assert ("type:a.Use", "type:m.Thread", "uses") not in edges
+
+
 def test_member_types_inherited_from_supertypes(repo):
     graph = build(repo, {
         "a/Base.java": "package a;\nabstract class Base { static class Failure extends Exception {} }\n",

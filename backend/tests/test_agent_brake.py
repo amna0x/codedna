@@ -30,8 +30,8 @@ def project(repo, tmp_path, monkeypatch):
     repo.commit("base")
     spec = tmp_path / "spec.json"
 
-    def outcomes(**tests):
-        spec.write_text(json.dumps({"tests": {
+    def outcomes(exit_code=0, **tests):
+        spec.write_text(json.dumps({"exit_code": exit_code, "tests": {
             t: {"status": status, "time": 1.0, "cases": ["x"]} for t, status in tests.items()}}))
 
     outcomes(**{"a.ATest": "passed", "a.BTest": "passed"})
@@ -57,24 +57,55 @@ def test_plan_keeps_must_run_patterns(project):
 
 def test_check_verdicts(project):
     repo, outcomes = project
-    passed = brake.check(repo.path, maven_command=FAKE)
+    passed = brake.check(repo.path, maven_command=FAKE, allow_build=True)
     assert passed["verdict"] == "passed" and passed["results"]["tests"]
     assert passed["recording"]["recorded"] is False  # uncommitted states are never history
 
     outcomes(**{"a.ATest": "passed", "a.BTest": "failed"})
-    blocked = brake.check(repo.path, maven_command=FAKE)
+    blocked = brake.check(repo.path, maven_command=FAKE, allow_build=True)
     assert blocked["verdict"] == "blocked" and blocked["failed"] == ["a.BTest"]
 
     outcomes(**{"a.ATest": "passed"})  # BTest produced no report (e.g. did not compile)
-    incomplete = brake.check(repo.path, maven_command=FAKE)
+    incomplete = brake.check(repo.path, maven_command=FAKE, allow_build=True)
     assert incomplete["verdict"] == "incomplete" and incomplete["missing"] == ["a.BTest"]
     assert repo.git("status", "--porcelain") == "M src/main/java/a/Core.java"
+
+
+def test_build_errors_and_all_skipped_runs_are_incomplete(project):
+    repo, outcomes = project
+    outcomes(exit_code=1, **{"a.ATest": "passed", "a.BTest": "passed"})  # e.g. another module failed
+    errored = brake.check(repo.path, maven_command=FAKE, allow_build=True)
+    assert errored["verdict"] == "incomplete" and "exit codes [1]" in errored["message"]
+
+    outcomes(**{"a.ATest": "skipped", "a.BTest": "skipped"})
+    skipped = brake.check(repo.path, maven_command=FAKE, allow_build=True)
+    assert skipped["verdict"] == "incomplete" and skipped["skipped_by_build"] == ["a.ATest", "a.BTest"]
+
+    outcomes(**{"a.ATest": "passed", "a.BTest": "skipped"})
+    some = brake.check(repo.path, maven_command=FAKE, allow_build=True)
+    assert some["verdict"] == "passed" and some["skipped_by_build"] == ["a.BTest"]
+
+
+def test_check_needs_explicit_build_consent(project):
+    repo, _ = project
+    with pytest.raises(ValueError, match="allow_build"):
+        brake.check(repo.path, maven_command=FAKE)
+
+
+def test_validated_plan_without_tests_is_nothing_to_run(project, monkeypatch):
+    repo, _ = project
+    planned = brake.plan(repo.path)
+    monkeypatch.setattr(brake, "plan", lambda *a, **k: {
+        **planned, "must_run": [], "skipped": ["a.ATest", "a.BTest"]})
+    result = brake.check(repo.path, maven_command=["nonexistent-command"], allow_build=True)
+    assert result["verdict"] == "nothing_to_run" and result["results"] is None
 
 
 def test_check_of_a_commit_is_recorded_as_history(project):
     repo, _ = project
     repo.commit("change")
-    result = brake.check(repo.path, base="HEAD~1", head="HEAD", maven_command=FAKE)
+    result = brake.check(repo.path, base="HEAD~1", head="HEAD", maven_command=FAKE,
+                         allow_build=True)
     assert result["verdict"] == "passed" and result["recording"]["recorded"] is True
     assert (repo.path / HISTORY_CSV).is_file()
 
@@ -83,7 +114,7 @@ def test_project_without_tests_checks_nothing(repo):
     repo.write("pom.xml", "<project/>")
     repo.write("src/main/java/a/Core.java", CORE)
     repo.commit("base")
-    result = brake.check(repo.path, maven_command=["nonexistent-command"])
+    result = brake.check(repo.path, maven_command=["nonexistent-command"], allow_build=True)
     assert result["verdict"] == "no_tests" and result["results"] is None
 
 
@@ -124,6 +155,8 @@ def test_check_is_offered_only_with_build_consent_for_one_repository(project):
     assert answer["isError"] is False and answer["structuredContent"]["verdict"] == "passed"
     hidden = rpc(BrakeServer(), "tools/call", {"name": "codedna_check", "arguments": {}})
     assert hidden["error"]["code"] == -32602
+    odd = rpc(BrakeServer(), "tools/call", {"name": ["codedna_plan_tests"], "arguments": {}})
+    assert odd["error"]["code"] == -32602  # an unhashable name must not crash the server
 
 
 def test_tool_calls_validate_arguments_and_repository(project, tmp_path):

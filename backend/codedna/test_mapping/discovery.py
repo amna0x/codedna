@@ -87,7 +87,8 @@ def discover_tests(repo_path: str | Path, revision: str = "HEAD") -> DiscoveryRe
     return discover_tests_for_commit(repo, commit)
 
 
-def discover_tests_for_commit(repo: Path, commit: str) -> DiscoveryReport:
+def discover_tests_for_commit(repo: Path, commit: str, *, cache: dict | None = None) -> DiscoveryReport:
+    """``cache``: optional parse cache keyed by blob SHA, shared with graph builds."""
     files = list_files(repo, commit, ".java")
     contents = read_blobs(repo, sorted({blob for _, blob in files}))
     types: dict[str, _TypeInfo] = {}
@@ -105,7 +106,7 @@ def discover_tests_for_commit(repo: Path, commit: str) -> DiscoveryReport:
     layout = detect_build(repo, commit)
     if layout.tool:
         warnings.extend(layout.warnings)
-    superclasses = _superclasses(repo, commit)
+    superclasses = _superclasses(repo, commit, cache)
     tests: list[DiscoveredTest] = []
     for info in types.values():
         if info.id != info.top_level or not info.is_class or info.is_abstract:
@@ -142,8 +143,8 @@ def discover_tests_for_commit(repo: Path, commit: str) -> DiscoveryReport:
                            layout.tool)
 
 
-def _superclasses(repo: Path, commit: str) -> dict[str, list[str]]:
-    graph = build_graph_for_commit(repo, commit, include_members=False)
+def _superclasses(repo: Path, commit: str, cache: dict | None = None) -> dict[str, list[str]]:
+    graph = build_graph_for_commit(repo, commit, include_members=False, cache=cache)
     parents: dict[str, list[str]] = {}
     for edge in graph.edges.values():
         if edge.kind == "extends":
