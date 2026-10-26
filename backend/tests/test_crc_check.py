@@ -1,0 +1,64 @@
+"""Conformal-risk-control stopping (B12) and its offline check."""
+import importlib.util
+from pathlib import Path
+
+import pytest
+from test_live_risk import dataset
+
+from codedna.selection import conformal
+
+ROOT = Path(__file__).resolve().parents[2]
+
+
+def load():
+    spec = importlib.util.spec_from_file_location('crc_check', ROOT / 'scripts/run_crc_check.py')
+    module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
+    return module
+
+
+def test_threshold_uses_the_corrected_bound():
+    # 39 commits: (k + 1) / 40 <= 0.05 allows at most one miss
+    losses = {None: [0.] * 39, .01: [0.] * 39, .05: [1.] + [0.] * 38, .1: [1., 1.] + [0.] * 37}
+    assert conformal.threshold(losses, .05) == .05
+
+
+def test_threshold_needs_enough_commits_and_stops_at_first_violation():
+    assert conformal.threshold({None: [0.] * 18, .5: [0.] * 18}, .05) is conformal.FULL
+    assert conformal.threshold({None: [0.] * 19, .5: [0.] * 19}, .05) == .5
+    # a violation at .01 blocks .05 even though .05 alone would pass
+    losses = {.001: [0.] * 39, .01: [1., 1.] + [0.] * 37, .05: [0.] * 39}
+    assert conformal.threshold(losses, .05) == .001
+
+
+def test_check_tunes_on_history_and_pairs_every_commit(monkeypatch):
+    check = load()
+    rolling = check.load(ROOT, 'run_rolling_evidence')
+    data = dataset([f'c{i}' for i in range(120)])
+    seen = []
+    real = check.fit_audited
+    monkeypatch.setattr(check, 'fit_audited', lambda h, *a: (seen.append(list(h.commits)),
+                                                             real(h, *a))[1])
+    report = check.evaluate(data, rolling)
+    for history, block in zip(seen, report['blocks']):
+        assert history == data.commits[:block['start']]
+    region = sum(x['commits'] for x in report['blocks'])
+    assert len(report['b12']) == len(report['product']) == region
+    for block in report['blocks']:
+        if block['threshold'] == 'full':
+            assert all(o[2] == 0 for o in block['b12'])
+
+
+def test_runner_refuses_changed_protocol(repo):
+    check = load()
+    for rel in check.CODE:
+        p = repo.path / rel; p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_bytes((ROOT / rel).read_bytes())
+    new = repo.path / 'data/newproject/dataset.csv'; new.parent.mkdir(parents=True)
+    dataset([f'n{i}' for i in range(120)]).to_csv(new)
+    out = repo.path / 'results'
+    summary = check.run(repo.path, {'newproject': new}, out)
+    assert summary['confirmatory']['verdict'] == 'inconclusive'  # one project < 3
+    assert check.run(repo.path, {'newproject': new}, out) == summary
+    (repo.path / 'docs/CRC_STOP_PROTOCOL.md').write_text('changed protocol')
+    with pytest.raises(ValueError, match='Protocol, code or inputs changed'):
+        check.run(repo.path, {'newproject': new}, out)
