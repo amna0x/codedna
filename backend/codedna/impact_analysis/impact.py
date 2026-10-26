@@ -30,7 +30,8 @@ from codedna.dependency_graph import (
     merge_graphs,
 )
 from codedna.plugins import load_plugins
-from codedna.plugins.languages import analyze_changes, commit_graph, installed, type_kinds
+from codedna.git_analysis.changes import ChangeReport
+from codedna.plugins.languages import analyze_changes, commit_graph, installed, plugin_type_kinds
 
 
 @dataclass
@@ -149,10 +150,13 @@ def explanation_graph(report: dict) -> dict:
 
 def compute_impact(repo_path: str | Path, base: str, head: str, *,
                    max_depth: int | None = None, include_heuristic: bool = True,
-                   cache: dict | None = None) -> ImpactReport:
-    registry = load_plugins()
+                   cache: dict | None = None, changes: ChangeReport | None = None,
+                   registry=None) -> ImpactReport:
+    """``changes`` and ``registry`` let a caller that already has them skip the work again."""
+    registry = registry or load_plugins()
     installed(registry)  # fails early, naming the plugin to install, if there is none
-    changes = analyze_changes(repo_path, base, head, registry=registry)
+    if changes is None:
+        changes = analyze_changes(repo_path, base, head, registry=registry)
     repo = Path(changes.repository)
     cache = {} if cache is None else cache  # parses keyed per plugin by blob SHA (may be shared)
     graph = merge_graphs(
@@ -160,12 +164,17 @@ def compute_impact(repo_path: str | Path, base: str, head: str, *,
         commit_graph(repo, changes.head_commit, registry=registry, cache=cache),
     )
 
-    seeds, ignored, unanalysed = _collect_seeds(changes, graph, type_kinds(registry))
+    seeds, ignored, unanalysed = _collect_seeds(changes, graph, registry)
     warnings = list(changes.warnings) + list(graph.warnings)
-    if unanalysed:
+    no_plugin = [u for u in unanalysed if u["reason"].startswith("no installed")]
+    if no_plugin:
         warnings.append(
-            f"{len(unanalysed)} changed file(s) not analysed by any installed language plugin; "
+            f"{len(no_plugin)} changed file(s) not analysed by any installed language plugin; "
             "their impact is unknown and a broader test run may be needed")
+    if len(unanalysed) > len(no_plugin):
+        warnings.append(
+            f"{len(unanalysed) - len(no_plugin)} changed file(s) not analysed: their plugin uses "
+            "plugin API 1.0, which does not report type kinds; update it")
 
     impacted = _traverse(graph, seeds, max_depth, include_heuristic)
     return ImpactReport(
@@ -186,7 +195,7 @@ def compute_impact(repo_path: str | Path, base: str, head: str, *,
 
 
 def _collect_seeds(changes, graph: CodeGraph,
-                   kinds: frozenset[str]) -> tuple[dict[str, Seed], list[dict], list[dict]]:
+                   registry) -> tuple[dict[str, Seed], list[dict], list[dict]]:
     seeds: dict[str, Seed] = {}
     ignored: list[dict] = []
     unanalysed: list[dict] = []
@@ -205,6 +214,12 @@ def _collect_seeds(changes, graph: CodeGraph,
             unanalysed.append({"path": changed.path, "status": changed.status,
                                "reason": "no installed language plugin analyses this file; "
                                          "impact not analysed"})
+            continue
+        kinds = plugin_type_kinds(registry.get(changed.language))  # this file's plugin
+        if not kinds:  # a plugin API 1.0 plugin: no way to tell types from members
+            unanalysed.append({"path": changed.path, "status": changed.status,
+                               "reason": "the language plugin does not report which graph nodes "
+                                         "are types (plugin API 1.0); impact not analysed"})
             continue
         paths = {changed.path, changed.old_path} - {None}
         file_types = [n for n in graph.nodes.values() if n.kind in kinds and n.file in paths]

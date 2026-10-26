@@ -143,3 +143,15 @@ def test_run_tests_needs_server_and_request_opt_in(project, tmp_path, monkeypatc
     ran = enabled.post("/api/run-tests", headers=AUTH, json={**body, "allow_build": True}).json()
     assert ran["results"]["failing_tests"] == ["a.CoreTest"]
     assert ran["coverage_map"] is None
+
+
+def test_catalogue_versions_carry_the_core_compatibility_answer(monkeypatch):
+    catalogue = {"schema_version": 1, "plugins": [{"id": "p", "versions": [
+        {"version": "1.0.0", "api_version": "1.0"}, {"version": "2.0.0", "api_version": "2.0"}]}]}
+    monkeypatch.setattr("codedna.plugins.manager.fetch_catalogue", lambda: catalogue)
+
+    response = client().get("/api/plugins/catalogue", headers=AUTH)
+
+    assert response.status_code == 200
+    versions = response.json()["catalogue"]["plugins"][0]["versions"]
+    assert [v["compatible"] for v in versions] == [True, False]

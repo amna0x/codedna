@@ -86,23 +86,58 @@ def install(catalogue: dict, plugin: str, version: str, *, confirmed: bool,
     digest = hashlib.sha256(data).hexdigest()
     if digest != entry.sha256:
         raise CatalogueError(f"checksum mismatch for {plugin} {version}: got {digest}")
+    run = pip or _pip
+    previous = _installed_version(entry.package or "", run)
     with tempfile.TemporaryDirectory(prefix="codedna-plugin-") as tmp:
         wheel = Path(tmp) / name
         wheel.write_bytes(data)
-        result = (pip or _pip)(["install", "--no-index", "--no-deps", "--disable-pip-version-check",
+        # Check the plugin's own dependencies first, changing nothing: with no
+        # index, pip can satisfy them only from what is already installed. An
+        # update therefore never replaces a working version with a broken one.
+        dry = run(["install", "--dry-run", "--no-index", "--disable-pip-version-check",
+                   str(wheel)])
+        if dry.returncode != 0:
+            raise CatalogueError(
+                f"{plugin} {version} was not installed because its dependencies are not all "
+                f"installed in CodeDNA's environment; nothing was changed. pip said: "
+                f"{_last_line(dry.stderr)}")
+        result = run(["install", "--no-index", "--no-deps", "--disable-pip-version-check",
                       str(wheel)])
     if result.returncode != 0:
         raise CatalogueError(f"pip could not install {plugin} {version}: {result.stderr.strip()}")
-    missing = _unmet_requirements(entry.package or "", pip or _pip)
+    missing = _unmet_requirements(entry.package or "", run)
     if missing:
-        # --no-deps never fetches anything else, so a plugin whose own dependencies
-        # are absent would fail to load; take it out again rather than leave it broken.
-        (pip or _pip)(["uninstall", "--yes", entry.package])
+        if previous is None:
+            # A plugin whose dependencies are absent would fail to load; take
+            # it out again rather than leave it broken.
+            run(["uninstall", "--yes", entry.package])
+            raise CatalogueError(
+                f"{plugin} {version} was removed again because its dependencies are not "
+                f"installed: {'; '.join(missing)}. Install them in CodeDNA's environment, "
+                "then retry")
         raise CatalogueError(
-            f"{plugin} {version} was removed again because its dependencies are not installed: "
-            f"{'; '.join(missing)}. Install them in CodeDNA's environment, then retry")
-    importlib.invalidate_caches()  # a running server should see the new package
-    return {"plugin": plugin, "version": version, "sha256": digest, "status": "installed"}
+            f"{plugin} {version} replaced version {previous} but its dependencies are not met: "
+            f"{'; '.join(missing)}. Install them, or install {previous} again")
+    importlib.invalidate_caches()  # a running server sees a newly added package
+    return {"plugin": plugin, "version": version, "sha256": digest, "status": "installed",
+            "previous_version": previous,
+            # Python keeps an already imported plugin in memory: an update or
+            # reinstall takes effect only after CodeDNA restarts.
+            "restart_required": previous is not None}
+
+
+def _installed_version(package: str, run: Runner) -> str | None:
+    """Version of ``package`` in the environment pip manages, None if absent."""
+    shown = run(["show", "--disable-pip-version-check", package])
+    if shown.returncode != 0:
+        return None
+    return next((line.split(":", 1)[1].strip() for line in (shown.stdout or "").splitlines()
+                 if line.startswith("Version:")), None)
+
+
+def _last_line(text: str | None) -> str:
+    lines = [line.strip() for line in (text or "").splitlines() if line.strip()]
+    return lines[-1] if lines else "(no output)"
 
 
 def _unmet_requirements(package: str, run: Runner) -> list[str]:
@@ -128,4 +163,5 @@ def remove(catalogue: dict, plugin: str, *, confirmed: bool, pip: Runner | None 
     if result.returncode != 0:
         raise CatalogueError(f"pip could not remove {package}: {result.stderr.strip()}")
     importlib.invalidate_caches()
-    return {"plugin": plugin, "status": "removed"}
+    # A plugin already imported stays in memory until CodeDNA restarts.
+    return {"plugin": plugin, "status": "removed", "restart_required": True}

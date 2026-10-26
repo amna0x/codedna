@@ -35,6 +35,7 @@ from codedna.models.replay import (
     replay_overview,
 )
 from codedna.plugins import load_plugins, manager
+from codedna.plugins.base import api_compatible
 from codedna.plugins.catalogue import CatalogueError
 from codedna.plugins.languages import (
     PluginMissingError,
@@ -208,8 +209,16 @@ def create_app(token: str, *, allow_build: bool = False,
 
     @app.get("/api/plugins/catalogue", dependencies=secured)
     def plugin_catalogue() -> dict:
-        """The official catalogue (fixed URL, validated) next to what is installed."""
-        return {"catalogue": manager.fetch_catalogue(), "installed": load_plugins().describe()}
+        """The official catalogue (fixed URL, validated) next to what is installed.
+
+        Each version says whether this core can load it (``compatible``), so the
+        IDE only displays the core's answer.
+        """
+        catalogue = manager.fetch_catalogue()
+        for plugin in catalogue.get("plugins", []):
+            for version in plugin.get("versions", []):
+                version["compatible"] = api_compatible(str(version.get("api_version", "")))
+        return {"catalogue": catalogue, "installed": load_plugins().describe()}
 
     @app.post("/api/plugins/install", dependencies=secured)
     def plugin_install(body: PluginInstallRequest) -> dict:

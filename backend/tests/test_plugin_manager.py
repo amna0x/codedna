@@ -29,13 +29,21 @@ def catalogue(sha=WHEEL_SHA, api="1.0"):
 
 
 class FakePip:
-    def __init__(self, code=0, check=""):
+    def __init__(self, code=0, check="", installed=None, dry_run_error=""):
         self.calls, self.code, self.check = [], code, check
+        self.installed, self.dry_run_error = installed, dry_run_error
 
     def __call__(self, args):
         self.calls.append(args)
         if args[0] == "check":  # pip check exits 1 for any broken package in the environment
             return subprocess.CompletedProcess(args, 1 if self.check else 0, self.check, "")
+        if args[0] == "show" and "--quiet" not in args:
+            found = self.installed is not None
+            return subprocess.CompletedProcess(args, 0 if found else 1,
+                                               f"Name: x\nVersion: {self.installed}\n" if found
+                                               else "", "")
+        if "--dry-run" in args and self.dry_run_error:
+            return subprocess.CompletedProcess(args, 1, "", self.dry_run_error)
         return subprocess.CompletedProcess(args, self.code, "", "boom" if self.code else "")
 
 
@@ -47,11 +55,35 @@ def fetch(url):
 def test_install_verifies_checksum_then_installs_one_wheel_without_index():
     pip = FakePip()
     result = manager.install(catalogue(), "python", "1.0.0", confirmed=True, download=fetch, pip=pip)
-    assert result["status"] == "installed"
-    args, check = pip.calls
+    assert result["status"] == "installed" and result["restart_required"] is False
+    show, dry, args, check = pip.calls
+    assert show[0] == "show"
+    assert dry[:3] == ["install", "--dry-run", "--no-index"]  # dependencies checked first
     assert args[:4] == ["install", "--no-index", "--no-deps", "--disable-pip-version-check"]
     assert args[-1].endswith("codedna_python-1.0.0-py3-none-any.whl")
     assert check[0] == "check"
+
+
+def test_missing_dependencies_stop_an_update_before_anything_changes():
+    pip = FakePip(installed="0.9.0", dry_run_error="ERROR: No matching distribution found "
+                                                    "for tree-sitter\n")
+    with pytest.raises(CatalogueError, match="nothing was changed.*tree-sitter"):
+        manager.install(catalogue(), "python", "1.0.0", confirmed=True, download=fetch, pip=pip)
+    assert not [c for c in pip.calls if c[0] in ("uninstall",) or
+                (c[0] == "install" and "--dry-run" not in c)]
+
+
+def test_an_update_keeps_the_new_version_and_asks_for_a_restart():
+    pip = FakePip(installed="0.9.0")
+    result = manager.install(catalogue(), "python", "1.0.0", confirmed=True, download=fetch,
+                             pip=pip)
+    assert result["previous_version"] == "0.9.0" and result["restart_required"] is True
+    broken = FakePip(installed="0.9.0",
+                     check="codedna_python 1.0.0 requires tree-sitter, which is not installed.\n")
+    with pytest.raises(CatalogueError, match="replaced version 0.9.0"):
+        manager.install(catalogue(), "python", "1.0.0", confirmed=True, download=fetch,
+                        pip=broken)
+    assert ["uninstall", "--yes", "codedna-python"] not in broken.calls  # old one is gone anyway
 
 
 def test_install_is_rolled_back_when_the_plugin_dependencies_are_missing():
@@ -135,7 +167,7 @@ def test_cli_catalogue_and_confirmed_install(monkeypatch, capsys):
     assert json.loads(capsys.readouterr().out)["schema_version"] == 1
     assert main(["plugins", "install", "python", "1.0.0", "--yes"]) == 0
     assert json.loads(capsys.readouterr().out)["status"] == "installed"
-    assert [call[0] for call in pip.calls] == ["install", "check"]
+    assert [call[0] for call in pip.calls] == ["show", "install", "install", "check"]
 
 
 def make_wheel(path, requires=b""):
@@ -200,7 +232,7 @@ def test_real_pip_rolls_back_a_plugin_whose_dependency_is_missing(tmp_path):
                       requires=b"Requires-Dist: codedna-no-such-dependency>=1\n")
     index = catalogue(sha=hashlib.sha256(data).hexdigest())
 
-    with pytest.raises(CatalogueError, match="codedna-no-such-dependency"):
+    with pytest.raises(CatalogueError, match="nothing was changed.*codedna-no-such-dependency"):
         manager.install(index, "python", "1.0.0", confirmed=True, download=lambda url: data,
                         pip=pip)
     assert pip(["show", "codedna-python"]).returncode != 0  # nothing left behind

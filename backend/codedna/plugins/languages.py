@@ -61,7 +61,7 @@ def require(language: str = "java", registry: PluginRegistry | None = None) -> L
     message = f"the {language} language plugin ({package}) is not installed"
     if command:
         message += f"; install it with: {command}"
-    problems = [p for p in registry.problems if language in p]
+    problems = [p for p in registry.problems if p.startswith(f"entry point {language}:")]
     if problems:
         message += f" (load problems: {'; '.join(problems)})"
     raise PluginMissingError(message)
@@ -114,6 +114,13 @@ def analyze_changes(repo_path: str | Path, base: str, head: str, *,
             attach(report)
     for changed in report.changed_files:
         changed.language = file_language(changed, registry)
+    for name in sorted(registry.plugins):
+        plugin = registry.plugins[name]
+        handled = [c for c in report.changed_files if c.language == name]
+        if handled and getattr(plugin, "attach_declarations", None) is None:
+            report.warnings.append(
+                f"the {name} plugin (API {plugin.api_version}) does not map changes to "
+                f"declarations; {len(handled)} changed file(s) stay at file level")
     for language, (package, suffix, command) in KNOWN.items():
         missed = [c.path for c in report.changed_files
                   if c.path.endswith(suffix) or (c.old_path or "").endswith(suffix)]
