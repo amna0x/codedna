@@ -1661,3 +1661,9 @@ coverage uses temporary Git repositories and includes real passing/failing
 pytest runs, mixed fake-Maven/real-pytest execution, MCP, pins, immutable
 snapshots, and conservative partial-plan estimates. Main's prior merge and
 post-pull validation are separate from validation of this feature branch.
+
+D-070 validation also caught the old two-test demo assuming that a dependency
+test could be skipped. The demo now adds a genuinely unrelated third test;
+required dependency tests remain in the plan. The history is still labelled
+synthetic. MCP startup accepts --python for the project's interpreter, without
+changing build consent or allowing an agent to override the interpreter.

@@ -44,7 +44,11 @@ The brake detects Java/Python test suites. Python has no validated risk
 selector yet, so Python and mixed-language repositories get an explicit
 unvalidated full-suite plan, not a risk-selection error or guessed score.
 check uses the installed language plugins to run the required tests and
-combine their results. Build consent is still required. Install the Java
+combine their results. Build consent is still required. For MCP Python checks,
+select the project's interpreter at server startup, for example
+`codedna mcp --repo PROJECT --allow-build --python PROJECT/.venv/Scripts/python.exe`.
+The interpreter must already have pytest and the project's dependencies;
+CodeDNA does not install them or let tool arguments override this choice. Install the Java
 and Python packages alongside the core when working from source:
 
 ```powershell
@@ -120,3 +124,9 @@ With `--check` the wrong formula is `blocked` and a harmless comment is
   SWE-bench Java patches the plan held a failing test whenever the full suite
   did. Whether agents finish with fewer broken changes when they use the
   brake has not been measured.
+
+The validated-history demo now adds IndependentTest for a separate shipping-fee
+component, unrelated to discount calculation. The
+breaking edit keeps both affected dependency tests and still skips the
+independent test. Its recorded history is explicitly synthetic; this is
+an end-to-end mechanism demonstration, not additional research evidence.

@@ -5,7 +5,9 @@ brake asks for the whole suite. This demo shows the other path. It builds a
 throwaway copy of ``examples/sample-java-project`` with 240 earlier commits
 and a **synthetic** recorded history (``.codedna/history.csv``) in which
 ``PriceCalculatorTest`` fails on three commits in five and
-``OrderServiceTest`` never fails. Then, as an agent would, it asks
+``OrderServiceTest`` and a genuinely unrelated ``IndependentTest`` never fail.
+The structural plan still requires OrderServiceTest for the breaking edit;
+IndependentTest lets the demo show partial selection without dropping it. Then, as an agent would, it asks
 ``codedna mcp`` for a plan with the conformal stop (``method: crc``) and runs
 ``codedna_check`` twice:
 
@@ -31,7 +33,22 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 COMMITS = 240
-TESTS = ("example.OrderServiceTest", "example.PriceCalculatorTest")
+TESTS = ("example.IndependentTest", "example.OrderServiceTest", "example.PriceCalculatorTest")
+INDEPENDENT_TEST = """package example;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
+class IndependentTest {
+    @Test void shippingThresholdIsIndependentOfDiscounts() {
+        assertEquals(500, ShippingCalculator.feeCents(1000));
+        assertEquals(0, ShippingCalculator.feeCents(6000));
+    }
+}
+"""
+SHIPPING_COMPONENT = """package example;
+final class ShippingCalculator {
+    static int feeCents(int subtotalCents) { return subtotalCents >= 5000 ? 0 : 500; }
+}
+"""
 
 
 def _load_demo():
@@ -122,10 +139,19 @@ def run_demo(dest: Path, run_check: bool, mvn: str | None) -> dict:
     edited = wrong.read_text(encoding="utf-8")
     subprocess.run(["git", *demo.IDENTITY, "checkout", "--quiet", "--", str(wrong)],
                    cwd=dest, check=True)  # park the agent's edit while history is built
+    # Add a real unrelated test before generating its synthetic history.
+    # Never omit a dependency test merely to make the plan look partial.
+    from codedna.git_analysis.git import run_git
+    independent = "src/test/java/example/IndependentTest.java"
+    (dest / independent).write_text(INDEPENDENT_TEST, encoding="utf-8", newline="\n")
+    shipping = "src/main/java/example/ShippingCalculator.java"
+    (dest / shipping).write_text(SHIPPING_COMPONENT, encoding="utf-8", newline="\n")
+    run_git(dest, "add", "--", independent, shipping)
+    run_git(dest, *demo.IDENTITY, "commit", "--quiet", "-m", "add independent demo test")
     make_history(dest)
     with open(wrong, "w", encoding="utf-8", newline="\n") as handle:
         handle.write(edited)
-    print(f"demo repository: {dest} ({COMMITS} earlier commits, SYNTHETIC history)")
+    print(f"demo repository: {dest} ({COMMITS} synthetic commits plus setup; SYNTHETIC history)")
     command = [sys.executable, "-m", "codedna", "mcp", "--repo", str(dest)]
     if run_check:
         command.append("--allow-build")

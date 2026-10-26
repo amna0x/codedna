@@ -48,9 +48,9 @@
     "semantic_hash": "2c226ebb7b1b4bee7206ccc5ca4d6553"
   },
   "backend/codedna/cli.py": {
-    "mtime": 1793031513.157891,
-    "seen": 1793033487.6411092,
-    "ast_hash": "bb050d96361bcb67a5023cdaae97efa4",
+    "mtime": 1793034246.069387,
+    "seen": 1793034954.6013148,
+    "ast_hash": "d2b69743c37820e1f4da9115b9b895ca",
     "semantic_hash": ""
   },
   "backend/codedna/dependency_graph/__init__.py": {
@@ -534,9 +534,9 @@
     "semantic_hash": "b56beff69c2cb266c8d2361408baa006"
   },
   "docs/DECISIONS.md": {
-    "mtime": 1793033060.739118,
-    "seen": 1793033487.6411092,
-    "ast_hash": "a0a8e8bb5aeaf6fec6f344bd3e591631",
+    "mtime": 1793034246.069387,
+    "seen": 1793034954.6076317,
+    "ast_hash": "735e2f9c2284ecf4c14ed83e962bf4a9",
     "semantic_hash": ""
   },
   "docs/PROJECT_SPEC.md": {
@@ -780,9 +780,9 @@
     "semantic_hash": ""
   },
   "backend/tests/test_demo_agent_brake.py": {
-    "mtime": 1793031513.2185154,
-    "seen": 1793033487.6411092,
-    "ast_hash": "ff98317bc6febff49d369f8241708b47",
+    "mtime": 1793034246.0625615,
+    "seen": 1793034954.6067598,
+    "ast_hash": "68dac6f22ba8e7e579d1c7f30c3a3d72",
     "semantic_hash": ""
   },
   "backend/tests/test_desktop_bundle.py": {
@@ -1128,9 +1128,9 @@
     "semantic_hash": ""
   },
   "scripts/demo_brake_end_to_end.py": {
-    "mtime": 1793031514.2109163,
-    "seen": 1793033487.6411092,
-    "ast_hash": "b65189e70ff4c86695e06ddb8c1c2990",
+    "mtime": 1793034637.0484092,
+    "seen": 1793034954.6076317,
+    "ast_hash": "211589ae651bb5b6457039103d7a7ab3",
     "semantic_hash": ""
   },
   "scripts/desktop_core_entry.py": {
@@ -1218,9 +1218,9 @@
     "semantic_hash": ""
   },
   "docs/AGENT_BRAKE.md": {
-    "mtime": 1793033060.7818394,
-    "seen": 1793033487.6411092,
-    "ast_hash": "2f11ec9c298772ddf6fbe4fbe8f0b31e",
+    "mtime": 1793034637.1010888,
+    "seen": 1793034954.6076317,
+    "ast_hash": "d35f0cf0f5ab23d1f2b8a57f3d9a145b",
     "semantic_hash": ""
   },
   "docs/AGENT_BRAKE_STUDY_PROTOCOL.md": {
@@ -1386,9 +1386,9 @@
     "semantic_hash": ""
   },
   "backend/tests/test_brake_planning.py": {
-    "mtime": 1793032937.3834178,
-    "seen": 1793033487.6411092,
-    "ast_hash": "41405acd23f2afae85ec52a8bf304523",
+    "mtime": 1793034246.069387,
+    "seen": 1793034954.6067598,
+    "ast_hash": "aff936ebd00b246bf4dec3a41fe345e4",
     "semantic_hash": ""
   }
 }

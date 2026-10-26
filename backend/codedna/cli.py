@@ -241,6 +241,7 @@ def build_parser() -> argparse.ArgumentParser:
                      help="Offer codedna_check (executes the project's build when the agent asks).")
     mcp.add_argument("--mvn", help="Path to the Maven executable (default: mvn on PATH).")
     mcp.add_argument("--gradle", help="Path to the Gradle executable (default: the wrapper or gradle).")
+    mcp.add_argument("--python", help="Python interpreter with the project's pytest/dependencies (default: PATH).")
 
     history = subcommands.add_parser(
         "history", help="Mine commit history, store test results, evaluate test ordering.")
@@ -446,6 +447,8 @@ def main(argv: list[str] | None = None) -> int:
                 build_options["maven_command"] = [args.mvn]
             if args.gradle:
                 build_options["gradle_command"] = [args.gradle]
+            if args.python:
+                build_options["python_command"] = [args.python]
             return mcp_main(args.repo, args.allow_build, build_options or None)
         elif args.command == "history":
             return _run_history(args)

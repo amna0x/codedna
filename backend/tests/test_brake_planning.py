@@ -191,3 +191,26 @@ def test_unsupported_language_does_not_bypass_target_validation(python_project, 
 def test_unsupported_language_does_not_accept_unknown_method(python_project):
     with pytest.raises(ValueError, match='Unknown risk method'):
         recommend(python_project.path, 'HEAD', 'WORKTREE', language='python', method='unknown')
+
+
+def test_mcp_python_check_runs_with_server_selected_interpreter(python_project):
+    server = BrakeServer(repo=python_project.path, allow_build=True,
+                         build_options={'python_command': [sys.executable]})
+    answer = server.handle({'jsonrpc': '2.0', 'id': 1, 'method': 'tools/call',
+                            'params': {'name': 'codedna_check', 'arguments': {}}})['result']
+    assert not answer['isError']
+    assert answer['structuredContent']['verdict'] == 'passed'
+    assert answer['structuredContent']['results']['tool'] == 'pytest'
+
+
+def test_mcp_cli_selects_python_without_granting_build_consent(python_project, monkeypatch):
+    import codedna.agent.mcp_server as mcp
+    from codedna.cli import main
+    captured = {}
+    def serve(repo, allow_build, build_options):
+        captured.update(repo=repo, allow_build=allow_build, build_options=build_options)
+        return 0
+    monkeypatch.setattr(mcp, 'main', serve)
+    assert main(['mcp', '--repo', str(python_project.path), '--python', sys.executable]) == 0
+    assert captured['allow_build'] is False
+    assert captured['build_options'] == {'python_command': [sys.executable]}
