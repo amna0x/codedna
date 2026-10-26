@@ -1,0 +1,10 @@
+{
+  "failed": 0,
+  "seconds": 1215.9,
+  "command": "python -m pytest --run-maven -q",
+  "worktree": "C:\\Users\\hp\\codedna-b13",
+  "updated_utc": "2026-10-26T13:59:41.7867462Z",
+  "skipped": 0,
+  "exit_code": 0,
+  "passed": 405
+}

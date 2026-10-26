@@ -1,0 +1,350 @@
+{
+  "projects": {
+    "buck": {
+      "set": "confirmatory",
+      "evaluation_failing_commits": 169,
+      "eligible": true,
+      "fit_failures": 0,
+      "thresholds": [
+        "full",
+        0.001,
+        0.005,
+        0.01,
+        0.01
+      ],
+      "b10": {
+        "time": 0.07340047393364929,
+        "recall": 0.8697674418604651,
+        "safety": 0.8757396449704142,
+        "miss_rate": 0.04976303317535545
+      },
+      "b12": {
+        "time": 0.4344440758293839,
+        "recall": 0.9674418604651163,
+        "safety": 0.9704142011834319,
+        "miss_rate": 0.011848341232227487
+      },
+      "product": {
+        "time": 1.0,
+        "recall": 1.0,
+        "safety": 1.0,
+        "miss_rate": 0.0
+      }
+    },
+    "cloudify": {
+      "set": "confirmatory",
+      "evaluation_failing_commits": 148,
+      "eligible": true,
+      "fit_failures": 0,
+      "thresholds": [
+        0.002,
+        0.002,
+        0.002,
+        "full",
+        0.0002
+      ],
+      "b10": {
+        "time": 0.047511386742578286,
+        "recall": 0.49367088607594933,
+        "safety": 0.46621621621621623,
+        "miss_rate": 0.032126880845872306
+      },
+      "b12": {
+        "time": 0.6883727124847498,
+        "recall": 0.8860759493670887,
+        "safety": 0.8783783783783784,
+        "miss_rate": 0.0073200488003253355
+      },
+      "product": {
+        "time": 1.0,
+        "recall": 1.0,
+        "safety": 1.0,
+        "miss_rate": 0.0
+      }
+    },
+    "deeplearning4j": {
+      "set": "confirmatory",
+      "evaluation_failing_commits": 205,
+      "eligible": true,
+      "fit_failures": 0,
+      "thresholds": [
+        0.1,
+        0.02,
+        0.01,
+        0.002,
+        0.002
+      ],
+      "b10": {
+        "time": 0.5187525229357798,
+        "recall": 0.9294871794871795,
+        "safety": 0.9170731707317074,
+        "miss_rate": 0.0389908256880734
+      },
+      "b12": {
+        "time": 0.778862385321101,
+        "recall": 0.967948717948718,
+        "safety": 0.9512195121951219,
+        "miss_rate": 0.022935779816513763
+      },
+      "product": {
+        "time": 0.8838543577981651,
+        "recall": 0.9903846153846154,
+        "safety": 0.9853658536585366,
+        "miss_rate": 0.006880733944954129
+      }
+    },
+    "dspace": {
+      "set": "confirmatory",
+      "evaluation_failing_commits": 59,
+      "eligible": true,
+      "fit_failures": 1,
+      "thresholds": [
+        "full",
+        0.0001,
+        0.0002,
+        0.02,
+        "full"
+      ],
+      "b10": {
+        "time": 0.47357161803713527,
+        "recall": 0.0052631578947368585,
+        "safety": 0.09375,
+        "miss_rate": 0.038461538461538464
+      },
+      "b12": {
+        "time": 0.9589459172852598,
+        "recall": 1.0,
+        "safety": 1.0,
+        "miss_rate": 0.0
+      },
+      "product": {
+        "time": 0.9762647932131495,
+        "recall": 0.9993894993894994,
+        "safety": 0.9830508474576272,
+        "miss_rate": 0.0010604453870625664
+      }
+    },
+    "jetty.project": {
+      "set": "confirmatory",
+      "evaluation_failing_commits": 86,
+      "eligible": true,
+      "fit_failures": 0,
+      "thresholds": [
+        0.005,
+        0.05,
+        0.1,
+        0.005,
+        0.01
+      ],
+      "b10": {
+        "time": 0.594175,
+        "recall": 0.9539473684210527,
+        "safety": 0.9186046511627907,
+        "miss_rate": 0.07291666666666667
+      },
+      "b12": {
+        "time": 0.8240572916666666,
+        "recall": 0.993421052631579,
+        "safety": 0.9883720930232558,
+        "miss_rate": 0.010416666666666666
+      },
+      "product": {
+        "time": 1.0,
+        "recall": 1.0,
+        "safety": 1.0,
+        "miss_rate": 0.0
+      }
+    },
+    "okhttp": {
+      "set": "confirmatory",
+      "evaluation_failing_commits": 238,
+      "eligible": true,
+      "fit_failures": 0,
+      "thresholds": [
+        0.01,
+        0.01,
+        0.01,
+        0.02,
+        0.02
+      ],
+      "b10": {
+        "time": 0.4001267793594306,
+        "recall": 0.8641509433962264,
+        "safety": 0.8487394957983193,
+        "miss_rate": 0.03202846975088968
+      },
+      "b12": {
+        "time": 0.6271772241992882,
+        "recall": 0.9660377358490566,
+        "safety": 0.9621848739495799,
+        "miss_rate": 0.00800711743772242
+      },
+      "product": {
+        "time": 0.6909937722419929,
+        "recall": 0.9207547169811321,
+        "safety": 0.9117647058823529,
+        "miss_rate": 0.018683274021352312
+      }
+    },
+    "sling": {
+      "set": "confirmatory",
+      "evaluation_failing_commits": 285,
+      "eligible": true,
+      "fit_failures": 0,
+      "thresholds": [
+        0.02,
+        0.02,
+        0.01,
+        0.005,
+        0.002
+      ],
+      "b10": {
+        "time": 0.5991641025641026,
+        "recall": 0.9047619047619048,
+        "safety": 0.8947368421052632,
+        "miss_rate": 0.042735042735042736
+      },
+      "b12": {
+        "time": 0.77759301994302,
+        "recall": 0.9682539682539683,
+        "safety": 0.9649122807017544,
+        "miss_rate": 0.014245014245014245
+      },
+      "product": {
+        "time": 0.9118913105413106,
+        "recall": 0.9809523809523809,
+        "safety": 0.9789473684210527,
+        "miss_rate": 0.008547008547008548
+      }
+    },
+    "sonarqube": {
+      "set": "confirmatory",
+      "evaluation_failing_commits": 116,
+      "eligible": true,
+      "fit_failures": 0,
+      "thresholds": [
+        "full",
+        0.002,
+        0.001,
+        0.005,
+        0.002
+      ],
+      "b10": {
+        "time": 0.2109879594423321,
+        "recall": 0.595890410958904,
+        "safety": 0.5862068965517241,
+        "miss_rate": 0.030418250950570342
+      },
+      "b12": {
+        "time": 0.9222790874524714,
+        "recall": 0.9863013698630136,
+        "safety": 0.9827586206896551,
+        "miss_rate": 0.0012674271229404308
+      },
+      "product": {
+        "time": 1.0,
+        "recall": 1.0,
+        "safety": 1.0,
+        "miss_rate": 0.0
+      }
+    },
+    "titan": {
+      "set": "confirmatory",
+      "evaluation_failing_commits": 53,
+      "eligible": true,
+      "fit_failures": 0,
+      "thresholds": [
+        0.01,
+        0.02,
+        0.05,
+        "full",
+        0.002
+      ],
+      "b10": {
+        "time": 0.771190052356021,
+        "recall": 0.9565217391304348,
+        "safety": 0.9622641509433962,
+        "miss_rate": 0.010471204188481676
+      },
+      "b12": {
+        "time": 0.9604916230366493,
+        "recall": 0.967391304347826,
+        "safety": 0.9811320754716981,
+        "miss_rate": 0.005235602094240838
+      },
+      "product": {
+        "time": 0.9671863874345549,
+        "recall": 0.967391304347826,
+        "safety": 0.9811320754716981,
+        "miss_rate": 0.005235602094240838
+      }
+    }
+  },
+  "confirmatory": {
+    "projects": [
+      "buck",
+      "cloudify",
+      "deeplearning4j",
+      "dspace",
+      "jetty.project",
+      "okhttp",
+      "sling",
+      "sonarqube",
+      "titan"
+    ],
+    "b12_minus_product": {
+      "time": {
+        "estimate": -0.162,
+        "ci": [
+          -0.1687,
+          -0.1553
+        ]
+      },
+      "recall": {
+        "estimate": -0.0173,
+        "ci": [
+          -0.0253,
+          -0.0095
+        ]
+      },
+      "safety": {
+        "estimate": -0.0179,
+        "ci": [
+          -0.0272,
+          -0.0084
+        ]
+      }
+    },
+    "projects_keeping_target": {
+      "b10": 1,
+      "b12": 8,
+      "product": 8
+    },
+    "verdict": "B12f saves time",
+    "pooled_commits": {
+      "b10": {
+        "time": 0.27553303272352486,
+        "recall": 0.5768115942028986,
+        "safety": 0.7980480480480481,
+        "miss_rate": 0.03465601649059521
+      },
+      "b12": {
+        "time": 0.765771751980883,
+        "recall": 0.9817795323413301,
+        "safety": 0.9587932303164092,
+        "miss_rate": 0.007043139227770092
+      },
+      "product": {
+        "time": 0.9385656521192303,
+        "recall": 0.9896750683267537,
+        "safety": 0.9764532744665195,
+        "miss_rate": 0.004024650987297196
+      }
+    }
+  },
+  "exploratory": {
+    "projects": [],
+    "verdict": "inconclusive",
+    "note": "previously inspected projects; exploratory only"
+  }
+}

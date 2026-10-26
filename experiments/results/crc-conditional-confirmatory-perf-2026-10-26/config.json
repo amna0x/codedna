@@ -1,0 +1,52 @@
+{
+  "protocol": "docs/CRC_CONDITIONAL_PROTOCOL.md",
+  "conditional": true,
+  "alpha": 0.05,
+  "grid": [
+    "full",
+    0.0001,
+    0.0002,
+    0.0005,
+    0.001,
+    0.002,
+    0.005,
+    0.01,
+    0.02,
+    0.05,
+    0.1,
+    0.2,
+    0.3,
+    0.5
+  ],
+  "python": "3.12.14",
+  "packages": {
+    "scikit-learn": "1.9.1",
+    "numpy": "2.5.4"
+  },
+  "input_sha256": {
+    "buck": "5827f566de535952fc7e374fe7c6702c80ef821e957a6ef4bba31ae1ca03bded",
+    "cloudify": "710e40af316aff83aa4391578df2c1cf0c733b8c533f331b14bd9122a9adc9bb",
+    "deeplearning4j": "f6ae51a6cce0fd703111138ce28e3bb2398872ba11af53224b724401158d5a14",
+    "dspace": "1933cd2d43d7dd5daccba9599db81b288e810f40a774c57b0401aac36a9f548c",
+    "jetty.project": "3f3aa331d38a7e3c737a2620234fe4981d0b9528cd98cbad2b7c4f00b7b1a0d4",
+    "okhttp": "fdbae90190c8cc92f7b83d3e9a0a496a4635121570af32301acba2683273fe22",
+    "sling": "1849f0d25abe7c7abe36ffe22c4814fd3e48b1dfa96e2332bae55316d5e4b4d0",
+    "sonarqube": "71345204989db0d621435dac92c59bd97ebdd0799f4e357b52b69ad3905e41bc",
+    "titan": "cb6f11e494e4c295efc08d0088768c4055289c520a90789e903afa1ff809f837"
+  },
+  "code_sha256": {
+    "scripts/run_crc_check.py": "bf12bfb6db14846d414230257d946ebddc20a365d8a99ec54371aba48821125b",
+    "docs/CRC_STOP_PROTOCOL.md": "ec813baf6aa79d9cc482f527439044334c73ceefbef4c2c757a55fec5739f88f",
+    "backend/codedna/selection/conformal.py": "8d01920e46ca9afada35815316c55a048df1bf06e0157176dd478434faf46e8d",
+    "scripts/run_rolling_evidence.py": "782ab3d759df9266a411fc82c76e7017cd2dab59f425f1a29a2774e5d09e400b",
+    "backend/codedna/selection/live.py": "0361de6c11f50b6d63225adbf31e03c2defbe0f267f352cbba5eea923137cd39",
+    "backend/codedna/selection/risk.py": "b97a390ec0923c8183d857208c6e7bd614f0d646e79e6fcb0d3082bb14b77437",
+    "backend/codedna/plugins/java_live.py": "77cf359dd97daa017a0481ad18eec5cf76963a82079417ffcea396ccfb255863",
+    "backend/codedna/models/rankers.py": "79c0a6f7fb67803009addffc13086db2762e28b2f829c1cc106299711b239f10",
+    "backend/codedna/models/uncertainty.py": "bfcda9e1da26ea79525b7678a520eb01042ef91da8ca8f8f85bf5786295db792",
+    "backend/codedna/calibration/calibrators.py": "1a182cea9040ecb7258af3e0a1c031e73161e96a15f3e1561b66b67c07023ddc",
+    "backend/codedna/test_history/features.py": "3a9ecfe884716b489e2193b1f379eb1c39eb193fea915b8ccf2d09ca76748572",
+    "scripts/run_study.py": "65f67f18d87f89e87cb899daf487f86a2610dee24694d3c61afa193360b7aa47",
+    "docs/CRC_CONDITIONAL_PROTOCOL.md": "7649658ad33e83f4de68aca3c204ae995bdef731b103578e7dd142e6a79d1139"
+  }
+}
