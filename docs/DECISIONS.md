@@ -1098,6 +1098,13 @@ spot-checked by a student) are in
   `SQLExceptionOverride.Override` was silently resolved to the JDK annotation
   before.
 
+Review follow-ups (same PR): a single static import of a library name
+(`import static java.util.Map.Entry`) can shadow a same-package type, so that
+edge is heuristic, not confirmed; and the `java.lang` names added after Java 8
+(`Record`, `Module`, `StackWalker`, ...) give way to a single wildcard-imported
+repository type of the same name (heuristic), because on Java 8 that is what
+the code means.
+
 Effect: the unresolved rate goes from 0.264 to 0.139 (HikariCP) and from
 0.103 to 0.070 (LittleProxy), and dependency edges go from 668 to 676 and
 from 479 to 502. Structural features (`dep_reachable`, `dep_distance`,
@@ -1120,14 +1127,17 @@ before they say a change is done. Tools:
   apart and the changed files CodeDNA cannot analyse.
 - `codedna_check` — runs the planned tests and gives one verdict: `passed`,
   `blocked` (a listed test failed), `incomplete` (a listed test has no
-  result, e.g. a compile error or timeout) or `no_tests`. A whole-suite check
+  result, the build exited with an error or timed out, or every listed test
+  was skipped), `nothing_to_run` (validated history says no test needs to
+  run) or `no_tests` (the build runs no tests). A whole-suite check
   of a commit on the first-parent line is recorded as history (D-053);
   uncommitted states never are.
 
 **Consent.** `plan` and `impact` read Git objects only. `check` executes the
 project's build, so it is listed only when the person starts the server with
 `--allow-build --repo PATH`, and it then serves that one repository whatever
-path the agent sends. An agent cannot turn it on (same rule as D-014).
+path the agent sends. `brake.check` itself also refuses to run without
+`allow_build=True`, so other callers cannot skip the consent. An agent cannot turn it on (same rule as D-014).
 
 **No dependency.** Only the part of MCP that tools need is implemented
 (`initialize` with version negotiation, `ping`, `tools/list`, `tools/call`;
@@ -1144,7 +1154,7 @@ Java study); no result is claimed here.
 
 ## D-061 — Predictive Test Selection baseline (B11)
 
-(D-060 is taken by the agent brake study protocol on another branch.)
+(D-060 is not used; the agent brake study is D-062.)
 
 **Why.** The closest prior work, Predictive Test Selection at Facebook
 (Machalica et al., ICSE-SEIP 2019), also uses a learned model, a holdout and
@@ -1168,3 +1178,25 @@ target on none; B10 kept its miss target on 3 of 4. Details:
 
 **Not changed.** B11 is a research baseline only. The live product keeps
 B10 with the D-041 gate.
+
+## D-062 — Agent brake study on public SWE-bench Java patches
+
+**What.** An offline check of the brake (D-059) on agent patches that are
+already public: the SWE-bench Multilingual Java instances (gson, druid,
+lucene, lombok, RxJava, javaparser) of every submission in
+`SWE-bench/experiments` (14 mini-SWE-agent runs with different models). For
+each patch the harness applied, CodeDNA computes the test plan for the
+agent's change and checks whether it contains the benchmark test classes the
+harness saw fail. Protocol fixed before results:
+[AGENT_BRAKE_STUDY_PROTOCOL.md](AGENT_BRAKE_STUDY_PROTOCOL.md); tool:
+`scripts/swebench_brake_study.py`.
+
+**Why this way.** It needs no paid API and no build: patches and harness
+reports are public, and CodeDNA reads Git objects only (`eval.sh` is parsed
+as text, never run). Paying for our own agent runs is out of budget.
+
+**What it cannot show.** Whether agents end with fewer broken changes when
+they use the brake; the harness runs only the benchmark's test files, so
+other regressions are unknown. Downloaded data stays out of Git
+(`experiments/datasets/swebench-multilingual/`); every file's SHA-256 and
+the `SWE-bench/experiments` commit are recorded.

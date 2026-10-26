@@ -40,6 +40,8 @@ for test_id, info in tests.items():
         body = ""
         if info["status"] == "failed":
             body = '<failure message="boom" type="AssertionError">trace</failure>'
+        elif info["status"] == "skipped":
+            body = "<skipped/>"
         cases.append(f'<testcase name="{name}" classname="{test_id}" time="{info["time"]}">'
                      f"{body}</testcase>")
     (reports / f"TEST-{test_id}.xml").write_text(

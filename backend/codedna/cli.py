@@ -17,7 +17,7 @@ Usage:
                     [--coverage-map FILE] [--non-java retest-all|ignore]
     codedna plugins
     codedna serve   [--host 127.0.0.1] [--port 8765] [--allow-build]
-    codedna mcp     [--repo PATH] [--allow-build] [--mvn PATH]
+    codedna mcp     [--repo PATH] [--allow-build] [--mvn PATH] [--gradle PATH]
     codedna history mine     --repo PATH --db FILE [--rev REV] [--max-commits N]
     codedna history import   --db FILE RESULTS [RESULTS ...] [--source NAME]
     codedna history collect  --repo PATH --db FILE --output-dir DIR --allow-build
@@ -222,6 +222,7 @@ def build_parser() -> argparse.ArgumentParser:
     mcp.add_argument("--allow-build", action="store_true",
                      help="Offer codedna_check (executes the project's build when the agent asks).")
     mcp.add_argument("--mvn", help="Path to the Maven executable (default: mvn on PATH).")
+    mcp.add_argument("--gradle", help="Path to the Gradle executable (default: the wrapper or gradle).")
 
     history = subcommands.add_parser(
         "history", help="Mine commit history, store test results, evaluate test ordering.")
@@ -418,8 +419,12 @@ def main(argv: list[str] | None = None) -> int:
                          allow_build=args.allow_build)
         elif args.command == "mcp":
             from codedna.agent.mcp_server import main as mcp_main
-            return mcp_main(args.repo, args.allow_build,
-                            {"maven_command": [args.mvn]} if args.mvn else None)
+            build_options = {}
+            if args.mvn:
+                build_options["maven_command"] = [args.mvn]
+            if args.gradle:
+                build_options["gradle_command"] = [args.gradle]
+            return mcp_main(args.repo, args.allow_build, build_options or None)
         elif args.command == "history":
             return _run_history(args)
         elif args.command == "replay":

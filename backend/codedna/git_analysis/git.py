@@ -142,7 +142,9 @@ _SNAPSHOT_ENV = {
 
 
 # CodeDNA's own outputs are not part of the user's change, even in folders
-# created before .codedna/.gitignore existed (D-053).
+# created before .codedna/.gitignore existed (D-053). Same list as
+# test_history.recording.OUTPUTS (a test keeps them equal; Git code must not
+# import the history package).
 _OUTPUTS = (".codedna/runs", ".codedna/history.db", ".codedna/history.csv",
             ".codedna/history.csv.partial")
 
