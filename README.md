@@ -29,7 +29,7 @@ Today CodeDNA can:
   `confirmed` or `heuristic` and unresolved names listed separately (`graph`);
 - list types **potentially impacted** by a change, each with an explanation
   path, plus the test classes that depend on them (`impact`);
-- discover JUnit 4/5 test classes statically (`tests`);
+- discover JUnit 3/4/5 test classes statically (`tests`);
 - run a commit's Maven test suite in an isolated export, optionally with
   **per-test JaCoCo coverage** (`run-tests`, only with `--allow-build`);
 - select tests with three baselines — retest-all, dependency-only and

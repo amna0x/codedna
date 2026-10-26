@@ -1173,3 +1173,31 @@ they use the brake; the harness runs only the benchmark's test files, so
 other regressions are unknown. Downloaded data stays out of Git
 (`experiments/datasets/swebench-multilingual/`); every file's SHA-256 and
 the `SWE-bench/experiments` commit are recorded.
+
+## D-064 — JUnit 3 tests and moved Gradle test folders in discovery
+
+**What.** Test discovery (`test_mapping/discovery.py`) also finds JUnit 3
+style tests: in a class that extends `junit.framework.TestCase` (imported,
+by wildcard, or fully qualified), or whose repository ancestor does, every
+`public void test*()` method without parameters, not static or abstract, is
+a test method. The same holds below a repository base class annotated
+`@TestMethodProviders` with a JUnit 3 method provider (randomizedtesting,
+which Lucene uses). Such classes get framework `junit3` unless their file
+uses JUnit 4/5 annotations. The Gradle layout (`test_mapping/build.py`) reads
+`test.java.srcDirs = [...]`, `+= [...]` and `test.java.srcDir(...)` from the
+`.gradle` scripts: in a module's own build script for that module, in any
+other script for every module, with a warning that the reading is syntactic.
+
+**Why.** The agent brake study (D-062) showed that every catch the plan
+missed was a test CodeDNA did not see, not a wrong selection: gson's tests
+before 2023 are JUnit 3, and Lucene's tests use JUnit 3 naming under
+`src/test` set by a shared Gradle script, so discovery found 1 to 20 gson
+classes and no Lucene classes. Surefire and Gradle run these tests by
+default, so the plan and the full-suite fallback (D-041) left them out.
+
+**Limits.** Syntactic, like the rest of discovery: a `TestCase` imported
+from elsewhere under the same name is not told apart from a same-package
+class of that name; Gradle source sets set programmatically or inside
+`sourceSets { test { java { ... } } }` blocks are not read. Results computed
+before this change (the D-062 primary run records its CodeDNA commit) keep
+the old discovery; the study's follow-up run is labelled as post hoc.
