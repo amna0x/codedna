@@ -337,3 +337,71 @@ def test_record_script_writes_checked_traces_and_skips_the_rest(tmp_path):
     assert not (out / "drifted").exists()
     assert script.record(study, out, seed=0, projects=["ok"])["exists"] == ["ok"]
     assert script.main(["--study", str(study), "--out", str(tmp_path / "o2")]) == 1
+
+
+@pytest.mark.parametrize("case", ["short_trace", "missing_field", "nan_time", "negative_miss",
+                                  "too_many_misses", "unknown_missed", "duplicate_failing",
+                                  "too_many_selected", "infinite_risk", "invalid_fallback",
+                                  "negative_seconds", "invalid_config", "empty_trace"])
+def test_invalid_trace_reports_fail_clearly(traced, case):
+    report = copy.deepcopy(traced)
+    trace = report["replay"]
+    outcome = trace["policies"][CODEDNA][0]
+    if case == "short_trace":
+        trace["policies"][CODEDNA].pop()
+    elif case == "missing_field":
+        del outcome["seconds"]
+    elif case == "nan_time":
+        outcome["time_ratio"] = float("nan")
+    elif case == "negative_miss":
+        report.pop("replay")
+        report["per_commit"][CODEDNA][0][2] = -1
+    elif case == "too_many_misses":
+        report.pop("replay")
+        row = report["per_commit"][CODEDNA][0]
+        row[2] = row[1] + 1
+    elif case == "unknown_missed":
+        outcome["missed"] = ["not-a-failing-test"]
+    elif case == "duplicate_failing":
+        trace["commits"][0]["failing"] = ["duplicate", "duplicate"]
+    elif case == "too_many_selected":
+        outcome["selected"] = trace["commits"][0]["tests"] + 1
+    elif case == "infinite_risk":
+        report["policies"][CODEDNA]["mean_estimated_skip_risk"] = float("inf")
+    elif case == "invalid_fallback":
+        outcome["fallback"] = "false"
+    elif case == "negative_seconds":
+        outcome["seconds"] = -1
+    elif case == "invalid_config":
+        report["config"] = []
+    elif case == "empty_trace":
+        trace["commits"] = []
+    with pytest.raises(ReplayError):
+        replay_timeline(report)
+
+
+def test_discovery_skips_invalid_reports(tmp_path, traced):
+    write(tmp_path / "good" / "experiment-seed0.json", traced)
+    broken = copy.deepcopy(traced)
+    broken["replay"]["policies"][CODEDNA].pop()
+    write(tmp_path / "bad" / "experiment-seed0.json", broken)
+    invalid_utf8 = tmp_path / "experiment-seed1.json"
+    invalid_utf8.write_bytes(b"\xff")
+    found = find_replay_sources(tmp_path)
+    assert [s["project"] for s in found["sources"]] == ["good"]
+    assert len(replay_overview(tmp_path)["projects"]) == 1
+
+
+def test_api_returns_bad_request_for_invalid_outcomes(tmp_path, traced):
+    from fastapi.testclient import TestClient
+    from codedna.api.app import create_app
+
+    broken = copy.deepcopy(traced)
+    broken["replay"]["policies"][CODEDNA].pop()
+    report = write(tmp_path / "experiment-seed0.json", broken)
+    token = "v" * 32
+    api = TestClient(create_app(token), base_url="http://127.0.0.1:8765")
+    result = api.post("/api/replay", json={"path": str(report)},
+                      headers={"X-CodeDNA-Token": token})
+    assert result.status_code == 400
+    assert "commit counts" in result.json()["error"]

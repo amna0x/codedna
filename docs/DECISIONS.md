@@ -1152,3 +1152,145 @@ D-018/D-024: the core has no built-in language and no Tree-sitter dependency.
   `plugins/codedna-java/codedna_java/live.py`, so a rolling-evidence run
   started before this change will not resume after it; restart it instead.
   The module's code is unchanged.
+
+## D-055 — Bundle the Python core in the Windows desktop installer
+
+The desktop installer must support analysis without a separate Python/CodeDNA
+installation. A build-only `desktop` extra pins PyInstaller 6.22.0; the installed
+analysis runtime gains no new dependency. `scripts/build_desktop_core.py` builds
+a console-mode, one-directory executable with the Java parser, SQLite history,
+ML/calibration and local API dependencies. The IDE hides its console and keeps
+the existing stdout/token handshake and explicit build-consent flow.
+
+Electron Builder copies that generated folder into `resources/core`. The main
+entry chooses an explicit `CODEDNA_EXECUTABLE` override first, then the bundled
+core, then `codedna` on PATH for development. Generated executables and caches
+are ignored. Each bundle records Python/package versions and SHA-256 hashes of
+its files; no saved datasets, credentials, historical model files or developer
+configuration are included intentionally. Git and project build tools remain
+external prerequisites. Packaging stays Windows x64; this is not a cross-platform
+installer or an in-app plugin installation mechanism.
+
+## D-056 — Confirmatory preparation skips unused graph work, guards data identity
+
+The existing `structural=False` extraction path is exposed as an explicit
+`prepare_confirmatory --no-structural` option, with full extraction still the
+default. Before preparing new projects, all 70,485 existing four-project rows
+were checked to retain identical identities, labels, durations and the 15 live
+model inputs. Only the three unused graph columns are omitted. Experimental
+rules/model/gate remain D-042; this does not change the statistical analysis.
+
+Preparation records project names, extraction option and extractor SHA-256 and
+refuses mixed or unfingerprinted resume data. The CLI refuses previously
+inspected projects and output-name collisions. The dated preparation note fixes
+the full nine-project set before fresh results. No old report is overwritten.
+
+The one-time `continue_confirmatory.py --wait` command reuses an existing active
+raw-subset producer. It verifies complete-cache hashes before importing and
+never starts a network download. A `raw_dir` option separates shared raw inputs
+from projected CSV/DB outputs. Queue-time code/library/equivalence fingerprints,
+a single-worker OS lock, a full-set check and local phase status guard unattended
+execution. No paid AI calls, notifications or recurring scheduler are used.
+
+## D-057 — Saved runs join the one recorded history (finishing the Codex draft)
+
+**Why.** Codex (2026-10-25, laptop) drafted `test_history/project.py`: list the
+saved runs under `.codedna/runs/`, import a clone's `results.json`, and build
+history from saved runs. The draft had no tests and three problems against
+D-053: it wrote a second history (`.codedna/history-exports/…`) and then
+overwrote `.codedna/history.csv`, so the next D-053 recording refused that
+file as foreign; it excluded every run with a non-zero build exit code,
+which drops all runs with a failing test (Maven/Gradle exit 1 then), so the
+history would have held passes only; and it edited `.git/info/exclude` in the
+user's repository.
+
+**What.** One history, one set of rules. `recording.py` gains
+`record_runs(repo, [(run, expected_tests), …])` (one rebuild for many runs,
+oldest first; `record_run` is now the one-run case) and `refusal()`, the D-053
+rules on their own. `project.py` uses them:
+
+- `list_runs` shows every saved run, newest first, with `candidate` and the
+  refusal reason (unreadable file, another repository, off the first-parent
+  line, an expected test class without a result);
+- `record_saved_runs` adds every eligible saved run to `.codedna/history.db`
+  and rebuilds `history.csv` like D-053 (a CSV CodeDNA did not write is still
+  left unchanged); recording twice is idempotent;
+- `import_run` copies a clone's `results.json` into `.codedna/runs/` bound to
+  this repository, only if its commit exists here, keeping the source path and
+  SHA-256 in `record.json`; it does not record by itself;
+- `run_detail` returns one saved run and its log files.
+
+Expected tests per commit come from the language plugin
+(`plugins.languages.discover_tests`, D-054). Failing runs are evidence;
+partial runs never are. API: `/api/project-history` (read-only),
+`/record`, `/import`, `/run`. Outputs stay ignored through
+`.codedna/.gitignore` (D-053); nothing is written inside `.git`.
+
+**IDE.** A **Project history** view (Ctrl+Shift+Alt+H, or "Open project
+history" in Tests to run) lists the saved runs with their reasons, opens a
+run's outcomes and logs, imports a `results.json` and adds saved runs to the
+history. Codex drafted the view on the laptop; it was moved onto this API (no
+BASE picker: eligibility follows the current branch, as in D-053).
+
+**Not decided here.** The gate (D-041) still decides whether the history is
+good enough.
+
+
+## D-065 — Windows-safe RTPTorrent ancestry queries and audited resume
+
+An RTPTorrent push can list enough commits to exceed Windows CreateProcess's
+command-line limit. `_tips` previously sent every SHA to `merge-base
+--independent`, unlike the importer's other bounded Git requests. Windows raised
+FileNotFoundError/WinError 206; the Git wrapper incorrectly reported missing Git.
+
+Keep the normal independent-tip query up to the existing 400-SHA limit. Above
+that limit, pass the revisions on stdin to `rev-list --parents --stdin`. Among
+the supplied candidates, exactly those never named as a parent in the complete
+reachable ancestry are independent. Walking all ancestors covers gaps between
+candidate commits and merge branches. This preserves the tested-commit rule;
+naively calculating independent tips separately per chunk would not preserve it.
+The Git wrapper distinguishes oversized requests, missing Git, missing working
+directories and other operating-system failures, retaining the original cause.
+
+Offline regression tests cover a real 1,000-commit import with bounded argv,
+branch/merge/gapped/duplicate inputs compared to Git's ordinary independent-tip
+query, and Windows/POSIX launch-error classification. No dependency or statistical
+rule changes. The fixed feature generator, model, gate, project set and protocol
+remain unchanged.
+
+The failed output folder and frozen sources remain intact. Resume into
+`experiments/datasets/confirmatory-windowsfix-2026-10-26` with results destined for
+`experiments/results/rolling-evidence-confirmatory-windowsfix-2026-10-26`.
+Copy and SHA-256-verify the three completed DB/CSV pairs (Cloudify, DSpace,
+SonarQube), configuration and feature-equivalence proof. `resume-provenance.json`
+records parent fingerprints, the two source changes and every reused file hash;
+`resume-code-change.patch` records the technical fix. The continuation creates new
+fingerprints and re-verifies the existing raw cache. No downloads or completed
+feature extractions are repeated. Partial Sling data is not treated as complete.
+
+Written by Codex on the laptop as "D-054"; renumbered because D-054 is the
+Java plugin split and D-058 to D-064 are taken by open PRs.
+
+## D-066 — Use discovered test files and discard obsolete IDE responses
+
+Recommended-test links now request the existing `/api/tests` JSON at the
+selection's immutable HEAD and open its reported file relative to the canonical
+repository. The frontend caches discovery for that selection. It never derives
+a source path from a package name: module layouts, Gradle projects, custom file
+locations and workspaces opened below the Git root must work. Missing locations
+produce an explanation rather than opening an invented path.
+
+A comparison/input generation prevents late recommendation, execution and file
+lookup responses from restoring results for an obsolete comparison, including
+switching away and back. Completed older executions remain available in Project
+History; the view reports where to find them. Consent is checked again against
+the same selection before execution. Build wording now covers Maven and Gradle.
+
+Eight offline Node tests exercise the actual TypeScript widget methods, with a
+throwaway Git repository and mocked core/progress/editor boundaries. They cover
+file navigation, missing paths, obsolete responses, pending consent and duplicate
+analysis clicks. CI runs them after extension compilation. No new dependency,
+core API, language plugin, model or fixed-study change is introduced.
+
+
+Written by Codex on the laptop as "D-053" (renumbered, see D-065).

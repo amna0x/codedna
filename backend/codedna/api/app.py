@@ -53,6 +53,9 @@ from codedna.test_mapping.results import (
     load_results,
 )
 
+from codedna.test_history.project import (import_run, list_runs, record_saved_runs,
+                                           run_detail)
+
 TOKEN_HEADER = "X-CodeDNA-Token"
 LOOPBACK_HOSTS = frozenset({"127.0.0.1", "localhost", "[::1]", "::1"})
 
@@ -122,6 +125,14 @@ class ReplaySourcesRequest(BaseModel):
 
 class ReplayOverviewRequest(ReplaySourcesRequest):
     seed: int | None = None
+
+
+class ImportProjectRunRequest(RepoRequest):
+    source: str
+
+
+class ProjectRunRequest(RepoRequest):
+    run_id: str
 
 
 class PluginInstallRequest(BaseModel):
@@ -293,6 +304,8 @@ def create_app(token: str, *, allow_build: bool = False,
         run,_ = plugin.run_tests(repo,selection['head_commit'],output,allow_build=True,
             selected_tests=[t['test'] for t in selection['selected']],
             maven_command=maven_command,timeout=body.timeout)
+        from codedna.test_mapping.results import save_json
+        save_json(selection, output / 'selection.json')
         # Whole-suite runs become project history so the risk gate can turn on (D-053).
         if selection['skipped']:
             recording = {'recorded':False,'reason':'selected runs are not recorded; '
@@ -310,6 +323,23 @@ def create_app(token: str, *, allow_build: bool = False,
             load_results(_json_file(body.ground_truth, RESULTS_FILE)),
             coverage_map=load_coverage_map(coverage) if coverage else None,
             non_java=body.non_java)
+
+    @app.post("/api/project-history", dependencies=secured)
+    def project_history_(body: RepoRequest) -> dict:
+        """Read-only: saved runs and whether each can be history (D-057)."""
+        return list_runs(body.repo)
+
+    @app.post("/api/project-history/record", dependencies=secured)
+    def record_saved_runs_(body: RepoRequest) -> dict:
+        return record_saved_runs(body.repo)
+
+    @app.post("/api/project-history/import", dependencies=secured)
+    def import_project_run_(body: ImportProjectRunRequest) -> dict:
+        return import_run(body.repo, body.source)
+
+    @app.post("/api/project-history/run", dependencies=secured)
+    def project_run_(body: ProjectRunRequest) -> dict:
+        return run_detail(body.repo, body.run_id)
 
     @app.post("/api/replay", dependencies=secured)
     def replay(body: ReplayRequest) -> dict:

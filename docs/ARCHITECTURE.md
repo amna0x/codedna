@@ -76,6 +76,7 @@ backend/codedna/
 │   ├── collection.py      import results.json / opt-in per-commit runs
 │   ├── rtptorrent.py      RTPTorrent importer (real CI results, no builds)
 │   ├── recording.py       full-suite runs kept as .codedna/history.csv (D-053)
+│   ├── project.py         saved runs listed, imported, added to that history (D-057)
 │   └── features.py        leakage-free (commit, test) rows
 └── models/
     ├── metrics.py         APFD, APFDc, recall@budget, time to first failure
@@ -499,3 +500,17 @@ confirmation, preserving the per-request consent check. `run_maven_tests` accept
 optional discovered test IDs, includes nested classes, and handles empty lists
 without invoking Maven. The UI displays actual result statuses and evidence
 without implementing model/selection logic. See JAVA_WORKFLOW.md.
+
+
+## Windows desktop runtime (D-055)
+
+The Windows installer includes the Python analysis core as a PyInstaller
+one-directory bundle under Electron's `resources/core/`. The Electron main
+entry resolves an explicit executable override, then that bundled executable,
+then the development PATH fallback. The existing Node service still starts a
+loopback-only token-authenticated API and forwards shared JSON; no analysis
+moves into TypeScript. Git and Java build tools remain external.
+
+`scripts/build_desktop_core.py` is build tooling only. Its optional `desktop`
+extra is separate from application dependencies. Generated binaries, dependency
+caches and core file-hash manifests are ignored; datasets are not bundled.

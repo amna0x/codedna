@@ -468,7 +468,9 @@ patterns for one run.
 Every run of the whole suite that CodeDNA starts (IDE **Run**, when nothing
 is skipped) is saved in `.codedna/history.db` and `.codedna/history.csv`
 (D-053). `codedna history record --repo PATH RESULTS` adds a saved
-`results.json`. Partial runs, other branches and uncommitted states are not
+`results.json`; `--saved` instead adds every eligible run under `.codedna/runs`,
+for example selected or older IDE runs (D-057). Partial runs, other branches and
+uncommitted states are not
 recorded, and a `history.csv` you supplied is never overwritten. Risk
 selection turns on only when this history passes the audit, which takes many
 recorded commits with failures; until then it recommends the full suite.

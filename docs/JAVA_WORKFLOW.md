@@ -90,8 +90,11 @@ means no Maven invocation; omitting `--tests` means the full suite.
 
 ## Remaining original scope
 
-The code graph is available through the CLI/API; an interactive IDE graph view,
-Java editor language support and distributable installers remain roadmap work.
-The new workflow completes the risk display/selected execution slice; it does
-not declare all original FYP milestones complete or establish general model
-superiority. Closest-work comparison and supervisor sign-off remain necessary.
+The IDE now includes the interactive graph, history replay, uncommitted-change
+analysis and selected execution. Windows packaging includes the Python core
+(D-055); Git and project build tools remain prerequisites. The packaged core
+has been checked without Python on PATH, including real sample Maven execution.
+Interactive Java editor/progress acceptance and clean-machine installer testing
+remain. See `ide/README.md` for packaging and `docs/ROADMAP.md` for scope.
+This workflow does not establish general model superiority or declare the whole
+FYP complete. Closest-work comparison and supervisor sign-off remain necessary.

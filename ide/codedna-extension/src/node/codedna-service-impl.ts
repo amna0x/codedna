@@ -7,6 +7,7 @@ import { BackendApplicationContribution } from '@theia/core/lib/node';
 import {
     AnalyzeReport, CodeDnaService, CodeDnaStatus, ImpactOptions, ImpactReport, InstalledPlugins, PluginCatalogueView, PluginChange,
     ReplayOverview, ReplaySources, ReplayTimeline,
+    ProjectHistory, RecordedHistory, SavedRun, TestDiscovery,
     SelectionReport, SelectionStrategy, SelectionRun
 } from '../common/codedna-protocol';
 
@@ -52,6 +53,10 @@ export class CodeDnaServiceImpl implements CodeDnaService, BackendApplicationCon
         return { running: true, version: this.version, executable: this.executable };
     }
 
+    tests(repo: string, revision: string): Promise<TestDiscovery> {
+        return this.post('/api/tests', { repo, rev: revision });
+    }
+
     analyze(repo: string, base: string, head: string): Promise<AnalyzeReport> {
         return this.post('/api/analyze', { repo, base, head, level: 'method' });
     }
@@ -77,6 +82,22 @@ export class CodeDnaServiceImpl implements CodeDnaService, BackendApplicationCon
         return this.post('/api/run-selection', {
             repo, base, head, strategy, history_csv: historyCsv || undefined, allow_build: true
         });
+    }
+
+    projectHistory(repo: string): Promise<ProjectHistory> {
+        return this.post('/api/project-history', { repo });
+    }
+
+    recordSavedRuns(repo: string): Promise<RecordedHistory> {
+        return this.post('/api/project-history/record', { repo });
+    }
+
+    importRun(repo: string, source: string): Promise<{ id: string; tests: number; failures: number }> {
+        return this.post('/api/project-history/import', { repo, source });
+    }
+
+    savedRun(repo: string, runId: string): Promise<SavedRun> {
+        return this.post('/api/project-history/run', { repo, run_id: runId });
     }
 
     async replayFolders(): Promise<string[]> {

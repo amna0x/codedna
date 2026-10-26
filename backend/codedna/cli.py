@@ -22,7 +22,7 @@ Usage:
     codedna history collect  --repo PATH --db FILE --output-dir DIR --allow-build
                              [--max-commits N] [--mvn PATH] [--timeout SECONDS]
     codedna history status   --db FILE
-    codedna history record   --repo PATH RESULTS
+    codedna history record   --repo PATH (RESULTS | --saved)
     codedna history import-rtptorrent --dataset DIR (--project NAME --db FILE | --list)
                              [--max-commits N]
     codedna history evaluate --db FILE [--repo PATH] [--rankers NAME ...]
@@ -254,9 +254,13 @@ def build_parser() -> argparse.ArgumentParser:
         help="Add a full-suite run to REPO/.codedna/history.csv (nothing is built).",
         description="Stores a complete run of the whole suite at a commit on the current "
                     "branch as project history for risk selection (D-053). Incomplete "
-                    "runs and other branches are refused with a reason.")
+                    "runs and other branches are refused with a reason. --saved adds "
+                    "every eligible run saved under REPO/.codedna/runs (D-057).")
     record.add_argument("--repo", required=True, help="Path to a local Git repository.")
-    record.add_argument("results", help="results.json file or run directory.")
+    recorded = record.add_mutually_exclusive_group(required=True)
+    recorded.add_argument("results", nargs="?", help="results.json file or run directory.")
+    recorded.add_argument("--saved", action="store_true",
+                          help="Add every eligible saved run of REPO instead.")
 
     rtp = history_commands.add_parser(
         "import-rtptorrent",
@@ -558,6 +562,11 @@ def _record_run(args: argparse.Namespace) -> int:
     from codedna.test_history.recording import record_run
     from codedna.test_mapping.results import RESULTS_FILE, load_results
 
+    if args.saved:
+        from codedna.test_history.project import record_saved_runs
+        report = record_saved_runs(args.repo)
+        _write_json(report, None)
+        return EXIT_OK if report["recorded_runs"] else EXIT_ANALYSIS_ERROR
     path = Path(args.results)
     run = load_results(path / RESULTS_FILE if path.is_dir() else path)
     repo = resolve_repository(args.repo)
