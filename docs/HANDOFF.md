@@ -78,7 +78,7 @@ Node tests pass. The simplest route is to merge this one PR (§3.1).
 
 ---
 
-## 0.5 Where Claude stopped — resume here (kept current; last update 2026-10-26 09:20Z)
+## 0.5 Where Claude stopped — resume here (kept current; last update 2026-10-26 09:25Z)
 
 If Claude ran out mid-task, start from this list. Check each branch on
 GitHub first: newer commits may have landed after this was written.
@@ -88,7 +88,7 @@ GitHub first: newer commits may have landed after this was written.
 | **Integration of all PRs** | this file's PR | `claude/project-thread-lo3rpw` | — | done and tested (475 passed with Maven, 8 Windows-only skips), includes #18's B13 commits up to `cec75ff` | if any PR branch below got new commits, `git merge origin/<branch>` into this branch, resolve, `python -m pytest --run-maven`, push |
 | **B13 tuned gate, B12f and B11 reruns on the 9 confirmatory projects** | novelty thread, running on the laptop | `claude/project-thread-71arlo` (#18's branch) in worktree `C:\Users\hp\codedna-b13`, data copied to `C:\Users\hp\codedna-b13-data\<project>\dataset.csv` | `experiments/results/tuned-gate-confirmatory-2026-10-26/`, `crc-conditional-confirmatory-2026-10-26/`, `pts-check-confirmatory-2026-10-26/` (protocol for B13: commit `2ac7ac7` on that branch) | started 09:11Z; may take hours | if the laptop slept, rerun the same commands from the worktree (they resume per project): `$env:PYTHONPATH="C:\Users\hp\codedna-b13\backend"; $env:OMP_NUM_THREADS="1"` then `python scripts/run_tuned_gate_check.py C:\Users\hp\codedna-b13-data --out experiments/results/tuned-gate-confirmatory-2026-10-26`, then `run_crc_check.py ... --conditional --out experiments/results/crc-conditional-confirmatory-2026-10-26`, then `run_pts_check.py ... --out experiments/results/pts-check-confirmatory-2026-10-26`. Commit only those three folders on that branch and push (no force). **B13 is exploratory** (designed after seeing #20). **Read the B12f 9-project verdict by hand:** that branch's `run_crc_check.py` still uses the 3-of-4 rule; apply 7 of 9 (§6.1) |
 | After those results land | whoever merges | `claude/project-thread-lo3rpw` | — | not started | `git merge origin/claude/project-thread-71arlo` into this branch (expect `run_crc_check.py` conflicts: keep this branch's `required_keeps`, `--protocol` and the `codedna_java.live` import), rerun tests, push; then write `FINDINGS.md` for each folder and report §4.12 |
-| Merging into main | owner | — | — | waiting on the owner | §3.2 (one PR) or §3.3 (one by one); click-by-click below |
+| Merging into main | owner via GPT/Codex on the laptop (owner chose this, 09:17Z) | `claude/project-thread-lo3rpw` = PR #21 | — | not started; Claude did not merge | paste the §17.1 prompt to Codex, or click PR #21's merge button (below) |
 | Laptop clean-up | owner at the laptop | main checkout | backup `C:\Users\hp\codedna-backup-2026-10-26\` | GPT edits not yet stashed | §4.1 command; **only after the B13 run above finishes** run §4.2–4.4 |
 | Everything else | Codex / next agent | new branch per task | — | not started | §17 prompt, task list at the end of §17 |
 
@@ -995,3 +995,61 @@ Suggested first tasks for Codex, in order (each is self-contained):
 5. §6.3: B12f in the live product (only after §6.2's decision).
 6. §6.5: end-to-end demo script.
 7. §7 bug 2 and 3: Python/mixed-repo brake fallbacks.
+
+### 17.1 Ready-to-paste prompt for GPT/Codex: do the merges
+
+Paste this to Codex on the laptop. It merges everything through the one
+integration branch with plain Git (Codex cannot use the GitHub website;
+pushing the merge to `main` makes GitHub mark PR #21 and #15–#20 as merged).
+
+```text
+Task: merge CodeDNA's open work into main. Repo:
+C:\Users\hp\OneDrive\Documents\GitHub\codedna. Stop and report at the first
+step that does not look as described. Never use reset --hard, clean,
+checkout -- ., stash pop, rebase or force push. Never commit any file you
+did not create in this task.
+
+1. Wait until no CodeDNA analysis job is running (check the PowerShell
+   windows; the B13/B12f/B11 run in C:\Users\hp\codedna-b13 must be finished
+   and pushed). Do not touch C:\Users\hp\codedna-b13.
+2. In the repo: `git status --short`. If it lists modified/untracked files
+   (the old GPT edits), set them aside, keeping the confirmatory results:
+   git stash push -u -m "GPT laptop edits, set aside 2026-10-26" -- . ":(exclude)experiments/results/rolling-evidence-confirmatory-windowsfix-2026-10-26"
+   Then `git status --short` must be empty or show only that results folder.
+   Never pop or apply this stash.
+3. `git fetch origin`
+4. `git log --oneline origin/main..main` — if it lists 97c3be7 (graphify
+   output, email blocked by GitHub), run
+   `git branch keep/graphify-97c3be7 97c3be7` then `git reset --keep origin/main`.
+   If it lists anything else, STOP and report.
+5. `git switch main` then `git merge --ff-only origin/main`.
+6. Check the integration branch is up to date with every PR branch. For each
+   of: claude/project-thread-dfhix3, claude/project-thread-71arlo,
+   claude/java-plugin-split, claude/project-thread-info38,
+   claude/python-plugin, claude/confirmatory-results-2026-10-26 run
+   `git merge-base --is-ancestor origin/<branch> origin/claude/project-thread-lo3rpw; echo $LASTEXITCODE`
+   0 = included. If any prints 1, that branch got new commits: make a local
+   branch `git switch -c integrate-update origin/claude/project-thread-lo3rpw`,
+   `git merge --no-ff origin/<branch>`, resolve conflicts following
+   docs/HANDOFF.md §3.3/§3.4 (on 71arlo results: keep the integration
+   branch's run_crc_check.py and the `codedna_java.live` imports), run the
+   tests (step 8), and use `integrate-update` instead of
+   origin/claude/project-thread-lo3rpw in step 7.
+7. `git merge --no-ff origin/claude/project-thread-lo3rpw -m "Merge PR #21: integrate PRs #15-#20, fixes, handoff blueprint"`
+   (no conflicts are expected; if there are, STOP and report).
+8. Reinstall and test:
+   .venv\Scripts\python -m pip install -e ".[ml,api,dev]" -e plugins\codedna-java -e plugins\codedna-python
+   .venv\Scripts\python -m pytest --run-maven -q
+   (set up Java/Maven from C:/Users/hp/.codex/tools/java-maven.json as in
+   MEMORY.md). Expect about 475+ passed, 0 failed. If anything fails, STOP,
+   do not push, report the failures.
+9. `git push origin main` (normal push, no force). If GitHub refuses it
+   (branch protection), push the merge to a branch instead and report:
+   `git push origin main:claude/merge-21-local`.
+10. Close PR #8 on GitHub (the owner can do this by hand: "Included in #16").
+11. Rebuild: `start.bat` (installs plugins, rebuilds the IDE), then
+    `& "C:\Users\hp\.codex\tools\graphify\Scripts\graphify.exe" update .`
+    and commit graphify-out with the owner's GitHub no-reply email.
+12. Report: the pushed SHA of main, `git log --oneline -8`, the pytest
+    summary line, and `git stash list`.
+```
