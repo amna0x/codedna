@@ -297,6 +297,8 @@ export interface CatalogueVersion {
     builtin: boolean;
     url: string | null;
     sha256: string | null;
+    /** Whether this CodeDNA core can load it (decided by the core). */
+    compatible?: boolean;
 }
 
 export interface CataloguePlugin {
@@ -319,5 +321,8 @@ export interface PluginChange {
     version?: string;
     sha256?: string;
     status: string;
+    /** Set after an update or removal: the old plugin code stays loaded until the server restarts. */
+    restart_required?: boolean;
+    previous_version?: string;
     installed: InstalledPlugins;
 }

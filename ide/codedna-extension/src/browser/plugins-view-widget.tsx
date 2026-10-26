@@ -4,7 +4,7 @@ import { ConfirmDialog } from '@theia/core/lib/browser/dialogs';
 import { ProgressService } from '@theia/core/lib/common/progress-service';
 import { ReactWidget } from '@theia/core/lib/browser/widgets/react-widget';
 import {
-    CataloguePlugin, CatalogueVersion, CodeDnaService, InstalledPlugins, PluginCatalogueView
+    CataloguePlugin, CatalogueVersion, CodeDnaService, InstalledPlugins, PluginCatalogueView, PluginChange
 } from '../common/codedna-protocol';
 import { withProgress } from './progress';
 import { Chip, ErrorNotice, Spinner } from './ui';
@@ -89,13 +89,16 @@ export class PluginsViewWidget extends ReactWidget {
             `${plugin.name} is removed.`);
     }
 
-    protected async change(label: string, action: () => Promise<{ installed: InstalledPlugins }>, done: string): Promise<void> {
+    protected async change(label: string, action: () => Promise<PluginChange>, done: string): Promise<void> {
         this.loading = true;
         this.error = this.message = undefined;
         this.update();
         try {
-            this.installed = (await withProgress(this.progress, label, action)).installed;
-            this.message = done;
+            const result = await withProgress(this.progress, label, action);
+            this.installed = result.installed;
+            this.message = result.restart_required
+                ? `${done} Restart CodeDNA (close it and run start.bat again) so the change takes effect.`
+                : done;
         } catch (error) {
             this.error = errorText(error);
         } finally {
@@ -164,8 +167,8 @@ export class PluginsViewWidget extends ReactWidget {
 
     protected renderEntry(plugin: CataloguePlugin): React.ReactNode {
         const installed = this.installed?.plugins.find(p => p.name === plugin.id);
-        const core = this.installed?.api_version ?? '';
-        const usable = plugin.versions.filter(v => compatible(v.api_version, core))
+        const core = this.installed?.api_version ?? '?';
+        const usable = plugin.versions.filter(v => v.compatible === true)
             .sort((a, b) => compareVersions(b.version, a.version));
         const latest = usable[0];
         let action: React.ReactNode;
@@ -195,13 +198,6 @@ export class PluginsViewWidget extends ReactWidget {
 
 function errorText(error: unknown): string {
     return error instanceof Error ? error.message : String(error);
-}
-
-/** Same rule as the core (codedna.plugins.base.api_compatible): same major, no newer minor. */
-export function compatible(plugin: string, core: string): boolean {
-    const [major, minor] = plugin.split('.').map(Number);
-    const [coreMajor, coreMinor] = core.split('.').map(Number);
-    return major === coreMajor && minor <= coreMinor;
 }
 
 export function compareVersions(a: string, b: string): number {

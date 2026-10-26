@@ -117,9 +117,14 @@ def select_tests(repo_path: str | Path, base: str, head: str, strategy: str, *,
                           f"{' and others' if len(non_java_changes) > 1 else ''}); "
                           "falling back to retest-all")
     elif strategy == "dependency":
-        impact = compute_impact(repo, base_sha, head_sha)
+        impact = compute_impact(repo, base_sha, head_sha, changes=changes, registry=registry)
         for candidate in impact.candidate_tests:
             pick(candidate["type"].removeprefix("type:"), candidate["reason"])
+        if impact.unanalysed_changes and non_java == "retest-all":
+            # Impact could not follow these changes, so no test may be left out.
+            first = impact.unanalysed_changes[0]["path"]
+            for test_id in universe:
+                pick(test_id, f"impact not analysed for {first}; falling back to retest-all")
     else:
         if coverage_map.commit != base_sha:
             warnings.append(f"coverage map is from commit {coverage_map.commit[:12]}, not BASE "

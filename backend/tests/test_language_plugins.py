@@ -132,3 +132,87 @@ def test_the_core_never_imports_the_java_plugin():
                             check=False)
     assert result.returncode == 0, result.stderr
     assert result.stdout.strip() == "ok"
+
+
+class _Api10Java:
+    """The Java plugin as an API 1.0 plugin: no ``type_kinds``, no ``attach_declarations``."""
+
+    name = "java"
+    display_name = "Java (API 1.0)"
+    version = "0.9"
+    api_version = "1.0"
+    file_suffixes = (".java",)
+
+    def __init__(self):
+        from codedna_java import JavaPlugin
+        self._real = JavaPlugin()
+
+    def handles(self, path):
+        return self._real.handles(path)
+
+    def parse(self, source):
+        return self._real.parse(source)
+
+    def build_graph(self, repo, commit, *, include_members=True, cache=None):
+        return self._real.build_graph(repo, commit, include_members=include_members, cache=cache)
+
+    def discover_tests(self, repo, commit):
+        return self._real.discover_tests(repo, commit)
+
+    def run_tests(self, *args, **kwargs):
+        return self._real.run_tests(*args, **kwargs)
+
+
+@pytest.fixture
+def api10_java(monkeypatch):
+    class Entry:
+        name = "java"
+
+        def load(self):
+            return _Api10Java
+
+    monkeypatch.setattr("codedna.plugins.registry.entry_points", lambda group: [Entry()])
+
+
+def test_an_api_1_0_plugin_is_loaded_and_says_changes_stay_at_file_level(api10_java, change):
+    repo, base, head = change
+
+    report = analyze_changes(repo.path, base, head)
+
+    assert "java" in load_plugins().plugins
+    assert all(c.java is None for c in report.changed_files)
+    assert any("API 1.0" in w and "1 changed file(s) stay at file level" in w
+               for w in report.warnings)
+
+
+def test_impact_with_an_api_1_0_plugin_is_unknown_not_empty(api10_java, change):
+    from codedna.impact_analysis import compute_impact
+    from codedna.selection import select_tests
+
+    repo, base, head = change
+
+    impact = compute_impact(repo.path, base, head)
+    java = [u for u in impact.unanalysed_changes if u["path"].endswith("Core.java")]
+    assert java and "plugin API 1.0" in java[0]["reason"]
+    assert any("plugin API 1.0" in w for w in impact.warnings)
+
+    # Only the Java file changes, so the README cannot trigger the fallback.
+    repo.write("src/main/java/a/Core.java", FILES["src/main/java/a/Core.java"].replace("1", "3"))
+    head2 = repo.commit("java only")
+    selection = select_tests(repo.path, head, head2, "dependency")
+    assert selection.selected_ids == {"a.CoreTest"}
+    assert "falling back to retest-all" in selection.selected[0].reasons[0]
+
+
+def test_load_problems_of_other_languages_are_not_blamed_on_java(monkeypatch):
+    class Broken:
+        name = "javascript"
+
+        def load(self):
+            raise ImportError("No module named 'esprima'")
+
+    monkeypatch.setattr("codedna.plugins.registry.entry_points", lambda group: [Broken()])
+
+    with pytest.raises(PluginMissingError) as error:
+        require("java", load_plugins())
+    assert "esprima" not in str(error.value)

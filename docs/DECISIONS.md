@@ -1115,11 +1115,30 @@ D-018/D-024: the core has no built-in language and no Tree-sitter dependency.
   `pip install -e plugins/codedna-java` (start.bat does it once for an
   existing `.venv`). The catalogue lists Java as bundled (`builtin: true`,
   package `codedna-java`, API 1.1); no wheel is published while the repository
-  is private (D-048).
-- **Manager:** catalogue wheels are installed with `--no-deps`, so the manager
-  runs `pip check` afterwards. If the plugin's own dependencies are missing it
-  is uninstalled again and the missing packages are named. An unreachable
-  catalogue is a normal `CatalogueError`, not a crash.
+  is private (D-048). This is not a D-020 catalogue install: the plugin's
+  code comes from the checked-out repository itself, like `pip install -e
+  backend`, and its dependencies (Tree-sitter) are resolved from PyPI by pip
+  exactly as the core's own are, pinned by `pyproject.toml` ranges but not by
+  hash. D-020's checksum and exact-version rules apply to wheels fetched from
+  the catalogue, which is the only path that downloads plugin code.
+- **Manager:** catalogue wheels are installed with `--no-deps`. Before the
+  real install the manager runs a `pip install --dry-run --no-index` of the
+  verified wheel; if the plugin's dependencies are not already installed it
+  stops there, names them and changes nothing. After installing it still runs
+  `pip check`: a fresh install with unmet dependencies is uninstalled again,
+  but an update is never rolled back by uninstalling, because that would also
+  remove the version that worked; the error says so. Python cannot reload a
+  plugin module safely, so an update or removal returns
+  `restart_required: true` and the IDE asks for a restart of the CodeDNA
+  server. An unreachable catalogue is a normal `CatalogueError`, not a crash.
+- **Review fixes (PR #16):** an API 1.0 plugin reports no type kinds, so
+  impact marks its changed files as not analysed and `dependency` selection
+  falls back to retest-all instead of silently picking no tests; a plugin
+  without `attach_declarations` adds a warning; `require` only shows load
+  problems of the requested language's entry point; the catalogue endpoint
+  adds `compatible` to each version so the IDE no longer re-implements the
+  API check; and `dependency` selection reuses the change report instead of
+  analysing the commits twice.
 - **API and IDE:** `GET /api/plugins/catalogue`, `POST /api/plugins/install`
   and `POST /api/plugins/remove`. Install and remove need `"confirm": true`,
   and versions must be exact. The IDE's "Language plugins" view shows
