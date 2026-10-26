@@ -263,7 +263,7 @@ def _run_group(task) -> None:
 
 def _run_instance(data, work, repo_url, manifest, instance) -> list[dict]:
     from codedna.selection.baselines import select_tests
-    from codedna.test_mapping.discovery import discover_tests_for_commit
+    from codedna_java.discovery import discover_tests_for_commit
 
     owner, rest = instance.split("__", 1)
     name = rest.rsplit("-", 1)[0]

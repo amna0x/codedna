@@ -26,7 +26,7 @@ import random
 import sys
 from pathlib import Path
 
-from codedna.dependency_graph.builder import build_graph
+from codedna_java.builder import build_graph
 from codedna.git_analysis.git import resolve_commit, resolve_repository, run_git_bytes
 
 FIELDS = ["row", "confidence", "kind", "source", "target", "evidence_file", "evidence_line",

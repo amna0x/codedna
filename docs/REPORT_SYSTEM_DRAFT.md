@@ -245,7 +245,7 @@ project, rather than extra failures caught.
 | F7 | Never skip tests the project marks as must-run | `selection/policy.py`, D-050 |
 | F8 | Store commit history and test outcomes; build leakage-free feature rows | `test_history`, D-021 to D-023 |
 | F9 | Train, calibrate and evaluate failure models; run the study policies B0 to B10 | `models`, `calibration`, D-022, D-025 to D-027, D-034 to D-037 |
-| F10 | Give a live risk recommendation only after a target-project audit, otherwise the full suite | `selection/live.py`, `plugins/java_live.py`, D-041 |
+| F10 | Give a live risk recommendation only after a target-project audit, otherwise the full suite | `selection/live.py`, `codedna_java/live.py` (plugin), D-041 |
 | F11 | Run the selected tests only after explicit consent, and keep complete runs as project history | `test_mapping/maven.py`, D-014, D-053 |
 | F12 | Show changes, impact graph, tests to run with risk, and history replay in an IDE | `ide/`, D-019, D-043, D-049, D-051 |
 | F13 | Accept further languages as plugins behind a fixed interface | `plugins/`, D-018, D-024 |

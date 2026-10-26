@@ -15,7 +15,7 @@ from pathlib import Path
 from codedna.models.experiment import _outcomes
 from codedna.models.rankers import order_by_baseline
 from codedna.models.uncertainty import metrics
-from codedna.plugins.java_live import LIVE_FEATURES
+from codedna_java.live import LIVE_FEATURES
 from codedna.selection import conformal
 from codedna.selection.live import fit_audited
 from codedna.selection.risk import RiskPolicy, decide
@@ -25,7 +25,7 @@ ALPHA = .05
 CODE = ['scripts/run_crc_check.py', 'docs/CRC_STOP_PROTOCOL.md',
         'backend/codedna/selection/conformal.py', 'scripts/run_rolling_evidence.py',
         'backend/codedna/selection/live.py', 'backend/codedna/selection/risk.py',
-        'backend/codedna/plugins/java_live.py', 'backend/codedna/models/rankers.py',
+        'plugins/codedna-java/codedna_java/live.py', 'backend/codedna/models/rankers.py',
         'backend/codedna/models/uncertainty.py', 'backend/codedna/calibration/calibrators.py',
         'backend/codedna/test_history/features.py', 'scripts/run_study.py',
         'docs/CRC_CONDITIONAL_PROTOCOL.md']
