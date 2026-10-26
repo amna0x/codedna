@@ -92,7 +92,7 @@ def fetch(data: Path) -> None:
         # The S3 harness logs do not show the base commit when the test patch only adds
         # files; the newer harness behind the GitHub-hosted logs prints `git diff <base>`.
         known = target / "test_output_head.txt"
-        script = (target / "eval.sh").read_text(encoding="utf-8") if (target / "eval.sh").exists() else ""
+        script = _read_exact(target / "eval.sh") if (target / "eval.sh").exists() else ""
         try:
             base_commit(script, known.read_text(encoding="utf-8", errors="replace")
                         if known.exists() else "")
@@ -271,7 +271,7 @@ def _run_instance(data, work, repo_url, manifest, instance) -> list[dict]:
     submissions = sorted(s for s, v in manifest["submissions"].items() if instance in v["instances"])
     try:
         folder = data / "instances" / instance
-        script = (folder / "eval.sh").read_text(encoding="utf-8")
+        script = _read_exact(folder / "eval.sh")
         head = (folder / "test_output_head.txt").read_text(encoding="utf-8", errors="replace")
         if (folder / "test_output_alt.txt.gz").exists():
             head += gzip.decompress((folder / "test_output_alt.txt.gz").read_bytes()).decode(
@@ -307,7 +307,7 @@ def _pair(data, repo, submission, instance, repository, base, t_commit, tests_pa
     if not report_file.exists() or not patch_file.exists():
         return _row(submission, instance, repository, "no_patch")
     report = json.loads(report_file.read_text(encoding="utf-8")).get(instance, {})
-    patch = patch_file.read_text(encoding="utf-8", errors="replace")
+    patch = _read_exact(patch_file)
     if (report.get("patch_is_None") or not report.get("patch_successfully_applied")
             or report.get("infra_failure") or not patch.strip()):
         return _row(submission, instance, repository, "excluded_by_harness")
@@ -361,14 +361,14 @@ def _state(repo: Path, base: str, agent_patch: str | None, tests_patch: str, mes
     patches = repo / ".git" / "codedna-study"
     patches.mkdir(exist_ok=True)
     if agent_patch is not None:
-        (patches / "agent.diff").write_text(agent_patch, encoding="utf-8")
+        (patches / "agent.diff").write_bytes(agent_patch.encode("utf-8", "surrogateescape"))
         _git(repo, "apply", "--whitespace=nowarn", str(patches / "agent.diff"))
         for path in patch_paths(tests_patch):
             if _git(repo, "ls-tree", "--name-only", base, "--", path).strip():
                 _git(repo, "checkout", base, "--", path)
             elif (repo / path).exists():
                 (repo / path).unlink()
-    (patches / "tests.diff").write_text(tests_patch, encoding="utf-8")
+    (patches / "tests.diff").write_bytes(tests_patch.encode("utf-8", "surrogateescape"))
     _git(repo, "apply", "--whitespace=nowarn", str(patches / "tests.diff"))
     _git(repo, "add", "-A")
     _git(repo, *IDENTITY, "commit", "--quiet", "--no-verify", "--allow-empty", "-m", message)
@@ -419,6 +419,11 @@ def summarise(rows: list[dict]) -> dict:
         "by_submission": {s: block([r for r in analysed if r["submission"] == s])
                           for s in sorted({r["submission"] for r in analysed})},
     }
+
+
+def _read_exact(path: Path) -> str:
+    """File text with line endings and undecodable bytes kept, so patches apply as published."""
+    return path.read_bytes().decode("utf-8", "surrogateescape")
 
 
 def _git(repo: Path, *args: str) -> str:

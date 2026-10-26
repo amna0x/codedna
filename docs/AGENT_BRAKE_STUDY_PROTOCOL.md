@@ -130,3 +130,9 @@ whose base commit cannot be fetched. All exclusions are counted.
   verdict gaps in D-059. They were fixed, everything was committed, and the
   run was restarted from scratch on that commit, which `summary.json`
   records (`codedna_commit`).
+- 2026-10-26, during the third run (no summary computed): patches were read
+  as text, which turns CRLF line endings into LF, so a patch for a file with
+  CRLF endings could fail to apply (one instance, gson-2479, has such a
+  test patch; Windows CI also caught it). Patches are now kept byte-exact,
+  and the run was restarted from scratch.
+
