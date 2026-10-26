@@ -12,7 +12,7 @@ from codedna.api.app import create_app
 from codedna.git_analysis.git import CodeDNAGitError
 from codedna.test_history.features import Dataset
 from codedna.test_history.project import (ProjectHistoryError, import_run, list_runs,
-                                          record_saved_runs, run_detail)
+                                          load_saved_run, record_saved_runs, run_detail)
 from codedna.test_history.recording import HISTORY_CSV, record_run
 from codedna.test_mapping.results import TestClassResult, TestRunResult
 
@@ -165,3 +165,23 @@ def test_cli_records_saved_runs(project, capsys):
     save(repo, "run", run_of(repo, first))
     assert main(["history", "record", "--repo", str(repo.path), "--saved"]) == EXIT_OK
     assert json.loads(capsys.readouterr().out)["recorded_runs"] == 1
+
+
+@pytest.mark.parametrize("tool", ["pytest", "maven+pytest", "gradle"])
+def test_saved_runs_of_any_language_plugin_are_readable(project, tool):
+    repo, first, _ = project
+    run = run_of(repo, first)
+    run.tool = tool
+    path = save(repo, f"tool-{tool}", run) / "results.json"
+    loaded, _ = load_saved_run(path)
+    assert loaded.tool == tool
+
+
+@pytest.mark.parametrize("tool", ["", "Maven", "maven+", "maven pytest"])
+def test_saved_run_without_a_runner_name_is_refused(project, tool):
+    repo, first, _ = project
+    run = run_of(repo, first)
+    run.tool = tool
+    path = save(repo, f"bad-{len(tool)}-{tool.replace(' ', '_') or 'empty'}", run) / "results.json"
+    with pytest.raises(ValueError, match="test runner"):
+        load_saved_run(path)

@@ -38,6 +38,9 @@ RUNS = ".codedna/runs"
 MAX_RUNS = 1000
 _ID = re.compile(r"^[A-Za-z0-9_-]{1,128}$")
 _SHA = re.compile(r"^(?:[0-9a-fA-F]{40}|[0-9a-fA-F]{64})$")
+# Runner names from the shared result model: one plugin's ("maven", "pytest")
+# or several joined by "+" for a mixed repository ("maven+pytest", D-060).
+_TOOL = re.compile(r"^[a-z][a-z0-9_-]*(?:\+[a-z][a-z0-9_-]*)*$")
 
 
 class ProjectHistoryError(CodeDNAGitError):
@@ -56,8 +59,8 @@ def load_saved_run(path: Path) -> tuple[TestRunResult, str]:
         raise ValueError("run must name an immutable commit SHA")
     if not isinstance(run.repository, str) or not run.repository:
         raise ValueError("run has no repository identity")
-    if run.tool not in ("maven", "gradle"):
-        raise ValueError("only Maven and Gradle results are supported")
+    if not isinstance(run.tool, str) or not _TOOL.fullmatch(run.tool):
+        raise ValueError("run does not name the test runner that produced it")
     if not math.isfinite(float(run.duration_seconds)) or float(run.duration_seconds) < 0:
         raise ValueError("invalid run duration")
     run.duration_seconds = float(run.duration_seconds)
