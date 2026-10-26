@@ -1,0 +1,99 @@
+{
+  "configuration": {
+    "extractor_sha256": "3a9ecfe884716b489e2193b1f379eb1c39eb193fea915b8ccf2d09ca76748572",
+    "projects": [
+      "CloudifySource@cloudify",
+      "DSpace@DSpace",
+      "SonarSource@sonarqube",
+      "apache@sling",
+      "deeplearning4j@deeplearning4j",
+      "eclipse@jetty.project",
+      "facebook@buck",
+      "square@okhttp",
+      "thinkaurelius@titan"
+    ],
+    "raw_dir": "C:\\Users\\hp\\OneDrive\\Documents\\GitHub\\codedna\\experiments\\datasets\\confirmatory\\raw",
+    "schema": 1,
+    "structural": false
+  },
+  "frozen_sources": {
+    "code_sha256": {
+      "backend/codedna/calibration/calibrators.py": "1a182cea9040ecb7258af3e0a1c031e73161e96a15f3e1561b66b67c07023ddc",
+      "backend/codedna/git_analysis/blobs.py": "75ec4df4c63360ed29e688e3991d183b64ccf7c7fce5107a7d4d81215093efa9",
+      "backend/codedna/git_analysis/changes.py": "e17be4af2fb4802bd135a883f3f5712f2e8b692081f006f7c5c00d2cd15dbddb",
+      "backend/codedna/git_analysis/git.py": "e944465ad995d19656cbf8d38bedb556ffd166802da95f3142780b0f706bb864",
+      "backend/codedna/models/experiment.py": "507c87f8f368e69993598deb9a35d76e7b8ed8608bad4cf16b09c003d2c0f90d",
+      "backend/codedna/models/rankers.py": "79c0a6f7fb67803009addffc13086db2762e28b2f829c1cc106299711b239f10",
+      "backend/codedna/models/uncertainty.py": "bfcda9e1da26ea79525b7678a520eb01042ef91da8ca8f8f85bf5786295db792",
+      "backend/codedna/plugins/java_live.py": "d36cc8abbd7aa3d3d4c34f44a046612912c5cb9ab85b8c9ed13eb975f20bce83",
+      "backend/codedna/selection/live.py": "f4d5d1594646302134c8b6d75a37da32043352475ff2b33ccbd21db366e3c38a",
+      "backend/codedna/selection/risk.py": "be5b074d1c43def00305ca62a6909198eaac7e571e65f075e19219bf1bf971a5",
+      "backend/codedna/selection/validation.py": "34f9fcbf7ac0d42ca217ecc214ab4d26dbe60beca0359cf315e58a24bc09a0f3",
+      "backend/codedna/test_history/features.py": "3a9ecfe884716b489e2193b1f379eb1c39eb193fea915b8ccf2d09ca76748572",
+      "backend/codedna/test_history/mining.py": "085e9bb7922af39301b651700a8d7b43d1b05eae340de85aa4b5b545bc03dd6b",
+      "backend/codedna/test_history/rtptorrent.py": "5c33d115872abf99cf722a59c9dbac16ae1945a6a53d3823f79bb4afd5cb6bed",
+      "backend/codedna/test_history/store.py": "1d56599508ae5ba766defbf6846e8993f0108856d30cb3969279cfa13c364474",
+      "backend/codedna/test_mapping/results.py": "112529ee2e58b8b51f3f4c2dec5e558ad4066880e891cf34714c6fd96beb0dad",
+      "docs/CONFIRMATORY_PREPARATION_2026-10-25.md": "94feb7d6249229287ca536787974bff12828315af1697ed688b343b032270183",
+      "docs/EVIDENCE_STUDY_PROTOCOL.md": "338ed8ccb1a4f4acc4a6cc979a1a84d95c60c173ba1e088994523472019ec606",
+      "scripts/continue_confirmatory.py": "f5f8a2ccc0b8f086d4b2519e41e1de4022389c72e3caab135913804788b8c1fd",
+      "scripts/fetch_rtptorrent_subset.py": "2f24d5e6b1633a473e6adce89324d3ab06e0c38601514781af21170ff8c0e296",
+      "scripts/prepare_confirmatory.py": "8a1f26a7280f34f6e59032f73810e34262223b6f836def391de8e152c7c8697d",
+      "scripts/run_rolling_evidence.py": "782ab3d759df9266a411fc82c76e7017cd2dab59f425f1a29a2774e5d09e400b",
+      "scripts/run_study.py": "65f67f18d87f89e87cb899daf487f86a2610dee24694d3c61afa193360b7aa47"
+    },
+    "equivalence_sha256": "c3c8002f7acae0f440d0a1a630cc2502699e8c17da71c8ac734a5c7f7bee758c",
+    "packages": {
+      "numpy": "2.5.4",
+      "scikit-learn": "1.9.1",
+      "scipy": "1.18.1"
+    },
+    "python": "3.12.14"
+  },
+  "live_feature_equivalence": [
+    {
+      "identical": true,
+      "live_features": 15,
+      "original_csv_sha256": "f2c4ce350b858f2daec1ccc1a3f017ca5c2c95e1ff534720155b12b16414ec7b",
+      "project": "hikaricp",
+      "rows": 20206,
+      "seconds": 1.415
+    },
+    {
+      "identical": true,
+      "live_features": 15,
+      "original_csv_sha256": "868dbdd676ce04f2186afd2720ffe196db8603b93e8e338069995826803a3bfe",
+      "project": "littleproxy",
+      "rows": 4575,
+      "seconds": 0.668
+    },
+    {
+      "identical": true,
+      "live_features": 15,
+      "original_csv_sha256": "d2399798e36770594a19a23ea247a99c7d34c6f227d3861fea68f5e1e90a3e65",
+      "project": "jade4j",
+      "rows": 10913,
+      "seconds": 1.314
+    },
+    {
+      "identical": true,
+      "live_features": 15,
+      "original_csv_sha256": "376ccf886d411c25b1ee534fa9bea969dc62f97ad09392c93dcad485eb829199",
+      "project": "wicket-bootstrap",
+      "rows": 34791,
+      "seconds": 3.189
+    }
+  ],
+  "projects": [
+    "CloudifySource@cloudify",
+    "DSpace@DSpace",
+    "SonarSource@sonarqube",
+    "apache@sling",
+    "deeplearning4j@deeplearning4j",
+    "eclipse@jetty.project",
+    "facebook@buck",
+    "square@okhttp",
+    "thinkaurelius@titan"
+  ],
+  "raw_manifest_sha256": "a91269d0ca1b5505794e50b34e82eb574558e03eca33075f583a28762d5aab63"
+}

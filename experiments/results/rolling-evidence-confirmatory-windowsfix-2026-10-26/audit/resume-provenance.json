@@ -1,0 +1,70 @@
+{
+  "reason": "Windows oversized Git argv (WinError 206), previously mislabeled as missing Git",
+  "created_utc": "2026-10-25T21:53:18.232389+00:00",
+  "parent_output": "C:\\Users\\hp\\OneDrive\\Documents\\GitHub\\codedna\\experiments\\datasets\\confirmatory-live-2026-10-25",
+  "new_output": "C:\\Users\\hp\\OneDrive\\Documents\\GitHub\\codedna\\experiments\\datasets\\confirmatory-windowsfix-2026-10-26",
+  "results": "C:\\Users\\hp\\OneDrive\\Documents\\GitHub\\codedna\\experiments\\results\\rolling-evidence-confirmatory-windowsfix-2026-10-26",
+  "changed_code": {
+    "backend/codedna/git_analysis/git.py": {
+      "before": "418329ffe72ec84e30cc9c9de694077bf6455d96f8cc63286c8ac73b93d2d63b",
+      "after": "e944465ad995d19656cbf8d38bedb556ffd166802da95f3142780b0f706bb864"
+    },
+    "backend/codedna/test_history/rtptorrent.py": {
+      "before": "dbcc1f92952bf5920b45816f2b1e43f5fa66b6a77ffe1ce825237934ed14458f",
+      "after": "5c33d115872abf99cf722a59c9dbac16ae1945a6a53d3823f79bb4afd5cb6bed"
+    }
+  },
+  "protocol_unchanged": true,
+  "features_unchanged": true,
+  "reused_projects": [
+    "cloudify",
+    "dspace",
+    "sonarqube"
+  ],
+  "files": {
+    "preparation.json": {
+      "sha256": "cd3becc3812625eddb13df81ed2a2ec524d2a5b154675b6fb8a12eabf3b8bf41",
+      "bytes": 514
+    },
+    "live-feature-equivalence.json": {
+      "sha256": "c3c8002f7acae0f440d0a1a630cc2502699e8c17da71c8ac734a5c7f7bee758c",
+      "bytes": 919
+    },
+    "db/cloudify.db": {
+      "sha256": "6c5356a2dae80bcc32448ef312a9a36f5d37d8d0d077595bb2145fe031d94916",
+      "bytes": 100585472
+    },
+    "db/cloudify-import.json": {
+      "sha256": "ab7d4b138e72876f7ebcb56c202cd1fe547415e7ef2585cf6c4b74f27160b896",
+      "bytes": 776
+    },
+    "datasets/cloudify/dataset.csv": {
+      "sha256": "710e40af316aff83aa4391578df2c1cf0c733b8c533f331b14bd9122a9adc9bb",
+      "bytes": 49346002
+    },
+    "db/dspace.db": {
+      "sha256": "289f7d617a6938b9a5c9642b379cf54467a6849fb9ad4618901399cb10defc6b",
+      "bytes": 43966464
+    },
+    "db/dspace-import.json": {
+      "sha256": "a3cdad105442757c97b98d5d9b9fd0ef92ced8a52984c3fbd6d79419d7bd0fe4",
+      "bytes": 718
+    },
+    "datasets/dspace/dataset.csv": {
+      "sha256": "1933cd2d43d7dd5daccba9599db81b288e810f40a774c57b0401aac36a9f548c",
+      "bytes": 21107944
+    },
+    "db/sonarqube.db": {
+      "sha256": "f4346fc34de61ebb65691c496e4de7cdc8e8fd58783bf4cb85143b3f464c69ba",
+      "bytes": 2176065536
+    },
+    "db/sonarqube-import.json": {
+      "sha256": "57901c7b42e0594955c85f4bb5112954cb1d60f8b207ec0ea5d1272015d2dc17",
+      "bytes": 743
+    },
+    "datasets/sonarqube/dataset.csv": {
+      "sha256": "71345204989db0d621435dac92c59bd97ebdd0799f4e357b52b69ad3905e41bc",
+      "bytes": 787728035
+    }
+  }
+}
