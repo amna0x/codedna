@@ -84,7 +84,9 @@ changes. Every frozen source hash in the study's
     has the `--no-structural` option. The rolling study's 15 live features
     use no structural columns, and the equivalence check reports them
     identical.
-  - `scripts/continue_confirmatory.py`: the resume script, included here.
+  - `scripts/continue_confirmatory.py`: the resume script, which PR #17
+    adds. Re-running the preparation needs PR #17 merged, because the
+    resume script calls the newer `prepare_confirmatory.prepare`.
 - `git_analysis/git.py` changes only the error text for a too-long Git
   command line.
 
