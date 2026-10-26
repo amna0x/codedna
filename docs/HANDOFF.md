@@ -78,7 +78,7 @@ Node tests pass. The simplest route is to merge this one PR (§3.1).
 
 ---
 
-## 0.5 Where Claude stopped — resume here (kept current; last update 2026-10-26 10:40Z)
+## 0.5 Where Claude stopped — resume here (kept current; last update 2026-10-26 09:37Z)
 
 If Claude ran out mid-task, start from this list. Check each branch on
 GitHub first: newer commits may have landed after this was written.
