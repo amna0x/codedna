@@ -72,7 +72,7 @@ blocks had too few failing audit commits). B12f targets exactly that.
 **Merging.** All six open PRs (#15, #18, #16, #17, #19, #20) were merged
 locally in that order on this branch, with the conflicts resolved and four
 cross-PR breakages fixed. Result: `python -m pytest --run-maven` gives
-**470 passed, 8 skipped** (the 8 are Windows-only `start.bat` tests), the
+**475 passed, 8 skipped** (the 8 are Windows-only `start.bat` tests), the
 3 Maven integration tests pass, the IDE extension compiles, and its 3 + 8
 Node tests pass. The simplest route is to merge this one PR (§3.1).
 
@@ -85,7 +85,7 @@ GitHub first: newer commits may have landed after this was written.
 
 | Task | Owner / place | Branch | Status file / output folder | State | How to resume |
 |---|---|---|---|---|---|
-| **Integration of all PRs** | this file's PR | `claude/project-thread-lo3rpw` | — | done and tested (471 passed with Maven) | if any PR branch below got new commits, `git merge origin/<branch>` into this branch, resolve, `python -m pytest --run-maven`, push |
+| **Integration of all PRs** | this file's PR | `claude/project-thread-lo3rpw` | — | done and tested (475 passed with Maven, 8 Windows-only skips), includes #18's B13 commits up to `cec75ff` | if any PR branch below got new commits, `git merge origin/<branch>` into this branch, resolve, `python -m pytest --run-maven`, push |
 | **B13 tuned gate, B12f and B11 reruns on the 9 confirmatory projects** | novelty thread, running on the laptop | `claude/project-thread-71arlo` (#18's branch) in worktree `C:\Users\hp\codedna-b13`, data copied to `C:\Users\hp\codedna-b13-data\<project>\dataset.csv` | `experiments/results/tuned-gate-confirmatory-2026-10-26/`, `crc-conditional-confirmatory-2026-10-26/`, `pts-check-confirmatory-2026-10-26/` (protocol for B13: commit `2ac7ac7` on that branch) | started 09:11Z; may take hours | if the laptop slept, rerun the same commands from the worktree (they resume per project): `$env:PYTHONPATH="C:\Users\hp\codedna-b13\backend"; $env:OMP_NUM_THREADS="1"` then `python scripts/run_tuned_gate_check.py C:\Users\hp\codedna-b13-data --out experiments/results/tuned-gate-confirmatory-2026-10-26`, then `run_crc_check.py ... --conditional --out experiments/results/crc-conditional-confirmatory-2026-10-26`, then `run_pts_check.py ... --out experiments/results/pts-check-confirmatory-2026-10-26`. Commit only those three folders on that branch and push (no force). **B13 is exploratory** (designed after seeing #20). **Read the B12f 9-project verdict by hand:** that branch's `run_crc_check.py` still uses the 3-of-4 rule; apply 7 of 9 (§6.1) |
 | After those results land | whoever merges | `claude/project-thread-lo3rpw` | — | not started | `git merge origin/claude/project-thread-71arlo` into this branch (expect `run_crc_check.py` conflicts: keep this branch's `required_keeps`, `--protocol` and the `codedna_java.live` import), rerun tests, push; then write `FINDINGS.md` for each folder and report §4.12 |
 | Merging into main | owner | — | — | waiting on the owner | §3.2 (one PR) or §3.3 (one by one); click-by-click below |
@@ -303,6 +303,8 @@ are stacked and lose their base if #16 is squashed).
      `plugins/codedna-java/codedna_java/live.py`;
    - `scripts/swebench_brake_study.py`:
      `codedna.test_mapping.discovery` → `codedna_java.discovery`;
+   - `scripts/run_tuned_gate_check.py` (B13, added later on #18's
+     branch): same two fixes as the PTS/CRC scripts;
    - `scripts/sample_graph_edges.py`:
      `codedna.dependency_graph.builder` → `codedna_java.builder`;
    - `docs/REPORT_SYSTEM_DRAFT.md` F10 row: `plugins/java_live.py` →
@@ -421,6 +423,7 @@ conformal test selection (§5.4).
 | Rolling-origin, 4 old projects | exploratory | B10−B3 safety −0.0032 [−0.036, 0.029] — `rolling-evidence-2026-10-24/` |
 | **Confirmatory, 9 new projects** | **confirmatory** | B10−B3 safety −0.0072 [−0.0339, 0.0179]; gate accepted 8/44 blocks, miss 2.52 % (UB 3.35 %) — `rolling-evidence-confirmatory-windowsfix-2026-10-26/summary.json`, `docs/CONFIRMATORY_RESULTS_2026-10-26.md` |
 | PTS baseline B11 | exploratory | B10−B11 safety +0.007 [−0.063, 0.091] — `pts-check-2026-10-25/` |
+| B13 tuned gate (fixed-sequence thresholds) | exploratory, designed after #20 | time −13.0 pp vs gated product [−13.9, −12.2], safety −2.6 pp [−4.2, −1.1], miss ≤ 5 % on 4/4, HikariCP safety 0.914 — `tuned-gate-2026-10-26/`, protocol `docs/TUNED_GATE_PROTOCOL.md` |
 | CRC B12 / B12f | exploratory | B12f safety ≥ 0.95 on 4/4 vs B10 2/4; time −4.7 % [−5.4, −4.0] vs gated product — `crc-conditional-2026-10-26/` |
 | Agent brake on SWE-bench patches | primary + post hoc | 47/143 = full suite; follow-up 108/149, 108/108 without lombok; 33/33 PASS_TO_PASS regressions — `agent-brake-swebench-2026-10-25/FINDINGS.md` |
 | Graph precision | done, AI-labelled | 160/160, Wilson [0.954, 1.00] per label — `graph-precision-2026-10-25/` |
@@ -660,6 +663,12 @@ thread is testing some of these and may send results; check
 | T4 | **Better test discovery** (Ant, data-driven tests, TestNG) so more of the suite is visible and selectable | `docs/DISCOVERY_ANT_PROTOCOL.md` (pre-register lombok as the target; other repos unchanged) | after implementing, rerun `scripts/swebench_brake_study.py run --data D --work W --out experiments/results/agent-brake-swebench-ant-DATE` | lombok discovered classes > 0; no change in the other repos' counts (regression check); labelled post hoc |
 | T5 | **Pool failure evidence across a project's modules or similar projects** for the *audit only* (never for skipping without own evidence) | must be a new pre-registered study; the D-039 transfer study already showed source-only transfer fails | — | only if T1 shows "too few failing audit commits" dominates |
 | T6 | **Commit-level grouping**: treat test classes that always fail together as one unit, so the risk estimate is less noisy | protocol first | `history experiment` variant | calibration error (ECE) and gate acceptance on old 4 projects, then confirmatory |
+
+**Already running:** B13 (tuned gate: try thresholds strict to loose with
+the same Wilson check, keep the loosest that passes; fixed-sequence
+testing) by the novelty thread; see §0.5. Exploratory result on the old 4:
+−13.0 pp time vs the gated product, safety −2.6 pp, HikariCP safety 0.914.
+`scripts/run_tuned_gate_check.py`, `backend/codedna/selection/tuned.py`.
 
 Order: T1 first (cheap, explains everything else), then T2 (already
 built), then T3 (supports the "history builds up" product story), then T4.
