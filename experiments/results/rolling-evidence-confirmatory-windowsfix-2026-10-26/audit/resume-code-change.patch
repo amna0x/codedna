@@ -1,0 +1,57 @@
+diff --git a/backend/codedna/git_analysis/git.py b/backend/codedna/git_analysis/git.py
+index 88b661d..18ab987 100644
+--- a/backend/codedna/git_analysis/git.py
++++ b/backend/codedna/git_analysis/git.py
+@@ -13,6 +13,7 @@ Design rules (see docs/DECISIONS.md, D-003):
+ 
+ from __future__ import annotations
+ 
++import errno
+ import os
+ import shutil
+ import subprocess
+@@ -77,10 +78,17 @@ def _run(repo: Path, args: tuple[str, ...], stdin: bytes | None = None,
+             check=False,
+             env={**os.environ, **env} if env else None,
+         )
+-    except FileNotFoundError as exc:
+-        raise GitCommandError("git executable not found on PATH") from exc
+     except OSError as exc:
+-        raise GitCommandError(f"could not run git: {exc}") from exc
++        # Windows reports an oversized argv as FileNotFoundError/WinError 206,
++        # even though git exists. Preserve that cause instead of blaming PATH.
++        if getattr(exc, "winerror", None) == 206 or exc.errno == errno.E2BIG:
++            message = f"could not run git: command line or path is too long: {exc}"
++        elif isinstance(exc, FileNotFoundError):
++            message = ("git executable not found on PATH" if repo.is_dir()
++                       else f"git working directory does not exist: {repo}")
++        else:
++            message = f"could not run git: {exc}"
++        raise GitCommandError(message) from exc
+ 
+     if completed.returncode != 0:
+         stderr = completed.stderr.decode("utf-8", errors="replace").strip()
+diff --git a/backend/codedna/test_history/rtptorrent.py b/backend/codedna/test_history/rtptorrent.py
+index d468c39..bf58852 100644
+--- a/backend/codedna/test_history/rtptorrent.py
++++ b/backend/codedna/test_history/rtptorrent.py
+@@ -253,7 +253,18 @@ def _commit_meta(repo: Path, shas: list[str]) -> dict[str, tuple[str | None, int
+ 
+ def _tips(repo: Path, shas: list[str]) -> list[str]:
+     """Commits of ``shas`` that are not ancestors of another one in the set."""
+-    return run_git(repo, "merge-base", "--independent", *shas).split()
++    if not shas:
++        return []
++    if len(shas) <= _CHUNK:
++        return run_git(repo, "merge-base", "--independent", *shas).split()
++    # A push can contain thousands of commits. Supplying those as argv exceeds
++    # Windows CreateProcess limits. Walk the same ancestry via stdin instead:
++    # a candidate is independent exactly when no reachable commit names it as
++    # a parent. Walking all ancestors also covers gaps between input commits.
++    output = run_git_bytes(repo, "rev-list", "--parents", "--stdin",
++                           stdin="".join(f"{sha}\n" for sha in shas).encode("ascii"))
++    ancestors = {parent for line in output.splitlines() for parent in line.split()[1:]}
++    return [sha for sha in dict.fromkeys(shas) if sha.encode("ascii") not in ancestors]
+ 
+ 
+ def _push_base(tip: str, pushed: set[str], meta: dict[str, tuple[str | None, int]]) -> str | None:
