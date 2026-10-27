@@ -295,3 +295,22 @@ May start in parallel (Student C) once the analysis JSON formats are stable.
   plugins are included by the desktop bundle builder
 - ⏳ File-level history fallback (co-change) for languages without a plugin,
   always labelled heuristic
+
+
+## Current engineering continuation - 2026-10-27
+
+- D-074 packaged optional-plugin installation is validated. Public catalogue
+  delivery and actual clean-PC acceptance remain open and are deferred to the
+  very end by the owner's latest instruction; older frozen-installation-open
+  wording above is historical.
+- D-075 report corrections and structural-input feasibility are complete.
+- D-076 observed-only, ancestry-scoped research replay and guarded runner are
+  implemented; 15 focused tests pass. Real pilot and full-suite validation are
+  in progress. No favorable safety/savings outcome is assumed.
+- D-077 source check explanations, evidence health and explicit decision export
+  are implemented in the IDE source; TypeScript and 25 UI/workflow tests pass.
+  No new packaged installer has been built for these changes.
+- Next engineering gaps: per-operation analysis cancellation/progress and
+  checkpoint recovery, measured cache behavior, and broader real workflow
+  acceptance. Do not duplicate existing history, selected-test outcomes or
+  conservative fallback. Additional languages remain deferred.

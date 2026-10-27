@@ -1782,3 +1782,40 @@ Proceed protocol-first with a bounded pilot; do not call reused cohorts fresh
 confirmation. The stronger partial-feedback claim needs new evaluation, while
 the bounded retrospective system claim does not depend on a positive study.
 Details: REPORT_REVISION_NOTES_D075.md and PARTIAL_FEEDBACK_FEASIBILITY.md.
+
+
+## D-076 - Observation-isolated development pilot (2026-10-27)
+
+The effective protocol was frozen as v2 in 1965665 before real evaluation.
+Source checkpoint 72e6043 implements independent policy factories, observed-only
+history features, ancestry-scoped complete fit/calibration/audit data, frozen
+decision-time features and exact reference/source universe checks. Audits have a
+fixed schedule and replace reduced execution rather than double-counting cost.
+The runner checkpoints source plans with input/protocol/source hashes and stops
+on mapping mismatches. Fifteen offline kernel/runner tests pass. Real pilot and
+the required full Maven-inclusive suite remain in progress. This reused-data
+pilot is descriptive development evidence, not independent confirmation or a
+product-policy change. See PARTIAL_FEEDBACK_PILOT_PROTOCOL.md.
+
+## D-077 - Explain existing decisions and export bounded evidence (2026-10-27)
+
+The owner authorized engineering improvements after asking how to strengthen
+the novelty feature. Reuse the existing static test-discovery endpoint to show
+declared check names, framework, language and source path at the selected
+commit. Do not generate semantic claims from names or treat static discovery
+as execution. Discard stale responses and reject another commit's details.
+
+Evidence health presents the core's refusal, comparison SHAs and available
+history fingerprint, with recovery guidance rather than weaker gates or a
+promise that more passing tests will validate risk. An explicit save dialog
+exports a versioned, allowlisted decision record containing comparison,
+selection, risk and actual execution statuses. It omits source, environment,
+raw logs and per-case failure messages; local paths and names remain disclosed.
+Canceling the dialog writes nothing. No backend behavior or dependency changes.
+
+TypeScript compilation passed; 25 Node UI/workflow tests pass. The workflow
+test exercises real view methods against a contract fixture, not a real Maven
+build or a clean-PC install. Full Python validation is running against the
+unchanged D-076 backend. Installer rebuilding is deferred by owner instruction.
+Per-operation core cancellation and broader progress/caching improvements are
+still pending; the existing elapsed-time notification is not a percentage.

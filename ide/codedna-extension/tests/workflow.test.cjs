@@ -127,3 +127,47 @@ test('late errors do not overwrite a newer comparison', async () => {
     const suggesting = view.suggest(); await tick(); change(); waiting.reject(new Error('old failure')); await suggesting;
     assert.equal(view.error, undefined); assert.equal(view.loading, false);
 });
+
+
+test('test detail inspection uses the exact comparison snapshot and drops late responses', async () => {
+    const { view, change } = widget(); const selected = report(); view.report = selected;
+    const waiting = deferred();
+    view.codedna.tests = () => waiting.promise;
+    const pending = view.inspectTest(selected, 'example.ExampleTest');
+    change();
+    waiting.resolve({ repository: root, commit: head, tests: [{ id: 'example.ExampleTest', file: relativeFile, methods: ['checksTotal'] }] });
+    await pending;
+    assert.equal(view.inspected, undefined); assert.equal(view.inspecting, false);
+    view.report = selected;
+    view.codedna.tests = async () => ({ repository: root, commit: 'wrong', tests: [] });
+    await view.inspectTest(selected, 'example.ExampleTest');
+    assert.match(view.error, /another commit/); assert.equal(view.inspected, undefined);
+});
+
+
+test('project workflow selects, inspects, confirms execution and retains actual history recording', async () => {
+    const { view, state } = widget(); const selected = report(); const calls = [];
+    view.codedna.select = async (...args) => { calls.push(['select', ...args]); return selected; };
+    view.codedna.tests = async () => ({ repository: root, commit: head,
+        tests: [{ id: 'example.ExampleTest', file: relativeFile, methods: ['checksTotal'] }] });
+    const executed = { selection: selected, results: { tests: [{ id: 'example.ExampleTest', status: 'passed', time: 1,
+        cases: [{ name: 'checksTotal', status: 'passed', time: 1, message: null }] }],
+        warnings: [], exit_codes: [0], failing_tests: [], duration_seconds: 1 },
+        output_dir: '.codedna/runs/run-1', recording: { recorded: true, reason: null, commits_with_results: 1 } };
+    view.codedna.runSelection = async (...args) => { calls.push(['run', ...args]); return executed; };
+    await view.suggest();
+    assert.equal(view.report, selected);
+    await view.inspectTest(selected, 'example.ExampleTest');
+    assert.equal(view.inspected.methods[0], 'checksTotal');
+    state.confirm = async () => false;
+    await view.runSelected(); assert.equal(calls.filter(call => call[0] === 'run').length, 0);
+    state.confirm = async () => true;
+    await view.runSelected();
+    assert.equal(calls.filter(call => call[0] === 'run').length, 1);
+    assert.equal(calls[1][1], root); assert.equal(calls[1][2], selected.base_commit);
+    assert.equal(calls[1][3], head); assert.equal(calls[1][4], 'risk');
+    assert.equal(view.execution, executed); assert.equal(view.execution.recording.recorded, true);
+    assert.equal(view.execution.results.tests[0].cases[0].status, 'passed');
+    assert.equal(view.loading, false);
+    assert.equal(view.report.risk, undefined); // a passing run cannot manufacture risk validation
+});

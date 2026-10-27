@@ -46,7 +46,7 @@ export interface CodeDnaService {
 export interface TestDiscovery {
     repository: string;
     commit: string;
-    tests: { id: string; file: string }[];
+    tests: { id: string; file: string; methods?: string[]; framework?: string; language?: string }[];
 }
 
 export type SelectionStrategy = 'dependency' | 'all' | 'risk';
@@ -171,6 +171,9 @@ export interface SelectionReport {
         status: 'unvalidated' | 'validated_history'; target: number;
         estimated_skip_risk: number | null; proposed_skip_risk: number | null;
         reasons: string[]; note: string;
+        method?: string; analysis_seconds?: number;
+        provenance?: { history_sha256?: string; [key: string]: unknown };
+        conformal?: { note?: string; [key: string]: unknown };
         validation: { commits: number; failing_commits: number; miss_upper_bound: number;
             failure_recall: number | null; accepted: boolean } | null;
     };

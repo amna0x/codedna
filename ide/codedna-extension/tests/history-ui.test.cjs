@@ -7,17 +7,20 @@ const ts = require('typescript');
 
 const createElement = (type, props, ...children) => ({ type, props: props || {}, children: children.flat(Infinity) });
 function load(name) {
-    const source = fs.readFileSync(path.join(__dirname, '../src/browser', name + '.tsx'), 'utf8');
+    const candidate = path.join(__dirname, '../src/browser', name);
+    const source = fs.readFileSync(fs.existsSync(candidate + '.tsx') ? candidate + '.tsx' : candidate + '.ts', 'utf8');
     const code = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS,
         target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.React, experimentalDecorators: true } }).outputText;
     const module = { exports: {} };
     vm.runInNewContext(code, { exports: module.exports, module, setInterval, clearInterval, require(id) {
+        if (id.endsWith('/buffer')) return { BinaryBuffer: { fromString: text => text } };
         if (id.endsWith('/react')) return { createElement };
         if (id.endsWith('/inversify')) return { injectable: () => target => target, inject: () => () => {}, postConstruct: () => {} };
         if (id.endsWith('/react-widget')) return { ReactWidget: class { update() {} } };
         if (id.endsWith('/file-uri')) return { FileUri: { fsPath: uri => uri.path } };
         if (id === './progress') return { withProgress: (_, __, action) => action() };
         if (id === './test-outcomes') return load('test-outcomes');
+        if (id === './decision-evidence') return load('decision-evidence');
         if (id === './plain-language') return { simpleName: x => x, plural: (n, word) => `${n} ${word}`,
             friendlyWarning: x => x, friendlyReason: x => x, packageName: () => '', breakable: x => x };
         if (id === './ui') return { Chip: 'chip', ErrorNotice: 'error', Spinner: 'spinner' };
@@ -93,4 +96,65 @@ test('unvalidated risk remains unvalidated, retains core reason and full-suite r
     assert.match(content, /Risk unvalidated/); assert.match(content, /Run the full suite/);
     assert.ok(content.includes(reason)); assert.match(content, /already contains results/);
     assert.equal(JSON.stringify(report), before);
+});
+
+
+test('test explanation shows source check names and warns that discovery is not execution', () => {
+    const { TestsViewWidget } = load('tests-view-widget'); const view = new TestsViewWidget();
+    view.inspected = { id: 'PriceTest', file: 'tests/PriceTest.java', framework: 'junit5', language: 'java',
+        methods: ['discountIsApplied', 'zeroTotal'] };
+    const report = { repository: 'C:/demo', base_commit: 'a'.repeat(40), head_commit: 'b'.repeat(40),
+        total_tests: 1, selected: [{ test: 'PriceTest', file: 'tests/PriceTest.java', reasons: ['changed test class'] }],
+        skipped: [], warnings: [] };
+    const content = text(view.renderReport(report));
+    assert.match(content, /discount Is Applied/); assert.match(content, /discountIsApplied/);
+    assert.match(content, /tests\/PriceTest.java/); assert.match(content, /does not execute or verify/);
+    assert.match(content, /Explain this test/);
+});
+
+test('evidence guidance preserves refusal and provenance without claiming more data guarantees approval', () => {
+    const { recoverySteps } = load('decision-evidence');
+    const report = { risk: { status: 'unvalidated', reasons: ['History includes another repository, branch or future commits.'] } };
+    const before = JSON.stringify(report);
+    const content = recoverySteps(report).join(' ');
+    assert.match(content, /ending at the comparison base/); assert.match(content, /audit must pass/);
+    assert.equal(JSON.stringify(report), before);
+});
+
+test('diagnostic export omits raw logs, source and failure messages but preserves observed statuses', () => {
+    const { decisionRecord } = load('decision-evidence');
+    const report = { repository: 'C:/demo', base_commit: 'base', head_commit: 'head', strategy: 'risk',
+        total_tests: 1, selected: [{ test: 'PriceTest', reasons: ['required'] }], skipped: [], warnings: [],
+        risk: { status: 'unvalidated', reasons: ['insufficient history'] },
+        source: 'SOURCE_SECRET', environment: { TOKEN: 'TOKEN_SECRET' } };
+    const execution = { output_dir: 'LOG_SECRET', results: { tests: [{ id: 'PriceTest', status: 'failed', time: 1,
+        cases: [{ name: 'discount', status: 'failed', time: 1, message: 'MESSAGE_SECRET' }] }],
+        failing_tests: ['PriceTest'], exit_codes: [1], duration_seconds: 1, logs: 'RAW_SECRET' } };
+    const record = decisionRecord(report, execution, '2026-10-27T00:00:00Z');
+    const content = JSON.stringify(record);
+    assert.match(content, /failed/); assert.match(content, /insufficient history/);
+    for (const secret of ['SOURCE_SECRET', 'TOKEN_SECRET', 'LOG_SECRET', 'MESSAGE_SECRET', 'RAW_SECRET']) {
+        assert.ok(!content.includes(secret));
+    }
+    assert.equal(record.execution.tests[0].cases[0].name, 'discount');
+    assert.match(record.disclosure, /Review before sharing/);
+    assert.equal(decisionRecord(report, undefined).execution, null);
+});
+
+
+test('evidence save requires a chosen destination and propagates write failures', async () => {
+    const { CodeDnaWorkspace } = load('codedna-workspace'); const workspace = new CodeDnaWorkspace();
+    const writes = [];
+    let target;
+    workspace.dialogs = { showSaveDialog: async options => {
+        assert.equal(options.inputValue, 'codedna-decision.json'); return target;
+    } };
+    workspace.files = { writeFile: async (...args) => writes.push(args) };
+    assert.equal(await workspace.saveDecisionEvidence('evidence'), false);
+    assert.equal(writes.length, 0);
+    target = { path: '/chosen/decision.json' };
+    assert.equal(await workspace.saveDecisionEvidence('evidence'), true);
+    assert.equal(writes.length, 1); assert.equal(writes[0][0], target); assert.equal(writes[0][1], 'evidence');
+    workspace.files.writeFile = async () => { throw new Error('read-only destination'); };
+    await assert.rejects(workspace.saveDecisionEvidence('evidence'), /read-only destination/);
 });

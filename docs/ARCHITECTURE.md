@@ -623,3 +623,17 @@ prefers valid optional copies and keeps bundled discovery separate because
 Python metadata otherwise deduplicates distribution names. Updates/removals
 require restart; bundled app files and risk logic are unchanged. Details and
 release constraints: DESKTOP_PLUGIN_INSTALLATION.md.
+
+
+### Decision inspection and evidence export (D-077)
+
+The IDE uses the existing `/api/tests` response to display statically declared
+checks at the selection's head commit. It rejects mismatched snapshots and
+invalidates pending details when the comparison changes. Check names are
+source metadata, not inferred behavioral guarantees. Source navigation opens
+the working copy; the shown discovery metadata is tied to the recorded SHA.
+
+`decision-evidence.ts` only formats existing core JSON and recovery guidance.
+It performs no risk calculation or test-selection logic. The workspace's save
+dialog writes a user-chosen JSON record through Theia FileService. No automatic
+upload, raw logs, source text, environment capture or new API endpoint is added.

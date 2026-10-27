@@ -8,6 +8,7 @@ import { CodeDnaService, SelectionReport, SelectionStrategy, SelectionRun, TestD
 import { CodeDnaComparison } from './comparison';
 import { CodeDnaWorkspace } from './codedna-workspace';
 import { withProgress } from './progress';
+import { decisionRecord, recoverySteps } from './decision-evidence';
 import { TestOutcomes } from './test-outcomes';
 import { breakable, friendlyReason, friendlyWarning, packageName, plural, simpleName } from './plain-language';
 import { Chip, ComparePicker, ErrorNotice, FirstRun, Spinner } from './ui';
@@ -45,6 +46,8 @@ export class TestsViewWidget extends ReactWidget {
     protected reportStrategy: SelectionStrategy = 'risk';
     protected generation = 0;
     protected notice: string | undefined;
+    protected inspected: TestDiscovery['tests'][number] | undefined;
+    protected inspecting = false;
     protected discovery: { report: SelectionReport; result: Promise<TestDiscovery> } | undefined;
 
     @postConstruct()
@@ -64,6 +67,7 @@ export class TestsViewWidget extends ReactWidget {
         this.report = undefined;
         this.execution = undefined;
         this.discovery = undefined;
+        this.inspected = undefined;
         this.error = undefined;
         this.notice = undefined;
         this.update();
@@ -130,24 +134,56 @@ export class TestsViewWidget extends ReactWidget {
         }
     }
 
+    protected async discoverTest(report: SelectionReport, test: string): Promise<TestDiscovery['tests'][number] | undefined> {
+        if (this.report !== report) { return undefined; }
+        if (this.discovery?.report !== report) {
+            this.discovery = { report, result: this.codedna.tests(report.repository, report.head_commit) };
+        }
+        const discovery = await this.discovery.result;
+        if (this.report !== report) { return undefined; }
+        if (discovery.commit !== report.head_commit) {
+            throw new Error('Test details belong to another commit. Suggest tests again.');
+        }
+        const item = discovery.tests.find(entry => entry.id === test);
+        if (!item?.file) { throw new Error(`No source file was discovered for ${test} at this commit.`); }
+        return item;
+    }
+
+    protected async inspectTest(report: SelectionReport, test: string): Promise<void> {
+        if (this.inspecting) { return; }
+        this.inspecting = true;
+        this.update();
+        try {
+            const item = await this.discoverTest(report, test);
+            if (this.report === report) { this.inspected = item; }
+        } catch (error) { this.testDetailError(report, error); }
+        finally { this.inspecting = false; this.update(); }
+    }
+
+    protected testDetailError(report: SelectionReport, error: unknown): void {
+        if (this.report === report) {
+            this.discovery = undefined;
+            this.error = error instanceof Error ? error.message : String(error);
+            this.update();
+        }
+    }
+
     protected async openTest(report: SelectionReport, test: string): Promise<void> {
+        try {
+            const item = await this.discoverTest(report, test);
+            if (item && this.report === report) { await this.workspace.openRepositoryFile(report.repository, item.file); }
+        } catch (error) { this.testDetailError(report, error); }
+    }
+
+    protected async exportEvidence(report: SelectionReport): Promise<void> {
         if (this.report !== report) { return; }
         try {
-            if (this.discovery?.report !== report) {
-                this.discovery = { report, result: this.codedna.tests(report.repository, report.head_commit) };
-            }
-            const discovery = await this.discovery.result;
-            if (this.report !== report) { return; }
-            const file = discovery.tests.find(item => item.id === test)?.file;
-            if (!file) { throw new Error(`No source file was discovered for ${test} at this commit.`); }
-            await this.workspace.openRepositoryFile(discovery.repository, file);
+            const content = JSON.stringify(decisionRecord(report, this.execution), null, 2) + '\n';
+            const saved = await this.workspace.saveDecisionEvidence(content);
+            if (saved && this.report === report) { this.notice = 'Decision evidence saved. Review local paths and test names before sharing.'; }
         } catch (error) {
-            if (this.report === report) {
-                this.discovery = undefined; // allow a retry after a temporary core failure
-                this.error = error instanceof Error ? error.message : String(error);
-                this.update();
-            }
-        }
+            if (this.report === report) { this.error = error instanceof Error ? error.message : String(error); }
+        } finally { this.update(); }
     }
 
     protected render(): React.ReactNode {
@@ -210,7 +246,17 @@ export class TestsViewWidget extends ReactWidget {
                         use HEAD to WORKTREE for a new uncommitted change, or supply history from before the comparison base.
                         The earlier history must still pass its audit.</p>}
                 {!!risk?.reasons.length && <ul>{risk.reasons.map(reason => <li key={reason}>{reason}</li>)}</ul>}
+                <details><summary>Evidence health and next steps</summary>
+                    <p>Project: <code>{report.repository}</code></p>
+                    <p>Evidence must precede base <code>{report.base_commit}</code>. Target: <code>{report.head_commit}</code>.</p>
+                    {risk?.provenance?.history_sha256 && <p>History fingerprint: <code>{risk.provenance.history_sha256}</code></p>}
+                    <ul>{recoverySteps(report).map(step => <li key={step}>{step}</li>)}</ul>
+                    {risk?.note && <p>{risk.note}</p>}
+                    {risk?.conformal?.note && <p>{risk.conformal.note}</p>}
+                </details>
             </section>
+            <button className='cd-button' onClick={() => this.exportEvidence(report)}>Export decision evidence</button>
+            <p className='cd-help'>The export includes local paths, test names and risk evidence. It excludes source code and raw build logs.</p>
             <button className='cd-button' disabled={this.loading || !report.total_tests}
                 onClick={() => this.runSelected()}>
                 {this.loading ? 'Running…' : `Run ${report.selected.length} recommended tests`}
@@ -248,12 +294,22 @@ export class TestsViewWidget extends ReactWidget {
                 <strong>Good to know</strong>
                 <ul>{notes.map(note => <li key={note}>{note}</li>)}</ul>
             </div>}
+            {this.inspected && <section className='cd-notice' aria-label='Discovered test details' aria-live='polite'>
+                <h3>Checks declared in {simpleName(this.inspected.id)}</h3>
+                <p><code>{this.inspected.file}</code> at <code>{report.head_commit.slice(0, 12)}</code></p>
+                <p>{this.inspected.framework ?? 'Framework not reported'}{this.inspected.language ? ` · ${this.inspected.language}` : ''}</p>
+                {this.inspected.methods?.length ? <ul>{this.inspected.methods.map(method => <li key={method}>
+                    <span>{method.replace(/([a-z0-9])([A-Z])/g, '$1 $2').replace(/_/g, ' ')}</span> <code>{method}</code>
+                </li>)}</ul> : <p>No individual check names were reported by static discovery.</p>}
+                <p className='cd-help'>These names come from project source. Read the assertions for exact behavior; discovery does not execute or verify these checks.</p>
+                <button className='cd-button' onClick={() => this.openTest(report, this.inspected!.id)}>Read test source</button>
+            </section>}
             {report.selected.length > 0 && <section aria-label='Run these'>
                 <h3>Run these</h3>
                 <p className='cd-help'>Each item is a test class or module and may contain several checks.
                     Select an item to read its source; after running, inspect its individual outcomes above.</p>
                 <div className='cd-card'>
-                    {report.selected.map(item => <button className='cd-row' key={item.test}
+                    {report.selected.map(item => <div key={item.test}><button className='cd-row'
                         title={`Open ${item.test}`}
                         onClick={() => this.openTest(report, item.test)}>
                         <span className='cd-code'>{simpleName(item.test)}</span>
@@ -264,7 +320,11 @@ export class TestsViewWidget extends ReactWidget {
                         <ul className='cd-reasons'>
                             {unique(item.reasons.map(friendlyReason)).map(r => <li key={r}>{r}</li>)}
                         </ul>
-                    </button>)}
+                    </button>
+                    {item.file && <p className='cd-meta'><code>{item.file}</code></p>}
+                    <button className='cd-button' disabled={this.inspecting} onClick={() => this.inspectTest(report, item.test)}>
+                        {this.inspecting ? 'Loading checks…' : 'Explain this test'}
+                    </button></div>)}
                 </div>
             </section>}
             {report.skipped.length > 0 && <section aria-label='Not selected'>
