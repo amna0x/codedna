@@ -34,9 +34,9 @@
     "progress_bytes_preserved": true
   },
   "published_log_sha256": {
-    "D076-full-suite-2026-10-27.txt": "9639b6effab13d9be8800176e2783c31a13dac0c75271ad872bd5972052c0dd6",
-    "D077-node-tests-2026-10-27.txt": "4aac0336148bc718b7561cd1228329e974f60b8aead7c4a331b245f296421d33",
-    "D077-typescript-2026-10-27.txt": "ed7672f37cf7db4dd5a8a1c0248b468f022684d69398bc305e1385156a1aefb2"
+    "D076-full-suite-2026-10-27.txt": "d6fbfbe9aaa80253166596c84ba11e1a63bef393f7776ce404ed4e861e0c475e",
+    "D077-node-tests-2026-10-27.txt": "d5d4688a1c4a321b9eabbe2342df88de739d6e755ce3780502533187878b7c2a",
+    "D077-typescript-2026-10-27.txt": "09f0f7bd312ae1f8a9062c6d0b4e3480e49760601506bafeed3a7151fd0e4a0d"
   },
   "risk_defaults_changed": false,
   "new_dependencies": false,
@@ -46,5 +46,6 @@
     "UI workflow tests use core-contract fixtures; new installed-app UI is not claimed tested.",
     "Per-operation analysis cancellation is planned, not implemented.",
     "Installer, catalogue delivery and clean-PC work remain deferred."
-  ]
+  ],
+  "published_log_encoding": "UTF-8 with LF line endings, matching committed Git blobs"
 }
