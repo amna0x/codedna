@@ -34,10 +34,12 @@ from __future__ import annotations
 from pathlib import Path
 from uuid import uuid4
 
+from codedna.git_analysis.git import reuse_git_validation
 from codedna.git_analysis.git import WORKTREE, resolve_repository
 from codedna.selection import SelectionError
 
 
+@reuse_git_validation
 def plan(repo_path: str | Path, *, base: str = "HEAD", head: str = WORKTREE,
          risk_target: float = 0.05, must_run: list[str] | None = None,
          language: str | None = None, method: str = "b10") -> dict:

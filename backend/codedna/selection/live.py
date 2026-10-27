@@ -1,4 +1,5 @@
 """Shared target audit and dispatch through the installed language plugin."""
+from codedna.git_analysis.git import reuse_git_validation
 from codedna.calibration.calibrators import Calibrator
 from codedna.models.experiment import _outcomes
 from codedna.models.rankers import MLRanker, order_by_baseline
@@ -30,6 +31,7 @@ def fit_audited(dataset, feature_names, risk_target=.05):
 
 
 
+@reuse_git_validation
 def recommend(repo_path,base,head,*,history_csv=None,risk_target=.05,language='java',must_run=None,
               method='b10'):
     """Dispatch supported risk methods; unsupported/mixed languages run all tests.

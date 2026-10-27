@@ -111,7 +111,9 @@ def recommend(repo_path, base, head, *, history_csv=None, risk_target=.05, must_
         parent = run_git(repo,'rev-parse',result['head_commit']+'^1').strip()
         if parent != result['base_commit']:
             return fallback('Risk validation applies only to the next first-parent change.')
-        changes = extract_changes(repo,base,head)
+        # Features and chosen tests must describe the same immutable snapshot,
+        # even if the editor changes WORKTREE while history is checked.
+        changes = extract_changes(repo,result['base_commit'],result['head_commit'])
         if any(not f.is_java for f in changes.changed_files):
             return fallback('This change includes unsupported non-Java files.')
         ids = [item['test'] for item in result['selected']]

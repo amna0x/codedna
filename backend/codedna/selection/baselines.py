@@ -33,6 +33,7 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 
+from codedna.git_analysis.git import reuse_git_validation
 from codedna.git_analysis.git import resolve_commit, resolve_repository
 from codedna.impact_analysis import compute_impact
 from codedna.plugins import load_plugins
@@ -78,6 +79,7 @@ class SelectionReport:
         return data
 
 
+@reuse_git_validation
 def select_tests(repo_path: str | Path, base: str, head: str, strategy: str, *,
                  coverage_map: CoverageMap | None = None, durations: TestRunResult | None = None,
                  non_java: str = "retest-all", must_run: list[str] | None = None,

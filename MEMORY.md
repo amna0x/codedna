@@ -1,4 +1,23 @@
 # MEMORY.md: handoff notes for the next agent
+## Current engineering - D-079, 2026-10-28
+
+D-076 is finished and committed in 27d9b43; do not resume or rerun it. Raw results,
+360 source mappings, findings, summary and verifier are preserved. The report's
+section 4.13 records no risk-gated reduction and only three failing evaluation
+commits. Last validated source batch: 591 tests, zero skips; Node 27; viewer 8.
+
+D-079 adds operation-local immutable Git validation reuse and fixes Java live
+risk features using a newer WORKTREE than the selected snapshot. Seventy-two
+focused risk/brake tests passed; ten final scope/snapshot checks passed. Three
+real snapshots retain identical selection JSON with four fewer Git launches each.
+Full new Maven-inclusive suite is running; do not claim it passed yet. See pointer
+.diagnostics/d079-full-suite.log. No default/threshold changes or new dependencies.
+
+Next is bounded per-operation cancellation/progress, not more models/languages.
+Read ANALYSIS_JOB_PLAN.md, including frozen-plugin activation pinning across worker
+restart. Installation remains last. MOONSHOT.md belongs to a separate proposal;
+leave it untracked and do not implement it. No new push/merge; preserve stashes.
+
 
 ## Latest continuation - D-076 completed, 2026-10-27
 

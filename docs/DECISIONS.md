@@ -1842,3 +1842,27 @@ reported rather than zero. Structural mode and unsupported changes receive
 appropriate recovery guidance; more passing history is never presented as a
 way to validate an unsupported domain. Core decisions and thresholds are unchanged.
 TypeScript and all 27 Node tests pass after these refinements.
+
+
+## D-079 - Scoped Git validation and immutable risk snapshots (2026-10-28)
+
+Matched parse-cache timings preserved output on three real snapshots but were
+variable. Profiling one selector call attributed 2.430 of 3.887 seconds to 19
+Git subprocesses. Reuse successful repository and full immutable-commit validation
+only inside one analysis operation. Nested calls share a bounded ContextVar
+scope; separate threads, requests, Git environment routing and exception exits
+do not share validation. Mutable refs and WORKTREE remain fresh. A hex-looking
+branch is not an immutable object unless Git resolves that exact object identity.
+No file trees, history outcomes, models or audit acceptance are cached here.
+
+On three saved code snapshots, Git launches fell from 19 to 15, 28 to 24 and
+22 to 18 with identical selection JSON. Local timings were mixed and are not
+claimed as CI speedup. See GIT_VALIDATION_REUSE_MEASUREMENTS_2026-10-28.json.
+
+A deterministic concurrent-edit regression also exposed Java risk features
+being extracted from the original mutable refs after selection had frozen its
+snapshot. Extract features from the selection's immutable base/head commits.
+The new regression failed before the fix and passes after it. User edits remain
+untouched; insufficient-history fallback still applies. Thresholds, model choices
+and defaults are unchanged. Seventy-two focused risk/brake tests and ten final
+scope/snapshot tests pass. Full Maven-inclusive validation is running.

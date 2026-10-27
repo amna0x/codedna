@@ -1,0 +1,94 @@
+{
+  "date": "2026-10-28",
+  "scope": "local development; process counts and output equivalence, not CI speedup",
+  "results": [
+    {
+      "head": "9837cf1e7ef037aecd4d2f7fc4672b445062e3c7",
+      "identical_output": true,
+      "measurements": [
+        {
+          "mode": "unscoped",
+          "git_calls": 19,
+          "seconds": 5.073020900017582,
+          "commands": {
+            "rev-parse": 8,
+            "ls-tree": 6,
+            "cat-file": 3,
+            "diff": 2
+          }
+        },
+        {
+          "mode": "scoped",
+          "git_calls": 15,
+          "seconds": 3.8822333000134677,
+          "commands": {
+            "rev-parse": 4,
+            "ls-tree": 6,
+            "cat-file": 3,
+            "diff": 2
+          }
+        }
+      ]
+    },
+    {
+      "head": "2ba53125028f0a36a6cd69ecf380657bff33e228",
+      "identical_output": true,
+      "measurements": [
+        {
+          "mode": "unscoped",
+          "git_calls": 28,
+          "seconds": 8.798007199977292,
+          "commands": {
+            "rev-parse": 8,
+            "ls-tree": 10,
+            "cat-file": 6,
+            "diff": 2,
+            "show": 2
+          }
+        },
+        {
+          "mode": "scoped",
+          "git_calls": 24,
+          "seconds": 8.157547200011322,
+          "commands": {
+            "rev-parse": 4,
+            "ls-tree": 10,
+            "cat-file": 6,
+            "diff": 2,
+            "show": 2
+          }
+        }
+      ]
+    },
+    {
+      "head": "9dcb652701663205a18b9b3dc6fe384755210f2c",
+      "identical_output": true,
+      "measurements": [
+        {
+          "mode": "unscoped",
+          "git_calls": 22,
+          "seconds": 7.217313300003298,
+          "commands": {
+            "rev-parse": 8,
+            "ls-tree": 6,
+            "cat-file": 3,
+            "diff": 3,
+            "show": 2
+          }
+        },
+        {
+          "mode": "scoped",
+          "git_calls": 18,
+          "seconds": 7.967695300001651,
+          "commands": {
+            "rev-parse": 4,
+            "ls-tree": 6,
+            "cat-file": 3,
+            "diff": 3,
+            "show": 2
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -637,3 +637,14 @@ the working copy; the shown discovery metadata is tied to the recorded SHA.
 It performs no risk calculation or test-selection logic. The workspace's save
 dialog writes a user-chosen JSON record through Theia FileService. No automatic
 upload, raw logs, source text, environment capture or new API endpoint is added.
+
+
+### Per-operation Git validation (D-079)
+
+Selection, risk dispatch and brake planning share a nested, bounded validation
+scope. It memoizes only successful repository resolution and exact immutable
+commit-object validation; it does not cache mutable refs, index/worktree reads,
+source trees, outcomes or risk acceptance. Thread ownership, Git environment keys
+and finally-reset prevent reuse across independent requests. Java risk feature
+extraction uses the already-selected immutable comparison, so edits during
+analysis cannot switch its feature snapshot.
