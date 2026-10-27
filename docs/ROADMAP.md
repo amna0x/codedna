@@ -308,7 +308,7 @@ May start in parallel (Student C) once the analysis JSON formats are stable.
   implemented; 15 focused tests pass. Real pilot and full-suite validation are
   in progress. No favorable safety/savings outcome is assumed.
 - D-077 source check explanations, evidence health and explicit decision export
-  are implemented in the IDE source; TypeScript and 25 UI/workflow tests pass.
+  are implemented in the IDE source; TypeScript and 26 UI/workflow tests pass.
   No new packaged installer has been built for these changes.
 - Next engineering gaps: per-operation analysis cancellation/progress and
   checkpoint recovery, measured cache behavior, and broader real workflow

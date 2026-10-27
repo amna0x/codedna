@@ -1813,7 +1813,7 @@ selection, risk and actual execution statuses. It omits source, environment,
 raw logs and per-case failure messages; local paths and names remain disclosed.
 Canceling the dialog writes nothing. No backend behavior or dependency changes.
 
-TypeScript compilation passed; 25 Node UI/workflow tests pass. The workflow
+TypeScript compilation passed; 26 Node UI/workflow tests pass. The workflow
 test exercises real view methods against a contract fixture, not a real Maven
 build or a clean-PC install. Full Python validation is running against the
 unchanged D-076 backend. Installer rebuilding is deferred by owner instruction.

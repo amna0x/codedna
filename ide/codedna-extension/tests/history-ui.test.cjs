@@ -158,3 +158,23 @@ test('evidence save requires a chosen destination and propagates write failures'
     workspace.files.writeFile = async () => { throw new Error('read-only destination'); };
     await assert.rejects(workspace.saveDecisionEvidence('evidence'), /read-only destination/);
 });
+
+
+test('view export saves the current decision, handles cancellation and reports a failed save', async () => {
+    const { TestsViewWidget } = load('tests-view-widget'); const view = new TestsViewWidget();
+    const report = { repository: 'C:/demo', base_commit: 'base', head_commit: 'head', strategy: 'risk',
+        total_tests: 1, selected: [{ test: 'PriceTest', reasons: ['required'] }], skipped: [], warnings: [],
+        risk: { status: 'unvalidated', reasons: ['insufficient history'] } };
+    view.report = report;
+    let payload;
+    view.workspace = { saveDecisionEvidence: async content => { payload = JSON.parse(content); return false; } };
+    await view.exportEvidence(report);
+    assert.equal(payload.comparison.head, 'head'); assert.equal(payload.risk.status, 'unvalidated');
+    assert.equal(view.notice, undefined);
+    view.workspace.saveDecisionEvidence = async () => true;
+    await view.exportEvidence(report); assert.match(view.notice, /evidence saved/);
+    view.workspace.saveDecisionEvidence = async () => { throw new Error('disk is full'); };
+    await view.exportEvidence(report); assert.match(view.error, /disk is full/);
+    view.report = undefined; view.workspace.saveDecisionEvidence = () => assert.fail('obsolete decision exported');
+    await view.exportEvidence(report);
+});
