@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "id": "D076-hikaricp-development-v1",
+  "classification": "development pilot on previously inspected data; not independent confirmation",
+  "project": "hikaricp",
+  "dataset": "experiments\\results\\study11-2026-10-21\\hikaricp\\dataset.csv",
+  "dataset_sha256": "f2c4ce350b858f2daec1ccc1a3f017ca5c2c95e1ff534720155b12b16414ec7b",
+  "database": "experiments\\datasets\\derived\\hikaricp.db",
+  "database_sha256": "92a3e45e3065daa08b8668e6e3a523071f73baf7da1830fd9242007d0895501c",
+  "prefix_commits": 360,
+  "warmup_commits": 240,
+  "evaluation_commits": 120,
+  "audit_every": 10,
+  "refit_every": 20,
+  "risk_target": 0.05,
+  "risk_method": "b10",
+  "seed": 0,
+  "policies": [
+    "full",
+    "history",
+    "structural",
+    "combined"
+  ],
+  "fit_history": "complete observed commits only; 50/25/25 fit/calibrate/audit; decision-time features",
+  "source_mapping": "exact reference/discovered universe match required; stop with diagnostic on mismatch",
+  "default_product_changed": false,
+  "statistical_inference": "descriptive development results only; no superiority or deployment guarantee",
+  "primary_safety": "zero omitted failing classes among failing evaluation commits",
+  "cost": "recorded test seconds including warmup/audits/mandatory classes; overhead measured separately on local hardware"
+}
