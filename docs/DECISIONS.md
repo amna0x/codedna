@@ -1762,3 +1762,9 @@ native files. The source environment retains its existing pip path.
 The small installer/packaging requirements belong to desktop and dev extras;
 the minimal analysis core remains without mandatory third-party dependencies.
 See DESKTOP_PLUGIN_INSTALLATION.md. Full/frozen validation is in progress.
+
+
+D-074 final full-suite and installer validation is complete. The authoritative
+dated counts, checksum, signature status and friend kit are recorded in
+RELEASE_VALIDATION_D074_2026-10-27.json. Clean-PC acceptance and public catalogue
+delivery remain separate; previous in-progress notes above are historical.

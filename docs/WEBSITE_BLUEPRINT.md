@@ -1,5 +1,12 @@
 # CodeDNA website blueprint
 
+> D-074 implementation update, 2026-10-27: optional wheel installation inside
+> the actual frozen core is now implemented and validated. See
+> DESKTOP_PLUGIN_INSTALLATION.md and RELEASE_VALIDATION_D074_2026-10-27.json.
+> Earlier warnings below identify the previous build's gap. Public catalogue
+> hosting, anonymous downloads and real clean-PC acceptance remain separate.
+
+
 Implementation brief for the website builder. Updated 27 October 2026.
 Use this together with PROJECT_SPEC.md, ARCHITECTURE.md and the current
 BLUEPRINT_COMPLETION.md. Build the website around verified functionality.

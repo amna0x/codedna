@@ -1,5 +1,18 @@
 # MEMORY.md: handoff notes for the next agent
 
+## Current override - D-074 completed, 2026-10-27
+
+The frozen desktop plugin-installation fix is complete and validated. Read
+docs/DESKTOP_PLUGIN_INSTALLATION.md and docs/RELEASE_VALIDATION_D074_2026-10-27.json.
+All final tests, bundled hashes and the new installer/friend kit are recorded
+there. Earlier notes calling this feature unimplemented are superseded.
+Source checkpoint 70626d8; no new push/merge; preserve stashes and old studies.
+Next authorized work: correct the report and assess feasibility of a bounded
+partial-feedback/structural-floor follow-up. The latest review makes that study
+conditional on a stronger claim. Public hosting and real clean-PC feedback are
+separate; do not repeat the completed plugin implementation.
+
+
 ## Active work - D-074 frozen plugin installation, 2026-10-27
 
 Owner explicitly asks to finish this fix first; do not start research, hosting

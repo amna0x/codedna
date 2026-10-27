@@ -183,3 +183,28 @@ earlier statements that frozen optional installation is unimplemented; it does
 not turn the separate public catalogue 404 or clean-PC acceptance into success.
 No research changes were made. The owner reports Gemini agreed with the graph
 labels; that is a second AI cross-check, not independent human validation.
+
+
+## D-074 completed local release - 2026-10-27
+
+Frozen-desktop optional plugin installation is implemented and verified, not
+an outstanding engineering gate. Source checkpoint 70626d8. Final production
+IDE/NSIS build completed; full Maven-inclusive suite: 576
+passed, zero failed/skipped, 2234.48 seconds. Nineteen
+IDE checks and all seven actual frozen-core plugin checks pass. All
+1,451 packaged core hashes match the tested candidate.
+Installer is unsigned, 340489443 bytes, SHA-256 `1cd872fe7dc1b44abb96fa6ff161ed7cb3a0021e183af0e0ec4d0c802b8ee7ed`.
+Evidence: RELEASE_VALIDATION_D074_2026-10-27.json.
+
+The new D074 friend kit and installer backup are prepared separately; older
+kits/installers are preserved. A real clean-PC installation remains unverified.
+The public catalogue still returns 404 and public wheels are unpublished;
+that separate distribution task is not fixed by changing the installation
+runtime. No new source push/merge; both original stashes are preserved.
+
+Owner now authorizes discretion after the revised ChatGPT review. Next is
+report correction and a read-only data-feasibility check, then a bounded study
+protocol if justified. The new study is required for a stronger partial-feedback
+claim, rather than unconditionally for a bounded retrospective FYP. Preserve
+all old study results. Gemini's graph check is another AI review, not human
+ground truth. Do not require further independent labelling from the owner.

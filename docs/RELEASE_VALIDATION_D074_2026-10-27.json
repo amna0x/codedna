@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-27",
+  "source_checkpoint": "70626d8",
+  "scope": "local candidate installer and actual frozen optional-plugin validation; not public delivery or clean-PC acceptance",
+  "installer": "C:\\Users\\hp\\OneDrive\\Documents\\GitHub\\codedna\\ide\\electron-app\\dist\\CodeDNA IDE Setup 0.1.0.exe",
+  "bytes": 340489443,
+  "sha256": "1cd872fe7dc1b44abb96fa6ff161ed7cb3a0021e183af0e0ec4d0c802b8ee7ed",
+  "verified_core_files": 1451,
+  "compression_level": 3,
+  "full_suite": {
+    "passed": 576,
+    "failed": 0,
+    "skipped": 0,
+    "seconds": 2234.48,
+    "maven_included": true
+  },
+  "ide_workflow_tests_passed": 19,
+  "frozen_plugin_smoke": {
+    "scope": "production frozen core, restricted PATH, isolated per-user store; not clean-PC acceptance",
+    "checks": {
+      "install_and_cold_restart": "passed",
+      "damaged_optional_uses_bundled_fallback": "passed",
+      "broken_update_preserves_working_version": "passed",
+      "missing_dependency_preserves_working_version": "passed",
+      "checksum_refusal": "passed",
+      "remove_and_restore_bundled_python": "passed",
+      "bundled_removal_refused": "passed"
+    },
+    "bundle_files_verified": 1451
+  },
+  "public_catalogue_hosting": "not published",
+  "clean_pc_acceptance": "pending",
+  "risk_logic_changed": false,
+  "authenticode_status": "NotSigned",
+  "friend_test_kit": {
+    "path": "C:\\Users\\hp\\OneDrive\\Documents\\GitHub\\codedna\\build\\friend-test-kit\\CodeDNA-Friend-Test-Kit-D074-2026-10-27.zip",
+    "bytes": 340514767,
+    "sha256": "d0f401f7a35374fa0fbf9a1d6513a158a97d3e81e8528b709aed603eed48cd8d",
+    "installer_sha256": "1cd872fe7dc1b44abb96fa6ff161ed7cb3a0021e183af0e0ec4d0c802b8ee7ed",
+    "scope": "prepared kit; no friend installation result claimed"
+  }
+}

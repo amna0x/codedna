@@ -73,3 +73,9 @@ missing dependency, checksum refusal, removal/restoration and bundled removal
 protection. All 1,451 core hashes match. The full Maven-inclusive suite and
 final NSIS installer verification are still running; this is not their result.
 Evidence: FROZEN_PLUGIN_VALIDATION_D074_2026-10-27.json.
+
+
+D-074 final full-suite and installer validation is complete. The authoritative
+dated counts, checksum, signature status and friend kit are recorded in
+RELEASE_VALIDATION_D074_2026-10-27.json. Clean-PC acceptance and public catalogue
+delivery remain separate; previous in-progress notes above are historical.
