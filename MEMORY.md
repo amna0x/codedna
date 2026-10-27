@@ -1,5 +1,17 @@
 # MEMORY.md: handoff notes for the next agent
 
+## Owner priorities - engineering follow-up, 2026-10-27
+
+Owner explicitly authorized the proposed engineering improvements: explain test
+purpose/source/selection/results; evidence health and provenance; progress,
+cancellation and checkpoint recovery; diagnostics export; end-to-end project
+workflow acceptance tests. Reuse existing implementations rather than duplicating
+them. Finish the active D-076 bounded research check first. Installation, public
+catalogue delivery and clean-PC testing are deferred to the very end by the
+owner's latest instruction. More languages remain deferred. Source push is
+separate from merge/release; no new push authorization has been given.
+
+
 ## Current continuation - D-075, 2026-10-27
 
 D-074 plugin installation is complete: full suite 576 passed, zero skips;

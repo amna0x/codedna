@@ -43,3 +43,17 @@ and whether installation from Extensions is currently possible. Java/Python
 are bundled; public optional downloads are not published. Address this directly
 without treating the 404 as a broken installed language. Do not invent hosting.
 The local website preview is http://127.0.0.1:8769/index.html while the server runs.
+
+## Authorized engineering follow-up - 2026-10-27
+
+The owner has now authorized these additions after the active D-076 pilot:
+
+1. Explain test purpose, file, selection reason and execution result.
+2. Show history health, provenance, refusal reasons and evidence recovery.
+3. Add truthful progress, cancellation and resumable checkpoints where missing.
+4. Export relevant diagnostics and reproducible decision evidence.
+5. Test the end-to-end open/select/run/record workflow.
+
+First inspect and reuse existing contracts. Do not weaken risk gates or promise
+favorable research outcomes. Installation, catalogue delivery and clean-PC
+acceptance are moved to the very end by the owner's latest instruction.
