@@ -48,6 +48,9 @@ export class TestsViewWidget extends ReactWidget {
     protected notice: string | undefined;
     protected inspected: TestDiscovery['tests'][number] | undefined;
     protected inspecting = false;
+    protected readonly revealTestDetails = (element: HTMLElement | null): void => {
+        element?.scrollIntoView({ block: 'nearest' });
+    };
     protected discovery: { report: SelectionReport; result: Promise<TestDiscovery> } | undefined;
 
     @postConstruct()
@@ -294,15 +297,16 @@ export class TestsViewWidget extends ReactWidget {
                 <strong>Good to know</strong>
                 <ul>{notes.map(note => <li key={note}>{note}</li>)}</ul>
             </div>}
-            {this.inspected && <section className='cd-notice' aria-label='Discovered test details' aria-live='polite'>
+            {this.inspected && <section key={`${report.head_commit}:${this.inspected.id}`} ref={this.revealTestDetails}
+                className='cd-notice' aria-label='Discovered test details' aria-live='polite'>
                 <h3>Checks declared in {simpleName(this.inspected.id)}</h3>
                 <p><code>{this.inspected.file}</code> at <code>{report.head_commit.slice(0, 12)}</code></p>
                 <p>{this.inspected.framework ?? 'Framework not reported'}{this.inspected.language ? ` · ${this.inspected.language}` : ''}</p>
                 {this.inspected.methods?.length ? <ul>{this.inspected.methods.map(method => <li key={method}>
                     <span>{method.replace(/([a-z0-9])([A-Z])/g, '$1 $2').replace(/_/g, ' ')}</span> <code>{method}</code>
                 </li>)}</ul> : <p>No individual check names were reported by static discovery.</p>}
-                <p className='cd-help'>These names come from project source. Read the assertions for exact behavior; discovery does not execute or verify these checks.</p>
-                <button className='cd-button' onClick={() => this.openTest(report, this.inspected!.id)}>Read test source</button>
+                <p className='cd-help'>These names come from project source. Read the assertions for exact behavior; discovery does not execute or verify these checks. Source navigation opens your current working copy, which may differ from this commit.</p>
+                <button className='cd-button' onClick={() => this.openTest(report, this.inspected!.id)}>Read source (working copy)</button>
             </section>}
             {report.selected.length > 0 && <section aria-label='Run these'>
                 <h3>Run these</h3>

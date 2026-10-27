@@ -106,7 +106,14 @@ test('test explanation shows source check names and warns that discovery is not 
     const report = { repository: 'C:/demo', base_commit: 'a'.repeat(40), head_commit: 'b'.repeat(40),
         total_tests: 1, selected: [{ test: 'PriceTest', file: 'tests/PriceTest.java', reasons: ['changed test class'] }],
         skipped: [], warnings: [] };
-    const content = text(view.renderReport(report));
+    const tree = view.renderReport(report);
+    const content = text(tree);
+    let revealed = false;
+    nodes(tree).find(node => node.props?.['aria-label'] === 'Discovered test details').props.ref({
+        scrollIntoView: options => { assert.equal(options.block, 'nearest'); revealed = true; }
+    });
+    assert.equal(revealed, true);
+    assert.match(content, /current working copy/);
     assert.match(content, /discount Is Applied/); assert.match(content, /discountIsApplied/);
     assert.match(content, /tests\/PriceTest.java/); assert.match(content, /does not execute or verify/);
     assert.match(content, /Explain this test/);
