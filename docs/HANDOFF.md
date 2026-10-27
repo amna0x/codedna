@@ -1,5 +1,20 @@
 # CodeDNA — full handoff blueprint (2026-10-26)
 
+## Current continuation - D-075, 2026-10-27
+
+D-074 plugin installation is complete: full suite 576 passed, zero skips;
+19 IDE tests; seven actual frozen plugin checks; 1451 packaged hashes verified.
+Installer and D074 friend kit are ready; source commits 70626d8/500c998 remain
+local, no new push/merge, all stashes preserved. Do not rebuild this feature.
+D-075 report corrections and read-only feasibility are complete. Read
+REPORT_REVISION_NOTES_D075.md and PARTIAL_FEEDBACK_FEASIBILITY.md. Four older
+datasets have structural evidence; the nine-project CSVs do not. Three HikariCP
+code-only snapshots mapped exactly. No new selector study has run. Next is a
+bounded protocol-first pilot; reused data is not independent confirmation.
+The owner's technical reviewer is ChatGPT and labels were cross-checked with
+Gemini; do not keep asking for human labels or claim independent validation.
+
+
 ## Current override - D-074 completed, 2026-10-27
 
 The frozen desktop plugin-installation fix is complete and validated. Read

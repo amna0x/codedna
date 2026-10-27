@@ -11,7 +11,7 @@ run); the findings file there lists both. Status: draft, 2026-10-26.
 
 ## 1. Motivation
 
-AI coding agents now write a large share of code changes. A common failure
+AI coding agents can edit source code and invoke developer tools. A common failure
 is that the agent edits code, runs no tests or the wrong ones, and reports
 the task done. The question CodeDNA answers for a person (which tests does
 this change need, and what is the risk of skipping the rest) is the same

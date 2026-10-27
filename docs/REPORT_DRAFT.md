@@ -40,8 +40,11 @@ paper (docs/DATASET_PLAN.md).
 
 ### 2.2 Features
 
-Each (commit, test class) pair becomes one row with 19 features, computed
-only from information available before the commit (D-023):
+Each (commit, test class) pair in the original structural study becomes a
+row with 19 features (D-023). Change/structural features describe the current
+code change; historical outcome features use stored earlier results, not the
+current result. This is retrospective full-history availability, not yet a
+policy-specific partial-feedback history:
 
 | Group | Features |
 |---|---|
@@ -104,6 +107,27 @@ expected run time. The estimated skip risk of a selection is
   failing-test recall, and commit safety (share of failing commits where
   every failing test was selected).
 
+The primary safety endpoint is **failure-conditional zero-omission safety**.
+For failing test-class set F and selected class set S at a commit:
+
+| Measure | Definition | Interpretation |
+|---|---|---|
+| Zero-omission safety (primary) | failing commits with F contained in S / failing commits | Every recorded failing class was selected |
+| Build escape (secondary) | failing commits with no element of F in S / failing commits | No selected class detects the recorded failure |
+| Missed-test fraction (secondary) | total omitted failing classes / total failing classes | Complement of micro-averaged failing-test recall on the same cohort |
+
+Safety and build escape are undefined when the cohort has no failing commits;
+such projects cannot supply evidence of failure-conditional safety. The test
+unit in these Java datasets is a class, not an individual JUnit method.
+Selecting nine of ten failing classes avoids a build escape but fails the
+zero-omission criterion. Build escape must not be inferred from zero-omission
+safety alone; historical tables that do not contain it do not claim to measure it.
+
+The B10 gate's original audit criterion uses misses over all audit commits;
+failure-conditional CRC uses failing audit commits. Neither denominator should
+be silently substituted for the primary endpoint. Statistical bounds apply
+under their stated assumptions, not as certainty about the next change.
+
 ### 2.6 Fair comparison and uncertainty
 
 A policy that runs more tests usually catches more failures. To separate
@@ -128,6 +152,22 @@ feature datasets. Their exact values and project cohorts are in
 `manifest.json` fingerprints the input reports, exporter and artifacts.
 Raw/calibrated comparisons use common project cohorts. No confidence intervals
 are derived from standard deviations over random seeds.
+
+### 2.8 Operational cost and claim boundary
+
+Historical test-time ratios charge the recorded selected-class durations.
+They are not end-to-end CI speedup or complete deployment costs. Full-suite
+audit collection, mandatory structural/policy tests, repeated executions,
+feature extraction and model/selector overhead must be included or separately
+reported in any new operational comparison. Unmeasured costs are unknown,
+not zero. Post-hoc equal-time matching describes the recorded benchmark;
+it is not a deployable controller with knowledge of future runtimes.
+
+The current contribution is an implemented, inspectable system and its
+retrospective tradeoffs. A stronger claim about closed-loop partial-feedback
+performance requires a separate policy-specific evaluation. A bounded study
+is recommended if input feasibility is established; it is not claimed already
+completed, and the bounded retrospective FYP does not depend on inventing one.
 
 ## 3. Data actually available
 

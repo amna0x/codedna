@@ -1768,3 +1768,17 @@ D-074 final full-suite and installer validation is complete. The authoritative
 dated counts, checksum, signature status and friend kit are recorded in
 RELEASE_VALIDATION_D074_2026-10-27.json. Clean-PC acceptance and public catalogue
 delivery remain separate; previous in-progress notes above are historical.
+
+
+## D-075 - Bounded claims, report consistency and input feasibility (2026-10-27)
+
+After D-074 completed, the owner authorized report corrections and a feasibility
+check. Use the dated release validation record, attribute graph judgements to
+AI, separate safety endpoints and describe cost/feedback limits. No original
+study results are altered. Four old structural datasets support development;
+the nine confirmatory CSVs have no graph columns. Three code-only HikariCP
+probes establish a small extraction/mapping proof, not a selector experiment.
+Proceed protocol-first with a bounded pilot; do not call reused cohorts fresh
+confirmation. The stronger partial-feedback claim needs new evaluation, while
+the bounded retrospective system claim does not depend on a positive study.
+Details: REPORT_REVISION_NOTES_D075.md and PARTIAL_FEEDBACK_FEASIBILITY.md.

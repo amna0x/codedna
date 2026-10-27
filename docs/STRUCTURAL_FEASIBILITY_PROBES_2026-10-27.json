@@ -1,0 +1,104 @@
+{
+  "scope": "development feasibility probes only; not a safety/cost experiment",
+  "selection": "first/middle/last labelled commit with a parent; selected without consulting labels",
+  "project": "hikaricp",
+  "results": [
+    {
+      "base": "661a641b320eb2f57e1c17885d1407219b9b00cc",
+      "head": "9837cf1e7ef037aecd4d2f7fc4672b445062e3c7",
+      "selected": [
+        "com.zaxxer.hikari.CreationTest"
+      ],
+      "skipped": [],
+      "total_tests": 1,
+      "warnings": [],
+      "policy": {
+        "pinned": [],
+        "source": null
+      },
+      "seconds": 3.172,
+      "status": "available",
+      "reference_classes": 1,
+      "reference_classes_not_discovered": [],
+      "discovered_classes_without_reference_outcome": []
+    },
+    {
+      "base": "1912587bba3ff0ddecea9110c18150faf4f6c2cf",
+      "head": "2ba53125028f0a36a6cd69ecf380657bff33e228",
+      "selected": [
+        "com.zaxxer.hikari.TestProxies"
+      ],
+      "skipped": [
+        "com.zaxxer.hikari.ConnectionStateTest",
+        "com.zaxxer.hikari.ExceptionTest",
+        "com.zaxxer.hikari.IsolationTest",
+        "com.zaxxer.hikari.JdbcDriverTest",
+        "com.zaxxer.hikari.MiscTest",
+        "com.zaxxer.hikari.ShutdownTest",
+        "com.zaxxer.hikari.StatementTest",
+        "com.zaxxer.hikari.TestConnectionCloseBlocking",
+        "com.zaxxer.hikari.TestConnectionTimeoutRetry",
+        "com.zaxxer.hikari.TestConnections",
+        "com.zaxxer.hikari.TestFastList",
+        "com.zaxxer.hikari.TestMBean",
+        "com.zaxxer.hikari.TestPropertySetter",
+        "com.zaxxer.hikari.UnwrapTest",
+        "com.zaxxer.hikari.osgi.OSGiBundleTest"
+      ],
+      "total_tests": 16,
+      "warnings": [
+        "1 test class(es) the build does not run by default are not considered: ['com.zaxxer.hikari.RampUpDown']"
+      ],
+      "policy": {
+        "pinned": [],
+        "source": null
+      },
+      "seconds": 5.469,
+      "status": "available",
+      "reference_classes": 16,
+      "reference_classes_not_discovered": [],
+      "discovered_classes_without_reference_outcome": []
+    },
+    {
+      "base": "bc010fba486b27ae3d034cc9701e0c4217457ddb",
+      "head": "9dcb652701663205a18b9b3dc6fe384755210f2c",
+      "selected": [
+        "com.zaxxer.hikari.ConnectionStateTest",
+        "com.zaxxer.hikari.ExceptionTest",
+        "com.zaxxer.hikari.IsolationTest",
+        "com.zaxxer.hikari.JdbcDriverTest",
+        "com.zaxxer.hikari.MiscTest",
+        "com.zaxxer.hikari.ShutdownTest",
+        "com.zaxxer.hikari.StatementTest",
+        "com.zaxxer.hikari.TestConcurrentBag",
+        "com.zaxxer.hikari.TestConnectionCloseBlocking",
+        "com.zaxxer.hikari.TestConnectionTimeoutRetry",
+        "com.zaxxer.hikari.TestConnections",
+        "com.zaxxer.hikari.TestFastList",
+        "com.zaxxer.hikari.TestHibernate",
+        "com.zaxxer.hikari.TestJNDI",
+        "com.zaxxer.hikari.TestMBean",
+        "com.zaxxer.hikari.TestMetrics",
+        "com.zaxxer.hikari.TestPropertySetter",
+        "com.zaxxer.hikari.TestProxies",
+        "com.zaxxer.hikari.TestValidation",
+        "com.zaxxer.hikari.UnwrapTest",
+        "com.zaxxer.hikari.osgi.OSGiBundleTest"
+      ],
+      "skipped": [],
+      "total_tests": 21,
+      "warnings": [
+        "1 test class(es) the build does not run by default are not considered: ['com.zaxxer.hikari.RampUpDown']"
+      ],
+      "policy": {
+        "pinned": [],
+        "source": null
+      },
+      "seconds": 4.078,
+      "status": "available",
+      "reference_classes": 21,
+      "reference_classes_not_discovered": [],
+      "discovered_classes_without_reference_outcome": []
+    }
+  ]
+}

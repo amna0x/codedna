@@ -208,3 +208,19 @@ protocol if justified. The new study is required for a stronger partial-feedback
 claim, rather than unconditionally for a bounded retrospective FYP. Preserve
 all old study results. Gemini's graph check is another AI review, not human
 ground truth. Do not require further independent labelling from the owner.
+
+
+## D-075 report corrections and feasibility completed
+
+The revised report has current dated validation, explicit AI-audit provenance,
+distinct safety metrics and honest retrospective/cost limits. All chapter
+sources and report dependencies are included in the corrected review pack.
+See REPORT_REVISION_NOTES_D075.md and REPORT_REVISION_QA_D075_2026-10-27.json.
+
+The read-only input audit and three HikariCP static probes support a bounded
+development pilot on the four older structural datasets. No closed-loop study
+has run; the nine-project CSVs lack dependency features. Next is a frozen pilot
+protocol and leakage-proof policy-observation engine, not another model/language.
+Independent labels remain unavailable; the Gemini check is AI cross-checking.
+Public hosting and real clean-PC feedback remain separate from the finished
+frozen-plugin implementation. Original studies and stashes are preserved.

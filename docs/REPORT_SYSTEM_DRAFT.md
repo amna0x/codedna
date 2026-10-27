@@ -443,8 +443,8 @@ The commit was picked for the demonstration and is not evidence.
 
 ### 6.1 Automated tests
 
-The pytest suite builds temporary Git repositories for every scenario; the
-default run needs no network. The Maven integration tests (`--run-maven`)
+The pytest suite uses temporary Git repositories where relevant; package
+tests use isolated stores/environments. The default run needs no network. The Maven integration tests (`--run-maven`)
 also need a JDK, Maven and network access while Maven downloads its plugins
 and JUnit. Areas covered include renames, CRLF files, syntax errors,
 binary files, multi-module and Gradle layouts, graph resolution and labels,
@@ -457,9 +457,18 @@ files so runner logic is tested without Java. One integration test runs the
 real Maven build of `examples/sample-java-project` with JaCoCo; the project
 rule is that it must not be silently skipped (`--run-maven`).
 
-Latest full local run (2026-10-25, Linux, Python 3.13, Maven included):
-`python -m pytest --run-maven` → 329 passed, 4 skipped. The skipped tests
-are the Windows-only `start.bat` checks.
+The authoritative current engineering record is
+[RELEASE_VALIDATION_D074_2026-10-27.json](RELEASE_VALIDATION_D074_2026-10-27.json).
+The Windows candidate at source checkpoint `70626d8` passed
+`python -m pytest --run-maven`: **576 passed, zero failed and zero skipped**
+(2234.48 seconds, one existing Starlette/httpx deprecation warning).
+The IDE compile and 19 Node checks passed. Seven actual frozen-executable
+plugin-installation checks passed with Python/pip absent from PATH, and all
+1,451 core file hashes matched the final installer. This validates the local
+candidate; it is not clean-PC acceptance, remote CI or a research result.
+
+The earlier 2026-10-25 Linux run (329 passed, four Windows-only skips) is
+historical development evidence, not the latest validation status.
 
 ### 6.2 Continuous integration
 
@@ -478,20 +487,25 @@ GitHub Actions (`.github/workflows/ci.yml`) runs on every pull request:
   is recorded in [IMPLEMENTATION_HANDOFF.md](IMPLEMENTATION_HANDOFF.md).
 - Impact graph layout rendered on real HikariCP graphs (D-051).
 - Test discovery on HikariCP 688d1911 matches the 21 classes CI ran (D-052).
-- **Graph precision check (D-058).** 160 dependency edges were sampled with
-  a fixed seed, 40 confirmed and 40 heuristic from each of HikariCP and
-  LittleProxy, and checked against the source. All 160 were correct:
-  precision 1.00, with a 95 % Wilson interval of [0.954, 1.00] for each label.
+- **AI-assisted exploratory source audit (D-058).** 160 dependency edges
+  were sampled with a fixed seed: 40 confirmed and 40 heuristic from each of
+  HikariCP and LittleProxy. Claude judged 160/160 sampled edges correct while
+  reading the source. The owner reports that Gemini also agreed with the
+  labels. These are AI judgements, not independent human ground truth; the
+  count does not establish graph precision of 1.00. A binomial interval over
+  those judgements would not account for shared AI errors and is not presented
+  as an independently validated graph-accuracy interval here.
   Every unresolved name was also sorted into groups to look for missed links.
   This found four causes: `var` read as a type name, an incomplete
   `java.lang` list, member types brought in by static imports, and member
   types inherited from a superclass. One of these had silently resolved an
   inherited `Override` enum to the JDK annotation. After the fixes, the
   unresolved rate fell from 0.264 to 0.139 on HikariCP and from 0.103 to
-  0.070 on LittleProxy, and no remaining unresolved name is a type the graph
-  models. The labels were made by Claude while reading the source and still
-  need a spot check by a student
-  (`experiments/results/graph-precision-2026-10-25/FINDINGS.md`).
+  0.070 on LittleProxy. The AI audit reported no further modelled-type misses
+  in the inspected material; completeness beyond that audit is unestablished.
+  Independent human validation is unavailable and is an explicit limitation,
+  rather than a claimed completed check. The original audit artifacts remain
+  unchanged (`experiments/results/graph-precision-2026-10-25/FINDINGS.md`).
 
 ## 7. Limitations and future work
 
@@ -524,8 +538,10 @@ are implemented (D-054/D-060/D-068/D-070), rather than future proposals. The
 live brake offers failure-conditional conformal stopping as opt-in CRC; B10
 remains default because the follow-up results do not justify replacing it.
 
-- Complete clean-machine acceptance, independent student graph labels and
-  university supervisor review. Local automation does not replace these checks.
+- Complete clean-machine acceptance and align the report with technical
+  review and applicable submission requirements. Independent human graph
+  labels are unavailable; retain the AI-audit limitation rather than treating
+  further labelling as a prerequisite for the bounded system thesis.
 - Publish an approved public catalogue and verified release files while keeping
   the source private; validate optional installation in the frozen desktop.
 - Evaluate policy-specific observed history and scheduled full-suite audits in

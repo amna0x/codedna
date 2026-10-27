@@ -1,8 +1,10 @@
 # CodeDNA: assembled FYP report
 
-Working report assembled 2026-10-27. Supervisor review, university formatting,
-independent human graph labels and final acceptance evidence remain open.
-Research findings are preserved, including negative and inconclusive results.
+Working report revised 2026-10-27 after technical AI review. Original research
+findings, including negative and inconclusive results, remain unchanged.
+The graph audit is AI-assisted and has no independent human validation.
+Clean-PC acceptance and any university-specific submission requirements remain
+separate. Closed-loop partial-feedback performance is not claimed validated.
 
 ## Reading guide
 
@@ -10,12 +12,14 @@ Research findings are preserved, including negative and inconclusive results.
 - [System, design and implementation](REPORT_SYSTEM_DRAFT.md)
 - [Evaluation](REPORT_DRAFT.md)
 - [Agent brake](REPORT_AGENT_BRAKE.md)
+- [Authoritative current engineering validation](RELEASE_VALIDATION_D074_2026-10-27.json)
+
+Section numbers are local to each named Part. Engineering test counts establish
+implementation checks, not research superiority or independent replication.
 
 ---
 
 # Part: Abstract
-
-# Abstract
 
 CodeDNA investigates how developers can reduce regression testing while making
 the limits of test selection explicit. It combines change-impact analysis,
@@ -45,8 +49,6 @@ restricted build support and statistical assumptions under distribution shift.
 ---
 
 # Part: System, design and implementation
-
-# CodeDNA: system chapters (draft)
 
 Draft of the report chapters other than the evaluation (which is in
 [REPORT_DRAFT.md](REPORT_DRAFT.md)): introduction, background, requirements,
@@ -491,8 +493,8 @@ The commit was picked for the demonstration and is not evidence.
 
 ### 6.1 Automated tests
 
-The pytest suite builds temporary Git repositories for every scenario; the
-default run needs no network. The Maven integration tests (`--run-maven`)
+The pytest suite uses temporary Git repositories where relevant; package
+tests use isolated stores/environments. The default run needs no network. The Maven integration tests (`--run-maven`)
 also need a JDK, Maven and network access while Maven downloads its plugins
 and JUnit. Areas covered include renames, CRLF files, syntax errors,
 binary files, multi-module and Gradle layouts, graph resolution and labels,
@@ -505,9 +507,18 @@ files so runner logic is tested without Java. One integration test runs the
 real Maven build of `examples/sample-java-project` with JaCoCo; the project
 rule is that it must not be silently skipped (`--run-maven`).
 
-Latest full local run (2026-10-25, Linux, Python 3.13, Maven included):
-`python -m pytest --run-maven` → 329 passed, 4 skipped. The skipped tests
-are the Windows-only `start.bat` checks.
+The authoritative current engineering record is
+[RELEASE_VALIDATION_D074_2026-10-27.json](RELEASE_VALIDATION_D074_2026-10-27.json).
+The Windows candidate at source checkpoint `70626d8` passed
+`python -m pytest --run-maven`: **576 passed, zero failed and zero skipped**
+(2234.48 seconds, one existing Starlette/httpx deprecation warning).
+The IDE compile and 19 Node checks passed. Seven actual frozen-executable
+plugin-installation checks passed with Python/pip absent from PATH, and all
+1,451 core file hashes matched the final installer. This validates the local
+candidate; it is not clean-PC acceptance, remote CI or a research result.
+
+The earlier 2026-10-25 Linux run (329 passed, four Windows-only skips) is
+historical development evidence, not the latest validation status.
 
 ### 6.2 Continuous integration
 
@@ -526,20 +537,25 @@ GitHub Actions (`.github/workflows/ci.yml`) runs on every pull request:
   is recorded in [IMPLEMENTATION_HANDOFF.md](IMPLEMENTATION_HANDOFF.md).
 - Impact graph layout rendered on real HikariCP graphs (D-051).
 - Test discovery on HikariCP 688d1911 matches the 21 classes CI ran (D-052).
-- **Graph precision check (D-058).** 160 dependency edges were sampled with
-  a fixed seed, 40 confirmed and 40 heuristic from each of HikariCP and
-  LittleProxy, and checked against the source. All 160 were correct:
-  precision 1.00, with a 95 % Wilson interval of [0.954, 1.00] for each label.
+- **AI-assisted exploratory source audit (D-058).** 160 dependency edges
+  were sampled with a fixed seed: 40 confirmed and 40 heuristic from each of
+  HikariCP and LittleProxy. Claude judged 160/160 sampled edges correct while
+  reading the source. The owner reports that Gemini also agreed with the
+  labels. These are AI judgements, not independent human ground truth; the
+  count does not establish graph precision of 1.00. A binomial interval over
+  those judgements would not account for shared AI errors and is not presented
+  as an independently validated graph-accuracy interval here.
   Every unresolved name was also sorted into groups to look for missed links.
   This found four causes: `var` read as a type name, an incomplete
   `java.lang` list, member types brought in by static imports, and member
   types inherited from a superclass. One of these had silently resolved an
   inherited `Override` enum to the JDK annotation. After the fixes, the
   unresolved rate fell from 0.264 to 0.139 on HikariCP and from 0.103 to
-  0.070 on LittleProxy, and no remaining unresolved name is a type the graph
-  models. The labels were made by Claude while reading the source and still
-  need a spot check by a student
-  (`experiments/results/graph-precision-2026-10-25/FINDINGS.md`).
+  0.070 on LittleProxy. The AI audit reported no further modelled-type misses
+  in the inspected material; completeness beyond that audit is unestablished.
+  Independent human validation is unavailable and is an explicit limitation,
+  rather than a claimed completed check. The original audit artifacts remain
+  unchanged (`experiments/results/graph-precision-2026-10-25/FINDINGS.md`).
 
 ## 7. Limitations and future work
 
@@ -572,8 +588,10 @@ are implemented (D-054/D-060/D-068/D-070), rather than future proposals. The
 live brake offers failure-conditional conformal stopping as opt-in CRC; B10
 remains default because the follow-up results do not justify replacing it.
 
-- Complete clean-machine acceptance, independent student graph labels and
-  university supervisor review. Local automation does not replace these checks.
+- Complete clean-machine acceptance and align the report with technical
+  review and applicable submission requirements. Independent human graph
+  labels are unavailable; retain the AI-audit limitation rather than treating
+  further labelling as a prerequisite for the bounded system thesis.
 - Publish an approved public catalogue and verified release files while keeping
   the source private; validate optional installation in the frozen desktop.
 - Evaluate policy-specific observed history and scheduled full-suite audits in
@@ -659,8 +677,6 @@ remains default because the follow-up results do not justify replacing it.
 
 # Part: Evaluation
 
-# CodeDNA: evaluation chapter (draft)
-
 Draft of the methods, results and threats-to-validity chapters for the FYP
 report (the other chapters are in [REPORT_SYSTEM_DRAFT.md](REPORT_SYSTEM_DRAFT.md)), covering research questions RQ1 to RQ5 (docs/RESEARCH_PLAN.md).
 Every number comes from files under `experiments/results/`; the source of
@@ -701,8 +717,11 @@ paper (docs/DATASET_PLAN.md).
 
 ### 2.2 Features
 
-Each (commit, test class) pair becomes one row with 19 features, computed
-only from information available before the commit (D-023):
+Each (commit, test class) pair in the original structural study becomes a
+row with 19 features (D-023). Change/structural features describe the current
+code change; historical outcome features use stored earlier results, not the
+current result. This is retrospective full-history availability, not yet a
+policy-specific partial-feedback history:
 
 | Group | Features |
 |---|---|
@@ -765,6 +784,27 @@ expected run time. The estimated skip risk of a selection is
   failing-test recall, and commit safety (share of failing commits where
   every failing test was selected).
 
+The primary safety endpoint is **failure-conditional zero-omission safety**.
+For failing test-class set F and selected class set S at a commit:
+
+| Measure | Definition | Interpretation |
+|---|---|---|
+| Zero-omission safety (primary) | failing commits with F contained in S / failing commits | Every recorded failing class was selected |
+| Build escape (secondary) | failing commits with no element of F in S / failing commits | No selected class detects the recorded failure |
+| Missed-test fraction (secondary) | total omitted failing classes / total failing classes | Complement of micro-averaged failing-test recall on the same cohort |
+
+Safety and build escape are undefined when the cohort has no failing commits;
+such projects cannot supply evidence of failure-conditional safety. The test
+unit in these Java datasets is a class, not an individual JUnit method.
+Selecting nine of ten failing classes avoids a build escape but fails the
+zero-omission criterion. Build escape must not be inferred from zero-omission
+safety alone; historical tables that do not contain it do not claim to measure it.
+
+The B10 gate's original audit criterion uses misses over all audit commits;
+failure-conditional CRC uses failing audit commits. Neither denominator should
+be silently substituted for the primary endpoint. Statistical bounds apply
+under their stated assumptions, not as certainty about the next change.
+
 ### 2.6 Fair comparison and uncertainty
 
 A policy that runs more tests usually catches more failures. To separate
@@ -789,6 +829,22 @@ feature datasets. Their exact values and project cohorts are in
 `manifest.json` fingerprints the input reports, exporter and artifacts.
 Raw/calibrated comparisons use common project cohorts. No confidence intervals
 are derived from standard deviations over random seeds.
+
+### 2.8 Operational cost and claim boundary
+
+Historical test-time ratios charge the recorded selected-class durations.
+They are not end-to-end CI speedup or complete deployment costs. Full-suite
+audit collection, mandatory structural/policy tests, repeated executions,
+feature extraction and model/selector overhead must be included or separately
+reported in any new operational comparison. Unmeasured costs are unknown,
+not zero. Post-hoc equal-time matching describes the recorded benchmark;
+it is not a deployable controller with knowledge of future runtimes.
+
+The current contribution is an implemented, inspectable system and its
+retrospective tradeoffs. A stronger claim about closed-loop partial-feedback
+performance requires a separate policy-specific evaluation. A bounded study
+is recommended if input feasibility is established; it is not claimed already
+completed, and the bounded retrospective FYP does not depend on inventing one.
 
 ## 3. Data actually available
 
@@ -1315,8 +1371,6 @@ comparable. See NOVELTY_REVIEW_2026-10-27.md for the source comparison.
 
 # Part: Agent brake
 
-# CodeDNA as a test brake for AI coding agents (report chapter draft)
-
 Draft chapter for the FYP report, next to the evaluation chapter
 ([REPORT_DRAFT.md](REPORT_DRAFT.md)) and the system chapters
 ([REPORT_SYSTEM_DRAFT.md](REPORT_SYSTEM_DRAFT.md)). Design: D-059; study
@@ -1328,7 +1382,7 @@ run); the findings file there lists both. Status: draft, 2026-10-26.
 
 ## 1. Motivation
 
-AI coding agents now write a large share of code changes. A common failure
+AI coding agents can edit source code and invoke developer tools. A common failure
 is that the agent edits code, runs no tests or the wrong ones, and reports
 the task done. The question CodeDNA answers for a person (which tests does
 this change need, and what is the risk of skipping the rest) is the same
