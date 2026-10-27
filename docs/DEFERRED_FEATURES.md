@@ -35,3 +35,11 @@ After finishing the current fixes/validation, the owner requests:
 
 Execute in that order after current work. Public hosting/wheel destinations must
 be real and verified; never replace missing downloads with invented URLs.
+
+## Catalogue 404 question queued by owner
+
+After the current checks, explain the exact 404 at the official catalogue URL
+and whether installation from Extensions is currently possible. Java/Python
+are bundled; public optional downloads are not published. Address this directly
+without treating the 404 as a broken installed language. Do not invent hosting.
+The local website preview is http://127.0.0.1:8769/index.html while the server runs.

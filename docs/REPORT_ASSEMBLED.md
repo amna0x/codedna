@@ -42,7 +42,6 @@ model transfer, future safety guarantees or CI wall-clock speedup. Limitations
 include temporal dependence, incomplete CI records, unobserved skipped outcomes,
 restricted build support and statistical assumptions under distribution shift.
 
-
 ---
 
 # Part: System, design and implementation
@@ -53,8 +52,8 @@ Draft of the report chapters other than the evaluation (which is in
 [REPORT_DRAFT.md](REPORT_DRAFT.md)): introduction, background, requirements,
 design, implementation, testing, limitations and future work. Every claim
 points to a decision record (`D-0xx` in [DECISIONS.md](DECISIONS.md)), a
-source file or a saved result. Status: first full draft, 2026-10-25. Numbers
-not yet measured are marked *to be filled*, never estimated.
+source file or a saved result. Draft originated 2026-10-25; implementation status reconciled 2026-10-27.
+Independent labels, clean-PC acceptance and supervisor review remain unverified.
 
 ## 1. Introduction
 
@@ -546,7 +545,9 @@ GitHub Actions (`.github/workflows/ci.yml`) runs on every pull request:
 
 ### 7.1 Limitations
 
-- **Java only.** Other languages need plugins; none exists yet.
+- **Java-specific risk evidence.** Java and Python plugins exist. Python/mixed
+  projects use full-suite risk fallback; Java-trained risk does not transfer
+  to Python. Additional languages and cross-language edges are not implemented.
 - **Type-level graph.** Calls between methods are not resolved, so impact is
   coarser than the change.
 - **Class-level outcomes.** History and selection work per test class, not
@@ -559,25 +560,31 @@ GitHub Actions (`.github/workflows/ci.yml`) runs on every pull request:
   (D-039).
 - **Data age.** The study projects are open-source Java projects from 2007 to
   2016 on Travis CI; modern or industrial CI may behave differently.
-- **Confirmatory study pending.** The pre-registered rolling-origin study
-  on new RTPTorrent projects (D-042) is being prepared. *Results to be
-  filled from `experiments/results/rolling-evidence-confirmatory-*`.*
+- **Confirmatory limits.** The nine-project confirmation and four follow-ups
+  are complete (evaluation sections 4.11/4.12, D-067/D-069). They do not establish
+  B10 superiority or a universally safe replacement default. A missing pre-run
+  addendum cannot be repaired retrospectively.
 
 ### 7.2 Future work
 
-- Security checks as add-on policy rules (`codedna.policies`), for example
-  always running tests of changed authentication code, after the defence.
-- The `codedna-java` package split and an in-IDE plugin manager installing
-  from the official catalogue (D-020).
-- A second language plugin.
-- Method-level call edges in the graph.
-- A guard for AI coding agents: an interface through which an agent asks
-  CodeDNA which tests must run before accepting its change.
-- Replace the D-041 gate with failure-conditional conformal risk control
-  (B12f, D-063) if the confirmatory datasets support it, and expose its
-  bound through the agent brake.
-- A risk estimate that does not assume independent test failures, for
-  example by grouping tests that fail together.
+The Java package split, plugin manager, Python plugin and agent-facing brake
+are implemented (D-054/D-060/D-068/D-070), rather than future proposals. The
+live brake offers failure-conditional conformal stopping as opt-in CRC; B10
+remains default because the follow-up results do not justify replacing it.
+
+- Complete clean-machine acceptance, independent student graph labels and
+  university supervisor review. Local automation does not replace these checks.
+- Publish an approved public catalogue and verified release files while keeping
+  the source private; validate optional installation in the frozen desktop.
+- Evaluate policy-specific observed history and scheduled full-suite audits in
+  a separate, pre-specified deployment-faithful study. Existing reports use the
+  available historical outcomes and do not establish performance under censored
+  feedback from selected-only execution.
+- Resolve method-level call edges, retain honest confidence labels, and evaluate
+  additional languages separately before enabling their statistical stopping.
+- Study temporally dependent failures and risk under changing distributions.
+  Any changed default needs new held-out evidence, not favorable retuning of
+  completed confirmatory results.
 
 ## References
 
@@ -647,7 +654,6 @@ GitHub Actions (`.github/workflows/ci.yml`) runs on every pull request:
     Conformal risk control. *ICLR* 2024.
 27. l-k-1-2. Predictive-test-selection: conformal risk control on the
     Enhanced Westermo dataset. GitHub repository, accessed 2026-10-26.
-
 
 ---
 
@@ -1095,8 +1101,9 @@ commits) B10 missed a failure on 0.43 % of commits (Wilson upper bound
 1.29 %); in the 12 rejected blocks (914 commits) it would have missed 2.74 %
 (upper bound 3.77 %). The cost is that the product saves little time: about
 6 % on wicket-bootstrap and 0–2 % elsewhere, and five of the seven accepted
-blocks come from that one project. A confirmatory run on new RTPTorrent
-projects (D-042) is pending.
+blocks come from that one project. The subsequent nine-project confirmation
+and completed follow-ups are reported in sections 4.11/4.12; this paragraph
+describes the earlier four-project study, not the current completion status.
 
 ### 4.9 Additional validation: a Predictive Test Selection baseline (D-061, exploratory)
 
@@ -1303,7 +1310,6 @@ Safety definitions also differ across prior work: CodeDNA counts a failing
 commit as safe only when no failing test was omitted. Build-escape measures
 count a miss only when no failure was caught. These numbers are not directly
 comparable. See NOVELTY_REVIEW_2026-10-27.md for the source comparison.
-
 
 ---
 

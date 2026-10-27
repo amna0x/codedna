@@ -43,3 +43,33 @@ is not a replacement for the project's build environment. Check uninstallation
 and retain application logs. Do not call a restricted-PATH smoke a clean-PC test.
 
 Actual execution status is recorded in BLUEPRINT_COMPLETION.md.
+
+
+## D-073 observed desktop acceptance - 2026-10-27
+
+The rebuilt source IDE with the frozen core was opened on C:/Users/hp/codedna-demo.
+Extensions was visible after restart and listed installed Java/Python despite
+the online catalogue 404. Project history loaded automatically, displayed the
+canonical demo path, and selecting View results revealed and scrolled to both
+classes and all six actual saved JUnit check outcomes. No project tests were
+executed and no saved history was changed by this acceptance check.
+
+History replay showed a disabled Load results for empty input. Browse opened a
+folder-only native picker and populated the chosen actual path. Loading
+experiments/results/study11-2026-10-21 succeeded: 55 compatible reports across
+11 projects appeared. Reports without trace SHAs are labelled accordingly.
+The rolling-evidence and other research summaries use a different format and
+are not currently replay inputs; an existing directory alone is insufficient.
+This remains a documented format limitation, not a reason to rerun studies.
+
+
+### Choosing the right replay folder
+
+Use a folder containing `<project>/experiment-seed0.json` (or replay.json /
+experiment.json) with compatible `config`, `policies` and per-commit outcomes.
+On the owner's laptop this working example is:
+`C:/Users/hp/OneDrive/Documents/GitHub/codedna/experiments/results/study11-2026-10-21`.
+Browse or paste the path, then choose Load results. A placeholder never loads
+data. These older study reports are for replay demonstrations; current
+confirmatory findings remain in their own reports and are not replaced by the
+demo. Project history instead shows test runs saved from the open project.

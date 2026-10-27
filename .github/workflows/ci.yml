@@ -66,6 +66,8 @@ jobs:
         run: npm run test:runtime --workspace electron-app
       - name: Check recommendation and execution workflow
         run: npm test --workspace codedna-extension
+      - name: Check website catalogue acquisition states
+        run: node --test ../website/tests/plugins.test.cjs
 
   maven-integration:
     name: CodeDNA + real Maven/JaCoCo (integration)

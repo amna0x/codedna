@@ -1,7 +1,5 @@
 {
   "4": "CI Workflow Config",
-  "5": "API Request Models",
-  "9": "Probability Calibrators",
   "10": "IDE Extension Package",
   "13": "Java Change Analysis",
   "18": "Study Runner",
@@ -28,7 +26,6 @@
   "64": "Electron App Config",
   "67": "Electron Bundle Gen",
   "73": "IDE & Local API Milestone",
-  "76": "RTPTorrent & SQLite Decisions",
   "78": "Validation & Demo Setup",
   "79": "Package Scripts",
   "80": "Platform Website Milestone",

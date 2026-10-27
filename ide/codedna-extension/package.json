@@ -31,7 +31,7 @@
     "clean": "rimraf lib",
     "build": "tsc",
     "watch": "tsc -w",
-    "test": "node --test tests/workflow.test.cjs"
+    "test": "node --test tests/workflow.test.cjs tests/plugins.test.cjs tests/startup.test.cjs tests/history-ui.test.cjs"
   },
   "theiaExtensions": [
     {

@@ -440,8 +440,9 @@ commits) B10 missed a failure on 0.43 % of commits (Wilson upper bound
 1.29 %); in the 12 rejected blocks (914 commits) it would have missed 2.74 %
 (upper bound 3.77 %). The cost is that the product saves little time: about
 6 % on wicket-bootstrap and 0–2 % elsewhere, and five of the seven accepted
-blocks come from that one project. A confirmatory run on new RTPTorrent
-projects (D-042) is pending.
+blocks come from that one project. The subsequent nine-project confirmation
+and completed follow-ups are reported in sections 4.11/4.12; this paragraph
+describes the earlier four-project study, not the current completion status.
 
 ### 4.9 Additional validation: a Predictive Test Selection baseline (D-061, exploratory)
 

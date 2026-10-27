@@ -1704,3 +1704,42 @@ packaged core hashes verified; new installer SHA-256
 e1120f72bca9fedd61e4f459eb70790a946ee543fd88684b4b49a1b430228200.
 Java diagnostics and mixed-language IDE analysis verified; clean-PC installation
 remains separate. See RELEASE_VALIDATION_2026-10-27.json.
+
+
+## D-072 - Evidence clarity and visible language acquisition (2026-10-27)
+
+After the D-071 batch passed 562 tests, the owner requested brake improvements,
+a detailed website blueprint, website plugin acquisition and visible Language
+plugins in Extensions on next launch. Research findings are not rewritten.
+The brake exposes method-specific audit semantics without changing selection
+rules or the B10 default. Proposed fresh evaluation is in BRAKE_IMPROVEMENT_PLAN.
+
+Use one Theia Extensions container holding the existing plugin widget, restored
+for fresh/saved layouts without stealing editor focus. Installed languages are
+displayed before a slow/offline catalogue finishes. No new marketplace library.
+Website acquisition reads the existing catalogue, offers only pinned official
+optional wheel URLs with full hashes/commands, and distinguishes bundled and
+unpublished releases. Public hosting/anonymous downloads and frozen-desktop
+optional installation remain release gates, not invented as complete.
+
+The clean-PC verifier and supervisor review pack prepare external checks; they
+do not constitute clean-machine provenance, human labels or supervisor approval.
+
+D-072 startup acceptance exposed sensitivity to a slow cold core during heavy
+local builds. The IDE now allows a bounded 60-second announcement (formerly
+15 seconds); tests simulate a successful 20-second handshake and verify an
+unresponsive child is killed after the deadline. Fourteen IDE workflow tests
+pass, alongside thirteen website acquisition tests. Final packaging/validation
+remains separate from these focused results.
+
+
+## D-073 - Test and history UX without weaker risk checks (2026-10-27)
+
+The owner found test-class names unexplained, saved-history clicks unclear,
+and the research replay placeholder easy to mistake for an entered path.
+Render the existing runner's individual cases (with an older-result fallback),
+keep raw risk refusal reasons and explain chronological leakage, reveal and
+announce the selected saved run, show its project, and provide a folder picker
+for real research reports. Never turn passing demo tests into validated skip
+risk. Selection/core behaviour, target and thresholds remain unchanged.
+Four focused UI tests join the regular IDE suite: 18 pass, zero skipped.

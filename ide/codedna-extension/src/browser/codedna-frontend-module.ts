@@ -7,6 +7,7 @@ import { ChangeViewWidget } from './change-view-widget';
 import {
     ChangeViewContribution, GraphViewContribution, HistoryViewContribution, PluginsViewContribution, ReplayViewContribution, TestsViewContribution
 } from './codedna-contributions';
+import { ExtensionsWidgetFactory } from './extensions-widget-factory';
 import { CodeDnaComparison } from './comparison';
 import { CodeDnaWorkspace } from './codedna-workspace';
 import { GraphViewWidget } from './graph-view-widget';
@@ -74,7 +75,10 @@ export default new ContainerModule((bind, _unbind, _isBound, rebind) => {
         id: PluginsViewWidget.ID,
         createWidget: () => ctx.container.get<PluginsViewWidget>(PluginsViewWidget)
     })).inSingletonScope();
+    bind(ExtensionsWidgetFactory).toSelf().inSingletonScope();
+    bind(WidgetFactory).toService(ExtensionsWidgetFactory);
     bindViewContribution(bind, PluginsViewContribution);
+    bind(FrontendApplicationContribution).toService(PluginsViewContribution);
 
     bind(HistoryViewWidget).toSelf();
     bind(WidgetFactory).toDynamicValue(ctx => ({

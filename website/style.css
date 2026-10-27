@@ -28,3 +28,13 @@ pre { background: var(--panel); border: 1px solid var(--line); border-radius: va
 .note { border-left: 3px solid var(--warn); padding: 8px 14px; color: var(--muted); background: var(--panel); border-radius: 0 var(--radius) var(--radius) 0; }
 .chip { display: inline-block; font-size: 12px; padding: 1px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); margin-left: 6px; }
 footer { margin-top: 64px; padding-top: 22px; padding-bottom: 40px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
+
+.card h2 { margin: 0 0 10px; font-size: 21px; }
+.card .plugin-meta { margin-top: 12px; }
+.card details { margin-top: 16px; }
+.card summary { cursor: pointer; }
+.checksum { display: block; overflow-wrap: anywhere; margin-top: 8px; }
+.copy-status { display: block; margin-top: 8px; }
+button.button { border: 0; font: inherit; cursor: pointer; }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+@media (max-width: 600px) { header { align-items: flex-start; gap: 12px; } header nav { display: flex; flex-wrap: wrap; gap: 8px 12px; } header nav a { margin-left: 0; } }

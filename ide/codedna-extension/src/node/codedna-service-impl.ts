@@ -203,7 +203,7 @@ export class CodeDnaServiceImpl implements CodeDnaService, BackendApplicationCon
         });
 
         try {
-            const url = await withTimeout(announced, 15000, 'CodeDNA API did not start within 15 s');
+            const url = await withTimeout(announced, 60000, 'CodeDNA API did not start within 60 s');
             this.version = await waitForHealth(url);
             this.process = child;
             this.baseUrl = url;

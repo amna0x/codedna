@@ -1,5 +1,18 @@
 # MEMORY.md: handoff notes for the next agent
 
+## Active checkpoint - D-072/D-073, 2026-10-27
+
+Continue on codex/blueprint-completion; preserve all stashes. D-071 is local
+commit 8b0d478. The branch contains the reviewed D-072/D-073 source checkpoint; inspect git log for its commit. Full Maven suite
+563 passed, zero skipped; latest TypeScript compile and 18 IDE tests passed.
+Risk thresholds/fallbacks unchanged. Individual recorded checks, clear history
+selection and replay folder browsing fix the owner's demo feedback. See
+docs/BLUEPRINT_COMPLETION.md for exact validation and remaining external gates.
+Final installer rebuild is in progress; do not send the old D-071 installer
+as this version. Website source and detailed blueprint are ready locally;
+public catalogue/wheel hosting remains unavailable. No new push/merge yet.
+
+
 ## Current continuation - 2026-10-27 (supersedes older status)
 
 PR #22 merged as 45821b4 after owner authorization and green checks. D-068 and

@@ -155,7 +155,8 @@ export interface ExplanationGraph {
 
 export interface SelectionRun {
     selection: SelectionReport;
-    results: { tests: { id: string; status: string; time: number }[];
+    results: { tests: { id: string; status: string; time: number;
+        cases?: { name: string; status: string; time: number; message: string | null }[] }[];
         failing_tests: string[]; warnings: string[]; duration_seconds: number; exit_codes: number[] };
     output_dir: string;
     /** Whole-suite runs are kept as project history for risk selection (D-053). */

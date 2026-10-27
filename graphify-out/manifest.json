@@ -360,9 +360,9 @@
     "semantic_hash": "71290cc7967cab1dde9c191ae39e3168"
   },
   "ide/codedna-extension/package.json": {
-    "mtime": 1793031514.1442597,
-    "seen": 1793033487.6411092,
-    "ast_hash": "9cbdf746078f6b87acbcd2a73a4718fe",
+    "mtime": 1793092165.1350384,
+    "seen": 1793092513.1161704,
+    "ast_hash": "5d889aa1f619e77590c3af2db7657691",
     "semantic_hash": ""
   },
   "ide/codedna-extension/src/browser/change-view-widget.tsx": {
@@ -372,15 +372,15 @@
     "semantic_hash": ""
   },
   "ide/codedna-extension/src/browser/codedna-contributions.ts": {
-    "mtime": 1793031514.1488218,
-    "seen": 1793033487.6411092,
-    "ast_hash": "df0e415948a99d84ae61aae102373dc8",
+    "mtime": 1793045127.1333504,
+    "seen": 1793047308.3945827,
+    "ast_hash": "f56e225525ab788737f87b1748acb325",
     "semantic_hash": ""
   },
   "ide/codedna-extension/src/browser/codedna-frontend-module.ts": {
-    "mtime": 1793031514.1488218,
-    "seen": 1793033487.6411092,
-    "ast_hash": "671f5cd4013122c2aa30995500cc61a2",
+    "mtime": 1793045127.1352239,
+    "seen": 1793047308.3945827,
+    "ast_hash": "1aebcd7f80141f6a7a77edf3d4c908a0",
     "semantic_hash": ""
   },
   "ide/codedna-extension/src/browser/codedna-workspace.ts": {
@@ -402,9 +402,9 @@
     "semantic_hash": ""
   },
   "ide/codedna-extension/src/browser/tests-view-widget.tsx": {
-    "mtime": 1793042958.4358537,
-    "seen": 1793043692.4127212,
-    "ast_hash": "56f46da5260670ee8aa519b3e495f64c",
+    "mtime": 1793091937.540143,
+    "seen": 1793092513.1161704,
+    "ast_hash": "8083086259e1f2bdce02e816148a904f",
     "semantic_hash": ""
   },
   "ide/codedna-extension/src/browser/theme/codedna-theme.ts": {
@@ -420,9 +420,9 @@
     "semantic_hash": "850412234736aeac780096c654ba3b45"
   },
   "ide/codedna-extension/src/common/codedna-protocol.ts": {
-    "mtime": 1793031514.1631174,
-    "seen": 1793033487.6411092,
-    "ast_hash": "ffab4eabc766ecfd3b59515947a09bbb",
+    "mtime": 1793091937.170308,
+    "seen": 1793092513.1161704,
+    "ast_hash": "f2280e4aa78eec55a89dc5cf1534d3d7",
     "semantic_hash": ""
   },
   "ide/codedna-extension/src/node/codedna-backend-module.ts": {
@@ -432,9 +432,9 @@
     "semantic_hash": "8477e6a56a90cb37a054de13bdf0741b"
   },
   "ide/codedna-extension/src/node/codedna-service-impl.ts": {
-    "mtime": 1793031514.1654735,
-    "seen": 1793033487.6411092,
-    "ast_hash": "291c311cf1f48b64884c52da94c66808",
+    "mtime": 1793047403.898249,
+    "seen": 1793090963.488742,
+    "ast_hash": "cfde220434a34e368309c402b387364e",
     "semantic_hash": ""
   },
   "ide/codedna-extension/tsconfig.json": {
@@ -486,9 +486,9 @@
     "semantic_hash": "f21bc84b8425fea7aa0fcf5020655950"
   },
   ".github/workflows/ci.yml": {
-    "mtime": 1793031513.1471012,
-    "seen": 1793033487.6411092,
-    "ast_hash": "ee9aa5c0a7495bc376bf60e89b7c2bb1",
+    "mtime": 1793045480.5264766,
+    "seen": 1793047308.3925693,
+    "ast_hash": "629b66d8175d14adf7b64de7ef5a65f9",
     "semantic_hash": ""
   },
   "AGENTS.md": {
@@ -510,21 +510,21 @@
     "semantic_hash": "143493fc0f69d7306bf0c787ca38fca9"
   },
   "MEMORY.md": {
-    "mtime": 1793043498.7327237,
-    "seen": 1793043692.4127212,
-    "ast_hash": "c0a0af0b6c312819b890d1766e8e40fd",
+    "mtime": 1793092350.732913,
+    "seen": 1793092513.1161704,
+    "ast_hash": "686cfd7384513cace81c9cec1c11d97c",
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1793038026.115751,
-    "seen": 1793043692.4127212,
-    "ast_hash": "9feb9ba6c40c49c4a314cd1656faac2c",
+    "mtime": 1793047173.9851437,
+    "seen": 1793047308.3945827,
+    "ast_hash": "f76bc79dc6e04cddfc088c1560b8b706",
     "semantic_hash": ""
   },
   "docs/ARCHITECTURE.md": {
-    "mtime": 1793038026.1521769,
-    "seen": 1793043692.4127212,
-    "ast_hash": "29e8070d379f68471d2575bc2d97422c",
+    "mtime": 1793047174.038946,
+    "seen": 1793047308.3945827,
+    "ast_hash": "823b16be59c76861ca4102884da1f5e1",
     "semantic_hash": ""
   },
   "docs/DATASET_PLAN.md": {
@@ -534,15 +534,15 @@
     "semantic_hash": "b56beff69c2cb266c8d2361408baa006"
   },
   "docs/DECISIONS.md": {
-    "mtime": 1793043498.7488437,
-    "seen": 1793043692.4127212,
-    "ast_hash": "1ce398c459acd08614407ba7c6ea6d6e",
+    "mtime": 1793092350.6908147,
+    "seen": 1793092513.1174974,
+    "ast_hash": "f7c535f0b4d6eb2204e61ab491cbd924",
     "semantic_hash": ""
   },
   "docs/PROJECT_SPEC.md": {
-    "mtime": 1793005834.2549696,
-    "seen": 1793030430.6885796,
-    "ast_hash": "24d2243551e6311b11ac8cd6c94a82c4",
+    "mtime": 1793043980.6004477,
+    "seen": 1793047308.395597,
+    "ast_hash": "5ce9026f480baf734d35a483dad82ed2",
     "semantic_hash": ""
   },
   "docs/REPORT_DRAFT.md": {
@@ -558,9 +558,9 @@
     "semantic_hash": "32a821de4b1178bef75683f2265b07a8"
   },
   "docs/ROADMAP.md": {
-    "mtime": 1793043498.7406812,
-    "seen": 1793043692.4127212,
-    "ast_hash": "7f5d3c55ec5fba88f79d8a3159bee3c3",
+    "mtime": 1793092350.7706873,
+    "seen": 1793092513.1174974,
+    "ast_hash": "a8d392b38aa8a83af59e5efa35b1baa2",
     "semantic_hash": ""
   },
   "ide/README.md": {
@@ -648,9 +648,9 @@
     "semantic_hash": ""
   },
   "backend/codedna/agent/brake.py": {
-    "mtime": 1793042958.403514,
-    "seen": 1793043692.409709,
-    "ast_hash": "252f45f9d3431aea73ba690a8c226823",
+    "mtime": 1793045043.486653,
+    "seen": 1793047308.3925693,
+    "ast_hash": "7643b5036974efff64e7c1284d650648",
     "semantic_hash": ""
   },
   "backend/codedna/agent/mcp_server.py": {
@@ -744,9 +744,9 @@
     "semantic_hash": ""
   },
   "backend/tests/test_agent_brake.py": {
-    "mtime": 1793042958.403514,
-    "seen": 1793043692.409709,
-    "ast_hash": "96c93e8944d572d30857ca819cd1e047",
+    "mtime": 1793045043.486653,
+    "seen": 1793047308.3945827,
+    "ast_hash": "7087039d88954c91409dc90be7a8fca0",
     "semantic_hash": ""
   },
   "backend/tests/test_build_layout.py": {
@@ -930,15 +930,15 @@
     "semantic_hash": ""
   },
   "ide/codedna-extension/src/browser/history-view-widget.tsx": {
-    "mtime": 1793031514.1545992,
-    "seen": 1793033487.6411092,
-    "ast_hash": "b29d981d1e63be1ded01928b321dd61a",
+    "mtime": 1793092165.105922,
+    "seen": 1793092513.1161704,
+    "ast_hash": "d7fedc5f4c36364ec5bcb556eb1c00ef",
     "semantic_hash": ""
   },
   "ide/codedna-extension/src/browser/plugins-view-widget.tsx": {
-    "mtime": 1793031514.1556377,
-    "seen": 1793033487.6411092,
-    "ast_hash": "06ccf641e0b70b179af094185eb8a3ec",
+    "mtime": 1793045127.138173,
+    "seen": 1793047308.3945827,
+    "ast_hash": "c203bee14b2001e24022d8ff238cd36f",
     "semantic_hash": ""
   },
   "ide/codedna-extension/src/browser/progress.ts": {
@@ -948,9 +948,9 @@
     "semantic_hash": ""
   },
   "ide/codedna-extension/src/browser/replay-view-widget.tsx": {
-    "mtime": 1792921696.6272328,
-    "seen": 1793030430.6885796,
-    "ast_hash": "9ad42ca7adae2733e77b51d0562a8abf",
+    "mtime": 1793091938.700132,
+    "seen": 1793092513.1161704,
+    "ast_hash": "3bbfb875ea9a06cf225a49c743a21580",
     "semantic_hash": ""
   },
   "ide/codedna-extension/tests/workflow.test.cjs": {
@@ -1206,15 +1206,15 @@
     "semantic_hash": ""
   },
   "website/catalogue/index.json": {
-    "mtime": 1793031514.227803,
-    "seen": 1793033487.6411092,
-    "ast_hash": "7b29c688a3b22950c02b29d0e202f8a6",
+    "mtime": 1793046058.2870898,
+    "seen": 1793047308.3945827,
+    "ast_hash": "0359ee6be20a8dd3c345fbb44f919e77",
     "semantic_hash": ""
   },
   "website/plugins.js": {
-    "mtime": 1792876651.6003778,
-    "seen": 1793030430.6885796,
-    "ast_hash": "b482366c066314a048e2f84d4c26a802",
+    "mtime": 1793045480.4931786,
+    "seen": 1793047308.3945827,
+    "ast_hash": "78191661bb04e11ffb78ea3a6ea4af10",
     "semantic_hash": ""
   },
   "docs/AGENT_BRAKE.md": {
@@ -1272,9 +1272,9 @@
     "semantic_hash": ""
   },
   "docs/HANDOFF.md": {
-    "mtime": 1793043498.7366323,
-    "seen": 1793043692.4127212,
-    "ast_hash": "d136aa6da97a093a4a1578161bda5115",
+    "mtime": 1793092350.7384374,
+    "seen": 1793092513.1174974,
+    "ast_hash": "fe972e4188385423eb686311df1d8297",
     "semantic_hash": ""
   },
   "docs/IMPLEMENTATION_HANDOFF.md": {
@@ -1308,15 +1308,15 @@
     "semantic_hash": ""
   },
   "docs/REPORT_AGENT_BRAKE.md": {
-    "mtime": 1793031513.288079,
-    "seen": 1793033487.6411092,
-    "ast_hash": "ef9dcb6845b1d1db9d94fe6c67835eaa",
+    "mtime": 1793043980.5983624,
+    "seen": 1793047308.395597,
+    "ast_hash": "5c977424ab6d0ac11d92a6e597515bb7",
     "semantic_hash": ""
   },
   "docs/REPORT_SYSTEM_DRAFT.md": {
-    "mtime": 1793031513.2917614,
-    "seen": 1793033487.6411092,
-    "ast_hash": "3463b72791757423c2f829c5290ef4ee",
+    "mtime": 1793043980.5913675,
+    "seen": 1793047308.395597,
+    "ast_hash": "3bfb72f53984a2cd4acafd4c711346b0",
     "semantic_hash": ""
   },
   "docs/TUNED_GATE_CONDITIONAL_PROTOCOL.md": {
@@ -1344,21 +1344,21 @@
     "semantic_hash": ""
   },
   "website/docs.html": {
-    "mtime": 1792876651.5983658,
-    "seen": 1793030430.6885796,
-    "ast_hash": "3e2ec5a2c013d9cf36db70116ed313aa",
+    "mtime": 1793046058.3316524,
+    "seen": 1793047308.395597,
+    "ast_hash": "cfb1420c9ea754f7766f92162292c9b8",
     "semantic_hash": ""
   },
   "website/index.html": {
-    "mtime": 1792876651.5983658,
-    "seen": 1793030430.6885796,
-    "ast_hash": "d25c466d1bb7ae800200801f1d52e881",
+    "mtime": 1793045426.8545246,
+    "seen": 1793047308.395597,
+    "ast_hash": "5b0aea7a1192fc22f704a681f8c3e048",
     "semantic_hash": ""
   },
   "website/plugins.html": {
-    "mtime": 1792876651.6003778,
-    "seen": 1793030430.6885796,
-    "ast_hash": "40337f66b1c5fe521e3c8d1f201b4884",
+    "mtime": 1793046058.3683295,
+    "seen": 1793047308.395597,
+    "ast_hash": "857dc1b5b77d6cd42b34c6e0653dc906",
     "semantic_hash": ""
   },
   "docs/figures/confirmatory-2026-10-26/pooled-differences.png": {
@@ -1410,15 +1410,15 @@
     "semantic_hash": ""
   },
   "docs/BLUEPRINT_COMPLETION.md": {
-    "mtime": 1793043498.7222989,
-    "seen": 1793043692.4127212,
-    "ast_hash": "c94cc959dd950ab2f71a5fc6aade0e3f",
+    "mtime": 1793092350.6232283,
+    "seen": 1793092513.1161704,
+    "ast_hash": "b791dca966b16561bba195f3c0905c49",
     "semantic_hash": ""
   },
   "docs/DEFERRED_FEATURES.md": {
-    "mtime": 1793043498.7183402,
-    "seen": 1793043692.4127212,
-    "ast_hash": "d5e7f1f0a95e1ee7af5e406a76aa5633",
+    "mtime": 1793047452.8916056,
+    "seen": 1793090963.488742,
+    "ast_hash": "294abbc604c7976ec79f05babe820ff7",
     "semantic_hash": ""
   },
   "docs/IDE_MANUAL_TEST.md": {
@@ -1437,6 +1437,120 @@
     "mtime": 1793043498.7267663,
     "seen": 1793043692.4127212,
     "ast_hash": "2c2231b32930521e009d011678d29e39",
+    "semantic_hash": ""
+  },
+  "docs/RELEASE_VALIDATION_2026-10-27.json": {
+    "mtime": 1793044840.07009,
+    "seen": 1793047308.3945827,
+    "ast_hash": "ff7cf2087ba570fd72dc4e8f27bbabf8",
+    "semantic_hash": ""
+  },
+  "docs/graph-human-review/provenance.json": {
+    "mtime": 1793044406.360697,
+    "seen": 1793047308.3945827,
+    "ast_hash": "5ebf40502e60f445399782a37346d1cc",
+    "semantic_hash": ""
+  },
+  "ide/codedna-extension/src/browser/extensions-widget-factory.ts": {
+    "mtime": 1793045127.1292672,
+    "seen": 1793047308.3945827,
+    "ast_hash": "b833053e6f6c8dc9d5d79d7b809d1616",
+    "semantic_hash": ""
+  },
+  "ide/codedna-extension/tests/plugins.test.cjs": {
+    "mtime": 1793045162.6768003,
+    "seen": 1793047308.3945827,
+    "ast_hash": "59c9c3318445877971ba5e93d06c37f9",
+    "semantic_hash": ""
+  },
+  "scripts/verify_desktop_install.ps1": {
+    "mtime": 1793045679.3186567,
+    "seen": 1793047308.3945827,
+    "ast_hash": "fe88830c85cce34050673214fd875875",
+    "semantic_hash": ""
+  },
+  "website/tests/plugins.test.cjs": {
+    "mtime": 1793045480.4978347,
+    "seen": 1793047308.3945827,
+    "ast_hash": "4cee9d87e7e14e47ab20d2f981f23a87",
+    "semantic_hash": ""
+  },
+  "docs/BRAKE_IMPROVEMENT_PLAN.md": {
+    "mtime": 1793046324.0793803,
+    "seen": 1793047308.3945827,
+    "ast_hash": "5a9b2449a254d5719f350de7cc0e3434",
+    "semantic_hash": ""
+  },
+  "docs/CLEAN_PC_ACCEPTANCE.md": {
+    "mtime": 1793045679.3248098,
+    "seen": 1793047308.395597,
+    "ast_hash": "796ec242d6a43218fb1305bcc66e14e1",
+    "semantic_hash": ""
+  },
+  "docs/DEFENCE_CHECKLIST.md": {
+    "mtime": 1793044696.808313,
+    "seen": 1793047308.395597,
+    "ast_hash": "ed4cb931a3fa8abd74894733463132fe",
+    "semantic_hash": ""
+  },
+  "docs/REPORT_ASSEMBLED.md": {
+    "mtime": 1793043980.7131984,
+    "seen": 1793047308.395597,
+    "ast_hash": "11f75f20143397a9fb3c8c9cd5d1c8ab",
+    "semantic_hash": ""
+  },
+  "docs/SUPERVISOR_REVIEW.md": {
+    "mtime": 1793045679.3186567,
+    "seen": 1793047308.395597,
+    "ast_hash": "a4ece4f41299965e535954d6cba4369e",
+    "semantic_hash": ""
+  },
+  "docs/WEBSITE_BLUEPRINT.md": {
+    "mtime": 1793045942.1459968,
+    "seen": 1793047308.395597,
+    "ast_hash": "4cc3ca288eb20d26d50e2e2fd0c11f90",
+    "semantic_hash": ""
+  },
+  "docs/graph-human-review/README.md": {
+    "mtime": 1793044406.36477,
+    "seen": 1793047308.395597,
+    "ast_hash": "43c9702ccc4ff525eb7865ba8386f827",
+    "semantic_hash": ""
+  },
+  "docs/graph-human-review/REVIEW_GUIDE.md": {
+    "mtime": 1793046759.4064689,
+    "seen": 1793047308.395597,
+    "ast_hash": "4053a72ba7a212af5a7836ed089c1c04",
+    "semantic_hash": ""
+  },
+  "docs/graph-human-review/SOURCE_LINKS.md": {
+    "mtime": 1793046759.3859227,
+    "seen": 1793047308.395597,
+    "ast_hash": "fc6346073f9a69b33d1c829222fc01a9",
+    "semantic_hash": ""
+  },
+  "website/downloads.html": {
+    "mtime": 1793045426.8504744,
+    "seen": 1793047308.395597,
+    "ast_hash": "676282e71b018e8de95a138e556f6008",
+    "semantic_hash": ""
+  },
+  "ide/codedna-extension/tests/startup.test.cjs": {
+    "mtime": 1793047403.901677,
+    "seen": 1793090963.488742,
+    "ast_hash": "993086631b3f48ad358b753c196d699f",
+    "semantic_hash": ""
+  },
+  "ide/codedna-extension/src/browser/test-outcomes.tsx": {
+    "mtime": 1793091937.17233,
+    "seen": 1793092513.1161704,
+    "ast_hash": "342dae93e40e2e6817fa24acf4b39bb6",
+    "semantic_hash": ""
+  },
+  "ide/codedna-extension/tests/history-ui.test.cjs": {
+    "mtime": 1793092165.1079361,
+    "seen": 1793092513.1161704,
+    "ast_hash": "ec4c3502bb083c2cc416ab86698728d3",
     "semantic_hash": ""
   }
 }

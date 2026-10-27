@@ -8,6 +8,7 @@ import { CodeDnaService, SelectionReport, SelectionStrategy, SelectionRun, TestD
 import { CodeDnaComparison } from './comparison';
 import { CodeDnaWorkspace } from './codedna-workspace';
 import { withProgress } from './progress';
+import { TestOutcomes } from './test-outcomes';
 import { breakable, friendlyReason, friendlyWarning, packageName, plural, simpleName } from './plain-language';
 import { Chip, ComparePicker, ErrorNotice, FirstRun, Spinner } from './ui';
 
@@ -199,6 +200,15 @@ export class TestsViewWidget extends ReactWidget {
                 {risk?.validation && <p>Prior audit: {risk.validation.commits} commits,
                     {' '}{risk.validation.failing_commits} with failures. Historical miss-rate upper bound:
                     {' '}{(risk.validation.miss_upper_bound * 100).toFixed(2)}%.</p>}
+                {risk?.status === 'unvalidated' && <p className='cd-help'>Passing tests and validated skip risk are different.
+                    A successful run records what happened; it does not prove that future tests can be skipped.
+                    Only sufficiently audited earlier history can support that decision.</p>}
+                {risk?.reasons.some(reason => /another repository, branch or future commits/i.test(reason)) &&
+                    <p className='cd-help'>This can also happen when history already contains results for the change being compared.
+                        For a previous-commit comparison, those outcomes are later than its base commit.
+                        CodeDNA refuses to use them to predict that same change. Keep your saved history;
+                        use HEAD to WORKTREE for a new uncommitted change, or supply history from before the comparison base.
+                        The earlier history must still pass its audit.</p>}
                 {!!risk?.reasons.length && <ul>{risk.reasons.map(reason => <li key={reason}>{reason}</li>)}</ul>}
             </section>
             <button className='cd-button' disabled={this.loading || !report.total_tests}
@@ -211,9 +221,9 @@ export class TestsViewWidget extends ReactWidget {
                     : this.execution.results.tests.length === 0 ? 'No test results recorded'
                     : `${this.execution.results.failing_tests.length} failing tests`}</h3>
                 <p>Finished in {this.execution.results.duration_seconds.toFixed(1)} seconds.</p>
-                <div className='cd-card'>{this.execution.results.tests.map(test => <div className='cd-row cd-static' key={test.id}>
-                    <span className='cd-code'>{simpleName(test.id)}</span><span>{test.status}</span>
-                </div>)}</div>
+                <TestOutcomes tests={this.execution.results.tests} />
+                <p className='cd-help'>These are tests written in your project. CodeDNA selects and runs them.
+                    The checks below each class or module show what the runner actually executed.</p>
                 {this.execution.results.warnings.map(warning => <p key={warning}>{warning}</p>)}
                 {this.execution.recording && <p className='cd-footnote'>{this.execution.recording.recorded
                     ? `Saved as project history (${this.execution.recording.commits_with_results} commits with full results). Risk selection turns on once this history passes its audit.`
@@ -240,6 +250,8 @@ export class TestsViewWidget extends ReactWidget {
             </div>}
             {report.selected.length > 0 && <section aria-label='Run these'>
                 <h3>Run these</h3>
+                <p className='cd-help'>Each item is a test class or module and may contain several checks.
+                    Select an item to read its source; after running, inspect its individual outcomes above.</p>
                 <div className='cd-card'>
                     {report.selected.map(item => <button className='cd-row' key={item.test}
                         title={`Open ${item.test}`}

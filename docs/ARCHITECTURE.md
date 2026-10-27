@@ -597,3 +597,17 @@ frozen analysis executable cannot be used as a Python interpreter.
 `scripts/pr_demo.py` and the PR-analysis workflow produce a read-only brake plan,
 not a test-run verdict. Website and optional new features remain separately
 tracked in the current completion ledger and deferred backlog.
+
+
+## Extensions and explicit risk evidence (D-072)
+
+The existing PluginsViewWidget is hosted inside a Theia Extensions ViewContainer
+provided by extensions-widget-factory.ts. PluginsViewContribution restores it
+after layout initialization without requesting editor focus. Installed language
+metadata renders before the online catalogue completes. UI installation still
+uses the core; website downloads do not execute local code.
+
+Brake plans expose the any-omitted-failure objective plus the active audit's
+denominator/sample/bound: B10 uses the all-audit-commit Wilson evidence screen;
+CRC uses failing audit commits and its corrected expected-risk quantity. Neither
+is advertised as a future guarantee. No model or stopping rule changed.

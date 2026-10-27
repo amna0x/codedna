@@ -1,5 +1,18 @@
 # CodeDNA — full handoff blueprint (2026-10-26)
 
+## Active checkpoint - D-072/D-073, 2026-10-27
+
+Continue on codex/blueprint-completion; preserve all stashes. D-071 is local
+commit 8b0d478. The branch contains the reviewed D-072/D-073 source checkpoint; inspect git log for its commit. Full Maven suite
+563 passed, zero skipped; latest TypeScript compile and 18 IDE tests passed.
+Risk thresholds/fallbacks unchanged. Individual recorded checks, clear history
+selection and replay folder browsing fix the owner's demo feedback. See
+BLUEPRINT_COMPLETION.md for exact validation and remaining external gates.
+Final installer rebuild is in progress; do not send the old D-071 installer
+as this version. Website source and detailed blueprint are ready locally;
+public catalogue/wheel hosting remains unavailable. No new push/merge yet.
+
+
 ## Current continuation - 2026-10-27 (supersedes older status)
 
 PR #22 merged as 45821b4 after owner authorization and green checks. D-068 and
@@ -74,7 +87,7 @@ rule (B3):
 **Lead the report with:** the gate's safety, the AI-brake study and the
 conformal stop B12f, in that order.
 
-**The three things that are not done and matter most:**
+**Historical three-item gap list (resolved by D-067/D-068/D-070; retained below as context, not current tasks):**
 
 1. **B12f is not in the product.** The live brake (`codedna mcp`, IDE,
    `risk-select`) still uses B10 + the Wilson gate (`selection/live.py`,
@@ -108,21 +121,20 @@ Node tests pass. The simplest route is to merge this one PR (§3.1).
 
 ---
 
-## 0.5 Where Claude stopped — resume here (kept current; last update 2026-10-26 09:40Z)
+## 0.5 START HERE - current continuation, 2026-10-27
 
-If Claude ran out mid-task, start from this list. Check each branch on
-GitHub first: newer commits may have landed after this was written.
+| Task | State | Next action |
+|---|---|---|
+| Integration/studies | #21/#22 merged; all nine-project runs complete; findings/hashes preserved | Do not repeat old merges or rerun studies. |
+| D-071 completion repairs | Local commit 8b0d478, based on main 45821b4; 562 passed/zero skips; verified installer | Read BLUEPRINT_COMPLETION.md and RELEASE_VALIDATION_2026-10-27.json. |
+| D-072 owner follow-up | Brake evidence clarity, persistent Extensions/Language plugins, website acquisition and detailed blueprint implemented; final validation/package underway | Finish final proof/Graphify refresh and review the new local changes. |
+| Independent acceptance | Clean PC, student labels, supervisor sign-off and defence recording open | CLEAN_PC_ACCEPTANCE.md, graph-human-review/REVIEW_GUIDE.md, SUPERVISOR_REVIEW.md and DEFENCE_CHECKLIST.md. |
+| Research improvement | Existing results retained; next valid development/evaluation plan written | BRAKE_IMPROVEMENT_PLAN.md; no favorable result is promised or invented. |
+| Website/release | Blueprint and acquisition UI prepared; public destination/anonymous downloads not available | WEBSITE_BLUEPRINT.md; retain source privacy and verify real artifacts before catalogue publication. |
 
-| Task | Owner / place | Branch | Status file / output folder | State | How to resume |
-|---|---|---|---|---|---|
-| Last finished step | Claude | `claude/project-thread-lo3rpw` | `scripts/demo_brake_end_to_end.py` | **§6.3 + §6.5 done:** conformal stop is a live opt-in method (`--method crc`, MCP `method`, D-068) and the end-to-end demo gives `blocked`/`passed` with real Maven | next (B13f commits up to `8c1b87f` already merged, 495 passed): §6.4 `structural_plan`, then §7 bug 2 (Python brake fallback) |
-| **Integration of all PRs** | this file's PR | `claude/project-thread-lo3rpw` | — | done and tested (494 passed with Maven, 8 Windows-only skips, after the row below), includes #18's B13 commits up to `cec75ff` | if any PR branch below got new commits, `git merge origin/<branch>` into this branch, resolve, `python -m pytest --run-maven`, push |
-| **START HERE (next agent)** | Codex | `codex/brake-structural-python` (D-070) | local validation log / next PR | PR #21 merged; studies finished; structural/Python implementation done; 554 passed / 0 skipped; publication approval pending | obtain explicit approval for the private-source push, then publish and check CI; do not merge a new PR without authorization; then remaining manual/clean-PC/report tasks |
-| **B13 tuned gate, B12f and B11 reruns on the 9 confirmatory projects** | novelty thread, running on the laptop | `claude/project-thread-71arlo` (#18's branch) in worktree `C:\Users\hp\codedna-b13`, data copied to `C:\Users\hp\codedna-b13-data\<project>\dataset.csv` | `experiments/results/tuned-gate-confirmatory-2026-10-26/`, `crc-conditional-confirmatory-2026-10-26/`, `pts-check-confirmatory-2026-10-26/` (protocol for B13: commit `2ac7ac7` on that branch) | started 09:11Z; may take hours. At 09:26Z still running a (B13), b (B12f), c (B11); a fourth run d was queued after them: `git merge --ff-only origin/claude/project-thread-71arlo` in the worktree, then `run_tuned_gate_check.py C:\Users\hp\codedna-b13-data --conditional --out experiments/results/tuned-gate-conditional-confirmatory-2026-10-26` (B13f, exploratory), committed with the other three folders. Nothing from this run is on GitHub yet | if the laptop slept, rerun the same commands from the worktree (they resume per project): `$env:PYTHONPATH="C:\Users\hp\codedna-b13\backend"; $env:OMP_NUM_THREADS="1"` then `python scripts/run_tuned_gate_check.py C:\Users\hp\codedna-b13-data --out experiments/results/tuned-gate-confirmatory-2026-10-26`, then `run_crc_check.py ... --conditional --out experiments/results/crc-conditional-confirmatory-2026-10-26`, then `run_pts_check.py ... --out experiments/results/pts-check-confirmatory-2026-10-26`. Commit only those three folders on that branch and push (no force). **B13 is exploratory** (designed after seeing #20). **Read the B12f 9-project verdict by hand:** that branch's `run_crc_check.py` still uses the 3-of-4 rule; apply 7 of 9 (§6.1) |
-| After those results land | whoever merges | `claude/project-thread-lo3rpw` | — | not started | `git merge origin/claude/project-thread-71arlo` into this branch (expect `run_crc_check.py` conflicts: keep this branch's `required_keeps`, `--protocol` and the `codedna_java.live` import), rerun tests, push; then write `FINDINGS.md` for each folder and report §4.12 |
-| Merging into main | owner via GPT/Codex on the laptop (owner chose this, 09:17Z) | `claude/project-thread-lo3rpw` = PR #21 | — | not started; Claude did not merge | paste the §17.1 prompt to Codex, or click PR #21's merge button (below) |
-| Laptop clean-up | owner at the laptop | main checkout | backup `C:\Users\hp\codedna-backup-2026-10-26\` | GPT edits not yet stashed | §4.1 command; **only after the B13 run above finishes** run §4.2–4.4 |
-| Everything else | Codex / next agent | new branch per task | — | not started | §17 prompt, task list at the end of §17 |
+Preserve every stash. Historical instructions below are reference, not a request
+to reapply old edits or repeat completed integration. Current extra-feature
+authorization is recorded in DEFERRED_FEATURES.md.
 
 ### Click-by-click: merging on GitHub
 

@@ -1,5 +1,18 @@
 # CodeDNA — Roadmap
 
+## Active checkpoint - D-072/D-073, 2026-10-27
+
+Continue on codex/blueprint-completion; preserve all stashes. D-071 is local
+commit 8b0d478. The branch contains the reviewed D-072/D-073 source checkpoint; inspect git log for its commit. Full Maven suite
+563 passed, zero skipped; latest TypeScript compile and 18 IDE tests passed.
+Risk thresholds/fallbacks unchanged. Individual recorded checks, clear history
+selection and replay folder browsing fix the owner's demo feedback. See
+BLUEPRINT_COMPLETION.md for exact validation and remaining external gates.
+Final installer rebuild is in progress; do not send the old D-071 installer
+as this version. Website source and detailed blueprint are ready locally;
+public catalogue/wheel hosting remains unavailable. No new push/merge yet.
+
+
 ## Current continuation - 2026-10-27 (supersedes older status)
 
 PR #22 merged as 45821b4 after owner authorization and green checks. D-068 and
@@ -32,10 +45,12 @@ Milestone 5 report review is still open.
 - Done: live CRC opt-in and real Maven end-to-end demo (D-068).
 - Done: exact-decision risk-prefix performance repair (D-069).
 - Default remains B10; B12f caveats and failed PTS cost match are explicit (D-067).
-- Implemented on the next review branch: structural_plan and Python/mixed
-  fallback (D-070); full local validation passed (554, zero skips); publication approval pending. Remaining: IDE/manual/clean-PC
-  checks and final report. Public catalogue hosting is
-  still outstanding; implemented plugin management is not public hosting.
+- Merged: structural_plan and Python/mixed fallback (D-070), PR #22 / main45821b4.
+- D-071 completion fixes validated locally: 562 passed, zero skips; refreshed
+  installer and Java diagnostics/mixed IDE analysis checked.
+- D-072: persistent Extensions/Language plugins and website acquisition UI
+  implemented; final follow-up validation in progress. Public catalogue hosting,
+  clean-PC acceptance, student labels and final supervisor review remain open.
 
 ## Milestone 0 — Repository bootstrap ✅
 
@@ -179,7 +194,7 @@ Product track, alongside:
   retrospective replay assumes stored prior outcomes; partial-feedback
   deployment performance is not established. New replay work is deferred.
 
-## Milestone 6 — CodeDNA IDE and FYP demo ⏳
+## Milestone 6 — CodeDNA IDE and FYP demo 🔄
 
 Replaces the standalone React dashboard: the same views live inside the IDE.
 May start in parallel (Student C) once the analysis JSON formats are stable.
@@ -205,11 +220,11 @@ May start in parallel (Student C) once the analysis JSON formats are stable.
 - ✅ Windows x64 production build and NSIS installer checked locally (D-044,
   D-055). Installer now includes Python plus the ML/API core. Packaged-core
   analysis, model/calibration fitting, API and actual Maven execution passed
-  without Python on PATH; all 1,354 core files matched their recorded hashes.
-- 🔄 Java editor/progress interactive acceptance and clean-machine installer
-  testing remain. Bundled Java extensions deploy, but the local UI automation
-  could not complete click-through checks after repeated minimization/user-input
-  errors. The local installer is unsigned.
+  without Python on PATH; current D-072 frozen core smoke verifies all 1,389 bundle-file hashes.
+- 🔄 Java diagnostics were observed appearing/clearing, mixed Java/Python
+  discovery and Extensions language visibility were checked locally (D-071/072).
+  Remaining interactive acceptance and clean-PC installation stay open;
+  the local installer is unsigned. See IDE_MANUAL_TEST.md and CLEAN_PC_ACCEPTANCE.md.
 - ✅ Uncommitted-change analysis: `WORKTREE` revision + "My uncommitted
   changes" in the IDE (D-046)
 - ✅ History replay view (D-049): the study's test commits played back one by
@@ -221,13 +236,14 @@ May start in parallel (Student C) once the analysis JSON formats are stable.
   discovery follows build-helper test folders and `.class` includes (D-052)
 - ✅ Record as you go: full-suite runs build the project's own history so
   the risk gate can turn on without external data (D-053)
-- ⏳ GitHub PR demonstration and final experimental report
+- 🔄 Read-only PR demonstration workflow and local plan artifact implemented (D-071);
+  live PR execution evidence and final university report review remain open.
 
 - ✅ IDE: risk status/audit evidence, explicit execution confirmation, actual
   selected-test statuses and logs; structural selection carries no probability
   guarantee. Native build validation is recorded in the implementation handoff.
 
-## Milestone 7 — Platform website and plugin distribution ⏳
+## Milestone 7 — Platform website and plugin distribution 🔄
 
 - ✅ Static platform website in `website/`: home, docs, catalogue page (D-047);
   hosting (e.g. GitHub Pages) still to switch on

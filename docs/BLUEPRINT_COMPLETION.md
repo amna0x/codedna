@@ -81,3 +81,55 @@ removed. Final suite and package proof is in RELEASE_VALIDATION_2026-10-27.json.
 The current automated completion batch passed. Continue with the queued brake
 improvement and website/Extensions work from DEFERRED_FEATURES.md. Human/external
 checks remain open; do not describe the entire blueprint as fully signed off.
+
+## D-072/D-073 continuation - 2026-10-27
+
+Owner confirmed: fix presentation and defects without weakening risk validation.
+Full Maven-inclusive suite after D-072: 563 passed, zero failed/skipped, 2437.48 s.
+No completed studies, thresholds, defaults, saved project history or stashes changed.
+D-073 is frontend-only: show runner-supplied individual check names/outcomes,
+explain same-change/future-history refusal without asserting that foreign data
+exists, make saved-run clicks reveal their details above the list and scroll
+them into view, display the analysed project path, and add a real study-folder
+browser with disabled empty submission. Research replay and project history
+are explicitly distinguished. Earlier saved results without cases still render.
+TypeScript compile and all 18 IDE Node regression tests pass (zero skipped).
+Website acquisition tests: 13 passed; desktop runtime tests: 3 passed previously.
+Frozen-core smoke: Java/Python load, actual MCP passing/failing pytest and missing
+external interpreter handling passed; all 1,389 bundle hashes match.
+
+Final production/installer rebuild includes D-073 and uses compression level 3
+instead of the packager's level 9 to avoid wasting laptop time. This affects
+archive size only. Package verification/friend kit remains pending until the
+final installer completes. Previous D-071 installer is preserved in backups.
+The public catalogue URL still returns 404; installed bundled Java/Python work,
+but optional online acquisition and frozen optional-wheel installation are not
+validated public release capabilities. Do not expose the private repository.
+Detailed website handoff: WEBSITE_BLUEPRINT.md; local preview port 8769.
+Clean-PC installation, independent human graph labels, university supervisor
+review and defence recording remain external acceptance, not AI-completed work.
+
+
+## D-073 observed desktop acceptance - 2026-10-27
+
+The rebuilt source IDE with the frozen core was opened on C:/Users/hp/codedna-demo.
+Extensions was visible after restart and listed installed Java/Python despite
+the online catalogue 404. Project history loaded automatically, displayed the
+canonical demo path, and selecting View results revealed and scrolled to both
+classes and all six actual saved JUnit check outcomes. No project tests were
+executed and no saved history was changed by this acceptance check.
+
+History replay showed a disabled Load results for empty input. Browse opened a
+folder-only native picker and populated the chosen actual path. Loading
+experiments/results/study11-2026-10-21 succeeded: 55 compatible reports across
+11 projects appeared. Reports without trace SHAs are labelled accordingly.
+The rolling-evidence and other research summaries use a different format and
+are not currently replay inputs; an existing directory alone is insufficient.
+This remains a documented format limitation, not a reason to rerun studies.
+
+
+The desktop risk recommendation was also checked after D-073: it retained
+Risk unvalidated, the original chronological-history reason and both required
+demo test classes, while showing the new same-change explanation. Only the
+read-only Suggest tests action was used; no test execution or history recording
+was triggered. Existing stashes retain their original object IDs.

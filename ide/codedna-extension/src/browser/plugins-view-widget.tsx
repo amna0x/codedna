@@ -48,6 +48,7 @@ export class PluginsViewWidget extends ReactWidget {
         this.update();
         try {
             this.installed = await this.codedna.installedPlugins();
+            this.update(); // Installed languages remain visible while the online catalogue loads.
         } catch (error) {
             this.error = errorText(error);
         }
@@ -112,6 +113,7 @@ export class PluginsViewWidget extends ReactWidget {
             <header className='cd-header'>
                 <h2>Language plugins</h2>
                 <p className='cd-subtitle'>Each language CodeDNA understands comes from a plugin. Java and Python are bundled.</p>
+                <p className='cd-help'>These are CodeDNA analysis plugins. Editor completion and debugging extensions are separate.</p>
             </header>
             <div className='cd-controls'>
                 <button className='theia-button secondary' disabled={this.loading} onClick={() => this.refresh()}>

@@ -1,5 +1,7 @@
 import * as React from '@theia/core/shared/react';
 import { inject, injectable, postConstruct } from '@theia/core/shared/inversify';
+import { FileDialogService } from '@theia/filesystem/lib/browser/file-dialog/file-dialog-service';
+import { FileUri } from '@theia/core/lib/common/file-uri';
 import { ProgressService } from '@theia/core/lib/common/progress-service';
 import { ReactWidget } from '@theia/core/lib/browser/widgets/react-widget';
 import {
@@ -34,6 +36,8 @@ export class ReplayViewWidget extends ReactWidget {
 
     @inject(CodeDnaService) protected readonly codedna: CodeDnaService;
     @inject(ProgressService) protected readonly progress: ProgressService;
+
+    @inject(FileDialogService) protected readonly dialogs: FileDialogService;
 
     protected folders = '';
     protected loading = false;
@@ -72,6 +76,22 @@ export class ReplayViewWidget extends ReactWidget {
         return this.folders.split(/\r?\n/).map(f => f.trim()).filter(f => !!f);
     }
 
+    protected async browse(): Promise<void> {
+        try {
+            const folder = await this.dialogs.showOpenDialog({
+                title: 'Choose a CodeDNA study results folder', canSelectFiles: false, canSelectFolders: true
+            });
+            if (folder) {
+                this.folders = [...new Set([...this.folderList, FileUri.fsPath(folder)])].join('\n');
+                this.error = undefined;
+                this.update();
+            }
+        } catch (error) {
+            this.error = error instanceof Error ? error.message : String(error);
+            this.update();
+        }
+    }
+
     protected async loadFolders(): Promise<void> {
         const folders = this.folderList;
         if (!folders.length) {
@@ -88,7 +108,7 @@ export class ReplayViewWidget extends ReactWidget {
             this.missingFolders = sources.missing;
             this.overview = overview;
             if (!this.sources.length) {
-                this.error = 'No experiment reports found in these folders.';
+                this.error = 'No experiment reports found in these folders. Choose a folder containing CodeDNA study reports, not a project source folder.';
             }
         });
     }
@@ -185,13 +205,16 @@ export class ReplayViewWidget extends ReactWidget {
                 <label className='cd-field'>
                     <span className='cd-field-label'>Study results folders (one per line)</span>
                     <textarea rows={2} value={this.folders} spellCheck={false} disabled={this.loading}
-                        placeholder='…\codedna\experiments\results\study11-2026-10-21'
+                        placeholder='Paste a real study results folder, or use Browse…'
                         onChange={e => { this.folders = e.currentTarget.value; this.update(); }} />
                 </label>
-                <button className='cd-button' type='submit' disabled={this.loading} aria-busy={this.loading}>
+                <button className='cd-button cd-secondary' type='button' disabled={this.loading} onClick={() => this.browse()}>Browse…</button>
+                <button className='cd-button' type='submit' disabled={this.loading || !this.folderList.length} aria-busy={this.loading}>
                     {this.loading ? <><Spinner /> Loading…</> : 'Load results'}
                 </button>
             </form>
+            <p className='cd-help'>History replay reads completed research study reports. The placeholder is not a loaded folder.
+                To inspect tests you ran in your open project, use Project history instead.</p>
             {this.error && <ErrorNotice message={this.error} />}
             {this.missingFolders.length > 0 && <div className='cd-notice'>
                 <strong>Some folders were not found</strong>

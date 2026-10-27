@@ -94,6 +94,10 @@ def plan(repo_path: str | Path, *, base: str = "HEAD", head: str = WORKTREE,
             "target": risk["target"],
             "estimated_skip_risk": risk["estimated_skip_risk"],
             "reasons": risk["reasons"],
+            "objective": "omit_any_failing_test",
+            "note": ("Historical evidence supports a selection rule, not a guarantee for "
+                     "this change or a proof that the patch is correct."),
+            "audit": _audit_summary(risk),
             **({"conformal": risk["conformal"]} if risk.get("conformal") else {}),
             **({"estimate_is_conservative": True} if risk.get("estimate_is_conservative") else {}),
         },
@@ -195,3 +199,26 @@ def _plan_summary(result: dict, validated: bool) -> str:
                 f"class would fail: {risk:.1%} (validated on this project's history).")
     return (f"Run all {total} test classes: skipping is not validated for this project "
             f"({result['risk']['reasons'][0] if result['risk']['reasons'] else 'no reason given'}).")
+
+
+def _audit_summary(risk: dict) -> dict | None:
+    """Expose the active method's evidence without mixing all/failing denominators."""
+    if risk.get("method") == "crc":
+        crc = risk.get("conformal")
+        if crc is None:
+            return None
+        return {"method": "crc", "denominator": "failing_audit_commits",
+                "sample_size": crc["failing_audit_commits"],
+                "observed_miss_rate": crc["audit_miss_rate"],
+                "corrected_expected_risk_bound": crc["corrected_bound"],
+                "assumption": "past and future failing commits are exchangeable",
+                "future_guarantee": False}
+    validation = risk.get("validation")
+    if validation is None:
+        return None
+    return {"method": "wilson_evidence_screen", "denominator": "all_audit_commits",
+            "sample_size": validation["commits"],
+            "failing_commits": validation["failing_commits"],
+            "observed_miss_rate": validation["observed_miss_rate"],
+            "historical_miss_upper_bound": validation["miss_upper_bound"],
+            "accepted": validation["accepted"], "future_guarantee": False}

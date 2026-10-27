@@ -521,3 +521,23 @@ not a probability and never permits skipping without validated history.
 Python and mixed-language projects safely receive a full-suite plan while
 risk selection is unsupported; execution uses the existing Java/Python
 plugin dispatcher. See [the brake guide](docs/AGENT_BRAKE.md).
+
+
+## Current completion and language plugins
+
+Open **Extensions → Language plugins** (Ctrl+Shift+X) in the IDE. Java and Python
+are bundled; analysis plugins are distinct from editor completion/debugging
+extensions. The activity tab is restored for existing as well as new layouts.
+Installed languages remain usable when the official catalogue is unavailable.
+
+- [Current completion ledger](docs/BLUEPRINT_COMPLETION.md)
+- [Website implementation blueprint](docs/WEBSITE_BLUEPRINT.md)
+- [Clean Windows acceptance and friend-PC test](docs/CLEAN_PC_ACCEPTANCE.md)
+- [Independent graph review guide](docs/graph-human-review/REVIEW_GUIDE.md)
+- [Supervisor review pack](docs/SUPERVISOR_REVIEW.md)
+
+The website renders official optional-plugin downloads, full checksums and exact
+install commands; current Java/Python entries are bundled. Public hosting and
+optional frozen-desktop installation validation remain release requirements.
+The brake reports its exact audit objective/denominator and does not promise
+future safety. Existing mixed research results are preserved.
