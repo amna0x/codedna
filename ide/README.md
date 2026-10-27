@@ -164,3 +164,25 @@ recomputes selection at the displayed immutable revisions, runs the selected
 classes in an isolated export and returns actual statuses, warnings and logs.
 Changing the comparison clears old recommendations. See
 [the Java workflow](../docs/JAVA_WORKFLOW.md) for history preparation and limits.
+
+
+### Inspecting a test and its evidence (D-077)
+
+In **Tests to run**, choose **Explain this test** to load declared check names,
+framework and source file from the selected commit. These are source names,
+not a generated description or a claim that the checks passed. **Read test
+source** opens the working copy; inspect its assertions for exact behavior.
+Individual recorded pass/fail results remain separate after execution.
+
+Open **Evidence health and next steps** to see the comparison, available history
+fingerprint, original risk refusal and relevant recovery guidance. More passing
+runs alone do not prove that tests can be skipped; the prior audit must pass.
+
+**Export decision evidence** opens a save dialog. The versioned JSON contains
+comparison, selected/skipped tests, risk evidence and recorded result statuses.
+It omits source code, environment variables, raw logs and per-check failure
+messages. Local paths, test names and diagnostic reasons remain, so review the
+file before sharing. Canceling the dialog writes nothing. No upload occurs.
+
+These changes are in the development source. They do not update an already
+installed executable; installer work is deferred by the owner until the end.

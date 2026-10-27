@@ -4,14 +4,15 @@
 Java projects in continuous integration.** A Software Engineering Final Year
 Project.
 
-Given a Git repository and two commits, CodeDNA will eventually work out which
-code changed, what it may affect, which regression tests matter, and how risky
-it is to skip the rest — and explain every decision.
+Given a Git repository and two commits, CodeDNA reports changed code, follows
+its potential dependencies and recommends regression tests with reasons. Its
+Java risk-stopping path requires prior target-project evidence; insufficient
+evidence keeps the full-suite fallback. Java and Python language plugins exist.
 
 **Where it is heading:** a platform — the Python analysis core, downloadable
 language plugins (Java first), the **CodeDNA IDE** built on Eclipse Theia,
-and a platform website with a plugin catalogue. The core and an initial IDE exist
-today; see [docs/ROADMAP.md](docs/ROADMAP.md) and decisions D-017 – D-020 in
+and a platform website with a plugin catalogue. The core and desktop IDE exist;
+public plugin hosting remains pending. Current engineering status: [handoff](docs/HANDOFF.md#05-start-here---current-continuation-2026-10-27); see [docs/ROADMAP.md](docs/ROADMAP.md) and decisions D-017 – D-020 in
 [docs/DECISIONS.md](docs/DECISIONS.md).
 
 **Status:** Milestones 0–3 are complete. Milestones 4–5 have saved results from
