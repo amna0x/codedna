@@ -234,7 +234,7 @@ Real source mapping and the Maven-inclusive full suite are in progress. The
 pilot does not change the live policy or turn reused inputs into confirmation.
 
 D-077 in 4c5767c adds source check names, history/evidence recovery guidance and
-an explicitly saved JSON decision record. TypeScript and 26 Node UI/workflow
+an explicitly saved JSON decision record. TypeScript and 27 Node UI/workflow
 checks pass. These are source changes; they are not in a rebuilt installer yet.
 Per-operation cancellation, broader progress and measured cache acceptance
 remain next. Source push readiness awaits full validation; no new push/merge.

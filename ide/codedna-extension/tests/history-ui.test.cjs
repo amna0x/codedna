@@ -190,3 +190,21 @@ test('view export saves the current decision, handles cancellation and reports a
     view.report = undefined; view.workspace.saveDecisionEvidence = () => assert.fail('obsolete decision exported');
     await view.exportEvidence(report);
 });
+
+
+test('CRC distinguishes its failing-commit bound from the score and B10 audit denominator', () => {
+    const { TestsViewWidget } = load('tests-view-widget'); const view = new TestsViewWidget();
+    const report = { repository: 'C:/demo', base_commit: 'a'.repeat(40), head_commit: 'b'.repeat(40),
+        total_tests: 1, selected: [{ test: 'PriceTest', reasons: [] }], skipped: [], warnings: [],
+        risk: { status: 'validated_history', method: 'crc', target: 0.05, estimated_skip_risk: 0.2, reasons: [],
+            validation: { commits: 60, failing_commits: 24, miss_upper_bound: 0.03, accepted: true },
+            conformal: { failing_audit_commits: 24, corrected_bound: 0.04 } } };
+    const before = JSON.stringify(report); const content = text(view.renderReport(report));
+    assert.match(content, /exchangeable failing commits/); assert.match(content, /Calibrated skip-risk score/);
+    assert.match(content, /20.00%/); assert.match(content, /all audit commits/);
+    assert.match(content, /Corrected bound among failing commits/); assert.match(content, /4.00%/);
+    assert.equal(JSON.stringify(report), before);
+    report.risk.estimated_skip_risk = null; report.risk.conformal.corrected_bound = null;
+    const absent = text(view.renderReport(report));
+    assert.match(absent, /not reported/); assert.ok(!absent.includes('0.00%'));
+});

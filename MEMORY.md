@@ -8,7 +8,7 @@ checkpoints at experiments/results/partial-feedback-pilot-d076-2026-10-27;
 do not restart from scratch or change fingerprinted Python source during it.
 Full suite with Maven is running; pointer .diagnostics/d076-full-suite.log.
 D-077 IDE source adds static check explanations, evidence-health guidance and
-explicit JSON evidence save, excluding source/raw logs. TypeScript and 26 Node
+explicit JSON evidence save, excluding source/raw logs. TypeScript and 27 Node
 tests pass (.diagnostics/d077-node-final.log). Live thresholds are unchanged.
 D-078 adds scripts/Watch-PartialFeedback.ps1 (read-only stage bar; eight offline
 checks passed). Per-operation IDE cancellation remains next; do not claim it is built.

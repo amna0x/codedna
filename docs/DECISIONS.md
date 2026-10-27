@@ -1813,7 +1813,7 @@ selection, risk and actual execution statuses. It omits source, environment,
 raw logs and per-case failure messages; local paths and names remain disclosed.
 Canceling the dialog writes nothing. No backend behavior or dependency changes.
 
-TypeScript compilation passed; 26 Node UI/workflow tests pass. The workflow
+TypeScript compilation passed; 27 Node UI/workflow tests pass. The workflow
 test exercises real view methods against a contract fixture, not a real Maven
 build or a clean-PC install. Full Python validation is running against the
 unchanged D-076 backend. Installer rebuilding is deferred by owner instruction.
@@ -1832,3 +1832,13 @@ The viewer never mutates study files or starts/stops a process. Eight offline
 checks pass in a temporary Git fixture, including preservation of progress
 bytes and refusal of completion without results. This is research progress
 visibility; per-operation IDE cancellation remains a separate pending task.
+
+
+D-077 risk presentation refinement: B10's model-audit miss-rate bound is labelled
+as using all audit commits. CRC's corrected bound is separately labelled among
+failing commits, with its exchangeability assumption. The calibrated skip-risk
+score is distinct from that bound. Missing numeric evidence is shown as not
+reported rather than zero. Structural mode and unsupported changes receive
+appropriate recovery guidance; more passing history is never presented as a
+way to validate an unsupported domain. Core decisions and thresholds are unchanged.
+TypeScript and all 27 Node tests pass after these refinements.

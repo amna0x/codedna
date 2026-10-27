@@ -173,7 +173,8 @@ export interface SelectionReport {
         reasons: string[]; note: string;
         method?: string; analysis_seconds?: number;
         provenance?: { history_sha256?: string; [key: string]: unknown };
-        conformal?: { note?: string; [key: string]: unknown };
+        conformal?: { note?: string; corrected_bound?: number | null; failing_audit_commits?: number;
+            alpha?: number; threshold?: number | null; [key: string]: unknown };
         validation: { commits: number; failing_commits: number; miss_upper_bound: number;
             failure_recall: number | null; accepted: boolean } | null;
     };

@@ -232,13 +232,21 @@ export class TestsViewWidget extends ReactWidget {
             <section className='cd-notice' aria-label='Risk evidence'>
                 <h3>{risk?.status === 'validated_history' ? 'Validated on earlier project history' : 'Risk unvalidated'}</h3>
                 {risk?.status === 'validated_history'
-                    ? <p>Estimated chance of at least one skipped test failing: {((risk.estimated_skip_risk ?? 0) * 100).toFixed(2)}%.
+                    ? risk.method === 'crc' ? <>
+                        <p>Conformal stopping target: {(risk.target * 100).toFixed(0)}% missed-failure rate among failing commits.
+                            This relies on exchangeable failing commits and is not a per-change guarantee.</p>
+                        <p>Calibrated skip-risk score: {percent(risk.estimated_skip_risk)}. This score is distinct from the conformal bound.</p>
+                    </> : <p>Estimated chance of at least one skipped test failing: {percent(risk.estimated_skip_risk)}.
                         Target: {(risk.target * 100).toFixed(0)}%. This is an estimate, not a guarantee.</p>
                     : <p>{risk ? 'Run the full suite because the evidence does not justify risk-based skipping.'
                         : 'This structural selection has no validated probability of missing failures.'}</p>}
-                {risk?.validation && <p>Prior audit: {risk.validation.commits} commits,
-                    {' '}{risk.validation.failing_commits} with failures. Historical miss-rate upper bound:
-                    {' '}{(risk.validation.miss_upper_bound * 100).toFixed(2)}%.</p>}
+                {risk?.validation && <p>Model audit (all audit commits): {risk.validation.commits} commits,
+                    {' '}{risk.validation.failing_commits} with failures. All-commit miss-rate upper bound:
+                    {' '}{percent(risk.validation.miss_upper_bound)}.</p>}
+                {risk?.method === 'crc' && risk.conformal && <p>
+                    Conformal audit: {risk.conformal.failing_audit_commits ?? 'not reported'} failing commits.
+                    {' '}Corrected bound among failing commits: {percent(risk.conformal.corrected_bound)}.
+                </p>}
                 {risk?.status === 'unvalidated' && <p className='cd-help'>Passing tests and validated skip risk are different.
                     A successful run records what happened; it does not prove that future tests can be skipped.
                     Only sufficiently audited earlier history can support that decision.</p>}
@@ -352,4 +360,10 @@ export class TestsViewWidget extends ReactWidget {
 
 function unique(values: string[]): string[] {
     return [...new Set(values)];
+}
+
+/** Missing evidence is never displayed as zero risk. */
+function percent(value: number | null | undefined): string {
+    return typeof value === 'number' && Number.isFinite(value) && value >= 0 && value <= 1
+        ? `${(value * 100).toFixed(2)}%` : 'not reported';
 }
