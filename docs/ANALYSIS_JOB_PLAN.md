@@ -1,12 +1,11 @@
 # Cancellable analysis jobs - implementation plan
 
-Status: D-080 source integrated, 2026-10-28. Authenticated job routes and
-capability-gated Tests recommendation and Changes cancellation are implemented.
-Other IDE views keep their existing synchronous UI (D-081). Thirty-three integrated Python checks,
-four later cleanup checks and 35 Node workflows pass; TypeScript compiles.
-Full Maven-inclusive D-080 validation remains required. D-079's earlier 601-test
-full run passed. No actual new frozen executable was built; that validation and
-installation remain deferred. No ordinary-analysis restart resume is claimed.
+Status: D-080/D-081 source implemented and validated, 2026-10-28.
+Full Maven-inclusive suite: 636 passed/zero skips, 1086.89 seconds; TypeScript
+and 43 Node workflows pass. Tests and Changes use capability-gated cancellation.
+Other views retain sync UI. Actual new packaged execution, installer refresh and
+clean-PC acceptance remain deferred. No ordinary-analysis restart resume.
+See ENGINEERING_VALIDATION_D080_D081_2026-10-28.json.
 
 ## Existing boundary
 
@@ -108,7 +107,9 @@ The API exposes typed submissions under `/api/analysis-jobs/{operation}` for
 ID, and POST cancellation by ID. One worker is active; at most two jobs wait.
 Results expire after 600 seconds and at most eight records are retained. Each
 protocol message is capped at 8 MiB, and no more than 32 worker events are read.
-Queue saturation returns HTTP 429; expired/foreign IDs return 404. Completed
+Queue saturation returns HTTP 429; expired status lookups and foreign IDs
+return 404. Cancellation of a retained terminal record is idempotent; terminal
+records are pruned on subsequent submissions, with at most eight retained. Completed
 results keep the core JSON, including independently measured analysis time.
 
 A contained worker waits for stdin before importing analysis/plugin code or

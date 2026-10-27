@@ -1906,3 +1906,8 @@ empty optional defaults. This regression failed before the fix; eight API tests
 pass after it. TypeScript and 43 Node workflows pass. The partial D-080 full run
 was stopped deliberately; full combined validation is required. No risk/model
 logic, defaults, research outputs or installed desktop package changed.
+
+D-080/D-081 verification: source 912f4c9 passed 636 tests, zero failures/skips,
+one existing warning, 1086.89 seconds, with Maven included. TypeScript and
+43 Node workflows pass. Source/frozen entry tests do not replace rebuilding and
+testing the actual packaged executable at the final installation stage.

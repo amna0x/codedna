@@ -1,5 +1,29 @@
 # Blueprint completion ledger - 2026-10-27
 
+## Verified continuation - D-080/D-081, 2026-10-28
+
+Source checkpoint 912f4c9 passed the complete Maven-inclusive suite: 636 tests,
+zero failures/skips, one existing warning, 1086.89 seconds. TypeScript and
+43 Node workflows pass. See ENGINEERING_VALIDATION_D080_D081_2026-10-28.json
+and its hashed logs. D-079's earlier 601-test full proof remains separate.
+Do not rerun either completed validation or any original research study.
+
+Implemented: bounded read-only analysis jobs and real owned process-tree cancel;
+stage/elapsed controls in Tests and Changes; immutable change/impact snapshots;
+canonical file navigation with visible errors; relative API path preservation;
+plugin activation pinned across worker and consented API restarts. Existing
+B10/CRC defaults, thresholds, refusals and research findings remain unchanged.
+The earlier 635-test invocation was deliberately interrupted to fix the new
+relative-path regression and is not counted as a pass.
+
+This is a source checkpoint, not a new installed desktop. Actual rebuilt frozen
+execution, installer refresh, official catalogue hosting and clean-PC evidence
+remain deferred to the final installation batch. Impact graph/replay/history
+keep their existing sync UI; ordinary analysis has no restart resume. The D076
+pilot is completed negative/mixed evidence, not a study to retune or resume.
+No new push or merge; preserve stashes and the untracked MOONSHOT.md proposal.
+Source is ready for private review; publication still requires owner instruction.
+
 ## Current checkpoint - D-080/D-081, 2026-10-28
 
 D-079 is fully validated: 601 passed/zero skips, proof JSON saved. D-080 source

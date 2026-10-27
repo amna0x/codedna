@@ -691,6 +691,33 @@ Full workflow UI tests use core-contract fixtures; installer refresh is deferred
 Per-operation core cancellation is planned, not claimed implemented.
 See [source validation](ENGINEERING_VALIDATION_D076_D078_2026-10-27.json).
 
+
+## Development validation addendum - D-079 through D-081
+
+After D-079's separate 601-test validation, source checkpoint 912f4c9 passed
+636 Python tests with Maven included, zero failures/skips and one existing
+Starlette warning (1086.89 seconds). TypeScript compiled and 43 Node UI
+workflows passed. These counts describe engineering validation, not additional
+scientific evidence or a rebuilt installer. The dated D-074 packaged release
+and D-076 research outputs remain unchanged.
+
+The local API now supports bounded read-only analysis jobs in contained private
+workers. Tests and Changes expose actual stages/elapsed time and cancellation
+when supported; older cores retain synchronous behavior. Cancellation terminates
+only the owned worker tree and never grants build consent. Tests include actual
+Windows descendants, unrelated-process survival, queue/deadline/cleanup races,
+typed/token/host restrictions, exact decision parity (separate runtime excluded),
+relative path preservation and pinned desktop plugin activation contracts.
+
+Changes computes impact from its analysis result's immutable comparison rather
+than a later WORKTREE snapshot. Source links use the canonical repository and
+explicitly open working files. Risk decisions/defaults/thresholds are unchanged.
+Actual rebuilt frozen execution, installer refresh and clean-PC evidence remain
+deferred; ordinary analyses cannot resume across restart, and other views keep
+their existing synchronous UI. This addendum supersedes the earlier statement
+that per-operation cancellation is only planned.
+See [dated source validation](ENGINEERING_VALIDATION_D080_D081_2026-10-28.json).
+
 ---
 
 # Part: Evaluation

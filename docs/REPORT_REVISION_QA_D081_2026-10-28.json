@@ -1,0 +1,50 @@
+{
+  "date": "2026-10-28",
+  "scope": "report consistency and portable-pack checks, not new scientific validation",
+  "authoritative_validation": "docs/ENGINEERING_VALIDATION_D080_D081_2026-10-28.json",
+  "packaged_release_validation": "docs/RELEASE_VALIDATION_D074_2026-10-27.json",
+  "duplicate_heading_check": {
+    "REPORT_ABSTRACT.md": {
+      "duplicate_text": [],
+      "duplicate_numbers": []
+    },
+    "REPORT_SYSTEM_DRAFT.md": {
+      "duplicate_text": [],
+      "duplicate_numbers": []
+    },
+    "REPORT_DRAFT.md": {
+      "duplicate_text": [],
+      "duplicate_numbers": []
+    },
+    "REPORT_AGENT_BRAKE.md": {
+      "duplicate_text": [],
+      "duplicate_numbers": []
+    }
+  },
+  "chapter_references_included": true,
+  "old_validation_labelled_historical": true,
+  "graph_audit_labelled_ai_assisted": true,
+  "original_experiment_results_rewritten": false,
+  "excluded_portable_links": [
+    {
+      "source": "experiments\\results\\partial-feedback-pilot-d076-2026-10-27\\FINDINGS.md",
+      "target": "STOP.json",
+      "reason": "repository/non-report reference, not a portable report artifact"
+    },
+    {
+      "source": "experiments\\results\\partial-feedback-pilot-d076-2026-10-27\\FINDINGS.md",
+      "target": "progress.json",
+      "reason": "repository/non-report reference, not a portable report artifact"
+    },
+    {
+      "source": "docs\\IMPLEMENTATION_HANDOFF.md",
+      "target": "C:/Users/hp/.codex/plugins/cache/openai-bundled/computer-use/26.1021.31345/skills/computer-use/SKILL.md",
+      "reason": "repository/non-report reference, not a portable report artifact"
+    },
+    {
+      "source": "docs\\IMPLEMENTATION_HANDOFF.md",
+      "target": "C:/Users/hp/.codex/plugins/cache/openai-bundled/computer-use/26.1021.31345/docs/guidance.md",
+      "reason": "repository/non-report reference, not a portable report artifact"
+    }
+  ]
+}

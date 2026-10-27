@@ -73,3 +73,37 @@ Browse or paste the path, then choose Load results. A placeholder never loads
 data. These older study reports are for replay demonstrations; current
 confirmatory findings remain in their own reports and are not replaced by the
 demo. Project history instead shows test runs saved from the open project.
+
+## D-080/D-081 analysis-job acceptance (source; packaged check pending)
+
+Automated source checks cover real Windows process-tree cancellation, API
+ownership/queue/deadline handling, relative paths and immutable Changes inputs.
+The following UI/package cases still need observation in the final rebuilt app;
+this list is not evidence that they already passed.
+
+1. Record the app/core versions and source checkpoint. A core advertising
+   `analysis_jobs.version = 1` should show actual stages and elapsed seconds in
+   Tests and Changes. An older D-074 core should keep synchronous behavior and
+   offer no analysis Cancel button. Do not invent a percentage or an ETA.
+2. Start a long recommendation, cancel it, and verify no stale recommendation
+   appears. Start another operation successfully. No project tests should run,
+   no saved history should change and working edits should remain intact.
+3. Repeat cancellation during Changes impact. Compare the displayed immutable
+   revisions: impact must use the change-analysis result's base/head. Changes
+   must not publish half a comparison after cancellation or a comparison change.
+4. Open a repository subfolder, inspect Changes and open a file link. Verify
+   the canonical repository/file and line selection; links open working files,
+   which may differ from the analysed snapshot. A missing working file should
+   produce a visible explanation. Late errors must not overwrite a new view.
+5. With a controlled trusted plugin fixture, queue an optional update/removal,
+   cancel/restart analysis, and confirm the active plugin stays unchanged. Then
+   explicitly confirm a test run that restarts the core for build permission;
+   that restart must also retain activation. Only restarting the application
+   should activate the pending change. Keep official installation/checksums.
+6. Close the app during analysis and verify its owned worker/descendants end.
+   An unrelated process must remain alive. Capture a real frozen execution
+   record in the final installation batch; source entry tests are insufficient.
+
+Ordinary analyses do not resume across an application restart. Research replay
+uses its separate saved results/checkpoints. Impact graph/history/replay retain
+synchronous UI and are outside this first cancellation rollout.
