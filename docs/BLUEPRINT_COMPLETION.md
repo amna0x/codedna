@@ -3,8 +3,8 @@
 This is the current task list. Historical HANDOFF.md rows about running studies,
 PR #21/#22 publication approval or applying old edits are superseded. Preserve
 all stashes and backups. Base main is 45821b4908bf3c17ff60cea28fd934c0dd55d8f1.
-Current review branch: codex/blueprint-completion. Extra proposals are deferred
-by the owner: DEFERRED_FEATURES.md.
+Current review branch: codex/blueprint-completion. The owner has now authorized
+the engineering follow-up in DEFERRED_FEATURES.md; installation is deferred last.
 
 ## Milestone status
 
@@ -27,9 +27,9 @@ Milestones 6/7 still have acceptance and distribution work.
 | 7 bug 3 unsupported files | Conservative full-suite fallback retained for build/resources/non-Java changes; no unvalidated broadening of the model domain. |
 | 7 bug 6 cache | Fixed: Python forwards cache; core passes optional cache by capability, including legacy compatibility. |
 | 7 bug 7 Ant discovery | Explicit unsupported-build limitation; not fabricated as working. |
-| 7 bug 8 graph precision | Blinded 40-edge form prepared in graph-human-review/; independent student labels still required. |
+| 7 bug 8 graph precision | Owner declines further labelling. Attribute the original AI audit and Gemini cross-check accurately; no independent human validation claim. |
 | 7 bug 9 wording | Tests view uses neutral test wording for Java classes and Python modules. |
-| 7 bug 10 installer | Current core rebuilt; production IDE/installer build and smoke validation in progress. |
+| 7 bug 10 installer | D-074 packaged optional installation is complete and validated; later installer refresh and clean-PC evidence are deferred last. |
 | 7 bug 11 IDE | Manual acceptance in progress; use IDE_MANUAL_TEST.md. |
 | 7 bug 12 hosting | Website/catalogue source exists. Public hosting and wheel URLs remain unavailable; do not expose the private source repository. |
 | 7 bugs 13-16 limits | 15 live vs 19 retrospective features, serial dependence, incomplete CI history and dependency warning remain disclosed. |
@@ -224,3 +224,21 @@ protocol and leakage-proof policy-observation engine, not another model/language
 Independent labels remain unavailable; the Gemini check is AI cross-checking.
 Public hosting and real clean-PC feedback remain separate from the finished
 frozen-plugin implementation. Original studies and stashes are preserved.
+
+
+## D-076 / D-077 active continuation
+
+The effective D-076 development protocol was frozen before real evaluation.
+The replay engine and checkpoint runner are in 72e6043; 15 focused tests pass.
+Real source mapping and the Maven-inclusive full suite are in progress. The
+pilot does not change the live policy or turn reused inputs into confirmation.
+
+D-077 in 4c5767c adds source check names, history/evidence recovery guidance and
+an explicitly saved JSON decision record. TypeScript and 25 Node UI/workflow
+checks pass. These are source changes; they are not in a rebuilt installer yet.
+Per-operation cancellation, broader progress and measured cache acceptance
+remain next. Source push readiness awaits full validation; no new push/merge.
+
+The owner explicitly moved installation, public catalogue delivery and actual
+clean-PC work to the very end. Do not resume these while engineering is active.
+No further independent-label task is requested; disclose AI provenance instead.

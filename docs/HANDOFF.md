@@ -153,16 +153,18 @@ Node tests pass. The simplest route is to merge this one PR (§3.1).
 
 | Task | State | Next action |
 |---|---|---|
-| Integration/studies | #21/#22 merged; all nine-project runs complete; findings/hashes preserved | Do not repeat old merges or rerun studies. |
-| D-071 completion repairs | Local commit 8b0d478, based on main 45821b4; 562 passed/zero skips; verified installer | Read BLUEPRINT_COMPLETION.md and RELEASE_VALIDATION_2026-10-27.json. |
-| D-072 owner follow-up | Brake evidence clarity, persistent Extensions/Language plugins, website acquisition and detailed blueprint implemented; final validation/package underway | Finish final proof/Graphify refresh and review the new local changes. |
-| Independent acceptance | Clean PC, student labels, supervisor sign-off and defence recording open | CLEAN_PC_ACCEPTANCE.md, graph-human-review/REVIEW_GUIDE.md, SUPERVISOR_REVIEW.md and DEFENCE_CHECKLIST.md. |
-| Research improvement | Existing results retained; next valid development/evaluation plan written | BRAKE_IMPROVEMENT_PLAN.md; no favorable result is promised or invented. |
-| Website/release | Blueprint and acquisition UI prepared; public destination/anonymous downloads not available | WEBSITE_BLUEPRINT.md; retain source privacy and verify real artifacts before catalogue publication. |
+| Integration/original studies | #21/#22 merged; nine-project findings/hashes preserved | Do not repeat merges or old studies. Preserve every stash. |
+| D-071 through D-074 | Completed and verified, including frozen optional-plugin installation; D-074 full suite 576 passed, zero skips | Do not rebuild installation now. It is deferred to the end by owner instruction. |
+| D-075 report/feasibility | Complete; corrected portable review pack and read-only feasibility audit saved | Read REPORT_REVISION_NOTES_D075.md and PARTIAL_FEEDBACK_FEASIBILITY.md. |
+| D-076 development research | Protocol v2 frozen in 1965665; kernel/runner in 72e6043; 15 focused tests pass; real source mapping and full Maven suite running | Read progress.json in experiments/results/partial-feedback-pilot-d076-2026-10-27 and pointer .diagnostics logs. Resume valid checkpoints; do not modify fingerprinted Python during the pilot. |
+| D-077 engineering | Local 4c5767c: source check explanations, evidence-health guidance, explicit decision evidence export; TypeScript and 25 Node tests pass | Continue operation cancellation/progress and broader workflow acceptance without weakening gates. No new installer yet. |
+| Labels/review | Owner uses ChatGPT for technical review; Gemini cross-check is a second AI judgement | No further owner labelling task. Keep provenance honest; no human-ground-truth claim. |
+| Website/distribution/clean PC | Website blueprint/source prepared; catalogue hosting and actual clean-PC evidence still open | Defer these installation/distribution tasks to the end; keep source private. |
+| Source sharing | Owner wants a checkpoint ready to push for a friend | Notify after full validation. No new push/merge was performed or authorized. |
 
-Preserve every stash. Historical instructions below are reference, not a request
-to reapply old edits or repeat completed integration. Current extra-feature
-authorization is recorded in DEFERRED_FEATURES.md.
+Historical instructions below are reference, not a request to reapply old
+edits, repeat integration or retune until a favorable research result appears.
+The authorized engineering follow-up is recorded in DEFERRED_FEATURES.md.
 
 ### Click-by-click: merging on GitHub
 
