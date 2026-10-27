@@ -8,7 +8,7 @@ const ts = require('typescript');
 const tick = () => new Promise(resolve => setImmediate(resolve));
 
 function service() {
-    const timers = new Set();
+    const timers = new Set(), launches = [];
     const child = new EventEmitter();
     child.stdout = new EventEmitter(); child.stderr = new EventEmitter();
     child.exitCode = null; child.killed = false;
@@ -22,7 +22,7 @@ function service() {
     vm.runInNewContext(code,{module,exports:module.exports,
         process:{env:{CODEDNA_EXECUTABLE:'fake-core'}},
         require(id) {
-            if(id==='child_process') return {spawn:()=>child};
+            if(id==='child_process') return {spawn:(executable,args,options)=>{ launches.push({executable,args,options}); return child; }};
             if(id==='net') return net;
             if(id==='crypto') return require('node:crypto');
             if(id==='path') return require('node:path');
@@ -33,7 +33,7 @@ function service() {
         setTimeout(callback,ms) { const timer={callback,ms};timers.add(timer);return timer; },
         clearTimeout:timer=>timers.delete(timer)
     });
-    return {client:new module.exports.CodeDnaServiceImpl(),child,
+    return {client:new module.exports.CodeDnaServiceImpl(),child,launches,
         advance(ms) { for(const timer of [...timers]) if(timer.ms<=ms) {timers.delete(timer);timer.callback();} }};
 }
 
@@ -58,4 +58,19 @@ test('An unresponsive core still times out and is cleaned up',async()=>{
     await rejected;
     assert.equal(child.killed,true);
     assert.equal(client.baseUrl,undefined);
+});
+
+test('desktop plugin activation is retained across a consented API restart', async () => {
+    const { client, child, launches } = service();
+    const snapshot = { schema_version: 1, home: 'fixture', directories: ['python-1.0.0-' + 'a'.repeat(32)], error: null };
+    const first = client.start(); await tick();
+    child.stdout.emit('data', Buffer.from(JSON.stringify({ url: 'http://127.0.0.1:12345', plugin_snapshot: snapshot }) + '\n'));
+    await first;
+    assert.equal(launches[0].options.env.CODEDNA_DESKTOP_PLUGIN_SNAPSHOT, undefined);
+    client.onStop(); client.buildsEnabled = true;
+    const restarted = client.start(); await tick();
+    assert.equal(launches[1].options.env.CODEDNA_DESKTOP_PLUGIN_SNAPSHOT, JSON.stringify(snapshot));
+    assert.ok(launches[1].args.includes('--allow-build'));
+    child.stdout.emit('data', Buffer.from(JSON.stringify({ url: 'http://127.0.0.1:12345', plugin_snapshot: snapshot }) + '\n'));
+    await restarted;
 });

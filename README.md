@@ -545,3 +545,14 @@ restricted-PATH installation/restart/update/removal checks passed. See
 catalogue/release hosting and clean-PC acceptance remain separate gates.
 The brake reports its exact audit objective/denominator and does not promise
 future safety. Existing mixed research results are preserved.
+
+## Cancellable analysis (source development build)
+
+The Tests to run view shows core stages, elapsed time and Cancel analysis when
+its connected core advertises analysis jobs. Older packaged cores retain the
+synchronous path. Analysis cancellation never runs or cancels project builds.
+The API also offers typed read-only jobs for test discovery, change analysis,
+impact and selection; see [the job contract](docs/ANALYSIS_JOB_PLAN.md).
+
+These source changes need the final desktop rebuild before they appear in an
+installed app. Installation and actual new frozen validation remain deferred.

@@ -1866,3 +1866,25 @@ The new regression failed before the fix and passes after it. User edits remain
 untouched; insufficient-history fallback still applies. Thresholds, model choices
 and defaults are unchanged. Seventy-two focused risk/brake tests and ten final
 scope/snapshot tests pass. Full Maven-inclusive validation is running.
+
+
+## D-080 - Bounded owned analysis jobs (2026-10-28)
+
+An aborted HTTP request does not cancel analysis. Run optional read-only jobs
+in private contained workers: one active, two queued, session-owned random IDs,
+300-second deadline, 600-second retention, eight records, 8 MiB message limit.
+Keep old synchronous routes compatible. Reuse their typed schemas and core
+functions, leaving build/test execution and mutation outside the job API.
+Token and loopback protections apply to every new route. Worker input is sent
+only after containment; cancelled state cannot become completed. An inability
+to confirm cleanup stops dispatch and remains an error.
+
+The Tests recommendation view shows actual stages and elapsed seconds, never
+an invented percentage. Capability version 1 enables cancellation; an older
+packaged core keeps the synchronous path. Other views are not yet migrated.
+Preserve plugin activation across replacement workers and consented API
+restarts; a pending plugin update must not activate before application restart.
+Source/frozen entry contracts and real Windows descendants are tested, while
+actual rebuilt frozen execution and installation remain deferred. This adds
+no runtime dependencies, changes no risk gate/default and claims no new speedup
+or research safety. Full source validation is pending after focused checks.

@@ -11,8 +11,9 @@ meant to be started by the IDE on the user's own machine:
 * running a build (``/api/run-tests``) needs the server to be started with
   ``allow_build`` **and** the request to say ``allow_build: true`` (D-014).
 
-Long operations (graph building, test runs) are synchronous; FastAPI runs them
-in a worker thread. A job queue can come later if the IDE needs progress.
+Synchronous routes remain compatible. Optional read-only analysis jobs run in
+contained private workers with bounded progress, deadlines and cancellation.
+Build/test execution retains its separate, explicit consent boundary.
 """
 
 from __future__ import annotations
@@ -214,6 +215,9 @@ def create_app(token: str, *, allow_build: bool = False,
         return {"status": "ok", "version": __version__}
 
     secured = [Depends(require_token)]
+    from codedna.api.job_routes import install_job_routes
+    install_job_routes(app, secured)
+
 
     @app.get("/api/plugins", dependencies=secured)
     def plugins() -> dict:
@@ -248,7 +252,9 @@ def create_app(token: str, *, allow_build: bool = False,
     @app.get("/api/capabilities", dependencies=secured)
     def capabilities() -> dict:
         return {"version": __version__, "allow_build": app.state.allow_build,
-                "strategies": ["all", "dependency", "coverage"]}
+                "strategies": ["all", "dependency", "coverage"],
+                "analysis_jobs": {"version": 1, "active_limit": 1, "queue_limit": 2,
+                                  "deadline_seconds": 300}}
 
     @app.post("/api/analyze", dependencies=secured)
     def analyze(body: AnalyzeRequest) -> dict:

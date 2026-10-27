@@ -648,3 +648,21 @@ source trees, outcomes or risk acceptance. Thread ownership, Git environment key
 and finally-reset prevent reuse across independent requests. Java risk feature
 extraction uses the already-selected immutable comparison, so edits during
 analysis cannot switch its feature snapshot.
+
+
+## Optional analysis workers (D-080)
+
+The local API retains synchronous routes and additionally offers bounded
+read-only jobs. `api.job_routes` applies existing typed models and authorization;
+`api.analysis_jobs` owns the queue and terminal state; `api.owned_process`
+contains each worker before input; `api.analysis_worker` invokes existing core
+functions and emits bounded JSON stages/results. The frontend displays these
+values without moving analysis into TypeScript. API lifespan cleanup closes
+owned workers. Builds/history/plugin changes retain their separate contracts.
+
+Only Tests recommendation currently opts into the job UI, capability-gated for
+older cores. The internal desktop bootstrap pins the parent's active managed
+plugin paths or bundled-fallback error before registry loading. The IDE backend
+retains that snapshot across core restarts for build permission. No ordinary
+analysis restart resume or cross-request model/audit cache is introduced.
+See ANALYSIS_JOB_PLAN.md for measured bounds, tests and packaging limits.

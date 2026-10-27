@@ -4,10 +4,11 @@ import { inject, injectable, postConstruct } from '@theia/core/shared/inversify'
 import { ConfirmDialog } from '@theia/core/lib/browser/dialogs';
 import { ProgressService } from '@theia/core/lib/common/progress-service';
 import { ReactWidget } from '@theia/core/lib/browser/widgets/react-widget';
-import { CodeDnaService, SelectionReport, SelectionStrategy, SelectionRun, TestDiscovery } from '../common/codedna-protocol';
+import { AnalysisJob, CodeDnaService, SelectionReport, SelectionStrategy, SelectionRun, TestDiscovery } from '../common/codedna-protocol';
 import { CodeDnaComparison } from './comparison';
 import { CodeDnaWorkspace } from './codedna-workspace';
 import { withProgress } from './progress';
+import { waitForAnalysis } from './analysis-jobs-ui';
 import { decisionRecord, recoverySteps } from './decision-evidence';
 import { TestOutcomes } from './test-outcomes';
 import { breakable, friendlyReason, friendlyWarning, packageName, plural, simpleName } from './plain-language';
@@ -38,6 +39,9 @@ export class TestsViewWidget extends ReactWidget {
 
     protected strategy: SelectionStrategy = 'risk';
     protected loading = false;
+    protected analysisJob: AnalysisJob | undefined;
+    protected cancelling = false;
+    protected analysisCancelled = false;
     protected error: string | undefined;
     protected report: SelectionReport | undefined;
     protected execution: SelectionRun | undefined;
@@ -66,6 +70,11 @@ export class TestsViewWidget extends ReactWidget {
     }
 
     protected invalidate(): void {
+        if (this.analysisJob && ['queued', 'running'].includes(this.analysisJob.state)) {
+            // The waiting operation cancels its own registered worker on the
+            // next poll. A comparison change must never kill the shared API.
+            this.analysisCancelled = true;
+        }
         this.generation++;
         this.report = undefined;
         this.execution = undefined;
@@ -83,12 +92,28 @@ export class TestsViewWidget extends ReactWidget {
         const base = this.comparison.base, head = this.comparison.head;
         const strategy = this.strategy, history = this.historyCsv;
         this.loading = true;
+        this.analysisCancelled = false;
+        this.cancelling = false;
+        this.analysisJob = undefined;
         this.update();
         try {
             const repo = await this.workspace.repositoryPath();
             if (!repo) { throw new Error('Open a folder first.'); }
-            const result = await withProgress(this.progress, strategy === 'risk' ? 'CodeDNA: checking history and choosing tests' : 'CodeDNA: choosing tests',
-                () => this.codedna.select(repo, base, head, strategy, history));
+            const supportsJobs = this.codedna.analysisJobs && await this.codedna.analysisJobs();
+            if (generation !== this.generation) { return; }
+            const result = supportsJobs
+                ? await waitForAnalysis<SelectionReport>(this.codedna,
+                    strategy === 'risk' ? 'risk-select' : 'select',
+                    strategy === 'risk' ? { repo, base, head, history_csv: history || undefined }
+                        : { repo, base, head, strategy },
+                    () => generation === this.generation && !this.analysisCancelled && !this.isDisposed,
+                    job => { this.analysisJob = job; this.update(); })
+                : await withProgress(this.progress, strategy === 'risk' ? 'CodeDNA: checking history and choosing tests' : 'CodeDNA: choosing tests',
+                    () => this.codedna.select(repo, base, head, strategy, history));
+            if (!result) {
+                if (generation === this.generation) { this.notice = 'Recommendation cancelled. No tests were executed.'; }
+                return;
+            }
             if (generation !== this.generation) { return; }
             this.report = result;
             this.reportHistory = history;
@@ -99,6 +124,27 @@ export class TestsViewWidget extends ReactWidget {
             }
         } finally {
             this.loading = false;
+            this.analysisJob = undefined;
+            this.cancelling = false;
+            this.update();
+        }
+    }
+
+    protected async cancelAnalysis(): Promise<void> {
+        const job = this.analysisJob, generation = this.generation;
+        if (!job || this.cancelling || !['queued', 'running'].includes(job.state)) { return; }
+        this.cancelling = true;
+        this.analysisCancelled = true;
+        this.update();
+        try {
+            const result = await this.codedna.cancelAnalysis(job.id);
+            if (generation === this.generation && this.analysisJob?.id === job.id) { this.analysisJob = result; }
+        } catch (error) {
+            if (generation === this.generation) {
+                this.error = `Could not confirm cancellation: ${error instanceof Error ? error.message : String(error)}`;
+            }
+        } finally {
+            if (generation === this.generation) { this.cancelling = false; }
             this.update();
         }
     }
@@ -217,6 +263,13 @@ export class TestsViewWidget extends ReactWidget {
                     Open project history
                 </button>
             </form>
+            {this.loading && this.analysisJob && <div className='cd-notice' role='status' aria-live='polite'>
+                <span>{this.analysisJob.stage} · {Math.floor(this.analysisJob.elapsed_seconds)} seconds</span>
+                {['queued', 'running'].includes(this.analysisJob.state) && <button className='cd-button' type='button'
+                    disabled={this.cancelling} onClick={() => this.cancelAnalysis()}>
+                    {this.cancelling ? 'Stopping analysis…' : 'Cancel analysis'}
+                </button>}
+            </div>}
             {this.error && <ErrorNotice message={this.error} />}
             {this.notice && <p className='cd-notice' role='status'>{this.notice}</p>}
             {this.report ? this.renderReport(this.report) : !this.loading && !this.error && <FirstRun action='Suggest tests' />}

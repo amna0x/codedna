@@ -25,6 +25,7 @@ from codedna.plugins.base import LanguagePlugin, api_compatible
 from codedna.plugins.catalogue import CatalogueError, PluginVersion
 
 _BOOT: tuple[Path, ...] | None = None
+_WORKER_BOOT_ERROR: str | None = None
 _ID = re.compile(r"[a-z][a-z0-9-]{1,40}")
 
 
@@ -108,6 +109,8 @@ def _write(home: Path, items: dict) -> None:
 def activate() -> tuple[Path, ...]:
     """Snapshot activation once per process; updates/removals take effect on restart."""
     global _BOOT
+    if _WORKER_BOOT_ERROR is not None:
+        raise CatalogueError(_WORKER_BOOT_ERROR)
     if _BOOT is None:
         home = root()
         paths = tuple(_path(home, item) / "site" for _, item in sorted(_read(home).items()))
@@ -119,6 +122,53 @@ def activate() -> tuple[Path, ...]:
         importlib.invalidate_caches()
         _BOOT = paths
     return _BOOT
+
+
+def worker_snapshot() -> dict:
+    """Internal bootstrap: replacements inherit this process's active plugins."""
+    try:
+        home = root()
+        paths = activate()
+        directories = []
+        for path in paths:
+            if path.name != 'site' or path.parent.parent != home / 'versions':
+                raise CatalogueError('active desktop plugin is outside its managed directory')
+            directories.append(path.parent.name)
+        return {'schema_version': 1, 'home': str(home),
+                'directories': directories, 'error': None}
+    except CatalogueError as exc:
+        # Preserve the parent's bundled-fallback state, not a newer manifest.
+        return {'schema_version': 1, 'home': None,
+                'directories': [], 'error': str(exc)[:1000]}
+
+
+def pin_worker_snapshot(snapshot: dict) -> None:
+    """Private worker bootstrap only; never accept plugin paths from an API body."""
+    global _BOOT, _WORKER_BOOT_ERROR
+    if _BOOT is not None or _WORKER_BOOT_ERROR is not None:
+        raise CatalogueError('desktop worker plugins were already activated')
+    if not isinstance(snapshot, dict) or snapshot.get('schema_version') != 1:
+        raise CatalogueError('invalid desktop worker plugin snapshot')
+    error = snapshot.get('error')
+    directories = snapshot.get('directories')
+    if error is not None:
+        if not isinstance(error, str) or not error or len(error) > 1000 or directories != []:
+            raise CatalogueError('invalid desktop worker plugin fallback')
+        _WORKER_BOOT_ERROR = error
+        return
+    home = root()
+    if snapshot.get('home') != str(home):
+        raise CatalogueError('desktop worker plugin home differs from its parent')
+    if not isinstance(directories, list) or len(directories) > 128:
+        raise CatalogueError('invalid desktop worker plugin directories')
+    paths = tuple(_path(home, {'directory': name}) / 'site' for name in directories)
+    if len(set(paths)) != len(paths) or any(not path.is_dir() for path in paths):
+        raise CatalogueError('desktop worker plugin files are missing or duplicated')
+    # Validate the entire snapshot before inserting any path.
+    for path in reversed(paths):
+        sys.path.insert(0, str(path))
+    importlib.invalidate_caches()
+    _BOOT = paths
 
 
 def entry_points() -> list:

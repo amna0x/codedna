@@ -19,6 +19,11 @@ export interface CodeDnaStatus {
 
 export interface CodeDnaService {
     status(): Promise<CodeDnaStatus>;
+    /** Capability-gated: older packaged cores keep the synchronous path. */
+    analysisJobs(): Promise<boolean>;
+    startAnalysis(operation: AnalysisOperation, payload: object): Promise<AnalysisJob>;
+    analysisJob(id: string): Promise<AnalysisJob>;
+    cancelAnalysis(id: string): Promise<AnalysisJob>;
     tests(repo: string, revision: string): Promise<TestDiscovery>;
     projectHistory(repo: string): Promise<ProjectHistory>;
     recordSavedRuns(repo: string): Promise<RecordedHistory>;
@@ -385,4 +390,16 @@ export interface PluginChange {
     restart_required?: boolean;
     previous_version?: string;
     installed: InstalledPlugins;
+}
+
+/** Read-only core jobs. Builds, plugins and history writes are excluded. */
+export type AnalysisOperation = 'tests' | 'analyze' | 'impact' | 'select' | 'risk-select';
+export interface AnalysisJob {
+    id: string;
+    operation: AnalysisOperation;
+    state: 'queued' | 'running' | 'completed' | 'failed' | 'cancelled';
+    stage: string;
+    elapsed_seconds: number;
+    result?: object;
+    error?: string;
 }

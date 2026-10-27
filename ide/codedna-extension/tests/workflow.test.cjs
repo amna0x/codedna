@@ -31,6 +31,14 @@ const deferred = () => { let resolve, reject; const promise = new Promise((a, b)
 const tick = () => new Promise(resolve => setImmediate(resolve));
 const report = () => ({ repository: root, base_commit: 'a'.repeat(40), head_commit: head,
     selected: [{ test: 'example.ExampleTest', reasons: [] }], skipped: [], total_tests: 1, warnings: [] });
+const jobSource = fs.readFileSync(path.join(__dirname, '../src/browser/analysis-jobs-ui.ts'), 'utf8');
+const jobCode = ts.transpileModule(jobSource, { compilerOptions: {
+    module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022
+} }).outputText;
+const jobModule = { exports: {} };
+vm.runInNewContext(jobCode, { exports: jobModule.exports, module: jobModule, setTimeout }, { filename: 'analysis-jobs-ui.js' });
+const { waitForAnalysis } = jobModule.exports;
+
 function widget() {
     let changed;
     const state = { confirm: () => Promise.resolve(true) };
@@ -45,6 +53,7 @@ function widget() {
         if (id.endsWith('/inversify')) return { injectable: () => target => target, inject: () => () => {}, postConstruct: () => {} };
         if (id.endsWith('/react-widget')) return { ReactWidget };
         if (id.endsWith('/dialogs')) return { ConfirmDialog };
+        if (id === './analysis-jobs-ui') return jobModule.exports;
         if (id === './progress') return { withProgress: (_, __, action) => action() };
         return {};
     } }, { filename: 'tests-view-widget.js' });
@@ -170,4 +179,88 @@ test('project workflow selects, inspects, confirms execution and retains actual 
     assert.equal(view.execution.results.tests[0].cases[0].status, 'passed');
     assert.equal(view.loading, false);
     assert.equal(view.report.risk, undefined); // a passing run cannot manufacture risk validation
+});
+
+test('core job stages are shown and results are returned without invented progress', async () => {
+    const stages = [], pauses = [];
+    const service = {
+        startAnalysis: async () => ({ id: 'owned', state: 'queued', stage: 'queued', elapsed_seconds: 0 }),
+        analysisJob: async () => pauses.length === 1
+            ? { id: 'owned', state: 'running', stage: 'selecting tests', elapsed_seconds: 2.1 }
+            : { id: 'owned', state: 'completed', stage: 'completed', elapsed_seconds: 3.2, result: { selected: [] } },
+        cancelAnalysis: async () => assert.fail('completed work should not be cancelled')
+    };
+    const result = await waitForAnalysis(service, 'select', {}, () => true, job => stages.push(job), async () => pauses.push(1));
+    assert.equal(JSON.stringify(result), JSON.stringify({ selected: [] }));
+    assert.equal(stages.map(s => s.stage).join(','), 'queued,selecting tests,completed');
+    assert.ok(stages.every(s => !('percent' in s)));
+});
+
+test('comparison changed during submission cancels its worker instead of accepting its response', async () => {
+    let current = true;
+    const submitted = deferred(), cancellations = [];
+    const service = {
+        startAnalysis: () => submitted.promise,
+        cancelAnalysis: async id => { cancellations.push(id); return { state: 'cancelled' }; },
+        analysisJob: async () => assert.fail('stale job should be cancelled first')
+    };
+    const waiting = waitForAnalysis(service, 'select', {}, () => current, () => assert.fail('stale progress'));
+    current = false; submitted.resolve({ id: 'owned', state: 'running' });
+    assert.equal(await waiting, undefined);
+    assert.deepEqual(cancellations, ['owned']);
+});
+
+test('worker failure and inability to confirm cancellation stay visible', async () => {
+    await assert.rejects(waitForAnalysis({ startAnalysis: async () => ({ state: 'failed', error: 'deadline exceeded' }) },
+        'select', {}, () => true, () => {}), /deadline exceeded/);
+    await assert.rejects(waitForAnalysis({ startAnalysis: async () => ({ id: 'owned', state: 'running' }),
+        cancelAnalysis: async () => { throw new Error('worker unavailable'); } },
+        'select', {}, () => false, () => {}), /worker unavailable/);
+});
+
+test('job-enabled recommendation uses the core job contract and no synchronous duplicate', async () => {
+    const { view } = widget(), chosen = report();
+    view.codedna.analysisJobs = async () => true;
+    view.codedna.select = async () => assert.fail('duplicate synchronous analysis');
+    view.codedna.startAnalysis = async (operation, payload) => {
+        assert.equal(operation, 'risk-select'); assert.equal(payload.repo, root);
+        return { id: 'owned', state: 'completed', stage: 'completed', elapsed_seconds: 1, result: chosen };
+    };
+    await view.suggest();
+    assert.equal(view.report, chosen); assert.equal(view.loading, false);
+    assert.equal(view.analysisJob, undefined);
+});
+
+test('cancelled recommendation cannot restore late results or run project tests', async () => {
+    const { view } = widget(), submitted = deferred();
+    view.codedna.analysisJobs = async () => true;
+    view.codedna.startAnalysis = () => submitted.promise;
+    view.codedna.cancelAnalysis = async id => { assert.equal(id, 'owned'); return { id, state: 'cancelled' }; };
+    view.codedna.runSelection = async () => assert.fail('analysis must never execute tests');
+    const suggesting = view.suggest(); await tick();
+    view.analysisCancelled = true;
+    submitted.resolve({ id: 'owned', state: 'running' }); await suggesting;
+    assert.equal(view.report, undefined); assert.equal(view.loading, false);
+    assert.match(view.notice, /No tests were executed/);
+});
+
+test('Cancel analysis targets only the displayed job and prevents duplicate clicks', async () => {
+    const { view } = widget(), cancellation = deferred(), ids = [];
+    view.analysisJob = { id: 'owned', state: 'running' };
+    view.codedna.cancelAnalysis = id => { ids.push(id); return cancellation.promise; };
+    const stopping = view.cancelAnalysis(); await view.cancelAnalysis();
+    assert.deepEqual(ids, ['owned']); assert.equal(view.cancelling, true);
+    assert.equal(view.analysisCancelled, true);
+    cancellation.resolve({ id: 'owned', state: 'cancelled' }); await stopping;
+    assert.equal(view.analysisJob.state, 'cancelled'); assert.equal(view.cancelling, false);
+});
+
+test('late cancellation errors cannot overwrite a newer comparison', async () => {
+    const { view, change } = widget(), cancellation = deferred();
+    view.analysisJob = { id: 'old', state: 'running' };
+    view.codedna.cancelAnalysis = () => cancellation.promise;
+    const stopping = view.cancelAnalysis(); change();
+    view.analysisJob = { id: 'new', state: 'running' };
+    cancellation.reject(new Error('old worker unavailable')); await stopping;
+    assert.equal(view.error, undefined); assert.equal(view.analysisJob.id, 'new');
 });

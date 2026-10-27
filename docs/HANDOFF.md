@@ -1,5 +1,55 @@
 # CodeDNA — full handoff blueprint (2026-10-26)
 
+## Current engineering - D-080 integrated, 2026-10-28
+
+D-079 full validation completed: 601 passed, zero skips, one existing warning,
+1324.42 seconds. See ENGINEERING_VALIDATION_D079_2026-10-28.json. Do not rerun it.
+
+D-080 source now mounts authenticated typed read-only analysis jobs: one active,
+two queued, 300-second worker deadline, bounded in-memory results and owned
+process-tree cancellation. Tests recommendation uses real stage/elapsed updates
+and Cancel analysis when capability version 1 is advertised; older installed
+cores retain synchronous behavior. Other views retain their existing sync UI.
+No build, test execution, plugin mutation or history writing is routed through
+the cancellation API. Risk defaults/thresholds/refusals remain unchanged.
+
+Frozen worker dispatch and optional-plugin activation are pinned before work.
+The IDE backend also retains activation across the consented API restart for
+build execution, so pending plugin changes still require an application restart.
+Source/frozen-entry contract tests passed; actual new packaged binary validation
+and installer refresh remain deferred to the final installation batch.
+
+Focused integrated Python suite: 33 passed; after cleanup review, four targeted
+checks passed (including one additional case). TypeScript and all 35 Node
+workflows pass. Full D-080 Maven-inclusive suite is the next validation; do not
+call this release complete from focused checks. There should be 635 tests.
+No new push/merge, research rerun, default changes, languages or stash operations.
+MOONSHOT.md remains unrelated and untracked. Staged integration scripts have
+already been applied; do not run them again.
+
+## Engineering continuation - D-079/D-080, 2026-10-28
+
+D-079 source is local commit a46f222. Its first full-suite invocation left an
+empty log and no live pytest process; it is not a pass. One replacement run is
+active: 601 collected tests, Maven included, verbose saved progress in pointer
+.diagnostics/d079-full-suite-retry.log. Do not start a duplicate. The previous
+591-test result still describes the earlier source checkpoint.
+
+D-080 is in progress, not a completed release. New independent worker modules
+support one active read-only operation, two queued requests, bounded retention,
+owned Windows Job Object termination and deadlines. Sixteen focused process/job
+checks pass, including actual descendants, unrelated-process survival, startup
+cancellation and exact sync/worker JSON on temporary Git fixtures. IDE TypeScript
+compilation and 32 Node workflows pass. The source UI is capability-gated; the
+new routes and frozen-plugin bootstrap are staged for integration after D-079's
+full validation. Do not claim they are mounted or present in the installed app.
+
+Continue from ANALYSIS_JOB_PLAN.md. Staging helpers are in the pointer checkout's
+.diagnostics; inspect before applying, as some helpers assert one-time changes.
+The current API remains synchronous. Installation/hosting remain last. No push,
+merge, research rerun, threshold changes or stash operations were performed.
+MOONSHOT.md remains the owner's separate untracked proposal.
+
 ## Latest continuation - D-076 completed, 2026-10-27
 
 The pilot completed all 360 mappings and four observed-only traces. Read

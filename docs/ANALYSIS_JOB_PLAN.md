@@ -1,8 +1,12 @@
 # Cancellable analysis jobs - implementation plan
 
-Status: planned next engineering step; not implemented or validated. The active
-D-076 runner's Python fingerprints must remain stable until its evaluation
-finishes. This plan does not change the frozen research protocol.
+Status: D-080 source integrated, 2026-10-28. Authenticated job routes and
+capability-gated Tests recommendation cancellation are implemented. Other IDE
+views keep their existing synchronous UI. Thirty-three integrated Python checks,
+four later cleanup checks and 35 Node workflows pass; TypeScript compiles.
+Full Maven-inclusive D-080 validation remains required. D-079's earlier 601-test
+full run passed. No actual new frozen executable was built; that validation and
+installation remain deferred. No ordinary-analysis restart resume is claimed.
 
 ## Existing boundary
 
@@ -96,3 +100,33 @@ Test this against D-074 activation and bundled-fallback semantics. If measuremen
 justify a persistent parse-cache worker, allow only one active operation in that
 worker, bind every response to its operation ID, and kill/recreate that owned
 worker on cancellation. Never cache audit acceptance across changed history.
+
+## Implemented bounds and lifecycle
+
+The API exposes typed submissions under `/api/analysis-jobs/{operation}` for
+`tests`, `analyze`, `impact`, `select`, and `risk-select`, status by registered
+ID, and POST cancellation by ID. One worker is active; at most two jobs wait.
+Results expire after 600 seconds and at most eight records are retained. Each
+protocol message is capped at 8 MiB, and no more than 32 worker events are read.
+Queue saturation returns HTTP 429; expired/foreign IDs return 404. Completed
+results keep the core JSON, including independently measured analysis time.
+
+A contained worker waits for stdin before importing analysis/plugin code or
+receiving project input. Windows uses a kill-on-close Job Object; POSIX uses an
+isolated process group. Actual process-tree tests ran on Windows only. A cleanup
+failure is reported, stops dispatch and never becomes successful cancellation.
+Lifespan shutdown closes owned workers. A cancelled ordinary operation cannot
+resume; the separate research runner's checkpoint format is unchanged.
+
+Plugin activation is inherited from the current core's snapshot rather than
+re-reading a pending active.json manifest. The IDE backend retains the snapshot
+when it restarts the core after explicit build consent. The private frozen
+worker switch runs before default plugin activation. Failed parent activation
+preserves visible errors and bundled fallback. Invalid bootstrap paths fail
+closed. No arbitrary executable/PID/path-to-plugin is accepted by job routes.
+
+The Jobs capability is optional. New source UI with an older packaged core
+falls back to synchronous analysis without advertising cancellation. Worker
+startup and lost in-memory parse-cache reuse may add overhead; this work
+improves responsiveness and ownership, not a claimed CI speedup. Actual new
+frozen execution, clean-PC validation and installer refresh remain last.

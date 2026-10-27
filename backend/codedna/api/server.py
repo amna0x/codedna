@@ -28,8 +28,12 @@ def serve(host: str = "127.0.0.1", port: int = 8765, *, token: str | None = None
 
     token = token or new_token()
     # One JSON line on stdout so the IDE can read the address and token.
-    print(json.dumps({"url": f"http://{host}:{port}", "token": token,
-                      "allow_build": allow_build}), flush=True)
+    announcement = {"url": f"http://{host}:{port}", "token": token,
+                    "allow_build": allow_build}
+    if getattr(sys, 'frozen', False):
+        from codedna.plugins import desktop_store
+        announcement['plugin_snapshot'] = desktop_store.worker_snapshot()
+    print(json.dumps(announcement), flush=True)
     if allow_build:
         print("warning: /api/run-tests is enabled; it executes project code on request",
               file=sys.stderr)
