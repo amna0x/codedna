@@ -133,3 +133,28 @@ Risk unvalidated, the original chronological-history reason and both required
 demo test classes, while showing the new same-change explanation. Only the
 read-only Suggest tests action was used; no test execution or history recording
 was triggered. Existing stashes retain their original object IDs.
+
+
+## Final local release handoff - 2026-10-27
+
+Source checkpoint: e16cbb5. Final production browser/node/Electron build and
+Windows NSIS installer completed successfully. Installer: 339848642 bytes;
+SHA-256 `7d3f469e63d8557682c4b95ec696b477ab49f35301a1e375bc77789fb9a33315`; unsigned. Every one of the 1,389
+packaged core hashes matches; current D-073 UI text exists in the packaged
+application. Evidence: RELEASE_VALIDATION_D072_D073_2026-10-27.json.
+
+The friend test kit is prepared under build/friend-test-kit and its archive
+integrity was checked. It includes the exact installer/hash, verifier,
+instructions and tiny Java/Python Git demos. No kit was sent to anyone and
+no clean-PC installation result is claimed. Previous installers are preserved.
+
+Both plugin wheels were built without network/dependency installation and
+their declared Java/Python entry points loaded from an isolated target. See
+PLUGIN_RELEASE_CANDIDATES_2026-10-27.json. This advances release preparation;
+no public URLs, frozen optional-wheel support or website publication is claimed.
+
+The remaining gates are real clean-PC feedback, independent student graph
+labels, university supervisor/report review, defence rehearsal/video, public
+catalogue/release publication and frozen optional-plugin installation support.
+The deferred novelty/features backlog remains deferred, and original studies
+are unchanged. Do not rebuild completed CRC, dependency union or Python fallback.

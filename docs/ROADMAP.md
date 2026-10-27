@@ -8,8 +8,8 @@ commit 8b0d478. The branch contains the reviewed D-072/D-073 source checkpoint; 
 Risk thresholds/fallbacks unchanged. Individual recorded checks, clear history
 selection and replay folder browsing fix the owner's demo feedback. See
 BLUEPRINT_COMPLETION.md for exact validation and remaining external gates.
-Final installer rebuild is in progress; do not send the old D-071 installer
-as this version. Website source and detailed blueprint are ready locally;
+Final D-072/D-073 installer and friend test kit are built and verified;
+see RELEASE_VALIDATION_D072_D073_2026-10-27.json. Clean-PC acceptance remains pending. Website source and detailed blueprint are ready locally;
 public catalogue/wheel hosting remains unavailable. No new push/merge yet.
 
 
@@ -253,9 +253,10 @@ May start in parallel (Student C) once the analysis JSON formats are stable.
   endpoints and the IDE "Language plugins" view (D-054): official catalogue
   only, SHA-256 checked before pip, exact versions, dependency check with
   roll back. Open: a public place to host the catalogue and wheels
-- 🔄 Package the Java plugin through the catalogue: it is a separate
-  distribution (`plugins/codedna-java`), listed as bundled; publishing a
-  wheel waits for public hosting
+- 🔄 Java/Python plugin wheels are built and their entry points load from an
+  isolated target (PLUGIN_RELEASE_CANDIDATES_2026-10-27.json). They remain
+  bundled in the desktop; public wheel/catalogue hosting and frozen optional
+  installation remain release gates.
 
 ## Later (only if Milestones 4–7 are on track)
 

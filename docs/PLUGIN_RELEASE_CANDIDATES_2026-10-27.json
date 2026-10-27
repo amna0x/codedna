@@ -1,0 +1,22 @@
+{
+  "scope": "local release candidates only; nothing published or installed in the desktop",
+  "plugins": [
+    {
+      "file": "codedna_java-0.1.0-py3-none-any.whl",
+      "bytes": 37156,
+      "sha256": "82152dcf06410d9a2f0f2ae73ad10ef01da5449a271d2db550a60295205bc98f",
+      "public_url": null
+    },
+    {
+      "file": "codedna_python-0.1.0-py3-none-any.whl",
+      "bytes": 21529,
+      "sha256": "aa5f940d985e54966ea2192d1b4ec314b4e8a0ce76afff4ac1eaf621b9320f13",
+      "public_url": null
+    }
+  ],
+  "entry_points_loaded_from_isolated_target": [
+    "java",
+    "python"
+  ],
+  "frozen_desktop_optional_install_verified": false
+}
