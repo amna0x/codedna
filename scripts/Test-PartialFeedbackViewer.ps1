@@ -33,6 +33,14 @@ try {
     '{"index":7,"error":"mapping mismatch"}' | Set-Content -LiteralPath $stop
     $output = (& $Viewer -Results $taskRoot -Once) -join "`n"
     Assert-Text $output 'STOPPED'; Assert-Text $output 'mapping mismatch'; $passed++
+    (Get-Item -LiteralPath $stop).LastWriteTimeUtc = [DateTime]::UtcNow.AddMinutes(-1)
+    $output = (& $Viewer -Results $taskRoot -Once) -join "`n"
+    Assert-Text $output 'COMPLETE:'
+    if ($output -match 'STOPPED') { throw 'An old stop diagnostic hid a newer completed checkpoint.' }; $passed++
+    '{"phase":"source_mapping","completed":361,"total":360}' | Set-Content -LiteralPath $progress
+    $refused = $false
+    try { & $Viewer -Results $taskRoot -Once | Out-Null } catch { $refused = $_.Exception.Message -match 'Invalid mapping checkpoint' }
+    if (-not $refused) { throw 'Viewer accepted impossible progress counters.' }; $passed++
     Write-Output "$passed viewer checks passed. Temporary Git fixture: $taskRoot"
 } finally {
     # Keep the small fixture for inspection; no recursive deletion or study mutation.

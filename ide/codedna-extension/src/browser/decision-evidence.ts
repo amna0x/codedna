@@ -2,7 +2,11 @@ import { SelectionReport, SelectionRun } from '../common/codedna-protocol';
 
 /** Presentation guidance only. The core remains the sole authority on risk. */
 export function recoverySteps(report: SelectionReport): string[] {
-    const reasons = (report.risk?.reasons ?? []).join(' ');
+    if (!report.risk) {
+        return ['This selection uses structural rules and has no validated skip-risk estimate. Choose Validated risk stopping to request a prior-audited estimate; it may still require the full suite.'];
+    }
+    const reasons = report.risk.reasons.join(' ');
+    const unsupported = /unsupported|non-Java|mixed|language/i.test(reasons);
     const steps: string[] = [];
     if (/another repository|branch|future|chronological|target outcome/i.test(reasons)) {
         steps.push('Use history from this repository and branch ending at the comparison base. Keep target-change outcomes out of its prediction.');
@@ -10,13 +14,15 @@ export function recoverySteps(report: SelectionReport): string[] {
     if (/stale|next first-parent/i.test(reasons)) {
         steps.push('Compare the next first-parent change and use complete history through its base commit.');
     }
-    if (/unsupported|non-Java|mixed|language/i.test(reasons)) {
+    if (unsupported) {
         steps.push('Risk stopping is supported only in its validated language domain. Use the full suite for this change.');
     }
     if (/invalid|duplicate|empty/i.test(reasons)) {
         steps.push('Inspect the history import and its warnings. Do not edit outcomes merely to make validation pass.');
     }
-    if (report.risk?.status !== 'validated_history') {
+    if (report.risk.status !== 'validated_history' && unsupported) {
+        steps.push('More history alone cannot make an unsupported change eligible for risk stopping.');
+    } else if (report.risk.status !== 'validated_history') {
         steps.push('Record complete full-suite runs over subsequent changes. Passing runs alone do not establish failure-detection safety; the prior audit must pass.');
     } else {
         steps.push('Continue recording full-suite audits. This decision describes this comparison; it does not validate later changes automatically.');

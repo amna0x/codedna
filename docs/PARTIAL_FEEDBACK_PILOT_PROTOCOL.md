@@ -122,4 +122,4 @@ completion requires both its recorded state and a saved results.json.
 This viewer is read-only. Ctrl+C closes the viewer only, not the study. It never
 starts, cancels or resumes a study. The runner itself resumes compatible source
 checkpoints when rerun with the same frozen input/protocol/source fingerprints.
-Six offline viewer checks passed against a temporary Git fixture.
+Eight offline viewer checks passed against a temporary Git fixture.

@@ -126,6 +126,11 @@ test('evidence guidance preserves refusal and provenance without claiming more d
     const content = recoverySteps(report).join(' ');
     assert.match(content, /ending at the comparison base/); assert.match(content, /audit must pass/);
     assert.equal(JSON.stringify(report), before);
+    const structural = recoverySteps({}).join(' ');
+    assert.match(structural, /Choose Validated risk stopping/);
+    const unsupported = recoverySteps({ risk: { status: 'unvalidated', reasons: ['This change includes unsupported non-Java files.'] } }).join(' ');
+    assert.match(unsupported, /More history alone cannot/);
+    assert.ok(!unsupported.includes('Record complete full-suite runs over subsequent changes'));
 });
 
 test('diagnostic export omits raw logs, source and failure messages but preserves observed statuses', () => {

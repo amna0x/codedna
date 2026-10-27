@@ -13,7 +13,9 @@ $taskRoot = [IO.Path]::GetFullPath($Results)
 function Show-PilotCheckpoint {
     $progressPath = Join-Path $taskRoot 'progress.json'
     $stopPath = Join-Path $taskRoot 'STOP.json'
-    if (Test-Path -LiteralPath $stopPath) {
+    $progressFile = Get-Item -LiteralPath $progressPath -ErrorAction SilentlyContinue
+    $stopFile = Get-Item -LiteralPath $stopPath -ErrorAction SilentlyContinue
+    if ($stopFile -and (-not $progressFile -or $stopFile.LastWriteTimeUtc -ge $progressFile.LastWriteTimeUtc)) {
         $stopped = Get-Content -LiteralPath $stopPath -Raw | ConvertFrom-Json
         Write-Output "STOPPED at snapshot $($stopped.index): $($stopped.error)"
         Write-Output 'No outcome evaluation is claimed. Read STOP.json before resuming.'
