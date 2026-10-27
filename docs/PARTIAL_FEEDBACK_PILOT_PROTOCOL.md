@@ -108,3 +108,18 @@ the real runner must provide one. Chronology models a sequential replay, not
 actual asynchronous CI completion latency. First failures mean first recorded
 failures in the available reference history, not provably first-ever failures.
 v1 was not evaluated; v2 is the effective pilot definition.
+
+
+## Operational progress viewer (protocol unchanged)
+
+From the checkout, run `powershell -File scripts/Watch-PartialFeedback.ps1`.
+Use `-Once` for one snapshot, or `-Results <directory>` for another pilot folder.
+The bar counts mapped source snapshots only. Replay is a separate stage with
+no invented percentage. Checkpoint age is displayed without guessing whether
+an operating-system process is alive. STOP.json diagnostics remain visible;
+completion requires both its recorded state and a saved results.json.
+
+This viewer is read-only. Ctrl+C closes the viewer only, not the study. It never
+starts, cancels or resumes a study. The runner itself resumes compatible source
+checkpoints when rerun with the same frozen input/protocol/source fingerprints.
+Six offline viewer checks passed against a temporary Git fixture.

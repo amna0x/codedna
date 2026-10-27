@@ -10,7 +10,8 @@ Full suite with Maven is running; pointer .diagnostics/d076-full-suite.log.
 D-077 IDE source adds static check explanations, evidence-health guidance and
 explicit JSON evidence save, excluding source/raw logs. TypeScript and 26 Node
 tests pass (.diagnostics/d077-node-final.log). Live thresholds are unchanged.
-Per-operation cancellation/progress remains next; do not claim it is built.
+D-078 adds scripts/Watch-PartialFeedback.ps1 (read-only stage bar; six offline
+checks passed). Per-operation IDE cancellation remains next; do not claim it is built.
 Installation is deferred to the end. Owner wants to push for a friend to see;
 notify when a validated checkpoint is ready, without assuming push/merge consent.
 No new push/merge; preserve all old stashes. Read the newest notes first.

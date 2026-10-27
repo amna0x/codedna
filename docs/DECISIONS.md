@@ -1819,3 +1819,16 @@ build or a clean-PC install. Full Python validation is running against the
 unchanged D-076 backend. Installer rebuilding is deferred by owner instruction.
 Per-operation core cancellation and broader progress/caching improvements are
 still pending; the existing elapsed-time notification is not a percentage.
+
+
+## D-078 - Truthful read-only pilot progress (2026-10-27)
+
+The owner previously found a process-detection viewer confusing. Provide a
+small PowerShell viewer for the current research runner's actual checkpoints.
+Its bar counts source snapshots only; replay has no fabricated percentage.
+Show checkpoint age without claiming that an OS process is alive or stuck.
+Display stop diagnostics and require a results file before showing completion.
+The viewer never mutates study files or starts/stops a process. Six offline
+checks pass in a temporary Git fixture, including preservation of progress
+bytes and refusal of completion without results. This is research progress
+visibility; per-operation IDE cancellation remains a separate pending task.
