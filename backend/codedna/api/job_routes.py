@@ -1,5 +1,6 @@
 """Authenticated read-only job routes. Build/history/plugin mutation stay separate."""
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import HTTPException
 from starlette.concurrency import run_in_threadpool
@@ -25,7 +26,14 @@ def install_job_routes(app, secured):
 
     def submit(operation, body):
         try:
-            return jobs.submit(operation, body.model_dump())
+            payload = body.model_dump()
+            # Workers start in a trusted core directory, so anchor API-relative
+            # paths here. Preserve empty optional paths and existing defaults.
+            for name in ('repo', 'history_csv', 'coverage_map', 'durations'):
+                value = payload.get(name)
+                if isinstance(value, str) and (name == 'repo' or value):
+                    payload[name] = str(Path(value).absolute())
+            return jobs.submit(operation, payload)
         except JobCapacityError as exc:
             raise HTTPException(status_code=429, detail=str(exc)) from exc
         except ValueError as exc:

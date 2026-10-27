@@ -95,3 +95,19 @@ def test_queue_limit_and_shutdown_cleanup_are_visible_at_api_boundary(repo, tmp_
     assert app.state.analysis_jobs.get(first)['state'] == 'cancelled'
     assert app.state.analysis_jobs.get(third)['state'] == 'cancelled'
     assert not app.state.analysis_jobs._thread.is_alive()
+
+
+def test_relative_api_paths_keep_parent_context_in_the_contained_worker(repo, monkeypatch):
+    repo.write('src/main/java/A.java', 'class A {}')
+    repo.write('src/test/java/ATest.java', 'import org.junit.jupiter.api.Test; class ATest { @Test void check() {} }')
+    repo.commit('fixture')
+    monkeypatch.chdir(repo.path.parent)
+    body = {'repo': repo.path.name, 'rev': 'HEAD'}
+    with TestClient(create_app(TOKEN), base_url='http://127.0.0.1') as client:
+        expected = client.post('/api/tests', headers=AUTH, json=body)
+        assert expected.status_code == 200
+        submitted = client.post('/api/analysis-jobs/tests', headers=AUTH, json=body)
+        assert submitted.status_code == 202
+        completed = await_result(client, submitted.json()['id'])
+        assert completed['state'] == 'completed', completed
+        assert completed['result'] == expected.json()

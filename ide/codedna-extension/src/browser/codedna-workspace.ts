@@ -31,8 +31,14 @@ export class CodeDnaWorkspace {
         return roots.length ? FileUri.fsPath(roots[0].resource) : undefined;
     }
 
-    async openRepositoryFile(repository: string, relativePath: string): Promise<void> {
-        await this.editors.open(FileUri.create(repository).resolve(relativePath));
+    async openRepositoryFile(repository: string, relativePath: string, line?: number): Promise<void> {
+        const uri = FileUri.create(repository).resolve(relativePath);
+        if (line === undefined) {
+            await this.editors.open(uri);
+        } else {
+            const position = { line: Math.max(line - 1, 0), character: 0 };
+            await this.editors.open(uri, { selection: { start: position, end: position } });
+        }
     }
 
     async openFile(relativePath: string, line?: number): Promise<void> {

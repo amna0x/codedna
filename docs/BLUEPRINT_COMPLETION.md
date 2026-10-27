@@ -1,5 +1,30 @@
 # Blueprint completion ledger - 2026-10-27
 
+## Current checkpoint - D-080/D-081, 2026-10-28
+
+D-079 is fully validated: 601 passed/zero skips, proof JSON saved. D-080 source
+was saved in f4ec9cf. Its later 635-test full invocation was intentionally
+stopped around 18 percent after a new regression exposed relative API paths
+being resolved in the worker's trusted directory. That run is not a pass.
+The regression failed before the fix; all eight API tests now pass. Anchor
+repo/history/coverage/duration paths to the API context before dispatch while
+preserving empty optional defaults and keeping workers out of analysed repos.
+
+D-081 extends cancellation/progress to Changes and fixes snapshot consistency:
+analyse once, then compute impact from that result's immutable base/head rather
+than separately resnapshotting WORKTREE. Drop stale responses and duplicate
+requests, bind source navigation to the canonical analysed repository, disclose
+working-file/line differences and show file-open errors. Tests and Changes now
+use job capability version 1; other views retain sync behavior. TypeScript and
+43 Node workflows pass. Eight actual API checks pass; earlier integrated worker
+suite 33 and later four cleanup checks passed. Full combined validation is next
+(expected 636 tests), not yet a pass. Freeze code during it.
+
+No installer rebuilt, new frozen binary validated, project code executed through
+analysis, public hosting, source push, merge or stash operation. Installation
+and clean-PC acceptance remain last. Existing B10/CRC decisions and research
+findings are unchanged. MOONSHOT.md remains unrelated and untracked.
+
 ## Current engineering - D-080 integrated, 2026-10-28
 
 D-079 full validation completed: 601 passed, zero skips, one existing warning,

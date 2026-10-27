@@ -1888,3 +1888,21 @@ Source/frozen entry contracts and real Windows descendants are tested, while
 actual rebuilt frozen execution and installation remain deferred. This adds
 no runtime dependencies, changes no risk gate/default and claims no new speedup
 or research safety. Full source validation is pending after focused checks.
+
+
+## D-081 - Consistent Changes snapshots and navigation (2026-10-28)
+
+The Changes view previously analysed change and impact in parallel using the
+original mutable references. Analyse changes first and pass its immutable
+base/head to impact, in both legacy and job-capable paths. Add operation-bound
+cancellation/stages and stale-response/duplicate-click guards. Open current files
+relative to the report's canonical repository, preserve optional line selection,
+explain missing files and disclose that working-file lines may differ. Do not
+translate no discovered impacts into a claim that no dependencies exist.
+
+A new API regression also found that a worker's trusted cwd changed relative
+path meaning. Anchor request paths at submission in the API process, preserving
+empty optional defaults. This regression failed before the fix; eight API tests
+pass after it. TypeScript and 43 Node workflows pass. The partial D-080 full run
+was stopped deliberately; full combined validation is required. No risk/model
+logic, defaults, research outputs or installed desktop package changed.

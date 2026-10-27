@@ -1,8 +1,8 @@
 # Cancellable analysis jobs - implementation plan
 
 Status: D-080 source integrated, 2026-10-28. Authenticated job routes and
-capability-gated Tests recommendation cancellation are implemented. Other IDE
-views keep their existing synchronous UI. Thirty-three integrated Python checks,
+capability-gated Tests recommendation and Changes cancellation are implemented.
+Other IDE views keep their existing synchronous UI (D-081). Thirty-three integrated Python checks,
 four later cleanup checks and 35 Node workflows pass; TypeScript compiles.
 Full Maven-inclusive D-080 validation remains required. D-079's earlier 601-test
 full run passed. No actual new frozen executable was built; that validation and
@@ -130,3 +130,8 @@ falls back to synchronous analysis without advertising cancellation. Worker
 startup and lost in-memory parse-cache reuse may add overhead; this work
 improves responsiveness and ownership, not a claimed CI speedup. Actual new
 frozen execution, clean-PC validation and installer refresh remain last.
+
+API-relative repository/history/coverage/duration paths are anchored in the API
+process before dispatch to the worker's trusted cwd. Empty optional paths retain
+their existing core defaults. Changes requests impact using immutable revision
+IDs returned by change analysis, including in the legacy synchronous fallback.

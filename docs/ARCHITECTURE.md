@@ -666,3 +666,11 @@ plugin paths or bundled-fallback error before registry loading. The IDE backend
 retains that snapshot across core restarts for build permission. No ordinary
 analysis restart resume or cross-request model/audit cache is introduced.
 See ANALYSIS_JOB_PLAN.md for measured bounds, tests and packaging limits.
+
+
+D-081 extends the job UI to Changes. Change and impact are sequential so both
+refer to the same immutable snapshot. Canonical-repository navigation keeps
+subfolder workspaces from opening the wrong files; links still open working
+files with that limitation disclosed. API-relative file paths are anchored
+before a worker starts in its trusted core directory. No analysis implementation
+or risk computation moves into TypeScript.

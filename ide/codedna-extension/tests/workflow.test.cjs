@@ -264,3 +264,115 @@ test('late cancellation errors cannot overwrite a newer comparison', async () =>
     cancellation.reject(new Error('old worker unavailable')); await stopping;
     assert.equal(view.error, undefined); assert.equal(view.analysisJob.id, 'new');
 });
+
+function changeWidget() {
+    let changed;
+    const source = fs.readFileSync(path.join(__dirname, '../src/browser/change-view-widget.tsx'), 'utf8');
+    const code = ts.transpileModule(source, { compilerOptions: {
+        module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022,
+        jsx: ts.JsxEmit.React, experimentalDecorators: true, emitDecoratorMetadata: false
+    } }).outputText;
+    class ReactWidget {
+        constructor() { this.title = {}; this.toDispose = []; }
+        addClass() {} update() {}
+    }
+    const module = { exports: {} };
+    vm.runInNewContext(code, { exports: module.exports, module, require(id) {
+        if (id.endsWith('/inversify')) return { injectable: () => target => target, inject: () => () => {}, postConstruct: () => {} };
+        if (id.endsWith('/react-widget')) return { ReactWidget };
+        if (id === './analysis-jobs-ui') return jobModule.exports;
+        if (id === './progress') return { withProgress: (_, __, action) => action() };
+        return {};
+    } });
+    const view = new module.exports.ChangeViewWidget();
+    view.comparison = { base: 'HEAD~1', head: 'WORKTREE', onDidChange(listener) { changed = listener; return { dispose() {} }; } };
+    view.workspace = { repositoryPath: async () => root };
+    view.codedna = {}; view.progress = {}; view.init();
+    return { view, change() { view.comparison.head = 'other'; changed(); } };
+}
+const changesReport = () => ({ repository: root, base_commit: 'a'.repeat(40), head_commit: head, changed_files: [], warnings: [] });
+
+test('legacy Changes impact uses the exact analysed snapshot rather than later WORKTREE edits', async () => {
+    const { view } = changeWidget(), chosen = changesReport(), impact = { impacted: [] };
+    view.codedna.analysisJobs = async () => false;
+    view.codedna.analyze = async (repo, base, rev) => {
+        assert.equal(repo, root); assert.equal(rev, 'WORKTREE'); return chosen;
+    };
+    view.codedna.impact = async (repo, base, rev) => {
+        assert.equal(base, chosen.base_commit); assert.equal(rev, chosen.head_commit); return impact;
+    };
+    await view.analyze();
+    assert.equal(view.changes, chosen); assert.equal(view.impact, impact); assert.equal(view.analysisJob, undefined);
+});
+
+test('Changes rejects duplicate clicks before repository lookup and drops stale comparisons', async () => {
+    const { view, change } = changeWidget(), waiting = deferred(); let calls = 0;
+    view.codedna.analyze = () => { calls++; return waiting.promise; };
+    view.codedna.impact = () => assert.fail('stale impact requested');
+    const running = view.analyze(); await view.analyze(); await tick();
+    assert.equal(calls, 1); change(); waiting.resolve(changesReport()); await running;
+    assert.equal(view.changes, undefined); assert.equal(view.impact, undefined); assert.equal(view.loading, false);
+});
+
+test('Changes core jobs run in order and bind impact to immutable analysis IDs', async () => {
+    const { view } = changeWidget(), chosen = changesReport(), operations = [];
+    view.codedna.analysisJobs = async () => true;
+    view.codedna.analyze = () => assert.fail('sync duplicate');
+    view.codedna.impact = () => assert.fail('sync duplicate');
+    view.codedna.startAnalysis = async (operation, payload) => {
+        operations.push(operation);
+        if (operation === 'impact') { assert.equal(payload.base, chosen.base_commit); assert.equal(payload.head, chosen.head_commit); }
+        return { id: operation, state: 'completed', result: operation === 'analyze' ? chosen : { impacted: [] } };
+    };
+    await view.analyze();
+    assert.deepEqual(operations, ['analyze', 'impact']); assert.equal(view.changes, chosen);
+});
+
+test('Changes cancellation during impact stops its owned job and never publishes partial results', async () => {
+    const { view } = changeWidget(), ids = [], chosen = changesReport();
+    view.codedna.analysisJobs = async () => true;
+    view.codedna.startAnalysis = async operation => operation === 'analyze'
+        ? { id: 'change', state: 'completed', result: chosen }
+        : { id: 'impact', state: 'running', stage: 'analysing impact', elapsed_seconds: 1 };
+    view.codedna.cancelAnalysis = async id => { ids.push(id); return { id, state: 'cancelled' }; };
+    view.codedna.analysisJob = async id => ({ id, state: 'cancelled' });
+    const running = view.analyze(); await tick();
+    assert.equal(view.analysisJob.id, 'impact'); await view.cancelAnalysis(); await running;
+    assert.ok(ids.length >= 1 && ids.every(id => id === 'impact'));
+    assert.equal(view.changes, undefined); assert.equal(view.impact, undefined);
+    assert.match(view.notice, /cancelled/); assert.equal(view.loading, false);
+});
+
+test('late Changes failures cannot overwrite a newer comparison', async () => {
+    const { view, change } = changeWidget(), waiting = deferred();
+    view.codedna.analyze = () => waiting.promise;
+    const running = view.analyze(); await tick(); change();
+    waiting.reject(new Error('obsolete failure')); await running;
+    assert.equal(view.error, undefined); assert.equal(view.changes, undefined);
+});
+
+test('Changes file navigation uses the analysed repository and preserves the supplied line', async () => {
+    const { view } = changeWidget(), chosen = changesReport(), opened = [];
+    view.changes = chosen;
+    view.workspace.repositoryPath = async () => path.join(root, 'component');
+    view.workspace.openRepositoryFile = async (...args) => opened.push(args);
+    await view.openResultFile(relativeFile, 7);
+    assert.deepEqual(opened, [[root, relativeFile, 7]]);
+    view.invalidate(); await view.openResultFile(relativeFile, 7);
+    assert.equal(opened.length, 1);
+});
+
+test('Changes navigation explains missing working files instead of failing silently', async () => {
+    const { view } = changeWidget(); view.changes = changesReport();
+    view.workspace.openRepositoryFile = async () => { throw new Error('file no longer exists'); };
+    await view.openResultFile(relativeFile, 7);
+    assert.match(view.error, /Could not open the working file.*no longer exists/);
+});
+
+test('a late Changes file-open error cannot overwrite a newer comparison', async () => {
+    const { view, change } = changeWidget(), opening = deferred(); view.changes = changesReport();
+    view.workspace.openRepositoryFile = () => opening.promise;
+    const pending = view.openResultFile(relativeFile, 7); change();
+    opening.reject(new Error('old file missing')); await pending;
+    assert.equal(view.error, undefined);
+});

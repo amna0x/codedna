@@ -548,8 +548,8 @@ future safety. Existing mixed research results are preserved.
 
 ## Cancellable analysis (source development build)
 
-The Tests to run view shows core stages, elapsed time and Cancel analysis when
-its connected core advertises analysis jobs. Older packaged cores retain the
+The Tests to run and Changes views show core stages, elapsed time and Cancel
+analysis when the connected core advertises analysis jobs. Older packaged cores retain the
 synchronous path. Analysis cancellation never runs or cancels project builds.
 The API also offers typed read-only jobs for test discovery, change analysis,
 impact and selection; see [the job contract](docs/ANALYSIS_JOB_PLAN.md).
