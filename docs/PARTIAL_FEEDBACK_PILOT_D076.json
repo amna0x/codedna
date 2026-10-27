@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "id": "D076-hikaricp-development-v1",
+  "id": "D076-hikaricp-development-v2",
   "classification": "development pilot on previously inspected data; not independent confirmation",
   "project": "hikaricp",
   "dataset": "experiments\\results\\study11-2026-10-21\\hikaricp\\dataset.csv",
@@ -26,5 +26,7 @@
   "default_product_changed": false,
   "statistical_inference": "descriptive development results only; no superiority or deployment guarantee",
   "primary_safety": "zero omitted failing classes among failing evaluation commits",
-  "cost": "recorded test seconds including warmup/audits/mandatory classes; overhead measured separately on local hardware"
+  "cost": "recorded test seconds including warmup/audits/mandatory classes; overhead measured separately on local hardware",
+  "history_scope": "earlier observed commits ancestral to current push base; rebuild scoped history; invalidate foreign cached fits",
+  "chronology_limit": "sequential replay of first-tested CI job order; actual asynchronous completion timing is unavailable"
 }

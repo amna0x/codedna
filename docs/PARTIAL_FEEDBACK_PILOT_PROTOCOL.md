@@ -92,3 +92,19 @@ Choose any larger exploratory follow-up only after this pilot's data/mapping,
 invariance and runtime checks pass. Preserve all previous studies and findings.
 If faithful input mapping is infeasible, narrow the thesis to its retrospective
 claim rather than manufacturing a successful closed-loop result.
+
+
+## Pre-evaluation clarification v2: ancestry and CI time
+
+Before any real pilot outcome was evaluated, importer inspection confirmed
+that reference order is first-tested CI job order, not a guaranteed single
+branch or asynchronous completion order. The pilot therefore supplies each
+decision with the earlier reference commits ancestral to its push base. History
+features and complete fit/calibration/audit inputs use only that scoped
+observation history. Invalidate cached fits when their basis is no longer
+eligible, even off the ordinary refit cadence. No other branch/current-push or
+future result may be used. Synthetic linear-history tests may omit the mask;
+the real runner must provide one. Chronology models a sequential replay, not
+actual asynchronous CI completion latency. First failures mean first recorded
+failures in the available reference history, not provably first-ever failures.
+v1 was not evaluated; v2 is the effective pilot definition.
