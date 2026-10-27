@@ -1,5 +1,23 @@
 # CodeDNA — full handoff blueprint (2026-10-26)
 
+## Latest continuation - D-076 completed, 2026-10-27
+
+The pilot completed all 360 mappings and four observed-only traces. Read
+experiments/results/partial-feedback-pilot-d076-2026-10-27/FINDINGS.md and summary.json.
+B10/history and combined refused all 108 ordinary evaluation decisions; no
+risk-gated savings. Structural-only reduced 40 of 120 suites and missed 0 of 4 failing outcomes
+across 3 failing commits; recorded savings were 15.32% in evaluation and 7.78%
+including warm-up. This is tiny
+development evidence, not proof of 95% safety or closed-loop ML effectiveness.
+The one 90-second extraction timeout resumed from 329 cached mappings and completed
+without input/source/threshold changes. STOP.json is a retained earlier diagnostic.
+Full source validation: 591 Python tests/zero skips (Maven+Gradle), 27 Node tests,
+TypeScript, 8 viewer checks. See ENGINEERING_VALIDATION_D076_D078_2026-10-27.json.
+Next: measure matched cold/warm analysis and improve existing cache use, then
+bounded analysis jobs/cancellation per ANALYSIS_JOB_PLAN.md. Do not rerun old
+studies or tune this prefix for gains. Installation remains last; no new push/merge.
+
+
 ## Current continuation - D-075, 2026-10-27
 
 D-074 plugin installation is complete: full suite 576 passed, zero skips;
@@ -156,11 +174,11 @@ Node tests pass. The simplest route is to merge this one PR (§3.1).
 | Integration/original studies | #21/#22 merged; nine-project findings/hashes preserved | Do not repeat merges or old studies. Preserve every stash. |
 | D-071 through D-074 | Completed and verified, including frozen optional-plugin installation; D-074 full suite 576 passed, zero skips | Do not rebuild installation now. It is deferred to the end by owner instruction. |
 | D-075 report/feasibility | Complete; corrected portable review pack and read-only feasibility audit saved | Read REPORT_REVISION_NOTES_D075.md and PARTIAL_FEEDBACK_FEASIBILITY.md. |
-| D-076 development research | Protocol v2 frozen in 1965665; kernel/runner in 72e6043; 15 focused tests pass; 329 mappings saved; one 90-second timeout; retry in progress; full Maven suite 591 passed/zero skips | Read progress.json in experiments/results/partial-feedback-pilot-d076-2026-10-27 and pointer .diagnostics logs. Resume valid checkpoints; do not modify fingerprinted Python during the pilot. |
+| D-076 development research | Completed: all 360 source mappings; 120 evaluation commits; no risk-gated reduction; full source suite 591 passed/zero skips | Read the new pilot FINDINGS.md. Measure overhead before scaling; do not retune for a positive result. |
 | D-077 engineering | Local 4c5767c: source check explanations, evidence-health guidance, explicit decision evidence export; TypeScript and 27 Node tests pass | Continue operation cancellation/progress and broader workflow acceptance without weakening gates. No new installer yet. |
 | Labels/review | Owner uses ChatGPT for technical review; Gemini cross-check is a second AI judgement | No further owner labelling task. Keep provenance honest; no human-ground-truth claim. |
 | Website/distribution/clean PC | Website blueprint/source prepared; catalogue hosting and actual clean-PC evidence still open | Defer these installation/distribution tasks to the end; keep source private. |
-| Source sharing | Owner wants a checkpoint ready to push for a friend | Notify after full validation. No new push/merge was performed or authorized. |
+| Source sharing | Owner notified: validated source-review checkpoint ready; no push/merge performed | Owner may push codex/blueprint-completion for private review. Keep release/merge decisions separate. |
 
 Historical instructions below are reference, not a request to reapply old
 edits, repeat integration or retune until a favorable research result appears.

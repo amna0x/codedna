@@ -673,6 +673,24 @@ remains default because the follow-up results do not justify replacing it.
 27. l-k-1-2. Predictive-test-selection: conformal risk control on the
     Enhanced Westermo dataset. GitHub repository, accessed 2026-10-26.
 
+
+## Development validation addendum - D-076 through D-078
+
+After the dated D-074 packaged release, development source passed 591 Python
+tests with Maven and Gradle included, zero failures/skips and one existing
+Starlette warning (4749.24 seconds). TypeScript and 27 Node UI/workflow tests
+passed; eight read-only progress-viewer checks passed. These are source checks,
+not a newly packaged or clean-PC-tested release. The D-074 executable's 576-test
+validation remains its own dated evidence.
+
+The IDE source now exposes statically declared test checks and their source
+path, evidence-health recovery and an explicitly saved JSON decision record.
+It distinguishes B10's all-commit audit from CRC's failing-commit bound and never
+displays absent evidence as zero risk. Risk thresholds/defaults are unchanged.
+Full workflow UI tests use core-contract fixtures; installer refresh is deferred.
+Per-operation core cancellation is planned, not claimed implemented.
+See [source validation](ENGINEERING_VALIDATION_D076_D078_2026-10-27.json).
+
 ---
 
 # Part: Evaluation
@@ -1292,6 +1310,58 @@ reports, with both source versions disclosed; a real-project full-report
 replay was exactly identical. All other new jobs used the optimized code.
 No model, threshold grid, split or success rule was tuned after these results.
 
+### 4.13 Observation-isolated development pilot (D-076)
+
+Before evaluation, protocol v2 was frozen in commit `1965665`. The first 360
+reference commits of the previously inspected HikariCP dataset were replayed:
+240 common full-suite warm-up commits, followed by 120 evaluation commits.
+Each policy saw only its own executed outcomes from earlier commits ancestral
+to the current push base. Complete observed commits alone entered model
+fit/calibration/audit; decision-time feature vectors were frozen before reveal.
+A fixed full audit every tenth evaluation commit replaced reduced execution.
+All 360 code snapshots matched the recorded test universe exactly.
+
+| Policy | Reduced suites | Zero-omission safe failing commits | Missed failing class outcomes | Evaluation recorded test seconds | Recorded seconds with warm-up |
+|---|---:|---:|---:|---:|---:|
+| Full suite | 0/120 | 3/3 | 0/4 | 1050.442 | 2068.276 |
+| Audited B10 history | 0/120 | 3/3 | 0/4 | 1050.442 | 2068.276 |
+| Dependency structure | 40/120 | 3/3 | 0/4 | 889.509 | 1907.343 |
+| B10 plus structural floor | 0/120 | 3/3 | 0/4 | 1050.442 | 2068.276 |
+
+The two risk-gated policies refused all 108 ordinary evaluation decisions;
+12 other decisions were scheduled audits. The first prior candidate audit
+missed six of 60 commits and seven of 11 failing class outcomes (36.36%
+failure recall; 18.19% all-commit miss-rate upper bound). Later refusals also
+included fewer than ten failure-bearing audit commits. The gate therefore
+demonstrated abstention, not useful risk-gated reduction, on this prefix.
+
+Dependency selection saved 15.32% of recorded evaluation test seconds (7.78%
+including warm-up), but only three evaluation commits failed. This establishes
+neither 95% future safety nor comparative superiority. All policies caught the
+four failing class outcomes, including one first-recorded and three recurring
+outcomes; no build escape occurred. These are separate diagnostic endpoints.
+
+Measured structural-analysis function time was 1164.203 seconds over the 120
+evaluation snapshots. Full-suite analysis overhead was not separately timed;
+most mapping overlapped local validation. Worker startup, failed attempts and
+checkpoint I/O are excluded. A net CI speedup or precise matched net slowdown
+cannot be inferred by summing these timings with historical test durations.
+One extraction exceeded the fixed 90-second deadline; a retry reused 329 saved
+mappings and completed under unchanged source, inputs, cohort and thresholds.
+
+The gated policies observed complete outcomes at every commit, so this pilot
+does not establish their selective-learning behavior under feedback starvation.
+Synthetic mutation tests verify observation isolation; structural-only had 40
+partial observations but does not train a history model. This is a development
+implementation/mapping check on inspected data, not independent confirmation.
+The next engineering priority is measured analysis overhead and caching,
+followed by bounded cancellation/progress; no favorable result is assumed.
+
+Source traces, independent accounting checks and refusal counts:
+[D-076 findings](../experiments/results/partial-feedback-pilot-d076-2026-10-27/FINDINGS.md),
+[summary](../experiments/results/partial-feedback-pilot-d076-2026-10-27/summary.json),
+[raw traces](../experiments/results/partial-feedback-pilot-d076-2026-10-27/results.json).
+
 ## 5. Threats to validity
 
 - **Construct.** Results are per test class, not per test method. "Commit
@@ -1360,7 +1430,9 @@ may remain unobserved, so subsequent history features and audit eligibility can
 differ. Existing results describe full-history retrospective replay, not a
 validated closed-loop partial-feedback deployment. Live recording accepts only
 complete full-suite evidence; a passing subset is not a fully passing commit.
-A separate deployment-faithful evaluation is deferred, not claimed completed.
+D-076 adds an observation-isolated development pilot (§4.13), but its risk
+policies never reduced a suite. Broader selective-learning performance remains
+unvalidated; the prior full-history studies are not recast as closed-loop evidence.
 
 Safety definitions also differ across prior work: CodeDNA counts a failing
 commit as safe only when no failing test was omitted. Build-escape measures

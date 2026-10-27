@@ -87,3 +87,12 @@ The IDE should expose cancellation only when the connected core supports this
 contract. An older packaged core retains the synchronous path without a fake
 cancel button. Actual frozen validation and the installer refresh are deferred
 to the final installation batch under the owner's latest instruction.
+
+
+Worker lifecycle constraint: preserve the parent process's active language-plugin
+snapshot across cancellation/restart. A pending optional-plugin update must not
+become active in a replacement worker before the application's required restart.
+Test this against D-074 activation and bundled-fallback semantics. If measurements
+justify a persistent parse-cache worker, allow only one active operation in that
+worker, bind every response to its operation ID, and kill/recreate that owned
+worker on cancellation. Never cache audit acceptance across changed history.

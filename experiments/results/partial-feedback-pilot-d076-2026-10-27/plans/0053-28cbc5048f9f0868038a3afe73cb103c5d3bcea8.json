@@ -1,0 +1,92 @@
+{
+  "binding": {
+    "base": "28993fd4395f537a6552a9791b79313b007dd595",
+    "commit": "28cbc5048f9f0868038a3afe73cb103c5d3bcea8",
+    "database_sha256": "92a3e45e3065daa08b8668e6e3a523071f73baf7da1830fd9242007d0895501c",
+    "dataset_sha256": "f2c4ce350b858f2daec1ccc1a3f017ca5c2c95e1ff534720155b12b16414ec7b",
+    "protocol_sha256": "654016f72fa199ee6c41d316b5b7daf12594576a988c687ac1b9cf184447e425",
+    "source_sha256": "720f88ac68260c9311e3894808c77d66723d7dd5962cf784e1cfbe2bb1d63c56",
+    "strategy": "all"
+  },
+  "payload": {
+    "analysis_seconds": 14.063737699994817,
+    "eligible_history": [
+      "043d3d987e5381a6af8a10744e8223ee03f76ed6",
+      "087ff88dc82e2e7d90f0d2ab2a5e05d38b8aa199",
+      "12cc8165ef00040faa7333306f7f723c65d0329c",
+      "1928dca409af72ff3305437ea8b848c338b05f7a",
+      "199cd2b835ef517cefa4f0074aa72e69087b5e1f",
+      "1f013c3f09cfd38cb1c171ace062a27d2ba58073",
+      "1f5ab6c149667ee026e3793ecfb215775c7913b4",
+      "272dc01c06d3211494c9c4a4efc10bcca13f9920",
+      "28993fd4395f537a6552a9791b79313b007dd595",
+      "2db908d17757d413927669eb010ac9a60e71c7db",
+      "30d8fb41b6a68d7b28da86699b7504ee79aa4dd8",
+      "315d09d62fde456fc05f861408e439bc21fb1f75",
+      "3200c5101a8f046eaf951f0876f6fbdb7190ce07",
+      "3dadc314deded3c1b2c6ed4ffb9c41362b7ecf47",
+      "52dec2f2f5a8ecc56eaf783fc3d8ce0b7e910a21",
+      "53376d601e6d48318b93a7f7a137032e26a2951c",
+      "6229c5d4141b0784920b8e863322753099af3259",
+      "6d69adedf78ef2a9ac89ad88b50cd53a370a9f37",
+      "6fc5f0f43b3f37d02e2711c08ac6048c997930fc",
+      "704703b9331a763142f7c1492f5ee161375ac1ec",
+      "7233f21a1c7c910aa6d1c0a01235667ba5f34de9",
+      "762392ca280cb93c6aae1abcfd2e24a64ec36144",
+      "7644159eb19ef335ec14578af2a825c1d4c651a0",
+      "81e4e8ffb3814d34c268143d8da2068579c92315",
+      "831c1b8f5d580fc8cf4d58cc81da64ca32482326",
+      "837c4bdb559a95264d0029b2aac0b6ffda8b50ce",
+      "8a3643d63482e733109caed3b6097641147e7879",
+      "8fcbc29ce9ea75de51de55144d3cc1201a01b762",
+      "97f5b160f53110ceb6ea59d87919a0a76a90b032",
+      "9837cf1e7ef037aecd4d2f7fc4672b445062e3c7",
+      "99a3416bd3a7c7c3ff7972353e1ca537380094e9",
+      "a2485dfa26f50ecaee7dfcdf7d1fe413fe9b42dd",
+      "a267e0c683cad5d7c3584596d8afc8abf2fd7e5f",
+      "a70c02b2f40f239008e0785e92de2dd9749b8786",
+      "ab0dc7e0468a25d404975f1164e8aaf7305d4663",
+      "abadd6723a242c4ac3091322078981a295f4372c",
+      "ac826dffd0b66e8cdba0f2a6e239d54061a69653",
+      "acbd0ab917aa75d4cee10ce7ecd8a6e83b6afe9b",
+      "b0b95e40acd3b0c10543c315fdb33aaa71507a0b",
+      "b180a60e90a66eb2fb9e656bf21ff16cff0ddfcb",
+      "b24b5b351cd1d44dbf81941996bcff8f3efe45b8",
+      "b905393bb75bab3f2dc53268e30a7bb170d0f7be",
+      "bb33e1f4fea7c7546fa077091a45677940d15f6e",
+      "bf71583afcf77794d84d78f5d64e3e4e6692e1fc",
+      "c28f34b2d36b3adcca1025cd9ef6a72ced1aa6b6",
+      "c2e939f345795398e2269905585f27e0515eda55",
+      "c94ab4576c5296bf7ecd8a43b6dd9d3397bfb928",
+      "cf1f1286b06e83b9d29e60cf0253123566d12d8b",
+      "d20695c2dafbdc08ecfd1d6ea2459f31d9c76f05",
+      "da4e539d8c7f1a612460298d543aac9bf96a0a61"
+    ],
+    "report": {
+      "base_commit": "28993fd4395f537a6552a9791b79313b007dd595",
+      "estimated_time": null,
+      "head_commit": "28cbc5048f9f0868038a3afe73cb103c5d3bcea8",
+      "policy": {
+        "pinned": [],
+        "source": null
+      },
+      "repository": "C:\\Users\\hp\\OneDrive\\Documents\\GitHub\\codedna\\experiments\\datasets\\raw\\rtp-torrent\\repo\\brettwooldridge@HikariCP",
+      "selected": [
+        {
+          "file": "src/test/java/com/zaxxer/hikari/ExceptionTest.java",
+          "reasons": [
+            "retest-all"
+          ],
+          "test": "com.zaxxer.hikari.ExceptionTest"
+        }
+      ],
+      "selected_count": 1,
+      "selection_ratio": 1.0,
+      "skipped": [],
+      "strategy": "all",
+      "total_tests": 1,
+      "warnings": []
+    }
+  },
+  "payload_sha256": "ed457e58a1a4d1729d413fe2e58b751e54fd940e839d1305570b5e421c7c1364"
+}

@@ -1,0 +1,185 @@
+{
+  "checks": [
+    "input CSV/DB hashes unchanged",
+    "all mapping payload hashes and bindings",
+    "exact reference/source universes",
+    "eligible history contains only earlier reference commits",
+    "trace order and selected IDs",
+    "warmup and audit full-suite replacement",
+    "structural/policy floors",
+    "missed classes and build escapes",
+    "recorded test seconds and aggregate counts"
+  ],
+  "classification": "development pilot on previously inspected data; not independent confirmation",
+  "date": "2026-10-27",
+  "engine_source_checkpoint": "72e6043",
+  "policies": {
+    "combined": {
+      "evaluation_status_counts": {
+        "scheduled_audit": 12,
+        "unvalidated_full": 108
+      },
+      "metrics": {
+        "build_escape_commits": 0,
+        "build_escape_rate": 0.0,
+        "complete_observation_commits": 360,
+        "evaluation_commits": 120,
+        "failing_class_recall": 1.0,
+        "failing_classes": 4,
+        "failing_commits": 3,
+        "first_failure_classes": 1,
+        "missed_class_fraction": 0.0,
+        "missed_classes": 0,
+        "missed_first_failure_classes": 0,
+        "missed_recurring_failure_classes": 0,
+        "recorded_evaluation_reference_seconds": 1050.442,
+        "recorded_evaluation_test_seconds": 1050.442,
+        "recorded_test_seconds_including_warmup": 2068.276,
+        "recorded_time_ratio_including_warmup": 1.0,
+        "recurring_failure_classes": 3,
+        "reduced_suite_commits": 0,
+        "reduced_suite_coverage": 0.0,
+        "reference_test_seconds_including_warmup": 2068.276,
+        "replay_overhead_seconds": 55.946755300072255,
+        "scheduled_audits": 12,
+        "simulated_additional_repeated_executions": 0,
+        "structural_analysis_seconds": 1164.2028222002555,
+        "zero_omission_safe_commits": 3,
+        "zero_omission_safety": 1.0
+      },
+      "recorded_evaluation_savings_fraction": 0.0,
+      "refusal_reason_counts": {
+        "fewer than 10 failure-bearing audit commits": 54,
+        "upper confidence bound on historical miss rate exceeds target; fewer than 10 failure-bearing audit commits; historical failure recall below 90% or undefined": 37,
+        "upper confidence bound on historical miss rate exceeds target; historical failure recall below 90% or undefined": 17
+      },
+      "trace_canonical_sha256": "69beeb827514f30cc82801375b2549e41683aa32f3e9640b34377063712282e4"
+    },
+    "full": {
+      "evaluation_status_counts": {
+        "full_reference": 108,
+        "scheduled_audit": 12
+      },
+      "metrics": {
+        "build_escape_commits": 0,
+        "build_escape_rate": 0.0,
+        "complete_observation_commits": 360,
+        "evaluation_commits": 120,
+        "failing_class_recall": 1.0,
+        "failing_classes": 4,
+        "failing_commits": 3,
+        "first_failure_classes": 1,
+        "missed_class_fraction": 0.0,
+        "missed_classes": 0,
+        "missed_first_failure_classes": 0,
+        "missed_recurring_failure_classes": 0,
+        "recorded_evaluation_reference_seconds": 1050.442,
+        "recorded_evaluation_test_seconds": 1050.442,
+        "recorded_test_seconds_including_warmup": 2068.276,
+        "recorded_time_ratio_including_warmup": 1.0,
+        "recurring_failure_classes": 3,
+        "reduced_suite_commits": 0,
+        "reduced_suite_coverage": 0.0,
+        "reference_test_seconds_including_warmup": 2068.276,
+        "replay_overhead_seconds": 1.2817205997707788,
+        "scheduled_audits": 12,
+        "simulated_additional_repeated_executions": 0,
+        "structural_analysis_seconds": 0.0,
+        "zero_omission_safe_commits": 3,
+        "zero_omission_safety": 1.0
+      },
+      "recorded_evaluation_savings_fraction": 0.0,
+      "refusal_reason_counts": {},
+      "trace_canonical_sha256": "2540d358e47c3a38dad03d495a3de70c618eef1ef5c9a1775bd134f645dd5a33"
+    },
+    "history": {
+      "evaluation_status_counts": {
+        "scheduled_audit": 12,
+        "unvalidated_full": 108
+      },
+      "metrics": {
+        "build_escape_commits": 0,
+        "build_escape_rate": 0.0,
+        "complete_observation_commits": 360,
+        "evaluation_commits": 120,
+        "failing_class_recall": 1.0,
+        "failing_classes": 4,
+        "failing_commits": 3,
+        "first_failure_classes": 1,
+        "missed_class_fraction": 0.0,
+        "missed_classes": 0,
+        "missed_first_failure_classes": 0,
+        "missed_recurring_failure_classes": 0,
+        "recorded_evaluation_reference_seconds": 1050.442,
+        "recorded_evaluation_test_seconds": 1050.442,
+        "recorded_test_seconds_including_warmup": 2068.276,
+        "recorded_time_ratio_including_warmup": 1.0,
+        "recurring_failure_classes": 3,
+        "reduced_suite_commits": 0,
+        "reduced_suite_coverage": 0.0,
+        "reference_test_seconds_including_warmup": 2068.276,
+        "replay_overhead_seconds": 75.04654230020242,
+        "scheduled_audits": 12,
+        "simulated_additional_repeated_executions": 0,
+        "structural_analysis_seconds": 0.0,
+        "zero_omission_safe_commits": 3,
+        "zero_omission_safety": 1.0
+      },
+      "recorded_evaluation_savings_fraction": 0.0,
+      "refusal_reason_counts": {
+        "fewer than 10 failure-bearing audit commits": 54,
+        "upper confidence bound on historical miss rate exceeds target; fewer than 10 failure-bearing audit commits; historical failure recall below 90% or undefined": 37,
+        "upper confidence bound on historical miss rate exceeds target; historical failure recall below 90% or undefined": 17
+      },
+      "trace_canonical_sha256": "5671b64f527c5f7ebbc3b30d1adae60c3b37a8c89a9d3082e8b71e50239fbf83"
+    },
+    "structural": {
+      "evaluation_status_counts": {
+        "scheduled_audit": 12,
+        "structural": 108
+      },
+      "metrics": {
+        "build_escape_commits": 0,
+        "build_escape_rate": 0.0,
+        "complete_observation_commits": 320,
+        "evaluation_commits": 120,
+        "failing_class_recall": 1.0,
+        "failing_classes": 4,
+        "failing_commits": 3,
+        "first_failure_classes": 1,
+        "missed_class_fraction": 0.0,
+        "missed_classes": 0,
+        "missed_first_failure_classes": 0,
+        "missed_recurring_failure_classes": 0,
+        "recorded_evaluation_reference_seconds": 1050.442,
+        "recorded_evaluation_test_seconds": 889.509,
+        "recorded_test_seconds_including_warmup": 1907.343,
+        "recorded_time_ratio_including_warmup": 0.9221897851157197,
+        "recurring_failure_classes": 3,
+        "reduced_suite_commits": 40,
+        "reduced_suite_coverage": 0.3333333333333333,
+        "reference_test_seconds_including_warmup": 2068.276,
+        "replay_overhead_seconds": 1.2858107001229655,
+        "scheduled_audits": 12,
+        "simulated_additional_repeated_executions": 0,
+        "structural_analysis_seconds": 1164.2028222002555,
+        "zero_omission_safe_commits": 3,
+        "zero_omission_safety": 1.0
+      },
+      "recorded_evaluation_savings_fraction": 0.15320503178661937,
+      "refusal_reason_counts": {},
+      "trace_canonical_sha256": "4afa903c4e56ee492ed0f07d24375713ade203044f7cc55bb93c618f562b38a0"
+    }
+  },
+  "protocol_commit": "1965665",
+  "results_canonical_sha256": "2f3cef6d64ff601dc6f1c044ba3cee6ca82925c20f2cd705318fd32c9ecd188f",
+  "runtime_limits": [
+    "Most source mapping overlapped full-suite/IDE/Graphify validation on an 8 GB laptop.",
+    "One extraction exceeded 90 seconds. The unchanged-protocol retry resumed saved plans and completed.",
+    "Measured function times exclude worker startup, failed attempts, dataset loading and checkpoint I/O.",
+    "Full-suite analysis overhead was not separately timed on the evaluation snapshots.",
+    "Recorded test seconds and local analysis wall times are not a measured CI wall-clock speedup."
+  ],
+  "schema_version": 1,
+  "source_snapshots_verified": 360
+}

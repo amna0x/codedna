@@ -622,3 +622,21 @@ remains default because the follow-up results do not justify replacing it.
     Conformal risk control. *ICLR* 2024.
 27. l-k-1-2. Predictive-test-selection: conformal risk control on the
     Enhanced Westermo dataset. GitHub repository, accessed 2026-10-26.
+
+
+## Development validation addendum - D-076 through D-078
+
+After the dated D-074 packaged release, development source passed 591 Python
+tests with Maven and Gradle included, zero failures/skips and one existing
+Starlette warning (4749.24 seconds). TypeScript and 27 Node UI/workflow tests
+passed; eight read-only progress-viewer checks passed. These are source checks,
+not a newly packaged or clean-PC-tested release. The D-074 executable's 576-test
+validation remains its own dated evidence.
+
+The IDE source now exposes statically declared test checks and their source
+path, evidence-health recovery and an explicitly saved JSON decision record.
+It distinguishes B10's all-commit audit from CRC's failing-commit bound and never
+displays absent evidence as zero risk. Risk thresholds/defaults are unchanged.
+Full workflow UI tests use core-contract fixtures; installer refresh is deferred.
+Per-operation core cancellation is planned, not claimed implemented.
+See [source validation](ENGINEERING_VALIDATION_D076_D078_2026-10-27.json).

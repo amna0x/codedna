@@ -1,5 +1,23 @@
 # Blueprint completion ledger - 2026-10-27
 
+## Latest continuation - D-076 completed, 2026-10-27
+
+The pilot completed all 360 mappings and four observed-only traces. Read
+experiments/results/partial-feedback-pilot-d076-2026-10-27/FINDINGS.md and summary.json.
+B10/history and combined refused all 108 ordinary evaluation decisions; no
+risk-gated savings. Structural-only reduced 40 of 120 suites and missed 0 of 4 failing outcomes
+across 3 failing commits; recorded savings were 15.32% in evaluation and 7.78%
+including warm-up. This is tiny
+development evidence, not proof of 95% safety or closed-loop ML effectiveness.
+The one 90-second extraction timeout resumed from 329 cached mappings and completed
+without input/source/threshold changes. STOP.json is a retained earlier diagnostic.
+Full source validation: 591 Python tests/zero skips (Maven+Gradle), 27 Node tests,
+TypeScript, 8 viewer checks. See ENGINEERING_VALIDATION_D076_D078_2026-10-27.json.
+Next: measure matched cold/warm analysis and improve existing cache use, then
+bounded analysis jobs/cancellation per ANALYSIS_JOB_PLAN.md. Do not rerun old
+studies or tune this prefix for gains. Installation remains last; no new push/merge.
+
+
 This is the current task list. Historical HANDOFF.md rows about running studies,
 PR #21/#22 publication approval or applying old edits are superseded. Preserve
 all stashes and backups. Base main is 45821b4908bf3c17ff60cea28fd934c0dd55d8f1.
