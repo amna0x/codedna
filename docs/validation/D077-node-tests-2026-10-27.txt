@@ -1,0 +1,39 @@
+
+> codedna-extension@0.1.0 test
+> node --test tests/workflow.test.cjs tests/plugins.test.cjs tests/startup.test.cjs tests/history-ui.test.cjs
+
+✔ replay refuses blank input; Browse adds an actual folder, cancellation keeps it (4316.9612ms)
+✔ saved execution click loads actual outcomes above the list with visible selection (1930.8779ms)
+✔ individual recorded checks and failures are visible; old results remain readable (114.5353ms)
+✔ unvalidated risk remains unvalidated, retains core reason and full-suite recommendation (1048.8533ms)
+✔ test explanation shows source check names and warns that discovery is not execution (887.1152ms)
+✔ evidence guidance preserves refusal and provenance without claiming more data guarantees approval (43.9262ms)
+✔ diagnostic export omits raw logs, source and failure messages but preserves observed statuses (167.1048ms)
+✔ evidence save requires a chosen destination and propagates write failures (103.0085ms)
+✔ view export saves the current decision, handles cancellation and reports a failed save (737.6437ms)
+✔ CRC distinguishes its failing-commit bound from the score and B10 audit denominator (511.3442ms)
+✔ Extensions contains the existing Language plugins widget without allowing it to be hidden (1016.332ms)
+✔ Restored layouts regain the Extensions tab without taking editor focus (896.846ms)
+✔ Installed languages appear while the catalogue is pending and remain available offline (1400.7544ms)
+✔ Cancelling a plugin installation never invokes the core installer (926.0134ms)
+✔ A pending desktop plugin change requests an app restart and retains actual loaded languages (814.4838ms)
+✔ A slow cold core can announce after 20 seconds instead of being killed at 15 (2625.5236ms)
+✔ An unresponsive core still times out and is cleaned up (1007.7238ms)
+✔ test links use discovered paths and canonical repository, including module/custom locations (28.6065ms)
+✔ missing test paths produce an explanation instead of a guessed file (4.9712ms)
+✔ late discovery cannot open a file for an obsolete comparison (10.2301ms)
+✔ switching away and back while a recommendation loads discards the obsolete response (43.155ms)
+✔ a completed older execution stays in history instead of restoring stale on-screen results (19.6328ms)
+✔ changing comparison while confirmation is open prevents execution (6.214ms)
+✔ duplicate recommendation clicks do not start duplicate analyses (16.6419ms)
+✔ late errors do not overwrite a newer comparison (10.9738ms)
+✔ test detail inspection uses the exact comparison snapshot and drops late responses (13.9826ms)
+✔ project workflow selects, inspects, confirms execution and retains actual history recording (11.5978ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12438.1807

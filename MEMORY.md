@@ -3,10 +3,16 @@
 ## Active checkpoint - D-076 / D-077, 2026-10-27
 
 D-076 source is local commit 72e6043; protocol v2 is frozen in 1965665.
-Fifteen focused tests pass. The real source-mapping pilot is running with
-checkpoints at experiments/results/partial-feedback-pilot-d076-2026-10-27;
-do not restart from scratch or change fingerprinted Python source during it.
-Full suite with Maven is running; pointer .diagnostics/d076-full-suite.log.
+Fifteen focused tests pass. The source-mapping pilot stopped at reference index
+329 on its 90-second extraction deadline; 329 valid plans are preserved and no
+outcome evaluation occurred. See STOP.json under
+experiments/results/partial-feedback-pilot-d076-2026-10-27. Let the full suite
+finish, then retry only unfinished work once under the same limit. Do not
+restart from scratch or change fingerprinted Python source during that retry.
+Full suite with Maven/Gradle completed: 591 passed, zero failed/skipped,
+4749.24s; one existing Starlette warning. See
+docs/ENGINEERING_VALIDATION_D076_D078_2026-10-27.json. The one bounded pilot retry
+is now running from the 329 preserved mappings; log d076-pilot-retry.log.
 D-077 IDE source adds static check explanations, evidence-health guidance and
 explicit JSON evidence save, excluding source/raw logs. TypeScript and 27 Node
 tests pass (.diagnostics/d077-node-final.log). Live thresholds are unchanged.

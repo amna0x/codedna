@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-27",
+  "recorded_at_utc": "2026-10-27T15:48:24.987683+00:00",
+  "scope": "development source validation; no new installer or clean-PC result",
+  "source_head": "de40aa7d2905ee2ac4d204587efc25b5d53ead2e",
+  "backend_source_sha256": "720f88ac68260c9311e3894808c77d66723d7dd5962cf784e1cfbe2bb1d63c56",
+  "full_suite": {
+    "command": ".venv/Scripts/python.exe -m pytest --run-maven -q",
+    "passed": 591,
+    "failed": 0,
+    "skipped": 0,
+    "warnings": 1,
+    "seconds": 4749.24,
+    "maven_and_gradle_included": true,
+    "warning": "existing Starlette/httpx deprecation"
+  },
+  "typescript": {
+    "cwd": "ide",
+    "command": "npm run build --workspace=codedna-extension",
+    "exit_code": 0
+  },
+  "node_tests": {
+    "cwd": "ide",
+    "command": "npm test --workspace=codedna-extension",
+    "passed": 27,
+    "failed": 0,
+    "skipped": 0
+  },
+  "viewer_checks": {
+    "command": "scripts/Test-PartialFeedbackViewer.ps1 -Viewer scripts/Watch-PartialFeedback.ps1",
+    "passed": 8,
+    "fixture": "temporary Git repository",
+    "progress_bytes_preserved": true
+  },
+  "published_log_sha256": {
+    "D076-full-suite-2026-10-27.txt": "9639b6effab13d9be8800176e2783c31a13dac0c75271ad872bd5972052c0dd6",
+    "D077-node-tests-2026-10-27.txt": "4aac0336148bc718b7561cd1228329e974f60b8aead7c4a331b245f296421d33",
+    "D077-typescript-2026-10-27.txt": "ed7672f37cf7db4dd5a8a1c0248b468f022684d69398bc305e1385156a1aefb2"
+  },
+  "risk_defaults_changed": false,
+  "new_dependencies": false,
+  "research": "pilot has separate progress/results; full source validation is not a safety/savings result",
+  "limits": [
+    "Full-suite runtime overlapped source mapping and is not a clean performance benchmark.",
+    "UI workflow tests use core-contract fixtures; new installed-app UI is not claimed tested.",
+    "Per-operation analysis cancellation is planned, not implemented.",
+    "Installer, catalogue delivery and clean-PC work remain deferred."
+  ]
+}

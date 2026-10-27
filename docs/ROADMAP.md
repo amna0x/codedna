@@ -314,3 +314,11 @@ May start in parallel (Student C) once the analysis JSON formats are stable.
   checkpoint recovery, measured cache behavior, and broader real workflow
   acceptance. Do not duplicate existing history, selected-test outcomes or
   conservative fallback. Additional languages remain deferred.
+
+
+D-076/D-077/D-078 final development checks: 591 Python tests passed, zero
+failed/skipped (Maven and Gradle included); TypeScript and 27 Node tests pass;
+eight read-only viewer checks pass. See ENGINEERING_VALIDATION_D076_D078_2026-10-27.json.
+This is source validation, not a new packaged release or a research verdict.
+The pilot saved 329 source mappings before one 90-second extraction timeout;
+a single unchanged-protocol retry resumed after the full suite finished.
