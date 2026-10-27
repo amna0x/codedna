@@ -158,3 +158,28 @@ labels, university supervisor/report review, defence rehearsal/video, public
 catalogue/release publication and frozen optional-plugin installation support.
 The deferred novelty/features backlog remains deferred, and original studies
 are unchanged. Do not rebuild completed CRC, dependency union or Python fallback.
+
+
+## Owner scope update - 2026-10-27
+
+The owner declines independent student graph labelling. Do not keep requesting
+it or treat it as an active owner task. Existing labels remain AI-generated;
+no independent validation or human precision result is claimed. Supervisor
+review is deferred until the owner supplies their next message. The pasted
+supervisor-style assessment is preliminary and has not reviewed the five files.
+Catalogue hosting and frozen optional-plugin installation remain genuine
+distribution work, separate from the bundled Java/Python functionality.
+
+
+## D-074 candidate - actual frozen plugin installation fixed
+
+The production frozen core now stages optional wheels per user, validates them
+and atomically activates them for restart. Source pip behavior remains intact.
+Actual executable installation/update/removal/restart and fallback checks pass
+without Python/pip on PATH; 1,451 core hashes match. See
+FROZEN_PLUGIN_VALIDATION_D074_2026-10-27.json and DESKTOP_PLUGIN_INSTALLATION.md.
+Final full-suite and NSIS verification remain in progress. This supersedes
+earlier statements that frozen optional installation is unimplemented; it does
+not turn the separate public catalogue 404 or clean-PC acceptance into success.
+No research changes were made. The owner reports Gemini agreed with the graph
+labels; that is a second AI cross-check, not independent human validation.

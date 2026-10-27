@@ -71,7 +71,8 @@ function pluginsWidget(confirm = false) {
     class ConfirmDialog { async open() { return confirm; } }
     const { PluginsViewWidget } = load('plugins-view-widget.tsx', {
         '@theia/core/lib/browser/widgets/react-widget': { ReactWidget },
-        '@theia/core/lib/browser/dialogs': { ConfirmDialog }
+        '@theia/core/lib/browser/dialogs': { ConfirmDialog },
+        './progress': { withProgress: (_, __, action) => action() }
     });
     return new PluginsViewWidget();
 }
@@ -100,4 +101,16 @@ test('Cancelling a plugin installation never invokes the core installer', async 
     await view.install({ id:'python', name:'Python', licence:'test', source:'https://example.invalid' },
         { version:'1.0.0', sha256:'a'.repeat(64) }, false);
     assert.equal(installs, 0);
+});
+
+
+test('A pending desktop plugin change requests an app restart and retains actual loaded languages', async () => {
+    const view = pluginsWidget();
+    const installed = { api_version: '1.1', plugins: [{ name: 'python', version: '0.1.0' }], problems: [] };
+    await view.change('install', async () => ({ installed, restart_required: true }), 'Python 1.0.0 is installed.');
+    assert.equal(view.installed, installed);
+    assert.equal(view.loading, false);
+    assert.equal(view.error, undefined);
+    assert.match(view.message, /Restart CodeDNA IDE/);
+    assert.doesNotMatch(view.message, /start\.bat|pip|python -m/);
 });

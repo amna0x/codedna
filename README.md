@@ -537,7 +537,10 @@ Installed languages remain usable when the official catalogue is unavailable.
 - [Supervisor review pack](docs/SUPERVISOR_REVIEW.md)
 
 The website renders official optional-plugin downloads, full checksums and exact
-install commands; current Java/Python entries are bundled. Public hosting and
-optional frozen-desktop installation validation remain release requirements.
+install commands; current Java/Python entries are bundled. The D-074 candidate
+supports transactional optional installation in the frozen executable; actual
+restricted-PATH installation/restart/update/removal checks passed. See
+[desktop plugin installation](docs/DESKTOP_PLUGIN_INSTALLATION.md). Public
+catalogue/release hosting and clean-PC acceptance remain separate gates.
 The brake reports its exact audit objective/denominator and does not promise
 future safety. Existing mixed research results are preserved.

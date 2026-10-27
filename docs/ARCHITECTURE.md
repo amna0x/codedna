@@ -611,3 +611,15 @@ Brake plans expose the any-omitted-failure objective plus the active audit's
 denominator/sample/bound: B10 uses the all-audit-commit Wilson evidence screen;
 CRC uses failing audit commits and its corrected expected-risk quantity. Neither
 is advertised as a future guarantee. No model or stopping rule changed.
+
+
+## Frozen optional plugin store (D-074)
+
+Desktop installation dispatches to plugins/desktop_store.py after the shared
+catalogue/confirmation/checksum validation. A per-user staging directory and
+isolated core subprocess validate the wheel; atomic active.json replacement
+commits the selection. Startup activation precedes CLI imports. Registry lookup
+prefers valid optional copies and keeps bundled discovery separate because
+Python metadata otherwise deduplicates distribution names. Updates/removals
+require restart; bundled app files and risk logic are unchanged. Details and
+release constraints: DESKTOP_PLUGIN_INSTALLATION.md.

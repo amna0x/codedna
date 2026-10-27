@@ -20,9 +20,9 @@ NAME = "codedna-core"
 # codedna_java and codedna_python are the language plugins (D-054, D-060); their
 # metadata carries the codedna.languages entry points, without which the bundled
 # core finds no plugin.
-PACKAGES = ("codedna", "codedna_java", "codedna_python", "uvicorn", "tree_sitter_java")
+PACKAGES = ("codedna", "codedna_java", "codedna_python", "uvicorn", "tree_sitter_java", "installer", "packaging")
 VERSIONS = ("codedna", "codedna-java", "codedna-python", "pyinstaller", "pyinstaller-hooks-contrib", "scikit-learn",
-            "scipy", "numpy", "tree-sitter", "tree-sitter-java", "fastapi", "uvicorn")
+            "scipy", "numpy", "tree-sitter", "tree-sitter-java", "fastapi", "uvicorn", "installer", "packaging")
 
 
 def build_command(root: Path) -> list[str]:
@@ -34,7 +34,9 @@ def build_command(root: Path) -> list[str]:
             "--paths", str(root / "backend"),
             "--paths", str(root / "plugins" / "codedna-java"),
             "--paths", str(root / "plugins" / "codedna-python"), "--copy-metadata", "codedna",
-            "--copy-metadata", "codedna-java", "--copy-metadata", "codedna-python"]
+            "--copy-metadata", "codedna-java", "--copy-metadata", "codedna-python",
+            "--copy-metadata", "tree-sitter", "--copy-metadata", "tree-sitter-java",
+            "--copy-metadata", "installer", "--copy-metadata", "packaging"]
     for package in PACKAGES:
         args += ["--collect-all", package]
     for module in ("matplotlib", "pytest", "IPython", "notebook", "sklearn.tests",

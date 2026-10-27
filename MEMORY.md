@@ -1,5 +1,23 @@
 # MEMORY.md: handoff notes for the next agent
 
+## Active work - D-074 frozen plugin installation, 2026-10-27
+
+Owner explicitly asks to finish this fix first; do not start research, hosting
+or language work yet. Source is on codex/blueprint-completion, after 1b95d85.
+New desktop_store.py implements offline wheel staging, dependency/tag/RECORD
+checks, isolated child factory validation, atomic per-user activation and
+restart loading/removal. Registry preserves a bundled fallback after a damaged
+optional override. PyPA installer 0.7.0 was installed only in the build venv and
+declared with packaging in desktop/dev extras. Source pip behavior is retained.
+30 manager/install tests, 8 build tests, 18 IDE tests and final 22 focused
+registry/store tests passed. Final frozen rebuild and all seven executable smoke checks passed; 1,451 hashes
+match. Final Maven suite and NSIS installer build/verification remain running. See DESKTOP_PLUGIN_INSTALLATION.
+No new push/merge; all stashes preserved. User's Gemini label cross-check is a
+second AI review. ChatGPT is the user's technical reviewer; review attachment
+efca63b5-725e-4ccb-9907-4b1e6353773d/Pasted text.txt requires later partial-feedback
+protocol/replay and structural ablation. Only discuss that agenda for now.
+
+
 ## Active checkpoint - D-072/D-073, 2026-10-27
 
 Continue on codex/blueprint-completion; preserve all stashes. D-071 is local
@@ -410,3 +428,14 @@ The local Maven cache is `C:/Users/hp/.codex/tools/maven-repository`, selected
 with `MAVEN_OPTS=-Dmaven.repo.local=C:/Users/hp/.codex/tools/maven-repository`.
 The passing integration test checks per-test JaCoCo mapping and verifies that
 the expected failing tests are caught after intentionally injecting a regression.
+
+
+## Owner scope update - 2026-10-27
+
+The owner declines independent student graph labelling. Do not keep requesting
+it or treat it as an active owner task. Existing labels remain AI-generated;
+no independent validation or human precision result is claimed. Supervisor
+review is deferred until the owner supplies their next message. The pasted
+supervisor-style assessment is preliminary and has not reviewed the five files.
+Catalogue hosting and frozen optional-plugin installation remain genuine
+distribution work, separate from the bundled Java/Python functionality.

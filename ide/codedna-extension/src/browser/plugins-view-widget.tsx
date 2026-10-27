@@ -82,7 +82,7 @@ export class PluginsViewWidget extends ReactWidget {
     protected async remove(plugin: CataloguePlugin): Promise<void> {
         const confirmed = await new ConfirmDialog({
             title: `Remove ${plugin.name}?`,
-            msg: `CodeDNA will stop analysing ${plugin.name} files until you install it again.`,
+            msg: `Remove the optional ${plugin.name} installation? After restart, CodeDNA uses its bundled version if one exists; otherwise this language becomes unavailable.`,
             ok: 'Remove', cancel: 'Cancel'
         }).open();
         if (!confirmed) { return; }
@@ -98,7 +98,7 @@ export class PluginsViewWidget extends ReactWidget {
             const result = await withProgress(this.progress, label, action);
             this.installed = result.installed;
             this.message = result.restart_required
-                ? `${done} Restart CodeDNA (close it and run start.bat again) so the change takes effect.`
+                ? `${done} Restart CodeDNA IDE to activate this change.`
                 : done;
         } catch (error) {
             this.error = errorText(error);

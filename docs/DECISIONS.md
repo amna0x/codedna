@@ -1743,3 +1743,22 @@ announce the selected saved run, show its project, and provide a folder picker
 for real research reports. Never turn passing demo tests into validated skip
 risk. Selection/core behaviour, target and thresholds remain unchanged.
 Four focused UI tests join the regular IDE suite: 18 pass, zero skipped.
+
+
+## D-074 - Transactional optional plugins in the frozen desktop (2026-10-27)
+
+Owner explicitly requested this fix before the research follow-up. A frozen
+core cannot use itself as `python -m pip`. Use a per-user immutable wheel store,
+bundled PyPA installer 0.7.0 and packaging validation, isolated factory probing,
+atomic manifest activation and restart-only import snapshots. Preserve pinned
+official downloads, full SHA-256 and explicit confirmation. Reject unavailable
+dependencies before activation; do not fetch arbitrary dependency packages.
+Optional updates override bundled languages only when they load successfully;
+separate bundled metadata lookup permits recovery from a damaged override.
+Removal affects only the override, with bundled restoration after restart.
+Inactive versions remain rollback cache rather than deleting loaded Windows
+native files. The source environment retains its existing pip path.
+
+The small installer/packaging requirements belong to desktop and dev extras;
+the minimal analysis core remains without mandatory third-party dependencies.
+See DESKTOP_PLUGIN_INSTALLATION.md. Full/frozen validation is in progress.
