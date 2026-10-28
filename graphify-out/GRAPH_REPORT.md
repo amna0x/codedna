@@ -1,7 +1,7 @@
 # Graph Report - codedna  (2026-10-28)
 
 ## Corpus Check
-- 328 files · ~306,990 words
+- 328 files · ~307,023 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 10 file(s) not represented in the graph (top: (none) 4, .css 3, .example 1)
 
@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `06a8ad50`
+- Built from commit: `c61933a9`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -1054,16 +1054,16 @@ Nodes (3): test_api_reports_an_unreachable_catalogue_as_json(), test_unreachable
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `LanguagePlugin` connect `languages.py` to `load_plugins`, `CodeDNA: system chapters (draft)`, `.build_graph`, `CatalogueError`, `CodeDNA: system chapters (draft)`, `pathlib`?**
-  _High betweenness centrality (0.063) - this node is a cross-community bridge._
+- **Why does `CodeDNA Decision Log` connect `Early Core Decisions` to `D-008 Tree-sitter Java for syntax-level declaration extraction`, `D-032 RTPTorrent as primary study dataset, imported without builds`, `D-036 Hybrid policy B10: rules order, calibrated stopping`, `Experiment Protocol Decisions`, `Scope & Platform Decisions`, `IDE & API Decisions`, `Baseline Policy Decisions`?**
+  _High betweenness centrality (0.070) - this node is a cross-community bridge._
 - **Are the 5 inferred relationships involving `create_app()` (e.g. with `require_token()` and `ReplayError`) actually correct?**
   _`create_app()` has 5 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `example:sample-java-project`, `codedna-java`, `codedna-python` to the rest of the system?**
   _71 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `cli.py` be split into smaller, more focused modules?**
   _Cohesion score 0.08888888888888889 - nodes in this community are weakly interconnected._
-- **Why does `CodeDNA README` connect `CodeDNA README` to `Project Rules & Plans`, `Packaged desktop plugin installation (D-074)`, `Experimental Moonshot: Java behavioral witnesses`, `CodeDNA FYP Starter brief`, `CodeDNA website blueprint`, `Cancellable analysis jobs - implementation plan`, `REPORT_ASSEMBLED.md`, `Performance engineering — D-083`, `Supervisor review pack`?**
-  _High betweenness centrality (0.059) - this node is a cross-community bridge._
+- **Why does `LanguagePlugin` connect `languages.py` to `load_plugins`, `CodeDNA: system chapters (draft)`, `.build_graph`, `CatalogueError`, `CodeDNA: system chapters (draft)`, `pathlib`?**
+  _High betweenness centrality (0.063) - this node is a cross-community bridge._
 
 ### Low-confidence Hints
 _AMBIGUOUS edges — the extractor was unsure. Verify before acting on these._

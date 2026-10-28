@@ -2040,9 +2040,9 @@
     "semantic_hash": ""
   },
   "backend/tests/test_behavior.py": {
-    "mtime": 1793184633.706777,
-    "seen": 1793184976.7103612,
-    "ast_hash": "e455102c10f4401d0c5cea6b7dc0e9f9",
+    "mtime": 1793185079.6044238,
+    "seen": 1793185104.5423872,
+    "ast_hash": "a39f663c376692cab827dfaf78d23920",
     "semantic_hash": ""
   },
   "backend/tests/test_behavior_mcp.py": {

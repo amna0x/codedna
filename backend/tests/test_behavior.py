@@ -204,7 +204,13 @@ def test_real_jvm_and_descendant_end_on_timeout_or_ctrl_c(repo,tmp_path,control)
         import _thread
         end=time.monotonic()+20
         while not stop.is_set() and time.monotonic()<end:
-            if ready.exists():
+            try:
+                fields=ready.read_text(encoding='utf-8').strip().split(',')
+            except OSError:
+                fields=[]
+            # Creation can precede the short PID write; interrupt only when
+            # both identities are recorded, so the cleanup assertion is stable.
+            if len(fields)==2 and all(field.isdigit() for field in fields):
                 _thread.interrupt_main();return
             time.sleep(.02)
     thread=Thread(target=interrupt,daemon=True) if control=='cancel' else None
