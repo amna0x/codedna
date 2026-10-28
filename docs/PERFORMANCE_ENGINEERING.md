@@ -92,6 +92,10 @@ fitted copies; even then it reruns the audit. No net CI speedup is established.
 Focused tests cover fingerprint invalidation, TTL/bounds, defensive copies,
 thread/exception isolation, fresh audit, current policy/eligibility, CSV race
 provenance, unreadable history fallback, optional failed-job metrics and UI
-redaction. TypeScript and 48 UI tests pass. The full Maven-inclusive suite and
-updated frozen candidate must be recorded separately when complete. D082's
-20 executable checks apply only to its earlier source checkpoint.
+redaction. Source 1a45664 passed 664 Maven-inclusive tests with zero skips;
+TypeScript, 48 UI tests and three desktop runtime checks pass. The actual D083
+frozen candidate passed 23 plugin/cancellation/restart/timing/brake checks,
+including real Maven outcomes and fresh audit on model reuse. All 1458 manifest
+files verified. See ENGINEERING_VALIDATION_D083_2026-10-28.json and
+FROZEN_CORE_VALIDATION_D083_2026-10-28.json. The installed IDE, updated installer
+and clean-PC acceptance are separate gates; D082's earlier proof stays intact.

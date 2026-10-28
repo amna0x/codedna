@@ -1,5 +1,34 @@
 # Blueprint completion ledger - 2026-10-27
 
+## D-083 desktop candidate validated — 2026-10-28
+
+Current stable source: 1a45664. Full Maven-inclusive suite 664/zero skips,
+TypeScript, 48 UI tests and three runtime checks pass. Actual updated frozen
+core: 23 checks pass; 1458 manifest files verified. Theia production compiled;
+the isolated NSIS installer built after one retained failed packaging attempt.
+Its actual embedded core was extracted and all 1458 hashes matched.
+See RELEASE_VALIDATION_D083_2026-10-28.json and the source/frozen proof JSONs.
+
+Actual packaged GUI checks passed: real measured timings, full-suite cold-history
+fallback, Cancel kills both worker/child, recovery, test-check explanations and
+source opening, build-consent cancellation, actual Maven six-check run reporting
+the failed discount check, refusal to train from the uncommitted run, Java/Python
+listed and Language plugins restored after restart. Only isolated owned app
+profiles/fixtures were used; those app windows are now closed. Current installed
+app is intact. Official catalogue 404, full clean-PC and other manual acceptance
+remain open. No new language plugin was delivered; slow-probe is a test fixture.
+
+Installer: build/desktop-D083-2026-10-28/installer-r2/CodeDNA IDE Setup 0.1.0.exe
+317665899 bytes; SHA-256 c9386e51cda0730c5bed196450dfe22fa3e089283cb9267a1b9e686b4ae5b752.
+It is unsigned. Do not claim it was installed or validated on a clean computer.
+This stable source/candidate is ready for private review; no push/merge performed.
+
+NEXT owner-authorized work: fix standalone demo target/ ignore (editor builds
+otherwise pollute its snapshot), then implement/evaluate the focused Java Moonshot
+pilot using MOONSHOT_PILOT_PROTOCOL.md. Research performance follow-up is planned,
+not run; old studies and mixed findings stay intact. Preserve both stashes,
+unrelated website changes and the untracked MOONSHOT.md. No public hosting.
+
 ## Current owner-approved work - D-082/D-083, 2026-10-28
 
 User explicitly asked to test the rebuilt .exe's cancellation, plugin changes/

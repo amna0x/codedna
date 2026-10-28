@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-28",
+  "source_commit": "1a4566447731af5d7c7bb9133bfd479c370f3b02",
+  "decisions": [
+    "D-083"
+  ],
+  "python": {
+    "command": ".venv/Scripts/python.exe -m pytest --run-maven -v",
+    "passed": 664,
+    "failed": 0,
+    "skipped": 0,
+    "warnings": 1,
+    "seconds": 799.26
+  },
+  "node": {
+    "command": "npm test --workspace=codedna-extension",
+    "passed": 48,
+    "failed": 0,
+    "skipped": 0
+  },
+  "desktop_runtime": {
+    "command": "npm run test:runtime --workspace=electron-app",
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0
+  },
+  "typescript": {
+    "command": "npm run build --workspace=codedna-extension",
+    "exit_code": 0
+  },
+  "logs_sha256_utf8_lf": {
+    "docs/validation/D083-full-suite-2026-10-28.txt": "ef2fde6091ed073d5af0c7df868c9fed98eda9e47791efc96262f0d9f424fdcf",
+    "docs/validation/D083-node-tests-2026-10-28.txt": "2e1518c4aaa33769a4dd6544e8295205fd1ef459b8686d1fbff1eecbf5044ff9",
+    "docs/validation/D083-typescript-2026-10-28.txt": "b342a9f74c160fdbc8a9b4b2504a028f058c59942f15fcffbfb2d73096c454df",
+    "docs/validation/D083-desktop-runtime-2026-10-28.txt": "8f0b2cb1526036d14fad4be298e08479db7bf620a4afd2acbb4b648bca887be3",
+    "docs/validation/D083-audit-equivalence-2026-10-28.txt": "0ad87220825fa866ddefdc70bfcb575c9da67bfe74109fb56f0453fe07ae0dd0"
+  },
+  "equivalence": {
+    "scope": "post-hoc engineering equality check on previously inspected data; no new research claim",
+    "input_sha256": "f2c4ce350b858f2daec1ccc1a3f017ca5c2c95e1ff534720155b12b16414ec7b",
+    "audit_commits": 357,
+    "audit_rows": 7495,
+    "all_audit_probabilities_exactly_equal": true,
+    "all_audit_decisions_exactly_equal": true,
+    "audit_evidence_and_provenance_equal": true
+  },
+  "limits": [
+    "Source validation; the updated frozen executable is a separate gate.",
+    "One inspected dataset/laptop engineering benchmark, not independent accuracy or net CI speedup.",
+    "Existing D076 findings, default risk targets and refusal gates are unchanged.",
+    "No push, merge, public hosting, old-study rerun or stash mutation."
+  ]
+}

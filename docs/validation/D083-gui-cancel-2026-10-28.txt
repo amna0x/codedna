@@ -1,0 +1,169 @@
+Window: "d083-gui-project - CodeDNA IDE", App: CodeDNA IDE.exe.
+	0 window d083-gui-project - CodeDNA IDE Secondary Actions: Raise
+		12 pane (disabled)
+		1 region d083-gui-project - CodeDNA IDE
+			2 region
+				3 region
+					4 region
+						5 region
+							6 region
+								7 region
+									10 document d083-gui-project - CodeDNA IDE Value: file:///C:/Users/hp/OneDrive/Documents/GitHub/codedna/build/desktop-D083-2026-10-28/installer-r2/win-unpacked/resources/app/lib/frontend/index.html?port=52307#/c:/Users/hp/OneDrive/Documents/ChatGPT/codedna/.diagnostics/d083-gui-project ID: RootWebArea
+										17 group
+											25 group ID: theia-app-shell
+												26 group ID: theia:menubar
+													27 menu bar
+														60 menu item File
+														61 menu item Edit
+														62 menu item Selection
+														63 menu item View
+														64 menu item Go
+														65 menu item Run
+														66 menu item Terminal
+														67 menu item Help
+												28 text d083-gui-project - CodeDNA IDE
+												29 group ID: minimize-button
+													68 text 
+												31 group ID: maximize-button
+													69 text 
+												33 group ID: close-button
+													70 text 
+												21 group ID: theia-left-right-split-panel
+													35 group
+													36 tab
+														71 text 
+														72 text 
+														73 text 
+														74 text 
+														75 text 
+														76 text 
+													43 group
+													44 group
+													45 group
+														46 group
+															77 text 
+													22 group ID: theia-main-content-panel
+													48 group
+													49 tab
+														291 text 
+														79 text 
+													52 group
+													53 group
+													54 group
+													55 group Description: CodeDNA: which tests to run for your change, and why
+														292 text Tests to run
+													57 group ID: theia-right-side-panel
+														58 tab panel Tests to run ID: codedna.tests
+															80 header
+																81 heading Tests to run
+																82 text Run the tests your change can break — and see why each one is needed.
+															83 text Compare
+															84 combo box (settable, string) Compare Value: My uncommitted changes
+															85 text Which tests
+															86 combo box (settable, string) Which tests Value: Validated risk stopping
+															87 text Test history file (optional)
+															88 edit (settable, string) Test history file (optional) Description: Use this project’s saved history
+															89 button Suggest tests
+															90 button Open project history
+															293 status
+																294 text Recommendation cancelled. No tests were executed.
+															295 list
+																296 list item 1Open your project folderFile → Open Folder…
+																	297 text 1
+																298 list item 2Pick what to compareyour last commit is a good start
+																	299 text 2
+																300 list item 3Press Suggest tests
+																	301 text 3
+												98 group ID: theia-statusBar
+													102 group $(codicon-error) 0 $(codicon-warning) 0, No Problems ID: status-bar-problem-marker-status
+														103 text 
+														104 text 0
+														105 text 
+														106 text 0
+													117 group $(coffee) Java: Ready, Show Java status menu ID: status-bar-java.serverStatus
+														272 text 
+														121 text Java: Ready
+													107 group No Notifications ID: status-bar-theia-notification-center
+														209 text 
+													109 button Toggle Bottom Panel ID: status-bar-bottom-panel-toggle
+											19 group
+											24 group
+											101 group ID: select-component-container
+								9 region
+
+Document text: ```
+￼
+￼
+￼
+File
+￼
+Edit
+￼
+Selection
+￼
+View
+￼
+Go
+￼
+Run
+￼
+Terminal
+￼
+Help
+d083-gui-project - CodeDNA IDE
+
+
+
+￼
+
+
+
+
+
+
+￼
+￼
+
+￼
+￼
+￼
+￼
+
+
+￼
+￼
+￼
+Tests to run
+Tests to run
+Run the tests your change can break — and see why each one is needed.
+Compare
+￼
+Which tests
+￼
+Test history file (optional)
+￼
+Suggest tests
+Open project history
+Recommendation cancelled. No tests were executed.
+1
+Open your project folder
+File → Open Folder…
+2
+Pick what to compare
+your last commit is a good start
+3
+Press Suggest tests
+
+0
+
+0
+
+Java: Ready
+
+
+￼
+￼
+￼
+￼
+￼
+```

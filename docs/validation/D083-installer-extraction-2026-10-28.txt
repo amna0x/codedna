@@ -1,0 +1,33 @@
+
+7-Zip (a) 21.07 (x64) : Copyright (c) 1999-2021 Igor Pavlov : 2021-12-26
+
+Scanning the drive for archives:
+1 file, 317665899 bytes (303 MiB)
+
+Extracting archive: C:\Users\hp\OneDrive\Documents\GitHub\codedna\build\desktop-D083-2026-10-28\installer-r2\CodeDNA IDE Setup 0.1.0.exe
+
+WARNINGS:
+There are data after the end of archive
+
+--
+Path = C:\Users\hp\OneDrive\Documents\GitHub\codedna\build\desktop-D083-2026-10-28\installer-r2\CodeDNA IDE Setup 0.1.0.exe
+Type = 7z
+WARNINGS:
+There are data after the end of archive
+Offset = 177419
+Physical Size = 317099612
+Tail Size = 388868
+Headers Size = 200222
+Method = LZMA2:20 LZMA:20 BCJ2
+Solid = -
+Blocks = 15042
+
+Everything is Ok
+
+Archives with Warnings: 1
+
+Warnings: 1
+Folders: 192
+Files: 1459
+Size:       161526934
+Compressed: 317665899

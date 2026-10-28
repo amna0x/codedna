@@ -1,0 +1,5 @@
+
+> codedna-ide-electron@0.1.0 rebuild
+> theia rebuild:electron --cacheRoot ..
+
+native node modules are already rebuilt for electron

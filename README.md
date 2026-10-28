@@ -554,8 +554,10 @@ synchronous path. Analysis cancellation never runs or cancels project builds.
 The API also offers typed read-only jobs for test discovery, change analysis,
 impact and selection; see [the job contract](docs/ANALYSIS_JOB_PLAN.md).
 
-These source changes need the final desktop rebuild before they appear in an
-installed app. Installation and actual new frozen validation remain deferred.
+The isolated D083 desktop candidate contains these changes. Its embedded core
+hashes and critical GUI workflows were verified; see
+[current release evidence](docs/RELEASE_VALIDATION_D083_2026-10-28.json).
+The existing installed app was not replaced. Clean-PC installation remains open.
 
 ## Performance diagnostics (D-083)
 
@@ -568,5 +570,5 @@ Immutable parsing and fitted-model reuse avoid duplicate work where safe.
 Each decision still checks current evidence and recomputes its audit. An
 entirely mandatory suite bypasses unnecessary fitting and remains a full-suite
 recommendation. See [measurement scope and examples](docs/PERFORMANCE_ENGINEERING.md).
-These source improvements require the updated desktop build; the earlier D082
-candidate validates the preceding source, not this performance batch.
+These improvements are included in the validated D083 candidate. D082's
+earlier evidence remains tied to its preceding source checkpoint.

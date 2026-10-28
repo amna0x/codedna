@@ -107,3 +107,21 @@ this list is not evidence that they already passed.
 Ordinary analyses do not resume across an application restart. Research replay
 uses its separate saved results/checkpoints. Impact graph/history/replay retain
 synchronous UI and are outside this first cancellation rollout.
+
+
+## D-083 packaged critical workflows — 2026-10-28
+
+The actual isolated win-unpacked package was launched with separate user/config/
+plugin stores and a disposable Java project. Measured timing and cold-history
+full-suite fallback displayed. A deliberately slow trusted plugin made Cancel
+testable: the GUI cancelled without a partial report and both worker/child ended.
+After recovery, source-derived test-check names loaded and Read source opened the
+actual file. Cancelling build consent created no saved run. Confirming the known
+fixture ran real Maven: six checks/two classes, one discount check failed and was
+displayed. The uncommitted result was not promoted to training history. Java and
+Python remained listed despite catalogue 404; Language plugins restored on restart.
+See RELEASE_VALIDATION_D083_2026-10-28.json and its hashed text/image evidence.
+The installer payload was extracted and its 1458 core hashes matched. This is
+not installation/clean-PC acceptance or a claim that every step above was rerun.
+The standalone demo lacked target/ ignore; editor-generated binaries appeared
+as warnings. Sample-project cleanup is next; conservative core rules stay intact.
