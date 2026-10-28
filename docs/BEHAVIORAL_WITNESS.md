@@ -65,7 +65,8 @@ Incomplete/unsupported/cancelled witness responses are tool errors.
 - `inconclusive`: an exception, timeout, excess/incomplete output or unstable
   repeated result prevented acceptance. These cases do not pass.
 - `cancelled`: Ctrl+C ended the owned operation. The worker and descendants are
-  cleaned up; no confirmed result is accepted.
+  cleaned up; no confirmed result is accepted. If cleanup cannot be confirmed, the
+  result is inconclusive and further witness execution is blocked in that session.
 
 The controller uses a private consented worker protocol, distinct from read-only
 analysis jobs. Project JVMs run under the existing owned process tree. Git objects
@@ -99,7 +100,8 @@ Temporary compiled files are left at the path the program prints.
 The initial 28 focused checks passed, including actual Java execution, independent
 reproduction/tamper refusal, unstable observations and real JVM/descendant cleanup.
 The later opt-in MCP integration passed 29 combined MCP/brake checks; four runner
-guards pass. These are engineering checks. Full source validation and actual new
+guards pass; the later forced-cleanup/CLI/timeout/cancellation/runner review passed
+nine checks, including the fifth duplicate-case guard. These are engineering checks. Full source validation and actual new
 frozen validation are still required before calling this source a release.
 
 The fixed comparison is in `experiments/moonshot-engineering-cases.json` and

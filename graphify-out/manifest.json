@@ -510,9 +510,9 @@
     "semantic_hash": "143493fc0f69d7306bf0c787ca38fca9"
   },
   "MEMORY.md": {
-    "mtime": 1793184420.5721357,
-    "seen": 1793184466.8977075,
-    "ast_hash": "0cdd05d0e9b06c09cac36dd0e24d663b",
+    "mtime": 1793184951.0579858,
+    "seen": 1793184976.7103612,
+    "ast_hash": "a8f8505b7896d16cc6c20ea3f82ecbe1",
     "semantic_hash": ""
   },
   "README.md": {
@@ -534,9 +534,9 @@
     "semantic_hash": "b56beff69c2cb266c8d2361408baa006"
   },
   "docs/DECISIONS.md": {
-    "mtime": 1793184297.3346968,
-    "seen": 1793184378.6717029,
-    "ast_hash": "f32c7e6ea15020913713db4c668a0113",
+    "mtime": 1793184951.0565464,
+    "seen": 1793184976.7103612,
+    "ast_hash": "f63eca692707f26280e2ea988773b153",
     "semantic_hash": ""
   },
   "docs/PROJECT_SPEC.md": {
@@ -558,9 +558,9 @@
     "semantic_hash": "32a821de4b1178bef75683f2265b07a8"
   },
   "docs/ROADMAP.md": {
-    "mtime": 1793184420.574829,
-    "seen": 1793184466.8977075,
-    "ast_hash": "8199655a69c90a67a74d0d280e1de1e0",
+    "mtime": 1793184951.0591457,
+    "seen": 1793184976.7103612,
+    "ast_hash": "219b2d3ca9055d85312f6b2bea6ef9a9",
     "semantic_hash": ""
   },
   "ide/README.md": {
@@ -1272,9 +1272,9 @@
     "semantic_hash": ""
   },
   "docs/HANDOFF.md": {
-    "mtime": 1793184420.5738409,
-    "seen": 1793184466.8977075,
-    "ast_hash": "232cdd8cf1bab3d46f9a1ac82dc26894",
+    "mtime": 1793184951.0603461,
+    "seen": 1793184976.7103612,
+    "ast_hash": "434e8b784ab644fdb111df13a6188d5c",
     "semantic_hash": ""
   },
   "docs/IMPLEMENTATION_HANDOFF.md": {
@@ -1410,9 +1410,9 @@
     "semantic_hash": ""
   },
   "docs/BLUEPRINT_COMPLETION.md": {
-    "mtime": 1793184420.5775328,
-    "seen": 1793184466.8977075,
-    "ast_hash": "3209679c7dbd07e281d51b7e6843777a",
+    "mtime": 1793184951.0613678,
+    "seen": 1793184976.7103612,
+    "ast_hash": "32d0e2bfcced8f4c8db194774c03f59a",
     "semantic_hash": ""
   },
   "docs/DEFERRED_FEATURES.md": {
@@ -2028,9 +2028,9 @@
     "semantic_hash": ""
   },
   "backend/codedna/behavior.py": {
-    "mtime": 1793183367.3994472,
-    "seen": 1793183757.6914024,
-    "ast_hash": "166975c3056945b855246c6763128870",
+    "mtime": 1793184733.364919,
+    "seen": 1793184976.7092695,
+    "ast_hash": "0b30fe95a602b48ef77f2b2774dc2e4a",
     "semantic_hash": ""
   },
   "backend/codedna/behavior_worker.py": {
@@ -2040,9 +2040,9 @@
     "semantic_hash": ""
   },
   "backend/tests/test_behavior.py": {
-    "mtime": 1793184073.3489425,
-    "seen": 1793184378.6717029,
-    "ast_hash": "466aeb93e90faaf5d6cfac4f8dee4524",
+    "mtime": 1793184633.706777,
+    "seen": 1793184976.7103612,
+    "ast_hash": "e455102c10f4401d0c5cea6b7dc0e9f9",
     "semantic_hash": ""
   },
   "backend/tests/test_behavior_mcp.py": {
@@ -2214,15 +2214,15 @@
     "semantic_hash": ""
   },
   "scripts/run_moonshot_pilot.py": {
-    "mtime": 1793184420.5775328,
-    "seen": 1793184466.8977075,
-    "ast_hash": "ca04d64c637a1d1bc151861e45382dfe",
+    "mtime": 1793184951.0545187,
+    "seen": 1793184976.7103612,
+    "ast_hash": "2f1e2a31cb9a9db40da0a65dd51299f3",
     "semantic_hash": ""
   },
   "docs/BEHAVIORAL_WITNESS.md": {
-    "mtime": 1793184297.2964556,
-    "seen": 1793184378.6717029,
-    "ast_hash": "5a209ee35a2ec31449c8ff2ea46149d2",
+    "mtime": 1793184951.0565464,
+    "seen": 1793184976.7103612,
+    "ast_hash": "2a3e2652563fa0ef0c01fdb577d64677",
     "semantic_hash": ""
   }
 }

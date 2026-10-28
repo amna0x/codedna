@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 from pathlib import Path, PurePosixPath
 import sys
+from subprocess import SubprocessError
 from threading import Event, Thread
 from time import monotonic, sleep
 
@@ -12,10 +13,12 @@ from codedna.performance import timed
 from codedna.git_analysis.git import resolve_commit, resolve_repository, reuse_git_validation
 
 MAX_MESSAGE = 1024 * 1024
+_BLOCKED_REASON = None
 
 
 def _exchange(owner, request, deadline):
     """Bound private stdout/stderr and stop the owned tree on every exit."""
+    global _BLOCKED_REASON
     data = json.dumps(request, allow_nan=False).encode('utf-8') + b'\n'
     if len(data) > 64 * 1024:
         raise ValueError('behavioral request exceeds its message limit')
@@ -55,11 +58,24 @@ def _exchange(owner, request, deadline):
             raise TimeoutError('behavioral result arrived after its time budget')
     finally:
         # Includes descendants holding inherited pipes after the leader exits.
-        owner.close()
+        cleanup_error = None
+        try:
+            owner.close()
+        except Exception as exc:
+            cleanup_error = exc
+            _BLOCKED_REASON = 'Project cleanup could not be confirmed; restart the CodeDNA worker/server before further witness execution'
+        cleanup_deadline = monotonic()+2
         for thread in [*readers, writer]:
-            thread.join(timeout=5)
-        for stream in (owner.process.stdin, owner.process.stdout, owner.process.stderr):
-            stream.close()
+            thread.join(timeout=max(0., cleanup_deadline-monotonic()))
+        if any(thread.is_alive() for thread in [*readers, writer]):
+            _BLOCKED_REASON = _BLOCKED_REASON or 'Worker I/O cleanup could not be confirmed; restart CodeDNA before further witness execution'
+            cleanup_error = cleanup_error or RuntimeError(_BLOCKED_REASON)
+        else:
+            # Never wait for a buffered-stream lock held by an unfinished reader.
+            for stream in (owner.process.stdin, owner.process.stdout, owner.process.stderr):
+                stream.close()
+        if cleanup_error is not None:
+            raise RuntimeError(_BLOCKED_REASON) from cleanup_error
     if any(thread.is_alive() for thread in [*readers, writer]) or io_error.is_set():
         raise RuntimeError('behavioral worker I/O did not finish cleanly')
     if overflow.is_set():
@@ -85,6 +101,8 @@ def find_difference(repo_path, base, head, *, file, symbol, output_dir,
     """
     if allow_build is not True:
         raise ValueError('behavioral comparison executes project code; pass --allow-build to confirm')
+    if _BLOCKED_REASON:
+        raise RuntimeError(_BLOCKED_REASON)
     started = monotonic()
     for name, value, low, high in [('max_inputs', max_inputs, 1, 64),
                                   ('seed', seed, 0, 2**32-1),
@@ -143,10 +161,13 @@ def find_difference(repo_path, base, head, *, file, symbol, output_dir,
             result = _exchange(owner, request, deadline)
     except KeyboardInterrupt:
         result = {'status': 'cancelled', 'reason': 'operation cancelled; no confirmed result was accepted'}
-    except (OSError, ValueError, RuntimeError, TimeoutError) as exc:
+    except (OSError, ValueError, RuntimeError, SubprocessError) as exc:
         result = {'status': 'inconclusive', 'reason': str(exc)[:1000]}
+    if _BLOCKED_REASON:
+        result = {'status': 'inconclusive', 'reason': _BLOCKED_REASON}
     # The controller owns interpretation and identity fields, even for plugins.
-    report = {**result, **common, 'elapsed_seconds': round(monotonic()-started, 6)}
+    report = {**result, **common, 'further_execution_blocked': bool(_BLOCKED_REASON),
+              'elapsed_seconds': round(monotonic()-started, 6)}
     with (output/'report.json').open('x', encoding='utf-8', newline='\n') as stream:
         stream.write(json.dumps(report, indent=2, allow_nan=False)+'\n')
     return report

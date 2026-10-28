@@ -25,6 +25,9 @@ MCP/existing-brake checks (225.15s, one existing warning). Four runner guards pa
 a fifth duplicate-case guard was then added. Default tool lists remain unchanged.
 NEXT: one full Maven-inclusive suite, then the fixed 48-search synthetic engineering
 comparison. Pinned source, case manifest and protocol must be committed first.
+A forced-cleanup error then exposed a missing session block. It now returns
+inconclusive and blocks further execution when cleanup is unconfirmed. Nine
+cleanup/real CLI/timeout/Ctrl+C/runner checks pass (31.40s). Full validation is next.
 No pilot result, full-source or actual new frozen validation is claimed yet.
 Do not claim the new code is release-validated or rerun D076. Continue from
 MOONSHOT_PILOT_PROTOCOL.md. Staging helpers in pointer .diagnostics/moonshot are

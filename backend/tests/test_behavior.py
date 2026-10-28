@@ -220,3 +220,27 @@ def test_real_jvm_and_descendant_end_on_timeout_or_ctrl_c(repo,tmp_path,control)
     java_pid,child_pid=map(int,ready.read_text().split(','))
     assert not alive(java_pid) and not alive(child_pid)
     assert not (tmp_path/'out/base').exists()
+
+
+@pytest.mark.maven
+def test_cleanup_uncertainty_blocks_further_execution(repo,tmp_path,monkeypatch):
+    import codedna.behavior as behavior
+    shas=versions(repo)
+    actual=behavior.OwnedProcess
+    monkeypatch.setattr(behavior,'_BLOCKED_REASON',None,raising=False)
+    class UncertainOwner:
+        def __init__(self,*args,**kwargs):
+            self.owner=actual(*args,**kwargs);self.process=self.owner.process
+        def close(self):
+            self.owner.close()
+            raise OSError('fixture: confirmation of cleanup failed')
+        def __enter__(self):return self
+        def __exit__(self,*args):self.close()
+    monkeypatch.setattr(behavior,'OwnedProcess',UncertainOwner)
+    result=invoke(repo,shas,tmp_path/'first',max_inputs=1,reduce_budget=0)
+    assert result['status']=='inconclusive' and result['further_execution_blocked'] is True,result
+    def forbidden(*args,**kwargs):raise AssertionError('uncertain cleanup must prevent a new worker')
+    monkeypatch.setattr(behavior,'OwnedProcess',forbidden)
+    with pytest.raises(RuntimeError,match='cleanup'):
+        invoke(repo,shas,tmp_path/'second',max_inputs=1)
+    assert not (tmp_path/'second').exists()

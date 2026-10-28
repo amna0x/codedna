@@ -1997,3 +1997,14 @@ confirmation. Commit its manifest/protocol/runner before execution and retain
 all cases, no-difference results, unsupported cases and reproduction failures.
 D083's installer remains the preceding stable candidate. See
 BEHAVIORAL_WITNESS.md and MOONSHOT_PILOT_PROTOCOL.md.
+
+
+D085 failure-path review: a forced cleanup-confirmation error exposed the missing
+session circuit breaker. The regression failed before the fix and now passes.
+Unconfirmed cleanup or unfinished worker I/O makes the result inconclusive and
+blocks later witness execution before repository access/new exports. Avoid closing
+buffered streams while reader threads still hold them; drain with one bounded
+cleanup deadline. Include subprocess cleanup errors in the controlled failure
+path. Nine final guard/real CLI/timeout/Ctrl+C/runner checks pass (31.40s). A
+normal cancellation remains distinct from unconfirmed cleanup. The fault injector
+actually closed its owned process; this is not evidence of a leaked real study.

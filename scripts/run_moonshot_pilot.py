@@ -6,6 +6,7 @@ The protocol/case manifest/source are pinned before any result is measured.
 from __future__ import annotations
 
 import argparse
+import importlib.metadata
 from hashlib import sha256
 import json
 import os
@@ -23,12 +24,11 @@ from codedna.behavior import find_difference
 from codedna.git_analysis.git import run_git
 from codedna_java.witness import _tools
 
-PINNED = ['backend/codedna/behavior.py','backend/codedna/behavior_worker.py',
-          'backend/codedna/git_analysis/git.py','backend/codedna/api/owned_process.py',
-          'plugins/codedna-java/codedna_java/witness.py','plugins/codedna-java/codedna_java/witness_export.py',
-          'plugins/codedna-java/codedna_java/parser.py','plugins/codedna-java/codedna_java/plugin.py',
-          'scripts/run_moonshot_pilot.py','experiments/moonshot-engineering-cases.json',
-          'docs/MOONSHOT_PILOT_PROTOCOL.md']
+PINNED = sorted(p.relative_to(ROOT).as_posix()
+    for directory in [ROOT/'backend/codedna', ROOT/'plugins/codedna-java/codedna_java']
+    for p in directory.rglob('*.py')) + [
+        'scripts/run_moonshot_pilot.py', 'scripts/desktop_core_entry.py',
+        'experiments/moonshot-engineering-cases.json', 'docs/MOONSHOT_PILOT_PROTOCOL.md']
 
 
 def fingerprints():
@@ -84,6 +84,7 @@ def main(argv=None):
               'source_commit':source_commit,'source_sha256':source,'case_definition':cases,
               'python':sys.version,'platform':platform.platform(),
               'machine':platform.machine(),'logical_cpus':os.cpu_count(),
+              'packages':{name:importlib.metadata.version(name) for name in ['codedna','codedna-java','tree-sitter','tree-sitter-java']},
               'execution_order':'serial, alternated guided/simple order within each case/seed pair',
               'limits':['Illustrative synthetic fixtures, not independent real-world failure detection or novelty confirmation.',
                         'Designed boundary cases deliberately favor syntax guidance; all cases/statuses retained.',
