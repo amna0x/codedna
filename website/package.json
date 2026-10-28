@@ -1,0 +1,16 @@
+{
+  "name": "codedna-website",
+  "private": true,
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node --test tests/*.test.cjs"
+  },
+  "dependencies": {
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "gsap": "3.15.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2"
+  }
+}

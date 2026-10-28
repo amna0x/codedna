@@ -1,0 +1,1 @@
+import React from 'react';import {renderToString} from 'react-dom/server';import {App,metadata} from './App.jsx';export {metadata};export function render(page){return renderToString(<App page={page}/>);}

@@ -1,57 +1,45 @@
-# CodeDNA website
+# CodeDNA website — React + GSAP
 
-The existing buildless HTML/CSS/JavaScript website, redesigned on 28 October
-2026 using the owner's Universal Website Design Blueprint. This is a local
-source update, not a public deployment.
+The existing website now uses React 19 and GSAP ScrollTrigger. The original
+design and catalogue remain; the overview has shorter copy and fewer repeated
+sections. `src/App.jsx` contains the page components and shared React menu,
+workflow filters, and catalogue mount. `src/client.jsx` hydrates the pages.
 
-## Design
-
-The overview uses a light opening poster, layered HTML/SVG workflow
-illustrations, mint/lilac/sand chapters, a dark workflow rail, and a closing
-setup action. Documentation, language plugins, and downloads use the same
-identity with direct task-oriented layouts. The illustrations are labelled
-examples, not product screenshots, actual analysis, or test results.
-
-No framework, animation library, external font, analytics, or service was
-added. `site.js` handles presentation only: mobile navigation, workflow
-filters, and optional intersection-based reveals. It does not perform code
-analysis. Core and plugin installation behavior remains separate.
-
-`plugins.js`, `catalogue/index.json`, and the original catalogue tests are
-unchanged. Public installer links remain unavailable; the download page
-states that explicitly. The private source setup remains labelled for
-collaborators. Java risk support is not attributed to Python/mixed projects.
-
-## Local preview
-
-From the repository root:
+## Build and preview
 
 ```text
-python -m http.server 8771 --bind 127.0.0.1 --directory website
+cd website
+npm ci
+npm run build
+npm test
+python -m http.server 8772 --bind 127.0.0.1
 ```
 
-Open `http://127.0.0.1:8771/`. Direct HTML navigation works without JavaScript;
-catalogue loading needs JavaScript and HTTP. Its fallback keeps bundled Java
-and Python support clear. Reduced motion disables transitions and reveals.
+`build.mjs` bundles dependencies locally and pre-renders all four existing HTML
+routes. No CDN, external fonts, new account, or backend service is needed.
+Node is needed for rebuilding, not for hosting the generated static pages.
+The root HTML files and assets/app.js are generated; edit src/App.jsx and
+style.css, then rebuild. Do not hand-edit generated HTML.
 
-## Website tests
+ScrollTrigger adds gentle chapter movement and a short heading arrival. It
+uses native scrolling, without scroll hijacking or pinned sections. GSAP
+contexts and media listeners are cleaned up. Reduced-motion preferences
+disable animation, including when changed during a visit. Pre-rendered content
+and navigation remain available without JavaScript; the catalogue has a
+no-JavaScript fallback.
 
-```text
-node --test website/tests/plugins.test.cjs website/tests/site.test.cjs
-```
+plugins.js and catalogue/index.json retain their existing validation, pinned
+downloads, checksums, and copy behavior. src/catalogue-adapter.js is the module
+wrapper for that preserved renderer. site.js and its tests are retained as
+legacy compatibility code; pages no longer load that script. React owns new
+navigation and filter behavior. Existing tests cover the legacy catalogue;
+React pre-render tests and local browser checks cover the new presentation.
 
-The 13 original catalogue checks and five presentation checks pass. Browser
-verification covers all four pages at 375, 768, and 1440 pixels, workflow
-filtering, mobile-menu Escape/focus, offline catalogue handling, and no-JS
-navigation. There is no page-level horizontal overflow at those widths.
-This is not a claim of comprehensive WCAG certification or clean-PC testing.
+Dependencies explicitly requested by the owner: react, react-dom, and gsap.
+esbuild is a development-only bundler. Exact versions are pinned in package.json
+and package-lock.json. No Python/core dependency or test/risk policy changed.
 
-The original eight website files were archived byte-for-byte with a SHA-256
-manifest before redesign at:
-`C:/Users/hp/OneDrive/Documents/ChatGPT/codedna/website-before-redesign-20261027.zip`.
-Local QA captures and browser-results.json are in the sibling `website-qa/`
-workspace folder. Neither backup nor local captures are public site assets.
-
-No backend source, model, policy, threshold, original study, installer, or
-publication state was changed. The separately completed 636-test backend
-validation is historical evidence, not a new test run for this redesign.
+The pre-React website is preserved locally in
+`C:/Users/hp/OneDrive/Documents/ChatGPT/codedna/website-before-react-20261029.zip`.
+This update is local source only: no public deployment, push, installer update,
+or new claim of backend validation.
