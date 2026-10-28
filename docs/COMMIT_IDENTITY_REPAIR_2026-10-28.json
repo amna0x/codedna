@@ -1,0 +1,237 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-28",
+  "scope": "user-authorized unpublished identity-only history repair",
+  "branch": "codex/blueprint-completion",
+  "github_login": "amna0x",
+  "noreply": "240961236+amna0x@users.noreply.github.com",
+  "base": "45821b4908bf3c17ff60cea28fd934c0dd55d8f1",
+  "old_head": "399d9c3dbac8338fd2adcc9adaecbeac227bc677",
+  "new_head": "840d2979c623766488cf7ae41c95c20d7b2f0ade",
+  "commits_rewritten": 35,
+  "local_backup_ref_do_not_push": "refs/heads/keep/private-email-backup-20261028-399d9c3",
+  "commit_map": [
+    {
+      "old": "8b0d4786dec45715831d6b0eaad9a734cd9a8d6d",
+      "new": "2ef663f02a505072ad953afac2d50f8adc1807ba",
+      "tree": "ff74c46a099c85dd07f658e9df7909e71ab117c8",
+      "tree_message_names_dates_preserved": true
+    },
+    {
+      "old": "e16cbb570a0df1072ae6556e62de1b886a7157ea",
+      "new": "080877483ab0f3a71f266e55f07f99a6b3dff048",
+      "tree": "5799aca2224eebe6437a6ab6007d2315c893567d",
+      "tree_message_names_dates_preserved": true
+    },
+    {
+      "old": "1b95d85d7c621cafb45c81c04254f477639f1866",
+      "new": "d77140fd4cdc4234be79726fb6123f8d71d254d7",
+      "tree": "9470781802f8dd0fd8e35f2b2ca1ea62b0c03b74",
+      "tree_message_names_dates_preserved": true
+    },
+    {
+      "old": "70626d887885e2b46bac369adffcec39abedfe94",
+      "new": "738a2e0005720324175cd8bf5a432d9fd9850c23",
+      "tree": "5bdd15a44121121f34d19f287d044fa41088efbd",
+      "tree_message_names_dates_preserved": true
+    },
+    {
+      "old": "500c99888880ccb5ab4179dd370b55e91e27e02c",
+      "new": "725df5e3deb4247813aa60fdeef6bf1c125994c2",
+      "tree": "9dc3d39f67e4795088bdf86ecd3ee4f14d9174d1",
+      "tree_message_names_dates_preserved": true
+    },
+    {
+      "old": "373a732e9bb9f0948f5215854bf7c3ef1b181cc6",
+      "new": "d485cb80fe4fe03e9dd2c7b3e053d8f671dbe695",
+      "tree": "07b0a2c814fa4db177b13029738845f3d882c855",
+      "tree_message_names_dates_preserved": true
+    },
+    {
+      "old": "d0e031a979c550c81db41731c093da5de5446fb9",
+      "new": "ce16ce187e9f67b1f190803b38f88593875e5a18",
+      "tree": "32c3622b6dde4e1809e2ac3971e54f4fb5b63131",
+      "tree_message_names_dates_preserved": true
+    },
+    {
+      "old": "196566516c4af54fa4f758b0f22a27172631bf5e",
+      "new": "7bb380b08335e6119cf3fd58aeef5e48021d9a9d",
+      "tree": "dff3aef8558363ebd7ec5f6e223d160f268047ca",
+      "tree_message_names_dates_preserved": true
+    },
+    {
+      "old": "72e60431ba020dad50bce0f7f961db27e7a9a603",
+      "new": "7521f9e46d461f03a2a9aa65addcbcf897492602",
+      "tree": "6fb002e7cf29e98a77fbda344a85de96d8770143",
+      "tree_message_names_dates_preserved": true
+    },
+    {
+      "old": "4c5767c62e5b0b431bbee6e9441b5ae3b10c7dd1",
+      "new": "756f1ab7e9bde0734513a579daa034ec8a2f4394",
+      "tree": "fd105d4b2caa573076335e9ac79649be58d4a6a4",
+      "tree_message_names_dates_preserved": true
+    },
+    {
+      "old": "668b896af8a6b9fad29d48ca549239c780e5662c",
+      "new": "12bcf03db4603b3f3ad506c98e138aa897d73bc4",
+      "tree": "db72df6c864f0488d8f29c1c5cd0e8b2cc941211",
+      "tree_message_names_dates_preserved": true
+    },
+    {
+      "old": "79647b08b4898398fd09339eb08916f61387ab43",
+      "new": "48df8853d78f8d43f161c038a6a96db32d860f7e",
+      "tree": "2fd166f210a2e3575aab28658f2f96f85184ceb6",
+      "tree_message_names_dates_preserved": true
+    },
+    {
+      "old": "9eb8c5419012a3989877ed2eba0a6381448c9bd3",
+      "new": "ffdb722fc64dbaf502622a8a1213661ae5f5e85c",
+      "tree": "934b8410fd2a795919dce09046f702c248d43655",
+      "tree_message_names_dates_preserved": true
+    },
+    {
+      "old": "8cb96f84a255f15fa587fda02a2d00dca3741fe1",
+      "new": "e7452a4bd448677c36c813432a1b7cc8649276ca",
+      "tree": "179b5167a031539b6402a7cb29a3ccfda80deddf",
+      "tree_message_names_dates_preserved": true
+    },
+    {
+      "old": "7c944c007344d6fc390476ffa2aaeb19ca9a4b0c",
+      "new": "c4eb2bb9f09b5b1d236f4f9753a14e7a06a7a929",
+      "tree": "f1716eea9c547cecd7e89107b139969d1885a010",
+      "tree_message_names_dates_preserved": true
+    },
+    {
+      "old": "f2b8e22b5001e7f1747d0faa9bb17bd3654454d8",
+      "new": "b03d77343c92484828857c87b1b2c0e89f1f6682",
+      "tree": "593f87095ed092b45ffe344f7b83ff00cc658e0d",
+      "tree_message_names_dates_preserved": true
+    },
+    {
+      "old": "868b973a74fc110d2772fd03ecaf5aa4c33c7e57",
+      "new": "bdb47a3a6dbcd5f34b01c4d776c5cee68a7d771d",
+      "tree": "5d233b7ac8238817e0497d8e42736268155ef253",
+      "tree_message_names_dates_preserved": true
+    },
+    {
+      "old": "f95455827bf4e3cec80613650b253604dc471217",
+      "new": "3bdeab50dd8633d80909ab6517c70ee7f5f60d04",
+      "tree": "c91349aea82844eaf780ea6a62f3e76704101e63",
+      "tree_message_names_dates_preserved": true
+    },
+    {
+      "old": "de40aa7d2905ee2ac4d204587efc25b5d53ead2e",
+      "new": "c794224c00656d85f74b448556791350b2bfb236",
+      "tree": "83f036b2a954f5cde1bf36050f8d4554252bd4f7",
+      "tree_message_names_dates_preserved": true
+    },
+    {
+      "old": "4c6485f81cb99fd26c03bc8cf8b7666e6be64d70",
+      "new": "1a68b47478d5fdec9300ca745086a23e97019d13",
+      "tree": "3d913b2860f17c203b322643b023f16ec861b549",
+      "tree_message_names_dates_preserved": true
+    },
+    {
+      "old": "697155bc9fb94a7d690f77ae1d633e08d66a68c2",
+      "new": "eb958f5ead8d917499c7903e3565d942eca9a7b3",
+      "tree": "d98b648cc8aeb65b086189c022762c83d43667ee",
+      "tree_message_names_dates_preserved": true
+    },
+    {
+      "old": "27d9b4337355cef6883418da1be5ca90c70e1ba7",
+      "new": "49e90dcf7dcb54832f4856f13f442c070f470107",
+      "tree": "483114e59948f3526df757523e026c162f0b2770",
+      "tree_message_names_dates_preserved": true
+    },
+    {
+      "old": "a46f222baf6ea4682fc0877b9d9ebd5d045a298c",
+      "new": "5a038b00952ac356710cb0ab104218a65465f19a",
+      "tree": "27b156ba2e3a88e8c5440f374801e3462fea823e",
+      "tree_message_names_dates_preserved": true
+    },
+    {
+      "old": "f4ec9cfc59adec772493ad9d5764ba8b0db12279",
+      "new": "7b1793850ac61551407f8444dc84901f03208a51",
+      "tree": "bf62b993b2e4236136de5af4665a18e81a706fea",
+      "tree_message_names_dates_preserved": true
+    },
+    {
+      "old": "912f4c90cc6a4c93e13a4038b941960d39ecfa03",
+      "new": "80b2717faa499ceefe19c76c03cc2e8f208d5061",
+      "tree": "15af1d3ab415297a7286491b1187472877fabd34",
+      "tree_message_names_dates_preserved": true
+    },
+    {
+      "old": "450e6adf59d449eaf73e809b420fec5445101465",
+      "new": "9b51d92e30612ab46c95571073538acaef16d6d0",
+      "tree": "177748961d2cb0e3a14c4113e5a7883585ae04be",
+      "tree_message_names_dates_preserved": true
+    },
+    {
+      "old": "1a4566447731af5d7c7bb9133bfd479c370f3b02",
+      "new": "77751ee2912b8241ce6174e7650ca0471be5dbbb",
+      "tree": "6a50ca453b7d254fe91f3000c609e6032157caa6",
+      "tree_message_names_dates_preserved": true
+    },
+    {
+      "old": "5848b6fdeb012999a9d47b44930610337ff129a0",
+      "new": "470a02481341b6af92a9534c867c3c0a41ded5d9",
+      "tree": "571b63401e8771a52e534c8016e76a8e46799895",
+      "tree_message_names_dates_preserved": true
+    },
+    {
+      "old": "994cf0e263939398a91c4be26f3d98c4b88891da",
+      "new": "852364f481ea336ee74857acf154c2fadfd4b2a6",
+      "tree": "f723117e94bb3bf463311c5fa88e820188fab0b4",
+      "tree_message_names_dates_preserved": true
+    },
+    {
+      "old": "06a8ad50ab1a8fe41af92f8bea90466d3690b866",
+      "new": "5249732ea0bea331a4ba1e622fe324abef812ee0",
+      "tree": "d612af38748ad611af9264a744c7e439b6274290",
+      "tree_message_names_dates_preserved": true
+    },
+    {
+      "old": "c61933a957cb16527a22e77740a954b409c9a43f",
+      "new": "a31c6212c72f9da3b2b502d502524079ffde14c7",
+      "tree": "634d82d1015708744327e39f2e7cb3ab72df9092",
+      "tree_message_names_dates_preserved": true
+    },
+    {
+      "old": "bd8c6d80dbfe4b500427c0c12fd8a9338ec67617",
+      "new": "a821a0dac5da566281dcc5b5dae21637fafb6339",
+      "tree": "2b8b653abc557a58db2a11df19263c75143ea2b2",
+      "tree_message_names_dates_preserved": true
+    },
+    {
+      "old": "4d359419ad68874c374a45d83732845327aeed41",
+      "new": "b799f28af22ca940201effc0d3dab0e4f17739d4",
+      "tree": "6dfc8248f309d6df5624dfc156a8693d15a9af0b",
+      "tree_message_names_dates_preserved": true
+    },
+    {
+      "old": "415d566896cbba4e65ac8c0ab65b5f71287e91f2",
+      "new": "aaad63d76fd6df5f07cf00f3c8d66249e17375fd",
+      "tree": "08c5071a638f9a4681221f93731b6ac72c1d8d84",
+      "tree_message_names_dates_preserved": true
+    },
+    {
+      "old": "399d9c3dbac8338fd2adcc9adaecbeac227bc677",
+      "new": "840d2979c623766488cf7ae41c95c20d7b2f0ade",
+      "tree": "3c0148deb4005ceba0d7b885898eb242fcb2f43d",
+      "tree_message_names_dates_preserved": true
+    }
+  ],
+  "checks": {
+    "all_commit_trees_messages_names_dates_preserved": true,
+    "final_tree_identical": true,
+    "both_stashes_preserved": true,
+    "remote_history_unchanged": true
+  },
+  "provenance": "Original evidence references and artifact hashes remain unchanged. Resolve old source commit IDs using this map.",
+  "limits": [
+    "Local backup retains old private-email metadata; do not push backup refs or use push --all/--mirror.",
+    "No source tests rerun: source and every existing artifact are byte-identical.",
+    "No files removed; latest user website/cache commit retained. No push, merge, privacy-setting or global Git change."
+  ]
+}

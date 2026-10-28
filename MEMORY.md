@@ -1,5 +1,19 @@
 # MEMORY.md: handoff notes for the next agent
 
+## GitHub private-email push repair — 2026-10-28
+
+Owner authorized repairing unpublished commit identities. Saved local-only backup
+keep/private-email-backup-20261028-399d9c3; never push this private-email backup.
+Rewrote the 35 commits after origin/main using the GitHub-verified amna0x account
+ID and its ID-based noreply address, preserving every commit tree, message, name,
+date and both stashes. Repository-local user.email now uses that noreply address;
+global Git and GitHub privacy settings are unchanged. No push/merge performed.
+Old source IDs inside hashed validation artifacts intentionally remain intact;
+resolve them through docs/COMMIT_IDENTITY_REPAIR_2026-10-28.json. Artifact bytes
+and source code did not change. Latest user website/cache commit is retained.
+This notes/map commit is metadata documentation, not a new source validation run.
+
+
 ## D-085 source, pilot, executable and installer verified; friend kit prepared — 2026-10-28
 
 Corrected source 4d359419ad68874c374a45d83732845327aeed41 passed the complete
