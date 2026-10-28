@@ -1,0 +1,29 @@
+{
+  "scope": "prespecified synthetic engineering fixtures, deliberately illustrative; not independent real-world research accuracy",
+  "completed": 48,
+  "planned": 48,
+  "by_generation": {
+    "guided": {
+      "statuses": {
+        "difference": 12,
+        "inconclusive": 6,
+        "no_difference_observed": 3,
+        "unsupported": 3
+      },
+      "median_wall_seconds": 11.23394824999923,
+      "reproduced": 12,
+      "witnesses": 12
+    },
+    "simple": {
+      "statuses": {
+        "difference": 3,
+        "inconclusive": 6,
+        "no_difference_observed": 12,
+        "unsupported": 3
+      },
+      "median_wall_seconds": 10.056787349996739,
+      "reproduced": 3,
+      "witnesses": 3
+    }
+  }
+}

@@ -5,7 +5,7 @@ import { delimiter } from 'path';
 import { injectable } from '@theia/core/shared/inversify';
 import { BackendApplicationContribution } from '@theia/core/lib/node';
 import {
-    AnalyzeReport, CodeDnaService, CodeDnaStatus, ImpactOptions, ImpactReport, InstalledPlugins, PluginCatalogueView, PluginChange,
+    AnalysisJob, AnalysisOperation, AnalyzeReport, CodeDnaService, CodeDnaStatus, ImpactOptions, ImpactReport, InstalledPlugins, PluginCatalogueView, PluginChange,
     ReplayOverview, ReplaySources, ReplayTimeline,
     ProjectHistory, RecordedHistory, SavedRun, TestDiscovery,
     SelectionReport, SelectionStrategy, SelectionRun
@@ -28,6 +28,8 @@ import {
 export class CodeDnaServiceImpl implements CodeDnaService, BackendApplicationContribution {
 
     protected buildsEnabled = false;
+    // Kept across API restart; only an application restart activates updates.
+    protected pluginSnapshot: string | undefined;
     protected process: ChildProcess | undefined;
     protected baseUrl: string | undefined;
     protected token: string | undefined;
@@ -51,6 +53,26 @@ export class CodeDnaServiceImpl implements CodeDnaService, BackendApplicationCon
             return { running: false, executable: this.executable, error: String(error instanceof Error ? error.message : error) };
         }
         return { running: true, version: this.version, executable: this.executable };
+    }
+
+    async analysisJobs(): Promise<boolean> {
+        const capabilities = await this.get<{ analysis_jobs?: { version?: number } }>('/api/capabilities');
+        return capabilities.analysis_jobs?.version === 1;
+    }
+
+    startAnalysis(operation: AnalysisOperation, payload: object): Promise<AnalysisJob> {
+        if (!['tests', 'analyze', 'impact', 'select', 'risk-select'].includes(operation)) {
+            throw new Error('Unsupported read-only analysis operation.');
+        }
+        return this.post(`/api/analysis-jobs/${operation}?profile=true`, payload);
+    }
+
+    analysisJob(id: string): Promise<AnalysisJob> {
+        return this.get(`/api/analysis-jobs/${encodeURIComponent(id)}`);
+    }
+
+    cancelAnalysis(id: string): Promise<AnalysisJob> {
+        return this.post(`/api/analysis-jobs/${encodeURIComponent(id)}/cancel`, {});
     }
 
     tests(repo: string, revision: string): Promise<TestDiscovery> {
@@ -175,7 +197,8 @@ export class CodeDnaServiceImpl implements CodeDnaService, BackendApplicationCon
         const args = ['serve', '--host', '127.0.0.1', '--port', String(port)];
         if (this.buildsEnabled) { args.push('--allow-build'); }
         const child = spawn(this.executable, args, {
-            env: { ...process.env, CODEDNA_API_TOKEN: token },
+            env: { ...process.env, CODEDNA_API_TOKEN: token,
+                CODEDNA_DESKTOP_PLUGIN_SNAPSHOT: this.pluginSnapshot },
             stdio: ['ignore', 'pipe', 'pipe'],
             shell: false,
             windowsHide: true
@@ -190,7 +213,15 @@ export class CodeDnaServiceImpl implements CodeDnaService, BackendApplicationCon
                 const newline = buffer.indexOf('\n');
                 if (newline >= 0) {
                     try {
-                        resolve(JSON.parse(buffer.slice(0, newline)).url);
+                        const announcement = JSON.parse(buffer.slice(0, newline));
+                        if (announcement.plugin_snapshot !== undefined) {
+                            const snapshot = JSON.stringify(announcement.plugin_snapshot);
+                            if (announcement.plugin_snapshot?.schema_version !== 1 || snapshot.length > 16000) {
+                                throw new Error('invalid desktop plugin activation snapshot');
+                            }
+                            this.pluginSnapshot = snapshot;
+                        }
+                        resolve(announcement.url);
                     } catch {
                         reject(new Error(`unexpected output from "${this.executable} serve": ${buffer.slice(0, 200)}`));
                     }
@@ -203,7 +234,7 @@ export class CodeDnaServiceImpl implements CodeDnaService, BackendApplicationCon
         });
 
         try {
-            const url = await withTimeout(announced, 15000, 'CodeDNA API did not start within 15 s');
+            const url = await withTimeout(announced, 60000, 'CodeDNA API did not start within 60 s');
             this.version = await waitForHealth(url);
             this.process = child;
             this.baseUrl = url;

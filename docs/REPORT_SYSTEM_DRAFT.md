@@ -4,8 +4,8 @@ Draft of the report chapters other than the evaluation (which is in
 [REPORT_DRAFT.md](REPORT_DRAFT.md)): introduction, background, requirements,
 design, implementation, testing, limitations and future work. Every claim
 points to a decision record (`D-0xx` in [DECISIONS.md](DECISIONS.md)), a
-source file or a saved result. Status: first full draft, 2026-10-25. Numbers
-not yet measured are marked *to be filled*, never estimated.
+source file or a saved result. Draft originated 2026-10-25; implementation status reconciled 2026-10-27.
+Independent labels, clean-PC acceptance and supervisor review remain unverified.
 
 ## 1. Introduction
 
@@ -394,14 +394,15 @@ feature of the product):
 
 - `git_analysis`: safe Git calls, change extraction, blob readers,
   working-tree snapshots (D-046).
-- `java_analysis`: Tree-sitter parse and line-to-declaration mapping.
+- `codedna_java`: Tree-sitter parse and line-to-declaration mapping (separate plugin, D-054).
 - `dependency_graph`: one `git cat-file --batch` read per commit, parse cache
   by blob SHA, reference resolution with evidence.
 - `impact_analysis`: merged BASE/HEAD graph, reverse BFS, explanation graph
   with package grouping and summary counts (D-051).
-- `test_mapping`: build layout detection (Maven reactor, Gradle,
-  `testSourceDirectory`, build-helper test folders, Surefire includes),
-  test discovery, opt-in runner, JaCoCo per-test coverage.
+- `test_mapping`: shared test-result and coverage schemas. `codedna_java`
+  supplies Maven/Gradle layout detection, test discovery, execution and Maven
+  per-test JaCoCo coverage. `codedna_python` supplies AST analysis, static pytest
+  module discovery and execution through the same core plugin interface.
 - `selection`: strategies, comparison, risk decision, policy, live gate.
 - `test_history`, `models`, `calibration`: history store, dataset builder,
   rankers, experiment runner, calibrators and metrics; `recording.py` keeps
@@ -442,8 +443,8 @@ The commit was picked for the demonstration and is not evidence.
 
 ### 6.1 Automated tests
 
-The pytest suite builds temporary Git repositories for every scenario; the
-default run needs no network. The Maven integration tests (`--run-maven`)
+The pytest suite uses temporary Git repositories where relevant; package
+tests use isolated stores/environments. The default run needs no network. The Maven integration tests (`--run-maven`)
 also need a JDK, Maven and network access while Maven downloads its plugins
 and JUnit. Areas covered include renames, CRLF files, syntax errors,
 binary files, multi-module and Gradle layouts, graph resolution and labels,
@@ -456,9 +457,18 @@ files so runner logic is tested without Java. One integration test runs the
 real Maven build of `examples/sample-java-project` with JaCoCo; the project
 rule is that it must not be silently skipped (`--run-maven`).
 
-Latest full local run (2026-10-25, Linux, Python 3.13, Maven included):
-`python -m pytest --run-maven` → 329 passed, 4 skipped. The skipped tests
-are the Windows-only `start.bat` checks.
+The authoritative current engineering record is
+[RELEASE_VALIDATION_D074_2026-10-27.json](RELEASE_VALIDATION_D074_2026-10-27.json).
+The Windows candidate at source checkpoint `70626d8` passed
+`python -m pytest --run-maven`: **576 passed, zero failed and zero skipped**
+(2234.48 seconds, one existing Starlette/httpx deprecation warning).
+The IDE compile and 19 Node checks passed. Seven actual frozen-executable
+plugin-installation checks passed with Python/pip absent from PATH, and all
+1,451 core file hashes matched the final installer. This validates the local
+candidate; it is not clean-PC acceptance, remote CI or a research result.
+
+The earlier 2026-10-25 Linux run (329 passed, four Windows-only skips) is
+historical development evidence, not the latest validation status.
 
 ### 6.2 Continuous integration
 
@@ -477,26 +487,33 @@ GitHub Actions (`.github/workflows/ci.yml`) runs on every pull request:
   is recorded in [IMPLEMENTATION_HANDOFF.md](IMPLEMENTATION_HANDOFF.md).
 - Impact graph layout rendered on real HikariCP graphs (D-051).
 - Test discovery on HikariCP 688d1911 matches the 21 classes CI ran (D-052).
-- **Graph precision check (D-058).** 160 dependency edges were sampled with
-  a fixed seed, 40 confirmed and 40 heuristic from each of HikariCP and
-  LittleProxy, and checked against the source. All 160 were correct:
-  precision 1.00, with a 95 % Wilson interval of [0.954, 1.00] for each label.
+- **AI-assisted exploratory source audit (D-058).** 160 dependency edges
+  were sampled with a fixed seed: 40 confirmed and 40 heuristic from each of
+  HikariCP and LittleProxy. Claude judged 160/160 sampled edges correct while
+  reading the source. The owner reports that Gemini also agreed with the
+  labels. These are AI judgements, not independent human ground truth; the
+  count does not establish graph precision of 1.00. A binomial interval over
+  those judgements would not account for shared AI errors and is not presented
+  as an independently validated graph-accuracy interval here.
   Every unresolved name was also sorted into groups to look for missed links.
   This found four causes: `var` read as a type name, an incomplete
   `java.lang` list, member types brought in by static imports, and member
   types inherited from a superclass. One of these had silently resolved an
   inherited `Override` enum to the JDK annotation. After the fixes, the
   unresolved rate fell from 0.264 to 0.139 on HikariCP and from 0.103 to
-  0.070 on LittleProxy, and no remaining unresolved name is a type the graph
-  models. The labels were made by Claude while reading the source and still
-  need a spot check by a student
-  (`experiments/results/graph-precision-2026-10-25/FINDINGS.md`).
+  0.070 on LittleProxy. The AI audit reported no further modelled-type misses
+  in the inspected material; completeness beyond that audit is unestablished.
+  Independent human validation is unavailable and is an explicit limitation,
+  rather than a claimed completed check. The original audit artifacts remain
+  unchanged (`experiments/results/graph-precision-2026-10-25/FINDINGS.md`).
 
 ## 7. Limitations and future work
 
 ### 7.1 Limitations
 
-- **Java only.** Other languages need plugins; none exists yet.
+- **Java-specific risk evidence.** Java and Python plugins exist. Python/mixed
+  projects use full-suite risk fallback; Java-trained risk does not transfer
+  to Python. Additional languages and cross-language edges are not implemented.
 - **Type-level graph.** Calls between methods are not resolved, so impact is
   coarser than the change.
 - **Class-level outcomes.** History and selection work per test class, not
@@ -509,25 +526,33 @@ GitHub Actions (`.github/workflows/ci.yml`) runs on every pull request:
   (D-039).
 - **Data age.** The study projects are open-source Java projects from 2007 to
   2016 on Travis CI; modern or industrial CI may behave differently.
-- **Confirmatory study pending.** The pre-registered rolling-origin study
-  on new RTPTorrent projects (D-042) is being prepared. *Results to be
-  filled from `experiments/results/rolling-evidence-confirmatory-*`.*
+- **Confirmatory limits.** The nine-project confirmation and four follow-ups
+  are complete (evaluation sections 4.11/4.12, D-067/D-069). They do not establish
+  B10 superiority or a universally safe replacement default. A missing pre-run
+  addendum cannot be repaired retrospectively.
 
 ### 7.2 Future work
 
-- Security checks as add-on policy rules (`codedna.policies`), for example
-  always running tests of changed authentication code, after the defence.
-- The `codedna-java` package split and an in-IDE plugin manager installing
-  from the official catalogue (D-020).
-- A second language plugin.
-- Method-level call edges in the graph.
-- A guard for AI coding agents: an interface through which an agent asks
-  CodeDNA which tests must run before accepting its change.
-- Replace the D-041 gate with failure-conditional conformal risk control
-  (B12f, D-063) if the confirmatory datasets support it, and expose its
-  bound through the agent brake.
-- A risk estimate that does not assume independent test failures, for
-  example by grouping tests that fail together.
+The Java package split, plugin manager, Python plugin and agent-facing brake
+are implemented (D-054/D-060/D-068/D-070), rather than future proposals. The
+live brake offers failure-conditional conformal stopping as opt-in CRC; B10
+remains default because the follow-up results do not justify replacing it.
+
+- Complete clean-machine acceptance and align the report with technical
+  review and applicable submission requirements. Independent human graph
+  labels are unavailable; retain the AI-audit limitation rather than treating
+  further labelling as a prerequisite for the bounded system thesis.
+- Publish an approved public catalogue and verified release files while keeping
+  the source private; validate optional installation in the frozen desktop.
+- Evaluate policy-specific observed history and scheduled full-suite audits in
+  a separate, pre-specified deployment-faithful study. Existing reports use the
+  available historical outcomes and do not establish performance under censored
+  feedback from selected-only execution.
+- Resolve method-level call edges, retain honest confidence labels, and evaluate
+  additional languages separately before enabling their statistical stopping.
+- Study temporally dependent failures and risk under changing distributions.
+  Any changed default needs new held-out evidence, not favorable retuning of
+  completed confirmatory results.
 
 ## References
 
@@ -597,3 +622,48 @@ GitHub Actions (`.github/workflows/ci.yml`) runs on every pull request:
     Conformal risk control. *ICLR* 2024.
 27. l-k-1-2. Predictive-test-selection: conformal risk control on the
     Enhanced Westermo dataset. GitHub repository, accessed 2026-10-26.
+
+
+## Development validation addendum - D-076 through D-078
+
+After the dated D-074 packaged release, development source passed 591 Python
+tests with Maven and Gradle included, zero failures/skips and one existing
+Starlette warning (4749.24 seconds). TypeScript and 27 Node UI/workflow tests
+passed; eight read-only progress-viewer checks passed. These are source checks,
+not a newly packaged or clean-PC-tested release. The D-074 executable's 576-test
+validation remains its own dated evidence.
+
+The IDE source now exposes statically declared test checks and their source
+path, evidence-health recovery and an explicitly saved JSON decision record.
+It distinguishes B10's all-commit audit from CRC's failing-commit bound and never
+displays absent evidence as zero risk. Risk thresholds/defaults are unchanged.
+Full workflow UI tests use core-contract fixtures; installer refresh is deferred.
+Per-operation core cancellation is planned, not claimed implemented.
+See [source validation](ENGINEERING_VALIDATION_D076_D078_2026-10-27.json).
+
+
+## Development validation addendum - D-079 through D-081
+
+After D-079's separate 601-test validation, source checkpoint 912f4c9 passed
+636 Python tests with Maven included, zero failures/skips and one existing
+Starlette warning (1086.89 seconds). TypeScript compiled and 43 Node UI
+workflows passed. These counts describe engineering validation, not additional
+scientific evidence or a rebuilt installer. The dated D-074 packaged release
+and D-076 research outputs remain unchanged.
+
+The local API now supports bounded read-only analysis jobs in contained private
+workers. Tests and Changes expose actual stages/elapsed time and cancellation
+when supported; older cores retain synchronous behavior. Cancellation terminates
+only the owned worker tree and never grants build consent. Tests include actual
+Windows descendants, unrelated-process survival, queue/deadline/cleanup races,
+typed/token/host restrictions, exact decision parity (separate runtime excluded),
+relative path preservation and pinned desktop plugin activation contracts.
+
+Changes computes impact from its analysis result's immutable comparison rather
+than a later WORKTREE snapshot. Source links use the canonical repository and
+explicitly open working files. Risk decisions/defaults/thresholds are unchanged.
+Actual rebuilt frozen execution, installer refresh and clean-PC evidence remain
+deferred; ordinary analyses cannot resume across restart, and other views keep
+their existing synchronous UI. This addendum supersedes the earlier statement
+that per-operation cancellation is only planned.
+See [dated source validation](ENGINEERING_VALIDATION_D080_D081_2026-10-28.json).

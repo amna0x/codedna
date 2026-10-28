@@ -1,0 +1,12 @@
+{
+  "binding": {
+    "database_sha256": "92a3e45e3065daa08b8668e6e3a523071f73baf7da1830fd9242007d0895501c",
+    "dataset_sha256": "f2c4ce350b858f2daec1ccc1a3f017ca5c2c95e1ff534720155b12b16414ec7b",
+    "protocol_sha256": "654016f72fa199ee6c41d316b5b7daf12594576a988c687ac1b9cf184447e425",
+    "source_sha256": "720f88ac68260c9311e3894808c77d66723d7dd5962cf784e1cfbe2bb1d63c56"
+  },
+  "commit": "947e787a150c2e0ea17d62892d2049dc03146aaa",
+  "error": "Command '['C:\\\\Users\\\\hp\\\\OneDrive\\\\Documents\\\\GitHub\\\\codedna\\\\.venv\\\\Scripts\\\\python.exe', 'C:\\\\Users\\\\hp\\\\OneDrive\\\\Documents\\\\GitHub\\\\codedna\\\\scripts\\\\run_partial_feedback_pilot.py', '--source-plan', 'C:\\\\Users\\\\hp\\\\OneDrive\\\\Documents\\\\GitHub\\\\codedna\\\\experiments\\\\datasets\\\\raw\\\\rtp-torrent\\\\repo\\\\brettwooldridge@HikariCP', '32eadc1d8ccd88aed568e1eaead5d50b04473012', '947e787a150c2e0ea17d62892d2049dc03146aaa', 'dependency']' timed out after 90 seconds",
+  "index": 329,
+  "outcomes_evaluated": false
+}

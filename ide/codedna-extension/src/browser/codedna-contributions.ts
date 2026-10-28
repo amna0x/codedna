@@ -2,6 +2,7 @@ import { injectable } from '@theia/core/shared/inversify';
 import { AbstractViewContribution } from '@theia/core/lib/browser';
 import { CommandRegistry } from '@theia/core/lib/common/command';
 import { ChangeViewWidget } from './change-view-widget';
+import { EXTENSIONS_CONTAINER_ID } from './extensions-widget-factory';
 import { GraphViewWidget } from './graph-view-widget';
 import { HistoryViewWidget } from './history-view-widget';
 import { PluginsViewWidget } from './plugins-view-widget';
@@ -65,9 +66,23 @@ export class PluginsViewContribution extends AbstractViewContribution<PluginsVie
     constructor() {
         super({
             widgetId: PluginsViewWidget.ID,
+            viewContainerId: EXTENSIONS_CONTAINER_ID,
             widgetName: PluginsViewWidget.LABEL,
-            defaultWidgetOptions: { area: 'main' },
-            toggleCommandId: 'codedna.plugins.toggle'
+            defaultWidgetOptions: { area: 'left', rank: 600 },
+            toggleCommandId: 'codedna.plugins.toggle',
+            toggleKeybinding: 'ctrlcmd+shift+x'
+        });
+    }
+
+    async onDidInitializeLayout(): Promise<void> {
+        // Runs for restored layouts too: add the activity tab without stealing focus.
+        await this.openView({ activate: false, reveal: false });
+    }
+
+    registerCommands(commands: CommandRegistry): void {
+        super.registerCommands(commands);
+        commands.registerCommand({ id: 'codedna.extensions.open', label: 'CodeDNA: Open Extensions' }, {
+            execute: () => this.openView({ activate: true, reveal: true })
         });
     }
 }

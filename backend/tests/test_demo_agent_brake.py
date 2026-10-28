@@ -29,6 +29,24 @@ def test_demo_plans_tests_for_the_agents_edit_without_building(tmp_path):
     assert demo.WRONG in edited
 
 
+
+def test_demo_ignores_editor_build_output_but_keeps_real_resource_changes(tmp_path):
+    from codedna.git_analysis import extract_changes
+
+    demo = load()
+    project = tmp_path / "demo"
+    demo.make_repo(project)
+    compiled = project / "target/classes/example/PriceCalculator.class"
+    compiled.parent.mkdir(parents=True)
+    compiled.write_bytes(b"\xca\xfe\xba\xbe editor output")
+    resource = project / "src/main/resources/settings.json"
+    resource.parent.mkdir(parents=True)
+    resource.write_text('{"discount": 0.2}', encoding="utf-8")
+    report = extract_changes(project, "HEAD", "WORKTREE")
+    assert {item.path for item in report.changed_files} == {
+        "src/main/java/example/PriceCalculator.java", "src/main/resources/settings.json"}
+
+
 def test_end_to_end_demo_plans_part_of_the_suite_on_validated_history(tmp_path):
     spec = importlib.util.spec_from_file_location("demo_brake_end_to_end",
                                                   ROOT / "scripts/demo_brake_end_to_end.py")

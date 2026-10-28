@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-28",
+  "decision": "D-079",
+  "source_commit": "a46f222",
+  "command": ".venv/Scripts/python.exe -u -m pytest --run-maven -v",
+  "scope": "Existing 601-test collection before D-080 production integration; new independent unused worker files were present. This is not full D-080 validation.",
+  "result": {
+    "passed": 601,
+    "failed": 0,
+    "skipped": 0,
+    "warnings": 1,
+    "seconds": 1324.42
+  },
+  "warning": "Existing Starlette httpx deprecation",
+  "log": "docs/validation/D079-full-suite-2026-10-28.txt",
+  "log_sha256_utf8_lf": "d76f7465c232e2ce919b3d239bc95c8d5d2b9a4e5ab9d7705bc0d59eeb7969a6",
+  "original_invocation": "No result, empty log and no remaining process. Not counted as a pass.",
+  "limits": [
+    "Local source engineering tests are not research safety evidence.",
+    "No new installer, clean-PC validation, push or merge."
+  ]
+}

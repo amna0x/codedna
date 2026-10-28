@@ -1,0 +1,60 @@
+
+> codedna-extension@0.1.0 test
+> node --test tests/workflow.test.cjs tests/plugins.test.cjs tests/startup.test.cjs tests/history-ui.test.cjs
+
+✔ replay refuses blank input; Browse adds an actual folder, cancellation keeps it (583.947ms)
+✔ saved execution click loads actual outcomes above the list with visible selection (217.2607ms)
+✔ individual recorded checks and failures are visible; old results remain readable (8.3161ms)
+✔ unvalidated risk remains unvalidated, retains core reason and full-suite recommendation (179.6316ms)
+✔ test explanation shows source check names and warns that discovery is not execution (150.1483ms)
+✔ evidence guidance preserves refusal and provenance without claiming more data guarantees approval (27.3324ms)
+✔ diagnostic export omits raw logs, source and failure messages but preserves observed statuses (29.7284ms)
+✔ evidence save requires a chosen destination and propagates write failures (12.1876ms)
+✔ view export saves the current decision, handles cancellation and reports a failed save (122.1217ms)
+✔ CRC distinguishes its failing-commit bound from the score and B10 audit denominator (94.3218ms)
+✔ a fully mandatory suite explains the policy without promising savings from more history (117.7354ms)
+✔ Extensions contains the existing Language plugins widget without allowing it to be hidden (134.3267ms)
+✔ Restored layouts regain the Extensions tab without taking editor focus (68.1185ms)
+✔ Installed languages appear while the catalogue is pending and remain available offline (227.7374ms)
+✔ Cancelling a plugin installation never invokes the core installer (87.4359ms)
+✔ A pending desktop plugin change requests an app restart and retains actual loaded languages (134.1216ms)
+✔ A slow cold core can announce after 20 seconds instead of being killed at 15 (382.4586ms)
+✔ An unresponsive core still times out and is cleaned up (142.8601ms)
+✔ desktop plugin activation is retained across a consented API restart (146.1791ms)
+✔ analysis RPC rejects non-read-only routes and requests optional core timing (69.124ms)
+✔ test links use discovered paths and canonical repository, including module/custom locations (7.9672ms)
+✔ missing test paths produce an explanation instead of a guessed file (1.5409ms)
+✔ late discovery cannot open a file for an obsolete comparison (1.9305ms)
+✔ switching away and back while a recommendation loads discards the obsolete response (9.183ms)
+✔ a completed older execution stays in history instead of restoring stale on-screen results (2.0538ms)
+✔ changing comparison while confirmation is open prevents execution (1.1799ms)
+✔ duplicate recommendation clicks do not start duplicate analyses (2.8192ms)
+✔ late errors do not overwrite a newer comparison (2.0715ms)
+✔ test detail inspection uses the exact comparison snapshot and drops late responses (1.312ms)
+✔ project workflow selects, inspects, confirms execution and retains actual history recording (1.353ms)
+✔ core job stages are shown and results are returned without invented progress (0.4487ms)
+✔ comparison changed during submission cancels its worker instead of accepting its response (0.1981ms)
+✔ worker failure and inability to confirm cancellation stay visible (0.8076ms)
+✔ job-enabled recommendation uses the core job contract and no synchronous duplicate (0.9761ms)
+✔ cancelled recommendation cannot restore late results or run project tests (3.192ms)
+✔ Cancel analysis targets only the displayed job and prevents duplicate clicks (1.3653ms)
+✔ late cancellation errors cannot overwrite a newer comparison (0.9826ms)
+✔ legacy Changes impact uses the exact analysed snapshot rather than later WORKTREE edits (90.1663ms)
+✔ Changes rejects duplicate clicks before repository lookup and drops stale comparisons (67.163ms)
+✔ Changes core jobs run in order and bind impact to immutable analysis IDs (78.4011ms)
+✔ Changes cancellation during impact stops its owned job and never publishes partial results (567.6022ms)
+✔ late Changes failures cannot overwrite a newer comparison (62.4725ms)
+✔ Changes file navigation uses the analysed repository and preserves the supplied line (38.6749ms)
+✔ Changes navigation explains missing working files instead of failing silently (41.5253ms)
+✔ a late Changes file-open error cannot overwrite a newer comparison (38.7824ms)
+✔ recommendation retains real timing data and comparison changes clear it (0.9834ms)
+✔ Changes keeps timing for both immutable operations without combining overlapping stages (42.5441ms)
+✔ timing export drops unknown fields and absent measurements stay absent (14.5111ms)
+ℹ tests 48
+ℹ suites 0
+ℹ pass 48
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2417.5309

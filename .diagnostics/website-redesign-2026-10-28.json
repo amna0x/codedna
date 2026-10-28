@@ -1,0 +1,156 @@
+{
+  "records": [
+    {
+      "file": "index.html",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "title": "CodeDNA \u00e2\u20ac\u201d A clearer picture of every change",
+      "h1": 1,
+      "nav": true
+    },
+    {
+      "file": "docs.html",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "title": "Documentation \u00e2\u20ac\u201d CodeDNA",
+      "h1": 1,
+      "nav": true
+    },
+    {
+      "file": "plugins.html",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "title": "Language plugins \u00e2\u20ac\u201d CodeDNA",
+      "h1": 1,
+      "nav": true
+    },
+    {
+      "file": "downloads.html",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "title": "Get CodeDNA \u00e2\u20ac\u201d Availability and setup",
+      "h1": 1,
+      "nav": true
+    },
+    {
+      "file": "index.html",
+      "width": 768,
+      "scrollWidth": 768,
+      "title": "CodeDNA \u00e2\u20ac\u201d A clearer picture of every change",
+      "h1": 1,
+      "nav": true
+    },
+    {
+      "file": "docs.html",
+      "width": 768,
+      "scrollWidth": 768,
+      "title": "Documentation \u00e2\u20ac\u201d CodeDNA",
+      "h1": 1,
+      "nav": true
+    },
+    {
+      "file": "plugins.html",
+      "width": 768,
+      "scrollWidth": 768,
+      "title": "Language plugins \u00e2\u20ac\u201d CodeDNA",
+      "h1": 1,
+      "nav": true
+    },
+    {
+      "file": "downloads.html",
+      "width": 768,
+      "scrollWidth": 768,
+      "title": "Get CodeDNA \u00e2\u20ac\u201d Availability and setup",
+      "h1": 1,
+      "nav": true
+    },
+    {
+      "file": "index.html",
+      "width": 375,
+      "scrollWidth": 375,
+      "title": "CodeDNA \u00e2\u20ac\u201d A clearer picture of every change",
+      "h1": 1,
+      "nav": true
+    },
+    {
+      "file": "docs.html",
+      "width": 375,
+      "scrollWidth": 375,
+      "title": "Documentation \u00e2\u20ac\u201d CodeDNA",
+      "h1": 1,
+      "nav": true
+    },
+    {
+      "file": "plugins.html",
+      "width": 375,
+      "scrollWidth": 375,
+      "title": "Language plugins \u00e2\u20ac\u201d CodeDNA",
+      "h1": 1,
+      "nav": true
+    },
+    {
+      "file": "downloads.html",
+      "width": 375,
+      "scrollWidth": 375,
+      "title": "Get CodeDNA \u00e2\u20ac\u201d Availability and setup",
+      "h1": 1,
+      "nav": true
+    }
+  ],
+  "errors": [],
+  "checks": [
+    "12 page/viewport combinations without page overflow",
+    "catalogue loaded at all widths",
+    "workflow filters with shared-language cards",
+    "mobile menu Escape and focus restoration",
+    "offline catalogue failure",
+    "no-JavaScript navigation and plugin fallback",
+    "reduced-motion screenshots"
+  ],
+  "date": "2026-10-28",
+  "website_tests": {
+    "passed": 18,
+    "failed": 0,
+    "skipped": 0,
+    "command": "node --test website/tests/plugins.test.cjs website/tests/site.test.cjs"
+  },
+  "local_links_checked": 94,
+  "merged_source": "C:\\Users\\hp\\OneDrive\\Documents\\GitHub\\codedna\\website",
+  "preservation_backup": "C:\\Users\\hp\\OneDrive\\Documents\\ChatGPT\\codedna\\website-before-redesign-20261027.zip",
+  "graphify": {
+    "nodes": 3847,
+    "edges": 9498,
+    "communities": 225,
+    "mode": "code-only local update"
+  },
+  "backend_validation": "Not rerun: latest project instructions preserve completed 636-test validation; no backend source changed.",
+  "merge": {
+    "files_merged": [
+      "index.html",
+      "docs.html",
+      "plugins.html",
+      "downloads.html",
+      "style.css",
+      "site.js",
+      "assets/favicon.svg",
+      "tests/site.test.cjs",
+      "README.md"
+    ],
+    "untouched": [
+      "plugins.js",
+      "catalogue/index.json",
+      "tests/plugins.test.cjs"
+    ],
+    "sha256": {
+      "index.html": "904f1df111d8307fe5a4a4cfd296ae21466647f1d69bc91fc71c8e2d8106dd34",
+      "docs.html": "4f4cce134a984338ba006c665c2b6be45b3edcfdc80ac05349c66feb705c278c",
+      "plugins.html": "155e52d0e70265d4b12923d4cb2121030c88c509a52cd23e97ec0fc977f91eb9",
+      "downloads.html": "6ce0812d496155af9a4d842a09afb241e64f9f3d23013ca90ddab1f2fba31fad",
+      "style.css": "5af65bd7888ccf2a70a76faccfb7fe00057e7324c9c573412b6ffab5f9a296b7",
+      "site.js": "c531e099c6baaa11e8c56bb53da28a00e8247aed41c418ad6068246cac17a537",
+      "assets/favicon.svg": "d22e5b5697aafa6508ba12cf63943ece130a8e44d549ef139057cc0666a32055",
+      "tests/site.test.cjs": "d2771d8c5fb5917938fa261ecb2d2f4b2237e86e9724525bea5cee80a7745104",
+      "README.md": "4457cc2501dcd26b18a7514fb38f9014603f175a161aab359fb62cda75781f6b"
+    }
+  }
+}

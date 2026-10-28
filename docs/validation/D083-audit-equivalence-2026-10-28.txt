@@ -1,0 +1,1 @@
+{"scope": "post-hoc engineering equality check on previously inspected data; no new research claim", "input_sha256": "f2c4ce350b858f2daec1ccc1a3f017ca5c2c95e1ff534720155b12b16414ec7b", "audit_commits": 357, "audit_rows": 7495, "all_audit_probabilities_exactly_equal": true, "all_audit_decisions_exactly_equal": true, "audit_evidence_and_provenance_equal": true}

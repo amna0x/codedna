@@ -1,0 +1,55 @@
+
+> codedna-extension@0.1.0 test
+> node --test tests/workflow.test.cjs tests/plugins.test.cjs tests/startup.test.cjs tests/history-ui.test.cjs
+
+✔ replay refuses blank input; Browse adds an actual folder, cancellation keeps it (1565.8283ms)
+✔ saved execution click loads actual outcomes above the list with visible selection (355.878ms)
+✔ individual recorded checks and failures are visible; old results remain readable (20.6414ms)
+✔ unvalidated risk remains unvalidated, retains core reason and full-suite recommendation (310.4246ms)
+✔ test explanation shows source check names and warns that discovery is not execution (269.7626ms)
+✔ evidence guidance preserves refusal and provenance without claiming more data guarantees approval (30.7491ms)
+✔ diagnostic export omits raw logs, source and failure messages but preserves observed statuses (27.3888ms)
+✔ evidence save requires a chosen destination and propagates write failures (36.0647ms)
+✔ view export saves the current decision, handles cancellation and reports a failed save (285.5978ms)
+✔ CRC distinguishes its failing-commit bound from the score and B10 audit denominator (242.4276ms)
+✔ Extensions contains the existing Language plugins widget without allowing it to be hidden (319.0962ms)
+✔ Restored layouts regain the Extensions tab without taking editor focus (153.8285ms)
+✔ Installed languages appear while the catalogue is pending and remain available offline (723.0278ms)
+✔ Cancelling a plugin installation never invokes the core installer (251.898ms)
+✔ A pending desktop plugin change requests an app restart and retains actual loaded languages (276.8839ms)
+✔ A slow cold core can announce after 20 seconds instead of being killed at 15 (774.4163ms)
+✔ An unresponsive core still times out and is cleaned up (451.9987ms)
+✔ desktop plugin activation is retained across a consented API restart (386.3964ms)
+✔ test links use discovered paths and canonical repository, including module/custom locations (15.4074ms)
+✔ missing test paths produce an explanation instead of a guessed file (2.6464ms)
+✔ late discovery cannot open a file for an obsolete comparison (2.1017ms)
+✔ switching away and back while a recommendation loads discards the obsolete response (16.0705ms)
+✔ a completed older execution stays in history instead of restoring stale on-screen results (6.3035ms)
+✔ changing comparison while confirmation is open prevents execution (4.0909ms)
+✔ duplicate recommendation clicks do not start duplicate analyses (3.6005ms)
+✔ late errors do not overwrite a newer comparison (3.2264ms)
+✔ test detail inspection uses the exact comparison snapshot and drops late responses (5.1432ms)
+✔ project workflow selects, inspects, confirms execution and retains actual history recording (4.3531ms)
+✔ core job stages are shown and results are returned without invented progress (1.0012ms)
+✔ comparison changed during submission cancels its worker instead of accepting its response (0.4974ms)
+✔ worker failure and inability to confirm cancellation stay visible (1.6761ms)
+✔ job-enabled recommendation uses the core job contract and no synchronous duplicate (2.2055ms)
+✔ cancelled recommendation cannot restore late results or run project tests (11.9208ms)
+✔ Cancel analysis targets only the displayed job and prevents duplicate clicks (1.9717ms)
+✔ late cancellation errors cannot overwrite a newer comparison (2.0857ms)
+✔ legacy Changes impact uses the exact analysed snapshot rather than later WORKTREE edits (225.7202ms)
+✔ Changes rejects duplicate clicks before repository lookup and drops stale comparisons (203.9425ms)
+✔ Changes core jobs run in order and bind impact to immutable analysis IDs (215.559ms)
+✔ Changes cancellation during impact stops its owned job and never publishes partial results (663.0132ms)
+✔ late Changes failures cannot overwrite a newer comparison (140.6023ms)
+✔ Changes file navigation uses the analysed repository and preserves the supplied line (95.1457ms)
+✔ Changes navigation explains missing working files instead of failing silently (103.7123ms)
+✔ a late Changes file-open error cannot overwrite a newer comparison (100.3763ms)
+ℹ tests 43
+ℹ suites 0
+ℹ pass 43
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5196.6163

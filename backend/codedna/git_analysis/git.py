@@ -13,6 +13,13 @@ Design rules (see docs/DECISIONS.md, D-003):
 
 from __future__ import annotations
 
+from codedna.performance import timed
+
+from contextlib import contextmanager
+from contextvars import ContextVar
+from functools import wraps
+from threading import get_ident
+import re
 import errno
 import os
 import shutil
@@ -30,6 +37,54 @@ _SAFE_CONFIG = (
     "-c", "core.fsmonitor=false",
     "-c", "core.quotePath=false",
 )
+
+
+# Only successful repository/immutable-object validation is reused, and only
+# during one synchronous analysis. Mutable refs, trees, index state, diffs,
+# outcomes and model acceptance are never cached here.
+_VALIDATION_SCOPE = ContextVar('codedna_git_validation_scope', default=None)
+
+
+@contextmanager
+def git_validation_scope():
+    current = _VALIDATION_SCOPE.get()
+    if current is not None and current['thread'] == get_ident():
+        yield
+        return
+    token = _VALIDATION_SCOPE.set({'thread': get_ident(), 'repositories': {}, 'commits': {}})
+    try:
+        yield
+    finally:
+        _VALIDATION_SCOPE.reset(token)
+
+
+def reuse_git_validation(function):
+    """Deduplicate immutable validation inside an analysis; preserve its signature."""
+    @wraps(function)
+    def wrapped(*args, **kwargs):
+        with git_validation_scope():
+            return function(*args, **kwargs)
+    return wrapped
+
+
+def _validation_cache(kind):
+    current = _VALIDATION_SCOPE.get()
+    return current[kind] if current is not None and current['thread'] == get_ident() else None
+
+
+def _validation_key(path, *parts):
+    # Repository/object routing can change through Git environment variables.
+    # Never reuse validation across such a change, even within the same call.
+    environment = tuple(sorted((key, value) for key, value in os.environ.items() if key.startswith('GIT_')))
+    return (str(Path(path).resolve()), environment, *parts)
+
+
+def _remember_validation(cache, key, value):
+    if cache is not None:
+        if len(cache) >= 4096:
+            cache.clear()  # Bound memory; eviction changes speed, never results.
+        cache[key] = value
+    return value
 
 
 class CodeDNAGitError(Exception):
@@ -66,6 +121,7 @@ def run_git_bytes(repo: Path, *args: str, stdin: bytes | None = None) -> bytes:
     return _run(repo, args, stdin)
 
 
+@timed('git')
 def _run(repo: Path, args: tuple[str, ...], stdin: bytes | None = None,
          env: dict[str, str] | None = None) -> bytes:
     command = ["git", *_SAFE_CONFIG, *args]
@@ -105,6 +161,10 @@ def resolve_repository(path: str | Path) -> Path:
     if not candidate.is_dir():
         raise InvalidRepositoryError(f"repository path is not a directory: {candidate}")
 
+    cache = _validation_cache('repositories')
+    key = _validation_key(candidate) if cache is not None else None
+    if cache is not None and key in cache:
+        return cache[key]
     try:
         top_level = run_git(candidate, "rev-parse", "--show-toplevel").strip()
     except GitCommandError as exc:
@@ -115,9 +175,12 @@ def resolve_repository(path: str | Path) -> Path:
         except GitCommandError:
             bare = False
         if bare:
-            return candidate.resolve()
+            return _remember_validation(cache, key, candidate.resolve())
         raise InvalidRepositoryError(f"not a Git repository: {candidate}") from exc
-    return Path(top_level).resolve()
+    resolved = _remember_validation(cache, key, Path(top_level).resolve())
+    if cache is not None:
+        _remember_validation(cache, _validation_key(resolved), resolved)
+    return resolved
 
 
 def resolve_commit(repo: Path, revision: str) -> str:
@@ -129,6 +192,10 @@ def resolve_commit(repo: Path, revision: str) -> str:
     if revision.startswith("-"):
         raise InvalidCommitError(f"invalid commit revision: {revision!r}")
 
+    cache = _validation_cache('commits') if re.fullmatch(r'(?:[0-9a-fA-F]{40}|[0-9a-fA-F]{64})', revision) else None
+    key = _validation_key(repo, revision) if cache is not None else None
+    if cache is not None and key in cache:
+        return cache[key]
     try:
         sha = run_git(
             repo, "rev-parse", "--verify", "--quiet", "--end-of-options",
@@ -138,7 +205,9 @@ def resolve_commit(repo: Path, revision: str) -> str:
         raise InvalidCommitError(f"unknown commit: {revision!r}") from exc
     if not sha:
         raise InvalidCommitError(f"unknown commit: {revision!r}")
-    return sha
+    # A hexadecimal ref name can still be a movable branch/tag. Reuse only
+    # when Git resolved it to that exact immutable commit object identity.
+    return _remember_validation(cache, key, sha) if sha.lower() == revision.lower() else sha
 
 
 # Fixed identity and dates make the snapshot of an unchanged tree reproducible.

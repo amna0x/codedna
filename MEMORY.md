@@ -1,5 +1,380 @@
 # MEMORY.md: handoff notes for the next agent
 
+## GitHub private-email push repair — 2026-10-28
+
+Owner authorized repairing unpublished commit identities. Saved local-only backup
+keep/private-email-backup-20261028-399d9c3; never push this private-email backup.
+Rewrote the 35 commits after origin/main using the GitHub-verified amna0x account
+ID and its ID-based noreply address, preserving every commit tree, message, name,
+date and both stashes. Repository-local user.email now uses that noreply address;
+global Git and GitHub privacy settings are unchanged. No push/merge performed.
+Old source IDs inside hashed validation artifacts intentionally remain intact;
+resolve them through docs/COMMIT_IDENTITY_REPAIR_2026-10-28.json. Artifact bytes
+and source code did not change. Latest user website/cache commit is retained.
+This notes/map commit is metadata documentation, not a new source validation run.
+
+
+## D-085 source, pilot, executable and installer verified; friend kit prepared — 2026-10-28
+
+Corrected source 4d359419ad68874c374a45d83732845327aeed41 passed the complete
+Maven-inclusive suite: 714 passed, zero failures/skips, one existing warning,
+2300.22s. See ENGINEERING_VALIDATION_D085_2026-10-28.json and hashed logs.
+The earlier 711-test invocation on bd8c6d8 was deliberately interrupted around
+12 percent for JDK17 Cp1252/UTF8 correction; never count it as a pass.
+
+Implemented optional Java witness CLI and --moonshot --allow-build --repo MCP
+capability. Self-contained public static int(int), bounded guided/simple inputs,
+fresh JVM confirmation, reduction, independent JDK-only source reproducer,
+explicit UTF-8 source/runtime assumptions, actual timeout/Ctrl+C descendant
+cleanup. Unconfirmed cleanup blocks later witness/MCP checking, while planning
+stays available. Base is not an oracle; no witness is not equivalence/skip-risk
+validation. Existing test/risk policy remains intact. D084 demo /target/ ignore
+also passed its Git regression and all four demo checks with real Maven.
+
+The fixed engineering comparison COMPLETED all 48 searches; all 15 emitted
+reproducers independently reproduced. Eight illustrative synthetic cases, three
+seeds/mode, not independent projects/bugs. Guided: 12 difference, 3 no-difference,
+6 inconclusive, 3 unsupported; simple: 3/12/6/3 respectively. Median whole-call
+costs 11.234s guided / 10.057s simple: no speedup claim. Boundary cases were
+constructed to favor guidance. See experiments/results/moonshot-engineering-pilot-d085-2026-10-28/FINDINGS.md
+and MOONSHOT_ENGINEERING_PILOT_D085_2026-10-28.json. All report/export hashes checked.
+Do not rerun/retune this pilot or old D076; no new accuracy/novelty confirmation.
+
+The isolated D085 core build completed. All 32 actual executable checks pass:
+seven plugin, eight worker/restart, eight real-Maven brake and nine witness checks.
+All 1462 bundle files were hash-verified. See
+FROZEN_CORE_VALIDATION_D085_2026-10-28.json and its hashed logs. Failed required
+tests block, passing required tests pass, skipped required tests remain incomplete;
+model reuse still performs a fresh audit. Optional witness reproduction, UTF-8,
+timeout and parent-termination descendant cleanup pass in the actual executable.
+
+D085 installer packaging completed. The actual embedded core was extracted;
+all 1462 file hashes matched. Restricted-PATH unpacked smoke passed with no
+external Python and both bundled languages. Three new packaged GUI checks pass:
+isolated launch, Java/Python display and Language plugins restored on restart.
+The unchanged D083 frontend was reused; its full 12-flow GUI test was not repeated.
+Both owned D085 windows were closed. No app was installed.
+See RELEASE_VALIDATION_D085_2026-10-28.json for hashes, logs and scope.
+
+Installer: build/desktop-D085-2026-10-28/installer/CodeDNA IDE D085 0.1.0 Setup.exe
+SHA-256: c0ad4d0fc2485b3b3763876c81d7a951bcee643980f06f9a0bdc67d53744ab0b
+Unsigned, 317705578 bytes. Local friend kit prepared and hash/ZIP
+verified: build/desktop-D085-2026-10-28/CodeDNA-D085-Friend-Kit.zip.
+Includes a two-commit Java brake demo, optional witness demo and manual checklist.
+Prepared is not sent/installed/clean-PC verified. D083 remains preserved.
+
+NEXT: friend-PC/manual acceptance and official catalogue hosting remain external
+release gates. Research performance follow-up remains protocol-first and not run;
+the completed synthetic pilot does not replace independent real-change evidence.
+No research claim was strengthened, no new language, rename, push or merge.
+
+Stable D083 evidence is below. Preserve both stashes, unrelated website changes,
+untracked MOONSHOT.md and all original research outputs. No new push/merge/public
+hosting. Official catalogue was rechecked and still returns 404; read-only log
+pointer .diagnostics/d085-live-catalogue.log. No additional language plugin.
+
+## D-083 desktop candidate validated — 2026-10-28
+
+Current stable source: 1a45664. Full Maven-inclusive suite 664/zero skips,
+TypeScript, 48 UI tests and three runtime checks pass. Actual updated frozen
+core: 23 checks pass; 1458 manifest files verified. Theia production compiled;
+the isolated NSIS installer built after one retained failed packaging attempt.
+Its actual embedded core was extracted and all 1458 hashes matched.
+See RELEASE_VALIDATION_D083_2026-10-28.json and the source/frozen proof JSONs.
+
+Actual packaged GUI checks passed: real measured timings, full-suite cold-history
+fallback, Cancel kills both worker/child, recovery, test-check explanations and
+source opening, build-consent cancellation, actual Maven six-check run reporting
+the failed discount check, refusal to train from the uncommitted run, Java/Python
+listed and Language plugins restored after restart. Only isolated owned app
+profiles/fixtures were used; those app windows are now closed. Current installed
+app is intact. Official catalogue 404, full clean-PC and other manual acceptance
+remain open. No new language plugin was delivered; slow-probe is a test fixture.
+
+Installer: build/desktop-D083-2026-10-28/installer-r2/CodeDNA IDE Setup 0.1.0.exe
+317665899 bytes; SHA-256 c9386e51cda0730c5bed196450dfe22fa3e089283cb9267a1b9e686b4ae5b752.
+It is unsigned. Do not claim it was installed or validated on a clean computer.
+This stable source/candidate is ready for private review; no push/merge performed.
+
+NEXT owner-authorized work: fix standalone demo target/ ignore (editor builds
+otherwise pollute its snapshot), then implement/evaluate the focused Java Moonshot
+pilot using MOONSHOT_PILOT_PROTOCOL.md. Research performance follow-up is planned,
+not run; old studies and mixed findings stay intact. Preserve both stashes,
+unrelated website changes and the untracked MOONSHOT.md. No public hosting.
+
+## Current owner-approved work - D-082/D-083, 2026-10-28
+
+User explicitly asked to test the rebuilt .exe's cancellation, plugin changes/
+restarts and AI brake, then improve engineering/research performance. All 20
+actual frozen checks passed in an isolated candidate: seven plugin checks,
+seven worker/restart checks, six brake checks using real Maven. Worker and child
+ended, unrelated fixture survived; failed tests block, passed tests pass and
+skipped required tests remain incomplete. See FROZEN_CORE_VALIDATION_D082_2026-10-28.json.
+The candidate is build/desktop-D082-2026-10-28/core/dist/codedna-core. All 1456
+manifest files were verified. Installed app/old installer were not overwritten.
+This is not clean-PC or actual new Theia acceptance. Prior full source: 636/zero
+skips; Node43 and TypeScript pass. Don't repeat old studies or that completed run.
+
+NEXT authorized D-083: measure real stage costs, safely reuse unchanged fitted
+models/parses, improve fallback diagnostics and evaluate a pre-analysis cost
+fast path. Never cache selected sets or accepted risk; revalidate eligibility
+and audit every decision. A cost switch after analysis is already paid cannot
+recover that sunk cost. Avoid serializing/loading Python models from disk.
+Do not claim improved safety/recall from latency or engineering test results.
+After changes: focused tests, full Maven-inclusive suite and updated frozen
+candidate/release verification. A separate research performance follow-up must
+be protocol-first, keep prior outputs intact and disclose reused data.
+
+Owner also approved the FOCUSED Moonshot version: deterministic Java paired
+execution, meaningful difference and small reproducer export, integrated with
+existing core/brake. See MOONSHOT_SCOPE.md. It follows current engineering and
+does not authorize the full twelve-month proposal, concurrency lab, automatic
+repair or extra languages. Preserve untracked MOONSHOT.md; Java/Python only.
+No new push/merge/public hosting; preserve both stashes. New performance work
+must not be described as already present in the tested D082 candidate.
+
+## Verified continuation - D-080/D-081, 2026-10-28
+
+Source checkpoint 912f4c9 passed the complete Maven-inclusive suite: 636 tests,
+zero failures/skips, one existing warning, 1086.89 seconds. TypeScript and
+43 Node workflows pass. See ENGINEERING_VALIDATION_D080_D081_2026-10-28.json
+and its hashed logs. D-079's earlier 601-test full proof remains separate.
+Do not rerun either completed validation or any original research study.
+
+Implemented: bounded read-only analysis jobs and real owned process-tree cancel;
+stage/elapsed controls in Tests and Changes; immutable change/impact snapshots;
+canonical file navigation with visible errors; relative API path preservation;
+plugin activation pinned across worker and consented API restarts. Existing
+B10/CRC defaults, thresholds, refusals and research findings remain unchanged.
+The earlier 635-test invocation was deliberately interrupted to fix the new
+relative-path regression and is not counted as a pass.
+
+This is a source checkpoint, not a new installed desktop. Actual rebuilt frozen
+execution, installer refresh, official catalogue hosting and clean-PC evidence
+remain deferred to the final installation batch. Impact graph/replay/history
+keep their existing sync UI; ordinary analysis has no restart resume. The D076
+pilot is completed negative/mixed evidence, not a study to retune or resume.
+No new push or merge; preserve stashes and the untracked MOONSHOT.md proposal.
+Source is ready for private review; publication still requires owner instruction.
+
+## Current checkpoint - D-080/D-081, 2026-10-28
+
+D-079 is fully validated: 601 passed/zero skips, proof JSON saved. D-080 source
+was saved in f4ec9cf. Its later 635-test full invocation was intentionally
+stopped around 18 percent after a new regression exposed relative API paths
+being resolved in the worker's trusted directory. That run is not a pass.
+The regression failed before the fix; all eight API tests now pass. Anchor
+repo/history/coverage/duration paths to the API context before dispatch while
+preserving empty optional defaults and keeping workers out of analysed repos.
+
+D-081 extends cancellation/progress to Changes and fixes snapshot consistency:
+analyse once, then compute impact from that result's immutable base/head rather
+than separately resnapshotting WORKTREE. Drop stale responses and duplicate
+requests, bind source navigation to the canonical analysed repository, disclose
+working-file/line differences and show file-open errors. Tests and Changes now
+use job capability version 1; other views retain sync behavior. TypeScript and
+43 Node workflows pass. Eight actual API checks pass; earlier integrated worker
+suite 33 and later four cleanup checks passed. Full combined validation is next
+(expected 636 tests), not yet a pass. Freeze code during it.
+
+No installer rebuilt, new frozen binary validated, project code executed through
+analysis, public hosting, source push, merge or stash operation. Installation
+and clean-PC acceptance remain last. Existing B10/CRC decisions and research
+findings are unchanged. MOONSHOT.md remains unrelated and untracked.
+
+## Current engineering - D-080 integrated, 2026-10-28
+
+D-079 full validation completed: 601 passed, zero skips, one existing warning,
+1324.42 seconds. See ENGINEERING_VALIDATION_D079_2026-10-28.json. Do not rerun it.
+
+D-080 source now mounts authenticated typed read-only analysis jobs: one active,
+two queued, 300-second worker deadline, bounded in-memory results and owned
+process-tree cancellation. Tests recommendation uses real stage/elapsed updates
+and Cancel analysis when capability version 1 is advertised; older installed
+cores retain synchronous behavior. Other views retain their existing sync UI.
+No build, test execution, plugin mutation or history writing is routed through
+the cancellation API. Risk defaults/thresholds/refusals remain unchanged.
+
+Frozen worker dispatch and optional-plugin activation are pinned before work.
+The IDE backend also retains activation across the consented API restart for
+build execution, so pending plugin changes still require an application restart.
+Source/frozen-entry contract tests passed; actual new packaged binary validation
+and installer refresh remain deferred to the final installation batch.
+
+Focused integrated Python suite: 33 passed; after cleanup review, four targeted
+checks passed (including one additional case). TypeScript and all 35 Node
+workflows pass. Full D-080 Maven-inclusive suite is the next validation; do not
+call this release complete from focused checks. There should be 635 tests.
+No new push/merge, research rerun, default changes, languages or stash operations.
+MOONSHOT.md remains unrelated and untracked. Staged integration scripts have
+already been applied; do not run them again.
+
+## Engineering continuation - D-079/D-080, 2026-10-28
+
+D-079 source is local commit a46f222. Its first full-suite invocation left an
+empty log and no live pytest process; it is not a pass. One replacement run is
+active: 601 collected tests, Maven included, verbose saved progress in pointer
+.diagnostics/d079-full-suite-retry.log. Do not start a duplicate. The previous
+591-test result still describes the earlier source checkpoint.
+
+D-080 is in progress, not a completed release. New independent worker modules
+support one active read-only operation, two queued requests, bounded retention,
+owned Windows Job Object termination and deadlines. Sixteen focused process/job
+checks pass, including actual descendants, unrelated-process survival, startup
+cancellation and exact sync/worker JSON on temporary Git fixtures. IDE TypeScript
+compilation and 32 Node workflows pass. The source UI is capability-gated; the
+new routes and frozen-plugin bootstrap are staged for integration after D-079's
+full validation. Do not claim they are mounted or present in the installed app.
+
+Continue from ANALYSIS_JOB_PLAN.md. Staging helpers are in the pointer checkout's
+.diagnostics; inspect before applying, as some helpers assert one-time changes.
+The current API remains synchronous. Installation/hosting remain last. No push,
+merge, research rerun, threshold changes or stash operations were performed.
+MOONSHOT.md remains the owner's separate untracked proposal.
+
+## Current engineering - D-079, 2026-10-28
+
+D-076 is finished and committed in 27d9b43; do not resume or rerun it. Raw results,
+360 source mappings, findings, summary and verifier are preserved. The report's
+section 4.13 records no risk-gated reduction and only three failing evaluation
+commits. Last validated source batch: 591 tests, zero skips; Node 27; viewer 8.
+
+D-079 adds operation-local immutable Git validation reuse and fixes Java live
+risk features using a newer WORKTREE than the selected snapshot. Seventy-two
+focused risk/brake tests passed; ten final scope/snapshot checks passed. Three
+real snapshots retain identical selection JSON with four fewer Git launches each.
+Full new Maven-inclusive suite is running; do not claim it passed yet. See pointer
+.diagnostics/d079-full-suite.log. No default/threshold changes or new dependencies.
+
+Next is bounded per-operation cancellation/progress, not more models/languages.
+Read ANALYSIS_JOB_PLAN.md, including frozen-plugin activation pinning across worker
+restart. Installation remains last. MOONSHOT.md belongs to a separate proposal;
+leave it untracked and do not implement it. No new push/merge; preserve stashes.
+
+
+## Latest continuation - D-076 completed, 2026-10-27
+
+The pilot completed all 360 mappings and four observed-only traces. Read
+experiments/results/partial-feedback-pilot-d076-2026-10-27/FINDINGS.md and summary.json.
+B10/history and combined refused all 108 ordinary evaluation decisions; no
+risk-gated savings. Structural-only reduced 40 of 120 suites and missed 0 of 4 failing outcomes
+across 3 failing commits; recorded savings were 15.32% in evaluation and 7.78%
+including warm-up. This is tiny
+development evidence, not proof of 95% safety or closed-loop ML effectiveness.
+The one 90-second extraction timeout resumed from 329 cached mappings and completed
+without input/source/threshold changes. STOP.json is a retained earlier diagnostic.
+Full source validation: 591 Python tests/zero skips (Maven+Gradle), 27 Node tests,
+TypeScript, 8 viewer checks. See ENGINEERING_VALIDATION_D076_D078_2026-10-27.json.
+Next: measure matched cold/warm analysis and improve existing cache use, then
+bounded analysis jobs/cancellation per ANALYSIS_JOB_PLAN.md. Do not rerun old
+studies or tune this prefix for gains. Installation remains last; no new push/merge.
+
+
+## Active checkpoint - D-076 / D-077, 2026-10-27
+
+D-076 source is local commit 72e6043; protocol v2 is frozen in 1965665.
+Fifteen focused tests pass. The source-mapping pilot stopped at reference index
+329 on its 90-second extraction deadline; 329 valid plans are preserved and no
+outcome evaluation occurred. See STOP.json under
+experiments/results/partial-feedback-pilot-d076-2026-10-27. Let the full suite
+finish, then retry only unfinished work once under the same limit. Do not
+restart from scratch or change fingerprinted Python source during that retry.
+Full suite with Maven/Gradle completed: 591 passed, zero failed/skipped,
+4749.24s; one existing Starlette warning. See
+docs/ENGINEERING_VALIDATION_D076_D078_2026-10-27.json. The one bounded pilot retry
+is now running from the 329 preserved mappings; log d076-pilot-retry.log.
+D-077 IDE source adds static check explanations, evidence-health guidance and
+explicit JSON evidence save, excluding source/raw logs. TypeScript and 27 Node
+tests pass (.diagnostics/d077-node-final.log). Live thresholds are unchanged.
+D-078 adds scripts/Watch-PartialFeedback.ps1 (read-only stage bar; eight offline
+checks passed). Per-operation IDE cancellation remains next; do not claim it is built.
+Installation is deferred to the end. Owner wants to push for a friend to see;
+notify when a validated checkpoint is ready, without assuming push/merge consent.
+No new push/merge; preserve all old stashes. Read the newest notes first.
+
+
+## Owner priorities - engineering follow-up, 2026-10-27
+
+Owner explicitly authorized the proposed engineering improvements: explain test
+purpose/source/selection/results; evidence health and provenance; progress,
+cancellation and checkpoint recovery; diagnostics export; end-to-end project
+workflow acceptance tests. Reuse existing implementations rather than duplicating
+them. Finish the active D-076 bounded research check first. Installation, public
+catalogue delivery and clean-PC testing are deferred to the very end by the
+owner's latest instruction. More languages remain deferred. Source push is
+separate from merge/release; no new push authorization has been given.
+
+
+## Current continuation - D-075, 2026-10-27
+
+D-074 plugin installation is complete: full suite 576 passed, zero skips;
+19 IDE tests; seven actual frozen plugin checks; 1451 packaged hashes verified.
+Installer and D074 friend kit are ready; source commits 70626d8/500c998 remain
+local, no new push/merge, all stashes preserved. Do not rebuild this feature.
+D-075 report corrections and read-only feasibility are complete. Read
+docs/REPORT_REVISION_NOTES_D075.md and docs/PARTIAL_FEEDBACK_FEASIBILITY.md. Four older
+datasets have structural evidence; the nine-project CSVs do not. Three HikariCP
+code-only snapshots mapped exactly. No new selector study has run. Next is a
+bounded protocol-first pilot; reused data is not independent confirmation.
+The owner's technical reviewer is ChatGPT and labels were cross-checked with
+Gemini; do not keep asking for human labels or claim independent validation.
+
+
+## Current override - D-074 completed, 2026-10-27
+
+The frozen desktop plugin-installation fix is complete and validated. Read
+docs/DESKTOP_PLUGIN_INSTALLATION.md and docs/RELEASE_VALIDATION_D074_2026-10-27.json.
+All final tests, bundled hashes and the new installer/friend kit are recorded
+there. Earlier notes calling this feature unimplemented are superseded.
+Source checkpoint 70626d8; no new push/merge; preserve stashes and old studies.
+Next authorized work: correct the report and assess feasibility of a bounded
+partial-feedback/structural-floor follow-up. The latest review makes that study
+conditional on a stronger claim. Public hosting and real clean-PC feedback are
+separate; do not repeat the completed plugin implementation.
+
+
+## Active work - D-074 frozen plugin installation, 2026-10-27
+
+Owner explicitly asks to finish this fix first; do not start research, hosting
+or language work yet. Source is on codex/blueprint-completion, after 1b95d85.
+New desktop_store.py implements offline wheel staging, dependency/tag/RECORD
+checks, isolated child factory validation, atomic per-user activation and
+restart loading/removal. Registry preserves a bundled fallback after a damaged
+optional override. PyPA installer 0.7.0 was installed only in the build venv and
+declared with packaging in desktop/dev extras. Source pip behavior is retained.
+30 manager/install tests, 8 build tests, 18 IDE tests and final 22 focused
+registry/store tests passed. Final frozen rebuild and all seven executable smoke checks passed; 1,451 hashes
+match. Final Maven suite and NSIS installer build/verification remain running. See DESKTOP_PLUGIN_INSTALLATION.
+No new push/merge; all stashes preserved. User's Gemini label cross-check is a
+second AI review. ChatGPT is the user's technical reviewer; review attachment
+efca63b5-725e-4ccb-9907-4b1e6353773d/Pasted text.txt requires later partial-feedback
+protocol/replay and structural ablation. Only discuss that agenda for now.
+
+
+## Active checkpoint - D-072/D-073, 2026-10-27
+
+Continue on codex/blueprint-completion; preserve all stashes. D-071 is local
+commit 8b0d478. The branch contains the reviewed D-072/D-073 source checkpoint; inspect git log for its commit. Full Maven suite
+563 passed, zero skipped; latest TypeScript compile and 18 IDE tests passed.
+Risk thresholds/fallbacks unchanged. Individual recorded checks, clear history
+selection and replay folder browsing fix the owner's demo feedback. See
+docs/BLUEPRINT_COMPLETION.md for exact validation and remaining external gates.
+Final D-072/D-073 installer and friend test kit are built and verified;
+see docs/RELEASE_VALIDATION_D072_D073_2026-10-27.json. Clean-PC acceptance remains pending. Website source and detailed blueprint are ready locally;
+public catalogue/wheel hosting remains unavailable. No new push/merge yet.
+
+
+## Current continuation - 2026-10-27 (supersedes older status)
+
+PR #22 merged as 45821b4 after owner authorization and green checks. D-068 and
+D-070 are already on main. The studies are finished; preserve their reports.
+Work now continues on codex/blueprint-completion. Read
+[the current completion ledger](docs/BLUEPRINT_COMPLETION.md) for remaining work
+and validation, and [the deferred backlog](docs/DEFERRED_FEATURES.md). The owner
+asked to save extra proposals for later, not implement them now. Preserve all
+stashes. Publication/merge-pending notes below are historical, not current.
+
+
 Read this first, then AGENTS.md (rules), docs/ROADMAP.md (status) and
 docs/DECISIONS.md (decision history and tradeoffs).
 Last updated: 2026-10-26 (completed studies and PR #21 integration review).
@@ -386,3 +761,31 @@ The local Maven cache is `C:/Users/hp/.codex/tools/maven-repository`, selected
 with `MAVEN_OPTS=-Dmaven.repo.local=C:/Users/hp/.codex/tools/maven-repository`.
 The passing integration test checks per-test JaCoCo mapping and verifies that
 the expected failing tests are caught after intentionally injecting a regression.
+
+
+## Owner scope update - 2026-10-27
+
+The owner declines independent student graph labelling. Do not keep requesting
+it or treat it as an active owner task. Existing labels remain AI-generated;
+no independent validation or human precision result is claimed. Supervisor
+review is deferred until the owner supplies their next message. The pasted
+supervisor-style assessment is preliminary and has not reviewed the five files.
+Catalogue hosting and frozen optional-plugin installation remain genuine
+distribution work, separate from the bundled Java/Python functionality.
+
+
+## Website design merge - 2026-10-28
+
+The owner approved merging UNIVERSAL-WEBSITE-DESIGN.md into the existing
+website. The four static pages share the new poster/typography/palette system;
+site.js adds accessible navigation, filters and optional reveals. Existing
+plugins.js, catalogue/index.json and original catalogue tests are byte-identical.
+Original eight files are preserved in the checksummed ZIP recorded by
+website/README.md. All 18 website tests pass. Real Chrome checks pass for all
+four pages at 375/768/1440, including filters, menu Escape/focus, offline
+catalogue, no-JS fallback and zero page errors/overflow. All 94 local links
+resolve. Graphify code refresh: 3847 nodes, 9498 edges, 225 communities.
+Proof: .diagnostics/website-redesign-2026-10-28.json. Backend validation was
+not rerun per current instruction; no backend/research/policy changes. No
+commit, push, public deployment or installer rebuild. Local checkout preview
+was served on 127.0.0.1:8772; it is not public hosting.

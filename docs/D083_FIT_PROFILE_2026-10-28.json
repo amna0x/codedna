@@ -1,0 +1,31 @@
+{
+  "scope": "single local engineering profile, reused data; no new accuracy or safety result",
+  "input_sha256": "f2c4ce350b858f2daec1ccc1a3f017ca5c2c95e1ff534720155b12b16414ec7b",
+  "rows": 20206,
+  "commits": 1427,
+  "load_seconds": 0.22280200000022887,
+  "fit_calibrate_audit_seconds": 4.740832899999987,
+  "stages_inclusive": {
+    "model_initialization": {
+      "seconds": 2.8979331999998976,
+      "calls": 1
+    },
+    "training": {
+      "seconds": 0.8951091999997516,
+      "calls": 1
+    },
+    "prediction": {
+      "seconds": 0.8327442999998311,
+      "calls": 358
+    },
+    "calibration_fit": {
+      "seconds": 0.009918400000060501,
+      "calls": 1
+    },
+    "calibration_transform": {
+      "seconds": 0.058424900008503755,
+      "calls": 357
+    }
+  },
+  "note": "Nested stage timings are not additive; cold import is separate from repeated work."
+}

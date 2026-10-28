@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-27",
+  "recorded_at_utc": "2026-10-27T15:48:24.987683+00:00",
+  "scope": "development source validation; no new installer or clean-PC result",
+  "source_head": "de40aa7d2905ee2ac4d204587efc25b5d53ead2e",
+  "backend_source_sha256": "720f88ac68260c9311e3894808c77d66723d7dd5962cf784e1cfbe2bb1d63c56",
+  "full_suite": {
+    "command": ".venv/Scripts/python.exe -m pytest --run-maven -q",
+    "passed": 591,
+    "failed": 0,
+    "skipped": 0,
+    "warnings": 1,
+    "seconds": 4749.24,
+    "maven_and_gradle_included": true,
+    "warning": "existing Starlette/httpx deprecation"
+  },
+  "typescript": {
+    "cwd": "ide",
+    "command": "npm run build --workspace=codedna-extension",
+    "exit_code": 0
+  },
+  "node_tests": {
+    "cwd": "ide",
+    "command": "npm test --workspace=codedna-extension",
+    "passed": 27,
+    "failed": 0,
+    "skipped": 0
+  },
+  "viewer_checks": {
+    "command": "scripts/Test-PartialFeedbackViewer.ps1 -Viewer scripts/Watch-PartialFeedback.ps1",
+    "passed": 8,
+    "fixture": "temporary Git repository",
+    "progress_bytes_preserved": true
+  },
+  "published_log_sha256": {
+    "D076-full-suite-2026-10-27.txt": "d6fbfbe9aaa80253166596c84ba11e1a63bef393f7776ce404ed4e861e0c475e",
+    "D077-node-tests-2026-10-27.txt": "d5d4688a1c4a321b9eabbe2342df88de739d6e755ce3780502533187878b7c2a",
+    "D077-typescript-2026-10-27.txt": "09f0f7bd312ae1f8a9062c6d0b4e3480e49760601506bafeed3a7151fd0e4a0d"
+  },
+  "risk_defaults_changed": false,
+  "new_dependencies": false,
+  "research": "pilot has separate progress/results; full source validation is not a safety/savings result",
+  "limits": [
+    "Full-suite runtime overlapped source mapping and is not a clean performance benchmark.",
+    "UI workflow tests use core-contract fixtures; new installed-app UI is not claimed tested.",
+    "Per-operation analysis cancellation is planned, not implemented.",
+    "Installer, catalogue delivery and clean-PC work remain deferred."
+  ],
+  "published_log_encoding": "UTF-8 with LF line endings, matching committed Git blobs"
+}

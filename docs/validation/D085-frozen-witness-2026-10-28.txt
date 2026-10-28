@@ -1,0 +1,16 @@
+{
+  "scope": "actual frozen D085 executable; isolated synthetic Java, not independent accuracy/clean-PC evidence",
+  "core": "C:\\Users\\hp\\OneDrive\\Documents\\GitHub\\codedna\\build\\desktop-D085-2026-10-28\\core\\dist\\codedna-core\\codedna-core.exe",
+  "core_sha256": "7d6d8aae69406141d9f73d71c45a4a2a241c09bb94be182c784f31786f969b16",
+  "checks": {
+    "moonshot_without_execution_consent_refused": "passed",
+    "default_mcp_tools_unchanged": "passed",
+    "opt_in_frozen_mcp_executes_contained_witness": "passed",
+    "frozen_unicode_observations_use_declared_utf8": "passed",
+    "witness_is_not_a_regression_or_skip_risk_verdict": "passed",
+    "independent_jdk_only_reproducer_matches_frozen_pair": "passed",
+    "original_repository_preserved": "passed",
+    "frozen_timeout_stops_jvm_and_descendant": "passed",
+    "terminating_frozen_parent_stops_jvm_and_descendant": "passed"
+  }
+}

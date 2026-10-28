@@ -580,3 +580,155 @@ returns an explicit full-suite fallback for missing risk capability or a
 mixed-language universe. `brake.check` delegates execution to the existing
 `plugins.languages.run_tests`, preserving consent and combined results.
 The core imports no language-specific package for this behavior.
+
+
+## Blueprint completion repairs (D-071)
+
+`agent.brake.check` refuses a successful verdict if any required test class or
+module is skipped by the build. `test_history.recording` rejects such incomplete
+observations before replacing complete recorded evidence. Real failing test
+results remain recordable, including Maven/Gradle's failure exit code.
+
+`plugins.languages.commit_tests` forwards the shared parse cache when a plugin
+explicitly supports the optional argument. Legacy discovery signatures continue
+to work. Python pytest execution prefers the original project's `.venv`; the
+frozen analysis executable cannot be used as a Python interpreter.
+
+`scripts/pr_demo.py` and the PR-analysis workflow produce a read-only brake plan,
+not a test-run verdict. Website and optional new features remain separately
+tracked in the current completion ledger and deferred backlog.
+
+
+## Extensions and explicit risk evidence (D-072)
+
+The existing PluginsViewWidget is hosted inside a Theia Extensions ViewContainer
+provided by extensions-widget-factory.ts. PluginsViewContribution restores it
+after layout initialization without requesting editor focus. Installed language
+metadata renders before the online catalogue completes. UI installation still
+uses the core; website downloads do not execute local code.
+
+Brake plans expose the any-omitted-failure objective plus the active audit's
+denominator/sample/bound: B10 uses the all-audit-commit Wilson evidence screen;
+CRC uses failing audit commits and its corrected expected-risk quantity. Neither
+is advertised as a future guarantee. No model or stopping rule changed.
+
+
+## Frozen optional plugin store (D-074)
+
+Desktop installation dispatches to plugins/desktop_store.py after the shared
+catalogue/confirmation/checksum validation. A per-user staging directory and
+isolated core subprocess validate the wheel; atomic active.json replacement
+commits the selection. Startup activation precedes CLI imports. Registry lookup
+prefers valid optional copies and keeps bundled discovery separate because
+Python metadata otherwise deduplicates distribution names. Updates/removals
+require restart; bundled app files and risk logic are unchanged. Details and
+release constraints: DESKTOP_PLUGIN_INSTALLATION.md.
+
+
+### Decision inspection and evidence export (D-077)
+
+The IDE uses the existing `/api/tests` response to display statically declared
+checks at the selection's head commit. It rejects mismatched snapshots and
+invalidates pending details when the comparison changes. Check names are
+source metadata, not inferred behavioral guarantees. Source navigation opens
+the working copy; the shown discovery metadata is tied to the recorded SHA.
+
+`decision-evidence.ts` only formats existing core JSON and recovery guidance.
+It performs no risk calculation or test-selection logic. The workspace's save
+dialog writes a user-chosen JSON record through Theia FileService. No automatic
+upload, raw logs, source text, environment capture or new API endpoint is added.
+
+
+### Per-operation Git validation (D-079)
+
+Selection, risk dispatch and brake planning share a nested, bounded validation
+scope. It memoizes only successful repository resolution and exact immutable
+commit-object validation; it does not cache mutable refs, index/worktree reads,
+source trees, outcomes or risk acceptance. Thread ownership, Git environment keys
+and finally-reset prevent reuse across independent requests. Java risk feature
+extraction uses the already-selected immutable comparison, so edits during
+analysis cannot switch its feature snapshot.
+
+
+## Optional analysis workers (D-080)
+
+The local API retains synchronous routes and additionally offers bounded
+read-only jobs. `api.job_routes` applies existing typed models and authorization;
+`api.analysis_jobs` owns the queue and terminal state; `api.owned_process`
+contains each worker before input; `api.analysis_worker` invokes existing core
+functions and emits bounded JSON stages/results. The frontend displays these
+values without moving analysis into TypeScript. API lifespan cleanup closes
+owned workers. Builds/history/plugin changes retain their separate contracts.
+
+Only Tests recommendation currently opts into the job UI, capability-gated for
+older cores. The internal desktop bootstrap pins the parent's active managed
+plugin paths or bundled-fallback error before registry loading. The IDE backend
+retains that snapshot across core restarts for build permission. No ordinary
+analysis restart resume or cross-request model/audit cache is introduced.
+See ANALYSIS_JOB_PLAN.md for measured bounds, tests and packaging limits.
+
+
+D-081 extends the job UI to Changes. Change and impact are sequential so both
+refer to the same immutable snapshot. Canonical-repository navigation keeps
+subfolder workspaces from opening the wrong files; links still open working
+files with that limitation disclosed. API-relative file paths are anchored
+before a worker starts in its trusted core directory. No analysis implementation
+or risk computation moves into TypeScript.
+
+## Optional performance diagnostics and scoped reuse (D-083)
+
+`codedna.performance` owns optional synchronous, thread/process-bound stage
+records. `POST /api/analysis-jobs/{operation}?profile=true` emits measurements
+before its terminal result; polling returns optional metrics. Capability
+`analysis_jobs.timing_version = 1` advertises this extension. Startup measures
+spawn to first worker stage and is separate from core operation time. MCP's
+optional `profile: true` adds `operation_timings` and distinguishes analysis
+from consented test execution. Defaults preserve operation JSON.
+
+`dependency_graph.cache` shares a bounded immutable-blob parse cache only
+inside one operation, partitioned by repository/plugin identity. `models.fit_cache`
+stores only independent fitted model/calibrator copies, with bounded memory,
+TTL, explicit namespace, complete dataset and implementation keys. Live Java
+checks eligibility before reuse and recomputes the audit and stopping decision.
+No history, audit acceptance, verdict, selected tests or mutable refs are reused.
+The CSV snapshot is parsed and fingerprinted from identical bytes. See
+[performance details](PERFORMANCE_ENGINEERING.md) for commands and limits.
+
+## Optional behavioral witness execution (D-085)
+
+`codedna.behavior` validates consent, bounded options, immutable refs and a new
+external export folder, then owns a separate `behavior_worker` process. Reuse
+`api.owned_process.OwnedProcess`, which is stdlib-only and does not import the
+API server. The worker waits for its contained parent's request before plugin
+activation; frozen workers receive the parent's pinned snapshot. Read-only
+analysis jobs gain no execution capability.
+
+The optional language-plugin `find_witness(request)` capability owns language
+syntax, compilation, generation and observations. Java's `witness.py` supports
+one self-contained public static int(int) method; `witness_export.py` creates
+an independent JDK-only reproducer. Structured observations/source hashes cross
+the core boundary; no Java parsing or analysis logic is added to the IDE/core.
+The CLI witness command and opt-in MCP --moonshot expose this experimental
+capability. Default MCP tools and test-brake decisions are unchanged. Controller
+identity/interpretation fields cannot be supplied by a plugin. See
+[behavioral witnesses](BEHAVIORAL_WITNESS.md) for limits and consent.
+
+
+## D085 completed engineering evidence — 2026-10-28
+
+Corrected source 4d35941 passed all 714 Maven-inclusive tests, zero skips/failures.
+Actual frozen executable: 32 passing contracts and 1462 verified bundle files.
+Installer embedded payload and restricted-PATH unpacked smoke passed; local
+friend kit includes demos and manual checklist. No installation/clean-PC claim.
+The unchanged D083 production frontend was reused. Three D085 packaged GUI checks
+pass: isolated launch, bundled language display and tab restoration on restart.
+The full D083 GUI test was not repeated; its earlier evidence remains separate.
+
+The fixed optional Moonshot comparison completed all 48 searches. All 15 emitted
+witnesses independently reproduced using only the JDK. Guided outcomes were
+12 difference / 3 no-difference / 6 inconclusive / 3 unsupported, versus simple
+3 / 12 / 6 / 3. Median whole-call costs were 11.234s / 10.057s. Repeated synthetic
+cases, with boundaries favoring guidance, are not independent real bugs or a
+net-CI speedup. A difference is not necessarily a regression; no witness does
+not validate skipping. The risk policy and original mixed findings are unchanged.
+See the D085 source/frozen/release/pilot evidence JSONs and pilot FINDINGS.md.

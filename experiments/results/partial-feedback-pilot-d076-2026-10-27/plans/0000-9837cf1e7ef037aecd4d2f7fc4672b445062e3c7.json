@@ -1,0 +1,41 @@
+{
+  "binding": {
+    "base": "661a641b320eb2f57e1c17885d1407219b9b00cc",
+    "commit": "9837cf1e7ef037aecd4d2f7fc4672b445062e3c7",
+    "database_sha256": "92a3e45e3065daa08b8668e6e3a523071f73baf7da1830fd9242007d0895501c",
+    "dataset_sha256": "f2c4ce350b858f2daec1ccc1a3f017ca5c2c95e1ff534720155b12b16414ec7b",
+    "protocol_sha256": "654016f72fa199ee6c41d316b5b7daf12594576a988c687ac1b9cf184447e425",
+    "source_sha256": "720f88ac68260c9311e3894808c77d66723d7dd5962cf784e1cfbe2bb1d63c56",
+    "strategy": "all"
+  },
+  "payload": {
+    "analysis_seconds": 5.0778999000031035,
+    "eligible_history": [],
+    "report": {
+      "base_commit": "661a641b320eb2f57e1c17885d1407219b9b00cc",
+      "estimated_time": null,
+      "head_commit": "9837cf1e7ef037aecd4d2f7fc4672b445062e3c7",
+      "policy": {
+        "pinned": [],
+        "source": null
+      },
+      "repository": "C:\\Users\\hp\\OneDrive\\Documents\\GitHub\\codedna\\experiments\\datasets\\raw\\rtp-torrent\\repo\\brettwooldridge@HikariCP",
+      "selected": [
+        {
+          "file": "src/test/java/com/zaxxer/hikari/CreationTest.java",
+          "reasons": [
+            "retest-all"
+          ],
+          "test": "com.zaxxer.hikari.CreationTest"
+        }
+      ],
+      "selected_count": 1,
+      "selection_ratio": 1.0,
+      "skipped": [],
+      "strategy": "all",
+      "total_tests": 1,
+      "warnings": []
+    }
+  },
+  "payload_sha256": "69a2bf7cdb744c380a0dbe943d178fee605dcd3dbbb7b972055b2318b08f1cf6"
+}

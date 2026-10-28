@@ -15,7 +15,10 @@ analysed are reported as not analysed; commands that cannot work at all raise
 
 from __future__ import annotations
 
+from codedna.performance import timed
+
 import time
+from inspect import signature
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -143,6 +146,7 @@ def build_graph(repo_path: str | Path, revision: str, *, include_members: bool =
     return commit_graph(repo, commit, registry=registry, include_members=include_members)
 
 
+@timed('graph')
 def commit_graph(repo: Path, commit: str, *, registry: PluginRegistry,
                  include_members: bool = True, cache: dict | None = None) -> CodeGraph:
     """All installed plugins' graphs of one commit, joined (``union_graphs``).
@@ -214,17 +218,19 @@ def discover_tests(repo_path: str | Path, revision: str = "HEAD", *,
     return commit_tests(repo, commit, registry=registry)
 
 
+@timed('test_discovery')
 def commit_tests(repo: Path, commit: str, *, registry: PluginRegistry,
                  cache: dict | None = None) -> CombinedDiscovery:
-    """Every installed plugin's tests at ``commit``; ``cache`` (parses by blob SHA) goes to Java."""
+    """Every plugin's tests; share parses when its optional cache argument is supported."""
     def discover(plugin: Any):
-        if cache is not None and plugin.name == "java":
+        if cache is not None and "cache" in signature(plugin.discover_tests).parameters:
             return plugin.discover_tests(repo, commit, cache=cache)
         return plugin.discover_tests(repo, commit)
     return CombinedDiscovery(str(repo), commit, {
         plugin.name: discover(plugin) for plugin in installed(registry)})
 
 
+@timed('test_execution')
 def run_tests(repo_path: str | Path, revision: str, output_dir: str | Path, *, allow_build: bool,
               per_test_coverage: bool = False, selected_tests: list[str] | None = None,
               registry: PluginRegistry | None = None,

@@ -40,8 +40,11 @@ paper (docs/DATASET_PLAN.md).
 
 ### 2.2 Features
 
-Each (commit, test class) pair becomes one row with 19 features, computed
-only from information available before the commit (D-023):
+Each (commit, test class) pair in the original structural study becomes a
+row with 19 features (D-023). Change/structural features describe the current
+code change; historical outcome features use stored earlier results, not the
+current result. This is retrospective full-history availability, not yet a
+policy-specific partial-feedback history:
 
 | Group | Features |
 |---|---|
@@ -104,6 +107,27 @@ expected run time. The estimated skip risk of a selection is
   failing-test recall, and commit safety (share of failing commits where
   every failing test was selected).
 
+The primary safety endpoint is **failure-conditional zero-omission safety**.
+For failing test-class set F and selected class set S at a commit:
+
+| Measure | Definition | Interpretation |
+|---|---|---|
+| Zero-omission safety (primary) | failing commits with F contained in S / failing commits | Every recorded failing class was selected |
+| Build escape (secondary) | failing commits with no element of F in S / failing commits | No selected class detects the recorded failure |
+| Missed-test fraction (secondary) | total omitted failing classes / total failing classes | Complement of micro-averaged failing-test recall on the same cohort |
+
+Safety and build escape are undefined when the cohort has no failing commits;
+such projects cannot supply evidence of failure-conditional safety. The test
+unit in these Java datasets is a class, not an individual JUnit method.
+Selecting nine of ten failing classes avoids a build escape but fails the
+zero-omission criterion. Build escape must not be inferred from zero-omission
+safety alone; historical tables that do not contain it do not claim to measure it.
+
+The B10 gate's original audit criterion uses misses over all audit commits;
+failure-conditional CRC uses failing audit commits. Neither denominator should
+be silently substituted for the primary endpoint. Statistical bounds apply
+under their stated assumptions, not as certainty about the next change.
+
 ### 2.6 Fair comparison and uncertainty
 
 A policy that runs more tests usually catches more failures. To separate
@@ -128,6 +152,22 @@ feature datasets. Their exact values and project cohorts are in
 `manifest.json` fingerprints the input reports, exporter and artifacts.
 Raw/calibrated comparisons use common project cohorts. No confidence intervals
 are derived from standard deviations over random seeds.
+
+### 2.8 Operational cost and claim boundary
+
+Historical test-time ratios charge the recorded selected-class durations.
+They are not end-to-end CI speedup or complete deployment costs. Full-suite
+audit collection, mandatory structural/policy tests, repeated executions,
+feature extraction and model/selector overhead must be included or separately
+reported in any new operational comparison. Unmeasured costs are unknown,
+not zero. Post-hoc equal-time matching describes the recorded benchmark;
+it is not a deployable controller with knowledge of future runtimes.
+
+The current contribution is an implemented, inspectable system and its
+retrospective tradeoffs. A stronger claim about closed-loop partial-feedback
+performance requires a separate policy-specific evaluation. A bounded study
+is recommended if input feasibility is established; it is not claimed already
+completed, and the bounded retrospective FYP does not depend on inventing one.
 
 ## 3. Data actually available
 
@@ -440,8 +480,9 @@ commits) B10 missed a failure on 0.43 % of commits (Wilson upper bound
 1.29 %); in the 12 rejected blocks (914 commits) it would have missed 2.74 %
 (upper bound 3.77 %). The cost is that the product saves little time: about
 6 % on wicket-bootstrap and 0–2 % elsewhere, and five of the seven accepted
-blocks come from that one project. A confirmatory run on new RTPTorrent
-projects (D-042) is pending.
+blocks come from that one project. The subsequent nine-project confirmation
+and completed follow-ups are reported in sections 4.11/4.12; this paragraph
+describes the earlier four-project study, not the current completion status.
 
 ### 4.9 Additional validation: a Predictive Test Selection baseline (D-061, exploratory)
 
@@ -574,6 +615,58 @@ reports, with both source versions disclosed; a real-project full-report
 replay was exactly identical. All other new jobs used the optimized code.
 No model, threshold grid, split or success rule was tuned after these results.
 
+### 4.13 Observation-isolated development pilot (D-076)
+
+Before evaluation, protocol v2 was frozen in commit `1965665`. The first 360
+reference commits of the previously inspected HikariCP dataset were replayed:
+240 common full-suite warm-up commits, followed by 120 evaluation commits.
+Each policy saw only its own executed outcomes from earlier commits ancestral
+to the current push base. Complete observed commits alone entered model
+fit/calibration/audit; decision-time feature vectors were frozen before reveal.
+A fixed full audit every tenth evaluation commit replaced reduced execution.
+All 360 code snapshots matched the recorded test universe exactly.
+
+| Policy | Reduced suites | Zero-omission safe failing commits | Missed failing class outcomes | Evaluation recorded test seconds | Recorded seconds with warm-up |
+|---|---:|---:|---:|---:|---:|
+| Full suite | 0/120 | 3/3 | 0/4 | 1050.442 | 2068.276 |
+| Audited B10 history | 0/120 | 3/3 | 0/4 | 1050.442 | 2068.276 |
+| Dependency structure | 40/120 | 3/3 | 0/4 | 889.509 | 1907.343 |
+| B10 plus structural floor | 0/120 | 3/3 | 0/4 | 1050.442 | 2068.276 |
+
+The two risk-gated policies refused all 108 ordinary evaluation decisions;
+12 other decisions were scheduled audits. The first prior candidate audit
+missed six of 60 commits and seven of 11 failing class outcomes (36.36%
+failure recall; 18.19% all-commit miss-rate upper bound). Later refusals also
+included fewer than ten failure-bearing audit commits. The gate therefore
+demonstrated abstention, not useful risk-gated reduction, on this prefix.
+
+Dependency selection saved 15.32% of recorded evaluation test seconds (7.78%
+including warm-up), but only three evaluation commits failed. This establishes
+neither 95% future safety nor comparative superiority. All policies caught the
+four failing class outcomes, including one first-recorded and three recurring
+outcomes; no build escape occurred. These are separate diagnostic endpoints.
+
+Measured structural-analysis function time was 1164.203 seconds over the 120
+evaluation snapshots. Full-suite analysis overhead was not separately timed;
+most mapping overlapped local validation. Worker startup, failed attempts and
+checkpoint I/O are excluded. A net CI speedup or precise matched net slowdown
+cannot be inferred by summing these timings with historical test durations.
+One extraction exceeded the fixed 90-second deadline; a retry reused 329 saved
+mappings and completed under unchanged source, inputs, cohort and thresholds.
+
+The gated policies observed complete outcomes at every commit, so this pilot
+does not establish their selective-learning behavior under feedback starvation.
+Synthetic mutation tests verify observation isolation; structural-only had 40
+partial observations but does not train a history model. This is a development
+implementation/mapping check on inspected data, not independent confirmation.
+The next engineering priority is measured analysis overhead and caching,
+followed by bounded cancellation/progress; no favorable result is assumed.
+
+Source traces, independent accounting checks and refusal counts:
+[D-076 findings](../experiments/results/partial-feedback-pilot-d076-2026-10-27/FINDINGS.md),
+[summary](../experiments/results/partial-feedback-pilot-d076-2026-10-27/summary.json),
+[raw traces](../experiments/results/partial-feedback-pilot-d076-2026-10-27/results.json).
+
 ## 5. Threats to validity
 
 - **Construct.** Results are per test class, not per test method. "Commit
@@ -632,3 +725,21 @@ equal-time comparison. The missing nine-project addendum and existing
 statistical limitations are explicit. Cross-project model transfer remains
 unestablished. The contribution is a working, inspectable brake with honest
 fallbacks and documented limits, not a universal fast or guaranteed selector.
+
+
+## Additional validity limit: feedback available after selection
+
+The retrospective feature builder correctly excludes current/future outcomes.
+It nevertheless uses all stored earlier results. In deployment, a skipped test
+may remain unobserved, so subsequent history features and audit eligibility can
+differ. Existing results describe full-history retrospective replay, not a
+validated closed-loop partial-feedback deployment. Live recording accepts only
+complete full-suite evidence; a passing subset is not a fully passing commit.
+D-076 adds an observation-isolated development pilot (§4.13), but its risk
+policies never reduced a suite. Broader selective-learning performance remains
+unvalidated; the prior full-history studies are not recast as closed-loop evidence.
+
+Safety definitions also differ across prior work: CodeDNA counts a failing
+commit as safe only when no failing test was omitted. Build-escape measures
+count a miss only when no failure was caught. These numbers are not directly
+comparable. See NOVELTY_REVIEW_2026-10-27.md for the source comparison.

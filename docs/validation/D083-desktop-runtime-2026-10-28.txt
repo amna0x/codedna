@@ -1,0 +1,15 @@
+
+> codedna-ide-electron@0.1.0 test:runtime
+> node --test scripts/desktop-runtime.test.cjs
+
+✔ packaged core works even when no Python or CodeDNA is on PATH (1.6037ms)
+✔ explicit external core always takes precedence over the bundle (0.2517ms)
+✔ development retains the normal PATH executable when no bundle exists (0.2405ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 97.8059

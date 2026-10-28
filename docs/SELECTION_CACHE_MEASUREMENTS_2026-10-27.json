@@ -1,0 +1,213 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-27",
+  "scope": "development microbenchmark, not CI wall-clock or selection-safety evidence",
+  "source_head": "697155bc9fb94a7d690f77ae1d633e08d66a68c2",
+  "selection": "same first/middle/last code snapshots chosen for D075 feasibility before this benchmark",
+  "method": "Prepare the cache separately; compare two interleaved uncached and populated-cache calls per strategy/snapshot; operating-system caches are uncontrolled.",
+  "project_builds_executed": false,
+  "other_codedna_study_or_test_running": false,
+  "results": [
+    {
+      "base": "661a641b320eb2f57e1c17885d1407219b9b00cc",
+      "head": "9837cf1e7ef037aecd4d2f7fc4672b445062e3c7",
+      "preparation_seconds": 14.360572800011141,
+      "cache_entries": 25,
+      "output_identical": true,
+      "calls": [
+        {
+          "strategy": "all",
+          "populated_parse_cache": false,
+          "seconds": 10.23358480000752,
+          "output_sha256": "3ab25f46e0835bf61e4ed9ba182a98287da7c3f98c78aee7b4d4060004f74838"
+        },
+        {
+          "strategy": "all",
+          "populated_parse_cache": true,
+          "seconds": 8.493057999992743,
+          "output_sha256": "3ab25f46e0835bf61e4ed9ba182a98287da7c3f98c78aee7b4d4060004f74838"
+        },
+        {
+          "strategy": "dependency",
+          "populated_parse_cache": false,
+          "seconds": 10.153134899999714,
+          "output_sha256": "a54fff011fb01cc1701d09a169a195e0f80f9eb3d29c4f44449911ef6498d6ba"
+        },
+        {
+          "strategy": "dependency",
+          "populated_parse_cache": true,
+          "seconds": 8.130961999995634,
+          "output_sha256": "a54fff011fb01cc1701d09a169a195e0f80f9eb3d29c4f44449911ef6498d6ba"
+        },
+        {
+          "strategy": "dependency",
+          "populated_parse_cache": true,
+          "seconds": 9.418783200002508,
+          "output_sha256": "a54fff011fb01cc1701d09a169a195e0f80f9eb3d29c4f44449911ef6498d6ba"
+        },
+        {
+          "strategy": "dependency",
+          "populated_parse_cache": false,
+          "seconds": 14.848071000014897,
+          "output_sha256": "a54fff011fb01cc1701d09a169a195e0f80f9eb3d29c4f44449911ef6498d6ba"
+        },
+        {
+          "strategy": "all",
+          "populated_parse_cache": true,
+          "seconds": 21.13520130002871,
+          "output_sha256": "3ab25f46e0835bf61e4ed9ba182a98287da7c3f98c78aee7b4d4060004f74838"
+        },
+        {
+          "strategy": "all",
+          "populated_parse_cache": false,
+          "seconds": 14.32233080000151,
+          "output_sha256": "3ab25f46e0835bf61e4ed9ba182a98287da7c3f98c78aee7b4d4060004f74838"
+        }
+      ],
+      "medians": {
+        "all": {
+          "False": 12.277957800004515,
+          "True": 14.814129650010727
+        },
+        "dependency": {
+          "False": 12.500602950007305,
+          "True": 8.774872599999071
+        }
+      }
+    },
+    {
+      "base": "1912587bba3ff0ddecea9110c18150faf4f6c2cf",
+      "head": "2ba53125028f0a36a6cd69ecf380657bff33e228",
+      "preparation_seconds": 56.283582900010515,
+      "cache_entries": 68,
+      "output_identical": true,
+      "calls": [
+        {
+          "strategy": "all",
+          "populated_parse_cache": false,
+          "seconds": 46.2907476000255,
+          "output_sha256": "de4e86464640b7dc8c7b76be4e15e0933669c79131ca3d8e8b88574d09519e46"
+        },
+        {
+          "strategy": "all",
+          "populated_parse_cache": true,
+          "seconds": 49.991557500005,
+          "output_sha256": "de4e86464640b7dc8c7b76be4e15e0933669c79131ca3d8e8b88574d09519e46"
+        },
+        {
+          "strategy": "dependency",
+          "populated_parse_cache": false,
+          "seconds": 52.488978300010785,
+          "output_sha256": "ef15f39de961fd0c14ffb7af9011387752614954bb26c1031c66007fb5a09d8b"
+        },
+        {
+          "strategy": "dependency",
+          "populated_parse_cache": true,
+          "seconds": 29.014051000005566,
+          "output_sha256": "ef15f39de961fd0c14ffb7af9011387752614954bb26c1031c66007fb5a09d8b"
+        },
+        {
+          "strategy": "dependency",
+          "populated_parse_cache": true,
+          "seconds": 20.52923039998859,
+          "output_sha256": "ef15f39de961fd0c14ffb7af9011387752614954bb26c1031c66007fb5a09d8b"
+        },
+        {
+          "strategy": "dependency",
+          "populated_parse_cache": false,
+          "seconds": 34.721760599990375,
+          "output_sha256": "ef15f39de961fd0c14ffb7af9011387752614954bb26c1031c66007fb5a09d8b"
+        },
+        {
+          "strategy": "all",
+          "populated_parse_cache": true,
+          "seconds": 22.69117439998081,
+          "output_sha256": "de4e86464640b7dc8c7b76be4e15e0933669c79131ca3d8e8b88574d09519e46"
+        },
+        {
+          "strategy": "all",
+          "populated_parse_cache": false,
+          "seconds": 23.52232470002491,
+          "output_sha256": "de4e86464640b7dc8c7b76be4e15e0933669c79131ca3d8e8b88574d09519e46"
+        }
+      ],
+      "medians": {
+        "all": {
+          "False": 34.906536150025204,
+          "True": 36.341365949992905
+        },
+        "dependency": {
+          "False": 43.60536945000058,
+          "True": 24.77164069999708
+        }
+      }
+    },
+    {
+      "base": "bc010fba486b27ae3d034cc9701e0c4217457ddb",
+      "head": "9dcb652701663205a18b9b3dc6fe384755210f2c",
+      "preparation_seconds": 19.195412300003227,
+      "cache_entries": 69,
+      "output_identical": true,
+      "calls": [
+        {
+          "strategy": "all",
+          "populated_parse_cache": false,
+          "seconds": 16.34033210002235,
+          "output_sha256": "cc0d1b5b474d80865809fd35fa7e302b27ab6511097891be57e8305bf0b7a1fe"
+        },
+        {
+          "strategy": "all",
+          "populated_parse_cache": true,
+          "seconds": 10.32935709998128,
+          "output_sha256": "cc0d1b5b474d80865809fd35fa7e302b27ab6511097891be57e8305bf0b7a1fe"
+        },
+        {
+          "strategy": "dependency",
+          "populated_parse_cache": false,
+          "seconds": 16.17015300001367,
+          "output_sha256": "97ac16e6a4e5b598d4ff74c45986d2449f7673b1ef4436e6424312b3f611cf4b"
+        },
+        {
+          "strategy": "dependency",
+          "populated_parse_cache": true,
+          "seconds": 16.35741270001745,
+          "output_sha256": "97ac16e6a4e5b598d4ff74c45986d2449f7673b1ef4436e6424312b3f611cf4b"
+        },
+        {
+          "strategy": "dependency",
+          "populated_parse_cache": true,
+          "seconds": 6.401671300001908,
+          "output_sha256": "97ac16e6a4e5b598d4ff74c45986d2449f7673b1ef4436e6424312b3f611cf4b"
+        },
+        {
+          "strategy": "dependency",
+          "populated_parse_cache": false,
+          "seconds": 8.695898200006923,
+          "output_sha256": "97ac16e6a4e5b598d4ff74c45986d2449f7673b1ef4436e6424312b3f611cf4b"
+        },
+        {
+          "strategy": "all",
+          "populated_parse_cache": true,
+          "seconds": 7.036093200003961,
+          "output_sha256": "cc0d1b5b474d80865809fd35fa7e302b27ab6511097891be57e8305bf0b7a1fe"
+        },
+        {
+          "strategy": "all",
+          "populated_parse_cache": false,
+          "seconds": 9.011785000009695,
+          "output_sha256": "cc0d1b5b474d80865809fd35fa7e302b27ab6511097891be57e8305bf0b7a1fe"
+        }
+      ],
+      "medians": {
+        "all": {
+          "False": 12.676058550016023,
+          "True": 8.68272514999262
+        },
+        "dependency": {
+          "False": 12.433025600010296,
+          "True": 11.379542000009678
+        }
+      }
+    }
+  ]
+}

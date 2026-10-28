@@ -1,0 +1,54 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.14, pytest-9.1.1, pluggy-1.7.0 -- C:\Users\hp\OneDrive\Documents\GitHub\codedna\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\hp\OneDrive\Documents\GitHub\codedna
+configfile: pyproject.toml
+plugins: anyio-4.15.1
+collecting ... collected 2 items
+
+backend/tests/test_behavior.py::test_utf8_source_and_runtime_reproduce_across_default_encodings FAILED [ 50%]
+backend/tests/test_behavior.py::test_non_utf8_java_source_is_unsupported_before_execution FAILED [100%]
+
+================================== FAILURES ===================================
+_______ test_utf8_source_and_runtime_reproduce_across_default_encodings _______
+
+repo = <conftest.GitRepo object at 0x0000021FBC91A240>
+tmp_path = WindowsPath('C:/Users/hp/AppData/Local/Temp/pytest-of-hp/pytest-105/test_utf8_source_and_runtime_r0')
+
+    @pytest.mark.maven
+    def test_utf8_source_and_runtime_reproduce_across_default_encodings(repo,tmp_path):
+        shas=versions(repo,'return "\U0001f4a1".getBytes().length + x;','return "\U0001f4a1".length() + x;')
+        output=tmp_path/'out'
+        result=invoke(repo,shas,output,max_inputs=1,reduce_budget=0)
+>       assert result['status']=='difference',result
+E       AssertionError: {'status': 'no_difference_observed', 'observations': [{'phase': 'search', 'input': 0, 'base': {'kind': 'value', 'value': 4}, 'head': {'kind': 'value', 'value': 4}}], 'jvm_runs': 2, 'compilations': 2, ...}
+E       assert 'no_difference_observed' == 'difference'
+E         
+E         - difference
+E         + no_difference_observed
+
+backend\tests\test_behavior.py:260: AssertionError
+__________ test_non_utf8_java_source_is_unsupported_before_execution __________
+
+repo = <conftest.GitRepo object at 0x0000021FBCA172C0>
+tmp_path = WindowsPath('C:/Users/hp/AppData/Local/Temp/pytest-of-hp/pytest-105/test_non_utf8_java_source_is_u0')
+
+    @pytest.mark.maven
+    def test_non_utf8_java_source_is_unsupported_before_execution(repo,tmp_path):
+        shas=versions(repo)
+        repo.write_bytes('src/main/java/example/Fee.java',
+            b'package example; public class Fee { public static int fee(int x) { /* \xff */ return x; } }')
+        head=repo.commit('non-UTF8 input')
+        result=invoke(repo,(shas[0],head),tmp_path/'out',max_inputs=1,reduce_budget=0)
+>       assert result['status']=='unsupported' and 'UTF-8' in result['reason'],result
+E       AssertionError: {'status': 'difference', 'observations': [{'phase': 'search', 'input': 100, 'base': {'kind': 'value', 'value': 1}, 'head': {'kind': 'value', 'value': 100}}, {'phase': 'confirmation', 'input': 100, 'base': {'kind': 'value', 'value': 1}, 'head': {'kind': 'value', 'value': 100}}, {'phase': 'confirmation', 'input': 100, 'base': {'kind': 'value', 'value': 1}, 'head': {'kind': 'value', 'value': 100}}, {'phase': 'confirmation', 'input': 100, 'base': {'kind': 'value', 'value': 1}, 'head': {'kind': 'value', 'value': 100}}, {'phase': 'confirmation', 'input': 100, 'base': {'kind': 'value', 'value': 1}, 'head': {'kind': 'value', 'value': 100}}], 'jvm_runs': 10, 'compilations': 2, ...}
+E       assert ('difference' == 'unsupported'
+E         
+E         - unsupported
+E         + difference)
+
+backend\tests\test_behavior.py:280: AssertionError
+=========================== short test summary info ===========================
+FAILED backend/tests/test_behavior.py::test_utf8_source_and_runtime_reproduce_across_default_encodings
+FAILED backend/tests/test_behavior.py::test_non_utf8_java_source_is_unsupported_before_execution
+============================= 2 failed in 12.48s ==============================

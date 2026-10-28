@@ -3,11 +3,13 @@ import { inject, injectable, postConstruct } from '@theia/core/shared/inversify'
 import { ProgressService } from '@theia/core/lib/common/progress-service';
 import { ReactWidget } from '@theia/core/lib/browser/widgets/react-widget';
 import {
-    AnalyzeReport, ChangedFile, CodeDnaService, DeclarationChange, ImpactReport, ImpactedNode, JavaFileAnalysis
+    AnalysisJob, AnalysisTimingRecord, AnalyzeReport, ChangedFile, CodeDnaService, DeclarationChange, ImpactReport, ImpactedNode, JavaFileAnalysis
 } from '../common/codedna-protocol';
 import { CodeDnaComparison } from './comparison';
 import { CodeDnaWorkspace } from './codedna-workspace';
 import { withProgress } from './progress';
+import { waitForAnalysis } from './analysis-jobs-ui';
+import { AnalysisTimingDetails } from './analysis-timings';
 import {
     breakable, changeLabel, confidenceLabel, fileStatusLabel, friendlyWarning, kindLabel, plural, readableName, simpleName
 } from './plain-language';
@@ -30,6 +32,12 @@ export class ChangeViewWidget extends ReactWidget {
     @inject(ProgressService) protected readonly progress: ProgressService;
 
     protected loading = false;
+    protected generation = 0;
+    protected analysisJob: AnalysisJob | undefined;
+    protected timings: AnalysisTimingRecord[] = [];
+    protected analysisCancelled = false;
+    protected cancelling = false;
+    protected notice: string | undefined;
     protected error: string | undefined;
     protected changes: AnalyzeReport | undefined;
     protected impact: ImpactReport | undefined;
@@ -42,32 +50,93 @@ export class ChangeViewWidget extends ReactWidget {
         this.title.iconClass = 'codicon codicon-git-compare';
         this.title.closable = true;
         this.addClass('codedna-view');
-        this.toDispose.push(this.comparison.onDidChange(() => this.update()));
+        this.toDispose.push(this.comparison.onDidChange(() => this.invalidate()));
+        this.update();
+    }
+
+    protected invalidate(): void {
+        this.timings = [];
+        this.generation++;
+        this.analysisCancelled = true;
+        this.changes = undefined;
+        this.impact = undefined;
+        this.error = undefined;
+        this.notice = undefined;
         this.update();
     }
 
     protected async analyze(): Promise<void> {
-        const repo = await this.workspace.repositoryPath();
-        if (!repo) {
-            this.error = 'Open a folder first.';
-            this.update();
-            return;
-        }
+        if (this.loading) { return; }
+        this.invalidate();
+        const generation = this.generation, { base, head } = this.comparison;
         this.loading = true;
-        this.error = undefined;
+        this.analysisCancelled = false;
+        this.cancelling = false;
+        this.analysisJob = undefined;
         this.update();
+        const current = (): boolean => generation === this.generation && !this.analysisCancelled && !this.isDisposed;
+        const progress = (job: AnalysisJob): void => {
+            this.analysisJob = job;
+            if (job.metrics) {
+                this.timings = [...this.timings.filter(item => item.id !== job.id),
+                    { id: job.id, operation: job.operation, metrics: job.metrics }];
+            }
+            this.update();
+        };
         try {
-            const { base, head } = this.comparison;
-            const [changes, impact] = await withProgress(this.progress, 'CodeDNA: analysing the change', () => Promise.all([
-                this.codedna.analyze(repo, base, head),
-                this.codedna.impact(repo, base, head)
-            ]));
+            const repo = await this.workspace.repositoryPath();
+            if (!repo) { throw new Error('Open a folder first.'); }
+            if (!current()) { return; }
+            const supportsJobs = this.codedna.analysisJobs && await this.codedna.analysisJobs();
+            if (!current()) { return; }
+            const changes = supportsJobs
+                ? await waitForAnalysis<AnalyzeReport>(this.codedna, 'analyze', { repo, base, head, level: 'method' }, current, progress)
+                : await withProgress(this.progress, 'CodeDNA: analysing the change', () => this.codedna.analyze(repo, base, head));
+            if (!current() || !changes) {
+                if (generation === this.generation) { this.notice = 'Analysis cancelled. No tests were executed.'; }
+                return;
+            }
+            // Reuse the actual immutable analysis comparison, including a
+            // WORKTREE snapshot, rather than capturing later working edits.
+            const impact = supportsJobs
+                ? await waitForAnalysis<ImpactReport>(this.codedna, 'impact', {
+                    repo, base: changes.base_commit, head: changes.head_commit
+                }, current, progress)
+                : await withProgress(this.progress, 'CodeDNA: checking impact',
+                    () => this.codedna.impact(repo, changes.base_commit, changes.head_commit));
+            if (!current() || !impact) {
+                if (generation === this.generation) { this.notice = 'Analysis cancelled. No tests were executed.'; }
+                return;
+            }
             this.changes = changes;
             this.impact = impact;
         } catch (error) {
-            this.error = error instanceof Error ? error.message : String(error);
+            if (generation === this.generation) {
+                this.error = error instanceof Error ? error.message : String(error);
+            }
         } finally {
             this.loading = false;
+            this.analysisJob = undefined;
+            this.cancelling = false;
+            this.update();
+        }
+    }
+
+    protected async cancelAnalysis(): Promise<void> {
+        const job = this.analysisJob, generation = this.generation;
+        if (!job || this.cancelling || !['queued', 'running'].includes(job.state)) { return; }
+        this.cancelling = true;
+        this.analysisCancelled = true;
+        this.update();
+        try {
+            const result = await this.codedna.cancelAnalysis(job.id);
+            if (generation === this.generation && this.analysisJob?.id === job.id) { this.analysisJob = result; }
+        } catch (error) {
+            if (generation === this.generation) {
+                this.error = `Could not confirm cancellation: ${error instanceof Error ? error.message : String(error)}`;
+            }
+        } finally {
+            if (generation === this.generation) { this.cancelling = false; }
             this.update();
         }
     }
@@ -84,9 +153,31 @@ export class ChangeViewWidget extends ReactWidget {
                     {this.loading ? <><Spinner /> Looking at your changes…</> : 'Show changes'}
                 </button>
             </form>
+            {this.loading && this.analysisJob && <div className='cd-notice' role='status' aria-live='polite'>
+                <span>{this.analysisJob.stage} · {Math.floor(this.analysisJob.elapsed_seconds)} seconds</span>
+                {['queued', 'running'].includes(this.analysisJob.state) && <button className='cd-button' type='button'
+                    disabled={this.cancelling} onClick={() => this.cancelAnalysis()}>
+                    {this.cancelling ? 'Stopping analysis…' : 'Cancel analysis'}
+                </button>}
+            </div>}
+            {this.notice && <p className='cd-notice' role='status'>{this.notice}</p>}
+            <AnalysisTimingDetails reports={this.timings} title='Change and impact analysis timing' />
             {this.error && <ErrorNotice message={this.error} />}
             {this.changes ? this.renderResults(this.changes) : !this.loading && !this.error && <FirstRun action='Show changes' />}
         </div>;
+    }
+
+    protected async openResultFile(path: string, line?: number): Promise<void> {
+        const report = this.changes;
+        if (!report) { return; }
+        try {
+            await this.workspace.openRepositoryFile(report.repository, path, line);
+        } catch (error) {
+            if (this.changes === report) {
+                this.error = `Could not open the working file: ${error instanceof Error ? error.message : String(error)}`;
+                this.update();
+            }
+        }
     }
 
     protected renderResults(changes: AnalyzeReport): React.ReactNode {
@@ -96,12 +187,14 @@ export class ChangeViewWidget extends ReactWidget {
         const notes = unique([...changes.warnings, ...(this.impact?.warnings ?? [])]
             .map(friendlyWarning).filter((w): w is string => !!w));
         return <div className='cd-results'>
+            <p className='cd-meta'>Compared snapshots {changes.base_commit.slice(0, 12)} and {changes.head_commit.slice(0, 12)}.
+                File links open current working files; line numbers may differ.</p>
             <p className='cd-lede'>
                 {changes.changed_files.length === 0
                     ? 'No differences between these commits.'
                     : <>{plural(changes.changed_files.length, 'file', 'files')} changed, touching {plural(codeChanges.length, 'part', 'parts')} of
                         your code. {impacted.length === 0
-                            ? 'Nothing else depends on it.'
+                            ? 'No further impacts were identified.'
                             : <>{plural(impacted.length, 'other class', 'other classes')} might be affected.</>}</>}
             </p>
             {notes.length > 0 && <div className='cd-notice'>
@@ -150,8 +243,8 @@ export class ChangeViewWidget extends ReactWidget {
         const label = changeLabel(d.change, d.code_changed === false);
         const removed = d.change === 'deleted';
         return <button className='cd-row' key={d.id} disabled={removed}
-            title={removed ? `${d.id} (removed)` : `Open at line ${line} · ${d.id}`}
-            onClick={() => this.workspace.openFile(file.path, line)}>
+            title={removed ? `${d.id} (removed)` : `Open working file at line ${line} · ${d.id}`}
+            onClick={() => this.openResultFile(file.path, line)}>
             <span className='cd-code'>{breakable(readableName(d.id))}</span>
             <span className='cd-row-meta'>
                 <Chip tone={label.tone}>{label.text}</Chip>
@@ -169,7 +262,7 @@ export class ChangeViewWidget extends ReactWidget {
                 ? `Uses ${simpleName(first.depends_on)}, which changed.`
                 : `Uses ${simpleName(first.depends_on)}, which depends on ${simpleName(node.seed)}, which changed.`;
         return <button className='cd-row' key={node.node} title={`${node.node.replace('type:', '')} · ${confidence.hint}`}
-            onClick={() => node.file && this.workspace.openFile(node.file)}>
+            onClick={() => node.file && this.openResultFile(node.file)}>
             <span className='cd-code'>{simpleName(node.node)}{node.role === 'test' ? <span className='cd-meta'> · test</span> : ''}</span>
             <span className='cd-row-meta'>
                 <Chip tone={confidence.tone} title={confidence.hint}>{confidence.text}</Chip>

@@ -1,0 +1,12 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.14, pytest-9.1.1, pluggy-1.7.0 -- C:\Users\hp\OneDrive\Documents\GitHub\codedna\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\hp\OneDrive\Documents\GitHub\codedna
+configfile: pyproject.toml
+plugins: anyio-4.15.1
+collecting ... collected 2 items
+
+backend/tests/test_behavior_mcp.py::test_uncertain_witness_cleanup_blocks_project_execution_but_allows_planning PASSED [ 50%]
+backend/tests/test_behavior_mcp.py::test_default_tools_stay_unchanged_and_opt_in_needs_build_consent PASSED [100%]
+
+============================== 2 passed in 9.26s ==============================

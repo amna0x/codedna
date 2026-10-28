@@ -1,0 +1,12 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.14, pytest-9.1.1, pluggy-1.7.0 -- C:\Users\hp\OneDrive\Documents\GitHub\codedna\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\hp\OneDrive\Documents\GitHub\codedna
+configfile: pyproject.toml
+plugins: anyio-4.15.1
+collecting ... collected 2 items
+
+backend/tests/test_behavior.py::test_utf8_source_and_runtime_reproduce_across_default_encodings PASSED [ 50%]
+backend/tests/test_behavior.py::test_non_utf8_java_source_is_unsupported_before_execution PASSED [100%]
+
+============================= 2 passed in 13.08s ==============================

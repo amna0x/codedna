@@ -1,0 +1,33 @@
+name: CodeDNA PR analysis demo
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install analysis core and existing language plugins
+        run: python -m pip install -e ".[ml]" -e plugins/codedna-java -e plugins/codedna-python
+      - name: Produce analysis only (no project tests executed)
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: python scripts/pr_demo.py --base "$BASE_SHA" --head "$HEAD_SHA" --out pr-analysis
+      - uses: actions/upload-artifact@v4
+        with:
+          name: codedna-pr-analysis
+          path: pr-analysis/
+          retention-days: 14
+      - name: Show analysis in the job summary
+        run: cat pr-analysis/summary.md >> "$GITHUB_STEP_SUMMARY"

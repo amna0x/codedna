@@ -1,0 +1,64 @@
+{
+  "date": "2026-10-28",
+  "source_checkpoint": "450e6adf59d449eaf73e809b420fec5445101465",
+  "scope": "actual isolated frozen core; not a rebuilt installer, installed IDE or clean-PC acceptance",
+  "core": "C:\\Users\\hp\\OneDrive\\Documents\\GitHub\\codedna\\build\\desktop-D082-2026-10-28\\core\\dist\\codedna-core\\codedna-core.exe",
+  "core_sha256": "7401504f11cbb0d4dbd6aa2c42bc8795d8255aa7baed68a1ec8e8fcda342307d",
+  "checks": {
+    "plugins": {
+      "scope": "production frozen core, restricted PATH, isolated per-user store; not clean-PC acceptance",
+      "checks": {
+        "install_and_cold_restart": "passed",
+        "damaged_optional_uses_bundled_fallback": "passed",
+        "broken_update_preserves_working_version": "passed",
+        "missing_dependency_preserves_working_version": "passed",
+        "checksum_refusal": "passed",
+        "remove_and_restore_bundled_python": "passed",
+        "bundled_removal_refused": "passed"
+      },
+      "bundle_files_verified": 1456
+    },
+    "jobs": {
+      "scope": "actual frozen executable, isolated offline fixtures; not clean-PC/installed IDE acceptance",
+      "core": "C:\\Users\\hp\\OneDrive\\Documents\\GitHub\\codedna\\build\\desktop-D082-2026-10-28\\core\\dist\\codedna-core\\codedna-core.exe",
+      "checks": {
+        "worker_and_descendant_cancelled": "passed",
+        "unrelated_process_survived": "passed",
+        "analysis_recovers_after_cancel": "passed",
+        "replacement_worker_keeps_parent_plugin": "passed",
+        "consented_api_restart_keeps_plugin_snapshot": "passed",
+        "application_restart_activates_pending_update": "passed",
+        "analysis_preserves_project_and_history": "passed"
+      },
+      "cancellation_confirmed_seconds": 0.016
+    },
+    "brake": {
+      "scope": "actual frozen MCP and real Maven, isolated synthetic history; engineering evidence only",
+      "core": "C:\\Users\\hp\\OneDrive\\Documents\\GitHub\\codedna\\build\\desktop-D082-2026-10-28\\core\\dist\\codedna-core\\codedna-core.exe",
+      "checks": {
+        "cold_history_requires_full_suite": "passed",
+        "build_consent_enforced": "passed",
+        "crc_plan_with_synthetic_history": "passed",
+        "real_failing_required_tests_block": "passed",
+        "real_passing_required_tests_pass": "passed",
+        "real_skipped_required_test_is_incomplete": "passed"
+      },
+      "verdicts": {
+        "breaking": "blocked",
+        "harmless": "passed",
+        "skipped": "incomplete"
+      }
+    }
+  },
+  "logs": {
+    "docs/validation/D082-frozen-plugins-2026-10-28.txt": "59da405d3fd35d1b6d2b9cf08b0e154c9c2700e7f22e2fc29f6af7e54aba0491",
+    "docs/validation/D082-frozen-jobs-2026-10-28.txt": "931d68e8b5dfd0d8547262d0357609201b57b044997c59c7bc2076e0c2985232",
+    "docs/validation/D082-frozen-brake-2026-10-28.txt": "907dc394626e98f484f5b1c4412fbd8d3cdd09b1d49a6625b1287bea40abbe9e"
+  },
+  "prior_source_validation": {
+    "passed": 636,
+    "skipped": 0,
+    "node_passed": 43,
+    "typescript": "passed"
+  }
+}

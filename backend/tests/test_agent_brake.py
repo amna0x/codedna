@@ -83,7 +83,8 @@ def test_build_errors_and_all_skipped_runs_are_incomplete(project):
 
     outcomes(**{"a.ATest": "passed", "a.BTest": "skipped"})
     some = brake.check(repo.path, maven_command=FAKE, allow_build=True)
-    assert some["verdict"] == "passed" and some["skipped_by_build"] == ["a.BTest"]
+    assert some["verdict"] == "incomplete" and some["skipped_by_build"] == ["a.BTest"]
+    assert "remain unverified" in some["message"]
 
 
 def test_check_needs_explicit_build_consent(project):
@@ -223,6 +224,12 @@ def test_brake_plans_part_of_the_suite_on_validated_history(validated, method):
     planned = brake.plan(repo.path, base=base, head=head, method=method)
     assert planned["risk"]["status"] == "validated_history", planned["risk"]
     assert planned["risk"]["method"] == method
+    assert planned["risk"]["objective"] == "omit_any_failing_test"
+    assert planned["risk"]["audit"]["future_guarantee"] is False
+    assert planned["risk"]["audit"]["sample_size"] > 0
+    assert planned["risk"]["audit"]["denominator"] == (
+        "failing_audit_commits" if method == "crc" else "all_audit_commits")
+    assert "not a guarantee" in planned["risk"]["note"]
     assert planned["must_run"] == ["a.CoreTest"] and planned["skipped"] == ["a.OtherTest"]
     assert planned["summary"].startswith("Run 1 of 2 test classes")
     if method == "crc":
@@ -253,3 +260,11 @@ def test_mcp_plan_accepts_the_conformal_method(validated):
     assert risk["method"] == "crc" and risk["conformal"]["threshold"] is not None
     bad = rpc(server, "tools/call", {"name": "codedna_plan_tests", "arguments": {"method": "x"}})
     assert bad["result"]["isError"] is True
+
+
+def test_unvalidated_brake_has_no_invented_audit(project):
+    repo, _ = project
+    risk = brake.plan(repo.path)["risk"]
+    assert risk["audit"] is None
+    assert risk["estimated_skip_risk"] is None
+    assert risk["objective"] == "omit_any_failing_test"

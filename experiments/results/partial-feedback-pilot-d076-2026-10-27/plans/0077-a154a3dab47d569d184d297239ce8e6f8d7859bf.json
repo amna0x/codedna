@@ -1,0 +1,123 @@
+{
+  "binding": {
+    "base": "8965325a272b4dfa1b08acd05cb238109631e13b",
+    "commit": "a154a3dab47d569d184d297239ce8e6f8d7859bf",
+    "database_sha256": "92a3e45e3065daa08b8668e6e3a523071f73baf7da1830fd9242007d0895501c",
+    "dataset_sha256": "f2c4ce350b858f2daec1ccc1a3f017ca5c2c95e1ff534720155b12b16414ec7b",
+    "protocol_sha256": "654016f72fa199ee6c41d316b5b7daf12594576a988c687ac1b9cf184447e425",
+    "source_sha256": "720f88ac68260c9311e3894808c77d66723d7dd5962cf784e1cfbe2bb1d63c56",
+    "strategy": "all"
+  },
+  "payload": {
+    "analysis_seconds": 9.091934299998684,
+    "eligible_history": [
+      "043d3d987e5381a6af8a10744e8223ee03f76ed6",
+      "0704aa0e01abf97c0c24a87b1193d5bbbf9c57b4",
+      "087ff88dc82e2e7d90f0d2ab2a5e05d38b8aa199",
+      "118e75792db890141691b847e605599795ed7575",
+      "12cc8165ef00040faa7333306f7f723c65d0329c",
+      "1928dca409af72ff3305437ea8b848c338b05f7a",
+      "199cd2b835ef517cefa4f0074aa72e69087b5e1f",
+      "1aacae6a3ceb05f057e2a1bad89a53eee80baf48",
+      "1f013c3f09cfd38cb1c171ace062a27d2ba58073",
+      "1f5ab6c149667ee026e3793ecfb215775c7913b4",
+      "272dc01c06d3211494c9c4a4efc10bcca13f9920",
+      "28993fd4395f537a6552a9791b79313b007dd595",
+      "28cbc5048f9f0868038a3afe73cb103c5d3bcea8",
+      "2db908d17757d413927669eb010ac9a60e71c7db",
+      "30d8fb41b6a68d7b28da86699b7504ee79aa4dd8",
+      "315d09d62fde456fc05f861408e439bc21fb1f75",
+      "3200c5101a8f046eaf951f0876f6fbdb7190ce07",
+      "33093708e01f4e30e3a5079c8cc4ab3e2f9d7978",
+      "3dadc314deded3c1b2c6ed4ffb9c41362b7ecf47",
+      "4bc66560b1832a5ebccbfeee504f1b1285b67c33",
+      "51fce05ffc79c8f0cb116bdf7a57ce7e07a46b4c",
+      "52dec2f2f5a8ecc56eaf783fc3d8ce0b7e910a21",
+      "53376d601e6d48318b93a7f7a137032e26a2951c",
+      "560f6d4fd0f6e02964ffde1eae33cdc3480cfed7",
+      "5e60b6dbd7c19490a5cb82a4207de2847d4acedd",
+      "5fc3935cd30d1b4574b623b8537fdb3268c4d66a",
+      "6229c5d4141b0784920b8e863322753099af3259",
+      "63d67dfa1995b51ffa10fee42e2dc9df5694febb",
+      "6584476e6a34ec075eff8debc3e4afa55c77722b",
+      "6d69adedf78ef2a9ac89ad88b50cd53a370a9f37",
+      "6fc5f0f43b3f37d02e2711c08ac6048c997930fc",
+      "704703b9331a763142f7c1492f5ee161375ac1ec",
+      "718b65bd2a45a6b88810a08433b74733226eda48",
+      "7233f21a1c7c910aa6d1c0a01235667ba5f34de9",
+      "762392ca280cb93c6aae1abcfd2e24a64ec36144",
+      "7644159eb19ef335ec14578af2a825c1d4c651a0",
+      "7b4d2f74eaf6d1110d1ab8441ee5fa8c18765512",
+      "7c8d8d071e896fd317872642de16c197c6bfae30",
+      "7e17dc3d9e0884b9d96bbd7c0e4358d1295c03fa",
+      "81e4e8ffb3814d34c268143d8da2068579c92315",
+      "831c1b8f5d580fc8cf4d58cc81da64ca32482326",
+      "837c4bdb559a95264d0029b2aac0b6ffda8b50ce",
+      "847980eb1f7beedc5aa800646723a4d699c0e6e2",
+      "8965325a272b4dfa1b08acd05cb238109631e13b",
+      "8a3643d63482e733109caed3b6097641147e7879",
+      "8fcbc29ce9ea75de51de55144d3cc1201a01b762",
+      "97f5b160f53110ceb6ea59d87919a0a76a90b032",
+      "9837cf1e7ef037aecd4d2f7fc4672b445062e3c7",
+      "99a3416bd3a7c7c3ff7972353e1ca537380094e9",
+      "a2485dfa26f50ecaee7dfcdf7d1fe413fe9b42dd",
+      "a267e0c683cad5d7c3584596d8afc8abf2fd7e5f",
+      "a70c02b2f40f239008e0785e92de2dd9749b8786",
+      "ab0dc7e0468a25d404975f1164e8aaf7305d4663",
+      "abadd6723a242c4ac3091322078981a295f4372c",
+      "ac826dffd0b66e8cdba0f2a6e239d54061a69653",
+      "acbd0ab917aa75d4cee10ce7ecd8a6e83b6afe9b",
+      "b0472650fe2696fbb1ee0584189d1aefc5787186",
+      "b0b95e40acd3b0c10543c315fdb33aaa71507a0b",
+      "b180a60e90a66eb2fb9e656bf21ff16cff0ddfcb",
+      "b24b5b351cd1d44dbf81941996bcff8f3efe45b8",
+      "b905393bb75bab3f2dc53268e30a7bb170d0f7be",
+      "bb33e1f4fea7c7546fa077091a45677940d15f6e",
+      "bf2421fdc79980d69c9a1732a8fee98202b28851",
+      "bf71583afcf77794d84d78f5d64e3e4e6692e1fc",
+      "c28f34b2d36b3adcca1025cd9ef6a72ced1aa6b6",
+      "c2e939f345795398e2269905585f27e0515eda55",
+      "c94ab4576c5296bf7ecd8a43b6dd9d3397bfb928",
+      "cf1f1286b06e83b9d29e60cf0253123566d12d8b",
+      "d20695c2dafbdc08ecfd1d6ea2459f31d9c76f05",
+      "da4e539d8c7f1a612460298d543aac9bf96a0a61",
+      "de886b3060970fc47aba7e8e5bbc2d1a1956cf3e",
+      "e12d84ed8294394c0400baaf4e878ad3fd9f28fa",
+      "e1abe3bbf79f3cbb57fefbd86ab1e139bea01037",
+      "fbb3e88788e4da3406659136bc1453314e2da2ae"
+    ],
+    "report": {
+      "base_commit": "8965325a272b4dfa1b08acd05cb238109631e13b",
+      "estimated_time": null,
+      "head_commit": "a154a3dab47d569d184d297239ce8e6f8d7859bf",
+      "policy": {
+        "pinned": [],
+        "source": null
+      },
+      "repository": "C:\\Users\\hp\\OneDrive\\Documents\\GitHub\\codedna\\experiments\\datasets\\raw\\rtp-torrent\\repo\\brettwooldridge@HikariCP",
+      "selected": [
+        {
+          "file": "src/test/java/com/zaxxer/hikari/CreationTest.java",
+          "reasons": [
+            "retest-all"
+          ],
+          "test": "com.zaxxer.hikari.CreationTest"
+        },
+        {
+          "file": "src/test/java/com/zaxxer/hikari/ExceptionTest.java",
+          "reasons": [
+            "retest-all"
+          ],
+          "test": "com.zaxxer.hikari.ExceptionTest"
+        }
+      ],
+      "selected_count": 2,
+      "selection_ratio": 1.0,
+      "skipped": [],
+      "strategy": "all",
+      "total_tests": 2,
+      "warnings": []
+    }
+  },
+  "payload_sha256": "ef79d9ece87aa0d2fdd9b3bbd4491ff4d65f58562fd31b350f1a7a1915b2a20c"
+}

@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "scope": "prespecified synthetic engineering fixtures, deliberately illustrative; not independent real-world research accuracy",
+  "max_inputs": 8,
+  "reduce_budget": 4,
+  "timeout_seconds": 30,
+  "seeds": [0, 7, 13],
+  "generations": ["guided", "simple"],
+  "cases": [
+    {
+      "id": "arithmetic_change",
+      "interpretation": "Unequal arithmetic is observable; no expected version is selected by the tool.",
+      "base_body": "return x+1;",
+      "head_body": "return x+2;"
+    },
+    {
+      "id": "positive_boundary",
+      "interpretation": "Designed off-by-one boundary illustration. Deliberately favors literal guidance; not representative sampling.",
+      "base_body": "return x >= 100 ? 1 : 0;",
+      "head_body": "return x >= 101 ? 1 : 0;"
+    },
+    {
+      "id": "negative_boundary",
+      "interpretation": "Designed negative off-by-one boundary illustration, not an independent bug.",
+      "base_body": "return x <= -100 ? 1 : 0;",
+      "head_body": "return x <= -101 ? 1 : 0;"
+    },
+    {
+      "id": "comment_only",
+      "interpretation": "Equal behavior on tested inputs is not proof of program equivalence.",
+      "base_body": "return x*x;",
+      "head_body": "/* same intended behavior */ return x*x;"
+    },
+    {
+      "id": "intended_shipping_change",
+      "interpretation": "Shipping threshold intentionally changes from 5000 to 6000. A found difference must not be called a regression automatically.",
+      "base_body": "return x < 5000 ? 500 : 0;",
+      "head_body": "return x < 6000 ? 500 : 0;"
+    },
+    {
+      "id": "exception",
+      "interpretation": "Exception behavior is outside this first normal-int-return pilot and must be inconclusive.",
+      "base_body": "throw new IllegalArgumentException(\"fixture\");",
+      "head_body": "/* same exception */ throw new IllegalArgumentException(\"fixture\");"
+    },
+    {
+      "id": "unstable_state",
+      "interpretation": "A per-version counter makes repeated fresh JVM observations disagree; confirmation must refuse it.",
+      "base_body": "try { java.nio.file.Path p=java.nio.file.Path.of(\"counter\"); int n=java.nio.file.Files.exists(p)?Integer.parseInt(java.nio.file.Files.readString(p)):0; java.nio.file.Files.writeString(p,Integer.toString(n+1)); return n; } catch(Exception e) { throw new RuntimeException(e); }",
+      "head_body": "try { java.nio.file.Path p=java.nio.file.Path.of(\"counter\"); int n=java.nio.file.Files.exists(p)?Integer.parseInt(java.nio.file.Files.readString(p)):0; java.nio.file.Files.writeString(p,Integer.toString(n+1)); return n+1; } catch(Exception e) { throw new RuntimeException(e); }"
+    },
+    {
+      "id": "external_dependency",
+      "interpretation": "Dependencies outside the selected self-contained file are unsupported; no project build is inferred.",
+      "base_body": "return Missing.apply(x);",
+      "head_body": "return Missing.apply(x)+1;"
+    }
+  ]
+}

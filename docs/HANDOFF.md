@@ -1,5 +1,293 @@
 # CodeDNA — full handoff blueprint (2026-10-26)
 
+## D-085 source, pilot, executable and installer verified; friend kit prepared — 2026-10-28
+
+Corrected source 4d359419ad68874c374a45d83732845327aeed41 passed the complete
+Maven-inclusive suite: 714 passed, zero failures/skips, one existing warning,
+2300.22s. See ENGINEERING_VALIDATION_D085_2026-10-28.json and hashed logs.
+The earlier 711-test invocation on bd8c6d8 was deliberately interrupted around
+12 percent for JDK17 Cp1252/UTF8 correction; never count it as a pass.
+
+Implemented optional Java witness CLI and --moonshot --allow-build --repo MCP
+capability. Self-contained public static int(int), bounded guided/simple inputs,
+fresh JVM confirmation, reduction, independent JDK-only source reproducer,
+explicit UTF-8 source/runtime assumptions, actual timeout/Ctrl+C descendant
+cleanup. Unconfirmed cleanup blocks later witness/MCP checking, while planning
+stays available. Base is not an oracle; no witness is not equivalence/skip-risk
+validation. Existing test/risk policy remains intact. D084 demo /target/ ignore
+also passed its Git regression and all four demo checks with real Maven.
+
+The fixed engineering comparison COMPLETED all 48 searches; all 15 emitted
+reproducers independently reproduced. Eight illustrative synthetic cases, three
+seeds/mode, not independent projects/bugs. Guided: 12 difference, 3 no-difference,
+6 inconclusive, 3 unsupported; simple: 3/12/6/3 respectively. Median whole-call
+costs 11.234s guided / 10.057s simple: no speedup claim. Boundary cases were
+constructed to favor guidance. See experiments/results/moonshot-engineering-pilot-d085-2026-10-28/FINDINGS.md
+and MOONSHOT_ENGINEERING_PILOT_D085_2026-10-28.json. All report/export hashes checked.
+Do not rerun/retune this pilot or old D076; no new accuracy/novelty confirmation.
+
+The isolated D085 core build completed. All 32 actual executable checks pass:
+seven plugin, eight worker/restart, eight real-Maven brake and nine witness checks.
+All 1462 bundle files were hash-verified. See
+FROZEN_CORE_VALIDATION_D085_2026-10-28.json and its hashed logs. Failed required
+tests block, passing required tests pass, skipped required tests remain incomplete;
+model reuse still performs a fresh audit. Optional witness reproduction, UTF-8,
+timeout and parent-termination descendant cleanup pass in the actual executable.
+
+D085 installer packaging completed. The actual embedded core was extracted;
+all 1462 file hashes matched. Restricted-PATH unpacked smoke passed with no
+external Python and both bundled languages. Three new packaged GUI checks pass:
+isolated launch, Java/Python display and Language plugins restored on restart.
+The unchanged D083 frontend was reused; its full 12-flow GUI test was not repeated.
+Both owned D085 windows were closed. No app was installed.
+See RELEASE_VALIDATION_D085_2026-10-28.json for hashes, logs and scope.
+
+Installer: build/desktop-D085-2026-10-28/installer/CodeDNA IDE D085 0.1.0 Setup.exe
+SHA-256: c0ad4d0fc2485b3b3763876c81d7a951bcee643980f06f9a0bdc67d53744ab0b
+Unsigned, 317705578 bytes. Local friend kit prepared and hash/ZIP
+verified: build/desktop-D085-2026-10-28/CodeDNA-D085-Friend-Kit.zip.
+Includes a two-commit Java brake demo, optional witness demo and manual checklist.
+Prepared is not sent/installed/clean-PC verified. D083 remains preserved.
+
+NEXT: friend-PC/manual acceptance and official catalogue hosting remain external
+release gates. Research performance follow-up remains protocol-first and not run;
+the completed synthetic pilot does not replace independent real-change evidence.
+No research claim was strengthened, no new language, rename, push or merge.
+
+Stable D083 evidence is below. Preserve both stashes, unrelated website changes,
+untracked MOONSHOT.md and all original research outputs. No new push/merge/public
+hosting. Official catalogue was rechecked and still returns 404; read-only log
+pointer .diagnostics/d085-live-catalogue.log. No additional language plugin.
+
+## D-083 desktop candidate validated — 2026-10-28
+
+Current stable source: 1a45664. Full Maven-inclusive suite 664/zero skips,
+TypeScript, 48 UI tests and three runtime checks pass. Actual updated frozen
+core: 23 checks pass; 1458 manifest files verified. Theia production compiled;
+the isolated NSIS installer built after one retained failed packaging attempt.
+Its actual embedded core was extracted and all 1458 hashes matched.
+See RELEASE_VALIDATION_D083_2026-10-28.json and the source/frozen proof JSONs.
+
+Actual packaged GUI checks passed: real measured timings, full-suite cold-history
+fallback, Cancel kills both worker/child, recovery, test-check explanations and
+source opening, build-consent cancellation, actual Maven six-check run reporting
+the failed discount check, refusal to train from the uncommitted run, Java/Python
+listed and Language plugins restored after restart. Only isolated owned app
+profiles/fixtures were used; those app windows are now closed. Current installed
+app is intact. Official catalogue 404, full clean-PC and other manual acceptance
+remain open. No new language plugin was delivered; slow-probe is a test fixture.
+
+Installer: build/desktop-D083-2026-10-28/installer-r2/CodeDNA IDE Setup 0.1.0.exe
+317665899 bytes; SHA-256 c9386e51cda0730c5bed196450dfe22fa3e089283cb9267a1b9e686b4ae5b752.
+It is unsigned. Do not claim it was installed or validated on a clean computer.
+This stable source/candidate is ready for private review; no push/merge performed.
+
+NEXT owner-authorized work: fix standalone demo target/ ignore (editor builds
+otherwise pollute its snapshot), then implement/evaluate the focused Java Moonshot
+pilot using MOONSHOT_PILOT_PROTOCOL.md. Research performance follow-up is planned,
+not run; old studies and mixed findings stay intact. Preserve both stashes,
+unrelated website changes and the untracked MOONSHOT.md. No public hosting.
+
+## Current owner-approved work - D-082/D-083, 2026-10-28
+
+User explicitly asked to test the rebuilt .exe's cancellation, plugin changes/
+restarts and AI brake, then improve engineering/research performance. All 20
+actual frozen checks passed in an isolated candidate: seven plugin checks,
+seven worker/restart checks, six brake checks using real Maven. Worker and child
+ended, unrelated fixture survived; failed tests block, passed tests pass and
+skipped required tests remain incomplete. See FROZEN_CORE_VALIDATION_D082_2026-10-28.json.
+The candidate is build/desktop-D082-2026-10-28/core/dist/codedna-core. All 1456
+manifest files were verified. Installed app/old installer were not overwritten.
+This is not clean-PC or actual new Theia acceptance. Prior full source: 636/zero
+skips; Node43 and TypeScript pass. Don't repeat old studies or that completed run.
+
+NEXT authorized D-083: measure real stage costs, safely reuse unchanged fitted
+models/parses, improve fallback diagnostics and evaluate a pre-analysis cost
+fast path. Never cache selected sets or accepted risk; revalidate eligibility
+and audit every decision. A cost switch after analysis is already paid cannot
+recover that sunk cost. Avoid serializing/loading Python models from disk.
+Do not claim improved safety/recall from latency or engineering test results.
+After changes: focused tests, full Maven-inclusive suite and updated frozen
+candidate/release verification. A separate research performance follow-up must
+be protocol-first, keep prior outputs intact and disclose reused data.
+
+Owner also approved the FOCUSED Moonshot version: deterministic Java paired
+execution, meaningful difference and small reproducer export, integrated with
+existing core/brake. See MOONSHOT_SCOPE.md. It follows current engineering and
+does not authorize the full twelve-month proposal, concurrency lab, automatic
+repair or extra languages. Preserve untracked MOONSHOT.md; Java/Python only.
+No new push/merge/public hosting; preserve both stashes. New performance work
+must not be described as already present in the tested D082 candidate.
+
+## Verified continuation - D-080/D-081, 2026-10-28
+
+Source checkpoint 912f4c9 passed the complete Maven-inclusive suite: 636 tests,
+zero failures/skips, one existing warning, 1086.89 seconds. TypeScript and
+43 Node workflows pass. See ENGINEERING_VALIDATION_D080_D081_2026-10-28.json
+and its hashed logs. D-079's earlier 601-test full proof remains separate.
+Do not rerun either completed validation or any original research study.
+
+Implemented: bounded read-only analysis jobs and real owned process-tree cancel;
+stage/elapsed controls in Tests and Changes; immutable change/impact snapshots;
+canonical file navigation with visible errors; relative API path preservation;
+plugin activation pinned across worker and consented API restarts. Existing
+B10/CRC defaults, thresholds, refusals and research findings remain unchanged.
+The earlier 635-test invocation was deliberately interrupted to fix the new
+relative-path regression and is not counted as a pass.
+
+This is a source checkpoint, not a new installed desktop. Actual rebuilt frozen
+execution, installer refresh, official catalogue hosting and clean-PC evidence
+remain deferred to the final installation batch. Impact graph/replay/history
+keep their existing sync UI; ordinary analysis has no restart resume. The D076
+pilot is completed negative/mixed evidence, not a study to retune or resume.
+No new push or merge; preserve stashes and the untracked MOONSHOT.md proposal.
+Source is ready for private review; publication still requires owner instruction.
+
+## Current checkpoint - D-080/D-081, 2026-10-28
+
+D-079 is fully validated: 601 passed/zero skips, proof JSON saved. D-080 source
+was saved in f4ec9cf. Its later 635-test full invocation was intentionally
+stopped around 18 percent after a new regression exposed relative API paths
+being resolved in the worker's trusted directory. That run is not a pass.
+The regression failed before the fix; all eight API tests now pass. Anchor
+repo/history/coverage/duration paths to the API context before dispatch while
+preserving empty optional defaults and keeping workers out of analysed repos.
+
+D-081 extends cancellation/progress to Changes and fixes snapshot consistency:
+analyse once, then compute impact from that result's immutable base/head rather
+than separately resnapshotting WORKTREE. Drop stale responses and duplicate
+requests, bind source navigation to the canonical analysed repository, disclose
+working-file/line differences and show file-open errors. Tests and Changes now
+use job capability version 1; other views retain sync behavior. TypeScript and
+43 Node workflows pass. Eight actual API checks pass; earlier integrated worker
+suite 33 and later four cleanup checks passed. Full combined validation is next
+(expected 636 tests), not yet a pass. Freeze code during it.
+
+No installer rebuilt, new frozen binary validated, project code executed through
+analysis, public hosting, source push, merge or stash operation. Installation
+and clean-PC acceptance remain last. Existing B10/CRC decisions and research
+findings are unchanged. MOONSHOT.md remains unrelated and untracked.
+
+## Current engineering - D-080 integrated, 2026-10-28
+
+D-079 full validation completed: 601 passed, zero skips, one existing warning,
+1324.42 seconds. See ENGINEERING_VALIDATION_D079_2026-10-28.json. Do not rerun it.
+
+D-080 source now mounts authenticated typed read-only analysis jobs: one active,
+two queued, 300-second worker deadline, bounded in-memory results and owned
+process-tree cancellation. Tests recommendation uses real stage/elapsed updates
+and Cancel analysis when capability version 1 is advertised; older installed
+cores retain synchronous behavior. Other views retain their existing sync UI.
+No build, test execution, plugin mutation or history writing is routed through
+the cancellation API. Risk defaults/thresholds/refusals remain unchanged.
+
+Frozen worker dispatch and optional-plugin activation are pinned before work.
+The IDE backend also retains activation across the consented API restart for
+build execution, so pending plugin changes still require an application restart.
+Source/frozen-entry contract tests passed; actual new packaged binary validation
+and installer refresh remain deferred to the final installation batch.
+
+Focused integrated Python suite: 33 passed; after cleanup review, four targeted
+checks passed (including one additional case). TypeScript and all 35 Node
+workflows pass. Full D-080 Maven-inclusive suite is the next validation; do not
+call this release complete from focused checks. There should be 635 tests.
+No new push/merge, research rerun, default changes, languages or stash operations.
+MOONSHOT.md remains unrelated and untracked. Staged integration scripts have
+already been applied; do not run them again.
+
+## Engineering continuation - D-079/D-080, 2026-10-28
+
+D-079 source is local commit a46f222. Its first full-suite invocation left an
+empty log and no live pytest process; it is not a pass. One replacement run is
+active: 601 collected tests, Maven included, verbose saved progress in pointer
+.diagnostics/d079-full-suite-retry.log. Do not start a duplicate. The previous
+591-test result still describes the earlier source checkpoint.
+
+D-080 is in progress, not a completed release. New independent worker modules
+support one active read-only operation, two queued requests, bounded retention,
+owned Windows Job Object termination and deadlines. Sixteen focused process/job
+checks pass, including actual descendants, unrelated-process survival, startup
+cancellation and exact sync/worker JSON on temporary Git fixtures. IDE TypeScript
+compilation and 32 Node workflows pass. The source UI is capability-gated; the
+new routes and frozen-plugin bootstrap are staged for integration after D-079's
+full validation. Do not claim they are mounted or present in the installed app.
+
+Continue from ANALYSIS_JOB_PLAN.md. Staging helpers are in the pointer checkout's
+.diagnostics; inspect before applying, as some helpers assert one-time changes.
+The current API remains synchronous. Installation/hosting remain last. No push,
+merge, research rerun, threshold changes or stash operations were performed.
+MOONSHOT.md remains the owner's separate untracked proposal.
+
+## Latest continuation - D-076 completed, 2026-10-27
+
+The pilot completed all 360 mappings and four observed-only traces. Read
+experiments/results/partial-feedback-pilot-d076-2026-10-27/FINDINGS.md and summary.json.
+B10/history and combined refused all 108 ordinary evaluation decisions; no
+risk-gated savings. Structural-only reduced 40 of 120 suites and missed 0 of 4 failing outcomes
+across 3 failing commits; recorded savings were 15.32% in evaluation and 7.78%
+including warm-up. This is tiny
+development evidence, not proof of 95% safety or closed-loop ML effectiveness.
+The one 90-second extraction timeout resumed from 329 cached mappings and completed
+without input/source/threshold changes. STOP.json is a retained earlier diagnostic.
+Full source validation: 591 Python tests/zero skips (Maven+Gradle), 27 Node tests,
+TypeScript, 8 viewer checks. See ENGINEERING_VALIDATION_D076_D078_2026-10-27.json.
+Next: measure matched cold/warm analysis and improve existing cache use, then
+bounded analysis jobs/cancellation per ANALYSIS_JOB_PLAN.md. Do not rerun old
+studies or tune this prefix for gains. Installation remains last; no new push/merge.
+
+
+## Current continuation - D-075, 2026-10-27
+
+D-074 plugin installation is complete: full suite 576 passed, zero skips;
+19 IDE tests; seven actual frozen plugin checks; 1451 packaged hashes verified.
+Installer and D074 friend kit are ready; source commits 70626d8/500c998 remain
+local, no new push/merge, all stashes preserved. Do not rebuild this feature.
+D-075 report corrections and read-only feasibility are complete. Read
+REPORT_REVISION_NOTES_D075.md and PARTIAL_FEEDBACK_FEASIBILITY.md. Four older
+datasets have structural evidence; the nine-project CSVs do not. Three HikariCP
+code-only snapshots mapped exactly. No new selector study has run. Next is a
+bounded protocol-first pilot; reused data is not independent confirmation.
+The owner's technical reviewer is ChatGPT and labels were cross-checked with
+Gemini; do not keep asking for human labels or claim independent validation.
+
+
+## Current override - D-074 completed, 2026-10-27
+
+The frozen desktop plugin-installation fix is complete and validated. Read
+DESKTOP_PLUGIN_INSTALLATION.md and RELEASE_VALIDATION_D074_2026-10-27.json.
+All final tests, bundled hashes and the new installer/friend kit are recorded
+there. Earlier notes calling this feature unimplemented are superseded.
+Source checkpoint 70626d8; no new push/merge; preserve stashes and old studies.
+Next authorized work: correct the report and assess feasibility of a bounded
+partial-feedback/structural-floor follow-up. The latest review makes that study
+conditional on a stronger claim. Public hosting and real clean-PC feedback are
+separate; do not repeat the completed plugin implementation.
+
+
+## Active checkpoint - D-072/D-073, 2026-10-27
+
+Continue on codex/blueprint-completion; preserve all stashes. D-071 is local
+commit 8b0d478. The branch contains the reviewed D-072/D-073 source checkpoint; inspect git log for its commit. Full Maven suite
+563 passed, zero skipped; latest TypeScript compile and 18 IDE tests passed.
+Risk thresholds/fallbacks unchanged. Individual recorded checks, clear history
+selection and replay folder browsing fix the owner's demo feedback. See
+BLUEPRINT_COMPLETION.md for exact validation and remaining external gates.
+Final D-072/D-073 installer and friend test kit are built and verified;
+see RELEASE_VALIDATION_D072_D073_2026-10-27.json. Clean-PC acceptance remains pending. Website source and detailed blueprint are ready locally;
+public catalogue/wheel hosting remains unavailable. No new push/merge yet.
+
+
+## Current continuation - 2026-10-27 (supersedes older status)
+
+PR #22 merged as 45821b4 after owner authorization and green checks. D-068 and
+D-070 are already on main. The studies are finished; preserve their reports.
+Work now continues on codex/blueprint-completion. Read
+[the current completion ledger](BLUEPRINT_COMPLETION.md) for remaining work
+and validation, and [the deferred backlog](DEFERRED_FEATURES.md). The owner
+asked to save extra proposals for later, not implement them now. Preserve all
+stashes. Publication/merge-pending notes below are historical, not current.
+
+
 This is the plan for finishing CodeDNA without the Claude project threads.
 It is written for Amna and Mohib, and for any AI coding agent (Codex, GPT,
 Claude) that picks the work up. Every claim below was checked against the
@@ -63,7 +351,7 @@ rule (B3):
 **Lead the report with:** the gate's safety, the AI-brake study and the
 conformal stop B12f, in that order.
 
-**The three things that are not done and matter most:**
+**Historical three-item gap list (resolved by D-067/D-068/D-070; retained below as context, not current tasks):**
 
 1. **B12f is not in the product.** The live brake (`codedna mcp`, IDE,
    `risk-select`) still uses B10 + the Wilson gate (`selection/live.py`,
@@ -97,21 +385,22 @@ Node tests pass. The simplest route is to merge this one PR (§3.1).
 
 ---
 
-## 0.5 Where Claude stopped — resume here (kept current; last update 2026-10-26 09:40Z)
+## 0.5 START HERE - current continuation, 2026-10-27
 
-If Claude ran out mid-task, start from this list. Check each branch on
-GitHub first: newer commits may have landed after this was written.
+| Task | State | Next action |
+|---|---|---|
+| Integration/original studies | #21/#22 merged; nine-project findings/hashes preserved | Do not repeat merges or old studies. Preserve every stash. |
+| D-071 through D-074 | Completed and verified, including frozen optional-plugin installation; D-074 full suite 576 passed, zero skips | Do not rebuild installation now. It is deferred to the end by owner instruction. |
+| D-075 report/feasibility | Complete; corrected portable review pack and read-only feasibility audit saved | Read REPORT_REVISION_NOTES_D075.md and PARTIAL_FEEDBACK_FEASIBILITY.md. |
+| D-076 development research | Completed: all 360 source mappings; 120 evaluation commits; no risk-gated reduction; full source suite 591 passed/zero skips | Read the new pilot FINDINGS.md. Measure overhead before scaling; do not retune for a positive result. |
+| D-077 engineering | Local 4c5767c: source check explanations, evidence-health guidance, explicit decision evidence export; TypeScript and 27 Node tests pass | Continue operation cancellation/progress and broader workflow acceptance without weakening gates. No new installer yet. |
+| Labels/review | Owner uses ChatGPT for technical review; Gemini cross-check is a second AI judgement | No further owner labelling task. Keep provenance honest; no human-ground-truth claim. |
+| Website/distribution/clean PC | Website blueprint/source prepared; catalogue hosting and actual clean-PC evidence still open | Defer these installation/distribution tasks to the end; keep source private. |
+| Source sharing | Owner notified: validated source-review checkpoint ready; no push/merge performed | Owner may push codex/blueprint-completion for private review. Keep release/merge decisions separate. |
 
-| Task | Owner / place | Branch | Status file / output folder | State | How to resume |
-|---|---|---|---|---|---|
-| Last finished step | Claude | `claude/project-thread-lo3rpw` | `scripts/demo_brake_end_to_end.py` | **§6.3 + §6.5 done:** conformal stop is a live opt-in method (`--method crc`, MCP `method`, D-068) and the end-to-end demo gives `blocked`/`passed` with real Maven | next (B13f commits up to `8c1b87f` already merged, 495 passed): §6.4 `structural_plan`, then §7 bug 2 (Python brake fallback) |
-| **Integration of all PRs** | this file's PR | `claude/project-thread-lo3rpw` | — | done and tested (494 passed with Maven, 8 Windows-only skips, after the row below), includes #18's B13 commits up to `cec75ff` | if any PR branch below got new commits, `git merge origin/<branch>` into this branch, resolve, `python -m pytest --run-maven`, push |
-| **START HERE (next agent)** | Codex | `codex/brake-structural-python` (D-070) | local validation log / next PR | PR #21 merged; studies finished; structural/Python implementation done; 554 passed / 0 skipped; publication approval pending | obtain explicit approval for the private-source push, then publish and check CI; do not merge a new PR without authorization; then remaining manual/clean-PC/report tasks |
-| **B13 tuned gate, B12f and B11 reruns on the 9 confirmatory projects** | novelty thread, running on the laptop | `claude/project-thread-71arlo` (#18's branch) in worktree `C:\Users\hp\codedna-b13`, data copied to `C:\Users\hp\codedna-b13-data\<project>\dataset.csv` | `experiments/results/tuned-gate-confirmatory-2026-10-26/`, `crc-conditional-confirmatory-2026-10-26/`, `pts-check-confirmatory-2026-10-26/` (protocol for B13: commit `2ac7ac7` on that branch) | started 09:11Z; may take hours. At 09:26Z still running a (B13), b (B12f), c (B11); a fourth run d was queued after them: `git merge --ff-only origin/claude/project-thread-71arlo` in the worktree, then `run_tuned_gate_check.py C:\Users\hp\codedna-b13-data --conditional --out experiments/results/tuned-gate-conditional-confirmatory-2026-10-26` (B13f, exploratory), committed with the other three folders. Nothing from this run is on GitHub yet | if the laptop slept, rerun the same commands from the worktree (they resume per project): `$env:PYTHONPATH="C:\Users\hp\codedna-b13\backend"; $env:OMP_NUM_THREADS="1"` then `python scripts/run_tuned_gate_check.py C:\Users\hp\codedna-b13-data --out experiments/results/tuned-gate-confirmatory-2026-10-26`, then `run_crc_check.py ... --conditional --out experiments/results/crc-conditional-confirmatory-2026-10-26`, then `run_pts_check.py ... --out experiments/results/pts-check-confirmatory-2026-10-26`. Commit only those three folders on that branch and push (no force). **B13 is exploratory** (designed after seeing #20). **Read the B12f 9-project verdict by hand:** that branch's `run_crc_check.py` still uses the 3-of-4 rule; apply 7 of 9 (§6.1) |
-| After those results land | whoever merges | `claude/project-thread-lo3rpw` | — | not started | `git merge origin/claude/project-thread-71arlo` into this branch (expect `run_crc_check.py` conflicts: keep this branch's `required_keeps`, `--protocol` and the `codedna_java.live` import), rerun tests, push; then write `FINDINGS.md` for each folder and report §4.12 |
-| Merging into main | owner via GPT/Codex on the laptop (owner chose this, 09:17Z) | `claude/project-thread-lo3rpw` = PR #21 | — | not started; Claude did not merge | paste the §17.1 prompt to Codex, or click PR #21's merge button (below) |
-| Laptop clean-up | owner at the laptop | main checkout | backup `C:\Users\hp\codedna-backup-2026-10-26\` | GPT edits not yet stashed | §4.1 command; **only after the B13 run above finishes** run §4.2–4.4 |
-| Everything else | Codex / next agent | new branch per task | — | not started | §17 prompt, task list at the end of §17 |
+Historical instructions below are reference, not a request to reapply old
+edits, repeat integration or retune until a favorable research result appears.
+The authorized engineering follow-up is recorded in DEFERRED_FEATURES.md.
 
 ### Click-by-click: merging on GitHub
 

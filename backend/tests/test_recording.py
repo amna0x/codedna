@@ -156,3 +156,19 @@ def test_cli_records_a_saved_run(project, tmp_path, capsys):
     assert json.loads(capsys.readouterr().out)["recorded"] is True
     results.write_text(json.dumps(fake_run(base, ["a.ATest"]).to_dict()))
     assert main(["history", "record", "--repo", str(repo.path), str(results)]) == EXIT_ANALYSIS_ERROR
+
+
+@pytest.mark.parametrize("skip_all", [False, True])
+def test_skipped_required_tests_cannot_replace_complete_history(project, skip_all):
+    repo, base = project
+    expected = ["a.ATest", "a.BTest"]
+    assert record_run(repo.path, fake_run(base), expected_tests=expected)["recorded"]
+    csv = repo.path / HISTORY_CSV
+    original = csv.read_bytes()
+    incomplete = fake_run(base)
+    incomplete.tests["a.BTest"].status = "skipped"
+    if skip_all:
+        incomplete.tests["a.ATest"].status = "skipped"
+    report = record_run(repo.path, incomplete, expected_tests=expected)
+    assert not report["recorded"] and "outcomes are unknown" in report["reason"]
+    assert csv.read_bytes() == original

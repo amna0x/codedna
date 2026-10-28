@@ -30,9 +30,13 @@ Python; see each plugin's discovery).
 
 from __future__ import annotations
 
+from codedna.performance import timed
+
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 
+from codedna.git_analysis.git import reuse_git_validation
+from codedna.dependency_graph.cache import reuse_parse_cache, operation_parse_cache
 from codedna.git_analysis.git import resolve_commit, resolve_repository
 from codedna.impact_analysis import compute_impact
 from codedna.plugins import load_plugins
@@ -78,6 +82,9 @@ class SelectionReport:
         return data
 
 
+@reuse_git_validation
+@timed('test_selection')
+@reuse_parse_cache
 def select_tests(repo_path: str | Path, base: str, head: str, strategy: str, *,
                  coverage_map: CoverageMap | None = None, durations: TestRunResult | None = None,
                  non_java: str = "retest-all", must_run: list[str] | None = None,
@@ -97,6 +104,8 @@ def select_tests(repo_path: str | Path, base: str, head: str, strategy: str, *,
     base_sha, head_sha = resolve_commit(repo, base), resolve_commit(repo, head)
 
     registry = load_plugins()
+    if cache is None:
+        cache = operation_parse_cache(repo, registry)
     discovery = commit_tests(repo, head_sha, registry=registry, cache=cache)
     universe = sorted(t.id for t in discovery.tests if t.runs_by_default)
     test_files = {t.id: t.file for t in discovery.tests}

@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-28",
+  "source_commit": "912f4c9",
+  "decisions": [
+    "D-080",
+    "D-081"
+  ],
+  "python": {
+    "command": ".venv/Scripts/python.exe -u -m pytest --run-maven -v",
+    "passed": 636,
+    "failed": 0,
+    "skipped": 0,
+    "warnings": 1,
+    "seconds": 1086.89
+  },
+  "node": {
+    "command": "npm test --workspace=codedna-extension",
+    "passed": 43,
+    "failed": 0,
+    "skipped": 0
+  },
+  "typescript": {
+    "command": "npm run build --workspace=codedna-extension",
+    "exit_code": 0
+  },
+  "logs_sha256_utf8_lf": {
+    "docs/validation/D080-D081-full-suite-2026-10-28.txt": "ba4a7a5727042ad2a0665296d7c0d2a3d2bf3b6c3fcd6f2e31d998d36455a706",
+    "docs/validation/D081-node-tests-2026-10-28.txt": "7ba7e6e2cffbca0979410e7f46c0aeb7652bc5a04dc01b5241847541e5d04b2d",
+    "docs/validation/D081-typescript-2026-10-28.txt": "09f0f7bd312ae1f8a9062c6d0b4e3480e49760601506bafeed3a7151fd0e4a0d",
+    "docs/validation/D080-relative-path-api-2026-10-28.txt": "414218b249418bea90da412782ab9ed593f20b7692694166251de1c87afb2981",
+    "docs/validation/D080-integrated-focused-2026-10-28.txt": "eacd46457f57940b00e08102ea7f6a8d056885480fd2800b3eff541333b8849a",
+    "docs/validation/D080-cleanup-review-2026-10-28.txt": "c44641480df119de80dc90438792eca5ad57e23595fe432c00daeb3a165feac4"
+  },
+  "regressions": {
+    "relative_paths": "failed before anchoring; eight API tests pass after fix",
+    "changes_snapshot": "impact uses immutable analysis IDs, in legacy and jobs UI",
+    "worker_tree": "actual Windows descendants stop; unrelated fixture process survives",
+    "plugin_activation": "source/frozen entry contracts pin updates/fallback across workers and API restart"
+  },
+  "interrupted_run": "Earlier 635-test D080 invocation deliberately stopped around 18% after the relative-path regression; not counted as a pass.",
+  "limits": [
+    "Source validation only; actual new frozen binary and clean-PC installation deferred.",
+    "POSIX containment source path not exercised on this Windows host.",
+    "Other views retain sync UI; ordinary analysis has no restart resume.",
+    "No research reruns, default/threshold changes, new languages, public hosting, push/merge or stash mutation."
+  ]
+}

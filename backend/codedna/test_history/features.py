@@ -74,20 +74,31 @@ class Dataset:
     @classmethod
     def from_csv(cls, path: str | Path) -> Dataset:
         """Load a dataset written by :meth:`to_csv` (features are not recomputed)."""
-        import csv
         with open(path, encoding="utf-8", newline="") as handle:
-            reader = csv.reader(handle)
-            header = next(reader)
-            if header[:5] != ["commit", "seq", "test_id", "label", "duration"]:
-                raise ValueError(f"{path} is not a CodeDNA dataset CSV (header {header[:5]})")
-            names = header[5:]
-            rows, commits = [], []
-            for record in reader:
-                if not commits or commits[-1] != record[0]:
-                    commits.append(record[0])
-                rows.append(Row(record[0], int(record[1]), record[2], int(record[3]),
-                                float(record[4]),
-                                {name: float(value) for name, value in zip(names, record[5:])}))
+            return cls._from_csv_handle(handle, path)
+
+    @classmethod
+    def from_csv_bytes(cls, data: bytes, *, source="<memory>") -> Dataset:
+        """Parse the exact bytes whose fingerprint is recorded by a caller."""
+        from io import StringIO
+        with StringIO(data.decode('utf-8'), newline="") as handle:
+            return cls._from_csv_handle(handle, source)
+
+    @classmethod
+    def _from_csv_handle(cls, handle, source) -> Dataset:
+        import csv
+        reader = csv.reader(handle)
+        header = next(reader)
+        if header[:5] != ["commit", "seq", "test_id", "label", "duration"]:
+            raise ValueError(f"{source} is not a CodeDNA dataset CSV (header {header[:5]})")
+        names = header[5:]
+        rows, commits = [], []
+        for record in reader:
+            if not commits or commits[-1] != record[0]:
+                commits.append(record[0])
+            rows.append(Row(record[0], int(record[1]), record[2], int(record[3]),
+                            float(record[4]),
+                            {name: float(value) for name, value in zip(names, record[5:])}))
         dataset = cls(rows=rows, feature_names=names, commits=list(dict.fromkeys(commits)))
         _warn_if_few_failures(dataset)
         return dataset

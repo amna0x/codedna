@@ -11,7 +11,7 @@ run); the findings file there lists both. Status: draft, 2026-10-26.
 
 ## 1. Motivation
 
-AI coding agents now write a large share of code changes. A common failure
+AI coding agents can edit source code and invoke developer tools. A common failure
 is that the agent edits code, runs no tests or the wrong ones, and reports
 the task done. The question CodeDNA answers for a person (which tests does
 this change need, and what is the risk of skipping the rest) is the same
@@ -199,5 +199,20 @@ ask for after that, not on the first day.
   brake, measuring broken changes reported as done.
 - Discovery for Ant builds and data-driven tests (lombok), and Gradle source
   sets declared in nested blocks.
-- The same study for the Python plugin once it lands, through the shared
-  core.
+- The same study for the implemented Python plugin, through the shared core.
+  Python/mixed execution already works with conservative full-suite fallback;
+  a Python risk model and agent-effectiveness claim remain unvalidated.
+
+
+## Current product verification (D-068/D-070/D-071)
+
+The live brake supports CRC as an opt-in method and returns the measured
+structural dependency plan separately. Required tests include both structural
+and statistical selections plus policy pins, all on the same immutable
+revision. Python/mixed projects explicitly run the full suite without a guessed
+risk score. A skipped required class/module leaves the verdict incomplete;
+complete failing tests still block even when the build exits nonzero.
+
+The real Maven demo exercises blocked and passed outcomes. The refreshed
+frozen-core smoke also exercises actual passing and failing pytest runs through
+MCP. These are integration tests, not a new empirical study of agent quality.

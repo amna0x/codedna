@@ -12,6 +12,8 @@ Safety:
 * ``check`` runs the project's build. It is offered only when the person
   started the server with ``--allow-build`` and ``--repo``. It then works for
   that one repository, whatever path the agent sends.
+* ``--moonshot`` additionally exposes bounded Java behavioral witnesses with
+  that same consent/repository binding. It never replaces the test brake.
 """
 
 from __future__ import annotations
@@ -28,6 +30,7 @@ from codedna.git_analysis.git import WORKTREE, resolve_repository
 PROTOCOL_VERSIONS = ("2025-06-18", "2025-03-26", "2024-11-05")
 
 _CHANGE = {
+    "profile": {"type": "boolean", "description": "Include measured operation timings; a check includes test execution."},
     "repo": {"type": "string", "description": "Path of the Git repository (default: the server's --repo)."},
     "base": {"type": "string", "description": "Base revision (default HEAD)."},
     "head": {"type": "string", "description": "Changed revision; WORKTREE (default) means uncommitted changes."},
@@ -75,6 +78,25 @@ TOOLS = {
                                             "description": "Build timeout in seconds (default 1800)."}},
             "additionalProperties": False},
     },
+
+    "codedna_find_witness": {
+        "description": (
+            "Experimental Moonshot: execute an explicitly selected public static Java int method(int) "
+            "on both versions with bounded inputs. Export a confirmed behavioral difference and standalone "
+            "reproducer to a new folder outside the repository. A difference is not automatically a regression. "
+            "No witness does not establish equivalence or justify skipping tests. Still call codedna_check. "
+            "Executes trusted project code; offered only with --moonshot --allow-build --repo."),
+        "inputSchema": {"type": "object", "properties": {
+            **_CHANGE, "file": {"type": "string"}, "symbol": {"type": "string"},
+            "output_dir": {"type": "string"},
+            "max_inputs": {"type": "integer", "minimum": 1, "maximum": 64},
+            "seed": {"type": "integer", "minimum": 0, "maximum": 4294967295},
+            "timeout": {"type": "integer", "minimum": 1, "maximum": 120},
+            "reduce_budget": {"type": "integer", "minimum": 0, "maximum": 16},
+            "generation": {"type": "string", "enum": ["guided", "simple"]}},
+            "required": ["file", "symbol", "output_dir"], "additionalProperties": False},
+    },
+
 }
 
 
@@ -84,12 +106,22 @@ class ToolError(Exception):
 
 class BrakeServer:
     def __init__(self, *, repo: Path | None = None, allow_build: bool = False,
-                 build_options: dict | None = None):
+                 build_options: dict | None = None, moonshot: bool = False):
+        if not isinstance(moonshot, bool) or moonshot and allow_build is not True:
+            raise ValueError('--moonshot requires explicit --allow-build and a repository')
         if allow_build and repo is None:
             raise ValueError("--allow-build needs --repo: builds run for one repository only")
         self.repo = resolve_repository(repo) if repo is not None else None
         self.allow_build = allow_build
         self.build_options = build_options or {}
+        self.moonshot = moonshot
+
+    def _available(self, name):
+        if name == 'codedna_check':
+            return self.allow_build
+        if name == 'codedna_find_witness':
+            return self.moonshot and self.allow_build
+        return True
 
     # --- protocol ---------------------------------------------------------------
 
@@ -120,14 +152,14 @@ class BrakeServer:
         if method == "tools/list":
             return _result(ident, {"tools": [{"name": name, **spec}
                                              for name, spec in TOOLS.items()
-                                             if name != "codedna_check" or self.allow_build]})
+                                             if self._available(name)]})
         if method == "tools/call":
             return self._call(ident, params)
         return _error(ident, -32601, f"method not found: {method}")
 
     def _call(self, ident, params: dict) -> dict:
         name, arguments = params.get("name"), params.get("arguments") or {}
-        if not isinstance(name, str) or name not in TOOLS or (name == "codedna_check" and not self.allow_build):
+        if not isinstance(name, str) or name not in TOOLS or not self._available(name):
             return _error(ident, -32602, f"unknown tool: {name}")
         if not isinstance(arguments, dict):
             return _error(ident, -32602, "arguments must be an object")
@@ -135,14 +167,24 @@ class BrakeServer:
         unknown = sorted(set(arguments) - allowed)
         if unknown:
             return _error(ident, -32602, f"unknown arguments: {unknown}")
+        profile = arguments.get('profile', False)
+        if not isinstance(profile, bool):
+            return _error(ident, -32602, 'profile must be a boolean')
         try:
-            data = self._run(name, arguments)
+            from codedna.performance import capture_timings
+            with capture_timings(profile) as timings:
+                data = self._run(name, arguments)
+            if timings is not None:
+                data = {**data, 'operation_timings': {**timings.to_dict(),
+                     'scope': ('includes_project_execution' if name == 'codedna_find_witness' else
+                              'includes_test_execution' if name == 'codedna_check' else 'analysis_only')}}
         except ToolError as exc:
             return _result(ident, _content({"error": str(exc)}, error=True))
         except Exception as exc:  # analysis errors go back to the agent, not a crash
             print(traceback.format_exc(), file=sys.stderr)
             return _result(ident, _content({"error": f"{type(exc).__name__}: {exc}"}, error=True))
-        return _result(ident, _content(data))
+        failed_witness = name == 'codedna_find_witness' and data.get('status') not in ('difference', 'no_difference_observed')
+        return _result(ident, _content(data, error=failed_witness))
 
     # --- tools ------------------------------------------------------------------
 
@@ -164,6 +206,23 @@ class BrakeServer:
         base, head = arguments.get("base", "HEAD"), arguments.get("head", WORKTREE)
         if not isinstance(base, str) or not isinstance(head, str):
             raise ToolError("base and head must be strings")
+        if name == 'codedna_check':
+            from codedna.behavior import execution_block_reason
+            if execution_block_reason():
+                raise ToolError(execution_block_reason())
+        if name == 'codedna_find_witness':
+            from codedna.behavior import find_difference
+            for key in ('file', 'symbol', 'output_dir'):
+                if not isinstance(arguments.get(key), str) or not arguments[key].strip():
+                    raise ToolError(key + ' must be a non-empty string')
+            try:
+                return find_difference(repo, base, head, file=arguments['file'], symbol=arguments['symbol'],
+                    output_dir=arguments['output_dir'], allow_build=self.allow_build,
+                    max_inputs=arguments.get('max_inputs', 16), seed=arguments.get('seed', 0),
+                    timeout=arguments.get('timeout', 30), reduce_budget=arguments.get('reduce_budget', 8),
+                    generation=arguments.get('generation', 'guided'))
+            except ValueError as exc:
+                raise ToolError(str(exc)) from exc
         method = arguments.get("method", "b10")
         if method not in ("b10", "crc"):
             raise ToolError("method must be b10 or crc")
@@ -237,10 +296,10 @@ def _error(ident, code: int, message: str) -> dict:
     return {"jsonrpc": "2.0", "id": ident, "error": {"code": code, "message": message}}
 
 
-def main(repo: str | None, allow_build: bool, build_options: dict | None = None) -> int:
+def main(repo: str | None, allow_build: bool, build_options: dict | None = None, *, moonshot=False) -> int:
     try:
         server = BrakeServer(repo=Path(repo) if repo else None, allow_build=allow_build,
-                             build_options=build_options)
+                             build_options=build_options, moonshot=moonshot)
     except ValueError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2

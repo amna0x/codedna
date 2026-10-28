@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-28",
+  "source_commit": "1a4566447731af5d7c7bb9133bfd479c370f3b02",
+  "scope": "actual isolated D083 frozen core, not installed IDE or clean-PC acceptance",
+  "core": "C:\\Users\\hp\\OneDrive\\Documents\\GitHub\\codedna\\build\\desktop-D083-2026-10-28\\core\\dist\\codedna-core\\codedna-core.exe",
+  "core_sha256": "9968d97a1f2a1d9c93c3d7c48f764940f17fd1a5d969a1333cb061fe679f7e49",
+  "manifest_files_verified": 1458,
+  "checks": {
+    "plugins": {
+      "scope": "production frozen core, restricted PATH, isolated per-user store; not clean-PC acceptance",
+      "checks": {
+        "install_and_cold_restart": "passed",
+        "damaged_optional_uses_bundled_fallback": "passed",
+        "broken_update_preserves_working_version": "passed",
+        "missing_dependency_preserves_working_version": "passed",
+        "checksum_refusal": "passed",
+        "remove_and_restore_bundled_python": "passed",
+        "bundled_removal_refused": "passed"
+      },
+      "bundle_files_verified": 1458
+    },
+    "jobs": {
+      "scope": "actual frozen executable, isolated offline fixtures; not clean-PC/installed IDE acceptance",
+      "core": "C:\\Users\\hp\\OneDrive\\Documents\\GitHub\\codedna\\build\\desktop-D083-2026-10-28\\core\\dist\\codedna-core\\codedna-core.exe",
+      "checks": {
+        "worker_and_descendant_cancelled": "passed",
+        "unrelated_process_survived": "passed",
+        "real_frozen_profile_metrics_without_project_source": "passed",
+        "analysis_recovers_after_cancel": "passed",
+        "replacement_worker_keeps_parent_plugin": "passed",
+        "consented_api_restart_keeps_plugin_snapshot": "passed",
+        "application_restart_activates_pending_update": "passed",
+        "analysis_preserves_project_and_history": "passed"
+      },
+      "cancellation_confirmed_seconds": 0.016
+    },
+    "brake": {
+      "scope": "actual frozen MCP and real Maven, isolated synthetic history; engineering evidence only",
+      "core": "C:\\Users\\hp\\OneDrive\\Documents\\GitHub\\codedna\\build\\desktop-D083-2026-10-28\\core\\dist\\codedna-core\\codedna-core.exe",
+      "checks": {
+        "cold_history_requires_full_suite": "passed",
+        "build_consent_enforced": "passed",
+        "crc_plan_with_synthetic_history": "passed",
+        "frozen_model_reuse_still_runs_fresh_audit_and_real_tests": "passed",
+        "frozen_mcp_profile_scope_preserves_build_consent": "passed",
+        "real_failing_required_tests_block": "passed",
+        "real_passing_required_tests_pass": "passed",
+        "real_skipped_required_test_is_incomplete": "passed"
+      },
+      "verdicts": {
+        "breaking": "blocked",
+        "harmless": "passed",
+        "skipped": "incomplete"
+      }
+    }
+  },
+  "logs_sha256_utf8_lf": {
+    "docs/validation/D083-frozen-plugins-2026-10-28.txt": "04a2f80ca013a8a6275b6885c112354e05365c877db4d6928592a6c263e7055d",
+    "docs/validation/D083-frozen-jobs-2026-10-28.txt": "2498e037e79ea6706c324f4bf263d9d269367c48772e19b1191d66f6ecb03241",
+    "docs/validation/D083-frozen-brake-2026-10-28.txt": "53dbd4d415d71460a871537d4eff05a3c3325573dca215df61f986be8e0ee46f"
+  },
+  "limits": [
+    "Isolated synthetic fixtures establish engineering contracts, not new selector accuracy.",
+    "Official public catalogue/release delivery is not established by offline plugin fixtures.",
+    "The installed application and previous installers were not replaced."
+  ],
+  "checks_passed": 23
+}

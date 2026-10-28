@@ -1,0 +1,170 @@
+Window: "PriceCalculatorTest.java - d083-gui-project - CodeDNA IDE", App: CodeDNA IDE.exe.
+	0 window PriceCalculatorTest.java - d083-gui-project - CodeDNA IDE Secondary Actions: Raise
+		12 pane (disabled)
+		1 region PriceCalculatorTest.java - d083-gui-project - CodeDNA IDE
+			2 region
+				3 region
+					4 region
+						5 region
+							6 region
+								7 region
+									10 document PriceCalculatorTest.java - d083-gui-project - CodeDNA IDE Value: file:///C:/Users/hp/OneDrive/Documents/GitHub/codedna/build/desktop-D083-2026-10-28/installer-r2/win-unpacked/resources/app/lib/frontend/index.html?port=50122#/c:/Users/hp/OneDrive/Documents/ChatGPT/codedna/.diagnostics/d083-gui-project ID: RootWebArea
+										17 group
+											25 group ID: theia-app-shell
+												26 group ID: theia:menubar
+													27 menu bar
+														36 menu item File
+														37 menu item Edit
+														38 menu item Selection
+														39 menu item View
+														40 menu item Go
+														41 menu item Run
+														42 menu item Terminal
+														43 menu item Help
+												118 text PriceCalculatorTest.java - d083-gui-project - CodeDNA IDE
+												29 group ID: minimize-button
+													50 text 
+												31 group ID: maximize-button
+													51 text 
+												33 group ID: close-button
+													52 text 
+												21 group ID: theia-left-right-split-panel
+													53 group
+													54 tab
+														55 text 
+														56 text 
+														57 text 
+														58 text 
+														59 text 
+														60 text 
+													61 group
+													62 group
+													63 group
+														64 group
+															65 text 
+													66 text Extensions: Language plugins
+													67 group ID: theia-left-side-panel
+														68 tab panel Extensions: Language plugins ID: codedna.extensions
+															69 group
+																70 group ID: codedna.plugins
+																	71 header
+																		72 heading Language plugins
+																		73 text Each language CodeDNA understands comes from a plugin. Java and Python are bundled.
+																		74 text These are CodeDNA analysis plugins. Editor completion and debugging extensions are separate.
+																	75 button Refresh
+																	174 heading Installed
+																	175 list
+																		176 list item Trusted frozen lifecycle test fixturev1.0.0.slowprobe · plugin API 1.1
+																			177 text Trusted frozen lifecycle test fixture
+																			178 text v
+																			179 text 1.0.0
+																		180 list item Java (Maven, Gradle, JUnit 4/5, JaCoCo)v0.1.0.java · plugin API 1.1
+																			181 text Java (Maven, Gradle, JUnit 4/5, JaCoCo)
+																			182 text v
+																			183 text 0.1.0
+																		184 list item Python (pytest)v0.1.0.py · plugin API 1.1
+																			185 text Python (pytest)
+																			186 text v
+																			187 text 0.1.0
+																	189 heading Official catalogue
+																	190 text The catalogue can’t be reached
+																	191 text Installing new plugins needs the official catalogue online. Installed plugins keep working.
+																	192 details
+																		193 disclosure triangle Details
+																			194 text Details
+																	195 group
+																		196 group
+													22 group ID: theia-main-content-panel
+														119 group
+															120 tab
+																121 text 
+																122 text PriceCalculatorTest.java
+																123 group Description: Close
+																	124 text 
+															125 group
+																134 list
+																	135 list item src Description: src
+																		253 text 
+																	137 list item src/test Description: src/test
+																		254 text 
+																	139 list item src/test/java Description: src/test/java
+																		255 text 
+																	141 list item src/test/java/example Description: src/test/java/example
+																		256 text 
+																	143 list item src/test/java/example/PriceCalculatorTest.java Description: src/test/java/example/PriceCalculatorTest.java
+																		257 text 
+																		258 text 
+																	251 group
+																	252 list item … Description: …
+														126 tab panel ID: code-editor-opener:file:///c%3A/Users/hp/OneDrive/Documents/ChatGPT/codedna/.diagnostics/d083-gui-project/src/test/java/example/PriceCalculatorTest.java:5941419000077535
+															127 code
+																128 editor (settable, string) Editor content
+																266 list (settable, string) Show Code Actions (Ctrl+.) Description: Show Code Actions (Ctrl+.)
+																	267 text 
+													78 group
+													79 tab
+														80 text 
+														81 text 
+													82 group
+													83 group
+													84 group
+													85 group Description: CodeDNA: which tests to run for your change, and why
+														86 text Tests to run
+													87 group ID: theia-right-side-panel
+														88 tab panel Tests to run ID: codedna.tests
+															89 header
+																90 heading Tests to run
+																91 text Run the tests your change can break — and see why each one is needed.
+															92 text Compare
+															93 combo box (settable, string) Compare Value: My last commit
+															94 text Which tests
+															95 combo box (settable, string) Which tests Value: Validated risk stopping
+															96 text Test history file (optional)
+															97 edit (settable, string) Test history file (optional) Description: Use this project’s saved history
+															98 button Suggest tests
+															99 button Open project history
+															100 list
+																101 list item 1Open your project folderFile → Open Folder…
+																	129 text 1
+																103 list item 2Pick what to compareyour last commit is a good start
+																	130 text 2
+																105 list item 3Press Suggest tests
+																	131 text 3
+															107 group
+																108 group
+												47 group ID: theia-statusBar
+													145 group $(codicon-error) 0 $(codicon-warning) 0, No Problems ID: status-bar-problem-marker-status
+														146 text 
+														147 text 0
+														148 text 
+														149 text 0
+													171 group $(coffee) Java: Ready, Show Java status menu ID: status-bar-java.serverStatus
+														265 text 
+														173 text Java: Ready
+													150 group Ln 1, Col 1, Go to Line/Column ID: status-bar-editor-status-cursor-position
+														151 text Ln 1, Col 1
+													152 group LF, Select End of Line Sequence ID: status-bar-editor-status-eol
+														153 text LF
+													154 group UTF-8, Select Encoding ID: status-bar-editor-status-encoding
+														155 text UTF-8
+													156 group Spaces: 4, Select Indentation ID: status-bar-editor-status-tabbing-config
+														157 text Spaces: 4
+													158 group $(bracket), [object HTMLDivElement] ID: status-bar-editor-language-status-items
+														159 text 
+													160 group Java, Select Language Mode ID: status-bar-editor-status-language
+														161 text Java
+													162 group No Notifications ID: status-bar-theia-notification-center
+														259 text 
+													164 button Toggle Bottom Panel ID: status-bar-bottom-panel-toggle
+											19 group
+											24 group
+											49 group ID: select-component-container
+											110 alert
+											111 alert
+											112 group
+											113 group
+								9 region
+
+Document text: ```
+￼
+```

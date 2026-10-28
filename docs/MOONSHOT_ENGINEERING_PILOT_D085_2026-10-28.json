@@ -1,0 +1,16 @@
+{
+  "scope": "prespecified synthetic engineering fixtures, deliberately illustrative; not independent real-world research accuracy",
+  "source_commit": "4d359419ad68874c374a45d83732845327aeed41",
+  "searches": 48,
+  "synthetic_cases": 8,
+  "independent_projects": 0,
+  "emitted_witnesses_repeated_runs": 15,
+  "independently_reproduced": 15,
+  "all_report_and_export_hashes_verified": true,
+  "files_sha256": {
+    "manifest.json": "b549ce32332ce0783dfc94b4596bc0361085888f037f4f666bbbef68c11350ca",
+    "results.json": "2b8bea44ffe41e047178825159a14e5fc7ea01177877116ed6d1adb50660bd10",
+    "summary.json": "433537354ed79f66a846b73d886d74dd343efe11100b473b460d287c30be75d4",
+    "FINDINGS.md": "7da9518385337ab0c7713bf6385f2f5232d047f43dad78336072883719788729"
+  }
+}

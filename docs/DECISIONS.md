@@ -1675,3 +1675,370 @@ The branch remains local because automatic approval review rejected the
 private-source push without explicit payload/destination approval. No new
 feature PR or CI result is claimed. Main's separately verified #21 merge
 and the preserved stash remain unchanged.
+
+
+## D-071 - Complete the existing blueprint before extra features (2026-10-27)
+
+Owner asks to finish existing functionality and verify the AI brake, while
+deferring the proposed replay/UI/audit features until a later explicit request.
+PR #22 is already merged (45821b4); historical publication restrictions are
+superseded by the completed authorized merge.
+
+Fix the false pass when a required test was skipped; reject such incomplete
+evidence before it replaces complete history. Preserve genuine failing-run
+evidence (including Maven/Gradle exit 1). Share Python discovery parses by
+optional capability, preserving legacy plugins. Prefer a project's .venv for
+pytest; a frozen core without an external interpreter gives an actionable error.
+Complete the existing read-only PR demo and add a tiny CRC CLI regression smoke.
+Keep B10 default, CRC opt-in, and all existing research outputs unchanged.
+Do not implement a Java risk model for Python without validation.
+
+The completion ledger records tests and remaining manual/external evidence.
+No clean-PC, student labeling, supervisor approval or public hosting is claimed
+without the corresponding evidence.
+
+D-071 verification: 562 passed, zero failed/skipped, Maven/Gradle enabled,
+1513.49 s. IDE compile plus 8 workflow and 3 runtime tests passed. Frozen-core
+MCP Python passing/blocked and missing-interpreter cases passed. All 1,389
+packaged core hashes verified; new installer SHA-256
+e1120f72bca9fedd61e4f459eb70790a946ee543fd88684b4b49a1b430228200.
+Java diagnostics and mixed-language IDE analysis verified; clean-PC installation
+remains separate. See RELEASE_VALIDATION_2026-10-27.json.
+
+
+## D-072 - Evidence clarity and visible language acquisition (2026-10-27)
+
+After the D-071 batch passed 562 tests, the owner requested brake improvements,
+a detailed website blueprint, website plugin acquisition and visible Language
+plugins in Extensions on next launch. Research findings are not rewritten.
+The brake exposes method-specific audit semantics without changing selection
+rules or the B10 default. Proposed fresh evaluation is in BRAKE_IMPROVEMENT_PLAN.
+
+Use one Theia Extensions container holding the existing plugin widget, restored
+for fresh/saved layouts without stealing editor focus. Installed languages are
+displayed before a slow/offline catalogue finishes. No new marketplace library.
+Website acquisition reads the existing catalogue, offers only pinned official
+optional wheel URLs with full hashes/commands, and distinguishes bundled and
+unpublished releases. Public hosting/anonymous downloads and frozen-desktop
+optional installation remain release gates, not invented as complete.
+
+The clean-PC verifier and supervisor review pack prepare external checks; they
+do not constitute clean-machine provenance, human labels or supervisor approval.
+
+D-072 startup acceptance exposed sensitivity to a slow cold core during heavy
+local builds. The IDE now allows a bounded 60-second announcement (formerly
+15 seconds); tests simulate a successful 20-second handshake and verify an
+unresponsive child is killed after the deadline. Fourteen IDE workflow tests
+pass, alongside thirteen website acquisition tests. Final packaging/validation
+remains separate from these focused results.
+
+
+## D-073 - Test and history UX without weaker risk checks (2026-10-27)
+
+The owner found test-class names unexplained, saved-history clicks unclear,
+and the research replay placeholder easy to mistake for an entered path.
+Render the existing runner's individual cases (with an older-result fallback),
+keep raw risk refusal reasons and explain chronological leakage, reveal and
+announce the selected saved run, show its project, and provide a folder picker
+for real research reports. Never turn passing demo tests into validated skip
+risk. Selection/core behaviour, target and thresholds remain unchanged.
+Four focused UI tests join the regular IDE suite: 18 pass, zero skipped.
+
+
+## D-074 - Transactional optional plugins in the frozen desktop (2026-10-27)
+
+Owner explicitly requested this fix before the research follow-up. A frozen
+core cannot use itself as `python -m pip`. Use a per-user immutable wheel store,
+bundled PyPA installer 0.7.0 and packaging validation, isolated factory probing,
+atomic manifest activation and restart-only import snapshots. Preserve pinned
+official downloads, full SHA-256 and explicit confirmation. Reject unavailable
+dependencies before activation; do not fetch arbitrary dependency packages.
+Optional updates override bundled languages only when they load successfully;
+separate bundled metadata lookup permits recovery from a damaged override.
+Removal affects only the override, with bundled restoration after restart.
+Inactive versions remain rollback cache rather than deleting loaded Windows
+native files. The source environment retains its existing pip path.
+
+The small installer/packaging requirements belong to desktop and dev extras;
+the minimal analysis core remains without mandatory third-party dependencies.
+See DESKTOP_PLUGIN_INSTALLATION.md. Full/frozen validation is in progress.
+
+
+D-074 final full-suite and installer validation is complete. The authoritative
+dated counts, checksum, signature status and friend kit are recorded in
+RELEASE_VALIDATION_D074_2026-10-27.json. Clean-PC acceptance and public catalogue
+delivery remain separate; previous in-progress notes above are historical.
+
+
+## D-075 - Bounded claims, report consistency and input feasibility (2026-10-27)
+
+After D-074 completed, the owner authorized report corrections and a feasibility
+check. Use the dated release validation record, attribute graph judgements to
+AI, separate safety endpoints and describe cost/feedback limits. No original
+study results are altered. Four old structural datasets support development;
+the nine confirmatory CSVs have no graph columns. Three code-only HikariCP
+probes establish a small extraction/mapping proof, not a selector experiment.
+Proceed protocol-first with a bounded pilot; do not call reused cohorts fresh
+confirmation. The stronger partial-feedback claim needs new evaluation, while
+the bounded retrospective system claim does not depend on a positive study.
+Details: REPORT_REVISION_NOTES_D075.md and PARTIAL_FEEDBACK_FEASIBILITY.md.
+
+
+## D-076 - Observation-isolated development pilot (2026-10-27)
+
+The effective protocol was frozen as v2 in 1965665 before real evaluation.
+Source checkpoint 72e6043 implements independent policy factories, observed-only
+history features, ancestry-scoped complete fit/calibration/audit data, frozen
+decision-time features and exact reference/source universe checks. Audits have a
+fixed schedule and replace reduced execution rather than double-counting cost.
+The runner checkpoints source plans with input/protocol/source hashes and stops
+on mapping mismatches. Fifteen offline kernel/runner tests pass. Real pilot and
+the required full Maven-inclusive suite remain in progress. This reused-data
+pilot is descriptive development evidence, not independent confirmation or a
+product-policy change. See PARTIAL_FEEDBACK_PILOT_PROTOCOL.md.
+
+## D-077 - Explain existing decisions and export bounded evidence (2026-10-27)
+
+The owner authorized engineering improvements after asking how to strengthen
+the novelty feature. Reuse the existing static test-discovery endpoint to show
+declared check names, framework, language and source path at the selected
+commit. Do not generate semantic claims from names or treat static discovery
+as execution. Discard stale responses and reject another commit's details.
+
+Evidence health presents the core's refusal, comparison SHAs and available
+history fingerprint, with recovery guidance rather than weaker gates or a
+promise that more passing tests will validate risk. An explicit save dialog
+exports a versioned, allowlisted decision record containing comparison,
+selection, risk and actual execution statuses. It omits source, environment,
+raw logs and per-case failure messages; local paths and names remain disclosed.
+Canceling the dialog writes nothing. No backend behavior or dependency changes.
+
+TypeScript compilation passed; 27 Node UI/workflow tests pass. The workflow
+test exercises real view methods against a contract fixture, not a real Maven
+build or a clean-PC install. Full Python validation is running against the
+unchanged D-076 backend. Installer rebuilding is deferred by owner instruction.
+Per-operation core cancellation and broader progress/caching improvements are
+still pending; the existing elapsed-time notification is not a percentage.
+
+
+## D-078 - Truthful read-only pilot progress (2026-10-27)
+
+The owner previously found a process-detection viewer confusing. Provide a
+small PowerShell viewer for the current research runner's actual checkpoints.
+Its bar counts source snapshots only; replay has no fabricated percentage.
+Show checkpoint age without claiming that an OS process is alive or stuck.
+Display stop diagnostics and require a results file before showing completion.
+The viewer never mutates study files or starts/stops a process. Eight offline
+checks pass in a temporary Git fixture, including preservation of progress
+bytes and refusal of completion without results. This is research progress
+visibility; per-operation IDE cancellation remains a separate pending task.
+
+
+D-077 risk presentation refinement: B10's model-audit miss-rate bound is labelled
+as using all audit commits. CRC's corrected bound is separately labelled among
+failing commits, with its exchangeability assumption. The calibrated skip-risk
+score is distinct from that bound. Missing numeric evidence is shown as not
+reported rather than zero. Structural mode and unsupported changes receive
+appropriate recovery guidance; more passing history is never presented as a
+way to validate an unsupported domain. Core decisions and thresholds are unchanged.
+TypeScript and all 27 Node tests pass after these refinements.
+
+
+## D-079 - Scoped Git validation and immutable risk snapshots (2026-10-28)
+
+Matched parse-cache timings preserved output on three real snapshots but were
+variable. Profiling one selector call attributed 2.430 of 3.887 seconds to 19
+Git subprocesses. Reuse successful repository and full immutable-commit validation
+only inside one analysis operation. Nested calls share a bounded ContextVar
+scope; separate threads, requests, Git environment routing and exception exits
+do not share validation. Mutable refs and WORKTREE remain fresh. A hex-looking
+branch is not an immutable object unless Git resolves that exact object identity.
+No file trees, history outcomes, models or audit acceptance are cached here.
+
+On three saved code snapshots, Git launches fell from 19 to 15, 28 to 24 and
+22 to 18 with identical selection JSON. Local timings were mixed and are not
+claimed as CI speedup. See GIT_VALIDATION_REUSE_MEASUREMENTS_2026-10-28.json.
+
+A deterministic concurrent-edit regression also exposed Java risk features
+being extracted from the original mutable refs after selection had frozen its
+snapshot. Extract features from the selection's immutable base/head commits.
+The new regression failed before the fix and passes after it. User edits remain
+untouched; insufficient-history fallback still applies. Thresholds, model choices
+and defaults are unchanged. Seventy-two focused risk/brake tests and ten final
+scope/snapshot tests pass. Full Maven-inclusive validation is running.
+
+
+## D-080 - Bounded owned analysis jobs (2026-10-28)
+
+An aborted HTTP request does not cancel analysis. Run optional read-only jobs
+in private contained workers: one active, two queued, session-owned random IDs,
+300-second deadline, 600-second retention, eight records, 8 MiB message limit.
+Keep old synchronous routes compatible. Reuse their typed schemas and core
+functions, leaving build/test execution and mutation outside the job API.
+Token and loopback protections apply to every new route. Worker input is sent
+only after containment; cancelled state cannot become completed. An inability
+to confirm cleanup stops dispatch and remains an error.
+
+The Tests recommendation view shows actual stages and elapsed seconds, never
+an invented percentage. Capability version 1 enables cancellation; an older
+packaged core keeps the synchronous path. Other views are not yet migrated.
+Preserve plugin activation across replacement workers and consented API
+restarts; a pending plugin update must not activate before application restart.
+Source/frozen entry contracts and real Windows descendants are tested, while
+actual rebuilt frozen execution and installation remain deferred. This adds
+no runtime dependencies, changes no risk gate/default and claims no new speedup
+or research safety. Full source validation is pending after focused checks.
+
+
+## D-081 - Consistent Changes snapshots and navigation (2026-10-28)
+
+The Changes view previously analysed change and impact in parallel using the
+original mutable references. Analyse changes first and pass its immutable
+base/head to impact, in both legacy and job-capable paths. Add operation-bound
+cancellation/stages and stale-response/duplicate-click guards. Open current files
+relative to the report's canonical repository, preserve optional line selection,
+explain missing files and disclose that working-file lines may differ. Do not
+translate no discovered impacts into a claim that no dependencies exist.
+
+A new API regression also found that a worker's trusted cwd changed relative
+path meaning. Anchor request paths at submission in the API process, preserving
+empty optional defaults. This regression failed before the fix; eight API tests
+pass after it. TypeScript and 43 Node workflows pass. The partial D-080 full run
+was stopped deliberately; full combined validation is required. No risk/model
+logic, defaults, research outputs or installed desktop package changed.
+
+D-080/D-081 verification: source 912f4c9 passed 636 tests, zero failures/skips,
+one existing warning, 1086.89 seconds, with Maven included. TypeScript and
+43 Node workflows pass. Source/frozen entry tests do not replace rebuilding and
+testing the actual packaged executable at the final installation stage.
+
+## D-082 - Actual isolated frozen-core validation (2026-10-28)
+
+The owner requested executable validation. Build an isolated frozen candidate
+from source 450e6ad without replacing the installed IDE or older installer.
+Twenty checks passed against the actual executable: seven plugin checks,
+seven owned-worker/restart checks, and six MCP brake checks using real Maven.
+The complete 1456-file manifest was verified. Evidence and hashed logs are in
+FROZEN_CORE_VALIDATION_D082_2026-10-28.json. Test outcomes remain authoritative:
+failure blocks, a passing run passes, and skipped required tests are incomplete.
+These disposable synthetic fixtures prove engineering behavior; they do not
+establish selector accuracy, online catalogue availability or clean-PC acceptance.
+
+## D-083 - Measured latency with fresh decisions (2026-10-28)
+
+Add optional bounded stage telemetry to read-only jobs and MCP operations.
+Keep core operation time and worker startup separate; nested inclusive stages
+must never be added together. Timings export only known stage/counter fields.
+Tests and Changes show collapsed timing details, not fabricated progress.
+
+Reuse immutable parses inside a synchronous operation. Fitted model/calibrator
+reuse is opt-in, process-local, defensive-copy, two-entry LRU with a five-minute
+TTL. Key repository/base/history namespace, complete dataset fingerprint,
+feature order, target, schema and implementation identities. Read and hash the
+same CSV bytes. Never persist executable models, selected sets or accepted risk.
+Always repeat current eligibility, prior audit, conformal threshold and decision.
+Batch independent audit predictions while retaining commit boundaries/order.
+
+If must-run policy already requires every discovered test, return the full
+suite before reading/fitting history. Retain unvalidated probability and explain
+that fitting cannot shorten this plan. No uncertain cost heuristic, risk target,
+default ordering or gate is changed. Isolated API workers still fit cold;
+cross-call model reuse benefits only long-lived, explicitly scoped consumers.
+
+Matched three-trial interleaved medians on one inspected HikariCP dataset were
+1.779s original, 1.403s batched fresh and 0.516s batched reused. All 7495 audit
+probabilities and all 357 per-commit decisions matched exactly in a separate
+post-hoc check. This excludes Git, graphs, process startup and project tests;
+it is engineering evidence, not independent accuracy confirmation or CI speedup.
+See PERFORMANCE_ENGINEERING.md and the three D083 measurement JSON files.
+Full source and updated packaged validation must be recorded after they finish.
+
+
+## D-084 - Standalone demo build output (2026-10-28)
+
+Actual D083 packaged acceptance exposed Java editor-generated target/classes
+appearing as untracked binary changes in the standalone sample. Add a project
+.gitignore containing /target/ to examples/sample-java-project; the demo copier
+carries it into generated repositories. Do not broaden the core's exclusion
+rules or risk domain. A real Git regression failed before the fix and passes
+with both source and resource edits still visible. All four demo checks pass
+with Maven included (90.25s). This is sample-project hygiene, not changed risk
+policy or a claim that the earlier binary was rebuilt after this file change.
+
+## D-085 - Bounded optional Java behavioral witnesses (2026-10-28)
+
+The owner approved the focused Moonshot scope after existing engineering.
+D083's source/frozen/critical GUI validation is complete. Add one optional
+Java capability, not the full untracked proposal or a new app/language/model.
+
+Compare the same bounded int inputs on immutable versions of one selected
+public static int(int) method. Compile only its self-contained source with
+annotation processing disabled, in isolated temporary folders and consented
+owned workers. Use syntax-derived boundary suggestions or a fixed/seeded simple
+baseline. Confirm unequal normal returns with fresh JVMs, attempt bounded input
+reduction and reconfirm. Export the selected full source files, hashes and a
+standalone JDK-only reproducer. Base is not an oracle; absence of a witness is
+not equivalence or justification to skip tests. Reject unsupported, unstable,
+exceptional, timed-out or incomplete work explicitly. No executable model cache,
+paid AI, new runtime dependency or default risk/policy change.
+
+Core controller/transport are language-neutral; Java belongs behind an optional
+plugin capability. Existing plugin API 1.1 is compatible because find_witness
+is read with getattr and is not a new required Protocol member. Read-only
+jobs stay read-only. MCP offers codedna_find_witness only with explicit
+--moonshot --allow-build --repo. It shares repository binding and supplements,
+never replaces, codedna_check. Existing default tool lists remain identical.
+
+Initial 28 focused checks passed (115.68s); combined opt-in MCP/existing-brake
+checks 29 passed (225.15s, one existing warning); runner guards four passed.
+Full source/frozen validation remains pending. The fixed 48-search comparison
+uses already inspected synthetic illustrations and is not independent research
+confirmation. Commit its manifest/protocol/runner before execution and retain
+all cases, no-difference results, unsupported cases and reproduction failures.
+D083's installer remains the preceding stable candidate. See
+BEHAVIORAL_WITNESS.md and MOONSHOT_PILOT_PROTOCOL.md.
+
+
+D085 failure-path review: a forced cleanup-confirmation error exposed the missing
+session circuit breaker. The regression failed before the fix and now passes.
+Unconfirmed cleanup or unfinished worker I/O makes the result inconclusive and
+blocks later witness execution before repository access/new exports. Avoid closing
+buffered streams while reader threads still hold them; drain with one bounded
+cleanup deadline. Include subprocess cleanup errors in the controlled failure
+path. Nine final guard/real CLI/timeout/Ctrl+C/runner checks pass (31.40s). A
+normal cancellation remains distinct from unconfirmed cleanup. The fault injector
+actually closed its owned process; this is not evidence of a leaked real study.
+
+
+D085 encoding correction: JDK 17 reports Cp1252 on this Windows laptop. Without
+an explicit encoding, the prototype could misread UTF-8 string literals and
+emit different observations on another PC. Stop the early 711-test invocation
+at about 12 percent rather than counting mixed-source validation. Two real
+regressions failed before and passed after (13.08s): an emoji byte/UTF-16-length
+comparison produces the declared UTF-8 pair and independently reproduces; a
+non-UTF8 source is refused before JVM execution. Validate source bytes as UTF-8,
+set javac -encoding UTF-8 and startup file.encoding=UTF-8, and apply identical
+settings in the standalone reproducer. Disclose the controlled scenario rather
+than assuming every project runtime has those settings. Keep the interrupted
+log separate. Unconfirmed witness cleanup also blocks MCP checking before any
+build while leaving read-only test planning available.
+
+
+## D085 completed engineering evidence — 2026-10-28
+
+Corrected source 4d35941 passed all 714 Maven-inclusive tests, zero skips/failures.
+Actual frozen executable: 32 passing contracts and 1462 verified bundle files.
+Installer embedded payload and restricted-PATH unpacked smoke passed; local
+friend kit includes demos and manual checklist. No installation/clean-PC claim.
+The unchanged D083 production frontend was reused. Three D085 packaged GUI checks
+pass: isolated launch, bundled language display and tab restoration on restart.
+The full D083 GUI test was not repeated; its earlier evidence remains separate.
+
+The fixed optional Moonshot comparison completed all 48 searches. All 15 emitted
+witnesses independently reproduced using only the JDK. Guided outcomes were
+12 difference / 3 no-difference / 6 inconclusive / 3 unsupported, versus simple
+3 / 12 / 6 / 3. Median whole-call costs were 11.234s / 10.057s. Repeated synthetic
+cases, with boundaries favoring guidance, are not independent real bugs or a
+net-CI speedup. A difference is not necessarily a regression; no witness does
+not validate skipping. The risk policy and original mixed findings are unchanged.
+See the D085 source/frozen/release/pilot evidence JSONs and pilot FINDINGS.md.

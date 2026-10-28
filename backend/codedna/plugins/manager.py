@@ -5,6 +5,8 @@ caller names an exact catalogue version and confirms; the wheel is
 downloaded from the URL the validated catalogue gives, its SHA-256 checked
 before pip sees it, and pip installs that one file into CodeDNA's own
 environment (``sys.executable``) with no index and no dependency resolution.
+The frozen desktop instead stages the wheel in its per-user plugin store,
+validates it in an isolated child and atomically activates it for next restart.
 Nothing here accepts a URL or file from the caller.
 """
 
@@ -86,6 +88,12 @@ def install(catalogue: dict, plugin: str, version: str, *, confirmed: bool,
     digest = hashlib.sha256(data).hexdigest()
     if digest != entry.sha256:
         raise CatalogueError(f"checksum mismatch for {plugin} {version}: got {digest}")
+    if getattr(sys, "frozen", False) and pip is None:
+        from codedna.plugins import desktop_store
+        with tempfile.TemporaryDirectory(prefix="codedna-plugin-") as tmp:
+            wheel = Path(tmp) / name
+            wheel.write_bytes(data)
+            return desktop_store.install(wheel, entry, digest)
     run = pip or _pip
     previous = _installed_version(entry.package or "", run)
     with tempfile.TemporaryDirectory(prefix="codedna-plugin-") as tmp:
@@ -152,6 +160,11 @@ def remove(catalogue: dict, plugin: str, *, confirmed: bool, pip: Runner | None 
     if not entries:
         raise CatalogueError(f"{plugin} is not in the official catalogue")
     package = next((e.package for e in entries if e.package), None)
+    if getattr(sys, "frozen", False) and pip is None:
+        if not confirmed:
+            raise CatalogueError("removing a plugin requires explicit confirmation")
+        from codedna.plugins import desktop_store
+        return desktop_store.remove(plugin)
     if package is None:
         raise CatalogueError(f"{plugin} is bundled with CodeDNA and cannot be removed here")
     if not confirmed:

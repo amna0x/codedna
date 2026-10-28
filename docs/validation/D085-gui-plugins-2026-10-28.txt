@@ -1,0 +1,220 @@
+Window: "CodeDNA IDE", App: CodeDNA IDE.exe.
+	0 window CodeDNA IDE Secondary Actions: Raise
+		1 pane (disabled)
+		2 region CodeDNA IDE
+			3 region
+				4 region
+					5 region
+						6 region
+							7 region
+								8 region
+									9 document CodeDNA IDE Value: file:///C:/Users/hp/OneDrive/Documents/GitHub/codedna/build/desktop-D085-2026-10-28/installer/win-unpacked/resources/app/lib/frontend/index.html?port=61432 ID: RootWebArea
+										10 group
+											11 group ID: theia:menubar
+												12 menu bar
+													13 menu item File
+													14 menu item Edit
+													15 menu item Selection
+													16 menu item View
+													17 menu item Go
+													18 menu item Run
+													19 menu item Terminal
+													20 menu item Help
+											21 text CodeDNA IDE
+											22 group ID: minimize-button
+												23 text 
+											24 group ID: maximize-button
+												25 text 
+											26 group ID: close-button
+												27 text 
+											28 group ID: theia-left-right-split-panel
+												29 group
+												30 tab
+													62 text 
+													63 text 
+													64 text 
+													65 text 
+													66 text 
+													95 text 
+												37 group
+												38 group
+												39 group
+													40 group
+														68 text 
+												69 text Extensions: Language plugins
+												70 group ID: theia-left-side-panel
+													71 tab panel Extensions: Language plugins ID: codedna.extensions
+														72 group
+															73 group ID: codedna.plugins
+																74 header
+																	75 heading Language plugins
+																	76 text Each language CodeDNA understands comes from a plugin. Java and Python are bundled.
+																	77 text These are CodeDNA analysis plugins. Editor completion and debugging extensions are separate.
+																78 button Refresh
+																79 heading Installed
+																80 list
+																	81 list item Java (Maven, Gradle, JUnit 4/5, JaCoCo)v0.1.0.java · plugin API 1.1
+																		82 text Java (Maven, Gradle, JUnit 4/5, JaCoCo)
+																		83 text v
+																		84 text 0.1.0
+																	85 list item Python (pytest)v0.1.0.py · plugin API 1.1
+																		86 text Python (pytest)
+																		87 text v
+																		88 text 0.1.0
+																89 heading Official catalogue
+																90 text The catalogue can’t be reached
+																91 text Installing new plugins needs the official catalogue online. Installed plugins keep working.
+																92 details
+																	93 disclosure triangle Details
+																		94 text Details
+												42 group ID: theia-main-content-panel
+												43 group
+												44 tab
+													45 text 
+												46 group
+												47 group
+												48 group
+											49 group ID: theia-statusBar
+												50 group $(codicon-error) 0 $(codicon-warning) 0, No Problems ID: status-bar-problem-marker-status
+													51 text 
+													52 text 0
+													53 text 
+													54 text 0
+												55 group No Notifications ID: status-bar-theia-notification-center
+													56 text 
+												57 button Toggle Bottom Panel ID: status-bar-bottom-panel-toggle
+											58 group
+											59 group
+											60 group ID: select-component-container
+								61 region
+
+Document text: ```
+￼
+￼
+￼
+File
+￼
+Edit
+￼
+Selection
+￼
+View
+￼
+Go
+￼
+Run
+￼
+Terminal
+￼
+Help
+CodeDNA IDE
+
+
+
+￼
+
+
+
+
+
+
+￼
+￼
+
+Extensions: Language pluginsExtensions: Language plug…
+￼
+Language plugins
+Each language CodeDNA understands comes from a plugin. Java and Python are bundled.
+These are CodeDNA analysis plugins. Editor completion and debugging extensions are separate.
+Refresh
+Installed
+Java (Maven, Gradle, JUnit 4/5, JaCoCo)v0.1.0.java · plugin API 1.1
+Python (pytest)v0.1.0.py · plugin API 1.1
+Official catalogue
+The catalogue can’t be reached
+Installing new plugins needs the official catalogue online. Installed plugins keep working.
+Details
+￼
+￼
+￼
+
+￼
+￼
+￼
+￼
+
+0
+
+0
+
+
+￼
+￼
+￼
+￼
+￼
+```
+￼
+￼
+￼
+File
+￼
+Edit
+￼
+Selection
+￼
+View
+￼
+Go
+￼
+Run
+￼
+Terminal
+￼
+Help
+CodeDNA IDE
+
+
+
+￼
+
+
+
+
+
+
+￼
+￼
+
+Extensions: Language pluginsExtensions: Language plug…
+￼
+Language plugins
+Each language CodeDNA understands comes from a plugin. Java and Python are bundled.
+These are CodeDNA analysis plugins. Editor completion and debugging extensions are separate.
+Refresh
+Installed
+Java (Maven, Gradle, JUnit 4/5, JaCoCo)v0.1.0.java · plugin API 1.1
+Python (pytest)v0.1.0.py · plugin API 1.1
+Official catalogue
+The catalogue can’t be reached
+Installing new plugins needs the official catalogue online. Installed plugins keep working.
+Details
+￼
+￼
+￼
+
+￼
+￼
+￼
+￼
+
+0
+
+0
+
+
+￼
+￼
+￼
+￼
+￼

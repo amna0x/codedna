@@ -1,0 +1,265 @@
+Window: "d083-gui-project - CodeDNA IDE", App: CodeDNA IDE.exe.
+	0 window d083-gui-project - CodeDNA IDE Secondary Actions: Raise
+		12 pane (disabled)
+		1 region d083-gui-project - CodeDNA IDE
+			2 region
+				3 region
+					4 region
+						5 region
+							6 region
+								7 region
+									10 document d083-gui-project - CodeDNA IDE Value: file:///C:/Users/hp/OneDrive/Documents/GitHub/codedna/build/desktop-D083-2026-10-28/installer-r2/win-unpacked/resources/app/lib/frontend/index.html?port=52307#/c:/Users/hp/OneDrive/Documents/ChatGPT/codedna/.diagnostics/d083-gui-project ID: RootWebArea
+										17 group
+											25 group ID: theia-app-shell
+												26 group ID: theia:menubar
+													27 menu bar
+														60 menu item File
+														61 menu item Edit
+														62 menu item Selection
+														63 menu item View
+														64 menu item Go
+														65 menu item Run
+														66 menu item Terminal
+														67 menu item Help
+												28 text d083-gui-project - CodeDNA IDE
+												29 group ID: minimize-button
+													68 text 
+												31 group ID: maximize-button
+													69 text 
+												33 group ID: close-button
+													70 text 
+												21 group ID: theia-left-right-split-panel
+													35 group
+													36 tab
+														71 text 
+														72 text 
+														73 text 
+														74 text 
+														75 text 
+														76 text 
+													43 group
+													44 group
+													45 group
+														46 group
+															77 text 
+													22 group ID: theia-main-content-panel
+													48 group
+													49 tab
+														302 text 
+														79 text 
+													52 group
+													53 group
+													54 group
+													55 group Description: CodeDNA: which tests to run for your change, and why
+														360 text Tests to run
+													57 group ID: theia-right-side-panel
+														58 tab panel Tests to run ID: codedna.tests
+															80 header
+																81 heading Tests to run
+																82 text Run the tests your change can break — and see why each one is needed.
+															83 text Compare
+															84 combo box (settable, string) Compare Value: My uncommitted changes
+															85 text Which tests
+															86 combo box (settable, string) Which tests Value: Validated risk stopping
+															87 text Test history file (optional)
+															88 edit (settable, string) Test history file (optional) Description: Use this project’s saved history
+															89 button Suggest tests
+															90 button Open project history
+															312 details
+																313 disclosure triangle Suggestion analysis timing
+																	314 text Suggestion analysis timing
+															315 region Risk evidence
+																316 heading Risk unvalidated
+																317 text Run the full suite because the evidence does not justify risk-based skipping.
+																318 text Passing tests and validated skip risk are different. A successful run records what happened; it does not prove that future tests can be skipped. Only sufficiently audited earlier history can support that decision.
+																319 list
+																	320 list item No target-project test history is available.
+																321 details
+																	322 disclosure triangle Evidence health and next steps
+																		323 text Evidence health and next steps
+															324 button Export decision evidence
+															325 text The export includes local paths, test names and risk evidence. It excludes source code and raw build logs.
+															326 button Run 2 recommended tests
+															327 text Compared commits:
+															328 text c71303ff
+															329 text →
+															330 text d84981d6
+															331 text Run
+															332 text 2
+															333 text of
+															334 text 2 tests
+															335 text .
+															336 text That’s all of them.
+															337 text No test-time savings estimate is available for this plan.
+															338 text Good to know
+															339 list
+																340 list item binary file, line ranges unavailable: target/classes/example/OrderService.class
+																341 list item binary file, line ranges unavailable: target/classes/example/PriceCalculator.class
+																342 list item binary file, line ranges unavailable: target/test-classes/example/OrderServiceTest.class
+																343 list item binary file, line ranges unavailable: target/test-classes/example/PriceCalculatorTest.class
+															361 region Discovered test details
+																362 heading Checks declared in PriceCalculatorTest
+																363 text src/test/java/example/PriceCalculatorTest.java
+																364 text at
+																365 text d84981d68cb8
+																366 text junit5
+																367 text · java
+																368 list
+																	369 list item line Price Multiplies Unit Price By QuantitylinePriceMultipliesUnitPriceByQuantity
+																		370 text linePriceMultipliesUnitPriceByQuantity
+																	371 list item negative Quantity Is RejectednegativeQuantityIsRejected
+																		372 text negativeQuantityIsRejected
+																	373 list item discount Is ApplieddiscountIsApplied
+																		374 text discountIsApplied
+																	375 list item invalid Discount Rate Is RejectedinvalidDiscountRateIsRejected
+																		376 text invalidDiscountRateIsRejected
+																377 text These names come from project source. Read the assertions for exact behavior; discovery does not execute or verify these checks. Source navigation opens your current working copy, which may differ from this commit.
+																378 button Read source (working copy)
+															344 region Run these
+																345 heading Run these
+																346 text Each item is a test class or module and may contain several checks. Select an item to read its source; after running, inspect its individual outcomes above.
+																347 button OrderServiceTest Run example risk unvalidated: run the full suite Description: Open example.OrderServiceTest
+																	348 list
+																		349 list item risk unvalidated: run the full suite
+																350 text src/test/java/example/OrderServiceTest.java
+																351 button Explain this test
+																352 button PriceCalculatorTest Run example risk unvalidated: run the full suite Description: Open example.PriceCalculatorTest
+																	353 list
+																		354 list item risk unvalidated: run the full suite
+																355 text src/test/java/example/PriceCalculatorTest.java
+																356 button Explain this test
+															357 text Risk-based skipping requires a separate prior audit. Refresh evidence with full-suite runs; selected-only results cannot reveal missed failures.
+															358 group
+																359 group
+												98 group ID: theia-statusBar
+													102 group $(codicon-error) 0 $(codicon-warning) 0, No Problems ID: status-bar-problem-marker-status
+														103 text 
+														104 text 0
+														105 text 
+														106 text 0
+													117 group $(coffee) Java: Ready, Show Java status menu ID: status-bar-java.serverStatus
+														272 text 
+														121 text Java: Ready
+													107 group No Notifications ID: status-bar-theia-notification-center
+														209 text 
+													109 button Toggle Bottom Panel ID: status-bar-bottom-panel-toggle
+											19 group
+											24 group
+											101 group ID: select-component-container
+								9 region
+
+Document text: ```
+￼
+￼
+￼
+File
+￼
+Edit
+￼
+Selection
+￼
+View
+￼
+Go
+￼
+Run
+￼
+Terminal
+￼
+Help
+d083-gui-project - CodeDNA IDE
+
+
+
+￼
+
+
+
+
+
+
+￼
+￼
+
+￼
+￼
+￼
+￼
+
+
+￼
+￼
+￼
+Tests to run
+Tests to run
+Run the tests your change can break — and see why each one is needed.
+Compare
+￼
+Which tests
+￼
+Test history file (optional)
+￼
+Suggest tests
+Open project history
+Suggestion analysis timing
+Risk unvalidated
+Run the full suite because the evidence does not justify risk-based skipping.
+Passing tests and validated skip risk are different. A successful run records what happened; it does not prove that future tests can be skipped. Only sufficiently audited earlier history can support that decision.
+• No target-project test history is available.
+Evidence health and next steps
+Export decision evidence
+The export includes local paths, test names and risk evidence. It excludes source code and raw build logs.
+Run 2 recommended tests
+Compared commits: c71303ff → d84981d6
+Run 2 of 2 tests. That’s all of them.
+No test-time savings estimate is available for this plan.
+Good to know
+• binary file, line ranges unavailable: target/classes/example/OrderService.class
+• binary file, line ranges unavailable: target/classes/example/PriceCalculator.class
+• binary file, line ranges unavailable: target/test-classes/example/OrderServiceTest.class
+• binary file, line ranges unavailable: target/test-classes/example/PriceCalculatorTest.class
+Checks declared in PriceCalculatorTest
+src/test/java/example/PriceCalculatorTest.java
+at
+d84981d68cb8
+junit5 · java
+• line Price Multiplies Unit Price By Quantity
+linePriceMultipliesUnitPriceByQuantity
+• negative Quantity Is Rejected
+negativeQuantityIsRejected
+• discount Is Applied
+discountIsApplied
+• invalid Discount Rate Is Rejected
+invalidDiscountRateIsRejected
+These names come from project source. Read the assertions for exact behavior; discovery does not execute or verify these checks. Source navigation opens your current working copy, which may differ from this commit.
+Read source (working copy)
+Run these
+Each item is a test class or module and may contain several checks. Select an item to read its source; after running, inspect its individual outcomes above.
+OrderServiceTest
+Run
+example
+• risk unvalidated: run the full suite
+src/test/java/example/OrderServiceTest.java
+Explain this test
+PriceCalculatorTest
+Run
+example
+• risk unvalidated: run the full suite
+src/test/java/example/PriceCalculatorTest.java
+Explain this test
+Risk-based skipping requires a separate prior audit. Refresh evidence with full-suite runs; selected-only results cannot reveal missed failures.
+￼
+
+0
+
+0
+
+Java: Ready
+
+
+￼
+￼
+￼
+￼
+￼
+```

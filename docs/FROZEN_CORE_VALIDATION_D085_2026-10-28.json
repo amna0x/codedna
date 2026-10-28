@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-28",
+  "source_commit": "4d359419ad68874c374a45d83732845327aeed41",
+  "scope": "actual isolated D085 frozen core; no installed/clean-PC acceptance claim",
+  "core": "C:\\Users\\hp\\OneDrive\\Documents\\GitHub\\codedna\\build\\desktop-D085-2026-10-28\\core\\dist\\codedna-core\\codedna-core.exe",
+  "core_sha256": "7d6d8aae69406141d9f73d71c45a4a2a241c09bb94be182c784f31786f969b16",
+  "manifest_files_verified": 1462,
+  "checks": {
+    "plugins": {
+      "scope": "production frozen core, restricted PATH, isolated per-user store; not clean-PC acceptance",
+      "checks": {
+        "install_and_cold_restart": "passed",
+        "damaged_optional_uses_bundled_fallback": "passed",
+        "broken_update_preserves_working_version": "passed",
+        "missing_dependency_preserves_working_version": "passed",
+        "checksum_refusal": "passed",
+        "remove_and_restore_bundled_python": "passed",
+        "bundled_removal_refused": "passed"
+      },
+      "bundle_files_verified": 1462
+    },
+    "jobs": {
+      "scope": "actual frozen executable, isolated offline fixtures; not clean-PC/installed IDE acceptance",
+      "core": "C:\\Users\\hp\\OneDrive\\Documents\\GitHub\\codedna\\build\\desktop-D085-2026-10-28\\core\\dist\\codedna-core\\codedna-core.exe",
+      "checks": {
+        "worker_and_descendant_cancelled": "passed",
+        "unrelated_process_survived": "passed",
+        "real_frozen_profile_metrics_without_project_source": "passed",
+        "analysis_recovers_after_cancel": "passed",
+        "replacement_worker_keeps_parent_plugin": "passed",
+        "consented_api_restart_keeps_plugin_snapshot": "passed",
+        "application_restart_activates_pending_update": "passed",
+        "analysis_preserves_project_and_history": "passed"
+      },
+      "cancellation_confirmed_seconds": 0.031
+    },
+    "brake": {
+      "scope": "actual frozen MCP and real Maven, isolated synthetic history; engineering evidence only",
+      "core": "C:\\Users\\hp\\OneDrive\\Documents\\GitHub\\codedna\\build\\desktop-D085-2026-10-28\\core\\dist\\codedna-core\\codedna-core.exe",
+      "checks": {
+        "cold_history_requires_full_suite": "passed",
+        "build_consent_enforced": "passed",
+        "crc_plan_with_synthetic_history": "passed",
+        "frozen_model_reuse_still_runs_fresh_audit_and_real_tests": "passed",
+        "frozen_mcp_profile_scope_preserves_build_consent": "passed",
+        "real_failing_required_tests_block": "passed",
+        "real_passing_required_tests_pass": "passed",
+        "real_skipped_required_test_is_incomplete": "passed"
+      },
+      "verdicts": {
+        "breaking": "blocked",
+        "harmless": "passed",
+        "skipped": "incomplete"
+      }
+    },
+    "witness": {
+      "scope": "actual frozen D085 executable; isolated synthetic Java, not independent accuracy/clean-PC evidence",
+      "core": "C:\\Users\\hp\\OneDrive\\Documents\\GitHub\\codedna\\build\\desktop-D085-2026-10-28\\core\\dist\\codedna-core\\codedna-core.exe",
+      "core_sha256": "7d6d8aae69406141d9f73d71c45a4a2a241c09bb94be182c784f31786f969b16",
+      "checks": {
+        "moonshot_without_execution_consent_refused": "passed",
+        "default_mcp_tools_unchanged": "passed",
+        "opt_in_frozen_mcp_executes_contained_witness": "passed",
+        "frozen_unicode_observations_use_declared_utf8": "passed",
+        "witness_is_not_a_regression_or_skip_risk_verdict": "passed",
+        "independent_jdk_only_reproducer_matches_frozen_pair": "passed",
+        "original_repository_preserved": "passed",
+        "frozen_timeout_stops_jvm_and_descendant": "passed",
+        "terminating_frozen_parent_stops_jvm_and_descendant": "passed"
+      }
+    }
+  },
+  "logs_sha256_utf8_lf": {
+    "docs/validation/D085-frozen-plugins-2026-10-28.txt": "79b556052c94f3888623da97d051a4a7987414983c33f90bb0775776a1d3dce1",
+    "docs/validation/D085-frozen-jobs-2026-10-28.txt": "c2dcf95b7385a261fd740054278550a46f8b1f2c2d7f83a49816d872a184714d",
+    "docs/validation/D085-frozen-brake-2026-10-28.txt": "cb5356adb817f76a486adb7fc519c80a365e3082a5b619e21036bc1226992da4",
+    "docs/validation/D085-frozen-witness-2026-10-28.txt": "dceac53757cf87d5f1c14e5fd8bc2d5886722a7b56a9d33a3699fb385d15d283"
+  },
+  "limits": [
+    "Synthetic fixture contracts, not independent selector accuracy or novelty confirmation.",
+    "No public catalogue availability or friend-PC installation is established.",
+    "Windows parent-termination and timeout cleanup tested; POSIX execution not exercised on this host.",
+    "Original research findings and risk gates unchanged; no push/merge/stash/public-hosting changes."
+  ],
+  "checks_passed": 32
+}

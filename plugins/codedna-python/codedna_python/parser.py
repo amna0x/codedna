@@ -22,6 +22,8 @@ setter, say) is one declaration with several parts.
 
 from __future__ import annotations
 
+from codedna.performance import timed
+
 import ast
 import copy
 import io
@@ -108,6 +110,7 @@ class PythonParseResult:
         return grouped
 
 
+@timed('parse.python')
 def parse_python(source: bytes, path: str = "module.py") -> PythonParseResult:
     """Parse ``source``, the contents of the repository file at ``path``."""
     module = module_name(path)

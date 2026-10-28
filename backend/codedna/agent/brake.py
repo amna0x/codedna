@@ -13,7 +13,7 @@ it is done:
   - ``passed``: every listed test class has a result and none failed;
   - ``blocked``: at least one listed test class failed;
   - ``incomplete``: some listed class has no result, the build exited with
-    an error or timed out, or every listed class was skipped, so nothing can
+    an error or timed out, or a listed class was skipped, so nothing can
     be concluded;
   - ``nothing_to_run``: validated history says no test needs to run for this
     change (the skipped tests and the estimated risk are in the plan);
@@ -34,10 +34,14 @@ from __future__ import annotations
 from pathlib import Path
 from uuid import uuid4
 
+from codedna.git_analysis.git import reuse_git_validation
+from codedna.dependency_graph.cache import reuse_parse_cache
 from codedna.git_analysis.git import WORKTREE, resolve_repository
 from codedna.selection import SelectionError
 
 
+@reuse_git_validation
+@reuse_parse_cache
 def plan(repo_path: str | Path, *, base: str = "HEAD", head: str = WORKTREE,
          risk_target: float = 0.05, must_run: list[str] | None = None,
          language: str | None = None, method: str = "b10") -> dict:
@@ -94,6 +98,10 @@ def plan(repo_path: str | Path, *, base: str = "HEAD", head: str = WORKTREE,
             "target": risk["target"],
             "estimated_skip_risk": risk["estimated_skip_risk"],
             "reasons": risk["reasons"],
+            "objective": "omit_any_failing_test",
+            "note": ("Historical evidence supports a selection rule, not a guarantee for "
+                     "this change or a proof that the patch is correct."),
+            "audit": _audit_summary(risk),
             **({"conformal": risk["conformal"]} if risk.get("conformal") else {}),
             **({"estimate_is_conservative": True} if risk.get("estimate_is_conservative") else {}),
         },
@@ -162,12 +170,12 @@ def _run_verdict(tests: list[str], run) -> dict:
         return _verdict("incomplete", "the build exited with an error or timed out "
                         f"(exit codes {run.exit_codes}); the results may be partial",
                         build_warnings=run.warnings)
-    if len(not_run) == len(tests):
-        return _verdict("incomplete", f"all {len(tests)} planned test class(es) were skipped "
-                        "by the build; nothing was checked", skipped_by_build=not_run)
-    note = f"; {len(not_run)} class(es) were skipped by the build" if not_run else ""
-    return _verdict("passed", f"all {len(tests)} planned test class(es) passed{note}",
-                    skipped_by_build=not_run)
+    if not_run:
+        return _verdict("incomplete", f"{len(not_run)} of {len(tests)} required test "
+                        "class(es) or module(s) were skipped by the build; required checks "
+                        "remain unverified", skipped_by_build=not_run)
+    return _verdict("passed", f"all {len(tests)} required test class(es) or module(s) passed",
+                    skipped_by_build=[])
 
 
 def _verdict(name: str, message: str, **details) -> dict:
@@ -195,3 +203,26 @@ def _plan_summary(result: dict, validated: bool) -> str:
                 f"class would fail: {risk:.1%} (validated on this project's history).")
     return (f"Run all {total} test classes: skipping is not validated for this project "
             f"({result['risk']['reasons'][0] if result['risk']['reasons'] else 'no reason given'}).")
+
+
+def _audit_summary(risk: dict) -> dict | None:
+    """Expose the active method's evidence without mixing all/failing denominators."""
+    if risk.get("method") == "crc":
+        crc = risk.get("conformal")
+        if crc is None:
+            return None
+        return {"method": "crc", "denominator": "failing_audit_commits",
+                "sample_size": crc["failing_audit_commits"],
+                "observed_miss_rate": crc["audit_miss_rate"],
+                "corrected_expected_risk_bound": crc["corrected_bound"],
+                "assumption": "past and future failing commits are exchangeable",
+                "future_guarantee": False}
+    validation = risk.get("validation")
+    if validation is None:
+        return None
+    return {"method": "wilson_evidence_screen", "denominator": "all_audit_commits",
+            "sample_size": validation["commits"],
+            "failing_commits": validation["failing_commits"],
+            "observed_miss_rate": validation["observed_miss_rate"],
+            "historical_miss_upper_bound": validation["miss_upper_bound"],
+            "accepted": validation["accepted"], "future_guarantee": False}

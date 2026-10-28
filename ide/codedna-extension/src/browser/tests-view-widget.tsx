@@ -4,10 +4,14 @@ import { inject, injectable, postConstruct } from '@theia/core/shared/inversify'
 import { ConfirmDialog } from '@theia/core/lib/browser/dialogs';
 import { ProgressService } from '@theia/core/lib/common/progress-service';
 import { ReactWidget } from '@theia/core/lib/browser/widgets/react-widget';
-import { CodeDnaService, SelectionReport, SelectionStrategy, SelectionRun, TestDiscovery } from '../common/codedna-protocol';
+import { AnalysisJob, AnalysisTimingRecord, CodeDnaService, SelectionReport, SelectionStrategy, SelectionRun, TestDiscovery } from '../common/codedna-protocol';
 import { CodeDnaComparison } from './comparison';
 import { CodeDnaWorkspace } from './codedna-workspace';
 import { withProgress } from './progress';
+import { waitForAnalysis } from './analysis-jobs-ui';
+import { AnalysisTimingDetails } from './analysis-timings';
+import { decisionRecord, recoverySteps } from './decision-evidence';
+import { TestOutcomes } from './test-outcomes';
 import { breakable, friendlyReason, friendlyWarning, packageName, plural, simpleName } from './plain-language';
 import { Chip, ComparePicker, ErrorNotice, FirstRun, Spinner } from './ui';
 
@@ -36,6 +40,10 @@ export class TestsViewWidget extends ReactWidget {
 
     protected strategy: SelectionStrategy = 'risk';
     protected loading = false;
+    protected analysisJob: AnalysisJob | undefined;
+    protected timings: AnalysisTimingRecord[] = [];
+    protected cancelling = false;
+    protected analysisCancelled = false;
     protected error: string | undefined;
     protected report: SelectionReport | undefined;
     protected execution: SelectionRun | undefined;
@@ -44,6 +52,11 @@ export class TestsViewWidget extends ReactWidget {
     protected reportStrategy: SelectionStrategy = 'risk';
     protected generation = 0;
     protected notice: string | undefined;
+    protected inspected: TestDiscovery['tests'][number] | undefined;
+    protected inspecting = false;
+    protected readonly revealTestDetails = (element: HTMLElement | null): void => {
+        element?.scrollIntoView({ block: 'nearest' });
+    };
     protected discovery: { report: SelectionReport; result: Promise<TestDiscovery> } | undefined;
 
     @postConstruct()
@@ -59,10 +72,17 @@ export class TestsViewWidget extends ReactWidget {
     }
 
     protected invalidate(): void {
+        this.timings = [];
+        if (this.analysisJob && ['queued', 'running'].includes(this.analysisJob.state)) {
+            // The waiting operation cancels its own registered worker on the
+            // next poll. A comparison change must never kill the shared API.
+            this.analysisCancelled = true;
+        }
         this.generation++;
         this.report = undefined;
         this.execution = undefined;
         this.discovery = undefined;
+        this.inspected = undefined;
         this.error = undefined;
         this.notice = undefined;
         this.update();
@@ -75,12 +95,32 @@ export class TestsViewWidget extends ReactWidget {
         const base = this.comparison.base, head = this.comparison.head;
         const strategy = this.strategy, history = this.historyCsv;
         this.loading = true;
+        this.analysisCancelled = false;
+        this.cancelling = false;
+        this.analysisJob = undefined;
         this.update();
         try {
             const repo = await this.workspace.repositoryPath();
             if (!repo) { throw new Error('Open a folder first.'); }
-            const result = await withProgress(this.progress, strategy === 'risk' ? 'CodeDNA: checking history and choosing tests' : 'CodeDNA: choosing tests',
-                () => this.codedna.select(repo, base, head, strategy, history));
+            const supportsJobs = this.codedna.analysisJobs && await this.codedna.analysisJobs();
+            if (generation !== this.generation) { return; }
+            const result = supportsJobs
+                ? await waitForAnalysis<SelectionReport>(this.codedna,
+                    strategy === 'risk' ? 'risk-select' : 'select',
+                    strategy === 'risk' ? { repo, base, head, history_csv: history || undefined }
+                        : { repo, base, head, strategy },
+                    () => generation === this.generation && !this.analysisCancelled && !this.isDisposed,
+                    job => {
+                        this.analysisJob = job;
+                        if (job.metrics) { this.timings = [{ id: job.id, operation: job.operation, metrics: job.metrics }]; }
+                        this.update();
+                    })
+                : await withProgress(this.progress, strategy === 'risk' ? 'CodeDNA: checking history and choosing tests' : 'CodeDNA: choosing tests',
+                    () => this.codedna.select(repo, base, head, strategy, history));
+            if (!result) {
+                if (generation === this.generation) { this.notice = 'Recommendation cancelled. No tests were executed.'; }
+                return;
+            }
             if (generation !== this.generation) { return; }
             this.report = result;
             this.reportHistory = history;
@@ -91,6 +131,27 @@ export class TestsViewWidget extends ReactWidget {
             }
         } finally {
             this.loading = false;
+            this.analysisJob = undefined;
+            this.cancelling = false;
+            this.update();
+        }
+    }
+
+    protected async cancelAnalysis(): Promise<void> {
+        const job = this.analysisJob, generation = this.generation;
+        if (!job || this.cancelling || !['queued', 'running'].includes(job.state)) { return; }
+        this.cancelling = true;
+        this.analysisCancelled = true;
+        this.update();
+        try {
+            const result = await this.codedna.cancelAnalysis(job.id);
+            if (generation === this.generation && this.analysisJob?.id === job.id) { this.analysisJob = result; }
+        } catch (error) {
+            if (generation === this.generation) {
+                this.error = `Could not confirm cancellation: ${error instanceof Error ? error.message : String(error)}`;
+            }
+        } finally {
+            if (generation === this.generation) { this.cancelling = false; }
             this.update();
         }
     }
@@ -129,24 +190,56 @@ export class TestsViewWidget extends ReactWidget {
         }
     }
 
+    protected async discoverTest(report: SelectionReport, test: string): Promise<TestDiscovery['tests'][number] | undefined> {
+        if (this.report !== report) { return undefined; }
+        if (this.discovery?.report !== report) {
+            this.discovery = { report, result: this.codedna.tests(report.repository, report.head_commit) };
+        }
+        const discovery = await this.discovery.result;
+        if (this.report !== report) { return undefined; }
+        if (discovery.commit !== report.head_commit) {
+            throw new Error('Test details belong to another commit. Suggest tests again.');
+        }
+        const item = discovery.tests.find(entry => entry.id === test);
+        if (!item?.file) { throw new Error(`No source file was discovered for ${test} at this commit.`); }
+        return item;
+    }
+
+    protected async inspectTest(report: SelectionReport, test: string): Promise<void> {
+        if (this.inspecting) { return; }
+        this.inspecting = true;
+        this.update();
+        try {
+            const item = await this.discoverTest(report, test);
+            if (this.report === report) { this.inspected = item; }
+        } catch (error) { this.testDetailError(report, error); }
+        finally { this.inspecting = false; this.update(); }
+    }
+
+    protected testDetailError(report: SelectionReport, error: unknown): void {
+        if (this.report === report) {
+            this.discovery = undefined;
+            this.error = error instanceof Error ? error.message : String(error);
+            this.update();
+        }
+    }
+
     protected async openTest(report: SelectionReport, test: string): Promise<void> {
+        try {
+            const item = await this.discoverTest(report, test);
+            if (item && this.report === report) { await this.workspace.openRepositoryFile(report.repository, item.file); }
+        } catch (error) { this.testDetailError(report, error); }
+    }
+
+    protected async exportEvidence(report: SelectionReport): Promise<void> {
         if (this.report !== report) { return; }
         try {
-            if (this.discovery?.report !== report) {
-                this.discovery = { report, result: this.codedna.tests(report.repository, report.head_commit) };
-            }
-            const discovery = await this.discovery.result;
-            if (this.report !== report) { return; }
-            const file = discovery.tests.find(item => item.id === test)?.file;
-            if (!file) { throw new Error(`No source file was discovered for ${test} at this commit.`); }
-            await this.workspace.openRepositoryFile(discovery.repository, file);
+            const content = JSON.stringify(decisionRecord(report, this.execution, undefined, this.timings), null, 2) + '\n';
+            const saved = await this.workspace.saveDecisionEvidence(content);
+            if (saved && this.report === report) { this.notice = 'Decision evidence saved. Review local paths and test names before sharing.'; }
         } catch (error) {
-            if (this.report === report) {
-                this.discovery = undefined; // allow a retry after a temporary core failure
-                this.error = error instanceof Error ? error.message : String(error);
-                this.update();
-            }
-        }
+            if (this.report === report) { this.error = error instanceof Error ? error.message : String(error); }
+        } finally { this.update(); }
     }
 
     protected render(): React.ReactNode {
@@ -177,6 +270,14 @@ export class TestsViewWidget extends ReactWidget {
                     Open project history
                 </button>
             </form>
+            {this.loading && this.analysisJob && <div className='cd-notice' role='status' aria-live='polite'>
+                <span>{this.analysisJob.stage} · {Math.floor(this.analysisJob.elapsed_seconds)} seconds</span>
+                {['queued', 'running'].includes(this.analysisJob.state) && <button className='cd-button' type='button'
+                    disabled={this.cancelling} onClick={() => this.cancelAnalysis()}>
+                    {this.cancelling ? 'Stopping analysis…' : 'Cancel analysis'}
+                </button>}
+            </div>}
+            <AnalysisTimingDetails reports={this.timings} title='Suggestion analysis timing' />
             {this.error && <ErrorNotice message={this.error} />}
             {this.notice && <p className='cd-notice' role='status'>{this.notice}</p>}
             {this.report ? this.renderReport(this.report) : !this.loading && !this.error && <FirstRun action='Suggest tests' />}
@@ -188,32 +289,60 @@ export class TestsViewWidget extends ReactWidget {
         const risk = report.risk;
         const notes = report.warnings.map(friendlyWarning).filter((w): w is string => !!w);
         const everything = report.selected.length === report.total_tests && report.total_tests > 0;
+        const mandatoryFull = everything && report.policy?.pinned.length === report.total_tests;
         return <div className='cd-results'>
             <section className='cd-notice' aria-label='Risk evidence'>
-                <h3>{risk?.status === 'validated_history' ? 'Validated on earlier project history' : 'Risk unvalidated'}</h3>
-                {risk?.status === 'validated_history'
-                    ? <p>Estimated chance of at least one skipped test failing: {((risk.estimated_skip_risk ?? 0) * 100).toFixed(2)}%.
+                <h3>{mandatoryFull ? 'Full suite required by policy' : risk?.status === 'validated_history' ? 'Validated on earlier project history' : 'Risk unvalidated'}</h3>
+                {mandatoryFull ? <p>Every discovered test is mandatory. Model fitting cannot shorten this plan.</p> : risk?.status === 'validated_history'
+                    ? risk.method === 'crc' ? <>
+                        <p>Conformal stopping target: {(risk.target * 100).toFixed(0)}% missed-failure rate among failing commits.
+                            This relies on exchangeable failing commits and is not a per-change guarantee.</p>
+                        <p>Calibrated skip-risk score: {percent(risk.estimated_skip_risk)}. This score is distinct from the conformal bound.</p>
+                    </> : <p>Estimated chance of at least one skipped test failing: {percent(risk.estimated_skip_risk)}.
                         Target: {(risk.target * 100).toFixed(0)}%. This is an estimate, not a guarantee.</p>
                     : <p>{risk ? 'Run the full suite because the evidence does not justify risk-based skipping.'
                         : 'This structural selection has no validated probability of missing failures.'}</p>}
-                {risk?.validation && <p>Prior audit: {risk.validation.commits} commits,
-                    {' '}{risk.validation.failing_commits} with failures. Historical miss-rate upper bound:
-                    {' '}{(risk.validation.miss_upper_bound * 100).toFixed(2)}%.</p>}
+                {risk?.validation && <p>Model audit (all audit commits): {risk.validation.commits} commits,
+                    {' '}{risk.validation.failing_commits} with failures. All-commit miss-rate upper bound:
+                    {' '}{percent(risk.validation.miss_upper_bound)}.</p>}
+                {risk?.method === 'crc' && risk.conformal && <p>
+                    Conformal audit: {risk.conformal.failing_audit_commits ?? 'not reported'} failing commits.
+                    {' '}Corrected bound among failing commits: {percent(risk.conformal.corrected_bound)}.
+                </p>}
+                {!mandatoryFull && risk?.status === 'unvalidated' && <p className='cd-help'>Passing tests and validated skip risk are different.
+                    A successful run records what happened; it does not prove that future tests can be skipped.
+                    Only sufficiently audited earlier history can support that decision.</p>}
+                {risk?.reasons.some(reason => /another repository, branch or future commits/i.test(reason)) &&
+                    <p className='cd-help'>This can also happen when history already contains results for the change being compared.
+                        For a previous-commit comparison, those outcomes are later than its base commit.
+                        CodeDNA refuses to use them to predict that same change. Keep your saved history;
+                        use HEAD to WORKTREE for a new uncommitted change, or supply history from before the comparison base.
+                        The earlier history must still pass its audit.</p>}
                 {!!risk?.reasons.length && <ul>{risk.reasons.map(reason => <li key={reason}>{reason}</li>)}</ul>}
+                <details><summary>Evidence health and next steps</summary>
+                    <p>Project: <code>{report.repository}</code></p>
+                    <p>Evidence must precede base <code>{report.base_commit}</code>. Target: <code>{report.head_commit}</code>.</p>
+                    {risk?.provenance?.history_sha256 && <p>History fingerprint: <code>{risk.provenance.history_sha256}</code></p>}
+                    <ul>{recoverySteps(report).map(step => <li key={step}>{step}</li>)}</ul>
+                    {risk?.note && <p>{risk.note}</p>}
+                    {risk?.conformal?.note && <p>{risk.conformal.note}</p>}
+                </details>
             </section>
+            <button className='cd-button' onClick={() => this.exportEvidence(report)}>Export decision evidence</button>
+            <p className='cd-help'>The export includes local paths, test names and risk evidence. It excludes source code and raw build logs.</p>
             <button className='cd-button' disabled={this.loading || !report.total_tests}
                 onClick={() => this.runSelected()}>
-                {this.loading ? 'Running…' : `Run ${report.selected.length} recommended test classes`}
+                {this.loading ? 'Running…' : `Run ${report.selected.length} recommended tests`}
             </button>
             {this.execution && <section aria-label='Test execution results'>
                 <h3>{this.execution.results.exit_codes.some(code => code !== 0)
                     ? 'Build did not complete successfully'
                     : this.execution.results.tests.length === 0 ? 'No test results recorded'
-                    : `${this.execution.results.failing_tests.length} failing test classes`}</h3>
+                    : `${this.execution.results.failing_tests.length} failing tests`}</h3>
                 <p>Finished in {this.execution.results.duration_seconds.toFixed(1)} seconds.</p>
-                <div className='cd-card'>{this.execution.results.tests.map(test => <div className='cd-row cd-static' key={test.id}>
-                    <span className='cd-code'>{simpleName(test.id)}</span><span>{test.status}</span>
-                </div>)}</div>
+                <TestOutcomes tests={this.execution.results.tests} />
+                <p className='cd-help'>These are tests written in your project. CodeDNA selects and runs them.
+                    The checks below each class or module show what the runner actually executed.</p>
                 {this.execution.results.warnings.map(warning => <p key={warning}>{warning}</p>)}
                 {this.execution.recording && <p className='cd-footnote'>{this.execution.recording.recorded
                     ? `Saved as project history (${this.execution.recording.commits_with_results} commits with full results). Risk selection turns on once this history passes its audit.`
@@ -226,22 +355,35 @@ export class TestsViewWidget extends ReactWidget {
                     ? 'No JUnit or pytest tests were found in this project.'
                     : report.selected.length === 0
                         ? 'No tests are recommended by the current selection policy.'
-                        : <>Run {report.selected.length} of {plural(report.total_tests, 'test class', 'test classes')}.
+                        : <>Run {report.selected.length} of {plural(report.total_tests, 'test', 'tests')}.
                             {everything ? ' That’s all of them.' : ` You can skip ${report.skipped.length}.`}</>}
             </p>
             <p className='cd-help'>
-                {time
+                {mandatoryFull ? 'No test-time savings are proposed: policy requires every test.' : time
                     ? `That saves about ${Math.round(time.saved_ratio * 100)}% of test time.`
-                    : 'Time savings show up after your tests have been run once with CodeDNA.'}
+                    : 'No test-time savings estimate is available for this plan.'}
             </p>
             {notes.length > 0 && <div className='cd-notice'>
                 <strong>Good to know</strong>
                 <ul>{notes.map(note => <li key={note}>{note}</li>)}</ul>
             </div>}
+            {this.inspected && <section key={`${report.head_commit}:${this.inspected.id}`} ref={this.revealTestDetails}
+                className='cd-notice' aria-label='Discovered test details' aria-live='polite'>
+                <h3>Checks declared in {simpleName(this.inspected.id)}</h3>
+                <p><code>{this.inspected.file}</code> at <code>{report.head_commit.slice(0, 12)}</code></p>
+                <p>{this.inspected.framework ?? 'Framework not reported'}{this.inspected.language ? ` · ${this.inspected.language}` : ''}</p>
+                {this.inspected.methods?.length ? <ul>{this.inspected.methods.map(method => <li key={method}>
+                    <span>{method.replace(/([a-z0-9])([A-Z])/g, '$1 $2').replace(/_/g, ' ')}</span> <code>{method}</code>
+                </li>)}</ul> : <p>No individual check names were reported by static discovery.</p>}
+                <p className='cd-help'>These names come from project source. Read the assertions for exact behavior; discovery does not execute or verify these checks. Source navigation opens your current working copy, which may differ from this commit.</p>
+                <button className='cd-button' onClick={() => this.openTest(report, this.inspected!.id)}>Read source (working copy)</button>
+            </section>}
             {report.selected.length > 0 && <section aria-label='Run these'>
                 <h3>Run these</h3>
+                <p className='cd-help'>Each item is a test class or module and may contain several checks.
+                    Select an item to read its source; after running, inspect its individual outcomes above.</p>
                 <div className='cd-card'>
-                    {report.selected.map(item => <button className='cd-row' key={item.test}
+                    {report.selected.map(item => <div key={item.test}><button className='cd-row'
                         title={`Open ${item.test}`}
                         onClick={() => this.openTest(report, item.test)}>
                         <span className='cd-code'>{simpleName(item.test)}</span>
@@ -252,7 +394,11 @@ export class TestsViewWidget extends ReactWidget {
                         <ul className='cd-reasons'>
                             {unique(item.reasons.map(friendlyReason)).map(r => <li key={r}>{r}</li>)}
                         </ul>
-                    </button>)}
+                    </button>
+                    {item.file && <p className='cd-meta'><code>{item.file}</code></p>}
+                    <button className='cd-button' disabled={this.inspecting} onClick={() => this.inspectTest(report, item.test)}>
+                        {this.inspecting ? 'Loading checks…' : 'Explain this test'}
+                    </button></div>)}
                 </div>
             </section>}
             {report.skipped.length > 0 && <section aria-label='Not selected'>
@@ -276,4 +422,10 @@ export class TestsViewWidget extends ReactWidget {
 
 function unique(values: string[]): string[] {
     return [...new Set(values)];
+}
+
+/** Missing evidence is never displayed as zero risk. */
+function percent(value: number | null | undefined): string {
+    return typeof value === 'number' && Number.isFinite(value) && value >= 0 && value <= 1
+        ? `${(value * 100).toFixed(2)}%` : 'not reported';
 }

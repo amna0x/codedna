@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-27",
+  "scope": "local production build and payload verification, not clean-PC installation",
+  "installer": "C:\\Users\\hp\\OneDrive\\Documents\\GitHub\\codedna\\ide\\electron-app\\dist\\CodeDNA IDE Setup 0.1.0.exe",
+  "bytes": 339848642,
+  "sha256": "7d3f469e63d8557682c4b95ec696b477ab49f35301a1e375bc77789fb9a33315",
+  "compression_level": 3,
+  "verified_core_files": 1389,
+  "current_ui_markers": [
+    "Recorded check name and details",
+    "History replay reads completed research study reports",
+    "Passing tests and validated skip risk are different",
+    "Viewing results"
+  ],
+  "tests": {
+    "python_full_maven": 563,
+    "python_failed": 0,
+    "python_skipped": 0,
+    "ide_workflow": 18,
+    "desktop_runtime": 3,
+    "website": 13
+  },
+  "risk_rules_changed_by_ui_fix": false,
+  "external_acceptance": "pending",
+  "authenticode_status": "NotSigned",
+  "friend_test_kit": {
+    "path": "C:\\Users\\hp\\OneDrive\\Documents\\GitHub\\codedna\\build\\friend-test-kit\\CodeDNA-Friend-Test-Kit-2026-10-27.zip",
+    "bytes": 339873956,
+    "sha256": "f146838e01950bc10dfd1f2f95822497af0a613e8b221a8f9889bbc236e01096",
+    "installer_sha256": "7d3f469e63d8557682c4b95ec696b477ab49f35301a1e375bc77789fb9a33315",
+    "scope": "prepared kit; no friend installation result claimed"
+  }
+}

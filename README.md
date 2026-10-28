@@ -4,14 +4,15 @@
 Java projects in continuous integration.** A Software Engineering Final Year
 Project.
 
-Given a Git repository and two commits, CodeDNA will eventually work out which
-code changed, what it may affect, which regression tests matter, and how risky
-it is to skip the rest — and explain every decision.
+Given a Git repository and two commits, CodeDNA reports changed code, follows
+its potential dependencies and recommends regression tests with reasons. Its
+Java risk-stopping path requires prior target-project evidence; insufficient
+evidence keeps the full-suite fallback. Java and Python language plugins exist.
 
 **Where it is heading:** a platform — the Python analysis core, downloadable
 language plugins (Java first), the **CodeDNA IDE** built on Eclipse Theia,
-and a platform website with a plugin catalogue. The core and an initial IDE exist
-today; see [docs/ROADMAP.md](docs/ROADMAP.md) and decisions D-017 – D-020 in
+and a platform website with a plugin catalogue. The core and desktop IDE exist;
+public plugin hosting remains pending. Current engineering status: [handoff](docs/HANDOFF.md#05-start-here---current-continuation-2026-10-27); see [docs/ROADMAP.md](docs/ROADMAP.md) and decisions D-017 – D-020 in
 [docs/DECISIONS.md](docs/DECISIONS.md).
 
 **Status:** Milestones 0–3 are complete. Milestones 4–5 have saved results from
@@ -521,3 +522,74 @@ not a probability and never permits skipping without validated history.
 Python and mixed-language projects safely receive a full-suite plan while
 risk selection is unsupported; execution uses the existing Java/Python
 plugin dispatcher. See [the brake guide](docs/AGENT_BRAKE.md).
+
+
+## Current completion and language plugins
+
+Open **Extensions → Language plugins** (Ctrl+Shift+X) in the IDE. Java and Python
+are bundled; analysis plugins are distinct from editor completion/debugging
+extensions. The activity tab is restored for existing as well as new layouts.
+Installed languages remain usable when the official catalogue is unavailable.
+
+- [Current completion ledger](docs/BLUEPRINT_COMPLETION.md)
+- [Website implementation blueprint](docs/WEBSITE_BLUEPRINT.md)
+- [Clean Windows acceptance and friend-PC test](docs/CLEAN_PC_ACCEPTANCE.md)
+- [Independent graph review guide](docs/graph-human-review/REVIEW_GUIDE.md)
+- [Supervisor review pack](docs/SUPERVISOR_REVIEW.md)
+
+The website renders official optional-plugin downloads, full checksums and exact
+install commands; current Java/Python entries are bundled. The D-074 candidate
+supports transactional optional installation in the frozen executable; actual
+restricted-PATH installation/restart/update/removal checks passed. See
+[desktop plugin installation](docs/DESKTOP_PLUGIN_INSTALLATION.md). Public
+catalogue/release hosting and clean-PC acceptance remain separate gates.
+The brake reports its exact audit objective/denominator and does not promise
+future safety. Existing mixed research results are preserved.
+
+## Cancellable analysis (source development build)
+
+The Tests to run and Changes views show core stages, elapsed time and Cancel
+analysis when the connected core advertises analysis jobs. Older packaged cores retain the
+synchronous path. Analysis cancellation never runs or cancels project builds.
+The API also offers typed read-only jobs for test discovery, change analysis,
+impact and selection; see [the job contract](docs/ANALYSIS_JOB_PLAN.md).
+
+The isolated D083 desktop candidate contains these changes. Its embedded core
+hashes and critical GUI workflows were verified; see
+[preceding D083 release evidence](docs/RELEASE_VALIDATION_D083_2026-10-28.json).
+The existing installed app was not replaced. Clean-PC installation remains open.
+
+## Performance diagnostics (D-083)
+
+Tests and Changes can show measured analysis timing in collapsed details.
+The optional job query `?profile=true` and MCP argument `"profile": true`
+return bounded stage timings. MCP checking still requires explicit build
+consent. Nested stages overlap; worker startup is reported separately.
+
+Immutable parsing and fitted-model reuse avoid duplicate work where safe.
+Each decision still checks current evidence and recomputes its audit. An
+entirely mandatory suite bypasses unnecessary fitting and remains a full-suite
+recommendation. See [measurement scope and examples](docs/PERFORMANCE_ENGINEERING.md).
+These improvements are included in the validated D083 candidate. D082's
+earlier evidence remains tied to its preceding source checkpoint.
+
+## Experimental Moonshot witness (D-085)
+
+An optional Java capability compares bounded inputs on two versions of one
+self-contained public static int(int) method. A confirmed difference exports
+source and a standalone JDK-only reproducer. It requires explicit project-code
+consent. It does not classify a regression automatically or change required tests.
+
+Use `python -m codedna witness --help`, or explicitly enable
+`python -m codedna mcp --repo PATH --allow-build --moonshot`. The extra witness
+tool is absent by default. See [scope, commands and evidence](docs/BEHAVIORAL_WITNESS.md).
+The isolated D085 installer includes this optional capability; D083 remains
+preserved. Source validation passed 714 tests with Maven and zero skips. Actual
+frozen validation passed 32 checks. Installer payload hashes and restricted-PATH
+unpacked smoke passed; no D085 installation or clean-PC acceptance is claimed.
+See [release evidence](docs/RELEASE_VALIDATION_D085_2026-10-28.json).
+
+The fixed 48-search synthetic comparison independently reproduced all 15 emitted
+witnesses. Its constructed cases favor guidance and show no overall speedup;
+they do not establish independent real-world accuracy or improved skip safety.
+The prepared local friend kit includes Java demos and an acceptance checklist.

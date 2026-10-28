@@ -1,0 +1,240 @@
+Window: "PriceCalculatorTest.java - d083-gui-project - CodeDNA IDE", App: CodeDNA IDE.exe.
+	0 window PriceCalculatorTest.java - d083-gui-project - CodeDNA IDE Secondary Actions: Raise
+		12 pane (disabled)
+		1 region PriceCalculatorTest.java - d083-gui-project - CodeDNA IDE
+			2 region
+				3 region
+					4 region
+						5 region
+							6 region
+								7 region
+									10 document PriceCalculatorTest.java - d083-gui-project - CodeDNA IDE Value: file:///C:/Users/hp/OneDrive/Documents/GitHub/codedna/build/desktop-D083-2026-10-28/installer-r2/win-unpacked/resources/app/lib/frontend/index.html?port=52307#/c:/Users/hp/OneDrive/Documents/ChatGPT/codedna/.diagnostics/d083-gui-project ID: RootWebArea
+										17 group
+											632 group ID: theia-app-shell
+												633 group ID: theia:menubar
+													634 menu bar
+														635 menu item File
+														636 menu item Edit
+														637 menu item Selection
+														638 menu item View
+														639 menu item Go
+														640 menu item Run
+														641 menu item Terminal
+														642 menu item Help
+												643 text PriceCalculatorTest.java - d083-gui-project - CodeDNA IDE
+												644 group ID: minimize-button
+													645 text 
+												646 group ID: maximize-button
+													647 text 
+												648 group ID: close-button
+													649 text 
+												650 group ID: theia-left-right-split-panel
+													651 group
+													652 tab
+														653 text 
+														654 text 
+														655 text 
+														656 text 
+														657 text 
+														658 text 
+													659 group
+													660 group
+													661 group
+														662 group
+															663 text 
+													664 group ID: theia-main-content-panel
+														665 tab
+															666 text 
+															667 text PriceCalculatorTest.java
+															668 group Description: Close
+																669 text 
+														670 group
+															671 list
+																672 list item src Description: src
+																	673 text 
+																674 list item src/test Description: src/test
+																	675 text 
+																676 list item src/test/java Description: src/test/java
+																	677 text 
+																678 list item src/test/java/example Description: src/test/java/example
+																	679 text 
+																680 list item src/test/java/example/PriceCalculatorTest.java Description: src/test/java/example/PriceCalculatorTest.java
+																	681 text 
+																	682 text 
+																683 list item … Description: …
+														684 tab panel ID: code-editor-opener:file:///c%3A/Users/hp/OneDrive/Documents/ChatGPT/codedna/.diagnostics/d083-gui-project/src/test/java/example/PriceCalculatorTest.java:5941419000077535
+															685 code
+																686 editor (settable, string) Editor content
+													687 group
+													688 tab
+														689 text 
+														690 text 
+													691 group
+													692 group
+													693 group
+													694 group Description: CodeDNA: which tests to run for your change, and why
+														695 text Tests to run
+													696 group ID: theia-right-side-panel
+														697 tab panel Tests to run ID: codedna.tests
+															698 header
+																699 heading Tests to run
+																700 text Run the tests your change can break — and see why each one is needed.
+															701 text Compare
+															702 combo box (settable, string) Compare Value: My uncommitted changes
+															703 text Which tests
+															704 combo box (settable, string) Which tests Value: Validated risk stopping
+															705 text Test history file (optional)
+															706 edit (settable, string) Test history file (optional) Description: Use this project’s saved history
+															707 button Suggest tests
+															708 button Open project history
+															709 details
+																710 disclosure triangle Suggestion analysis timing
+																	711 text Suggestion analysis timing
+															712 region Risk evidence
+																713 heading Risk unvalidated
+																714 text Run the full suite because the evidence does not justify risk-based skipping.
+																715 text Passing tests and validated skip risk are different. A successful run records what happened; it does not prove that future tests can be skipped. Only sufficiently audited earlier history can support that decision.
+																716 list
+																	717 list item No target-project test history is available.
+																718 details
+																	719 disclosure triangle Evidence health and next steps
+																		720 text Evidence health and next steps
+															721 button Export decision evidence
+															722 text The export includes local paths, test names and risk evidence. It excludes source code and raw build logs.
+															723 button Run 2 recommended tests
+															858 region Test execution results
+																859 heading 1 failing tests
+																860 text Finished in
+																861 text 36.4
+																862 text seconds.
+																863 text example.OrderServiceTest
+																864 text passed
+																865 text 0.09
+																866 text s
+																867 list Checks in example.OrderServiceTest
+																	868 list item total Sums Lines And Applies Discount — passed (0.08 s)Recorded check name and details
+																		869 text passed
+																		870 details
+																			871 disclosure triangle Recorded check name and details
+																				872 text Recorded check name and details
+																	873 list item empty Order Totals Zero — passed (0.01 s)Recorded check name and details
+																		874 text passed
+																		875 details
+																			876 disclosure triangle Recorded check name and details
+																				877 text Recorded check name and details
+																878 text example.PriceCalculatorTest
+																879 text failed
+																880 text 0.06
+																881 text s
+																882 list Checks in example.PriceCalculatorTest
+																	883 list item line Price Multiplies Unit Price By Quantity — passed (0.00 s)Recorded check name and details
+																		884 text passed
+																		885 details
+																			886 disclosure triangle Recorded check name and details
+																				887 text Recorded check name and details
+																	888 list item negative Quantity Is Rejected — passed (0.01 s)Recorded check name and details
+																		889 text passed
+																		890 details
+																			891 disclosure triangle Recorded check name and details
+																				892 text Recorded check name and details
+																	893 list item invalid Discount Rate Is Rejected — passed (0.00 s)Recorded check name and details
+																		894 text passed
+																		895 details
+																			896 disclosure triangle Recorded check name and details
+																				897 text Recorded check name and details
+																	898 list item discount Is Applied — failed (0.05 s)Recorded check name and details
+																		899 text failed
+																		900 details
+																			901 disclosure triangle Recorded check name and details
+																				902 text Recorded check name and details
+																903 text These are tests written in your project. CodeDNA selects and runs them. The checks below each class or module show what the runner actually executed.
+																904 text Not saved as history: the tested commit is not on the current branch's first-parent history (e.g. uncommitted changes); it is not recorded
+																905 text Logs and reports:
+																906 text C:\Users\hp\OneDrive\Documents\ChatGPT\codedna\.diagnostics\d083-gui-project\.codedna\runs\90a3a077fa71430b85689a8105d88953
+															724 text Compared commits:
+															725 text c71303ff
+															726 text →
+															727 text d84981d6
+															728 text Run
+															729 text 2
+															730 text of
+															731 text 2 tests
+															732 text .
+															733 text That’s all of them.
+															734 text No test-time savings estimate is available for this plan.
+															735 text Good to know
+															736 list
+																737 list item binary file, line ranges unavailable: target/classes/example/OrderService.class
+																738 list item binary file, line ranges unavailable: target/classes/example/PriceCalculator.class
+																739 list item binary file, line ranges unavailable: target/test-classes/example/OrderServiceTest.class
+																740 list item binary file, line ranges unavailable: target/test-classes/example/PriceCalculatorTest.class
+															741 region Discovered test details
+																742 heading Checks declared in PriceCalculatorTest
+																743 text src/test/java/example/PriceCalculatorTest.java
+																744 text at
+																745 text d84981d68cb8
+																746 text junit5
+																747 text · java
+																748 list
+																	749 list item line Price Multiplies Unit Price By QuantitylinePriceMultipliesUnitPriceByQuantity
+																		750 text linePriceMultipliesUnitPriceByQuantity
+																	751 list item negative Quantity Is RejectednegativeQuantityIsRejected
+																		752 text negativeQuantityIsRejected
+																	753 list item discount Is ApplieddiscountIsApplied
+																		754 text discountIsApplied
+																	755 list item invalid Discount Rate Is RejectedinvalidDiscountRateIsRejected
+																		756 text invalidDiscountRateIsRejected
+																757 text These names come from project source. Read the assertions for exact behavior; discovery does not execute or verify these checks. Source navigation opens your current working copy, which may differ from this commit.
+																758 button Read source (working copy)
+															759 region Run these
+																760 heading Run these
+																761 text Each item is a test class or module and may contain several checks. Select an item to read its source; after running, inspect its individual outcomes above.
+																762 button OrderServiceTest Run example risk unvalidated: run the full suite Description: Open example.OrderServiceTest
+																	763 list
+																		764 list item risk unvalidated: run the full suite
+																765 text src/test/java/example/OrderServiceTest.java
+																766 button Explain this test
+																767 button PriceCalculatorTest Run example risk unvalidated: run the full suite Description: Open example.PriceCalculatorTest
+																	768 list
+																		769 list item risk unvalidated: run the full suite
+																770 text src/test/java/example/PriceCalculatorTest.java
+																771 button Explain this test
+															772 text Risk-based skipping requires a separate prior audit. Refresh evidence with full-suite runs; selected-only results cannot reveal missed failures.
+															773 group
+																774 group
+												775 group ID: theia-statusBar
+													776 group $(codicon-error) 0 $(codicon-warning) 0, No Problems ID: status-bar-problem-marker-status
+														777 text 
+														778 text 0
+														779 text 
+														780 text 0
+													781 group $(coffee) Java: Ready, Show Java status menu ID: status-bar-java.serverStatus
+														908 text 
+														783 text Java: Ready
+													784 group Ln 1, Col 1, Go to Line/Column ID: status-bar-editor-status-cursor-position
+														785 text Ln 1, Col 1
+													786 group LF, Select End of Line Sequence ID: status-bar-editor-status-eol
+														787 text LF
+													788 group UTF-8, Select Encoding ID: status-bar-editor-status-encoding
+														789 text UTF-8
+													790 group Spaces: 4, Select Indentation ID: status-bar-editor-status-tabbing-config
+														791 text Spaces: 4
+													792 group $(bracket), [object HTMLDivElement] ID: status-bar-editor-language-status-items
+														793 text 
+													794 group Java, Select Language Mode ID: status-bar-editor-status-language
+														795 text Java
+													796 group No Notifications ID: status-bar-theia-notification-center
+														907 text 
+													798 button Toggle Bottom Panel ID: status-bar-bottom-panel-toggle
+											799 group
+											805 group
+											101 group ID: select-component-container
+											806 alert
+											807 alert
+											808 group
+											809 group
+								9 region
+
+Document text: ```
+￼
+```

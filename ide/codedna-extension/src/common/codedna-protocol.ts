@@ -19,6 +19,11 @@ export interface CodeDnaStatus {
 
 export interface CodeDnaService {
     status(): Promise<CodeDnaStatus>;
+    /** Capability-gated: older packaged cores keep the synchronous path. */
+    analysisJobs(): Promise<boolean>;
+    startAnalysis(operation: AnalysisOperation, payload: object): Promise<AnalysisJob>;
+    analysisJob(id: string): Promise<AnalysisJob>;
+    cancelAnalysis(id: string): Promise<AnalysisJob>;
     tests(repo: string, revision: string): Promise<TestDiscovery>;
     projectHistory(repo: string): Promise<ProjectHistory>;
     recordSavedRuns(repo: string): Promise<RecordedHistory>;
@@ -46,7 +51,7 @@ export interface CodeDnaService {
 export interface TestDiscovery {
     repository: string;
     commit: string;
-    tests: { id: string; file: string }[];
+    tests: { id: string; file: string; methods?: string[]; framework?: string; language?: string }[];
 }
 
 export type SelectionStrategy = 'dependency' | 'all' | 'risk';
@@ -155,7 +160,8 @@ export interface ExplanationGraph {
 
 export interface SelectionRun {
     selection: SelectionReport;
-    results: { tests: { id: string; status: string; time: number }[];
+    results: { tests: { id: string; status: string; time: number;
+        cases?: { name: string; status: string; time: number; message: string | null }[] }[];
         failing_tests: string[]; warnings: string[]; duration_seconds: number; exit_codes: number[] };
     output_dir: string;
     /** Whole-suite runs are kept as project history for risk selection (D-053). */
@@ -163,6 +169,7 @@ export interface SelectionRun {
 }
 
 export interface SelectionReport {
+    policy?: { pinned: string[]; source: string | null } | null;
     repository: string;
     base_commit: string;
     head_commit: string;
@@ -170,6 +177,10 @@ export interface SelectionReport {
         status: 'unvalidated' | 'validated_history'; target: number;
         estimated_skip_risk: number | null; proposed_skip_risk: number | null;
         reasons: string[]; note: string;
+        method?: string; analysis_seconds?: number;
+        provenance?: { history_sha256?: string; [key: string]: unknown };
+        conformal?: { note?: string; corrected_bound?: number | null; failing_audit_commits?: number;
+            alpha?: number; threshold?: number | null; [key: string]: unknown };
         validation: { commits: number; failing_commits: number; miss_upper_bound: number;
             failure_recall: number | null; accepted: boolean } | null;
     };
@@ -380,4 +391,30 @@ export interface PluginChange {
     restart_required?: boolean;
     previous_version?: string;
     installed: InstalledPlugins;
+}
+
+/** Read-only core jobs. Builds, plugins and history writes are excluded. */
+export type AnalysisOperation = 'tests' | 'analyze' | 'impact' | 'select' | 'risk-select';
+export interface AnalysisJob {
+    id: string;
+    operation: AnalysisOperation;
+    state: 'queued' | 'running' | 'completed' | 'failed' | 'cancelled';
+    stage: string;
+    elapsed_seconds: number;
+    metrics?: AnalysisTimings;
+    result?: object;
+    error?: string;
+}
+
+export interface AnalysisTimings {
+    schema_version: 1;
+    total_seconds: number;
+    worker_startup_seconds?: number;
+    stages: Record<string, { calls: number; seconds: number; self_seconds: number }>;
+    counters: Record<string, number>;
+}
+export interface AnalysisTimingRecord {
+    id: string;
+    operation: AnalysisOperation;
+    metrics: AnalysisTimings;
 }

@@ -1,0 +1,38 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.14, pytest-9.1.1, pluggy-1.7.0 -- C:\Users\hp\OneDrive\Documents\GitHub\codedna\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\hp\OneDrive\Documents\GitHub\codedna
+configfile: pyproject.toml
+plugins: anyio-4.15.1
+collecting ... collected 28 items
+
+backend/tests/test_behavior.py::test_explicit_consent_precedes_repository_access_and_export PASSED [  3%]
+backend/tests/test_behavior.py::test_invalid_requests_create_no_export[options0] PASSED [  7%]
+backend/tests/test_behavior.py::test_invalid_requests_create_no_export[options1] PASSED [ 10%]
+backend/tests/test_behavior.py::test_invalid_requests_create_no_export[options2] PASSED [ 14%]
+backend/tests/test_behavior.py::test_invalid_requests_create_no_export[options3] PASSED [ 17%]
+backend/tests/test_behavior.py::test_invalid_requests_create_no_export[options4] PASSED [ 21%]
+backend/tests/test_behavior.py::test_invalid_requests_create_no_export[options5] PASSED [ 25%]
+backend/tests/test_behavior.py::test_invalid_requests_create_no_export[options6] PASSED [ 28%]
+backend/tests/test_behavior.py::test_invalid_requests_create_no_export[options7] PASSED [ 32%]
+backend/tests/test_behavior.py::test_invalid_requests_create_no_export[options8] PASSED [ 35%]
+backend/tests/test_behavior.py::test_invalid_requests_create_no_export[options9] PASSED [ 39%]
+backend/tests/test_behavior.py::test_existing_and_in_repository_exports_are_refused PASSED [ 42%]
+backend/tests/test_behavior.py::test_plugin_without_optional_capability_is_not_executed PASSED [ 46%]
+backend/tests/test_behavior.py::test_candidate_modes_are_bounded_repeatable_and_preserve_int32 PASSED [ 50%]
+backend/tests/test_behavior.py::test_real_threshold_witness_reproduces_without_codedna_or_maven PASSED [ 53%]
+backend/tests/test_behavior.py::test_reduction_retains_a_confirmed_difference_and_no_oracle PASSED [ 57%]
+backend/tests/test_behavior.py::test_comment_only_change_is_finite_no_difference_not_equivalence PASSED [ 60%]
+backend/tests/test_behavior.py::test_unsupported_signatures_and_external_dependencies_do_not_run[package example; public class Fee { public int fee(int x) { return x; } }] PASSED [ 64%]
+backend/tests/test_behavior.py::test_unsupported_signatures_and_external_dependencies_do_not_run[package example; public class Fee { public static long fee(int x) { return x; } }] PASSED [ 67%]
+backend/tests/test_behavior.py::test_unsupported_signatures_and_external_dependencies_do_not_run[package example; public class Fee { public static int fee(long x) { return 0; } }] PASSED [ 71%]
+backend/tests/test_behavior.py::test_unsupported_signatures_and_external_dependencies_do_not_run[package example; class Fee { public static int fee(int x) { return x; } }] PASSED [ 75%]
+backend/tests/test_behavior.py::test_unsupported_signatures_and_external_dependencies_do_not_run[package example; public class Fee { public static int fee(int x) { return Missing.apply(x); } }] PASSED [ 78%]
+backend/tests/test_behavior.py::test_missing_jdk_is_actionable_and_not_a_no_difference PASSED [ 82%]
+backend/tests/test_behavior.py::test_exceptions_and_excess_output_are_inconclusive[throw new IllegalArgumentException("fixture");-Exception observed] PASSED [ 85%]
+backend/tests/test_behavior.py::test_exceptions_and_excess_output_are_inconclusive[while (true) { System.out.println("bounded fixture log"); }-output exceeded] PASSED [ 89%]
+backend/tests/test_behavior.py::test_repeated_fresh_jvms_reject_observed_nondeterminism PASSED [ 92%]
+backend/tests/test_behavior.py::test_real_jvm_and_descendant_end_on_timeout_or_ctrl_c[timeout] PASSED [ 96%]
+backend/tests/test_behavior.py::test_real_jvm_and_descendant_end_on_timeout_or_ctrl_c[cancel] PASSED [100%]
+
+======================= 28 passed in 115.68s (0:01:55) ========================
