@@ -1,5 +1,36 @@
 # MEMORY.md: handoff notes for the next agent
 
+## D-084/D-085 active continuation — 2026-10-28
+
+D083 stable checkpoint/evidence is 5848b6f (runtime source 1a45664): 664 full
+Maven-inclusive tests, 23 actual frozen checks, 12 critical packaged GUI checks;
+installer SHA and limits below. No source push/merge was made. The old installer
+and installed app are intact; all isolated acceptance app windows are closed.
+
+D084 sample /target/ ignore cleanup is implemented. Its Git regression failed
+before and all four demo checks pass after, including real Maven (90.25s).
+
+D085 focused Moonshot is now SOURCE WORK IN PROGRESS, not in the D083 installer.
+New core behavior.py / behavior_worker.py, Java witness.py / witness_export.py,
+optional plugin capability and witness CLI compare public static int method(int)
+on immutable versions in contained consented workers. Bounded syntax-guided/simple
+inputs, fresh JVM confirmation, input reduction and independent JDK-only source
+reproducer. No difference is a finite search outcome, not equivalence; no oracle
+or regression classification is invented. Existing risk/required-test logic stays
+separate. First 28 focused real-Java/guard tests passed (115.68s), including actual
+timeout/Ctrl+C descendant cleanup and independent reproduction/tamper refusal.
+
+Explicitly opt-in MCP --moonshot --allow-build --repo wiring passed 29 combined
+MCP/existing-brake checks (225.15s, one existing warning). Four runner guards passed;
+a fifth duplicate-case guard was then added. Default tool lists remain unchanged.
+NEXT: one full Maven-inclusive suite, then the fixed 48-search synthetic engineering
+comparison. Pinned source, case manifest and protocol must be committed first.
+No pilot result, full-source or actual new frozen validation is claimed yet.
+Do not claim the new code is release-validated or rerun D076. Continue from
+MOONSHOT_PILOT_PROTOCOL.md. Staging helpers in pointer .diagnostics/moonshot are
+one-time patches; inspect rather than rerunning. Preserve website edits, MOONSHOT.md
+and both stashes. No public hosting or additional language expansion.
+
 ## D-083 desktop candidate validated — 2026-10-28
 
 Current stable source: 1a45664. Full Maven-inclusive suite 664/zero skips,

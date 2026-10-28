@@ -1952,3 +1952,48 @@ post-hoc check. This excludes Git, graphs, process startup and project tests;
 it is engineering evidence, not independent accuracy confirmation or CI speedup.
 See PERFORMANCE_ENGINEERING.md and the three D083 measurement JSON files.
 Full source and updated packaged validation must be recorded after they finish.
+
+
+## D-084 - Standalone demo build output (2026-10-28)
+
+Actual D083 packaged acceptance exposed Java editor-generated target/classes
+appearing as untracked binary changes in the standalone sample. Add a project
+.gitignore containing /target/ to examples/sample-java-project; the demo copier
+carries it into generated repositories. Do not broaden the core's exclusion
+rules or risk domain. A real Git regression failed before the fix and passes
+with both source and resource edits still visible. All four demo checks pass
+with Maven included (90.25s). This is sample-project hygiene, not changed risk
+policy or a claim that the earlier binary was rebuilt after this file change.
+
+## D-085 - Bounded optional Java behavioral witnesses (2026-10-28)
+
+The owner approved the focused Moonshot scope after existing engineering.
+D083's source/frozen/critical GUI validation is complete. Add one optional
+Java capability, not the full untracked proposal or a new app/language/model.
+
+Compare the same bounded int inputs on immutable versions of one selected
+public static int(int) method. Compile only its self-contained source with
+annotation processing disabled, in isolated temporary folders and consented
+owned workers. Use syntax-derived boundary suggestions or a fixed/seeded simple
+baseline. Confirm unequal normal returns with fresh JVMs, attempt bounded input
+reduction and reconfirm. Export the selected full source files, hashes and a
+standalone JDK-only reproducer. Base is not an oracle; absence of a witness is
+not equivalence or justification to skip tests. Reject unsupported, unstable,
+exceptional, timed-out or incomplete work explicitly. No executable model cache,
+paid AI, new runtime dependency or default risk/policy change.
+
+Core controller/transport are language-neutral; Java belongs behind an optional
+plugin capability. Existing plugin API 1.1 is compatible because find_witness
+is read with getattr and is not a new required Protocol member. Read-only
+jobs stay read-only. MCP offers codedna_find_witness only with explicit
+--moonshot --allow-build --repo. It shares repository binding and supplements,
+never replaces, codedna_check. Existing default tool lists remain identical.
+
+Initial 28 focused checks passed (115.68s); combined opt-in MCP/existing-brake
+checks 29 passed (225.15s, one existing warning); runner guards four passed.
+Full source/frozen validation remains pending. The fixed 48-search comparison
+uses already inspected synthetic illustrations and is not independent research
+confirmation. Commit its manifest/protocol/runner before execution and retain
+all cases, no-difference results, unsupported cases and reproduction failures.
+D083's installer remains the preceding stable candidate. See
+BEHAVIORAL_WITNESS.md and MOONSHOT_PILOT_PROTOCOL.md.

@@ -57,3 +57,9 @@ class JavaPlugin:
         """Optional capability: live risk-based selection (D-041)."""
         from codedna_java.live import recommend
         return recommend(repo_path, base, head, **options)
+
+
+    def find_witness(self, request):
+        """Optional experimental capability; only the consented worker invokes it."""
+        from codedna_java.witness import find_witness
+        return find_witness(request)

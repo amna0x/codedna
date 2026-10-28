@@ -572,3 +572,15 @@ entirely mandatory suite bypasses unnecessary fitting and remains a full-suite
 recommendation. See [measurement scope and examples](docs/PERFORMANCE_ENGINEERING.md).
 These improvements are included in the validated D083 candidate. D082's
 earlier evidence remains tied to its preceding source checkpoint.
+
+## Experimental Moonshot witness (source pilot)
+
+An optional Java capability compares bounded inputs on two versions of one
+self-contained public static int(int) method. A confirmed difference exports
+source and a standalone JDK-only reproducer. It requires explicit project-code
+consent. It does not classify a regression automatically or change required tests.
+
+Use `python -m codedna witness --help`, or explicitly enable
+`python -m codedna mcp --repo PATH --allow-build --moonshot`. The extra witness
+tool is absent by default. See [scope, commands and evidence](docs/BEHAVIORAL_WITNESS.md).
+This newer experimental source is not included in the preceding D083 installer.

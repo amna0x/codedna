@@ -85,3 +85,24 @@ Differential testing already exists; this pilot alone establishes no new
 scientific novelty. Potential contribution is useful integration of explicit
 behavioral evidence with the conservative test brake, supported by a fair
 comparison and honest limits. No automatic repair or concurrency laboratory.
+
+
+## Fixed engineering comparison manifest — before execution
+
+The concrete manifest is experiments/moonshot-engineering-cases.json: eight
+synthetic cases, seeds 0/7/13, guided/simple generation, equal eight-search-input,
+four-reduction-input and 30-second budgets. Forty-eight searches run serially
+with alternating mode order. Reproduction of every emitted witness is measured
+separately. Preserve raw per-search reports, observations, source/tool hashes,
+compiler/search/confirmation counts, wall costs and reproduction outcomes.
+
+These fixtures were deliberately designed; some were already inspected in unit
+tests. Boundary examples favor syntax guidance. This is a fixed engineering
+illustration, not a blind preregistered independent accuracy study. Do not count
+seeds as independent bugs/projects or report witness frequency as regression
+recall. Intended changes are explicitly included to expose the oracle limitation.
+
+scripts/run_moonshot_pilot.py refuses missing consent, untracked/dirty pinned
+source, escaping/duplicate case IDs and existing output directories. It writes
+its manifest before results. Current source must be committed before execution.
+No old experiment is resumed, relabelled, retuned or overwritten by this pilot.

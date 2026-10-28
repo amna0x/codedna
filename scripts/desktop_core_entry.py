@@ -16,6 +16,11 @@ if __name__ == "__main__":
         # containment; never activate a pending plugin update from active.json.
         from codedna.api.analysis_worker import main as analysis_worker_main
         raise SystemExit(analysis_worker_main())
+    if sys.argv[1:2] == ["--codedna-behavior-worker"]:
+        # Consented execution has a separate protocol from read-only jobs.
+        # Read the request only after the owner has contained this process.
+        from codedna.behavior_worker import main as behavior_worker_main
+        raise SystemExit(behavior_worker_main())
     pinned = os.environ.get("CODEDNA_DESKTOP_PLUGIN_SNAPSHOT")
     if pinned is not None:
         try:

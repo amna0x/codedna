@@ -228,6 +228,20 @@ def build_parser() -> argparse.ArgumentParser:
     serve.add_argument("--allow-build", action="store_true",
                        help="Allow /api/run-tests (executes project code on request).")
 
+    witness = subcommands.add_parser(
+        "witness", help="Experimental: seek a bounded behavioral difference; executes trusted project code.")
+    _add_change_args(witness)
+    witness.add_argument("--file", required=True, help="Repository-relative source file.")
+    witness.add_argument("--symbol", required=True, help="Plugin symbol ID, e.g. example.Fee#fee(int).")
+    witness.add_argument("--output-dir", required=True, help="New export folder outside the analysed repository.")
+    witness.add_argument("--language", default="java", help="Installed language plugin (pilot: java).")
+    witness.add_argument("--allow-build", action="store_true", help="Confirm executing the selected project's code.")
+    witness.add_argument("--max-inputs", type=int, default=16)
+    witness.add_argument("--seed", type=int, default=0)
+    witness.add_argument("--timeout", type=int, default=30, help="Total operation budget in seconds (1-120).")
+    witness.add_argument("--reduce-budget", type=int, default=8)
+    witness.add_argument("--generation", choices=("guided", "simple"), default="guided")
+
     mcp = subcommands.add_parser(
         "mcp",
         help="Test brake for AI coding agents: an MCP server on stdin/stdout (D-059).",
@@ -239,6 +253,8 @@ def build_parser() -> argparse.ArgumentParser:
     mcp.add_argument("--repo", help="Repository the agent works on (required with --allow-build).")
     mcp.add_argument("--allow-build", action="store_true",
                      help="Offer codedna_check (executes the project's build when the agent asks).")
+    mcp.add_argument("--moonshot", action="store_true",
+                     help="Also offer experimental bounded Java witnesses; needs --allow-build and --repo.")
     mcp.add_argument("--mvn", help="Path to the Maven executable (default: mvn on PATH).")
     mcp.add_argument("--gradle", help="Path to the Gradle executable (default: the wrapper or gradle).")
     mcp.add_argument("--python", help="Python interpreter with the project's pytest/dependencies (default: PATH).")
@@ -427,6 +443,15 @@ def main(argv: list[str] | None = None) -> int:
             return _write_json(recommend(args.repo,args.base,args.head,
                 history_csv=args.history_csv,risk_target=args.risk_target,
                 must_run=args.must_run,method=args.method),None)
+        elif args.command == "witness":
+            from codedna.behavior import find_difference
+            result = find_difference(args.repo, args.base, args.head, file=args.file,
+                symbol=args.symbol, output_dir=args.output_dir, language=args.language,
+                allow_build=args.allow_build, max_inputs=args.max_inputs, seed=args.seed,
+                timeout=args.timeout, reduce_budget=args.reduce_budget, generation=args.generation)
+            _write_json(result, None)
+            return (130 if result['status'] == 'cancelled' else
+                    EXIT_OK if result['status'] in ('difference', 'no_difference_observed') else EXIT_ANALYSIS_ERROR)
         elif args.command == "run-tests":
             return _run_tests(args)
         elif args.command == "plugins":
@@ -449,7 +474,8 @@ def main(argv: list[str] | None = None) -> int:
                 build_options["gradle_command"] = [args.gradle]
             if args.python:
                 build_options["python_command"] = [args.python]
-            return mcp_main(args.repo, args.allow_build, build_options or None)
+            return mcp_main(args.repo, args.allow_build, build_options or None,
+                            **({'moonshot': True} if args.moonshot else {}))
         elif args.command == "history":
             return _run_history(args)
         elif args.command == "replay":

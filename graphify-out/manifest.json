@@ -48,9 +48,9 @@
     "semantic_hash": "2c226ebb7b1b4bee7206ccc5ca4d6553"
   },
   "backend/codedna/cli.py": {
-    "mtime": 1793038026.1347547,
-    "seen": 1793043692.409709,
-    "ast_hash": "d2b69743c37820e1f4da9115b9b895ca",
+    "mtime": 1793183367.4890435,
+    "seen": 1793183757.6914024,
+    "ast_hash": "68557fe83f9a0cc4cb8812d8f1e1fd64",
     "semantic_hash": ""
   },
   "backend/codedna/dependency_graph/__init__.py": {
@@ -510,21 +510,21 @@
     "semantic_hash": "143493fc0f69d7306bf0c787ca38fca9"
   },
   "MEMORY.md": {
-    "mtime": 1793139009.794866,
-    "seen": 1793179242.2583237,
-    "ast_hash": "84b7bbe7643b22d93cfe3934eeae0333",
+    "mtime": 1793184420.5721357,
+    "seen": 1793184466.8977075,
+    "ast_hash": "0cdd05d0e9b06c09cac36dd0e24d663b",
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1793179123.7968173,
-    "seen": 1793179242.2583237,
-    "ast_hash": "a524c80a4f8560793ac78bb5c942794d",
+    "mtime": 1793184297.342721,
+    "seen": 1793184378.6717029,
+    "ast_hash": "7a7ff4d627f6d14d07e0647fbeb74e5f",
     "semantic_hash": ""
   },
   "docs/ARCHITECTURE.md": {
-    "mtime": 1793179123.793044,
-    "seen": 1793179242.2583237,
-    "ast_hash": "59c6926cb333f7c8dddc4d601c5cd6d7",
+    "mtime": 1793184347.262663,
+    "seen": 1793184378.6717029,
+    "ast_hash": "65e21bd91001531bd78644e64bf724bc",
     "semantic_hash": ""
   },
   "docs/DATASET_PLAN.md": {
@@ -534,9 +534,9 @@
     "semantic_hash": "b56beff69c2cb266c8d2361408baa006"
   },
   "docs/DECISIONS.md": {
-    "mtime": 1793179123.793044,
-    "seen": 1793179242.2583237,
-    "ast_hash": "cdcf3941c2b37e1919a183b2fd4f217c",
+    "mtime": 1793184297.3346968,
+    "seen": 1793184378.6717029,
+    "ast_hash": "f32c7e6ea15020913713db4c668a0113",
     "semantic_hash": ""
   },
   "docs/PROJECT_SPEC.md": {
@@ -558,9 +558,9 @@
     "semantic_hash": "32a821de4b1178bef75683f2265b07a8"
   },
   "docs/ROADMAP.md": {
-    "mtime": 1793139009.794866,
-    "seen": 1793179242.2583237,
-    "ast_hash": "6427e5465b5c2dd6f49f94d5b95e52c5",
+    "mtime": 1793184420.574829,
+    "seen": 1793184466.8977075,
+    "ast_hash": "8199655a69c90a67a74d0d280e1de1e0",
     "semantic_hash": ""
   },
   "ide/README.md": {
@@ -654,9 +654,9 @@
     "semantic_hash": ""
   },
   "backend/codedna/agent/mcp_server.py": {
-    "mtime": 1793176962.3317523,
-    "seen": 1793179242.2576418,
-    "ast_hash": "5c4203239c46fbad251440561f2d193a",
+    "mtime": 1793184073.3821726,
+    "seen": 1793184378.6717029,
+    "ast_hash": "5bd78dcf4bb27f13052bdcb9d8763291",
     "semantic_hash": ""
   },
   "backend/codedna/dependency_graph/cache.py": {
@@ -780,9 +780,9 @@
     "semantic_hash": ""
   },
   "backend/tests/test_demo_agent_brake.py": {
-    "mtime": 1793038026.142835,
-    "seen": 1793043692.409709,
-    "ast_hash": "68dac6f22ba8e7e579d1c7f30c3a3d72",
+    "mtime": 1793181931.273841,
+    "seen": 1793183757.6914024,
+    "ast_hash": "11993f805f19d72f22855d69d3a9af13",
     "semantic_hash": ""
   },
   "backend/tests/test_desktop_bundle.py": {
@@ -1038,9 +1038,9 @@
     "semantic_hash": ""
   },
   "plugins/codedna-java/codedna_java/plugin.py": {
-    "mtime": 1793031514.188003,
-    "seen": 1793033487.6411092,
-    "ast_hash": "9d39114313c1b79052107e46e30d5962",
+    "mtime": 1793182824.4146335,
+    "seen": 1793183757.6914024,
+    "ast_hash": "e9f6578a402a922da9890a287c3eba8f",
     "semantic_hash": ""
   },
   "plugins/codedna-java/codedna_java/references.py": {
@@ -1134,9 +1134,9 @@
     "semantic_hash": ""
   },
   "scripts/desktop_core_entry.py": {
-    "mtime": 1793134696.4966378,
-    "seen": 1793134940.8009422,
-    "ast_hash": "b23e97f0022785c5c1433ca3f16153c3",
+    "mtime": 1793182824.4163036,
+    "seen": 1793183757.692402,
+    "ast_hash": "57cfb3ab442dc6598a14ec9973463135",
     "semantic_hash": ""
   },
   "scripts/make_hikaricp_demo.py": {
@@ -1272,9 +1272,9 @@
     "semantic_hash": ""
   },
   "docs/HANDOFF.md": {
-    "mtime": 1793139009.8001149,
-    "seen": 1793179242.2583237,
-    "ast_hash": "cfdebb0acbf56aa4acc763b2456de61e",
+    "mtime": 1793184420.5738409,
+    "seen": 1793184466.8977075,
+    "ast_hash": "232cdd8cf1bab3d46f9a1ac82dc26894",
     "semantic_hash": ""
   },
   "docs/IMPLEMENTATION_HANDOFF.md": {
@@ -1410,9 +1410,9 @@
     "semantic_hash": ""
   },
   "docs/BLUEPRINT_COMPLETION.md": {
-    "mtime": 1793139009.8021662,
-    "seen": 1793179242.2583237,
-    "ast_hash": "5750fd387e24dac3c24400365970ef1a",
+    "mtime": 1793184420.5775328,
+    "seen": 1793184466.8977075,
+    "ast_hash": "3209679c7dbd07e281d51b7e6843777a",
     "semantic_hash": ""
   },
   "docs/DEFERRED_FEATURES.md": {
@@ -1422,9 +1422,9 @@
     "semantic_hash": ""
   },
   "docs/IDE_MANUAL_TEST.md": {
-    "mtime": 1793135851.4025784,
-    "seen": 1793136738.1139045,
-    "ast_hash": "9ac46f888db3d62c03309db775c92347",
+    "mtime": 1793181837.7002175,
+    "seen": 1793183757.692402,
+    "ast_hash": "50096ca901bbfdf74a1dc6369edbc2bb",
     "semantic_hash": ""
   },
   "docs/REPORT_ABSTRACT.md": {
@@ -1998,9 +1998,9 @@
     "semantic_hash": ""
   },
   "docs/PERFORMANCE_ENGINEERING.md": {
-    "mtime": 1793179123.7980914,
-    "seen": 1793179242.2583237,
-    "ast_hash": "1d3345b7dbbc352f1fdaba2d28499bb5",
+    "mtime": 1793180179.3804643,
+    "seen": 1793183757.692402,
+    "ast_hash": "8fcc8e3c4bf895b8f8e71d61ef5a672e",
     "semantic_hash": ""
   },
   "docs/RESEARCH_PERFORMANCE_FOLLOWUP.md": {
@@ -2025,6 +2025,204 @@
     "mtime": 1793139009.76565,
     "seen": 1793179242.2583237,
     "ast_hash": "47f950b455d166761fd0907aeb165b0b",
+    "semantic_hash": ""
+  },
+  "backend/codedna/behavior.py": {
+    "mtime": 1793183367.3994472,
+    "seen": 1793183757.6914024,
+    "ast_hash": "166975c3056945b855246c6763128870",
+    "semantic_hash": ""
+  },
+  "backend/codedna/behavior_worker.py": {
+    "mtime": 1793182824.4078548,
+    "seen": 1793183757.6914024,
+    "ast_hash": "e2ae097467715032178d6058afb464fb",
+    "semantic_hash": ""
+  },
+  "backend/tests/test_behavior.py": {
+    "mtime": 1793184073.3489425,
+    "seen": 1793184378.6717029,
+    "ast_hash": "466aeb93e90faaf5d6cfac4f8dee4524",
+    "semantic_hash": ""
+  },
+  "backend/tests/test_behavior_mcp.py": {
+    "mtime": 1793183464.8957686,
+    "seen": 1793183757.6914024,
+    "ast_hash": "de048cfe0773ade78c31534cf21ebbb2",
+    "semantic_hash": ""
+  },
+  "docs/ENGINEERING_VALIDATION_D083_2026-10-28.json": {
+    "mtime": 1793181903.7132826,
+    "seen": 1793183757.6914024,
+    "ast_hash": "b508b791530c3834a381909fc4f3ec17",
+    "semantic_hash": ""
+  },
+  "docs/FROZEN_CORE_VALIDATION_D083_2026-10-28.json": {
+    "mtime": 1793180113.7714353,
+    "seen": 1793183757.6914024,
+    "ast_hash": "6cdffd2f983724be35c10a194d88d59b",
+    "semantic_hash": ""
+  },
+  "docs/RELEASE_VALIDATION_D083_2026-10-28.json": {
+    "mtime": 1793181903.8844004,
+    "seen": 1793183757.6914024,
+    "ast_hash": "b0d8b0e1033cda80510479877a258104",
+    "semantic_hash": ""
+  },
+  "plugins/codedna-java/codedna_java/witness.py": {
+    "mtime": 1793183367.4789727,
+    "seen": 1793183757.6914024,
+    "ast_hash": "07109e7e31dfda6fd07fa326debeb6ce",
+    "semantic_hash": ""
+  },
+  "plugins/codedna-java/codedna_java/witness_export.py": {
+    "mtime": 1793182824.4127026,
+    "seen": 1793183757.6914024,
+    "ast_hash": "26e520ba24d6a2cb6c589c32f119976d",
+    "semantic_hash": ""
+  },
+  "docs/MOONSHOT_PILOT_PROTOCOL.md": {
+    "mtime": 1793184297.342721,
+    "seen": 1793184378.6717029,
+    "ast_hash": "18b59dbc9afd3e9da9085c0d74bc776f",
+    "semantic_hash": ""
+  },
+  "docs/validation/D083-audit-equivalence-2026-10-28.txt": {
+    "mtime": 1793179806.2165825,
+    "seen": 1793183757.692402,
+    "ast_hash": "783a88412eee7da4f10183b5782f9da8",
+    "semantic_hash": ""
+  },
+  "docs/validation/D083-desktop-runtime-2026-10-28.txt": {
+    "mtime": 1793179806.2085514,
+    "seen": 1793183757.692402,
+    "ast_hash": "507fcc4eb67653f1a8801501f5b6e8da",
+    "semantic_hash": ""
+  },
+  "docs/validation/D083-frozen-brake-2026-10-28.txt": {
+    "mtime": 1793180113.7471268,
+    "seen": 1793183757.692402,
+    "ast_hash": "1181da1819851f10a935006ededa2d4b",
+    "semantic_hash": ""
+  },
+  "docs/validation/D083-frozen-jobs-2026-10-28.txt": {
+    "mtime": 1793180113.7324462,
+    "seen": 1793183757.692402,
+    "ast_hash": "5c092d7751e838bc17b98cbcb3eba1ce",
+    "semantic_hash": ""
+  },
+  "docs/validation/D083-frozen-plugins-2026-10-28.txt": {
+    "mtime": 1793180113.7175834,
+    "seen": 1793183757.692402,
+    "ast_hash": "393dd28a8ef07e665d5932a74ea07ddf",
+    "semantic_hash": ""
+  },
+  "docs/validation/D083-full-suite-2026-10-28.txt": {
+    "mtime": 1793179806.1903374,
+    "seen": 1793183757.692402,
+    "ast_hash": "9b32c83e49ecd641eb38b75dfee208f3",
+    "semantic_hash": ""
+  },
+  "docs/validation/D083-gui-cancel-2026-10-28.txt": {
+    "mtime": 1793181837.5710988,
+    "seen": 1793183757.692402,
+    "ast_hash": "e3c7a04ab44b2bfb47af32aaf07be914",
+    "semantic_hash": ""
+  },
+  "docs/validation/D083-gui-restarted-plugins-2026-10-28.txt": {
+    "mtime": 1793181837.5819857,
+    "seen": 1793183757.692402,
+    "ast_hash": "251823ca7669481323e67d144bec7ec4",
+    "semantic_hash": ""
+  },
+  "docs/validation/D083-gui-run-results-2026-10-28.txt": {
+    "mtime": 1793181837.5748324,
+    "seen": 1793183757.692402,
+    "ast_hash": "8a15e51c3ebee9ee77ba1fb7088c65e1",
+    "semantic_hash": ""
+  },
+  "docs/validation/D083-gui-test-explanation-2026-10-28.txt": {
+    "mtime": 1793181837.5748324,
+    "seen": 1793183757.692402,
+    "ast_hash": "a45364a43402ebc2e5062c8d15962031",
+    "semantic_hash": ""
+  },
+  "docs/validation/D083-installer-extraction-2026-10-28.txt": {
+    "mtime": 1793181837.5710988,
+    "seen": 1793183757.692402,
+    "ast_hash": "dffb55b06ca3fb01ac0811ebb87e289c",
+    "semantic_hash": ""
+  },
+  "docs/validation/D083-node-tests-2026-10-28.txt": {
+    "mtime": 1793179806.1903374,
+    "seen": 1793183757.692402,
+    "ast_hash": "df58c6956c290924be0264e2d58665bb",
+    "semantic_hash": ""
+  },
+  "docs/validation/D083-package-2026-10-28.txt": {
+    "mtime": 1793181837.568916,
+    "seen": 1793183757.692402,
+    "ast_hash": "f9cf6dada4b8f248edbddd39eadab39e",
+    "semantic_hash": ""
+  },
+  "docs/validation/D083-package-failed-attempt-2026-10-28.txt": {
+    "mtime": 1793181837.5679195,
+    "seen": 1793183757.692402,
+    "ast_hash": "3c8f9fe2757eb3a01d3f7a6906bc4b86",
+    "semantic_hash": ""
+  },
+  "docs/validation/D083-theia-native-2026-10-28.txt": {
+    "mtime": 1793181837.5338063,
+    "seen": 1793183757.692402,
+    "ast_hash": "44fa8dbb05694bddfa18929defb28d44",
+    "semantic_hash": ""
+  },
+  "docs/validation/D083-theia-production-2026-10-28.txt": {
+    "mtime": 1793181903.6044245,
+    "seen": 1793183757.692402,
+    "ast_hash": "7fffd34d3477e739bac6a17b8a8d40f8",
+    "semantic_hash": ""
+  },
+  "docs/validation/D083-typescript-2026-10-28.txt": {
+    "mtime": 1793181903.6180737,
+    "seen": 1793183757.692402,
+    "ast_hash": "22f7fab4c80d6b159dc0d1f46b367198",
+    "semantic_hash": ""
+  },
+  "docs/validation/D083-gui-cancel-2026-10-28.png": {
+    "mtime": 1793181837.5819857,
+    "seen": 1793183757.692402,
+    "ast_hash": "c38bb386c7032b634302852df72d72a6",
+    "semantic_hash": ""
+  },
+  "docs/validation/D083-gui-restarted-plugins-2026-10-28.png": {
+    "mtime": 1793181837.5819857,
+    "seen": 1793183757.692402,
+    "ast_hash": "4c306fe2dfc6610a1a6a773966022b58",
+    "semantic_hash": ""
+  },
+  "backend/tests/test_moonshot_runner.py": {
+    "mtime": 1793184347.2636557,
+    "seen": 1793184378.6717029,
+    "ast_hash": "f845c04e28cf04cfd6697958b803557c",
+    "semantic_hash": ""
+  },
+  "experiments/moonshot-engineering-cases.json": {
+    "mtime": 1793183862.0193796,
+    "seen": 1793184378.6717029,
+    "ast_hash": "88f13622f5a96ccf590ea04accbb99dc",
+    "semantic_hash": ""
+  },
+  "scripts/run_moonshot_pilot.py": {
+    "mtime": 1793184420.5775328,
+    "seen": 1793184466.8977075,
+    "ast_hash": "ca04d64c637a1d1bc151861e45382dfe",
+    "semantic_hash": ""
+  },
+  "docs/BEHAVIORAL_WITNESS.md": {
+    "mtime": 1793184297.2964556,
+    "seen": 1793184378.6717029,
+    "ast_hash": "5a209ee35a2ec31449c8ff2ea46149d2",
     "semantic_hash": ""
   }
 }

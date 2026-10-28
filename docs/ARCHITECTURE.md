@@ -693,3 +693,22 @@ checks eligibility before reuse and recomputes the audit and stopping decision.
 No history, audit acceptance, verdict, selected tests or mutable refs are reused.
 The CSV snapshot is parsed and fingerprinted from identical bytes. See
 [performance details](PERFORMANCE_ENGINEERING.md) for commands and limits.
+
+## Optional behavioral witness execution (D-085)
+
+`codedna.behavior` validates consent, bounded options, immutable refs and a new
+external export folder, then owns a separate `behavior_worker` process. Reuse
+`api.owned_process.OwnedProcess`, which is stdlib-only and does not import the
+API server. The worker waits for its contained parent's request before plugin
+activation; frozen workers receive the parent's pinned snapshot. Read-only
+analysis jobs gain no execution capability.
+
+The optional language-plugin `find_witness(request)` capability owns language
+syntax, compilation, generation and observations. Java's `witness.py` supports
+one self-contained public static int(int) method; `witness_export.py` creates
+an independent JDK-only reproducer. Structured observations/source hashes cross
+the core boundary; no Java parsing or analysis logic is added to the IDE/core.
+The CLI witness command and opt-in MCP --moonshot expose this experimental
+capability. Default MCP tools and test-brake decisions are unchanged. Controller
+identity/interpretation fields cannot be supplied by a plugin. See
+[behavioral witnesses](BEHAVIORAL_WITNESS.md) for limits and consent.
