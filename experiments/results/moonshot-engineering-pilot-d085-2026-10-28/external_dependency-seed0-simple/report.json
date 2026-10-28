@@ -1,0 +1,41 @@
+{
+  "status": "unsupported",
+  "observations": [],
+  "jvm_runs": 0,
+  "compilations": 1,
+  "search_inputs": 0,
+  "reduction_inputs": 0,
+  "source_encoding": "UTF-8",
+  "runtime_file_encoding": "UTF-8",
+  "budget": {
+    "max_inputs": 8,
+    "seed": 0,
+    "reduce_budget": 4,
+    "generation": "simple"
+  },
+  "guidance": "Integer literals and neighbors from selected method syntax; no semantic guarantee.",
+  "source_sha256": {
+    "base": "d3372decf07e7eb0aa9d96797c38d7985970c5ab44861fc9dba8c73ec0f20c49",
+    "head": "217d5522f8a77b8ddcbf91f44741c1ea0b9edcbe88ee677658530a32f3d06273"
+  },
+  "selected_method_tokens_changed": true,
+  "reason": "Self-contained pilot compilation failed; external dependencies/build scripts are unsupported.",
+  "compiler_details": "C:\\Users\\hp\\AppData\\Local\\Temp\\codedna-witness-2erbbk0s\\base\\Fee.java:1: error: cannot find symbol\r\npackage example; public class Fee { public static int fee(int x) { return Missing.apply(x); } }\r\n                                                                          ^\r\n  symbol:   variable Missing\r\n  location: class Fee\r\n1 error\r\n",
+  "schema_version": 1,
+  "kind": "codedna-behavioral-evidence",
+  "experimental": true,
+  "repository": "C:\\Users\\hp\\OneDrive\\Documents\\GitHub\\codedna\\build\\moonshot-fixtures-moonshot-engineering-pilot-d085-2026-10-28\\external_dependency",
+  "base_commit": "c8b5ab98a5d1e49b9f1baa72034dfce395a5a98d",
+  "head_commit": "ee4e8e3dbce3ea57bf22a8dea84cf36420996a26",
+  "language": "java",
+  "file": "src/main/java/example/Fee.java",
+  "symbol": "example.Fee#fee(int)",
+  "regression_established": false,
+  "required_tests_removed": false,
+  "plugin_version": "0.1.0",
+  "plugin_api_version": "1.1",
+  "export_disclosure": "A confirmed export includes the entire selected base/head source file; compiler diagnostics may quote source. Review before sharing.",
+  "interpretation": "A stable observed difference needs an applicable expectation to be called a regression. No witness within a finite budget does not establish equivalence or validate skip risk.",
+  "further_execution_blocked": false,
+  "elapsed_seconds": 3.485
+}

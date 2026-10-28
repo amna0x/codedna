@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-28",
+  "source_commit": "4d359419ad68874c374a45d83732845327aeed41",
+  "installer": {
+    "scope": "embedded installer core extracted and verified; no installation/registry change or clean-PC claim",
+    "installer": "C:\\Users\\hp\\OneDrive\\Documents\\GitHub\\codedna\\build\\desktop-D085-2026-10-28\\installer\\CodeDNA IDE D085 0.1.0 Setup.exe",
+    "installer_sha256": "c0ad4d0fc2485b3b3763876c81d7a951bcee643980f06f9a0bdc67d53744ab0b",
+    "installer_bytes": 317705578,
+    "core_sha256": "7d6d8aae69406141d9f73d71c45a4a2a241c09bb94be182c784f31786f969b16",
+    "manifest_files_verified": 1462,
+    "extraction_exit_code": 0,
+    "archive_warning": "7-Zip reports NSIS data after the embedded archive; all extracted core hashes match."
+  },
+  "restricted_path_unpacked_smoke": {
+    "checked_at_utc": "2026-10-28T14:44:13.3379593Z",
+    "scope": "Installed payload smoke; GUI/build acceptance and clean-machine provenance require human confirmation.",
+    "status": "automated_smoke_passed_manual_pending",
+    "os": "Microsoft Windows NT 10.0.26200.0",
+    "core_version": "codedna 0.1.0",
+    "verified_files": 1462,
+    "plugins": [
+      "java",
+      "python"
+    ],
+    "git_available": true,
+    "external_python_on_path": false,
+    "manual_checks": [
+      "Fresh Windows provenance",
+      "IDE launch",
+      "Extensions/Language plugins",
+      "Open project and analyse change",
+      "Test execution with prerequisites",
+      "Uninstall"
+    ]
+  },
+  "friend_kit": {
+    "path": "C:\\Users\\hp\\OneDrive\\Documents\\GitHub\\codedna\\build\\desktop-D085-2026-10-28\\CodeDNA-D085-Friend-Kit.zip",
+    "bytes": 317806313,
+    "sha256": "6bee18b084e0fb5f1aa787f0dfb4ae86b22c6ff5e562509628f108ee8fff25a7",
+    "files_verified": 92,
+    "scope": "prepared local friend-PC kit; not sent, installed or clean-PC validated"
+  },
+  "signature": {
+    "Status": "NotSigned",
+    "StatusMessage": "The file C:\\Users\\hp\\OneDrive\\Documents\\GitHub\\codedna\\build\\desktop-D085-2026-10-28\\installer\\CodeDNA IDE D085 0.1.0 Setup.exe is not digitally signed. You cannot run this script on the current system. For more information about running scripts and setting execution policy, see about_Execution_Policies at https://go.microsoft.com/fwlink/?LinkID=135170"
+  },
+  "frozen_checks_passed": 32,
+  "logs_sha256_utf8_lf": {
+    "docs/validation/D085-package-2026-10-28.txt": "9dd1a4bf5cacb0c9ab3ef790d926f02fd7bfa62bbe7ad3882e0504ee62158070",
+    "docs/validation/D085-installer-extraction-2026-10-28.txt": "8584cf6b8dd5b5ab59981fbfeb118dbf986df27d3138d1814541e3d90c6e267c",
+    "docs/validation/D085-gui-plugins-2026-10-28.txt": "97816b3472746cbdd722be10a97139714984522f8820f2a13ccc4251016c2ee5",
+    "docs/validation/D085-gui-restarted-plugins-2026-10-28.txt": "f335945241574e16b502371cbbafbb2695436931e44924f6e3457cb12eb37adf"
+  },
+  "frontend": "Unchanged production frontend from D083. Three D085 launch/plugin/restart checks performed; full D083 GUI workflow not repeated.",
+  "gui_checks": {
+    "isolated_new_package_launches": "passed",
+    "bundled_java_python_displayed": "passed",
+    "language_plugins_restored_after_restart": "passed"
+  },
+  "limits": [
+    "No installation or clean-PC acceptance performed; friend kit prepared locally, not sent.",
+    "D085 executable and three GUI checks tested; D083 full GUI workflow evidence remains tied to D083.",
+    "Live official catalogue was last checked as 404; no public hosting or availability claim.",
+    "Original research remains mixed; synthetic witness pilot is not independent accuracy evidence.",
+    "No new language, rename, push, merge, or stash changes."
+  ]
+}

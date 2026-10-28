@@ -1,44 +1,63 @@
 # CodeDNA — Roadmap
 
-## D-084/D-085 active continuation — 2026-10-28
+## D-085 source, pilot, executable and installer verified; friend kit prepared — 2026-10-28
 
-D083 stable checkpoint/evidence is 5848b6f (runtime source 1a45664): 664 full
-Maven-inclusive tests, 23 actual frozen checks, 12 critical packaged GUI checks;
-installer SHA and limits below. No source push/merge was made. The old installer
-and installed app are intact; all isolated acceptance app windows are closed.
+Corrected source 4d359419ad68874c374a45d83732845327aeed41 passed the complete
+Maven-inclusive suite: 714 passed, zero failures/skips, one existing warning,
+2300.22s. See ENGINEERING_VALIDATION_D085_2026-10-28.json and hashed logs.
+The earlier 711-test invocation on bd8c6d8 was deliberately interrupted around
+12 percent for JDK17 Cp1252/UTF8 correction; never count it as a pass.
 
-D084 sample /target/ ignore cleanup is implemented. Its Git regression failed
-before and all four demo checks pass after, including real Maven (90.25s).
+Implemented optional Java witness CLI and --moonshot --allow-build --repo MCP
+capability. Self-contained public static int(int), bounded guided/simple inputs,
+fresh JVM confirmation, reduction, independent JDK-only source reproducer,
+explicit UTF-8 source/runtime assumptions, actual timeout/Ctrl+C descendant
+cleanup. Unconfirmed cleanup blocks later witness/MCP checking, while planning
+stays available. Base is not an oracle; no witness is not equivalence/skip-risk
+validation. Existing test/risk policy remains intact. D084 demo /target/ ignore
+also passed its Git regression and all four demo checks with real Maven.
 
-D085 focused Moonshot is now SOURCE WORK IN PROGRESS, not in the D083 installer.
-New core behavior.py / behavior_worker.py, Java witness.py / witness_export.py,
-optional plugin capability and witness CLI compare public static int method(int)
-on immutable versions in contained consented workers. Bounded syntax-guided/simple
-inputs, fresh JVM confirmation, input reduction and independent JDK-only source
-reproducer. No difference is a finite search outcome, not equivalence; no oracle
-or regression classification is invented. Existing risk/required-test logic stays
-separate. First 28 focused real-Java/guard tests passed (115.68s), including actual
-timeout/Ctrl+C descendant cleanup and independent reproduction/tamper refusal.
+The fixed engineering comparison COMPLETED all 48 searches; all 15 emitted
+reproducers independently reproduced. Eight illustrative synthetic cases, three
+seeds/mode, not independent projects/bugs. Guided: 12 difference, 3 no-difference,
+6 inconclusive, 3 unsupported; simple: 3/12/6/3 respectively. Median whole-call
+costs 11.234s guided / 10.057s simple: no speedup claim. Boundary cases were
+constructed to favor guidance. See experiments/results/moonshot-engineering-pilot-d085-2026-10-28/FINDINGS.md
+and MOONSHOT_ENGINEERING_PILOT_D085_2026-10-28.json. All report/export hashes checked.
+Do not rerun/retune this pilot or old D076; no new accuracy/novelty confirmation.
 
-Explicitly opt-in MCP --moonshot --allow-build --repo wiring passed 29 combined
-MCP/existing-brake checks (225.15s, one existing warning). Four runner guards passed;
-a fifth duplicate-case guard was then added. Default tool lists remain unchanged.
-The 711-test full run on bd8c6d8 was deliberately stopped around 12 percent
-for a Java 17 encoding bug found during review. It is NOT a pass; retain pointer
-.diagnostics/d085-full-maven.log and d085-interrupted-full.json. No full run is
-currently active. Laptop JDK reports Cp1252; two real Unicode regressions failed
-before explicit UTF-8 source/compiler/runtime/reproducer fixes and both passed
-following the fix (13.08s). Verify the MCP session guard, commit corrected source,
-then launch ONE new full Maven-inclusive run using a new log. The fixed 48-search
-comparison is still not started. Pinned source, case manifest and protocol must be committed first.
-A forced-cleanup error then exposed a missing session block. It now returns
-inconclusive and blocks further execution when cleanup is unconfirmed. Nine
-cleanup/real CLI/timeout/Ctrl+C/runner checks pass (31.40s). Full validation is next.
-No pilot result, full-source or actual new frozen validation is claimed yet.
-Do not claim the new code is release-validated or rerun D076. Continue from
-MOONSHOT_PILOT_PROTOCOL.md. Staging helpers in pointer .diagnostics/moonshot are
-one-time patches; inspect rather than rerunning. Preserve website edits, MOONSHOT.md
-and both stashes. No public hosting or additional language expansion.
+The isolated D085 core build completed. All 32 actual executable checks pass:
+seven plugin, eight worker/restart, eight real-Maven brake and nine witness checks.
+All 1462 bundle files were hash-verified. See
+FROZEN_CORE_VALIDATION_D085_2026-10-28.json and its hashed logs. Failed required
+tests block, passing required tests pass, skipped required tests remain incomplete;
+model reuse still performs a fresh audit. Optional witness reproduction, UTF-8,
+timeout and parent-termination descendant cleanup pass in the actual executable.
+
+D085 installer packaging completed. The actual embedded core was extracted;
+all 1462 file hashes matched. Restricted-PATH unpacked smoke passed with no
+external Python and both bundled languages. Three new packaged GUI checks pass:
+isolated launch, Java/Python display and Language plugins restored on restart.
+The unchanged D083 frontend was reused; its full 12-flow GUI test was not repeated.
+Both owned D085 windows were closed. No app was installed.
+See RELEASE_VALIDATION_D085_2026-10-28.json for hashes, logs and scope.
+
+Installer: build/desktop-D085-2026-10-28/installer/CodeDNA IDE D085 0.1.0 Setup.exe
+SHA-256: c0ad4d0fc2485b3b3763876c81d7a951bcee643980f06f9a0bdc67d53744ab0b
+Unsigned, 317705578 bytes. Local friend kit prepared and hash/ZIP
+verified: build/desktop-D085-2026-10-28/CodeDNA-D085-Friend-Kit.zip.
+Includes a two-commit Java brake demo, optional witness demo and manual checklist.
+Prepared is not sent/installed/clean-PC verified. D083 remains preserved.
+
+NEXT: friend-PC/manual acceptance and official catalogue hosting remain external
+release gates. Research performance follow-up remains protocol-first and not run;
+the completed synthetic pilot does not replace independent real-change evidence.
+No research claim was strengthened, no new language, rename, push or merge.
+
+Stable D083 evidence is below. Preserve both stashes, unrelated website changes,
+untracked MOONSHOT.md and all original research outputs. No new push/merge/public
+hosting. Official catalogue was rechecked and still returns 404; read-only log
+pointer .diagnostics/d085-live-catalogue.log. No additional language plugin.
 
 ## D-083 desktop candidate validated — 2026-10-28
 

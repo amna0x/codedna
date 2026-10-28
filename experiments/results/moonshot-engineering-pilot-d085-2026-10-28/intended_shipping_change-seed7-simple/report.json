@@ -1,0 +1,149 @@
+{
+  "status": "no_difference_observed",
+  "observations": [
+    {
+      "phase": "search",
+      "input": 0,
+      "base": {
+        "kind": "value",
+        "value": 500
+      },
+      "head": {
+        "kind": "value",
+        "value": 500
+      }
+    },
+    {
+      "phase": "search",
+      "input": 1,
+      "base": {
+        "kind": "value",
+        "value": 500
+      },
+      "head": {
+        "kind": "value",
+        "value": 500
+      }
+    },
+    {
+      "phase": "search",
+      "input": -1,
+      "base": {
+        "kind": "value",
+        "value": 500
+      },
+      "head": {
+        "kind": "value",
+        "value": 500
+      }
+    },
+    {
+      "phase": "search",
+      "input": 2,
+      "base": {
+        "kind": "value",
+        "value": 500
+      },
+      "head": {
+        "kind": "value",
+        "value": 500
+      }
+    },
+    {
+      "phase": "search",
+      "input": -2,
+      "base": {
+        "kind": "value",
+        "value": 500
+      },
+      "head": {
+        "kind": "value",
+        "value": 500
+      }
+    },
+    {
+      "phase": "search",
+      "input": -2147483648,
+      "base": {
+        "kind": "value",
+        "value": 500
+      },
+      "head": {
+        "kind": "value",
+        "value": 500
+      }
+    },
+    {
+      "phase": "search",
+      "input": 2147483647,
+      "base": {
+        "kind": "value",
+        "value": 0
+      },
+      "head": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "phase": "search",
+      "input": -1499591369,
+      "base": {
+        "kind": "value",
+        "value": 500
+      },
+      "head": {
+        "kind": "value",
+        "value": 500
+      }
+    }
+  ],
+  "jvm_runs": 16,
+  "compilations": 2,
+  "search_inputs": 8,
+  "reduction_inputs": 0,
+  "source_encoding": "UTF-8",
+  "runtime_file_encoding": "UTF-8",
+  "budget": {
+    "max_inputs": 8,
+    "seed": 7,
+    "reduce_budget": 4,
+    "generation": "simple"
+  },
+  "guidance": "Integer literals and neighbors from selected method syntax; no semantic guarantee.",
+  "source_sha256": {
+    "base": "82f0563e5920f0b0cdb6c6a5389e65cb37abb7bfa0ba34b1d2edb390440e2e28",
+    "head": "5da1b1d195954a16eab9ef229cb42e9183b38f997f3f8c7e26c7d1c4a856ccbd"
+  },
+  "selected_method_tokens_changed": true,
+  "java_version": "openjdk version \"17.0.20\" 2026-07-21\r\nOpenJDK Runtime Environment Temurin-17.0.20+8 (build 17.0.20+8)\r\nOpenJDK 64-Bit Server VM Temurin-17.0.20+8 (build 17.0.20+8, mixed mode, sharing)\r\n",
+  "javac_version": "javac 17.0.20\r\n",
+  "candidate_inputs": [
+    0,
+    1,
+    -1,
+    2,
+    -2,
+    -2147483648,
+    2147483647,
+    -1499591369
+  ],
+  "reason": "No normal-return difference observed within the finite input/time budget; equivalence is not established.",
+  "schema_version": 1,
+  "kind": "codedna-behavioral-evidence",
+  "experimental": true,
+  "repository": "C:\\Users\\hp\\OneDrive\\Documents\\GitHub\\codedna\\build\\moonshot-fixtures-moonshot-engineering-pilot-d085-2026-10-28\\intended_shipping_change",
+  "base_commit": "3e42ebe44c7bd947564b32b2a1554010eb57b91f",
+  "head_commit": "a2132e96f29e95ade9ac630278cc2f45dd8abb2e",
+  "language": "java",
+  "file": "src/main/java/example/Fee.java",
+  "symbol": "example.Fee#fee(int)",
+  "regression_established": false,
+  "required_tests_removed": false,
+  "plugin_version": "0.1.0",
+  "plugin_api_version": "1.1",
+  "export_disclosure": "A confirmed export includes the entire selected base/head source file; compiler diagnostics may quote source. Review before sharing.",
+  "interpretation": "A stable observed difference needs an applicable expectation to be called a regression. No witness within a finite budget does not establish equivalence or validate skip risk.",
+  "further_execution_blocked": false,
+  "elapsed_seconds": 13.328
+}

@@ -1,0 +1,41 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.14, pytest-9.1.1, pluggy-1.7.0 -- C:\Users\hp\OneDrive\Documents\GitHub\codedna\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\hp\OneDrive\Documents\GitHub\codedna
+configfile: pyproject.toml
+plugins: anyio-4.15.1
+collecting ... collected 1 item
+
+backend/tests/test_behavior.py::test_cleanup_uncertainty_blocks_further_execution FAILED [100%]
+
+================================== FAILURES ===================================
+______________ test_cleanup_uncertainty_blocks_further_execution ______________
+
+repo = <conftest.GitRepo object at 0x000002139C61A210>
+tmp_path = WindowsPath('C:/Users/hp/AppData/Local/Temp/pytest-of-hp/pytest-102/test_cleanup_uncertainty_block0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002139C446330>
+
+    @pytest.mark.maven
+    def test_cleanup_uncertainty_blocks_further_execution(repo,tmp_path,monkeypatch):
+        import codedna.behavior as behavior
+        shas=versions(repo)
+        actual=behavior.OwnedProcess
+        monkeypatch.setattr(behavior,'_BLOCKED_REASON',None,raising=False)
+        class UncertainOwner:
+            def __init__(self,*args,**kwargs):
+                self.owner=actual(*args,**kwargs);self.process=self.owner.process
+            def close(self):
+                self.owner.close()
+                raise OSError('fixture: confirmation of cleanup failed')
+            def __enter__(self):return self
+            def __exit__(self,*args):self.close()
+        monkeypatch.setattr(behavior,'OwnedProcess',UncertainOwner)
+        result=invoke(repo,shas,tmp_path/'first',max_inputs=1,reduce_budget=0)
+>       assert result['status']=='inconclusive' and result['further_execution_blocked'] is True,result
+                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'further_execution_blocked'
+
+backend\tests\test_behavior.py:241: KeyError
+=========================== short test summary info ===========================
+FAILED backend/tests/test_behavior.py::test_cleanup_uncertainty_blocks_further_execution
+============================== 1 failed in 7.77s ==============================

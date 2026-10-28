@@ -1,0 +1,914 @@
+[
+  {
+    "case": "arithmetic_change",
+    "seed": 0,
+    "generation": "guided",
+    "status": "difference",
+    "wall_seconds": 11.39881030000106,
+    "search_inputs": 1,
+    "reduction_inputs": 1,
+    "jvm_runs": 12,
+    "witness": {
+      "phase": "reduction",
+      "input": 0,
+      "base": {
+        "kind": "value",
+        "value": 1
+      },
+      "head": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    "report_sha256": "5d90bd100d3b4b15a16517f26b280cc550053ecc07e149bbf70340be59bdfb90",
+    "regression_established": false,
+    "reproduction": {
+      "seconds": 4.5986010000051465,
+      "compile_exit_code": 0,
+      "run_exit_code": 0,
+      "passed": true
+    }
+  },
+  {
+    "case": "arithmetic_change",
+    "seed": 0,
+    "generation": "simple",
+    "status": "difference",
+    "wall_seconds": 11.265511500001594,
+    "search_inputs": 1,
+    "reduction_inputs": 0,
+    "jvm_runs": 10,
+    "witness": {
+      "phase": "search",
+      "input": 0,
+      "base": {
+        "kind": "value",
+        "value": 1
+      },
+      "head": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    "report_sha256": "f6cea1eefe7558a99ca07aefb797840333ccf3a6fa1fb3444a77d082efabf579",
+    "regression_established": false,
+    "reproduction": {
+      "seconds": 4.990521100000478,
+      "compile_exit_code": 0,
+      "run_exit_code": 0,
+      "passed": true
+    }
+  },
+  {
+    "case": "positive_boundary",
+    "seed": 0,
+    "generation": "simple",
+    "status": "no_difference_observed",
+    "wall_seconds": 10.82458410000254,
+    "search_inputs": 8,
+    "reduction_inputs": 0,
+    "jvm_runs": 16,
+    "witness": null,
+    "report_sha256": "f180d30c678f06a63fffa7931d44104d26327ca8d71a723beff831cbe9a77ef4",
+    "regression_established": false,
+    "reproduction": null
+  },
+  {
+    "case": "positive_boundary",
+    "seed": 0,
+    "generation": "guided",
+    "status": "difference",
+    "wall_seconds": 12.736859800003003,
+    "search_inputs": 2,
+    "reduction_inputs": 4,
+    "jvm_runs": 20,
+    "witness": {
+      "phase": "search",
+      "input": 100,
+      "base": {
+        "kind": "value",
+        "value": 1
+      },
+      "head": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    "report_sha256": "d1c7d25cc2efa2bf3b7a6585f3e98eb32f95e979a2c713f419be088388dd89f0",
+    "regression_established": false,
+    "reproduction": {
+      "seconds": 4.4387710000009974,
+      "compile_exit_code": 0,
+      "run_exit_code": 0,
+      "passed": true
+    }
+  },
+  {
+    "case": "negative_boundary",
+    "seed": 0,
+    "generation": "guided",
+    "status": "difference",
+    "wall_seconds": 13.248449099999561,
+    "search_inputs": 3,
+    "reduction_inputs": 4,
+    "jvm_runs": 22,
+    "witness": {
+      "phase": "search",
+      "input": -100,
+      "base": {
+        "kind": "value",
+        "value": 1
+      },
+      "head": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    "report_sha256": "d9a6cca064b98942437c77d4a852fd86dda19a2284e2f27bdb8b8b040c579f0d",
+    "regression_established": false,
+    "reproduction": {
+      "seconds": 4.438408300004085,
+      "compile_exit_code": 0,
+      "run_exit_code": 0,
+      "passed": true
+    }
+  },
+  {
+    "case": "negative_boundary",
+    "seed": 0,
+    "generation": "simple",
+    "status": "no_difference_observed",
+    "wall_seconds": 11.617637000003015,
+    "search_inputs": 8,
+    "reduction_inputs": 0,
+    "jvm_runs": 16,
+    "witness": null,
+    "report_sha256": "9f869a97c146ab49eb77282b5d1dda5073a65f73adcab235833ba485caf50a23",
+    "regression_established": false,
+    "reproduction": null
+  },
+  {
+    "case": "comment_only",
+    "seed": 0,
+    "generation": "simple",
+    "status": "no_difference_observed",
+    "wall_seconds": 11.639983799999754,
+    "search_inputs": 8,
+    "reduction_inputs": 0,
+    "jvm_runs": 16,
+    "witness": null,
+    "report_sha256": "533c9d04afc6bacd010745eec7bfbf45e6ad78d913baa38c42716d612ed4d5e8",
+    "regression_established": false,
+    "reproduction": null
+  },
+  {
+    "case": "comment_only",
+    "seed": 0,
+    "generation": "guided",
+    "status": "no_difference_observed",
+    "wall_seconds": 11.004932200004987,
+    "search_inputs": 8,
+    "reduction_inputs": 0,
+    "jvm_runs": 16,
+    "witness": null,
+    "report_sha256": "7eadaed16ae02f2cac62649ba8986d0013259075344965532a08cc0036ed9429",
+    "regression_established": false,
+    "reproduction": null
+  },
+  {
+    "case": "intended_shipping_change",
+    "seed": 0,
+    "generation": "guided",
+    "status": "difference",
+    "wall_seconds": 12.26353360000212,
+    "search_inputs": 2,
+    "reduction_inputs": 4,
+    "jvm_runs": 20,
+    "witness": {
+      "phase": "search",
+      "input": 5999,
+      "base": {
+        "kind": "value",
+        "value": 0
+      },
+      "head": {
+        "kind": "value",
+        "value": 500
+      }
+    },
+    "report_sha256": "7eb918636b3f8366828c7ed9f252a10f02ccff6de8b28fb30fc117c9521898d3",
+    "regression_established": false,
+    "reproduction": {
+      "seconds": 4.673619299996062,
+      "compile_exit_code": 0,
+      "run_exit_code": 0,
+      "passed": true
+    }
+  },
+  {
+    "case": "intended_shipping_change",
+    "seed": 0,
+    "generation": "simple",
+    "status": "no_difference_observed",
+    "wall_seconds": 10.467537099997571,
+    "search_inputs": 8,
+    "reduction_inputs": 0,
+    "jvm_runs": 16,
+    "witness": null,
+    "report_sha256": "d8994f1eff9e674360c90bcbe72d5d3fa9127b3d4b210cbd5860d21667096ec2",
+    "regression_established": false,
+    "reproduction": null
+  },
+  {
+    "case": "exception",
+    "seed": 0,
+    "generation": "simple",
+    "status": "inconclusive",
+    "wall_seconds": 8.057358199999726,
+    "search_inputs": 1,
+    "reduction_inputs": 0,
+    "jvm_runs": 2,
+    "witness": null,
+    "report_sha256": "cabf1c1feeb0b26e4dbaab5530e94855702bec9a699fa9a2baffdc52e50b6ebd",
+    "regression_established": false,
+    "reproduction": null
+  },
+  {
+    "case": "exception",
+    "seed": 0,
+    "generation": "guided",
+    "status": "inconclusive",
+    "wall_seconds": 10.768035900000541,
+    "search_inputs": 1,
+    "reduction_inputs": 0,
+    "jvm_runs": 2,
+    "witness": null,
+    "report_sha256": "6a1088708d0fd98c47de154e22c94101cbb668281d55e55522f55ffd9d91fc4c",
+    "regression_established": false,
+    "reproduction": null
+  },
+  {
+    "case": "unstable_state",
+    "seed": 0,
+    "generation": "guided",
+    "status": "inconclusive",
+    "wall_seconds": 9.75750859999971,
+    "search_inputs": 1,
+    "reduction_inputs": 0,
+    "jvm_runs": 4,
+    "witness": null,
+    "report_sha256": "57dceb656644e853afc00aae3eda714759242f3196e70fc57a8cf27ca0246565",
+    "regression_established": false,
+    "reproduction": null
+  },
+  {
+    "case": "unstable_state",
+    "seed": 0,
+    "generation": "simple",
+    "status": "inconclusive",
+    "wall_seconds": 8.618802099997993,
+    "search_inputs": 1,
+    "reduction_inputs": 0,
+    "jvm_runs": 4,
+    "witness": null,
+    "report_sha256": "20a2de658112ff0dfb49cba2b9ae69191366b90d4a6c767e99c29e57795ee279",
+    "regression_established": false,
+    "reproduction": null
+  },
+  {
+    "case": "external_dependency",
+    "seed": 0,
+    "generation": "simple",
+    "status": "unsupported",
+    "wall_seconds": 3.4795868000001065,
+    "search_inputs": 0,
+    "reduction_inputs": 0,
+    "jvm_runs": 0,
+    "witness": null,
+    "report_sha256": "73ee4052787e52d7448aa91c961c78909523f5270ce98c808ce517131a68e10d",
+    "regression_established": false,
+    "reproduction": null
+  },
+  {
+    "case": "external_dependency",
+    "seed": 0,
+    "generation": "guided",
+    "status": "unsupported",
+    "wall_seconds": 3.870813999994425,
+    "search_inputs": 0,
+    "reduction_inputs": 0,
+    "jvm_runs": 0,
+    "witness": null,
+    "report_sha256": "89f5cda8d00d93c54196653a5660e13064dacd73edc45b879451a2869d02c36f",
+    "regression_established": false,
+    "reproduction": null
+  },
+  {
+    "case": "arithmetic_change",
+    "seed": 7,
+    "generation": "simple",
+    "status": "difference",
+    "wall_seconds": 9.226181900005031,
+    "search_inputs": 1,
+    "reduction_inputs": 0,
+    "jvm_runs": 10,
+    "witness": {
+      "phase": "search",
+      "input": 0,
+      "base": {
+        "kind": "value",
+        "value": 1
+      },
+      "head": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    "report_sha256": "24709495ae862d12deb7bacc1639d097c9ce4d1148f844498a644f34d1fee21f",
+    "regression_established": false,
+    "reproduction": {
+      "seconds": 4.880151000004844,
+      "compile_exit_code": 0,
+      "run_exit_code": 0,
+      "passed": true
+    }
+  },
+  {
+    "case": "arithmetic_change",
+    "seed": 7,
+    "generation": "guided",
+    "status": "difference",
+    "wall_seconds": 11.0690861999974,
+    "search_inputs": 1,
+    "reduction_inputs": 1,
+    "jvm_runs": 12,
+    "witness": {
+      "phase": "reduction",
+      "input": 0,
+      "base": {
+        "kind": "value",
+        "value": 1
+      },
+      "head": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    "report_sha256": "3bc09d57f46c73f5dd94f398bfa438706ec2ac10acb6bb0aa392ab826e0232e4",
+    "regression_established": false,
+    "reproduction": {
+      "seconds": 4.655220000000554,
+      "compile_exit_code": 0,
+      "run_exit_code": 0,
+      "passed": true
+    }
+  },
+  {
+    "case": "positive_boundary",
+    "seed": 7,
+    "generation": "guided",
+    "status": "difference",
+    "wall_seconds": 12.320625300002575,
+    "search_inputs": 2,
+    "reduction_inputs": 4,
+    "jvm_runs": 20,
+    "witness": {
+      "phase": "search",
+      "input": 100,
+      "base": {
+        "kind": "value",
+        "value": 1
+      },
+      "head": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    "report_sha256": "555529e7bf1a55cbb2d19bbfba56b2638d70d763ed211e37b15e12370e3a0628",
+    "regression_established": false,
+    "reproduction": {
+      "seconds": 4.434703099999751,
+      "compile_exit_code": 0,
+      "run_exit_code": 0,
+      "passed": true
+    }
+  },
+  {
+    "case": "positive_boundary",
+    "seed": 7,
+    "generation": "simple",
+    "status": "no_difference_observed",
+    "wall_seconds": 13.368010900005174,
+    "search_inputs": 8,
+    "reduction_inputs": 0,
+    "jvm_runs": 16,
+    "witness": null,
+    "report_sha256": "57126ead938ea0b8d3f0633549722a3cb181d043fc06882238a05e40727cd541",
+    "regression_established": false,
+    "reproduction": null
+  },
+  {
+    "case": "negative_boundary",
+    "seed": 7,
+    "generation": "simple",
+    "status": "no_difference_observed",
+    "wall_seconds": 13.894920799997635,
+    "search_inputs": 8,
+    "reduction_inputs": 0,
+    "jvm_runs": 16,
+    "witness": null,
+    "report_sha256": "d6891df70d27fba0a032b217f279141f491850b1e42087ea57ef12e77df7c5a1",
+    "regression_established": false,
+    "reproduction": null
+  },
+  {
+    "case": "negative_boundary",
+    "seed": 7,
+    "generation": "guided",
+    "status": "difference",
+    "wall_seconds": 14.189760200002638,
+    "search_inputs": 3,
+    "reduction_inputs": 4,
+    "jvm_runs": 22,
+    "witness": {
+      "phase": "search",
+      "input": -100,
+      "base": {
+        "kind": "value",
+        "value": 1
+      },
+      "head": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    "report_sha256": "ea4691287455acdbed06e5e2f57adc3e6e6a97d9552f5e28d440d814fffcb2c5",
+    "regression_established": false,
+    "reproduction": {
+      "seconds": 4.100555800003349,
+      "compile_exit_code": 0,
+      "run_exit_code": 0,
+      "passed": true
+    }
+  },
+  {
+    "case": "comment_only",
+    "seed": 7,
+    "generation": "guided",
+    "status": "no_difference_observed",
+    "wall_seconds": 13.14868469999783,
+    "search_inputs": 8,
+    "reduction_inputs": 0,
+    "jvm_runs": 16,
+    "witness": null,
+    "report_sha256": "b5ea8c0a017262bc4cf002d44edcc61fb75607fc5280b6610fca8fe9f5c5bfc9",
+    "regression_established": false,
+    "reproduction": null
+  },
+  {
+    "case": "comment_only",
+    "seed": 7,
+    "generation": "simple",
+    "status": "no_difference_observed",
+    "wall_seconds": 12.24791639999603,
+    "search_inputs": 8,
+    "reduction_inputs": 0,
+    "jvm_runs": 16,
+    "witness": null,
+    "report_sha256": "151ba7a593eaa3724dcc20f99b65b63e39e6889581b8bb3210b4606d349b3761",
+    "regression_established": false,
+    "reproduction": null
+  },
+  {
+    "case": "intended_shipping_change",
+    "seed": 7,
+    "generation": "simple",
+    "status": "no_difference_observed",
+    "wall_seconds": 13.330106500005058,
+    "search_inputs": 8,
+    "reduction_inputs": 0,
+    "jvm_runs": 16,
+    "witness": null,
+    "report_sha256": "48d383b57f9d3da46aea946e353c0b46c167f3f6415e4bc98ce83f4aabd1420f",
+    "regression_established": false,
+    "reproduction": null
+  },
+  {
+    "case": "intended_shipping_change",
+    "seed": 7,
+    "generation": "guided",
+    "status": "difference",
+    "wall_seconds": 13.593146899998828,
+    "search_inputs": 2,
+    "reduction_inputs": 4,
+    "jvm_runs": 20,
+    "witness": {
+      "phase": "search",
+      "input": 5999,
+      "base": {
+        "kind": "value",
+        "value": 0
+      },
+      "head": {
+        "kind": "value",
+        "value": 500
+      }
+    },
+    "report_sha256": "809d0bc2e9acf647b37c53af3f70848e4266d2c57861375878506e15d22b2367",
+    "regression_established": false,
+    "reproduction": {
+      "seconds": 4.620827500002633,
+      "compile_exit_code": 0,
+      "run_exit_code": 0,
+      "passed": true
+    }
+  },
+  {
+    "case": "exception",
+    "seed": 7,
+    "generation": "guided",
+    "status": "inconclusive",
+    "wall_seconds": 8.060798000005889,
+    "search_inputs": 1,
+    "reduction_inputs": 0,
+    "jvm_runs": 2,
+    "witness": null,
+    "report_sha256": "c3a56cd5f1917e0a8b6e514658e59e1b2325d23941ad35b213201e23b3b0e74a",
+    "regression_established": false,
+    "reproduction": null
+  },
+  {
+    "case": "exception",
+    "seed": 7,
+    "generation": "simple",
+    "status": "inconclusive",
+    "wall_seconds": 7.241709199995967,
+    "search_inputs": 1,
+    "reduction_inputs": 0,
+    "jvm_runs": 2,
+    "witness": null,
+    "report_sha256": "90a54b430386a955e86b243aa010f29ea2db6713366249a909f269c5c2a456df",
+    "regression_established": false,
+    "reproduction": null
+  },
+  {
+    "case": "unstable_state",
+    "seed": 7,
+    "generation": "simple",
+    "status": "inconclusive",
+    "wall_seconds": 9.62018860000535,
+    "search_inputs": 1,
+    "reduction_inputs": 0,
+    "jvm_runs": 4,
+    "witness": null,
+    "report_sha256": "dc859aa649830e119990fb7b9d01d65e6c45bc93b1c57e737d77f9b4d97d4de3",
+    "regression_established": false,
+    "reproduction": null
+  },
+  {
+    "case": "unstable_state",
+    "seed": 7,
+    "generation": "guided",
+    "status": "inconclusive",
+    "wall_seconds": 8.29582240000309,
+    "search_inputs": 1,
+    "reduction_inputs": 0,
+    "jvm_runs": 4,
+    "witness": null,
+    "report_sha256": "e08a1d8e544f0d2dd68f73e90a5c9b0baedc652211f26ec24d27ac08fc1d7ac0",
+    "regression_established": false,
+    "reproduction": null
+  },
+  {
+    "case": "external_dependency",
+    "seed": 7,
+    "generation": "guided",
+    "status": "unsupported",
+    "wall_seconds": 4.30620849999832,
+    "search_inputs": 0,
+    "reduction_inputs": 0,
+    "jvm_runs": 0,
+    "witness": null,
+    "report_sha256": "e371a3a431594b2f9ef95b6b94344558bd27fb568e9c81c3b5a8ffa4f9454063",
+    "regression_established": false,
+    "reproduction": null
+  },
+  {
+    "case": "external_dependency",
+    "seed": 7,
+    "generation": "simple",
+    "status": "unsupported",
+    "wall_seconds": 5.7056689000019105,
+    "search_inputs": 0,
+    "reduction_inputs": 0,
+    "jvm_runs": 0,
+    "witness": null,
+    "report_sha256": "f4582fda38ece30bdda5db6f2d3eb6ea7a97b43037707f02c1f6e6b1da1d74d3",
+    "regression_established": false,
+    "reproduction": null
+  },
+  {
+    "case": "arithmetic_change",
+    "seed": 13,
+    "generation": "guided",
+    "status": "difference",
+    "wall_seconds": 10.809736800001701,
+    "search_inputs": 1,
+    "reduction_inputs": 1,
+    "jvm_runs": 12,
+    "witness": {
+      "phase": "reduction",
+      "input": 0,
+      "base": {
+        "kind": "value",
+        "value": 1
+      },
+      "head": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    "report_sha256": "6828cbab5add028326571b1147c97992811cd71427f85c2c2955c0e8a6af530a",
+    "regression_established": false,
+    "reproduction": {
+      "seconds": 5.540649199996551,
+      "compile_exit_code": 0,
+      "run_exit_code": 0,
+      "passed": true
+    }
+  },
+  {
+    "case": "arithmetic_change",
+    "seed": 13,
+    "generation": "simple",
+    "status": "difference",
+    "wall_seconds": 8.10311979999824,
+    "search_inputs": 1,
+    "reduction_inputs": 0,
+    "jvm_runs": 10,
+    "witness": {
+      "phase": "search",
+      "input": 0,
+      "base": {
+        "kind": "value",
+        "value": 1
+      },
+      "head": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    "report_sha256": "c21c87a148b7c3d7ed2d9c87a996bb7c64757f532be2aeb45189eaf670ad3c0f",
+    "regression_established": false,
+    "reproduction": {
+      "seconds": 4.503361100003531,
+      "compile_exit_code": 0,
+      "run_exit_code": 0,
+      "passed": true
+    }
+  },
+  {
+    "case": "positive_boundary",
+    "seed": 13,
+    "generation": "simple",
+    "status": "no_difference_observed",
+    "wall_seconds": 9.646037599995907,
+    "search_inputs": 8,
+    "reduction_inputs": 0,
+    "jvm_runs": 16,
+    "witness": null,
+    "report_sha256": "81e9c592df5fb11129d8a14e82b3b06759ed96ca3aa8b4a8f6d59cf949fba29f",
+    "regression_established": false,
+    "reproduction": null
+  },
+  {
+    "case": "positive_boundary",
+    "seed": 13,
+    "generation": "guided",
+    "status": "difference",
+    "wall_seconds": 17.157724099997722,
+    "search_inputs": 2,
+    "reduction_inputs": 4,
+    "jvm_runs": 20,
+    "witness": {
+      "phase": "search",
+      "input": 100,
+      "base": {
+        "kind": "value",
+        "value": 1
+      },
+      "head": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    "report_sha256": "c9d1699f80260e20a8769f81ae5c8cd7c61662832eed986e3200ce01fbdc5705",
+    "regression_established": false,
+    "reproduction": {
+      "seconds": 9.870049099998141,
+      "compile_exit_code": 0,
+      "run_exit_code": 0,
+      "passed": true
+    }
+  },
+  {
+    "case": "negative_boundary",
+    "seed": 13,
+    "generation": "guided",
+    "status": "difference",
+    "wall_seconds": 16.51352840000618,
+    "search_inputs": 3,
+    "reduction_inputs": 4,
+    "jvm_runs": 22,
+    "witness": {
+      "phase": "search",
+      "input": -100,
+      "base": {
+        "kind": "value",
+        "value": 1
+      },
+      "head": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    "report_sha256": "03d8bb6dd8477d5f00a82310fd652e1494d893d69507189a70f3669e7eb1a34f",
+    "regression_established": false,
+    "reproduction": {
+      "seconds": 8.386229000003368,
+      "compile_exit_code": 0,
+      "run_exit_code": 0,
+      "passed": true
+    }
+  },
+  {
+    "case": "negative_boundary",
+    "seed": 13,
+    "generation": "simple",
+    "status": "no_difference_observed",
+    "wall_seconds": 15.437373699998716,
+    "search_inputs": 8,
+    "reduction_inputs": 0,
+    "jvm_runs": 16,
+    "witness": null,
+    "report_sha256": "caf8cf42364ae2ccde9fbe8b8863e5adf3db92e154fa85eefbc382c3400d386c",
+    "regression_established": false,
+    "reproduction": null
+  },
+  {
+    "case": "comment_only",
+    "seed": 13,
+    "generation": "simple",
+    "status": "no_difference_observed",
+    "wall_seconds": 15.994523699999263,
+    "search_inputs": 8,
+    "reduction_inputs": 0,
+    "jvm_runs": 16,
+    "witness": null,
+    "report_sha256": "be8b26a43fa456c3191cdc03e5227f44a26abfa63738bac187a0cc2b67f8d014",
+    "regression_established": false,
+    "reproduction": null
+  },
+  {
+    "case": "comment_only",
+    "seed": 13,
+    "generation": "guided",
+    "status": "no_difference_observed",
+    "wall_seconds": 13.684889899996051,
+    "search_inputs": 8,
+    "reduction_inputs": 0,
+    "jvm_runs": 16,
+    "witness": null,
+    "report_sha256": "bd9c4223ab6b1d675d9ff5364d3e5e5bd96da59265a59267e82cb1a334f86668",
+    "regression_established": false,
+    "reproduction": null
+  },
+  {
+    "case": "intended_shipping_change",
+    "seed": 13,
+    "generation": "guided",
+    "status": "difference",
+    "wall_seconds": 14.494353800000681,
+    "search_inputs": 2,
+    "reduction_inputs": 4,
+    "jvm_runs": 20,
+    "witness": {
+      "phase": "search",
+      "input": 5999,
+      "base": {
+        "kind": "value",
+        "value": 0
+      },
+      "head": {
+        "kind": "value",
+        "value": 500
+      }
+    },
+    "report_sha256": "ad7b0a23250d89d5d56f05e73ea6e9d869f332bdbea122a96715f76365942774",
+    "regression_established": false,
+    "reproduction": {
+      "seconds": 4.723332600005961,
+      "compile_exit_code": 0,
+      "run_exit_code": 0,
+      "passed": true
+    }
+  },
+  {
+    "case": "intended_shipping_change",
+    "seed": 13,
+    "generation": "simple",
+    "status": "no_difference_observed",
+    "wall_seconds": 13.881604400005017,
+    "search_inputs": 8,
+    "reduction_inputs": 0,
+    "jvm_runs": 16,
+    "witness": null,
+    "report_sha256": "68427304c58bdfbf7f6482527554c8cce408748386e4b7e5ce66983c5344aea1",
+    "regression_established": false,
+    "reproduction": null
+  },
+  {
+    "case": "exception",
+    "seed": 13,
+    "generation": "simple",
+    "status": "inconclusive",
+    "wall_seconds": 7.163999399999739,
+    "search_inputs": 1,
+    "reduction_inputs": 0,
+    "jvm_runs": 2,
+    "witness": null,
+    "report_sha256": "7bbe7adce3a6973a2f648cf904f5e19f0e2f7d1543c64fe06ccd9df121e4a89d",
+    "regression_established": false,
+    "reproduction": null
+  },
+  {
+    "case": "exception",
+    "seed": 13,
+    "generation": "guided",
+    "status": "inconclusive",
+    "wall_seconds": 8.232781900005648,
+    "search_inputs": 1,
+    "reduction_inputs": 0,
+    "jvm_runs": 2,
+    "witness": null,
+    "report_sha256": "55e826e77551fed621e39ff23e49097bbd79cc99e1ff95d51f0c70c8d96703ab",
+    "regression_established": false,
+    "reproduction": null
+  },
+  {
+    "case": "unstable_state",
+    "seed": 13,
+    "generation": "guided",
+    "status": "inconclusive",
+    "wall_seconds": 9.861247499997262,
+    "search_inputs": 1,
+    "reduction_inputs": 0,
+    "jvm_runs": 4,
+    "witness": null,
+    "report_sha256": "5fa796235580dc9e80a1e04f443ec69a0c0056476d1280d8fdaba913c05a8b2d",
+    "regression_established": false,
+    "reproduction": null
+  },
+  {
+    "case": "unstable_state",
+    "seed": 13,
+    "generation": "simple",
+    "status": "inconclusive",
+    "wall_seconds": 8.122176800003217,
+    "search_inputs": 1,
+    "reduction_inputs": 0,
+    "jvm_runs": 4,
+    "witness": null,
+    "report_sha256": "4b9f689cf7ec0cf5403f9805617a37a7855233b9c48aa813054adaf30e98e002",
+    "regression_established": false,
+    "reproduction": null
+  },
+  {
+    "case": "external_dependency",
+    "seed": 13,
+    "generation": "simple",
+    "status": "unsupported",
+    "wall_seconds": 4.180510199999844,
+    "search_inputs": 0,
+    "reduction_inputs": 0,
+    "jvm_runs": 0,
+    "witness": null,
+    "report_sha256": "e9e1d43cecd366efe5f18d2a2715e6f34867e9cd92e9bbb8b6a0c54a198b0390",
+    "regression_established": false,
+    "reproduction": null
+  },
+  {
+    "case": "external_dependency",
+    "seed": 13,
+    "generation": "guided",
+    "status": "unsupported",
+    "wall_seconds": 3.916461299995717,
+    "search_inputs": 0,
+    "reduction_inputs": 0,
+    "jvm_runs": 0,
+    "witness": null,
+    "report_sha256": "99f30b2ae612610f5d74f72208bd7e5c9d0a458a100988ad394a223307151b78",
+    "regression_established": false,
+    "reproduction": null
+  }
+]

@@ -1,0 +1,162 @@
+{
+  "status": "difference",
+  "observations": [
+    {
+      "phase": "search",
+      "input": 2,
+      "base": {
+        "kind": "value",
+        "value": 3
+      },
+      "head": {
+        "kind": "value",
+        "value": 4
+      }
+    },
+    {
+      "phase": "confirmation",
+      "input": 2,
+      "base": {
+        "kind": "value",
+        "value": 3
+      },
+      "head": {
+        "kind": "value",
+        "value": 4
+      }
+    },
+    {
+      "phase": "confirmation",
+      "input": 2,
+      "base": {
+        "kind": "value",
+        "value": 3
+      },
+      "head": {
+        "kind": "value",
+        "value": 4
+      }
+    },
+    {
+      "phase": "reduction",
+      "input": 0,
+      "base": {
+        "kind": "value",
+        "value": 1
+      },
+      "head": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    {
+      "phase": "confirmation",
+      "input": 0,
+      "base": {
+        "kind": "value",
+        "value": 1
+      },
+      "head": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    {
+      "phase": "confirmation",
+      "input": 0,
+      "base": {
+        "kind": "value",
+        "value": 1
+      },
+      "head": {
+        "kind": "value",
+        "value": 2
+      }
+    }
+  ],
+  "jvm_runs": 12,
+  "compilations": 2,
+  "search_inputs": 1,
+  "reduction_inputs": 1,
+  "source_encoding": "UTF-8",
+  "runtime_file_encoding": "UTF-8",
+  "budget": {
+    "max_inputs": 8,
+    "seed": 7,
+    "reduce_budget": 4,
+    "generation": "guided"
+  },
+  "guidance": "Integer literals and neighbors from selected method syntax; no semantic guarantee.",
+  "source_sha256": {
+    "base": "146b5842c26ae214f3bbdda4193fbe3fd05dc0deaf6020755d84df06a2557856",
+    "head": "7ec1f3b0b8e244e9c021834079dcaca1076ba7845479b147e955a6f17cc5ed22"
+  },
+  "selected_method_tokens_changed": true,
+  "java_version": "openjdk version \"17.0.20\" 2026-07-21\r\nOpenJDK Runtime Environment Temurin-17.0.20+8 (build 17.0.20+8)\r\nOpenJDK 64-Bit Server VM Temurin-17.0.20+8 (build 17.0.20+8, mixed mode, sharing)\r\n",
+  "javac_version": "javac 17.0.20\r\n",
+  "candidate_inputs": [
+    2,
+    1,
+    3,
+    0,
+    -1,
+    -2,
+    -2147483648,
+    2147483647
+  ],
+  "witness": {
+    "phase": "reduction",
+    "input": 0,
+    "base": {
+      "kind": "value",
+      "value": 1
+    },
+    "head": {
+      "kind": "value",
+      "value": 2
+    }
+  },
+  "original_witness": {
+    "phase": "search",
+    "input": 2,
+    "base": {
+      "kind": "value",
+      "value": 3
+    },
+    "head": {
+      "kind": "value",
+      "value": 4
+    }
+  },
+  "reduction": "Smallest absolute value among the reduction candidates actually tried; no global minimality claim.",
+  "confirmation": "Each accepted witness pair matched two further fresh-JVM pairs; general determinism is not proved.",
+  "reproducer": {
+    "files_sha256": {
+      "base/Fee.java": "146b5842c26ae214f3bbdda4193fbe3fd05dc0deaf6020755d84df06a2557856",
+      "head/Fee.java": "7ec1f3b0b8e244e9c021834079dcaca1076ba7845479b147e955a6f17cc5ed22",
+      "CodeDNABehaviorProbe.java": "a78f4a777b74a96dacc936f45c7df648fd333355274a535df8466271d91410f0",
+      "ReproduceDifference.java": "d32c92206cb60c9d2f230c373e7df6ba7050b138574b8e0d99ecd1b9b38db95a",
+      "README.md": "20c494c0aea646bc5a739523d34af7e989fae80226f5e4e279511ffb859a85d8"
+    },
+    "entrypoint": "ReproduceDifference.java",
+    "requires": "JDK 17+; explicitly trusted selected source",
+    "disclosure": "Includes the entire chosen base/head source file. Review before sharing."
+  },
+  "schema_version": 1,
+  "kind": "codedna-behavioral-evidence",
+  "experimental": true,
+  "repository": "C:\\Users\\hp\\OneDrive\\Documents\\GitHub\\codedna\\build\\moonshot-fixtures-moonshot-engineering-pilot-d085-2026-10-28\\arithmetic_change",
+  "base_commit": "a2d5a3dad097f0b267158d9a72d6ce1bfb11a860",
+  "head_commit": "388070d85e9350e4570f7dc9e01a25ee78f43ef8",
+  "language": "java",
+  "file": "src/main/java/example/Fee.java",
+  "symbol": "example.Fee#fee(int)",
+  "regression_established": false,
+  "required_tests_removed": false,
+  "plugin_version": "0.1.0",
+  "plugin_api_version": "1.1",
+  "export_disclosure": "A confirmed export includes the entire selected base/head source file; compiler diagnostics may quote source. Review before sharing.",
+  "interpretation": "A stable observed difference needs an applicable expectation to be called a regression. No witness within a finite budget does not establish equivalence or validate skip risk.",
+  "further_execution_blocked": false,
+  "elapsed_seconds": 11.078
+}

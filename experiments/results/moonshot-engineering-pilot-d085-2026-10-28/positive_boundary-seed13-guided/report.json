@@ -1,0 +1,210 @@
+{
+  "status": "difference",
+  "observations": [
+    {
+      "phase": "search",
+      "input": 101,
+      "base": {
+        "kind": "value",
+        "value": 1
+      },
+      "head": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "phase": "search",
+      "input": 100,
+      "base": {
+        "kind": "value",
+        "value": 1
+      },
+      "head": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "phase": "confirmation",
+      "input": 100,
+      "base": {
+        "kind": "value",
+        "value": 1
+      },
+      "head": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "phase": "confirmation",
+      "input": 100,
+      "base": {
+        "kind": "value",
+        "value": 1
+      },
+      "head": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "phase": "reduction",
+      "input": 0,
+      "base": {
+        "kind": "value",
+        "value": 0
+      },
+      "head": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "phase": "reduction",
+      "input": 1,
+      "base": {
+        "kind": "value",
+        "value": 0
+      },
+      "head": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "phase": "reduction",
+      "input": 3,
+      "base": {
+        "kind": "value",
+        "value": 0
+      },
+      "head": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "phase": "reduction",
+      "input": 6,
+      "base": {
+        "kind": "value",
+        "value": 0
+      },
+      "head": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "phase": "confirmation",
+      "input": 100,
+      "base": {
+        "kind": "value",
+        "value": 1
+      },
+      "head": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "phase": "confirmation",
+      "input": 100,
+      "base": {
+        "kind": "value",
+        "value": 1
+      },
+      "head": {
+        "kind": "value",
+        "value": 0
+      }
+    }
+  ],
+  "jvm_runs": 20,
+  "compilations": 2,
+  "search_inputs": 2,
+  "reduction_inputs": 4,
+  "source_encoding": "UTF-8",
+  "runtime_file_encoding": "UTF-8",
+  "budget": {
+    "max_inputs": 8,
+    "seed": 13,
+    "reduce_budget": 4,
+    "generation": "guided"
+  },
+  "guidance": "Integer literals and neighbors from selected method syntax; no semantic guarantee.",
+  "source_sha256": {
+    "base": "01939f5bba068f6c08b0ecbc0d4f41b54b0b6dfbef862cf0fe8f91b332a5ed10",
+    "head": "5c81c7eb3b4c30738de2b4f1581630774e510a6e5e6e3ae14c8576ade96f675c"
+  },
+  "selected_method_tokens_changed": true,
+  "java_version": "openjdk version \"17.0.20\" 2026-07-21\r\nOpenJDK Runtime Environment Temurin-17.0.20+8 (build 17.0.20+8)\r\nOpenJDK 64-Bit Server VM Temurin-17.0.20+8 (build 17.0.20+8, mixed mode, sharing)\r\n",
+  "javac_version": "javac 17.0.20\r\n",
+  "candidate_inputs": [
+    101,
+    100,
+    102,
+    1,
+    0,
+    2,
+    -1,
+    99
+  ],
+  "witness": {
+    "phase": "search",
+    "input": 100,
+    "base": {
+      "kind": "value",
+      "value": 1
+    },
+    "head": {
+      "kind": "value",
+      "value": 0
+    }
+  },
+  "original_witness": {
+    "phase": "search",
+    "input": 100,
+    "base": {
+      "kind": "value",
+      "value": 1
+    },
+    "head": {
+      "kind": "value",
+      "value": 0
+    }
+  },
+  "reduction": "Smallest absolute value among the reduction candidates actually tried; no global minimality claim.",
+  "confirmation": "Each accepted witness pair matched two further fresh-JVM pairs; general determinism is not proved.",
+  "reproducer": {
+    "files_sha256": {
+      "base/Fee.java": "01939f5bba068f6c08b0ecbc0d4f41b54b0b6dfbef862cf0fe8f91b332a5ed10",
+      "head/Fee.java": "5c81c7eb3b4c30738de2b4f1581630774e510a6e5e6e3ae14c8576ade96f675c",
+      "CodeDNABehaviorProbe.java": "a78f4a777b74a96dacc936f45c7df648fd333355274a535df8466271d91410f0",
+      "ReproduceDifference.java": "c2a5eb906ed571ab77f43d765ce4cc0396d28f9d42287621794b1781d034eead",
+      "README.md": "e1a0b7190f4a62245f410c1bcb39037f84aff34bf84c47ac492363a50a21c3cd"
+    },
+    "entrypoint": "ReproduceDifference.java",
+    "requires": "JDK 17+; explicitly trusted selected source",
+    "disclosure": "Includes the entire chosen base/head source file. Review before sharing."
+  },
+  "schema_version": 1,
+  "kind": "codedna-behavioral-evidence",
+  "experimental": true,
+  "repository": "C:\\Users\\hp\\OneDrive\\Documents\\GitHub\\codedna\\build\\moonshot-fixtures-moonshot-engineering-pilot-d085-2026-10-28\\positive_boundary",
+  "base_commit": "72214c12db87d1be1a4ea698e144ff9dde41910a",
+  "head_commit": "4e04533375c920812e835175dfc9e73b156d7b7e",
+  "language": "java",
+  "file": "src/main/java/example/Fee.java",
+  "symbol": "example.Fee#fee(int)",
+  "regression_established": false,
+  "required_tests_removed": false,
+  "plugin_version": "0.1.0",
+  "plugin_api_version": "1.1",
+  "export_disclosure": "A confirmed export includes the entire selected base/head source file; compiler diagnostics may quote source. Review before sharing.",
+  "interpretation": "A stable observed difference needs an applicable expectation to be called a regression. No witness within a finite budget does not establish equivalence or validate skip risk.",
+  "further_execution_blocked": false,
+  "elapsed_seconds": 17.156
+}

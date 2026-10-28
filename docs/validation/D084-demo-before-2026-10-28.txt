@@ -1,0 +1,45 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.14, pytest-9.1.1, pluggy-1.7.0 -- C:\Users\hp\OneDrive\Documents\GitHub\codedna\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\hp\OneDrive\Documents\GitHub\codedna
+configfile: pyproject.toml
+plugins: anyio-4.15.1
+collecting ... collected 1 item
+
+backend/tests/test_demo_agent_brake.py::test_demo_ignores_editor_build_output_but_keeps_real_resource_changes FAILED [100%]
+
+================================== FAILURES ===================================
+____ test_demo_ignores_editor_build_output_but_keeps_real_resource_changes ____
+
+tmp_path = WindowsPath('C:/Users/hp/AppData/Local/Temp/pytest-of-hp/pytest-97/test_demo_ignores_editor_build0')
+
+    def test_demo_ignores_editor_build_output_but_keeps_real_resource_changes(tmp_path):
+        from codedna.git_analysis import extract_changes
+    
+        demo = load()
+        project = tmp_path / "demo"
+        demo.make_repo(project)
+        compiled = project / "target/classes/example/PriceCalculator.class"
+        compiled.parent.mkdir(parents=True)
+        compiled.write_bytes(b"\xca\xfe\xba\xbe editor output")
+        resource = project / "src/main/resources/settings.json"
+        resource.parent.mkdir(parents=True)
+        resource.write_text('{"discount": 0.2}', encoding="utf-8")
+        report = extract_changes(project, "HEAD", "WORKTREE")
+>       assert {item.path for item in report.changed_files} == {
+            "src/main/java/example/PriceCalculator.java", "src/main/resources/settings.json"}
+E       AssertionError: assert {'src/main/ja...ulator.class'} == {'src/main/ja...ettings.json'}
+E         
+E         Extra items in the left set:
+E         'target/classes/example/PriceCalculator.class'
+E         
+E         Full diff:
+E           {
+E               'src/main/java/example/PriceCalculator.java',...
+E         
+E         ...Full output truncated (3 lines hidden), use '-vv' to show
+
+backend\tests\test_demo_agent_brake.py:46: AssertionError
+=========================== short test summary info ===========================
+FAILED backend/tests/test_demo_agent_brake.py::test_demo_ignores_editor_build_output_but_keeps_real_resource_changes
+============================== 1 failed in 2.01s ==============================

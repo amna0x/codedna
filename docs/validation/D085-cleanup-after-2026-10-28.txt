@@ -1,0 +1,19 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.14, pytest-9.1.1, pluggy-1.7.0 -- C:\Users\hp\OneDrive\Documents\GitHub\codedna\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\hp\OneDrive\Documents\GitHub\codedna
+configfile: pyproject.toml
+plugins: anyio-4.15.1
+collecting ... collected 9 items
+
+backend/tests/test_behavior.py::test_cleanup_uncertainty_blocks_further_execution PASSED [ 11%]
+backend/tests/test_behavior.py::test_real_jvm_and_descendant_end_on_timeout_or_ctrl_c[timeout] PASSED [ 22%]
+backend/tests/test_behavior.py::test_real_jvm_and_descendant_end_on_timeout_or_ctrl_c[cancel] PASSED [ 33%]
+backend/tests/test_behavior.py::test_reduction_retains_a_confirmed_difference_and_no_oracle PASSED [ 44%]
+backend/tests/test_moonshot_runner.py::test_pilot_requires_explicit_execution_consent_before_creating_fixtures PASSED [ 55%]
+backend/tests/test_moonshot_runner.py::test_unfrozen_or_escaping_pilot_is_rejected_before_any_execution[dirty] PASSED [ 66%]
+backend/tests/test_moonshot_runner.py::test_unfrozen_or_escaping_pilot_is_rejected_before_any_execution[untracked] PASSED [ 77%]
+backend/tests/test_moonshot_runner.py::test_unfrozen_or_escaping_pilot_is_rejected_before_any_execution[escaping_case] PASSED [ 88%]
+backend/tests/test_moonshot_runner.py::test_unfrozen_or_escaping_pilot_is_rejected_before_any_execution[duplicate_case] PASSED [100%]
+
+============================= 9 passed in 31.40s ==============================

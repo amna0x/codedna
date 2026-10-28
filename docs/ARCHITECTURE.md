@@ -712,3 +712,23 @@ The CLI witness command and opt-in MCP --moonshot expose this experimental
 capability. Default MCP tools and test-brake decisions are unchanged. Controller
 identity/interpretation fields cannot be supplied by a plugin. See
 [behavioral witnesses](BEHAVIORAL_WITNESS.md) for limits and consent.
+
+
+## D085 completed engineering evidence — 2026-10-28
+
+Corrected source 4d35941 passed all 714 Maven-inclusive tests, zero skips/failures.
+Actual frozen executable: 32 passing contracts and 1462 verified bundle files.
+Installer embedded payload and restricted-PATH unpacked smoke passed; local
+friend kit includes demos and manual checklist. No installation/clean-PC claim.
+The unchanged D083 production frontend was reused. Three D085 packaged GUI checks
+pass: isolated launch, bundled language display and tab restoration on restart.
+The full D083 GUI test was not repeated; its earlier evidence remains separate.
+
+The fixed optional Moonshot comparison completed all 48 searches. All 15 emitted
+witnesses independently reproduced using only the JDK. Guided outcomes were
+12 difference / 3 no-difference / 6 inconclusive / 3 unsupported, versus simple
+3 / 12 / 6 / 3. Median whole-call costs were 11.234s / 10.057s. Repeated synthetic
+cases, with boundaries favoring guidance, are not independent real bugs or a
+net-CI speedup. A difference is not necessarily a regression; no witness does
+not validate skipping. The risk policy and original mixed findings are unchanged.
+See the D085 source/frozen/release/pilot evidence JSONs and pilot FINDINGS.md.

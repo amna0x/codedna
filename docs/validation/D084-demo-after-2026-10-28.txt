@@ -1,0 +1,14 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.14, pytest-9.1.1, pluggy-1.7.0 -- C:\Users\hp\OneDrive\Documents\GitHub\codedna\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\hp\OneDrive\Documents\GitHub\codedna
+configfile: pyproject.toml
+plugins: anyio-4.15.1
+collecting ... collected 4 items
+
+backend/tests/test_demo_agent_brake.py::test_demo_plans_tests_for_the_agents_edit_without_building PASSED [ 25%]
+backend/tests/test_demo_agent_brake.py::test_demo_ignores_editor_build_output_but_keeps_real_resource_changes PASSED [ 50%]
+backend/tests/test_demo_agent_brake.py::test_end_to_end_demo_plans_part_of_the_suite_on_validated_history PASSED [ 75%]
+backend/tests/test_demo_agent_brake.py::test_end_to_end_demo_blocks_the_breaking_edit_and_passes_the_harmless_one PASSED [100%]
+
+======================== 4 passed in 90.25s (0:01:30) =========================

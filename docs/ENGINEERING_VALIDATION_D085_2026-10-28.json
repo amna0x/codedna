@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-28",
+  "source_commit": "4d359419ad68874c374a45d83732845327aeed41",
+  "decisions": [
+    "D-084",
+    "D-085"
+  ],
+  "python": {
+    "command": ".venv/Scripts/python.exe -m pytest --run-maven -v",
+    "passed": 714,
+    "failed": 0,
+    "skipped": 0,
+    "warnings": 1,
+    "seconds": 2300.22
+  },
+  "unchanged_frontend_validation": {
+    "source_batch": "D-083",
+    "typescript": "passed",
+    "node_passed": 48,
+    "desktop_runtime_passed": 3,
+    "frontend_changed_since": false
+  },
+  "interrupted_run": {
+    "source_commit": "bd8c6d80dbfe4b500427c0c12fd8a9338ec67617",
+    "collected": 711,
+    "approximate_percent": 12,
+    "is_pass": false,
+    "reason": "Deliberately stopped for real JDK17 Cp1252/UTF8 compiler/runtime/reproducer correction"
+  },
+  "logs_sha256_utf8_lf": {
+    "docs/validation/D085-full-suite-2026-10-28.txt": "9533c358ccf0de89a78e716067a7ced587822cb49ec1b99c44167eb2f0f963e0",
+    "docs/validation/D085-interrupted-full-suite-2026-10-28.txt": "f38e467dfe37eb7a51e74061c0fc109090488b5d26f381a78f90560702b3f221",
+    "docs/validation/D084-demo-before-2026-10-28.txt": "5d4c601edbb06d661b72b243db494bc49f4f747fd9d59dfa8b63d4827cddfa4c",
+    "docs/validation/D084-demo-after-2026-10-28.txt": "81a0ce1f2b24864c49d703e4c4f91774c3650a240be035c5c8efa66a3de39f05",
+    "docs/validation/D085-initial-witness-tests-2026-10-28.txt": "57768aea4be889cc6111d9e6801ce78b62ff247402e5572644fdefe9ebf12746",
+    "docs/validation/D085-mcp-brake-2026-10-28.txt": "f89fe21044ea564b9da9ef47b75fdc942cfa84cdbb710990e41bca7f9c8308bb",
+    "docs/validation/D085-cleanup-before-2026-10-28.txt": "72692c38446d6614ee5835e10775ebe2d7af36159801e3b0bd195ba14273c1fa",
+    "docs/validation/D085-cleanup-after-2026-10-28.txt": "acf2ad858cb4333d587f55d8bb947c381ad5e667e366e903e9a71b17254159ff",
+    "docs/validation/D085-encoding-before-2026-10-28.txt": "09842d0061e55cb0dce38c1958437881dffafb9b2aed5556bfdb1bb37b2328b1",
+    "docs/validation/D085-encoding-after-2026-10-28.txt": "c1ee920a8a75b62f6cdb54c635abc27216daa11210030a9f90b5c92d8759720f",
+    "docs/validation/D085-session-guard-2026-10-28.txt": "34447b7c76477f14b27a8e5f7b778ab1a76ab70f80cea3d2bdba3e16cd55ce95"
+  },
+  "limits": [
+    "Source validation; actual new D085 frozen/payload checks remain separate.",
+    "No independent research accuracy, global equivalence, automatic regression oracle or net CI speedup claim.",
+    "Fixed 48-search synthetic engineering comparison remains separate from prior experiments.",
+    "No new language plugin, push/merge, public hosting or stash changes."
+  ]
+}

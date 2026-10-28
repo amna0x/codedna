@@ -105,8 +105,14 @@ The initial 28 focused checks passed, including actual Java execution, independe
 reproduction/tamper refusal, unstable observations and real JVM/descendant cleanup.
 The later opt-in MCP integration passed 29 combined MCP/brake checks; four runner
 guards pass; the later forced-cleanup/CLI/timeout/cancellation/runner review passed
-nine checks, including the fifth duplicate-case guard. These are engineering checks. Full source validation and actual new
-frozen validation are still required before calling this source a release.
+nine checks, including the fifth duplicate-case guard. These are engineering checks. Corrected source 4d35941 subsequently passed the
+full Maven-inclusive suite: 714 passed, zero skips/failures. The actual frozen
+core passed 32 checks, including nine witness checks; all 1462 bundle hashes
+matched. See ENGINEERING_VALIDATION_D085_2026-10-28.json and
+FROZEN_CORE_VALIDATION_D085_2026-10-28.json. D085 installer packaging, embedded payload hashes and restricted-PATH unpacked
+smoke subsequently passed; see RELEASE_VALIDATION_D085_2026-10-28.json. D085
+full GUI/manual and clean-PC acceptance remain separate gates. Three new packaged
+launch/plugin/restart checks pass.
 
 The fixed comparison is in `experiments/moonshot-engineering-cases.json` and
 `scripts/run_moonshot_pilot.py`, under MOONSHOT_PILOT_PROTOCOL.md. Eight synthetic
@@ -123,4 +129,16 @@ around 12 percent after confirming this laptop's JDK 17 defaults to Cp1252. It i
 not counted as a pass. Two real regressions demonstrated misread UTF-8 literals
 and acceptance of non-UTF8 source before the fix; both pass after explicit
 source/compiler/runtime/reproducer encoding (13.08s). Full corrected validation
-is still required. Source reports now disclose both encoding assumptions.
+passed on corrected source (714 tests, zero skips). Source reports disclose
+both encoding assumptions.
+
+
+### Fixed engineering comparison completed
+
+All 48 searches completed; all 15 exported witnesses independently reproduced.
+Guided mode: 12 difference / 3 no-difference / 6 inconclusive / 3 unsupported.
+Simple mode: 3 / 12 / 6 / 3. Median whole-call times were 11.234s and 10.057s,
+respectively; guided mode was not faster overall. Repeated illustrative cases
+are not independent bugs. Boundary construction favored guidance. Findings:
+`experiments/results/moonshot-engineering-pilot-d085-2026-10-28/FINDINGS.md`.
+Keep this optional narrow debugging aid; no new research/CI or skip-safety claim.

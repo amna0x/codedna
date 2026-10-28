@@ -556,7 +556,7 @@ impact and selection; see [the job contract](docs/ANALYSIS_JOB_PLAN.md).
 
 The isolated D083 desktop candidate contains these changes. Its embedded core
 hashes and critical GUI workflows were verified; see
-[current release evidence](docs/RELEASE_VALIDATION_D083_2026-10-28.json).
+[preceding D083 release evidence](docs/RELEASE_VALIDATION_D083_2026-10-28.json).
 The existing installed app was not replaced. Clean-PC installation remains open.
 
 ## Performance diagnostics (D-083)
@@ -573,7 +573,7 @@ recommendation. See [measurement scope and examples](docs/PERFORMANCE_ENGINEERIN
 These improvements are included in the validated D083 candidate. D082's
 earlier evidence remains tied to its preceding source checkpoint.
 
-## Experimental Moonshot witness (source pilot)
+## Experimental Moonshot witness (D-085)
 
 An optional Java capability compares bounded inputs on two versions of one
 self-contained public static int(int) method. A confirmed difference exports
@@ -583,4 +583,13 @@ consent. It does not classify a regression automatically or change required test
 Use `python -m codedna witness --help`, or explicitly enable
 `python -m codedna mcp --repo PATH --allow-build --moonshot`. The extra witness
 tool is absent by default. See [scope, commands and evidence](docs/BEHAVIORAL_WITNESS.md).
-This newer experimental source is not included in the preceding D083 installer.
+The isolated D085 installer includes this optional capability; D083 remains
+preserved. Source validation passed 714 tests with Maven and zero skips. Actual
+frozen validation passed 32 checks. Installer payload hashes and restricted-PATH
+unpacked smoke passed; no D085 installation or clean-PC acceptance is claimed.
+See [release evidence](docs/RELEASE_VALIDATION_D085_2026-10-28.json).
+
+The fixed 48-search synthetic comparison independently reproduced all 15 emitted
+witnesses. Its constructed cases favor guidance and show no overall speedup;
+they do not establish independent real-world accuracy or improved skip safety.
+The prepared local friend kit includes Java demos and an acceptance checklist.

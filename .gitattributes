@@ -7,3 +7,6 @@
 
 # Preserve byte-exact study outputs and SHA-256 source snapshots on every OS.
 experiments/results/*confirmatory-perf-2026-10-26/** -text
+
+# Keep fixed Moonshot pilot hashes valid across Git clones and operating systems.
+experiments/results/moonshot-engineering-pilot-d085-2026-10-28/** -text
