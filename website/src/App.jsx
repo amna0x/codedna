@@ -1,8 +1,6 @@
 import React, {createContext, useContext, useState, useEffect, useLayoutEffect, useRef} from 'react';
-import {gsap} from 'gsap';
-import {ScrollTrigger} from 'gsap/ScrollTrigger';
+import {useWebsiteMotion} from './motion.js';
 import catalogue from './catalogue-adapter.js';
-gsap.registerPlugin(ScrollTrigger);
 const UI=createContext(null);
 function MenuButton(props){const ui=useContext(UI);return <button {...props} aria-expanded={ui.open} onClick={()=>ui.setOpen(!ui.open)} />;}
 function Navigation(props){const ui=useContext(UI);return <nav {...props} className={ui.open?'is-open':''} onClick={event=>{if(event.target.closest('a'))ui.setOpen(false);}}/>;}
@@ -18,7 +16,7 @@ const pages={'index.html':HomePage,'docs.html':DocsPage,'plugins.html':PluginsPa
 export function App({page='index.html'}){
  const [open,setOpen]=useState(false),[filter,setFilter]=useState('all');const scope=useRef(null);
  useEffect(()=>{document.body.classList.add('js-ready');const close=e=>{if(e.key==='Escape' && document.querySelector('.menu-toggle')?.getAttribute('aria-expanded')==='true'){setOpen(false);document.querySelector('.menu-toggle')?.focus();}};const media=matchMedia('(min-width:761px)');const resize=e=>{if(e.matches)setOpen(false);};document.addEventListener('keydown',close);media.addEventListener('change',resize);return()=>{document.removeEventListener('keydown',close);media.removeEventListener('change',resize);document.body.classList.remove('js-ready');};},[]);
- useLayoutEffect(()=>{const mm=gsap.matchMedia();mm.add('(prefers-reduced-motion: no-preference)',()=>{const ctx=gsap.context(()=>{gsap.from('.hero h1',{y:20,duration:.85,ease:'power2.out'});gsap.utils.toArray('[data-reveal]').forEach(el=>{gsap.fromTo(el,{y:24},{y:-12,ease:'none',scrollTrigger:{trigger:el,start:'top 95%',end:'bottom 15%',scrub:1}});});},scope);return()=>ctx.revert();});return()=>mm.revert();},[]);
+ useWebsiteMotion(scope);
  useLayoutEffect(()=>{const rail=document.querySelector('.workflow-rail');if(rail)rail.scrollLeft=0;},[filter]);
  const Page=pages[page]||HomePage;return <UI.Provider value={{open,setOpen,filter,setFilter}}><div ref={scope}><Page/><p className="sr-only" role="status">{filter==='all'?'Showing all workflows.':'Showing '+filter+' workflows.'}</p></div></UI.Provider>;
 }

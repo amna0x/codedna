@@ -43,3 +43,13 @@ The pre-React website is preserved locally in
 `C:/Users/hp/OneDrive/Documents/ChatGPT/codedna/website-before-react-20261029.zip`.
 This update is local source only: no public deployment, push, installer update,
 or new claim of backend validation.
+
+## Lenis and Anime.js — 29 October 2026
+
+Lenis 1.3.27 smooths wheel and same-page anchor scrolling using GSAP's clock.
+Touch scrolling stays native. Nested workflow rails and code blocks retain
+native scrolling. Anime.js 4.5.0 handles a short heading entrance, staggered
+diagram nodes and click feedback. GSAP retains chapter scroll motion. Each
+library owns different elements/properties; cleanup removes listeners,
+animation scopes, ticker callbacks and Lenis on unmount or reduced motion.
+Both packages are pinned, bundled locally and explicitly requested by the owner.
