@@ -4,11 +4,12 @@ import { inject, injectable, postConstruct } from '@theia/core/shared/inversify'
 import { ConfirmDialog } from '@theia/core/lib/browser/dialogs';
 import { ProgressService } from '@theia/core/lib/common/progress-service';
 import { ReactWidget } from '@theia/core/lib/browser/widgets/react-widget';
-import { AnalysisJob, CodeDnaService, SelectionReport, SelectionStrategy, SelectionRun, TestDiscovery } from '../common/codedna-protocol';
+import { AnalysisJob, AnalysisTimingRecord, CodeDnaService, SelectionReport, SelectionStrategy, SelectionRun, TestDiscovery } from '../common/codedna-protocol';
 import { CodeDnaComparison } from './comparison';
 import { CodeDnaWorkspace } from './codedna-workspace';
 import { withProgress } from './progress';
 import { waitForAnalysis } from './analysis-jobs-ui';
+import { AnalysisTimingDetails } from './analysis-timings';
 import { decisionRecord, recoverySteps } from './decision-evidence';
 import { TestOutcomes } from './test-outcomes';
 import { breakable, friendlyReason, friendlyWarning, packageName, plural, simpleName } from './plain-language';
@@ -40,6 +41,7 @@ export class TestsViewWidget extends ReactWidget {
     protected strategy: SelectionStrategy = 'risk';
     protected loading = false;
     protected analysisJob: AnalysisJob | undefined;
+    protected timings: AnalysisTimingRecord[] = [];
     protected cancelling = false;
     protected analysisCancelled = false;
     protected error: string | undefined;
@@ -70,6 +72,7 @@ export class TestsViewWidget extends ReactWidget {
     }
 
     protected invalidate(): void {
+        this.timings = [];
         if (this.analysisJob && ['queued', 'running'].includes(this.analysisJob.state)) {
             // The waiting operation cancels its own registered worker on the
             // next poll. A comparison change must never kill the shared API.
@@ -107,7 +110,11 @@ export class TestsViewWidget extends ReactWidget {
                     strategy === 'risk' ? { repo, base, head, history_csv: history || undefined }
                         : { repo, base, head, strategy },
                     () => generation === this.generation && !this.analysisCancelled && !this.isDisposed,
-                    job => { this.analysisJob = job; this.update(); })
+                    job => {
+                        this.analysisJob = job;
+                        if (job.metrics) { this.timings = [{ id: job.id, operation: job.operation, metrics: job.metrics }]; }
+                        this.update();
+                    })
                 : await withProgress(this.progress, strategy === 'risk' ? 'CodeDNA: checking history and choosing tests' : 'CodeDNA: choosing tests',
                     () => this.codedna.select(repo, base, head, strategy, history));
             if (!result) {
@@ -227,7 +234,7 @@ export class TestsViewWidget extends ReactWidget {
     protected async exportEvidence(report: SelectionReport): Promise<void> {
         if (this.report !== report) { return; }
         try {
-            const content = JSON.stringify(decisionRecord(report, this.execution), null, 2) + '\n';
+            const content = JSON.stringify(decisionRecord(report, this.execution, undefined, this.timings), null, 2) + '\n';
             const saved = await this.workspace.saveDecisionEvidence(content);
             if (saved && this.report === report) { this.notice = 'Decision evidence saved. Review local paths and test names before sharing.'; }
         } catch (error) {
@@ -270,6 +277,7 @@ export class TestsViewWidget extends ReactWidget {
                     {this.cancelling ? 'Stopping analysis…' : 'Cancel analysis'}
                 </button>}
             </div>}
+            <AnalysisTimingDetails reports={this.timings} title='Suggestion analysis timing' />
             {this.error && <ErrorNotice message={this.error} />}
             {this.notice && <p className='cd-notice' role='status'>{this.notice}</p>}
             {this.report ? this.renderReport(this.report) : !this.loading && !this.error && <FirstRun action='Suggest tests' />}
@@ -281,10 +289,11 @@ export class TestsViewWidget extends ReactWidget {
         const risk = report.risk;
         const notes = report.warnings.map(friendlyWarning).filter((w): w is string => !!w);
         const everything = report.selected.length === report.total_tests && report.total_tests > 0;
+        const mandatoryFull = everything && report.policy?.pinned.length === report.total_tests;
         return <div className='cd-results'>
             <section className='cd-notice' aria-label='Risk evidence'>
-                <h3>{risk?.status === 'validated_history' ? 'Validated on earlier project history' : 'Risk unvalidated'}</h3>
-                {risk?.status === 'validated_history'
+                <h3>{mandatoryFull ? 'Full suite required by policy' : risk?.status === 'validated_history' ? 'Validated on earlier project history' : 'Risk unvalidated'}</h3>
+                {mandatoryFull ? <p>Every discovered test is mandatory. Model fitting cannot shorten this plan.</p> : risk?.status === 'validated_history'
                     ? risk.method === 'crc' ? <>
                         <p>Conformal stopping target: {(risk.target * 100).toFixed(0)}% missed-failure rate among failing commits.
                             This relies on exchangeable failing commits and is not a per-change guarantee.</p>
@@ -300,7 +309,7 @@ export class TestsViewWidget extends ReactWidget {
                     Conformal audit: {risk.conformal.failing_audit_commits ?? 'not reported'} failing commits.
                     {' '}Corrected bound among failing commits: {percent(risk.conformal.corrected_bound)}.
                 </p>}
-                {risk?.status === 'unvalidated' && <p className='cd-help'>Passing tests and validated skip risk are different.
+                {!mandatoryFull && risk?.status === 'unvalidated' && <p className='cd-help'>Passing tests and validated skip risk are different.
                     A successful run records what happened; it does not prove that future tests can be skipped.
                     Only sufficiently audited earlier history can support that decision.</p>}
                 {risk?.reasons.some(reason => /another repository, branch or future commits/i.test(reason)) &&
@@ -350,9 +359,9 @@ export class TestsViewWidget extends ReactWidget {
                             {everything ? ' That’s all of them.' : ` You can skip ${report.skipped.length}.`}</>}
             </p>
             <p className='cd-help'>
-                {time
+                {mandatoryFull ? 'No test-time savings are proposed: policy requires every test.' : time
                     ? `That saves about ${Math.round(time.saved_ratio * 100)}% of test time.`
-                    : 'Time savings show up after your tests have been run once with CodeDNA.'}
+                    : 'No test-time savings estimate is available for this plan.'}
             </p>
             {notes.length > 0 && <div className='cd-notice'>
                 <strong>Good to know</strong>

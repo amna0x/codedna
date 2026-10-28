@@ -74,3 +74,12 @@ test('desktop plugin activation is retained across a consented API restart', asy
     child.stdout.emit('data', Buffer.from(JSON.stringify({ url: 'http://127.0.0.1:12345', plugin_snapshot: snapshot }) + '\n'));
     await restarted;
 });
+
+test('analysis RPC rejects non-read-only routes and requests optional core timing', async () => {
+    const { client, launches } = service();
+    assert.throws(() => client.startAnalysis('../run-tests', {}), /Unsupported read-only/);
+    assert.equal(launches.length, 0);
+    const calls = []; client.post = async (...args) => { calls.push(args); return { id: 'owned' }; };
+    await client.startAnalysis('select', { repo: 'fixture' });
+    assert.equal(calls[0][0], '/api/analysis-jobs/select?profile=true');
+});

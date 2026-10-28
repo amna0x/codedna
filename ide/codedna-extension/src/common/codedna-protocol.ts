@@ -169,6 +169,7 @@ export interface SelectionRun {
 }
 
 export interface SelectionReport {
+    policy?: { pinned: string[]; source: string | null } | null;
     repository: string;
     base_commit: string;
     head_commit: string;
@@ -400,6 +401,20 @@ export interface AnalysisJob {
     state: 'queued' | 'running' | 'completed' | 'failed' | 'cancelled';
     stage: string;
     elapsed_seconds: number;
+    metrics?: AnalysisTimings;
     result?: object;
     error?: string;
+}
+
+export interface AnalysisTimings {
+    schema_version: 1;
+    total_seconds: number;
+    worker_startup_seconds?: number;
+    stages: Record<string, { calls: number; seconds: number; self_seconds: number }>;
+    counters: Record<string, number>;
+}
+export interface AnalysisTimingRecord {
+    id: string;
+    operation: AnalysisOperation;
+    metrics: AnalysisTimings;
 }

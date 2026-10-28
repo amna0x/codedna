@@ -13,6 +13,8 @@ Design rules (see docs/DECISIONS.md, D-003):
 
 from __future__ import annotations
 
+from codedna.performance import timed
+
 from contextlib import contextmanager
 from contextvars import ContextVar
 from functools import wraps
@@ -119,6 +121,7 @@ def run_git_bytes(repo: Path, *args: str, stdin: bytes | None = None) -> bytes:
     return _run(repo, args, stdin)
 
 
+@timed('git')
 def _run(repo: Path, args: tuple[str, ...], stdin: bytes | None = None,
          env: dict[str, str] | None = None) -> bytes:
     command = ["git", *_SAFE_CONFIG, *args]

@@ -556,3 +556,17 @@ impact and selection; see [the job contract](docs/ANALYSIS_JOB_PLAN.md).
 
 These source changes need the final desktop rebuild before they appear in an
 installed app. Installation and actual new frozen validation remain deferred.
+
+## Performance diagnostics (D-083)
+
+Tests and Changes can show measured analysis timing in collapsed details.
+The optional job query `?profile=true` and MCP argument `"profile": true`
+return bounded stage timings. MCP checking still requires explicit build
+consent. Nested stages overlap; worker startup is reported separately.
+
+Immutable parsing and fitted-model reuse avoid duplicate work where safe.
+Each decision still checks current evidence and recomputes its audit. An
+entirely mandatory suite bypasses unnecessary fitting and remains a full-suite
+recommendation. See [measurement scope and examples](docs/PERFORMANCE_ENGINEERING.md).
+These source improvements require the updated desktop build; the earlier D082
+candidate validates the preceding source, not this performance batch.

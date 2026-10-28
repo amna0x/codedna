@@ -674,3 +674,22 @@ subfolder workspaces from opening the wrong files; links still open working
 files with that limitation disclosed. API-relative file paths are anchored
 before a worker starts in its trusted core directory. No analysis implementation
 or risk computation moves into TypeScript.
+
+## Optional performance diagnostics and scoped reuse (D-083)
+
+`codedna.performance` owns optional synchronous, thread/process-bound stage
+records. `POST /api/analysis-jobs/{operation}?profile=true` emits measurements
+before its terminal result; polling returns optional metrics. Capability
+`analysis_jobs.timing_version = 1` advertises this extension. Startup measures
+spawn to first worker stage and is separate from core operation time. MCP's
+optional `profile: true` adds `operation_timings` and distinguishes analysis
+from consented test execution. Defaults preserve operation JSON.
+
+`dependency_graph.cache` shares a bounded immutable-blob parse cache only
+inside one operation, partitioned by repository/plugin identity. `models.fit_cache`
+stores only independent fitted model/calibrator copies, with bounded memory,
+TTL, explicit namespace, complete dataset and implementation keys. Live Java
+checks eligibility before reuse and recomputes the audit and stopping decision.
+No history, audit acceptance, verdict, selected tests or mutable refs are reused.
+The CSV snapshot is parsed and fingerprinted from identical bytes. See
+[performance details](PERFORMANCE_ENGINEERING.md) for commands and limits.

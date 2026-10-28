@@ -1,12 +1,16 @@
 """Shared target audit and dispatch through the installed language plugin."""
 from codedna.git_analysis.git import reuse_git_validation
+from codedna.dependency_graph.cache import reuse_parse_cache
 from codedna.calibration.calibrators import Calibrator
 from codedna.models.experiment import _outcomes
 from codedna.models.rankers import MLRanker, order_by_baseline
 from codedna.selection.risk import RiskPolicy, decide
 from codedna.selection.validation import validate_outcomes
+from codedna.models.fit_cache import fitted_models
+from codedna.performance import stage, timed
 
 
+@timed('risk.fit_and_audit')
 def fit_audited(dataset, feature_names, risk_target=.05):
     """50/25/25 fit/calibrate/audit; do not refit after inspecting the audit."""
     n = len(dataset.commits)
@@ -15,23 +19,43 @@ def fit_audited(dataset, feature_names, risk_target=.05):
     train = [r for c in dataset.commits[:a] for r in groups[c]]
     cal = [r for c in dataset.commits[a:b] for r in groups[c]]
     audit = [groups[c] for c in dataset.commits[b:]]
-    ranker = MLRanker('gradient_boosting', feature_names, seed=0)
-    ranker.fit(train)
-    calibrator = Calibrator('isotonic').fit(ranker.predict_proba(cal), [r.label for r in cal])
+    def compute_models():
+        with stage('risk.model_setup'):
+            ranker = MLRanker('gradient_boosting', list(feature_names), seed=0)
+        with stage('risk.training'):
+            ranker.fit(train)
+        with stage('risk.calibration'):
+            calibrator = Calibrator('isotonic').fit(ranker.predict_proba(cal), [r.label for r in cal])
+        return ranker, calibrator
+    implementation = (MLRanker, MLRanker.__init__, MLRanker.fit, MLRanker.predict_proba,
+                      Calibrator, Calibrator.__init__, Calibrator.fit)
+    ranker, calibrator = fitted_models(dataset, feature_names, risk_target,
+                                      implementation, compute_models)
+    # Predictions are independent per row. Batch only inference, preserving
+    # the original per-commit ordering, decisions, outcomes and fresh audit.
+    audit_rows = [row for rows in audit for row in rows]
+    with stage('risk.audit_prediction'):
+        audit_scores = calibrator.transform(ranker.predict_proba(audit_rows))
+    if len(audit_scores) != len(audit_rows):
+        raise ValueError('audit prediction count does not match its rows')
+    scores = {id(row): score for row, score in zip(audit_rows, audit_scores)}
     def choose(rows):
-        d = decide(rows, calibrator.transform(ranker.predict_proba(rows)),
+        d = decide(rows, [scores[id(row)] for row in rows],
                    RiskPolicy(budget=None, risk_target=risk_target),
                    order=order_by_baseline('recent_failures', rows))
         return d.selected, d
-    evidence = validate_outcomes(_outcomes(audit, choose), risk_target)
+    # Eligibility, audit acceptance and target decisions are never cached.
+    with stage('risk.audit'):
+        evidence = validate_outcomes(_outcomes(audit, choose), risk_target)
     return ranker, calibrator, evidence, {
         'training_commits': dataset.commits[:a], 'calibration_commits': dataset.commits[a:b],
-        'audit_commits': dataset.commits[b:], 'features': feature_names,
+        'audit_commits': dataset.commits[b:], 'features': list(feature_names),
         'model': 'gradient_boosting', 'calibration': 'isotonic', 'seed': 0}
 
 
 
 @reuse_git_validation
+@reuse_parse_cache
 def recommend(repo_path,base,head,*,history_csv=None,risk_target=.05,language='java',must_run=None,
               method='b10'):
     """Dispatch supported risk methods; unsupported/mixed languages run all tests.

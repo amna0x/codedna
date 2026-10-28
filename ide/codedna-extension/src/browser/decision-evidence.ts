@@ -1,4 +1,5 @@
-import { SelectionReport, SelectionRun } from '../common/codedna-protocol';
+import { AnalysisTimingRecord, SelectionReport, SelectionRun } from '../common/codedna-protocol';
+import { safeAnalysisTimings } from './analysis-metrics';
 
 /** Presentation guidance only. The core remains the sole authority on risk. */
 export function recoverySteps(report: SelectionReport): string[] {
@@ -6,6 +7,9 @@ export function recoverySteps(report: SelectionReport): string[] {
         return ['This selection uses structural rules and has no validated skip-risk estimate. Choose Validated risk stopping to request a prior-audited estimate; it may still require the full suite.'];
     }
     const reasons = report.risk.reasons.join(' ');
+    if (/All discovered tests are required by the must-run policy/.test(reasons)) {
+        return ['All tests are already mandatory. Run the full suite; this recommendation does not need a fitted risk model.'];
+    }
     const unsupported = /unsupported|non-Java|mixed|language/i.test(reasons);
     const steps: string[] = [];
     if (/another repository|branch|future|chronological|target outcome/i.test(reasons)) {
@@ -31,9 +35,10 @@ export function recoverySteps(report: SelectionReport): string[] {
 }
 
 /** Allowlisted evidence: no source text, environment variables, credentials or raw logs. */
-export function decisionRecord(report: SelectionReport, execution?: SelectionRun, createdAt = new Date().toISOString()): object {
+export function decisionRecord(report: SelectionReport, execution?: SelectionRun, createdAt = new Date().toISOString(), timings: AnalysisTimingRecord[] = []): object {
     return {
         schema_version: 1, kind: 'codedna-decision-evidence', created_at: createdAt,
+        ...(timings.length ? { analysis_timings: safeAnalysisTimings(timings) } : {}),
         disclosure: 'Contains local repository paths, test names and core diagnostic messages. Review before sharing.',
         comparison: { repository: report.repository, base: report.base_commit, head: report.head_commit },
         selection: { strategy: report.strategy, total_tests: report.total_tests,

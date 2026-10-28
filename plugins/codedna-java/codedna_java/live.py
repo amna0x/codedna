@@ -9,6 +9,8 @@ from collections import defaultdict
 from hashlib import sha256
 from pathlib import Path
 from time import perf_counter
+from codedna.models.fit_cache import fitted_model_scope
+from codedna.performance import count, stage, timed
 
 from codedna.git_analysis import extract_changes
 from codedna.git_analysis.git import resolve_repository, run_git
@@ -57,6 +59,7 @@ def prediction_rows(dataset, changes, test_ids):
 METHODS = ('b10', 'crc')
 
 
+@timed('risk.recommendation')
 def recommend(repo_path, base, head, *, history_csv=None, risk_target=.05, must_run=None,
               method='b10'):
     """``method``: ``b10`` = stop at estimated skip risk ``risk_target`` behind the D-041 gate;
@@ -80,17 +83,26 @@ def recommend(repo_path, base, head, *, history_csv=None, risk_target=.05, must_
             'proposed_skip_risk':None, 'validation':None, 'reasons':[],
             'note':'Historical validation is not a guarantee; full-suite audits must refresh evidence.'}
     result['risk'] = risk
-    def fallback(reason):
+    def fallback(reason, code='evidence_unusable'):
+        count('fallback.'+code)
         risk['reasons'].append(reason)
         for item in result['selected']:
             item['reasons'] = ['risk unvalidated: run the full suite']+pin_reasons.get(item['test'],[])
         risk['analysis_seconds'] = round(perf_counter()-started,4)
         return result
+    # Exact no-savings fast path: fitting cannot remove a mandatory test.
+    # Keep the estimate unvalidated rather than inventing a model probability.
+    if result['selected'] and pinned.issuperset(item['test'] for item in result['selected']):
+        return fallback('All discovered tests are required by the must-run policy; '
+                        'model fitting cannot reduce this suite.', 'all_tests_required')
     path = Path(history_csv) if history_csv else repo/'.codedna/history.csv'
     if not path.is_file():
-        return fallback('No target-project test history is available.')
+        return fallback('No target-project test history is available.', 'history_missing')
     try:
-        dataset = Dataset.from_csv(path)
+        with stage('risk.history_load'):
+            history_bytes = path.read_bytes()
+            history_digest = sha256(history_bytes).hexdigest()
+            dataset = Dataset.from_csv_bytes(history_bytes, source=path)
         if not dataset.commits or len(set(dataset.commits)) != len(dataset.commits):
             return fallback('History is empty or has duplicate commits.')
         if len({(r.commit,r.test_id) for r in dataset.rows}) != len(dataset.rows):
@@ -115,7 +127,7 @@ def recommend(repo_path, base, head, *, history_csv=None, risk_target=.05, must_
         # even if the editor changes WORKTREE while history is checked.
         changes = extract_changes(repo,result['base_commit'],result['head_commit'])
         if any(not f.is_java for f in changes.changed_files):
-            return fallback('This change includes unsupported non-Java files.')
+            return fallback('This change includes unsupported non-Java files.', 'unsupported_change')
         ids = [item['test'] for item in result['selected']]
         latest = {r.test_id for r in dataset.rows_by_commit()[dataset.commits[-1]]}
         if not set(ids).issubset(latest):
@@ -124,9 +136,12 @@ def recommend(repo_path, base, head, *, history_csv=None, risk_target=.05, must_
         groups = dataset.rows_by_commit()
         if any(not set(ids).issubset({r.test_id for r in groups[c]}) for c in audit_shas):
             return fallback('Prior audit omits current test classes; complete full-suite outcomes are required.')
-        model, calibrator, evidence, provenance = fit_audited(dataset,risk_target)
+        # A model depends on validated history, not on a later working-tree
+        # edit. Current eligibility/audit/conformal stop are still recomputed.
+        with fitted_model_scope(('java', str(repo), result['base_commit'], history_digest, method)):
+            model, calibrator, evidence, provenance = fit_audited(dataset,risk_target)
         risk['validation'] = evidence.to_dict()
-        risk['provenance'] = {**provenance,'history_sha256':sha256(path.read_bytes()).hexdigest()}
+        risk['provenance'] = {**provenance,'history_sha256':history_digest}
         rows = prediction_rows(dataset,changes,ids)
         probabilities = calibrator.transform(model.predict_proba(rows))
         stop = risk_target
@@ -137,12 +152,12 @@ def recommend(repo_path, base, head, *, history_csv=None, risk_target=.05, must_
             risk['conformal'] = {**crc,'note':'Bound on missed failures among failing commits; '
                                  'it assumes past and future failing commits are exchangeable.'}
             if stop is conformal.FULL:
-                return fallback('Conformal stop needs the full suite: '+crc['reason']+'.')
+                return fallback('Conformal stop needs the full suite: '+crc['reason']+'.', 'conformal_full_suite')
         decision = decide(rows,probabilities,RiskPolicy(budget=None,risk_target=stop),
                           order=order_by_baseline('recent_failures',rows),always=pinned)
         risk['proposed_skip_risk'] = decision.estimated_skip_risk
         if method == 'b10' and not evidence.accepted:
-            return fallback('Prior target audit failed: '+ '; '.join(evidence.reasons))
+            return fallback('Prior target audit failed: '+ '; '.join(evidence.reasons), 'prior_audit_failed')
         risk.update(status='validated_history',estimated_skip_risk=decision.estimated_skip_risk,
                     analysis_seconds=round(perf_counter()-started,4))
         score = {r.test_id:p for r,p in zip(rows,probabilities)}
@@ -165,5 +180,5 @@ def recommend(repo_path, base, head, *, history_csv=None, risk_target=.05, must_
         result['estimated_time'] = {'selected_seconds':chosen,'all_seconds':total,
                                    'saved_ratio':1-chosen/total if total else 0.}
         return result
-    except (ValueError,KeyError,StopIteration,RuntimeError,ImportError) as exc:
+    except (ValueError,KeyError,StopIteration,RuntimeError,ImportError,OSError) as exc:
         return fallback('Risk evidence cannot be used: '+str(exc))

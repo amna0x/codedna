@@ -1911,3 +1911,44 @@ D-080/D-081 verification: source 912f4c9 passed 636 tests, zero failures/skips,
 one existing warning, 1086.89 seconds, with Maven included. TypeScript and
 43 Node workflows pass. Source/frozen entry tests do not replace rebuilding and
 testing the actual packaged executable at the final installation stage.
+
+## D-082 - Actual isolated frozen-core validation (2026-10-28)
+
+The owner requested executable validation. Build an isolated frozen candidate
+from source 450e6ad without replacing the installed IDE or older installer.
+Twenty checks passed against the actual executable: seven plugin checks,
+seven owned-worker/restart checks, and six MCP brake checks using real Maven.
+The complete 1456-file manifest was verified. Evidence and hashed logs are in
+FROZEN_CORE_VALIDATION_D082_2026-10-28.json. Test outcomes remain authoritative:
+failure blocks, a passing run passes, and skipped required tests are incomplete.
+These disposable synthetic fixtures prove engineering behavior; they do not
+establish selector accuracy, online catalogue availability or clean-PC acceptance.
+
+## D-083 - Measured latency with fresh decisions (2026-10-28)
+
+Add optional bounded stage telemetry to read-only jobs and MCP operations.
+Keep core operation time and worker startup separate; nested inclusive stages
+must never be added together. Timings export only known stage/counter fields.
+Tests and Changes show collapsed timing details, not fabricated progress.
+
+Reuse immutable parses inside a synchronous operation. Fitted model/calibrator
+reuse is opt-in, process-local, defensive-copy, two-entry LRU with a five-minute
+TTL. Key repository/base/history namespace, complete dataset fingerprint,
+feature order, target, schema and implementation identities. Read and hash the
+same CSV bytes. Never persist executable models, selected sets or accepted risk.
+Always repeat current eligibility, prior audit, conformal threshold and decision.
+Batch independent audit predictions while retaining commit boundaries/order.
+
+If must-run policy already requires every discovered test, return the full
+suite before reading/fitting history. Retain unvalidated probability and explain
+that fitting cannot shorten this plan. No uncertain cost heuristic, risk target,
+default ordering or gate is changed. Isolated API workers still fit cold;
+cross-call model reuse benefits only long-lived, explicitly scoped consumers.
+
+Matched three-trial interleaved medians on one inspected HikariCP dataset were
+1.779s original, 1.403s batched fresh and 0.516s batched reused. All 7495 audit
+probabilities and all 357 per-commit decisions matched exactly in a separate
+post-hoc check. This excludes Git, graphs, process startup and project tests;
+it is engineering evidence, not independent accuracy confirmation or CI speedup.
+See PERFORMANCE_ENGINEERING.md and the three D083 measurement JSON files.
+Full source and updated packaged validation must be recorded after they finish.

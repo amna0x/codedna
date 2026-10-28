@@ -61,7 +61,10 @@ export class CodeDnaServiceImpl implements CodeDnaService, BackendApplicationCon
     }
 
     startAnalysis(operation: AnalysisOperation, payload: object): Promise<AnalysisJob> {
-        return this.post(`/api/analysis-jobs/${operation}`, payload);
+        if (!['tests', 'analyze', 'impact', 'select', 'risk-select'].includes(operation)) {
+            throw new Error('Unsupported read-only analysis operation.');
+        }
+        return this.post(`/api/analysis-jobs/${operation}?profile=true`, payload);
     }
 
     analysisJob(id: string): Promise<AnalysisJob> {

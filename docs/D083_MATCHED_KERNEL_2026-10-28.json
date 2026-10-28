@@ -1,0 +1,293 @@
+{
+  "scope": "matched local fit/calibrate/audit engineering benchmark; reused data, not new selector accuracy/safety or net CI speedup",
+  "input_sha256": "f2c4ce350b858f2daec1ccc1a3f017ca5c2c95e1ff534720155b12b16414ec7b",
+  "rows": 20206,
+  "commits": 1427,
+  "cold_original_seconds": 4.2314652999994,
+  "trials": [
+    {
+      "variant": "original",
+      "seconds": 1.7402336000013747,
+      "metrics": {
+        "schema_version": 1,
+        "total_seconds": 1.74024,
+        "stages": {},
+        "counters": {}
+      }
+    },
+    {
+      "variant": "batched_fresh",
+      "seconds": 1.4034730999992462,
+      "metrics": {
+        "schema_version": 1,
+        "total_seconds": 1.403478,
+        "stages": {
+          "risk.fit_and_audit": {
+            "calls": 1,
+            "seconds": 1.403215,
+            "self_seconds": 0.005626
+          },
+          "risk.model_setup": {
+            "calls": 1,
+            "seconds": 4.2e-05,
+            "self_seconds": 4.2e-05
+          },
+          "risk.training": {
+            "calls": 1,
+            "seconds": 1.056126,
+            "self_seconds": 1.056126
+          },
+          "risk.calibration": {
+            "calls": 1,
+            "seconds": 0.136332,
+            "self_seconds": 0.136332
+          },
+          "risk.audit_prediction": {
+            "calls": 1,
+            "seconds": 0.169439,
+            "self_seconds": 0.169439
+          },
+          "risk.audit": {
+            "calls": 1,
+            "seconds": 0.03565,
+            "self_seconds": 0.03565
+          }
+        },
+        "counters": {
+          "fit_cache.disabled": 1
+        }
+      }
+    },
+    {
+      "variant": "batched_reused",
+      "seconds": 0.5161931999973604,
+      "metrics": {
+        "schema_version": 1,
+        "total_seconds": 0.516197,
+        "stages": {
+          "risk.fit_and_audit": {
+            "calls": 1,
+            "seconds": 0.515868,
+            "self_seconds": 0.004574
+          },
+          "fit_cache.fingerprint": {
+            "calls": 1,
+            "seconds": 0.362123,
+            "self_seconds": 0.362123
+          },
+          "fit_cache.copy": {
+            "calls": 1,
+            "seconds": 0.003869,
+            "self_seconds": 0.003869
+          },
+          "risk.audit_prediction": {
+            "calls": 1,
+            "seconds": 0.115218,
+            "self_seconds": 0.115218
+          },
+          "risk.audit": {
+            "calls": 1,
+            "seconds": 0.030084,
+            "self_seconds": 0.030084
+          }
+        },
+        "counters": {
+          "fit_cache.hit": 1
+        }
+      }
+    },
+    {
+      "variant": "batched_reused",
+      "seconds": 0.47741099999984726,
+      "metrics": {
+        "schema_version": 1,
+        "total_seconds": 0.477414,
+        "stages": {
+          "risk.fit_and_audit": {
+            "calls": 1,
+            "seconds": 0.477165,
+            "self_seconds": 0.00419
+          },
+          "fit_cache.fingerprint": {
+            "calls": 1,
+            "seconds": 0.331797,
+            "self_seconds": 0.331797
+          },
+          "fit_cache.copy": {
+            "calls": 1,
+            "seconds": 0.003443,
+            "self_seconds": 0.003443
+          },
+          "risk.audit_prediction": {
+            "calls": 1,
+            "seconds": 0.108173,
+            "self_seconds": 0.108173
+          },
+          "risk.audit": {
+            "calls": 1,
+            "seconds": 0.02956,
+            "self_seconds": 0.02956
+          }
+        },
+        "counters": {
+          "fit_cache.hit": 1
+        }
+      }
+    },
+    {
+      "variant": "original",
+      "seconds": 1.7785106000010273,
+      "metrics": {
+        "schema_version": 1,
+        "total_seconds": 1.778515,
+        "stages": {},
+        "counters": {}
+      }
+    },
+    {
+      "variant": "batched_fresh",
+      "seconds": 2.3063469999979134,
+      "metrics": {
+        "schema_version": 1,
+        "total_seconds": 2.306351,
+        "stages": {
+          "risk.fit_and_audit": {
+            "calls": 1,
+            "seconds": 2.306137,
+            "self_seconds": 0.005162
+          },
+          "risk.model_setup": {
+            "calls": 1,
+            "seconds": 4.7e-05,
+            "self_seconds": 4.7e-05
+          },
+          "risk.training": {
+            "calls": 1,
+            "seconds": 1.962346,
+            "self_seconds": 1.962346
+          },
+          "risk.calibration": {
+            "calls": 1,
+            "seconds": 0.143522,
+            "self_seconds": 0.143522
+          },
+          "risk.audit_prediction": {
+            "calls": 1,
+            "seconds": 0.155482,
+            "self_seconds": 0.155482
+          },
+          "risk.audit": {
+            "calls": 1,
+            "seconds": 0.039578,
+            "self_seconds": 0.039578
+          }
+        },
+        "counters": {
+          "fit_cache.disabled": 1
+        }
+      }
+    },
+    {
+      "variant": "batched_fresh",
+      "seconds": 1.220917799997551,
+      "metrics": {
+        "schema_version": 1,
+        "total_seconds": 1.220924,
+        "stages": {
+          "risk.fit_and_audit": {
+            "calls": 1,
+            "seconds": 1.220592,
+            "self_seconds": 0.004699
+          },
+          "risk.model_setup": {
+            "calls": 1,
+            "seconds": 1.8e-05,
+            "self_seconds": 1.8e-05
+          },
+          "risk.training": {
+            "calls": 1,
+            "seconds": 0.96255,
+            "self_seconds": 0.96255
+          },
+          "risk.calibration": {
+            "calls": 1,
+            "seconds": 0.114754,
+            "self_seconds": 0.114754
+          },
+          "risk.audit_prediction": {
+            "calls": 1,
+            "seconds": 0.107082,
+            "self_seconds": 0.107082
+          },
+          "risk.audit": {
+            "calls": 1,
+            "seconds": 0.031489,
+            "self_seconds": 0.031489
+          }
+        },
+        "counters": {
+          "fit_cache.disabled": 1
+        }
+      }
+    },
+    {
+      "variant": "batched_reused",
+      "seconds": 1.1036175999979605,
+      "metrics": {
+        "schema_version": 1,
+        "total_seconds": 1.103624,
+        "stages": {
+          "risk.fit_and_audit": {
+            "calls": 1,
+            "seconds": 1.103119,
+            "self_seconds": 0.008365
+          },
+          "fit_cache.fingerprint": {
+            "calls": 1,
+            "seconds": 0.880652,
+            "self_seconds": 0.880652
+          },
+          "fit_cache.copy": {
+            "calls": 1,
+            "seconds": 0.004194,
+            "self_seconds": 0.004194
+          },
+          "risk.audit_prediction": {
+            "calls": 1,
+            "seconds": 0.151961,
+            "self_seconds": 0.151961
+          },
+          "risk.audit": {
+            "calls": 1,
+            "seconds": 0.057946,
+            "self_seconds": 0.057946
+          }
+        },
+        "counters": {
+          "fit_cache.hit": 1
+        }
+      }
+    },
+    {
+      "variant": "original",
+      "seconds": 4.8119106000012835,
+      "metrics": {
+        "schema_version": 1,
+        "total_seconds": 4.811917,
+        "stages": {},
+        "counters": {}
+      }
+    }
+  ],
+  "median_seconds": {
+    "original": 1.7785106000010273,
+    "batched_fresh": 1.4034730999992462,
+    "batched_reused": 0.5161931999973604
+  },
+  "all_audit_evidence_provenance_probe_predictions_identical": true,
+  "limits": [
+    "CSV loading, Git/graphs, worker startup and project test execution excluded.",
+    "Model reuse applies within an explicit long-lived process; isolated API workers start cold.",
+    "Interleaved three trials per variant on one laptop and one inspected dataset."
+  ]
+}

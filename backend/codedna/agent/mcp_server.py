@@ -28,6 +28,7 @@ from codedna.git_analysis.git import WORKTREE, resolve_repository
 PROTOCOL_VERSIONS = ("2025-06-18", "2025-03-26", "2024-11-05")
 
 _CHANGE = {
+    "profile": {"type": "boolean", "description": "Include measured operation timings; a check includes test execution."},
     "repo": {"type": "string", "description": "Path of the Git repository (default: the server's --repo)."},
     "base": {"type": "string", "description": "Base revision (default HEAD)."},
     "head": {"type": "string", "description": "Changed revision; WORKTREE (default) means uncommitted changes."},
@@ -135,8 +136,16 @@ class BrakeServer:
         unknown = sorted(set(arguments) - allowed)
         if unknown:
             return _error(ident, -32602, f"unknown arguments: {unknown}")
+        profile = arguments.get('profile', False)
+        if not isinstance(profile, bool):
+            return _error(ident, -32602, 'profile must be a boolean')
         try:
-            data = self._run(name, arguments)
+            from codedna.performance import capture_timings
+            with capture_timings(profile) as timings:
+                data = self._run(name, arguments)
+            if timings is not None:
+                data = {**data, 'operation_timings': {**timings.to_dict(),
+                    'scope': 'includes_test_execution' if name == 'codedna_check' else 'analysis_only'}}
         except ToolError as exc:
             return _result(ident, _content({"error": str(exc)}, error=True))
         except Exception as exc:  # analysis errors go back to the agent, not a crash

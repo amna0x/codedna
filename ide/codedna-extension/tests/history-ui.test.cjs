@@ -21,6 +21,8 @@ function load(name) {
         if (id === './progress') return { withProgress: (_, __, action) => action() };
         if (id === './test-outcomes') return load('test-outcomes');
         if (id === './decision-evidence') return load('decision-evidence');
+        if (id === './analysis-metrics') return load('analysis-metrics');
+        if (id === './analysis-timings') return load('analysis-timings');
         if (id === './plain-language') return { simpleName: x => x, plural: (n, word) => `${n} ${word}`,
             friendlyWarning: x => x, friendlyReason: x => x, packageName: () => '', breakable: x => x };
         if (id === './ui') return { Chip: 'chip', ErrorNotice: 'error', Spinner: 'spinner' };
@@ -207,4 +209,17 @@ test('CRC distinguishes its failing-commit bound from the score and B10 audit de
     report.risk.estimated_skip_risk = null; report.risk.conformal.corrected_bound = null;
     const absent = text(view.renderReport(report));
     assert.match(absent, /not reported/); assert.ok(!absent.includes('0.00%'));
+});
+
+
+test('a fully mandatory suite explains the policy without promising savings from more history', () => {
+    const { TestsViewWidget } = load('tests-view-widget'); const view = new TestsViewWidget();
+    const report = { repository: 'C:/demo', base_commit: 'a'.repeat(40), head_commit: 'b'.repeat(40),
+        strategy: 'risk', total_tests: 1, selected: [{ test: 'ATest', reasons: ['required'] }],
+        skipped: [], warnings: [], policy: { pinned: ['ATest'] },
+        risk: { status: 'unvalidated', reasons: ['All discovered tests are required by the must-run policy; model fitting cannot reduce this suite.'] } };
+    const content = text(view.renderReport(report));
+    assert.match(content, /Full suite required by policy/);
+    assert.match(content, /Model fitting cannot shorten this plan/);
+    assert.ok(!content.includes('Risk unvalidated') && !content.includes('after your tests have been run once'));
 });

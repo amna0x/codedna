@@ -58,27 +58,36 @@ def main() -> int:
             raise ValueError('analysis result exceeds the worker message limit')
         output.write(message + '\n'); output.flush()
 
+    timings = None
+    metrics_emitted = False
     try:
         if len(line) > MAX_MESSAGE:
             raise ValueError('analysis request exceeds the worker message limit')
         request = json.loads(line)
         from contextlib import redirect_stdout
-        with redirect_stdout(sys.stderr):
-            emit('stage', 'loading analysis core')
-            if getattr(sys, 'frozen', False):
-                from codedna.plugins import desktop_store
-                desktop_store.pin_worker_snapshot(request['plugins'])
-            stages = {'tests': 'discovering tests', 'analyze': 'analysing changes',
-                      'impact': 'analysing impact', 'select': 'selecting tests',
-                      'risk-select': 'checking history and selecting tests'}
-            operation = request['operation']
-            if operation not in stages:
-                raise ValueError('unsupported analysis operation')
-            emit('stage', stages[operation])
-            result = execute(operation, request['payload'])
-            emit('result', result)
+        from codedna.performance import capture_timings
+        with capture_timings(request.get('profile', False)) as timings:
+            with redirect_stdout(sys.stderr):
+                emit('stage', 'loading analysis core')
+                if getattr(sys, 'frozen', False):
+                    from codedna.plugins import desktop_store
+                    desktop_store.pin_worker_snapshot(request['plugins'])
+                stages = {'tests': 'discovering tests', 'analyze': 'analysing changes',
+                          'impact': 'analysing impact', 'select': 'selecting tests',
+                          'risk-select': 'checking history and selecting tests'}
+                operation = request['operation']
+                if operation not in stages:
+                    raise ValueError('unsupported analysis operation')
+                emit('stage', stages[operation])
+                result = execute(operation, request['payload'])
+        if timings is not None:
+            emit('metrics', timings.to_dict())
+            metrics_emitted = True
+        emit('result', result)
         return 0
     except Exception as exc:
+        if timings is not None and not metrics_emitted:
+            emit('metrics', timings.to_dict())
         emit('error', str(exc)[:1000] or type(exc).__name__)
         return 1
 

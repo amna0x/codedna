@@ -1,5 +1,36 @@
 # Blueprint completion ledger - 2026-10-27
 
+## Current owner-approved work - D-082/D-083, 2026-10-28
+
+User explicitly asked to test the rebuilt .exe's cancellation, plugin changes/
+restarts and AI brake, then improve engineering/research performance. All 20
+actual frozen checks passed in an isolated candidate: seven plugin checks,
+seven worker/restart checks, six brake checks using real Maven. Worker and child
+ended, unrelated fixture survived; failed tests block, passed tests pass and
+skipped required tests remain incomplete. See FROZEN_CORE_VALIDATION_D082_2026-10-28.json.
+The candidate is build/desktop-D082-2026-10-28/core/dist/codedna-core. All 1456
+manifest files were verified. Installed app/old installer were not overwritten.
+This is not clean-PC or actual new Theia acceptance. Prior full source: 636/zero
+skips; Node43 and TypeScript pass. Don't repeat old studies or that completed run.
+
+NEXT authorized D-083: measure real stage costs, safely reuse unchanged fitted
+models/parses, improve fallback diagnostics and evaluate a pre-analysis cost
+fast path. Never cache selected sets or accepted risk; revalidate eligibility
+and audit every decision. A cost switch after analysis is already paid cannot
+recover that sunk cost. Avoid serializing/loading Python models from disk.
+Do not claim improved safety/recall from latency or engineering test results.
+After changes: focused tests, full Maven-inclusive suite and updated frozen
+candidate/release verification. A separate research performance follow-up must
+be protocol-first, keep prior outputs intact and disclose reused data.
+
+Owner also approved the FOCUSED Moonshot version: deterministic Java paired
+execution, meaningful difference and small reproducer export, integrated with
+existing core/brake. See MOONSHOT_SCOPE.md. It follows current engineering and
+does not authorize the full twelve-month proposal, concurrency lab, automatic
+repair or extra languages. Preserve untracked MOONSHOT.md; Java/Python only.
+No new push/merge/public hosting; preserve both stashes. New performance work
+must not be described as already present in the tested D082 candidate.
+
 ## Verified continuation - D-080/D-081, 2026-10-28
 
 Source checkpoint 912f4c9 passed the complete Maven-inclusive suite: 636 tests,

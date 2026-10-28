@@ -3,12 +3,13 @@ import { inject, injectable, postConstruct } from '@theia/core/shared/inversify'
 import { ProgressService } from '@theia/core/lib/common/progress-service';
 import { ReactWidget } from '@theia/core/lib/browser/widgets/react-widget';
 import {
-    AnalysisJob, AnalyzeReport, ChangedFile, CodeDnaService, DeclarationChange, ImpactReport, ImpactedNode, JavaFileAnalysis
+    AnalysisJob, AnalysisTimingRecord, AnalyzeReport, ChangedFile, CodeDnaService, DeclarationChange, ImpactReport, ImpactedNode, JavaFileAnalysis
 } from '../common/codedna-protocol';
 import { CodeDnaComparison } from './comparison';
 import { CodeDnaWorkspace } from './codedna-workspace';
 import { withProgress } from './progress';
 import { waitForAnalysis } from './analysis-jobs-ui';
+import { AnalysisTimingDetails } from './analysis-timings';
 import {
     breakable, changeLabel, confidenceLabel, fileStatusLabel, friendlyWarning, kindLabel, plural, readableName, simpleName
 } from './plain-language';
@@ -33,6 +34,7 @@ export class ChangeViewWidget extends ReactWidget {
     protected loading = false;
     protected generation = 0;
     protected analysisJob: AnalysisJob | undefined;
+    protected timings: AnalysisTimingRecord[] = [];
     protected analysisCancelled = false;
     protected cancelling = false;
     protected notice: string | undefined;
@@ -53,6 +55,7 @@ export class ChangeViewWidget extends ReactWidget {
     }
 
     protected invalidate(): void {
+        this.timings = [];
         this.generation++;
         this.analysisCancelled = true;
         this.changes = undefined;
@@ -72,7 +75,14 @@ export class ChangeViewWidget extends ReactWidget {
         this.analysisJob = undefined;
         this.update();
         const current = (): boolean => generation === this.generation && !this.analysisCancelled && !this.isDisposed;
-        const progress = (job: AnalysisJob): void => { this.analysisJob = job; this.update(); };
+        const progress = (job: AnalysisJob): void => {
+            this.analysisJob = job;
+            if (job.metrics) {
+                this.timings = [...this.timings.filter(item => item.id !== job.id),
+                    { id: job.id, operation: job.operation, metrics: job.metrics }];
+            }
+            this.update();
+        };
         try {
             const repo = await this.workspace.repositoryPath();
             if (!repo) { throw new Error('Open a folder first.'); }
@@ -151,6 +161,7 @@ export class ChangeViewWidget extends ReactWidget {
                 </button>}
             </div>}
             {this.notice && <p className='cd-notice' role='status'>{this.notice}</p>}
+            <AnalysisTimingDetails reports={this.timings} title='Change and impact analysis timing' />
             {this.error && <ErrorNotice message={this.error} />}
             {this.changes ? this.renderResults(this.changes) : !this.loading && !this.error && <FirstRun action='Show changes' />}
         </div>;

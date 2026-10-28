@@ -9,6 +9,8 @@ D-008 and D-009 for the ID format and its limits).
 
 from __future__ import annotations
 
+from codedna.performance import timed
+
 from dataclasses import dataclass, field
 
 import tree_sitter_java
@@ -79,6 +81,7 @@ class JavaParseResult:
         return bool(self.syntax_errors)
 
 
+@timed('parse.java')
 def parse_java(source: bytes) -> JavaParseResult:
     """Parse one Java file and return its declarations."""
     tree = Parser(_LANGUAGE).parse(source)

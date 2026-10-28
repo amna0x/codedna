@@ -254,7 +254,7 @@ def create_app(token: str, *, allow_build: bool = False,
         return {"version": __version__, "allow_build": app.state.allow_build,
                 "strategies": ["all", "dependency", "coverage"],
                 "analysis_jobs": {"version": 1, "active_limit": 1, "queue_limit": 2,
-                                  "deadline_seconds": 300}}
+                                  "deadline_seconds": 300, "timing_version": 1}}
 
     @app.post("/api/analyze", dependencies=secured)
     def analyze(body: AnalyzeRequest) -> dict:

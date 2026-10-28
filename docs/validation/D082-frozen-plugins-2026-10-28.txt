@@ -1,0 +1,13 @@
+{
+  "scope": "production frozen core, restricted PATH, isolated per-user store; not clean-PC acceptance",
+  "checks": {
+    "install_and_cold_restart": "passed",
+    "damaged_optional_uses_bundled_fallback": "passed",
+    "broken_update_preserves_working_version": "passed",
+    "missing_dependency_preserves_working_version": "passed",
+    "checksum_refusal": "passed",
+    "remove_and_restore_bundled_python": "passed",
+    "bundled_removal_refused": "passed"
+  },
+  "bundle_files_verified": 1456
+}

@@ -60,12 +60,14 @@ class AnalysisJobs:
             if self._records[key]['state'] in TERMINAL:
                 del self._records[key]
 
-    def submit(self, operation, payload):
+    def submit(self, operation, payload, *, profile=False):
         if operation not in OPERATIONS:
             raise ValueError('unsupported analysis operation')
+        if not isinstance(profile, bool):
+            raise ValueError('profile must be a boolean')
         # Freeze caller input; do not retain mutable request objects.
         request = json.dumps({'operation': operation, 'payload': payload,
-                              'plugins': self._plugins}, allow_nan=False).encode() + b'\n'
+                              'plugins': self._plugins, 'profile': profile}, allow_nan=False).encode() + b'\n'
         if len(request) > MAX_MESSAGE:
             raise ValueError('analysis request exceeds the worker message limit')
         with self._condition:
@@ -77,7 +79,7 @@ class AnalysisJobs:
             key = uuid4().hex
             self._records[key] = dict(id=key, operation=operation, state='queued',
                 stage='queued', created=monotonic(), finished=None, request=request,
-                owner=None, cancel_requested=False, result=None, error=None)
+                owner=None, cancel_requested=False, result=None, error=None, metrics=None)
             self._queue.append(key)
             if self._thread is None:
                 self._thread = Thread(target=self._loop, name='codedna-analysis-jobs', daemon=True)
@@ -91,6 +93,8 @@ class AnalysisJobs:
         view['elapsed_seconds'] = round(max(0., end - record['created']), 3)
         if record['state'] == 'completed':
             view['result'] = deepcopy(record['result'])
+        if record.get('metrics') is not None:
+            view['metrics'] = deepcopy(record['metrics'])
         if record['state'] == 'failed':
             view['error'] = record['error']
         return view
@@ -159,6 +163,9 @@ class AnalysisJobs:
         error = None
         success = False
         cleanup_failed = False
+        worker_started = monotonic()
+        first_stage_seconds = None
+        got_metrics = False
         try:
             owner = OwnedProcess(worker_command(), cwd=Path(__file__).resolve().parent)
             with self._condition:
@@ -204,12 +211,25 @@ class AnalysisJobs:
                     raise ValueError('analysis worker exceeded protocol limits')
                 event = json.loads(line)
                 if event.get('kind') == 'stage' and not got_result:
+                    if first_stage_seconds is None:
+                        first_stage_seconds = max(0., monotonic()-worker_started)
                     stage = event['value']
                     if not isinstance(stage, str) or len(stage) > 100:
                         raise ValueError('invalid analysis progress event')
                     with self._condition:
                         if record['state'] not in TERMINAL and not record['cancel_requested']:
                             record['stage'] = stage
+                elif event.get('kind') == 'metrics' and not got_result and not got_metrics:
+                    metrics = event.get('value')
+                    if not isinstance(metrics, dict) or metrics.get('schema_version') != 1:
+                        raise ValueError('invalid analysis timing event')
+                    got_metrics = True
+                    metrics = dict(metrics)
+                    if first_stage_seconds is not None:
+                        metrics['worker_startup_seconds'] = round(first_stage_seconds, 6)
+                    with self._condition:
+                        if record['state'] not in TERMINAL and not record['cancel_requested']:
+                            record['metrics'] = metrics
                 elif event.get('kind') == 'result' and not got_result:
                     result = event['value']; got_result = True
                     if not isinstance(result, dict):

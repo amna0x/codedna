@@ -376,3 +376,41 @@ test('a late Changes file-open error cannot overwrite a newer comparison', async
     opening.reject(new Error('old file missing')); await pending;
     assert.equal(view.error, undefined);
 });
+
+const sampleMetrics = () => ({ schema_version: 1, total_seconds: .5,
+    stages: { git: { calls: 3, seconds: .1, self_seconds: .1 } }, counters: { 'fit_cache.hit': 1 } });
+
+test('recommendation retains real timing data and comparison changes clear it', async () => {
+    const { view, change } = widget(), metrics = sampleMetrics();
+    view.codedna.analysisJobs = async () => true;
+    view.codedna.startAnalysis = async () => ({ id: 'owned', operation: 'risk-select', state: 'completed', result: report(), metrics });
+    await view.suggest();
+    assert.equal(view.timings.length, 1); assert.equal(view.timings[0].metrics, metrics);
+    change(); assert.equal(view.timings.length, 0);
+});
+
+test('Changes keeps timing for both immutable operations without combining overlapping stages', async () => {
+    const { view, change } = changeWidget();
+    view.codedna.analysisJobs = async () => true;
+    view.codedna.startAnalysis = async operation => ({ id: operation, operation, state: 'completed',
+        metrics: sampleMetrics(), result: operation === 'analyze' ? changesReport() : { impacted: [] } });
+    await view.analyze(); assert.equal(view.timings.length, 2);
+    assert.equal(view.timings.map(value => value.operation).join(','), 'analyze,impact');
+    assert.equal(view.timings[0].metrics.total_seconds, .5);
+    change(); assert.equal(view.timings.length, 0);
+});
+
+test('timing export drops unknown fields and absent measurements stay absent', () => {
+    const module = { exports: {} };
+    const source = fs.readFileSync(path.join(__dirname, '../src/browser/analysis-metrics.ts'), 'utf8');
+    const code = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
+    vm.runInNewContext(code, { module, exports: module.exports });
+    const metrics = sampleMetrics(); metrics.source = 'PRIVATE-SOURCE';
+    metrics.stages['PRIVATE-PATH'] = { calls: 1, seconds: 3, self_seconds: 3 };
+    metrics.counters.credentials = 7; metrics.stages.git.raw_log = 'PRIVATE-LOG';
+    const safe = module.exports.safeAnalysisTimings([{ id: 'owned', operation: 'select', metrics }]);
+    assert.equal(safe.length, 1); assert.equal(safe[0].metrics.worker_startup_seconds, undefined);
+    assert.equal(Object.keys(safe[0].metrics.stages).join(','), 'git');
+    assert.ok(!JSON.stringify(safe).includes('PRIVATE') && !JSON.stringify(safe).includes('credentials'));
+    assert.equal(metrics.source, 'PRIVATE-SOURCE');
+});
