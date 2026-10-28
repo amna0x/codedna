@@ -114,7 +114,12 @@ def _source(repo, commit, file):
     blob = files[file]
     if int(run_git(repo, 'cat-file', '-s', blob).strip()) > MAX_SOURCE:
         raise ValueError('Selected source exceeds the 256 KiB pilot limit')
-    return read_blobs(repo, [blob])[blob]
+    source = read_blobs(repo, [blob])[blob]
+    try:
+        source.decode('utf-8')
+    except UnicodeDecodeError as exc:
+        raise ValueError('Pilot requires UTF-8 Java source on both versions') from exc
+    return source
 
 
 def _method(source, symbol):
@@ -195,6 +200,7 @@ def find_witness(request):
     """Called only in the consented contained worker, never by read-only jobs."""
     report = {'status': 'inconclusive', 'observations': [], 'jvm_runs': 0,
               'compilations': 0, 'search_inputs': 0, 'reduction_inputs': 0,
+              'source_encoding': 'UTF-8', 'runtime_file_encoding': 'UTF-8',
               'budget': dict(request['options']),
               'guidance': 'Integer literals and neighbors from selected method syntax; no semantic guarantee.'}
     repo = Path(request['repository'])
@@ -224,7 +230,7 @@ def find_witness(request):
                 folder = work/label; folder.mkdir(); classes = folder/'classes'; classes.mkdir()
                 (folder/basename).write_bytes(source)
                 (folder/'CodeDNABehaviorProbe.java').write_text(HARNESS, encoding='utf-8')
-                code, output = _run([javac, '-J-Xmx128m', '-proc:none', '-classpath', str(empty),
+                code, output = _run([javac, '-J-Xmx128m', '-J-Dfile.encoding=UTF-8', '-encoding', 'UTF-8', '-proc:none', '-classpath', str(empty),
                     '-sourcepath', str(empty), '-d', str(classes), str(folder/basename),
                     str(folder/'CodeDNABehaviorProbe.java')], folder, deadline, step_timeout=10)
                 report['compilations'] += 1
@@ -246,7 +252,7 @@ def find_witness(request):
                 pair = []
                 for folder, classes in paths:
                     token = 'CODEDNA_'+uuid4().hex+':'
-                    code, output = _run([java, '-Xmx64m', '-Xss256k', '-cp', str(classes),
+                    code, output = _run([java, '-Xmx64m', '-Xss256k', '-Dfile.encoding=UTF-8', '-cp', str(classes),
                         'CodeDNABehaviorProbe', class_name, method_name, str(value), token], folder, deadline)
                     report['jvm_runs'] += 1
                     lines = [line[len(token):] for line in output[0].splitlines() if line.startswith(token)]

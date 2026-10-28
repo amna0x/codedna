@@ -16,6 +16,11 @@ MAX_MESSAGE = 1024 * 1024
 _BLOCKED_REASON = None
 
 
+def execution_block_reason():
+    """Session execution stays closed after unconfirmed owned cleanup."""
+    return _BLOCKED_REASON
+
+
 def _exchange(owner, request, deadline):
     """Bound private stdout/stderr and stop the owned tree on every exit."""
     global _BLOCKED_REASON

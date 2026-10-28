@@ -21,7 +21,7 @@ public final class ReproduceDifference {
     String suffix = System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("win") ? ".exe" : "";
     String token = "CODEDNA_REPRO_" + UUID.randomUUID() + ":";
     Process p = new ProcessBuilder(Path.of(System.getProperty("java.home"), "bin", "java"+suffix).toString(),
-        "-Xmx64m", "-Xss256k", "-cp", classes.toString(), "CodeDNABehaviorProbe", TYPE, METHOD,
+        "-Xmx64m", "-Xss256k", "-Dfile.encoding=UTF-8", "-cp", classes.toString(), "CodeDNABehaviorProbe", TYPE, METHOD,
         Integer.toString(INPUT), token).directory(cwd.toFile()).redirectErrorStream(true).start();
     ExecutorService reader = Executors.newSingleThreadExecutor();
     Future<byte[]> bytes = reader.submit(() -> p.getInputStream().readNBytes(65537));
@@ -52,7 +52,7 @@ public final class ReproduceDifference {
     String[] versions = {"base", "head"};
     for (int i=0; i<versions.length; i++) {
       Path classes = Files.createDirectory(work.resolve(versions[i]));
-      int code = compiler.run(null, null, null, "-proc:none", "-classpath", empty.toString(),
+      int code = compiler.run(null, null, null, "-encoding", "UTF-8", "-proc:none", "-classpath", empty.toString(),
           "-sourcepath", empty.toString(), "-d", classes.toString(),
           root.resolve(versions[i]).resolve(FILE).toString(), harness.toString());
       if (code!=0) throw new IllegalStateException("Cannot compile the self-contained version " + versions[i]);
@@ -113,12 +113,14 @@ trusted project code. The generated reproducer is ordinary Java, not a sandbox.
 From this folder with JDK 17+ (no CodeDNA, Python, Maven or external libraries):
 
 ```text
-javac -proc:none ReproduceDifference.java
-java -cp . ReproduceDifference
+javac -encoding UTF-8 -proc:none ReproduceDifference.java
+java -Dfile.encoding=UTF-8 -cp . ReproduceDifference
 ```
 
 The program verifies source/harness fingerprints, compiles self-contained
-versions with annotation processing disabled, and runs a fresh JVM for each.
+versions as UTF-8 with annotation processing disabled, and runs a fresh JVM for
+each with startup file.encoding=UTF-8. This controlled encoding may differ from
+the original project runtime; observations apply to this explicit scenario.
 It requires the recorded pair exactly; a changed, failed or timed-out observation
 does not pass reproduction. Compiled class files are left in the reported OS
 temporary directory. This one reproduction run does not prove general determinism.

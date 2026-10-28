@@ -510,9 +510,9 @@
     "semantic_hash": "143493fc0f69d7306bf0c787ca38fca9"
   },
   "MEMORY.md": {
-    "mtime": 1793184951.0579858,
-    "seen": 1793184976.7103612,
-    "ast_hash": "a8f8505b7896d16cc6c20ea3f82ecbe1",
+    "mtime": 1793194263.6154745,
+    "seen": 1793194363.73667,
+    "ast_hash": "f270e943fd547c422bccf195a50b18c8",
     "semantic_hash": ""
   },
   "README.md": {
@@ -534,9 +534,9 @@
     "semantic_hash": "b56beff69c2cb266c8d2361408baa006"
   },
   "docs/DECISIONS.md": {
-    "mtime": 1793184951.0565464,
-    "seen": 1793184976.7103612,
-    "ast_hash": "f63eca692707f26280e2ea988773b153",
+    "mtime": 1793194310.0426166,
+    "seen": 1793194363.73667,
+    "ast_hash": "c0ec484545a1a41861ed0312007272b6",
     "semantic_hash": ""
   },
   "docs/PROJECT_SPEC.md": {
@@ -558,9 +558,9 @@
     "semantic_hash": "32a821de4b1178bef75683f2265b07a8"
   },
   "docs/ROADMAP.md": {
-    "mtime": 1793184951.0591457,
-    "seen": 1793184976.7103612,
-    "ast_hash": "219b2d3ca9055d85312f6b2bea6ef9a9",
+    "mtime": 1793194263.6767292,
+    "seen": 1793194363.73667,
+    "ast_hash": "84c12bc2a4fa0040677d221056251342",
     "semantic_hash": ""
   },
   "ide/README.md": {
@@ -654,9 +654,9 @@
     "semantic_hash": ""
   },
   "backend/codedna/agent/mcp_server.py": {
-    "mtime": 1793184073.3821726,
-    "seen": 1793184378.6717029,
-    "ast_hash": "5bd78dcf4bb27f13052bdcb9d8763291",
+    "mtime": 1793194263.6104326,
+    "seen": 1793194363.731588,
+    "ast_hash": "b0e9e41f2098d36e2cf73f19d45b1558",
     "semantic_hash": ""
   },
   "backend/codedna/dependency_graph/cache.py": {
@@ -1272,9 +1272,9 @@
     "semantic_hash": ""
   },
   "docs/HANDOFF.md": {
-    "mtime": 1793184951.0603461,
-    "seen": 1793184976.7103612,
-    "ast_hash": "434e8b784ab644fdb111df13a6188d5c",
+    "mtime": 1793194263.648414,
+    "seen": 1793194363.73667,
+    "ast_hash": "226b54533030b7d0a3a3fbf2aeeeb628",
     "semantic_hash": ""
   },
   "docs/IMPLEMENTATION_HANDOFF.md": {
@@ -1410,9 +1410,9 @@
     "semantic_hash": ""
   },
   "docs/BLUEPRINT_COMPLETION.md": {
-    "mtime": 1793184951.0613678,
-    "seen": 1793184976.7103612,
-    "ast_hash": "32d0e2bfcced8f4c8db194774c03f59a",
+    "mtime": 1793194263.7079194,
+    "seen": 1793194363.73667,
+    "ast_hash": "54af61266d3fef0f5daaba11dd242293",
     "semantic_hash": ""
   },
   "docs/DEFERRED_FEATURES.md": {
@@ -2028,9 +2028,9 @@
     "semantic_hash": ""
   },
   "backend/codedna/behavior.py": {
-    "mtime": 1793184733.364919,
-    "seen": 1793184976.7092695,
-    "ast_hash": "0b30fe95a602b48ef77f2b2774dc2e4a",
+    "mtime": 1793194263.6073973,
+    "seen": 1793194363.731588,
+    "ast_hash": "01b34ccef1745d0785c280c122643478",
     "semantic_hash": ""
   },
   "backend/codedna/behavior_worker.py": {
@@ -2040,15 +2040,15 @@
     "semantic_hash": ""
   },
   "backend/tests/test_behavior.py": {
-    "mtime": 1793185079.6044238,
-    "seen": 1793185104.5423872,
-    "ast_hash": "a39f663c376692cab827dfaf78d23920",
+    "mtime": 1793185630.3273163,
+    "seen": 1793194363.731588,
+    "ast_hash": "aa4bfea32206fc3d1fdb8fe4e1cff59e",
     "semantic_hash": ""
   },
   "backend/tests/test_behavior_mcp.py": {
-    "mtime": 1793183464.8957686,
-    "seen": 1793183757.6914024,
-    "ast_hash": "de048cfe0773ade78c31534cf21ebbb2",
+    "mtime": 1793194263.6124454,
+    "seen": 1793194363.731588,
+    "ast_hash": "9e36b9a36eef7e6d741e2316f7875717",
     "semantic_hash": ""
   },
   "docs/ENGINEERING_VALIDATION_D083_2026-10-28.json": {
@@ -2070,15 +2070,15 @@
     "semantic_hash": ""
   },
   "plugins/codedna-java/codedna_java/witness.py": {
-    "mtime": 1793183367.4789727,
-    "seen": 1793183757.6914024,
-    "ast_hash": "07109e7e31dfda6fd07fa326debeb6ce",
+    "mtime": 1793185769.0802028,
+    "seen": 1793194363.73667,
+    "ast_hash": "85a434f30acbfdee6fe9c98da7f0ee51",
     "semantic_hash": ""
   },
   "plugins/codedna-java/codedna_java/witness_export.py": {
-    "mtime": 1793182824.4127026,
-    "seen": 1793183757.6914024,
-    "ast_hash": "26e520ba24d6a2cb6c589c32f119976d",
+    "mtime": 1793185769.082182,
+    "seen": 1793194363.73667,
+    "ast_hash": "4864e0e856987320771e9440010d7ee6",
     "semantic_hash": ""
   },
   "docs/MOONSHOT_PILOT_PROTOCOL.md": {
@@ -2214,15 +2214,15 @@
     "semantic_hash": ""
   },
   "scripts/run_moonshot_pilot.py": {
-    "mtime": 1793184951.0545187,
-    "seen": 1793184976.7103612,
-    "ast_hash": "2f1e2a31cb9a9db40da0a65dd51299f3",
+    "mtime": 1793185769.085212,
+    "seen": 1793194363.73667,
+    "ast_hash": "e890e9467449575ec0435fe544610a60",
     "semantic_hash": ""
   },
   "docs/BEHAVIORAL_WITNESS.md": {
-    "mtime": 1793184951.0565464,
-    "seen": 1793184976.7103612,
-    "ast_hash": "2a3e2652563fa0ef0c01fdb577d64677",
+    "mtime": 1793194310.0266936,
+    "seen": 1793194363.73667,
+    "ast_hash": "5467cb16975b8ed23233fb4d69608879",
     "semantic_hash": ""
   }
 }

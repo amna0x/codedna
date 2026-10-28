@@ -250,3 +250,32 @@ def test_cleanup_uncertainty_blocks_further_execution(repo,tmp_path,monkeypatch)
     with pytest.raises(RuntimeError,match='cleanup'):
         invoke(repo,shas,tmp_path/'second',max_inputs=1)
     assert not (tmp_path/'second').exists()
+
+
+@pytest.mark.maven
+def test_utf8_source_and_runtime_reproduce_across_default_encodings(repo,tmp_path):
+    shas=versions(repo,'return "💡".getBytes().length + x;','return "💡".length() + x;')
+    output=tmp_path/'out'
+    result=invoke(repo,shas,output,max_inputs=1,reduce_budget=0)
+    assert result['status']=='difference',result
+    assert result['witness']['base']['value']==4 and result['witness']['head']['value']==2
+    assert result['source_encoding']==result['runtime_file_encoding']=='UTF-8'
+    javac,java=_tools(repo.path)
+    compiled=subprocess.run([javac,'-encoding','UTF-8','-proc:none','ReproduceDifference.java'],
+        cwd=output,capture_output=True,text=True,timeout=30)
+    assert compiled.returncode==0,compiled.stderr
+    reproduced=subprocess.run([java,'-cp','.','ReproduceDifference'],cwd=output,
+        capture_output=True,text=True,timeout=30)
+    assert reproduced.returncode==0,reproduced.stderr
+    assert 'input=0 base=4 head=2' in reproduced.stdout
+
+
+@pytest.mark.maven
+def test_non_utf8_java_source_is_unsupported_before_execution(repo,tmp_path):
+    shas=versions(repo)
+    repo.write_bytes('src/main/java/example/Fee.java',
+        b'package example; public class Fee { public static int fee(int x) { /* \xff */ return x; } }')
+    head=repo.commit('non-UTF8 input')
+    result=invoke(repo,(shas[0],head),tmp_path/'out',max_inputs=1,reduce_budget=0)
+    assert result['status']=='unsupported' and 'UTF-8' in result['reason'],result
+    assert result['jvm_runs']==0

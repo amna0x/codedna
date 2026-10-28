@@ -96,3 +96,18 @@ def test_optional_mcp_executes_real_witness_and_profiles_project_execution(repo,
     assert data['status']=='difference' and data['regression_established'] is False
     assert data['operation_timings']['scope']=='includes_project_execution'
     assert data['operation_timings']['stages']['behavior.comparison']['calls']==1
+
+
+
+def test_uncertain_witness_cleanup_blocks_project_execution_but_allows_planning(repo,monkeypatch):
+    import codedna.behavior as behavior
+    from codedna.agent import brake
+    base,head=project(repo)
+    server=BrakeServer(repo=repo.path,allow_build=True,moonshot=True)
+    monkeypatch.setattr(behavior,'_BLOCKED_REASON','Project cleanup could not be confirmed; restart the server')
+    def forbidden(*args,**kwargs):raise AssertionError('cannot start a project build after uncertain cleanup')
+    monkeypatch.setattr(brake,'check',forbidden)
+    refused=call(server,'codedna_check',{'base':base,'head':head})['result']
+    assert refused['isError'] is True and 'cleanup' in refused['structuredContent']['error']
+    planned=call(server,'codedna_plan_tests',{'base':base,'head':head})['result']['structuredContent']
+    assert planned['must_run']==['example.FeeTest']

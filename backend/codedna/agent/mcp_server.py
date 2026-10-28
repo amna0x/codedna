@@ -206,6 +206,10 @@ class BrakeServer:
         base, head = arguments.get("base", "HEAD"), arguments.get("head", WORKTREE)
         if not isinstance(base, str) or not isinstance(head, str):
             raise ToolError("base and head must be strings")
+        if name == 'codedna_check':
+            from codedna.behavior import execution_block_reason
+            if execution_block_reason():
+                raise ToolError(execution_block_reason())
         if name == 'codedna_find_witness':
             from codedna.behavior import find_difference
             for key in ('file', 'symbol', 'output_dir'):

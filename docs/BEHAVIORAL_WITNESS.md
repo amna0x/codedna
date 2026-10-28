@@ -28,6 +28,9 @@ The product command defaults to **16 search inputs**,
 eight reduction attempts, seed zero and a 30-second operation budget. Limits
 are 64 search inputs, 16 reduction attempts and 120 seconds. Each tool invocation
 also has a bounded step time/output. Compiler annotation processing is disabled.
+Java source must be UTF-8; compilation and JVM startup file.encoding explicitly
+use UTF-8, including the standalone reproducer. These controlled settings may
+differ from a project runtime, so observations apply to this declared scenario.
 The prespecified engineering comparison separately uses eight inputs/four
 reduction attempts equally for both generation modes.
 
@@ -66,7 +69,8 @@ Incomplete/unsupported/cancelled witness responses are tool errors.
   repeated result prevented acceptance. These cases do not pass.
 - `cancelled`: Ctrl+C ended the owned operation. The worker and descendants are
   cleaned up; no confirmed result is accepted. If cleanup cannot be confirmed, the
-  result is inconclusive and further witness execution is blocked in that session.
+  result is inconclusive and further witness execution and MCP project checking
+  are blocked in that session; read-only planning remains available.
 
 The controller uses a private consented worker protocol, distinct from read-only
 analysis jobs. Project JVMs run under the existing owned process tree. Git objects
@@ -86,8 +90,8 @@ actually tried; it does not claim a globally minimal input or reduced program.
 From the export folder, with JDK 17+ and explicitly trusted source:
 
 ```text
-javac -proc:none ReproduceDifference.java
-java -cp . ReproduceDifference
+javac -encoding UTF-8 -proc:none ReproduceDifference.java
+java -Dfile.encoding=UTF-8 -cp . ReproduceDifference
 ```
 
 No CodeDNA, Python, Maven or external library is needed for that reproduction.
@@ -112,3 +116,11 @@ This is illustrative engineering evidence, not an independently sampled research
 dataset, new scientific novelty, universal superiority or improved stopping safety.
 Existing D076 and nine-project findings are preserved. The D083 installer does
 not include this newer experimental source.
+
+
+Encoding review: the first 711-test full invocation was intentionally stopped
+around 12 percent after confirming this laptop's JDK 17 defaults to Cp1252. It is
+not counted as a pass. Two real regressions demonstrated misread UTF-8 literals
+and acceptance of non-UTF8 source before the fix; both pass after explicit
+source/compiler/runtime/reproducer encoding (13.08s). Full corrected validation
+is still required. Source reports now disclose both encoding assumptions.

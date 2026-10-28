@@ -23,8 +23,14 @@ timeout/Ctrl+C descendant cleanup and independent reproduction/tamper refusal.
 Explicitly opt-in MCP --moonshot --allow-build --repo wiring passed 29 combined
 MCP/existing-brake checks (225.15s, one existing warning). Four runner guards passed;
 a fifth duplicate-case guard was then added. Default tool lists remain unchanged.
-NEXT: one full Maven-inclusive suite, then the fixed 48-search synthetic engineering
-comparison. Pinned source, case manifest and protocol must be committed first.
+The 711-test full run on bd8c6d8 was deliberately stopped around 12 percent
+for a Java 17 encoding bug found during review. It is NOT a pass; retain pointer
+.diagnostics/d085-full-maven.log and d085-interrupted-full.json. No full run is
+currently active. Laptop JDK reports Cp1252; two real Unicode regressions failed
+before explicit UTF-8 source/compiler/runtime/reproducer fixes and both passed
+following the fix (13.08s). Verify the MCP session guard, commit corrected source,
+then launch ONE new full Maven-inclusive run using a new log. The fixed 48-search
+comparison is still not started. Pinned source, case manifest and protocol must be committed first.
 A forced-cleanup error then exposed a missing session block. It now returns
 inconclusive and blocks further execution when cleanup is unconfirmed. Nine
 cleanup/real CLI/timeout/Ctrl+C/runner checks pass (31.40s). Full validation is next.

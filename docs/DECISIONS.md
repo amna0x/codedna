@@ -2008,3 +2008,17 @@ cleanup deadline. Include subprocess cleanup errors in the controlled failure
 path. Nine final guard/real CLI/timeout/Ctrl+C/runner checks pass (31.40s). A
 normal cancellation remains distinct from unconfirmed cleanup. The fault injector
 actually closed its owned process; this is not evidence of a leaked real study.
+
+
+D085 encoding correction: JDK 17 reports Cp1252 on this Windows laptop. Without
+an explicit encoding, the prototype could misread UTF-8 string literals and
+emit different observations on another PC. Stop the early 711-test invocation
+at about 12 percent rather than counting mixed-source validation. Two real
+regressions failed before and passed after (13.08s): an emoji byte/UTF-16-length
+comparison produces the declared UTF-8 pair and independently reproduces; a
+non-UTF8 source is refused before JVM execution. Validate source bytes as UTF-8,
+set javac -encoding UTF-8 and startup file.encoding=UTF-8, and apply identical
+settings in the standalone reproducer. Disclose the controlled scenario rather
+than assuming every project runtime has those settings. Keep the interrupted
+log separate. Unconfirmed witness cleanup also blocks MCP checking before any
+build while leaving read-only test planning available.

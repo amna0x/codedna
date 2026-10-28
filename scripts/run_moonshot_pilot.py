@@ -125,9 +125,9 @@ def main(argv=None):
                 if report['status']=='difference':
                     javac,java=_tools(repo)
                     repro_start=perf_counter()
-                    compiled=subprocess.run([javac,'-proc:none','ReproduceDifference.java'],cwd=export,
+                    compiled=subprocess.run([javac,'-encoding','UTF-8','-proc:none','ReproduceDifference.java'],cwd=export,
                         stdout=subprocess.PIPE,stderr=subprocess.STDOUT,timeout=30)
-                    reproduced=(subprocess.run([java,'-cp','.','ReproduceDifference'],cwd=export,
+                    reproduced=(subprocess.run([java,'-Dfile.encoding=UTF-8','-cp','.','ReproduceDifference'],cwd=export,
                         stdout=subprocess.PIPE,stderr=subprocess.STDOUT,timeout=30) if compiled.returncode==0 else None)
                     row['reproduction']={'seconds':perf_counter()-repro_start,
                         'compile_exit_code':compiled.returncode,'run_exit_code':reproduced.returncode if reproduced else None,
