@@ -1,0 +1,19 @@
+{
+  "scope": "actual frozen MCP and real Maven, isolated synthetic history; engineering evidence only",
+  "core": "C:\\Users\\hp\\OneDrive\\Documents\\ChatGPT\\codedna\\.worktrees\\core-evidence\\build\\desktop-D098-2026-10-30\\core\\dist\\codedna-core\\codedna-core.exe",
+  "checks": {
+    "cold_history_requires_full_suite": "passed",
+    "build_consent_enforced": "passed",
+    "crc_plan_with_synthetic_history": "passed",
+    "frozen_model_reuse_still_runs_fresh_audit_and_real_tests": "passed",
+    "frozen_mcp_profile_scope_preserves_build_consent": "passed",
+    "real_failing_required_tests_block": "passed",
+    "real_passing_required_tests_pass": "passed",
+    "real_skipped_required_test_is_incomplete": "passed"
+  },
+  "verdicts": {
+    "breaking": "blocked",
+    "harmless": "passed",
+    "skipped": "incomplete"
+  }
+}

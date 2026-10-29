@@ -1090,3 +1090,18 @@ Verified local CI collector23452stopped; child20904exited with parent. Archive
 preserved; no ongoing collector promised. Remaining release work: current-source
 installer verification and friend clean-PC acceptance/smoke JSON/manual results.
 D085friend kit is older than current a02d20fsource. No push/merge/stash operations.
+
+## D098 verified core, UI before final installer — 2026-10-30
+
+Owner asked to verify/rebuild installer. D086setup predates a02d20fvalidatedsource.
+Built isolated D098core from unchanged a02app(780sourcepasses); manifest1464files,
+87PyInstaller application module entries allfromcore-evidenceworktree. Frozen
+plugin/cancellation/Maven-brake/witness check groups allpassed; exactchecks/count
+andhashes in CORE_CANDIDATE_D098_2026-10-30.json withdurablelogs/checkscripts.
+
+Owner steered mid-build: friend willmakeUIpretty later. Therefore complete only
+corecandidate; HOLD FINAL INSTALLER untilfriendUIchanges, affectedUIverification,
+thenpackaging/extraction/hashchecks. OlderD085/D086kitsunchanged,notcurrentrelease.
+Clean-PCfriendacceptance stillrequired. NoGUI/installation/registry/publication,
+push/merge/researchchange orstashop. Newcandidatepath:
+build/desktop-D098-2026-10-30/core/dist/codedna-core/.

@@ -1,0 +1,15 @@
+{
+  "scope": "actual frozen executable, isolated offline fixtures; not clean-PC/installed IDE acceptance",
+  "core": "C:\\Users\\hp\\OneDrive\\Documents\\ChatGPT\\codedna\\.worktrees\\core-evidence\\build\\desktop-D098-2026-10-30\\core\\dist\\codedna-core\\codedna-core.exe",
+  "checks": {
+    "worker_and_descendant_cancelled": "passed",
+    "unrelated_process_survived": "passed",
+    "real_frozen_profile_metrics_without_project_source": "passed",
+    "analysis_recovers_after_cancel": "passed",
+    "replacement_worker_keeps_parent_plugin": "passed",
+    "consented_api_restart_keeps_plugin_snapshot": "passed",
+    "application_restart_activates_pending_update": "passed",
+    "analysis_preserves_project_and_history": "passed"
+  },
+  "cancellation_confirmed_seconds": 0.016
+}
