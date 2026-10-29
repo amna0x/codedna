@@ -172,6 +172,26 @@ def test_repeated_failure_is_never_erased_or_recorded_as_stable_history(project,
     assert result['shadow']['observed_failures_outside_recommendation'] == []  # both were recommended
 
 
+def test_shadow_repeats_detect_disappearing_generated_tests(project, monkeypatch):
+    from codedna.plugins import languages
+    repo, outcomes = project
+    original = languages.run_tests
+    calls = []
+    def execute(*args, **kwargs):
+        calls.append(True)
+        tests = {'a.ATest': 'passed', 'a.BTest': 'passed'}
+        if len(calls) == 1:
+            tests['a.GeneratedTest'] = 'passed'
+        outcomes(**tests)
+        return original(*args, **kwargs)
+    monkeypatch.setattr(languages, 'run_tests', execute)
+    result = brake.check(repo.path, maven_command=FAKE, allow_build=True, shadow=True, attempts=2)
+    assert result['verdict'] == 'incomplete'
+    assert result['shadow']['missing_results'] == ['a.GeneratedTest']
+    assert result['recording']['recorded'] is False
+    assert result['repeat_evidence']['attempts'][1]['verdict']['missing'] == ['a.GeneratedTest']
+
+
 def test_repeated_build_error_cannot_turn_into_a_pass(project, monkeypatch):
     from codedna.plugins import languages
     repo, outcomes = project

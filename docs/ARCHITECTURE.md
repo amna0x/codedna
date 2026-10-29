@@ -753,3 +753,22 @@ set has 5 narrow source-contract cases and 19 unsupported cases; no behavioral
 outcomes have been observed yet. See CORE_IMPROVEMENTS_D086.md. Do not rerun old
 studies or promise positive results. One full Maven-inclusive suite and an
 isolated packaged validation follow the stable engineering batch.
+
+## D087 numeric witnesses and repeat completeness — 2026-10-29
+
+Supersedes the D086 in-progress status above: D086 validation and all 48
+feasibility searches completed. See CORE_IMPROVEMENTS_D086.md and its evidence
+JSONs. Each feasibility mode retained five no-difference and 19 unsupported
+outcomes; none yielded a witness. Preserve these results unchanged.
+
+D087 development adds signed Java long inputs/results and bounded integer
+arrays/varargs (eight elements maximum), declared-type validation, width-aware
+literal guidance, array shrinking that preserves method arity, and long-valued
+standalone reproducer observations. Private methods, absent sources and ambiguous
+renames remain unsupported; no automatic identity guesses were introduced.
+
+Full-suite repeated brake checks now use the union of tests observed in all
+attempts. A generated test disappearing from another attempt makes that attempt
+incomplete, and the run cannot enter stable training history. Any observed failure
+still blocks. Risk targets, audit requirements and skip authority are unchanged.
+D087 is source development, not a new release or independent research result.

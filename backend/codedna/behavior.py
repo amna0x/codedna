@@ -21,14 +21,14 @@ def execution_block_reason():
     return _BLOCKED_REASON
 
 
-def _bounded_input(value):
+def _bounded_input(value, depth=0):
     """Language-neutral JSON scenario bounds; plugins validate declared types."""
     if isinstance(value, list):
-        return len(value) == 2 and all(not isinstance(v, list) and _bounded_input(v) for v in value)
+        return depth < 2 and len(value) <= 8 and all(_bounded_input(v, depth+1) for v in value)
     if type(value) is bool:
         return True
     if type(value) is int:
-        return -(2**31) <= value < 2**31
+        return -(2**63) <= value < 2**63
     if isinstance(value, str) and len(value) <= 128:
         try: value.encode('utf-8')
         except UnicodeError: return False
@@ -128,10 +128,10 @@ def find_difference(repo_path, base, head, *, file, symbol, output_dir,
         if not isinstance(expectation, dict) or set(expectation) != {'input', 'expected', 'requirement'}:
             raise ValueError('expectation requires exactly input, expected and requirement')
         if not _bounded_input(expectation['input']):
-            raise ValueError('expectation input must be a bounded JSON scalar or two-element argument array')
+            raise ValueError('expectation input must be a bounded JSON scalar or argument/array input with at most eight elements per level and two levels')
         value = expectation['expected']
-        if type(value) is not int or not -(2**31) <= value < 2**31:
-            raise ValueError('expectation expected result must be a signed int32 value')
+        if type(value) is not int or not -(2**63) <= value < 2**63:
+            raise ValueError('expectation expected result must be a signed integer64 value')
         requirement = expectation['requirement']
         if not isinstance(requirement, str) or not requirement.strip() or len(requirement) > 2000 or not requirement.isprintable():
             raise ValueError('expectation requirement must be a printable nonempty line of at most 2000 characters')

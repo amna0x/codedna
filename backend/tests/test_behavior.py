@@ -48,7 +48,7 @@ def test_simple_generation_does_not_use_change_literals():
 
 @pytest.mark.parametrize('expectation', [True, {}, {'input': 0, 'expected': 1},
     {'input': None, 'expected': 1, 'requirement': 'rule'},
-    {'input': 0, 'expected': 2**31, 'requirement': 'rule'},
+    {'input': 0, 'expected': 2**63, 'requirement': 'rule'},
     {'input': 0, 'expected': 1, 'requirement': 'bad\nline'}])
 def test_bad_expectation_is_refused_before_repository_access(tmp_path, monkeypatch, expectation):
     import codedna.behavior as behavior

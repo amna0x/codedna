@@ -85,7 +85,7 @@ TOOLS = {
 
     "codedna_find_witness": {
         "description": (
-            "Experimental Moonshot: execute a public static Java int method with one or two int/boolean/String arguments "
+            "Experimental Moonshot: execute a public static Java int/long method with one or two bounded numeric/boolean/String arguments "
             "on both versions with bounded inputs. Export a confirmed behavioral difference and standalone "
             "reproducer to a new folder outside the repository. A difference is not automatically a regression. "
             "No witness does not establish equivalence or justify skipping tests. Still call codedna_check. "
@@ -96,13 +96,14 @@ TOOLS = {
             "support_files": {"type": "array", "maxItems": 3, "uniqueItems": True,
                               "items": {"type": "string", "maxLength": 1024}},
             "expectation": {"type": "object", "properties": {
-                "input": {"description": "Scalar for one argument; two-element array for two. Strings at most 128 characters.",
-                    "oneOf": [{"type": "integer", "minimum": -2147483648, "maximum": 2147483647},
+                "input": {"description": "Scalar or integer array for one argument; two-element array for two. Plugins validate declared types.",
+                    "oneOf": [{"type": "integer", "minimum": -9223372036854775808, "maximum": 9223372036854775807},
                               {"type": "boolean"}, {"type": "string", "maxLength": 128},
-                              {"type": "array", "minItems": 2, "maxItems": 2,
-                               "items": {"oneOf": [{"type": "integer", "minimum": -2147483648, "maximum": 2147483647},
-                                                     {"type": "boolean"}, {"type": "string", "maxLength": 128}]}}]},
-                "expected": {"type": "integer", "minimum": -2147483648, "maximum": 2147483647},
+                              {"type": "array", "maxItems": 8,
+                               "items": {"oneOf": [{"type": "integer", "minimum": -9223372036854775808, "maximum": 9223372036854775807},
+                                                     {"type": "boolean"}, {"type": "string", "maxLength": 128},
+                                                     {"type": "array", "maxItems": 8, "items": {"type": "integer", "minimum": -2147483648, "maximum": 2147483647}}]}}]},
+                "expected": {"type": "integer", "minimum": -9223372036854775808, "maximum": 9223372036854775807},
                 "requirement": {"type": "string", "minLength": 1, "maxLength": 2000}},
                 "required": ["input", "expected", "requirement"], "additionalProperties": False},
             "max_inputs": {"type": "integer", "minimum": 1, "maximum": 64},

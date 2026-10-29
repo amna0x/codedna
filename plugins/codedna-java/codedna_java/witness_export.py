@@ -75,7 +75,7 @@ def export_reproducer(output, basename, sources, symbol, witness, hashes, harnes
     method = method.split('(', 1)[0]
     types = parameter_types(symbol)
     if witness['base']['kind'] != 'value' or witness['head']['kind'] != 'value':
-        raise ValueError('a normal int-return witness is required for this reproducer')
+        raise ValueError('a normal int/long-return witness is required for this reproducer')
     files = {}
 
     def write(name, raw):
@@ -96,7 +96,7 @@ def export_reproducer(output, basename, sources, symbol, witness, hashes, harnes
             if label == 'base': helper_names.append('support/'+file)
     values = {'TYPE': json.dumps(class_name), 'METHOD': json.dumps(method),
               'FILE': json.dumps(basename), 'INPUT': str(witness['input']),
-              'BASE': str(witness['base']['value']), 'HEAD': str(witness['head']['value']),
+              'BASE': str(witness['base']['value'])+'L', 'HEAD': str(witness['head']['value'])+'L',
               'BASE_SHA': json.dumps(hashes['base']), 'HEAD_SHA': json.dumps(hashes['head']),
               'HARNESS_SHA': json.dumps(files['CodeDNABehaviorProbe.java'])}
     program = REPRODUCER
@@ -124,6 +124,11 @@ def export_reproducer(output, basename, sources, symbol, witness, hashes, harnes
         if match[1] not in values:
             raise ValueError('unresolved reproducer template field')
         return values[match[1]]
+    program = program.replace('static final int INPUT = @@INPUT@@, EXPECTED_BASE = @@BASE@@, EXPECTED_HEAD = @@HEAD@@;',
+        'static final int INPUT = @@INPUT@@;\n  static final long EXPECTED_BASE = @@BASE@@, EXPECTED_HEAD = @@HEAD@@;')
+    program = program.replace('static final int EXPECTED_BASE =', 'static final long EXPECTED_BASE =')
+    program = program.replace('static int run(', 'static long run(').replace('return Integer.parseInt(values.get(0)', 'return Long.parseLong(values.get(0)')
+    program = program.replace('int[] observed = new int[2]', 'long[] observed = new long[2]')
     # Substitute once: literal user inputs may themselves contain template markers.
     program = re.sub(r'@@([A-Z_]+)@@', substitute, program)
     write('ReproduceDifference.java', program.encode('utf-8'))
@@ -184,7 +189,7 @@ public final class CodeDNAWitnessTest {
   }
 }
 '''
-        replacements = {'EXPECTED': str(expectation['expected']), 'TYPE': class_name,
+        replacements = {'EXPECTED': str(expectation['expected'])+('L' if not -(2**31)<=expectation['expected']<2**31 else ''), 'TYPE': class_name,
                         'METHOD': method, 'INPUT': java_arguments(types, expectation['input']),
                         'REQUIREMENT': json.dumps(expectation['requirement'], ensure_ascii=True)}
         # Substitute the message last so its contents cannot become template code.

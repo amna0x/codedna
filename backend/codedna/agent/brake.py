@@ -183,6 +183,13 @@ def check(repo_path: str | Path, *, base: str = "HEAD", head: str = WORKTREE,
         current = _run_verdict(required, repeated)
         runs.append(repeated)
         attempt_reports.append({"verdict": current, "results": repeated.to_dict(), "output_dir": str(next_output)})
+    if shadow:
+        # Discovery can miss generated/dynamic tests. Once any full run observes
+        # a test, require its result in every repeat instead of hiding dropout.
+        observed_tests = sorted(set(tests).union(*(set(r.tests) for r in runs)))
+        for item, observed_run in zip(attempt_reports, runs):
+            item["verdict"] = _run_verdict(observed_tests, observed_run)
+        verdict = attempt_reports[0]["verdict"]
     failed = sorted({t for item in attempt_reports for t in item["verdict"].get("failed", [])})
     signatures = [{"tests": {t: outcome.status for t, outcome in r.tests.items()},
                    "exit_codes": list(r.exit_codes)} for r in runs]
@@ -217,7 +224,7 @@ def check(repo_path: str | Path, *, base: str = "HEAD", head: str = WORKTREE,
             "observed_failures_outside_recommendation": sorted({
                 t for r in runs for t, outcome in r.tests.items()
                 if outcome.failed and t not in planned["must_run"]}),
-            "missing_results": sorted({t for r in runs for t in tests if t not in r.tests}),
+            "missing_results": sorted({t for r in runs for t in observed_tests if t not in r.tests}),
             "skipped_by_build": sorted({t for r in runs for t in tests if t in r.tests and r.tests[t].status == "skipped"}),
             "exit_codes": [code for r in runs for code in r.exit_codes],
             "analysis_seconds": analysis_seconds, "execution_seconds": execution_seconds,

@@ -842,3 +842,17 @@ Proof: .diagnostics/website-redesign-2026-10-28.json. Backend validation was
 not rerun per current instruction; no backend/research/policy changes. No
 commit, push, public deployment or installer rebuild. Local checkout preview
 was served on 127.0.0.1:8772; it is not public hosting.
+
+## D087 focused validation — 2026-10-29
+
+Implemented bounded long/int-array witnesses and repeat test-inventory completeness
+in the isolated core worktree. Focused check: 69 passed, 25 deselected, one existing
+Starlette warning in 319.97 seconds. This is not the full Maven-inclusive suite.
+Numeric suite with real JVM and standalone replay: 5 passed in 57.10 seconds.
+An earlier numeric invocation had one incorrect test assertion comparing the
+structured outcome object to an integer; corrected to inspect its value. The
+actual overflow observation was correct. Initial numeric support also passed
+three checks in 89.26 seconds. Preserve separate invocation counts; do not sum
+these as unique tests or claim a full-suite pass. Graphify AST refreshed locally.
+D087 release rebuild, full-suite validation and independent research remain pending.
+No push or merge. D085/D086 installers unchanged. See CORE_IMPROVEMENTS_D087.md.

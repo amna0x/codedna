@@ -1,4 +1,4 @@
-"""Bounded experimental Java int-to-int paired execution, not a regression oracle."""
+"""Bounded experimental Java numeric paired execution, not a regression oracle."""
 from __future__ import annotations
 
 from hashlib import sha256
@@ -23,7 +23,8 @@ from codedna_java.witness_inputs import parameter_types, encode, generate, compl
 MIN_INT, MAX_INT = -(2**31), 2**31-1
 MAX_SOURCE = 256 * 1024
 NAME = r'[A-Za-z_$][A-Za-z0-9_$]*'
-SYMBOL = re.compile(rf'^({NAME}(?:\.{NAME})*)#({NAME})\((int|boolean|String)(?:,(int|boolean|String))?\)$')
+ARG = r'(?:int\[\]|int\.\.\.|int|long|boolean|String)'
+SYMBOL = re.compile(rf'^({NAME}(?:\.{NAME})*)#({NAME})\(({ARG})(?:,({ARG}))?\)$')
 INTEGER = re.compile(r'^(?:0[xX][0-9a-fA-F_]+|0[bB][01_]+|[0-9][0-9_]*)[lL]?$')
 HARNESS = '''import java.lang.reflect.*;
 public final class CodeDNABehaviorProbe {
@@ -38,6 +39,9 @@ public final class CodeDNABehaviorProbe {
       for (int i=0; i<kinds.length; i++) {
         switch (kinds[i]) {
           case "int": types[i]=int.class; values[i]=Integer.parseInt(inputs[i]); break;
+          case "long": types[i]=long.class; values[i]=Long.parseLong(inputs[i]); break;
+          case "int[]": case "int...": types[i]=int[].class;
+            values[i]=inputs[i].isEmpty() ? new int[0] : java.util.Arrays.stream(inputs[i].split(",")).mapToInt(Integer::parseInt).toArray(); break;
           case "boolean": types[i]=boolean.class;
             if (!inputs[i].equals("true") && !inputs[i].equals("false")) throw new IllegalArgumentException("boolean");
             values[i]=Boolean.parseBoolean(inputs[i]); break;
@@ -48,8 +52,8 @@ public final class CodeDNABehaviorProbe {
       }
       Method method = Class.forName(args[0]).getDeclaredMethod(args[1], types);
       if (!Modifier.isPublic(method.getModifiers()) || !Modifier.isStatic(method.getModifiers())
-          || method.getReturnType() != int.class) throw new IllegalArgumentException("unsupported method");
-      int result = (Integer)method.invoke(null, values);
+          || (method.getReturnType() != int.class && method.getReturnType() != long.class)) throw new IllegalArgumentException("unsupported method");
+      long result = ((Number)method.invoke(null, values)).longValue();
       System.out.println(args[3] + "value:" + result);
     } catch (InvocationTargetException ex) {
       System.out.println(args[3] + "throw:" + ex.getCause().getClass().getName());
@@ -144,7 +148,7 @@ def _source(repo, commit, file):
 def _method(source, symbol):
     match = SYMBOL.fullmatch(symbol)
     if match is None:
-        raise ValueError('Pilot symbol must select one or two int/boolean/String arguments')
+        raise ValueError('Pilot symbol must select one or two supported numeric/boolean/String arguments')
     class_name, method_name = match.groups()[:2]
     parameter_types(symbol)
     if class_name.rsplit('.', 1)[-1] in {'CodeDNABehaviorProbe', 'ReproduceDifference', 'CodeDNAWitnessTest'}:
@@ -157,13 +161,13 @@ def _method(source, symbol):
     method = methods[0]
     prefix = method.tokens[:method.tokens.index(method_name)]
     if ('public' not in classes[0].tokens or 'public' not in prefix or 'static' not in prefix
-            or not prefix or prefix[-1] != 'int' or '{' not in method.tokens
+            or not prefix or prefix[-1] not in ('int','long') or '{' not in method.tokens
             or {'native', 'abstract', 'synchronized'}.intersection(prefix)):
-        raise ValueError('Pilot requires a public top-level class and a public static int-return method with a body')
+        raise ValueError('Pilot requires a public top-level class and a public static int/long-return method with a body')
     return class_name, method_name, method
 
 
-def _literals(tokens):
+def _literals(tokens, bits=32):
     result = []
     for index, token in enumerate(tokens):
         if not INTEGER.fullmatch(token):
@@ -178,17 +182,20 @@ def _literals(tokens):
         nondecimal = raw.lower().startswith(('0x', '0b')) or len(raw)>1 and raw.startswith('0')
         if not is_long and nondecimal and MAX_INT < value <= 2**32-1:
             value -= 2**32
+        elif is_long and nondecimal and 2**63-1 < value <= 2**64-1:
+            value -= 2**64
         if index and tokens[index-1] == '-':
             value = -value
-        if MIN_INT <= value <= MAX_INT:
+        if -(2**(bits-1)) <= value < 2**(bits-1):
             result.append(value)
     return result
 
 
-def candidates(base_tokens, head_tokens, *, mode, seed, maximum):
+def candidates(base_tokens, head_tokens, *, mode, seed, maximum, bits=32):
     """Syntax-derived boundaries are suggestions, never semantic guarantees."""
     rng = random.Random(seed)
-    initial = [0, 1, -1, 2, -2, MIN_INT, MAX_INT]
+    lower, upper = -(2**(bits-1)), 2**(bits-1)-1
+    initial = [0, 1, -1, 2, -2, lower, upper]
     if mode == 'guided':
         guided = []
         # Prioritize edited literals before unchanged constants in a large method.
@@ -199,19 +206,19 @@ def candidates(base_tokens, head_tokens, *, mode, seed, maximum):
             for tag, a, b, c, d in matcher.get_opcodes():
                 if tag != 'equal':
                     # Keep the preceding sign token when a signed literal changed.
-                    changed.extend(_literals(head_tokens[max(0,c-1):d]))
-                    changed.extend(_literals(base_tokens[max(0,a-1):b]))
-        for value in changed+_literals(head_tokens)+_literals(base_tokens):
+                    changed.extend(_literals(head_tokens[max(0,c-1):d], bits))
+                    changed.extend(_literals(base_tokens[max(0,a-1):b], bits))
+        for value in changed+_literals(head_tokens, bits)+_literals(base_tokens, bits):
             guided.extend([value, value-1, value+1])
         initial = guided+initial
     seen, result = set(), []
     for value in initial:
-        if MIN_INT <= value <= MAX_INT and value not in seen:
+        if lower <= value <= upper and value not in seen:
             seen.add(value); result.append(value)
             if len(result) == maximum:
                 return result
     while len(result) < maximum:
-        value = rng.randint(MIN_INT, MAX_INT)
+        value = rng.randint(lower, upper)
         if value not in seen:
             seen.add(value); result.append(value)
     return result
@@ -342,7 +349,7 @@ def find_witness(request):
                         'reason': 'No normal-return difference observed within the finite input/time budget; equivalence is not established.'}
             confirm(witness)
             original = witness
-            for value in reductions(original['input'], _smaller)[:options['reduce_budget']]:
+            for value in reductions(original['input'], _smaller, types)[:options['reduce_budget']]:
                 if complexity(value) >= complexity(witness['input']):
                     continue
                 report['reduction_inputs'] += 1
