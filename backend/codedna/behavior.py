@@ -21,6 +21,21 @@ def execution_block_reason():
     return _BLOCKED_REASON
 
 
+def _bounded_input(value):
+    """Language-neutral JSON scenario bounds; plugins validate declared types."""
+    if isinstance(value, list):
+        return len(value) == 2 and all(not isinstance(v, list) and _bounded_input(v) for v in value)
+    if type(value) is bool:
+        return True
+    if type(value) is int:
+        return -(2**31) <= value < 2**31
+    if isinstance(value, str) and len(value) <= 128:
+        try: value.encode('utf-8')
+        except UnicodeError: return False
+        return True
+    return False
+
+
 def _exchange(owner, request, deadline):
     """Bound private stdout/stderr and stop the owned tree on every exit."""
     global _BLOCKED_REASON
@@ -98,7 +113,8 @@ def _exchange(owner, request, deadline):
 @reuse_git_validation
 def find_difference(repo_path, base, head, *, file, symbol, output_dir,
                     language='java', allow_build=False, max_inputs=16, seed=0,
-                    timeout=30, reduce_budget=8, generation='guided'):
+                    timeout=30, reduce_budget=8, generation='guided', expectation=None,
+                    support_files=None):
     """Execute an optional plugin capability with explicit consent and ownership.
 
     A difference is an observation, not a regression classification. Nothing
@@ -108,6 +124,18 @@ def find_difference(repo_path, base, head, *, file, symbol, output_dir,
         raise ValueError('behavioral comparison executes project code; pass --allow-build to confirm')
     if _BLOCKED_REASON:
         raise RuntimeError(_BLOCKED_REASON)
+    if expectation is not None:
+        if not isinstance(expectation, dict) or set(expectation) != {'input', 'expected', 'requirement'}:
+            raise ValueError('expectation requires exactly input, expected and requirement')
+        if not _bounded_input(expectation['input']):
+            raise ValueError('expectation input must be a bounded JSON scalar or two-element argument array')
+        value = expectation['expected']
+        if type(value) is not int or not -(2**31) <= value < 2**31:
+            raise ValueError('expectation expected result must be a signed int32 value')
+        requirement = expectation['requirement']
+        if not isinstance(requirement, str) or not requirement.strip() or len(requirement) > 2000 or not requirement.isprintable():
+            raise ValueError('expectation requirement must be a printable nonempty line of at most 2000 characters')
+        expectation = dict(expectation)
     started = monotonic()
     for name, value, low, high in [('max_inputs', max_inputs, 1, 64),
                                   ('seed', seed, 0, 2**32-1),
@@ -128,6 +156,19 @@ def find_difference(repo_path, base, head, *, file, symbol, output_dir,
     relative = PurePosixPath(file.replace('\\', '/'))
     if not relative.parts or relative.is_absolute() or any(p in ('..', '') or ':' in p for p in relative.parts):
         raise ValueError('file must stay within the repository')
+    support_files = [] if support_files is None else support_files
+    if not isinstance(support_files, list) or len(support_files) > 3:
+        raise ValueError('support_files must list at most three repository-relative Java files')
+    helpers = []
+    for value in support_files:
+        if not isinstance(value, str) or not value or len(value) > 1024:
+            raise ValueError('support_files must contain bounded paths')
+        path = PurePosixPath(value.replace('\\', '/'))
+        if path.is_absolute() or any(p == '..' or ':' in p for p in path.parts) or path.suffix != '.java':
+            raise ValueError('support_files must stay within the repository and name Java files')
+        if path == relative or path.as_posix() in helpers:
+            raise ValueError('support_files must be distinct from the selected file and each other')
+        helpers.append(path.as_posix())
     repo = resolve_repository(repo_path)
     base_sha, head_sha = resolve_commit(repo, base), resolve_commit(repo, head)
     output = Path(output_dir).resolve()
@@ -145,8 +186,10 @@ def find_difference(repo_path, base, head, *, file, symbol, output_dir,
     common = {'schema_version': 1, 'kind': 'codedna-behavioral-evidence', 'experimental': True,
               'repository': str(repo), 'base_commit': base_sha, 'head_commit': head_sha,
               'language': language, 'file': relative.as_posix(), 'symbol': symbol,
+              'support_files': helpers,
               'regression_established': False, 'required_tests_removed': False,
               'plugin_version': plugin.version, 'plugin_api_version': plugin.api_version,
+              **({'supplied_expectation': expectation} if expectation is not None else {}),
               'export_disclosure': 'A confirmed export includes the entire selected base/head source file; compiler diagnostics may quote source. Review before sharing.',
               'interpretation': 'A stable observed difference needs an applicable expectation to be called a regression. '
                                 'No witness within a finite budget does not establish equivalence or validate skip risk.'}
@@ -173,6 +216,28 @@ def find_difference(repo_path, base, head, *, file, symbol, output_dir,
     # The controller owns interpretation and identity fields, even for plugins.
     report = {**result, **common, 'further_execution_blocked': bool(_BLOCKED_REASON),
               'elapsed_seconds': round(monotonic()-started, 6)}
+    if expectation is not None:
+        assessment = {'status': 'not_confirmed_at_supplied_input',
+                      'requirement_source': 'user_supplied_not_independently_verified',
+                      'regression_against_supplied_requirement': False}
+        if report['status'] == 'difference':
+            for key in ('witness', 'original_witness'):
+                item = result.get(key) or {}
+                if item.get('input') != expectation['input']:
+                    continue
+                pair = (item.get('base', {}), item.get('head', {}))
+                if not all(o.get('kind') == 'value' for o in pair):
+                    continue
+                confirmations = [o for o in result.get('observations', [])
+                                 if o.get('phase') == 'confirmation' and o.get('input') == expectation['input']]
+                if len(confirmations) < 2 or any(o.get('base') != pair[0] or o.get('head') != pair[1] for o in confirmations):
+                    continue
+                before, after = (o.get('value') == expectation['expected'] for o in pair)
+                assessment.update(status='confirmed_at_supplied_input', base_satisfies=before,
+                                  head_satisfies=after,
+                                  regression_against_supplied_requirement=before and not after)
+                break
+        report['expectation_assessment'] = assessment
     with (output/'report.json').open('x', encoding='utf-8', newline='\n') as stream:
         stream.write(json.dumps(report, indent=2, allow_nan=False)+'\n')
     return report

@@ -32,6 +32,7 @@ language plugin (Java first).
 from __future__ import annotations
 
 from pathlib import Path
+from time import monotonic
 from uuid import uuid4
 
 from codedna.git_analysis.git import reuse_git_validation
@@ -115,17 +116,28 @@ def check(repo_path: str | Path, *, base: str = "HEAD", head: str = WORKTREE,
           timeout: int = 1800, language: str | None = None, method: str = "b10",
           maven_command: list[str] | None = None,
           gradle_command: list[str] | None = None,
-          python_command: list[str] | None = None, allow_build: bool = False) -> dict:
+          python_command: list[str] | None = None, allow_build: bool = False,
+          shadow: bool = False, attempts: int = 1) -> dict:
     """Run the planned tests and return one verdict. Executes project code."""
     from codedna.plugins.languages import run_tests
     from codedna.test_history.recording import ignore_outputs, record_run
 
     if not allow_build:
         raise SelectionError("check runs the project's build; pass allow_build=True to consent")
+    if not isinstance(shadow, bool):
+        raise SelectionError("shadow must be a boolean")
+    if isinstance(attempts, bool) or not isinstance(attempts, int) or not 1 <= attempts <= 3:
+        raise SelectionError("attempts must be an integer between 1 and 3")
+    started = monotonic()
     repo = resolve_repository(repo_path)
     planned = plan(repo, base=base, head=head, risk_target=risk_target, must_run=must_run,
                    language=language, method=method)
     tests = planned["must_run"]
+    if shadow:
+        tests = sorted(set(tests) | set(planned["skipped"]))
+        if len(tests) != planned["total_tests"]:
+            raise SelectionError("shadow requires a complete discovered test inventory")
+    analysis_seconds = monotonic() - started
     if not tests:
         if planned["skipped"]:
             message = (f"validated history: none of {planned['total_tests']} test class(es) "
@@ -134,7 +146,9 @@ def check(repo_path: str | Path, *, base: str = "HEAD", head: str = WORKTREE,
         else:
             verdict = _verdict("no_tests", "the build runs no tests here; nothing was checked")
         return {**verdict, "plan": planned, "results": None, "output_dir": None,
-                "recording": None}
+                "recording": None, "cost": {"analysis_seconds": analysis_seconds,
+                    "execution_seconds": 0.0, "total_seconds": monotonic() - started,
+                    "scope": "inside_check_no_project_execution"}}
     ignore_outputs(repo)
     output = repo / ".codedna/runs" / uuid4().hex
     options = {"timeout": timeout}
@@ -144,23 +158,84 @@ def check(repo_path: str | Path, *, base: str = "HEAD", head: str = WORKTREE,
         options["gradle_command"] = gradle_command
     if python_command:
         options["python_command"] = python_command
+    execution_started = monotonic()
     run, _ = run_tests(repo, planned["head_commit"], output, allow_build=True,
-                              selected_tests=tests, **options)
-    verdict = _run_verdict(tests, run)
+                              selected_tests=None if shadow else tests, **options)
+    execution_seconds = monotonic() - execution_started
+    observed_tests = sorted(set(tests) | set(run.tests)) if shadow else tests
+    verdict = _run_verdict(observed_tests, run)
+    runs = [run]
+    attempt_reports = [{"verdict": verdict, "results": run.to_dict(), "output_dir": str(output)}]
+    repeat_error = None
+    for index in range(1, attempts):
+        remaining = int(timeout - (monotonic() - execution_started))
+        if remaining < 1:
+            repeat_error = "repeat budget exhausted; remaining attempts were not executed"
+            break
+        next_output = repo / ".codedna/runs" / uuid4().hex
+        try:
+            repeated, _ = run_tests(repo, planned["head_commit"], next_output, allow_build=True,
+                selected_tests=None if shadow else tests, **{**options, "timeout": remaining})
+        except (OSError, ValueError, RuntimeError) as exc:
+            repeat_error = str(exc)[:1000]
+            break
+        required = sorted(set(tests) | set(repeated.tests)) if shadow else tests
+        current = _run_verdict(required, repeated)
+        runs.append(repeated)
+        attempt_reports.append({"verdict": current, "results": repeated.to_dict(), "output_dir": str(next_output)})
+    failed = sorted({t for item in attempt_reports for t in item["verdict"].get("failed", [])})
+    signatures = [{"tests": {t: outcome.status for t, outcome in r.tests.items()},
+                   "exit_codes": list(r.exit_codes)} for r in runs]
+    unstable = any(s != signatures[0] for s in signatures[1:])
+    if attempts > 1:
+        if failed:
+            verdict = _verdict("blocked", "A test failed in at least one attempt; passing repeats do not erase failures", failed=failed)
+        elif repeat_error or any(item["verdict"]["verdict"] != "passed" for item in attempt_reports):
+            verdict = _verdict("incomplete", "Repeated execution was incomplete; inspect every attempt")
+    execution_seconds = monotonic() - execution_started
     recording = None
-    if not planned["skipped"]:  # a whole-suite run is project history (D-053)
+    if (shadow or not planned["skipped"]) and (attempts == 1 or (
+            not unstable and not repeat_error and not any(
+            item["verdict"]["verdict"] == "incomplete" for item in attempt_reports))):
         recording = record_run(repo, run, expected_tests=tests)
-    return {**verdict, "plan": planned, "results": run.to_dict(), "output_dir": str(output),
-            "recording": recording}
+    elif (shadow or not planned["skipped"]) and attempts > 1:
+        recording = {"recorded": False, "reason": "unstable or incomplete repeated execution is not training history"}
+    result = {**verdict, "plan": planned, "results": run.to_dict(), "output_dir": str(output),
+              "recording": recording, "cost": {"analysis_seconds": analysis_seconds,
+                  "execution_seconds": execution_seconds, "total_seconds": monotonic() - started,
+                  "execution_attempts": len(runs),
+                  "scope": "inside_check_includes_planning_execution_and_recording_not_server_startup",
+                  "note": "Measured elapsed cost of this operation, not counterfactual savings or estimated per-class duration sums."}}
+    if attempts > 1:
+        result["repeat_evidence"] = {"requested": attempts, "completed": len(runs),
+            "unstable_observed": unstable, "attempts": attempt_reports, "error": repeat_error,
+            "note": "Disagreement indicates observed instability; it does not prove which cause is responsible. No failing attempt is erased."}
+    if shadow:
+        result["shadow"] = {
+            "mode": "full_suite_observation", "skipping_authorized": False,
+            "recommended_tests": list(planned["must_run"]), "expected_tests": tests,
+            "observed_failures_outside_recommendation": sorted({
+                t for r in runs for t, outcome in r.tests.items()
+                if outcome.failed and t not in planned["must_run"]}),
+            "missing_results": sorted({t for r in runs for t in tests if t not in r.tests}),
+            "skipped_by_build": sorted({t for r in runs for t in tests if t in r.tests and r.tests[t].status == "skipped"}),
+            "exit_codes": [code for r in runs for code in r.exit_codes],
+            "analysis_seconds": analysis_seconds, "execution_seconds": execution_seconds,
+            "total_seconds": monotonic() - started,
+            "note": "Observed failures are evidence, not a validated miss probability. Missing/skipped results and build errors limit interpretation. Full-suite cost does not measure the counterfactual selected-run cost.",
+        }
+    return result
 
 
 def _run_verdict(tests: list[str], run) -> dict:
-    failed = sorted(t for t in tests if t in run.tests and run.tests[t].failed)
+    # Some build configurations execute additional tests despite the requested
+    # selection. An observed failure still blocks, even outside that selection.
+    failed = sorted(t for t, outcome in run.tests.items() if outcome.failed)
     missing = sorted(t for t in tests if t not in run.tests)
     build_errors = [code for code in run.exit_codes if code != 0]
     not_run = sorted(t for t in tests if t in run.tests and run.tests[t].status == "skipped")
     if failed:  # a failing test is decisive even if the build also reported errors
-        return _verdict("blocked", f"{len(failed)} of {len(tests)} test class(es) failed",
+        return _verdict("blocked", f"{len(failed)} observed test class(es) failed",
                         failed=failed)
     if missing:
         return _verdict("incomplete", f"{len(missing)} of {len(tests)} test class(es) have no "

@@ -1,0 +1,172 @@
+{
+  "status": "inputs pinned before behavioral outcomes; execution pending",
+  "date": "2026-10-29",
+  "repository": "https://github.com/TheAlgorithms/Java",
+  "anchor_commit": "a7a244157cf22e62a8f7c95fd6f6be5628edfa7a",
+  "cases": [
+    {
+      "id": "ReverseBits-1",
+      "file": "src/main/java/com/thealgorithms/bitmanipulation/ReverseBits.java",
+      "head": "fd14016c8659c8b2b8220325a77178876f8c5c1d",
+      "base": "54567e2ed3d0e7181b7b454fc028d6a72f6e8183"
+    },
+    {
+      "id": "ReverseBits-2",
+      "file": "src/main/java/com/thealgorithms/bitmanipulation/ReverseBits.java",
+      "head": "d3bb691f59fe118616df97588216cb4d03fe3be3",
+      "base": "030bb91d0556a0527e079239a8f43c75f03dc9f6"
+    },
+    {
+      "id": "ReverseBits-3",
+      "file": "src/main/java/com/thealgorithms/bitmanipulation/ReverseBits.java",
+      "head": "f010a47608607a2622a49a4414e7fbf4b4a7ee03",
+      "base": "78ca465b1ea1b33fa484678fdbdaaf7e7eb29770"
+    },
+    {
+      "id": "ReverseBits-4",
+      "file": "src/main/java/com/thealgorithms/bitmanipulation/ReverseBits.java",
+      "head": "251157059c98ae6de54f85a9998094a0dbaedb63",
+      "base": "07945c77042614ae8d86de3048753f990c249f6e"
+    },
+    {
+      "id": "BinaryToDecimal-1",
+      "file": "src/main/java/com/thealgorithms/conversions/BinaryToDecimal.java",
+      "head": "21eff8ad094c8cf4cf5b79bea8f4f872319cb2e7",
+      "base": "ae2e40acab4d0735b503b9ded8fc05a9275f2a9e"
+    },
+    {
+      "id": "BinaryToDecimal-2",
+      "file": "src/main/java/com/thealgorithms/conversions/BinaryToDecimal.java",
+      "head": "e32cab3189a195a25fe5eeb4089d807ec7d2b7d7",
+      "base": "c20375ae0fedc2630bee75389234714e3b591259"
+    },
+    {
+      "id": "BinaryToDecimal-3",
+      "file": "src/main/java/com/thealgorithms/conversions/BinaryToDecimal.java",
+      "head": "9eaa2bb7562fc6e58f9a61ad6a6679e87bb8a174",
+      "base": "44ce6e7b0d470c06c3a7730d113a28a6e5630391"
+    },
+    {
+      "id": "BinaryToDecimal-4",
+      "file": "src/main/java/com/thealgorithms/conversions/BinaryToDecimal.java",
+      "head": "d3bb691f59fe118616df97588216cb4d03fe3be3",
+      "base": "030bb91d0556a0527e079239a8f43c75f03dc9f6"
+    },
+    {
+      "id": "AbsoluteMax-1",
+      "file": "src/main/java/com/thealgorithms/maths/AbsoluteMax.java",
+      "head": "30d0c064a7723f2c1e0dc485eefd31d747e1497a",
+      "base": "5454e2ff626547eaac3edad1d1459f6bf5ca7e7f"
+    },
+    {
+      "id": "AbsoluteMax-2",
+      "file": "src/main/java/com/thealgorithms/maths/AbsoluteMax.java",
+      "head": "d3bb691f59fe118616df97588216cb4d03fe3be3",
+      "base": "030bb91d0556a0527e079239a8f43c75f03dc9f6"
+    },
+    {
+      "id": "AbsoluteMax-3",
+      "file": "src/main/java/com/thealgorithms/maths/AbsoluteMax.java",
+      "head": "d1601560032b75f347adf987417eda0fdc2d95f4",
+      "base": "ad72c28d91989460f61917b28545f4f33c2771d4"
+    },
+    {
+      "id": "AbsoluteMax-4",
+      "file": "src/main/java/com/thealgorithms/maths/AbsoluteMax.java",
+      "head": "e96f567bfc6e980dc5c4c48ccf185d7f7c7108ab",
+      "base": "32b9b11ed505cd991cb2cf5d1c8436f10191e71f"
+    },
+    {
+      "id": "AbsoluteMin-1",
+      "file": "src/main/java/com/thealgorithms/maths/AbsoluteMin.java",
+      "head": "e9f11bb79c0cc5b4e4d31032f82c9b4796ea6a24",
+      "base": "8a20fa9ee4ada879d7df93bdaccb10f4d8d2f8ca"
+    },
+    {
+      "id": "AbsoluteMin-2",
+      "file": "src/main/java/com/thealgorithms/maths/AbsoluteMin.java",
+      "head": "0e0539ea6c9d40189edb19bb462fdd7f72057170",
+      "base": "30d0c064a7723f2c1e0dc485eefd31d747e1497a"
+    },
+    {
+      "id": "AbsoluteMin-3",
+      "file": "src/main/java/com/thealgorithms/maths/AbsoluteMin.java",
+      "head": "d3bb691f59fe118616df97588216cb4d03fe3be3",
+      "base": "030bb91d0556a0527e079239a8f43c75f03dc9f6"
+    },
+    {
+      "id": "AbsoluteMin-4",
+      "file": "src/main/java/com/thealgorithms/maths/AbsoluteMin.java",
+      "head": "415a04ea7f1eb3ca129bbaafc85323b24faccacf",
+      "base": "00282efd8becbd0612cc710f49bf21a562deb034"
+    },
+    {
+      "id": "AbsoluteValue-1",
+      "file": "src/main/java/com/thealgorithms/maths/AbsoluteValue.java",
+      "head": "734a7a41bc6a5a38583492d6060e5e3e7746c7bd",
+      "base": "b3a96d22717fecb8a0f018f55640585a3b561305"
+    },
+    {
+      "id": "AbsoluteValue-2",
+      "file": "src/main/java/com/thealgorithms/maths/AbsoluteValue.java",
+      "head": "504b5283eb75f9416693740eba48c5cea9eb28bd",
+      "base": "0c79d33eb591842c8cc809f02a9303ab843a1c37"
+    },
+    {
+      "id": "AbsoluteValue-3",
+      "file": "src/main/java/com/thealgorithms/maths/AbsoluteValue.java",
+      "head": "d3bb691f59fe118616df97588216cb4d03fe3be3",
+      "base": "030bb91d0556a0527e079239a8f43c75f03dc9f6"
+    },
+    {
+      "id": "AbsoluteValue-4",
+      "file": "src/main/java/com/thealgorithms/maths/AbsoluteValue.java",
+      "head": "5eed0849ef4734e3faec8fa21d798c2927ec3b4e",
+      "base": "64b624efb204b641d300307d595049f7120ed7a0"
+    },
+    {
+      "id": "NumberOfDigits-1",
+      "file": "src/main/java/com/thealgorithms/maths/NumberOfDigits.java",
+      "head": "7201dc78adf418b22a9151f1780dafebb86e751b",
+      "base": "f39bb8f32f158c8b3f2e350ced006be6cd015c7a"
+    },
+    {
+      "id": "NumberOfDigits-2",
+      "file": "src/main/java/com/thealgorithms/maths/NumberOfDigits.java",
+      "head": "00282efd8becbd0612cc710f49bf21a562deb034",
+      "base": "ad03086f547854a4c00b1e3a85dde5d315f119b6"
+    },
+    {
+      "id": "NumberOfDigits-3",
+      "file": "src/main/java/com/thealgorithms/maths/NumberOfDigits.java",
+      "head": "e96f567bfc6e980dc5c4c48ccf185d7f7c7108ab",
+      "base": "32b9b11ed505cd991cb2cf5d1c8436f10191e71f"
+    },
+    {
+      "id": "NumberOfDigits-4",
+      "file": "src/main/java/com/thealgorithms/maths/NumberOfDigits.java",
+      "head": "9fb3364cccc5373c32dbdb661f773c5ee753c77a",
+      "base": "8e533d2617f1b36263055615057d613b2d88aea0"
+    }
+  ],
+  "selection": "Six lexically listed path-name matches for absolute/binarytodecimal/reversebits/numberofdigits; up to four latest touching commits per path. Keep every selected case.",
+  "method_selection": "Lexically first method matching the existing public static int(int) contract on both snapshots; otherwise unsupported. Never choose a method using observed outputs.",
+  "budget_per_case_per_mode": {
+    "max_inputs": 8,
+    "reduce_budget": 4,
+    "timeout_seconds": 30,
+    "seed": 7
+  },
+  "generation_modes": [
+    "guided",
+    "simple"
+  ],
+  "expectations": "No supplied expected outputs. A difference alone is not a regression.",
+  "comparison": "Preserve baseline source and final candidate hashes before execution. Run matched sources/inputs/budgets; independently replay every emitted witness. No outcome-based retries or replacement cases.",
+  "limits": [
+    "Educational algorithm repository; not representative of production CI or an independent confirmatory bug dataset.",
+    "Paths chosen after reviewing prototype limitations but before seeing behavioral outcomes; report feasibility, not universal superiority.",
+    "Historical commits may be formatting/refactoring/additions or unsupported. Preserve those statuses and all costs.",
+    "No original study or synthetic pilot is rerun; no stopping-risk claim follows from this audit."
+  ]
+}

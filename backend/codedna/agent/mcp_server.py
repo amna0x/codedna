@@ -74,14 +74,18 @@ TOOLS = {
             "Do not report the change as done unless the verdict is passed. "
             "Executes the project's build."),
         "inputSchema": {"type": "object", "properties": {
-            **_CHANGE, **_RISK, "timeout": {"type": "integer", "minimum": 1,
+            **_CHANGE, **_RISK,
+            "shadow": {"type": "boolean", "description": "Observe the recommendation but run the full suite; does not authorize skipping."},
+            "attempts": {"type": "integer", "minimum": 1, "maximum": 3,
+                         "description": "Bounded stability observations. Any failed attempt still blocks. Default 1."},
+            "timeout": {"type": "integer", "minimum": 1,
                                             "description": "Build timeout in seconds (default 1800)."}},
             "additionalProperties": False},
     },
 
     "codedna_find_witness": {
         "description": (
-            "Experimental Moonshot: execute an explicitly selected public static Java int method(int) "
+            "Experimental Moonshot: execute a public static Java int method with one or two int/boolean/String arguments "
             "on both versions with bounded inputs. Export a confirmed behavioral difference and standalone "
             "reproducer to a new folder outside the repository. A difference is not automatically a regression. "
             "No witness does not establish equivalence or justify skipping tests. Still call codedna_check. "
@@ -89,6 +93,18 @@ TOOLS = {
         "inputSchema": {"type": "object", "properties": {
             **_CHANGE, "file": {"type": "string"}, "symbol": {"type": "string"},
             "output_dir": {"type": "string"},
+            "support_files": {"type": "array", "maxItems": 3, "uniqueItems": True,
+                              "items": {"type": "string", "maxLength": 1024}},
+            "expectation": {"type": "object", "properties": {
+                "input": {"description": "Scalar for one argument; two-element array for two. Strings at most 128 characters.",
+                    "oneOf": [{"type": "integer", "minimum": -2147483648, "maximum": 2147483647},
+                              {"type": "boolean"}, {"type": "string", "maxLength": 128},
+                              {"type": "array", "minItems": 2, "maxItems": 2,
+                               "items": {"oneOf": [{"type": "integer", "minimum": -2147483648, "maximum": 2147483647},
+                                                     {"type": "boolean"}, {"type": "string", "maxLength": 128}]}}]},
+                "expected": {"type": "integer", "minimum": -2147483648, "maximum": 2147483647},
+                "requirement": {"type": "string", "minLength": 1, "maxLength": 2000}},
+                "required": ["input", "expected", "requirement"], "additionalProperties": False},
             "max_inputs": {"type": "integer", "minimum": 1, "maximum": 64},
             "seed": {"type": "integer", "minimum": 0, "maximum": 4294967295},
             "timeout": {"type": "integer", "minimum": 1, "maximum": 120},
@@ -220,7 +236,8 @@ class BrakeServer:
                     output_dir=arguments['output_dir'], allow_build=self.allow_build,
                     max_inputs=arguments.get('max_inputs', 16), seed=arguments.get('seed', 0),
                     timeout=arguments.get('timeout', 30), reduce_budget=arguments.get('reduce_budget', 8),
-                    generation=arguments.get('generation', 'guided'))
+                    generation=arguments.get('generation', 'guided'), expectation=arguments.get('expectation'),
+                    support_files=arguments.get('support_files'))
             except ValueError as exc:
                 raise ToolError(str(exc)) from exc
         method = arguments.get("method", "b10")
@@ -235,7 +252,13 @@ class BrakeServer:
         timeout = arguments.get("timeout", 1800)
         if not isinstance(timeout, int) or isinstance(timeout, bool) or timeout < 1:
             raise ToolError("timeout must be a positive integer")
-        return brake.check(repo, base=base, head=head, timeout=timeout, **risk,
+        shadow = arguments.get("shadow", False)
+        if not isinstance(shadow, bool):
+            raise ToolError("shadow must be a boolean")
+        attempts = arguments.get("attempts", 1)
+        if isinstance(attempts, bool) or not isinstance(attempts, int) or not 1 <= attempts <= 3:
+            raise ToolError("attempts must be an integer between 1 and 3")
+        return brake.check(repo, base=base, head=head, timeout=timeout, shadow=shadow, attempts=attempts, **risk,
                            allow_build=self.allow_build, **self.build_options)
 
     # --- loop -------------------------------------------------------------------

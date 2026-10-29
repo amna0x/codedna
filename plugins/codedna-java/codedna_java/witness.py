@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from hashlib import sha256
+from difflib import SequenceMatcher
 import json
 import os
 from pathlib import Path
@@ -17,20 +18,38 @@ from uuid import uuid4
 from codedna.git_analysis.blobs import list_files, read_blobs
 from codedna.git_analysis.git import run_git
 from codedna_java.parser import parse_java
+from codedna_java.witness_inputs import parameter_types, encode, generate, complexity, reductions
 
 MIN_INT, MAX_INT = -(2**31), 2**31-1
 MAX_SOURCE = 256 * 1024
 NAME = r'[A-Za-z_$][A-Za-z0-9_$]*'
-SYMBOL = re.compile(rf'^({NAME}(?:\.{NAME})*)#({NAME})\(int\)$')
+SYMBOL = re.compile(rf'^({NAME}(?:\.{NAME})*)#({NAME})\((int|boolean|String)(?:,(int|boolean|String))?\)$')
 INTEGER = re.compile(r'^(?:0[xX][0-9a-fA-F_]+|0[bB][01_]+|[0-9][0-9_]*)[lL]?$')
 HARNESS = '''import java.lang.reflect.*;
 public final class CodeDNABehaviorProbe {
   public static void main(String[] args) throws Exception {
     try {
-      Method method = Class.forName(args[0]).getDeclaredMethod(args[1], int.class);
+      String[] kinds = args.length > 4 ? args[4].split(",") : new String[]{"int"};
+      String[] inputs = args[2].split(":", -1);
+      if (kinds.length < 1 || kinds.length > 2 || inputs.length != kinds.length)
+        throw new IllegalArgumentException("unsupported input arity");
+      Class<?>[] types = new Class<?>[kinds.length];
+      Object[] values = new Object[kinds.length];
+      for (int i=0; i<kinds.length; i++) {
+        switch (kinds[i]) {
+          case "int": types[i]=int.class; values[i]=Integer.parseInt(inputs[i]); break;
+          case "boolean": types[i]=boolean.class;
+            if (!inputs[i].equals("true") && !inputs[i].equals("false")) throw new IllegalArgumentException("boolean");
+            values[i]=Boolean.parseBoolean(inputs[i]); break;
+          case "String": types[i]=String.class;
+            values[i]=new String(java.util.Base64.getDecoder().decode(inputs[i]), java.nio.charset.StandardCharsets.UTF_8); break;
+          default: throw new IllegalArgumentException("unsupported argument type");
+        }
+      }
+      Method method = Class.forName(args[0]).getDeclaredMethod(args[1], types);
       if (!Modifier.isPublic(method.getModifiers()) || !Modifier.isStatic(method.getModifiers())
           || method.getReturnType() != int.class) throw new IllegalArgumentException("unsupported method");
-      int result = (Integer)method.invoke(null, Integer.parseInt(args[2]));
+      int result = (Integer)method.invoke(null, values);
       System.out.println(args[3] + "value:" + result);
     } catch (InvocationTargetException ex) {
       System.out.println(args[3] + "throw:" + ex.getCause().getClass().getName());
@@ -125,9 +144,10 @@ def _source(repo, commit, file):
 def _method(source, symbol):
     match = SYMBOL.fullmatch(symbol)
     if match is None:
-        raise ValueError('Pilot symbol must be package.Class#method(int)')
-    class_name, method_name = match.groups()
-    if class_name.rsplit('.', 1)[-1] in {'CodeDNABehaviorProbe', 'ReproduceDifference'}:
+        raise ValueError('Pilot symbol must select one or two int/boolean/String arguments')
+    class_name, method_name = match.groups()[:2]
+    parameter_types(symbol)
+    if class_name.rsplit('.', 1)[-1] in {'CodeDNABehaviorProbe', 'ReproduceDifference', 'CodeDNAWitnessTest'}:
         raise ValueError('Selected type conflicts with a reserved reproducer class name')
     parsed = parse_java(source)
     classes = [d for d in parsed.declarations if d.id == class_name and d.kind == 'class' and d.parent is None]
@@ -139,7 +159,7 @@ def _method(source, symbol):
     if ('public' not in classes[0].tokens or 'public' not in prefix or 'static' not in prefix
             or not prefix or prefix[-1] != 'int' or '{' not in method.tokens
             or {'native', 'abstract', 'synchronized'}.intersection(prefix)):
-        raise ValueError('Pilot requires a public top-level class and a public static int method(int) with a body')
+        raise ValueError('Pilot requires a public top-level class and a public static int-return method with a body')
     return class_name, method_name, method
 
 
@@ -171,7 +191,17 @@ def candidates(base_tokens, head_tokens, *, mode, seed, maximum):
     initial = [0, 1, -1, 2, -2, MIN_INT, MAX_INT]
     if mode == 'guided':
         guided = []
-        for value in _literals(head_tokens)+_literals(base_tokens):
+        # Prioritize edited literals before unchanged constants in a large method.
+        # Bound matching work; this remains syntax guidance, not branch coverage.
+        changed = []
+        if len(base_tokens) + len(head_tokens) <= 8192:
+            matcher = SequenceMatcher(None, base_tokens, head_tokens, autojunk=False)
+            for tag, a, b, c, d in matcher.get_opcodes():
+                if tag != 'equal':
+                    # Keep the preceding sign token when a signed literal changed.
+                    changed.extend(_literals(head_tokens[max(0,c-1):d]))
+                    changed.extend(_literals(base_tokens[max(0,a-1):b]))
+        for value in changed+_literals(head_tokens)+_literals(base_tokens):
             guided.extend([value, value-1, value+1])
         initial = guided+initial
     seen, result = set(), []
@@ -202,15 +232,21 @@ def find_witness(request):
               'compilations': 0, 'search_inputs': 0, 'reduction_inputs': 0,
               'source_encoding': 'UTF-8', 'runtime_file_encoding': 'UTF-8',
               'budget': dict(request['options']),
-              'guidance': 'Integer literals and neighbors from selected method syntax; no semantic guarantee.'}
+              'guidance': 'Edited integer literals first, then literal neighbors and fixed/seeded inputs from selected method syntax; no semantic or coverage guarantee.'}
     repo = Path(request['repository'])
     try:
         if request.get('allow_build') is not True:
             raise ValueError('explicit project-code consent is required')
         javac, java = _tools(repo)
         sources = [_source(repo, request[key], request['file']) for key in ('base_commit', 'head_commit')]
+        support = {label: [(file, _source(repo, request[key], file)) for file in request.get('support_files', [])]
+                   for label, key in [('base', 'base_commit'), ('head', 'head_commit')]}
         methods = [_method(source, request['symbol']) for source in sources]
         class_name, method_name, _ = methods[0]
+        types = parameter_types(request['symbol'])
+        report['input_types'] = types
+        if request.get('supplied_expectation') is not None:
+            encode(types, request['supplied_expectation']['input'])
         basename = Path(request['file']).name
         if basename != class_name.rsplit('.', 1)[-1]+'.java':
             raise ValueError('Selected public class must match its Java source filename')
@@ -229,10 +265,16 @@ def find_witness(request):
             for label, source in zip(('base', 'head'), sources):
                 folder = work/label; folder.mkdir(); classes = folder/'classes'; classes.mkdir()
                 (folder/basename).write_bytes(source)
+                helper_paths = []
+                for file, raw in support[label]:
+                    target = folder/'support'/file
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    target.write_bytes(raw)
+                    helper_paths.append(str(target))
                 (folder/'CodeDNABehaviorProbe.java').write_text(HARNESS, encoding='utf-8')
                 code, output = _run([javac, '-J-Xmx128m', '-J-Dfile.encoding=UTF-8', '-encoding', 'UTF-8', '-proc:none', '-classpath', str(empty),
                     '-sourcepath', str(empty), '-d', str(classes), str(folder/basename),
-                    str(folder/'CodeDNABehaviorProbe.java')], folder, deadline, step_timeout=10)
+                    str(folder/'CodeDNABehaviorProbe.java'), *helper_paths], folder, deadline, step_timeout=10)
                 report['compilations'] += 1
                 if code:
                     return {**report, 'status': 'unsupported',
@@ -253,7 +295,8 @@ def find_witness(request):
                 for folder, classes in paths:
                     token = 'CODEDNA_'+uuid4().hex+':'
                     code, output = _run([java, '-Xmx64m', '-Xss256k', '-Dfile.encoding=UTF-8', '-cp', str(classes),
-                        'CodeDNABehaviorProbe', class_name, method_name, str(value), token], folder, deadline)
+                        'CodeDNABehaviorProbe', class_name, method_name, encode(types, value), token,
+                        ','.join(types)], folder, deadline)
                     report['jvm_runs'] += 1
                     lines = [line[len(token):] for line in output[0].splitlines() if line.startswith(token)]
                     if code or len(lines) != 1:
@@ -277,9 +320,16 @@ def find_witness(request):
                     if actual['base'] != item['base'] or actual['head'] != item['head']:
                         raise ToolFailure('Repeated fresh JVM runs disagreed; witness is unstable')
 
-            values = candidates(methods[0][2].tokens, methods[1][2].tokens,
-                                mode=options['generation'], seed=options['seed'], maximum=options['max_inputs'])
+            values = generate(types, methods[0][2].tokens, methods[1][2].tokens,
+                mode=options['generation'], seed=options['seed'], maximum=options['max_inputs'],
+                int_candidates=candidates)
             report['candidate_inputs'] = values
+            expectation = request.get('supplied_expectation')
+            if expectation is not None:
+                value = expectation['input']
+                values = ([value] + [v for v in values if v != value])[:options['max_inputs']]
+                report['candidate_inputs'] = values
+                report['supplied_input_counts_toward_search_budget'] = True
             witness = None
             for value in values:
                 report['search_inputs'] += 1
@@ -292,8 +342,8 @@ def find_witness(request):
                         'reason': 'No normal-return difference observed within the finite input/time budget; equivalence is not established.'}
             confirm(witness)
             original = witness
-            for value in _smaller(original['input'])[:options['reduce_budget']]:
-                if abs(value) >= abs(witness['input']):
+            for value in reductions(original['input'], _smaller)[:options['reduce_budget']]:
+                if complexity(value) >= complexity(witness['input']):
                     continue
                 report['reduction_inputs'] += 1
                 item = observe(value, 'reduction')
@@ -301,11 +351,12 @@ def find_witness(request):
                     witness = item
             confirm(witness)
             report.update(status='difference', witness=witness, original_witness=original,
-                          reduction='Smallest absolute value among the reduction candidates actually tried; no global minimality claim.',
+                          reduction='Smallest absolute value for int, or summed magnitude/string-length complexity, among candidates actually tried; no global minimality claim.',
                           confirmation='Each accepted witness pair matched two further fresh-JVM pairs; general determinism is not proved.')
             from codedna_java.witness_export import export_reproducer
             report['reproducer'] = export_reproducer(Path(request['output_dir']), basename, sources,
-                request['symbol'], witness, report['source_sha256'], HARNESS)
+                request['symbol'], witness, report['source_sha256'], HARNESS,
+                expectation=expectation, support=support)
             return report
         except (ToolFailure, OSError, ValueError) as exc:
             return {**report, 'status': 'inconclusive', 'reason': str(exc)[:1000]}

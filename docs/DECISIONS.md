@@ -2042,3 +2042,24 @@ cases, with boundaries favoring guidance, are not independent real bugs or a
 net-CI speedup. A difference is not necessarily a regression; no witness does
 not validate skipping. The risk policy and original mixed findings are unchanged.
 See the D085 source/frozen/release/pilot evidence JSONs and pilot FINDINGS.md.
+
+
+## D086 engineering batch in progress — 2026-10-29
+
+Continue on codex/core-evidence-improvements in the isolated core worktree.
+Website changes and the validated D085 friend kit remain untouched. Implemented:
+full-suite shadow observations, measured check cost, up to three bounded repeats
+that preserve failures and reject unstable training evidence; edited-boundary
+input priority; one/two int/boolean/bounded-String inputs; structured reduction;
+caller-supplied expectations and JUnit drafts; up to three explicit helper source
+files with independent hash-checked reproduction. Default risk thresholds,
+full-suite fallback and required-test authority are unchanged.
+
+Focused checks: brake component 28 passed (one existing warning), then one extra
+unexpected-test-failure regression passed. Typed JVM replay, literal-marker and
+helper-tamper checks passed individually. Full-batch tests and performance claims
+remain pending. Preserve old studies. A pinned 24-case real-change feasibility
+set has 5 narrow source-contract cases and 19 unsupported cases; no behavioral
+outcomes have been observed yet. See CORE_IMPROVEMENTS_D086.md. Do not rerun old
+studies or promise positive results. One full Maven-inclusive suite and an
+isolated packaged validation follow the stable engineering batch.

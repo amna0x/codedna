@@ -32,6 +32,54 @@ def invoke(repo, shas, output, **options):
         symbol='example.Fee#fee(int)',output_dir=output,allow_build=True,timeout=120,**options)
 
 
+def test_guidance_prioritizes_edited_boundary_over_many_unchanged_literals():
+    prefix = tuple(token for value in range(200) for token in (str(value), ';'))
+    before = prefix + ('x', '>=', '9000', '?', '1', ':', '0')
+    after = prefix + ('x', '>=', '9001', '?', '1', ':', '0')
+    values = candidates(before, after, mode='guided', seed=7, maximum=4)
+    assert values[:3] == [9001, 9000, 9002]
+    assert len(values) == len(set(values)) == 4
+
+
+def test_simple_generation_does_not_use_change_literals():
+    args = dict(mode='simple', seed=13, maximum=16)
+    assert candidates(('9000',), ('9001',), **args) == candidates(('12',), ('13',), **args)
+
+
+@pytest.mark.parametrize('expectation', [True, {}, {'input': 0, 'expected': 1},
+    {'input': None, 'expected': 1, 'requirement': 'rule'},
+    {'input': 0, 'expected': 2**31, 'requirement': 'rule'},
+    {'input': 0, 'expected': 1, 'requirement': 'bad\nline'}])
+def test_bad_expectation_is_refused_before_repository_access(tmp_path, monkeypatch, expectation):
+    import codedna.behavior as behavior
+    def forbidden(*a, **k): raise AssertionError('must validate before reading repository')
+    monkeypatch.setattr(behavior, 'resolve_repository', forbidden)
+    with pytest.raises(ValueError, match='expectation'):
+        find_difference(tmp_path, 'HEAD', 'HEAD', file='Fee.java', symbol='Fee#fee(int)',
+                        output_dir=tmp_path/'out', allow_build=True, expectation=expectation)
+    assert not (tmp_path/'out').exists()
+
+
+@pytest.mark.maven
+def test_supplied_expectation_has_confirmed_evidence_and_non_oracle_junit(repo, tmp_path):
+    shas = versions(repo, 'return x;', 'return 2*x;')
+    supplied = {'input': 17, 'expected': 999, 'requirement': 'INPUT TYPE METHOD: externally supplied rule'}
+    result = invoke(repo, shas, tmp_path/'out', max_inputs=4, reduce_budget=2, expectation=supplied)
+    assert result['status'] == 'difference', result
+    assert result['candidate_inputs'][0] == 17
+    assessment = result['expectation_assessment']
+    assert assessment['status'] == 'confirmed_at_supplied_input'
+    assert assessment['base_satisfies'] is False and assessment['head_satisfies'] is False
+    assert assessment['regression_against_supplied_requirement'] is False
+    assert result['required_tests_removed'] is False and result['regression_established'] is False
+    draft = (tmp_path/'out/CodeDNAWitnessTest.java').read_text()
+    assert 'assertEquals(999, example.Fee.fee(17),' in draft
+    assert 'INPUT TYPE METHOD: externally supplied rule' in draft
+    assert json.loads((tmp_path/'out/SUPPLIED_EXPECTATION.json').read_text()) == supplied
+    for name, expected in result['reproducer']['files_sha256'].items():
+        assert hashlib.sha256((tmp_path/'out'/name).read_bytes()).hexdigest() == expected
+
+
 def test_explicit_consent_precedes_repository_access_and_export(tmp_path,monkeypatch):
     import codedna.behavior as behavior
     def forbidden(*args,**kwargs):raise AssertionError('must refuse before inspecting or executing')

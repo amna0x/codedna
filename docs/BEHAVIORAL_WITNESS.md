@@ -142,3 +142,29 @@ respectively; guided mode was not faster overall. Repeated illustrative cases
 are not independent bugs. Boundary construction favored guidance. Findings:
 `experiments/results/moonshot-engineering-pilot-d085-2026-10-28/FINDINGS.md`.
 Keep this optional narrow debugging aid; no new research/CI or skip-safety claim.
+
+
+## D086 source contract (full release validation pending)
+
+The source now accepts a public static int-return method with one or two
+arguments, each int, boolean or String. Strings are bounded to 128 Unicode code
+points; no null, array, object or long inputs are inferred. Pass up to three
+explicit --support-file repository-relative Java paths for small helper classes.
+Both revisions compile those exact sources with processors disabled; helpers
+are exported and hash-checked by the standalone reproducer. Other dependencies
+remain unsupported. Compilation/execution still requires explicit --allow-build.
+
+--expectation-json accepts input, expected and requirement. Two arguments use a
+two-element input array; expected is an int32 return value. This input counts
+against both modes' search budgets. Conditional requirement assessment uses
+confirmed observations, including the original witness when reduction changes
+its input. A JUnit 5 draft asserts the supplied expectation, never the base
+output; review and add it manually. No requirement is independently verified,
+no witness authorizes skipping, and no-difference never establishes equivalence.
+
+MCP codedna_check accepts shadow=true and attempts=1..3. Shadow executes the full
+suite while preserving the recommendation and reporting observed failures outside
+it. Every repeated failure still blocks; missing/skipped/build-error attempts
+cannot become a passing verdict. Unstable or incomplete repeats are not training
+history. Measured cost includes planning/execution/recording within the check,
+not server startup or counterfactual selected-test savings. Default attempts=1.

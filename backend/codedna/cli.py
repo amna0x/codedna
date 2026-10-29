@@ -241,6 +241,9 @@ def build_parser() -> argparse.ArgumentParser:
     witness.add_argument("--timeout", type=int, default=30, help="Total operation budget in seconds (1-120).")
     witness.add_argument("--reduce-budget", type=int, default=8)
     witness.add_argument("--generation", choices=("guided", "simple"), default="guided")
+    witness.add_argument("--support-file", action="append", default=[], help="Explicit helper Java source (up to three); included in both snapshots and export.")
+    witness.add_argument("--expectation-json", type=json.loads,
+                         help='Explicit requirement object: input, expected and requirement. Never inferred from base output.')
 
     mcp = subcommands.add_parser(
         "mcp",
@@ -448,7 +451,8 @@ def main(argv: list[str] | None = None) -> int:
             result = find_difference(args.repo, args.base, args.head, file=args.file,
                 symbol=args.symbol, output_dir=args.output_dir, language=args.language,
                 allow_build=args.allow_build, max_inputs=args.max_inputs, seed=args.seed,
-                timeout=args.timeout, reduce_budget=args.reduce_budget, generation=args.generation)
+                timeout=args.timeout, reduce_budget=args.reduce_budget, generation=args.generation,
+                expectation=args.expectation_json, support_files=args.support_file)
             _write_json(result, None)
             return (130 if result['status'] == 'cancelled' else
                     EXIT_OK if result['status'] in ('difference', 'no_difference_observed') else EXIT_ANALYSIS_ERROR)

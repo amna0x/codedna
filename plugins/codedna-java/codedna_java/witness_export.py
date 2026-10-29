@@ -1,6 +1,8 @@
 """Export deliberately selected source and a standalone JDK-only reproducer."""
 from hashlib import sha256
 import json
+import re
+from codedna_java.witness_inputs import parameter_types, encode, java_arguments
 
 REPRODUCER = r'''import java.nio.file.*;
 import java.nio.charset.StandardCharsets;
@@ -68,9 +70,10 @@ public final class ReproduceDifference {
 '''
 
 
-def export_reproducer(output, basename, sources, symbol, witness, hashes, harness):
+def export_reproducer(output, basename, sources, symbol, witness, hashes, harness, *, expectation=None, support=None):
     class_name, method = symbol.split('#')
-    method = method[:-5]  # validated '(int)' suffix
+    method = method.split('(', 1)[0]
+    types = parameter_types(symbol)
     if witness['base']['kind'] != 'value' or witness['head']['kind'] != 'value':
         raise ValueError('a normal int-return witness is required for this reproducer')
     files = {}
@@ -84,16 +87,45 @@ def export_reproducer(output, basename, sources, symbol, witness, hashes, harnes
         (output/label).mkdir()
         write(label+'/'+basename, source)
     write('CodeDNABehaviorProbe.java', harness.encode('utf-8'))
+    helper_names = []
+    for label in ('base', 'head'):
+        for file, raw in (support or {}).get(label, []):
+            name = label+'/support/'+file
+            (output/name).parent.mkdir(parents=True, exist_ok=True)
+            write(name, raw)
+            if label == 'base': helper_names.append('support/'+file)
     values = {'TYPE': json.dumps(class_name), 'METHOD': json.dumps(method),
               'FILE': json.dumps(basename), 'INPUT': str(witness['input']),
               'BASE': str(witness['base']['value']), 'HEAD': str(witness['head']['value']),
               'BASE_SHA': json.dumps(hashes['base']), 'HEAD_SHA': json.dumps(hashes['head']),
               'HARNESS_SHA': json.dumps(files['CodeDNABehaviorProbe.java'])}
     program = REPRODUCER
-    for key, value in values.items():
-        program = program.replace('@@'+key+'@@', value)
-    if '@@' in program:
-        raise ValueError('unresolved reproducer template field')
+    if helper_names:
+        checks = '\n'.join('    verify(root.resolve('+json.dumps(name)+'), '+json.dumps(digest)+');'
+                            for name, digest in files.items() if '/support/' in name)
+        program = program.replace('Path work = Files.createTempDirectory', checks+'\n    Path work = Files.createTempDirectory')
+        additions = '\n'.join('      compile.add(root.resolve(versions[i]).resolve('+json.dumps(name)+').toString());'
+                              for name in helper_names)
+        program = program.replace('int code = compiler.run(null, null, null,',
+                                  'var compile = new ArrayList<String>(List.of(')
+        program = program.replace('harness.toString());\n      if (code!=0)',
+            'harness.toString()));\n'+additions+'\n      int code = compiler.run(null, null, null, compile.toArray(String[]::new));\n      if (code!=0)')
+    if types != ['int']:
+        values['INPUT'] = json.dumps(encode(types, witness['input']))
+        values['INPUT_TYPES'] = json.dumps(','.join(types))
+        values['DISPLAY_INPUT'] = json.dumps(json.dumps(witness['input'], ensure_ascii=True))
+        program = program.replace('static final int INPUT = @@INPUT@@, EXPECTED_BASE = @@BASE@@, EXPECTED_HEAD = @@HEAD@@;',
+            'static final String INPUT = @@INPUT@@, INPUT_TYPES = @@INPUT_TYPES@@;\n'
+            '  static final String DISPLAY_INPUT = @@DISPLAY_INPUT@@;\n'
+            '  static final int EXPECTED_BASE = @@BASE@@, EXPECTED_HEAD = @@HEAD@@;')
+        program = program.replace('Integer.toString(INPUT), token)', 'INPUT, token, INPUT_TYPES)')
+        program = program.replace('"input=%d base=%d head=%d%n", INPUT', '"input=%s base=%d head=%d%n", DISPLAY_INPUT')
+    def substitute(match):
+        if match[1] not in values:
+            raise ValueError('unresolved reproducer template field')
+        return values[match[1]]
+    # Substitute once: literal user inputs may themselves contain template markers.
+    program = re.sub(r'@@([A-Z_]+)@@', substitute, program)
     write('ReproduceDifference.java', program.encode('utf-8'))
     readme = f'''# Observed Java behavioral difference
 
@@ -125,7 +157,41 @@ It requires the recorded pair exactly; a changed, failed or timed-out observatio
 does not pass reproduction. Compiled class files are left in the reported OS
 temporary directory. This one reproduction run does not prove general determinism.
 '''
+    if expectation is not None:
+        readme += '''
+## Supplied expectation and JUnit draft
+
+SUPPLIED_EXPECTATION.json records a caller-supplied requirement; CodeDNA has not
+independently verified that requirement. CodeDNAWitnessTest.java asserts that
+supplied input/output, not the base result. Review it before copying it to a
+trusted JUnit 5 project. It is not installed or executed automatically.
+The supplied input counts toward the search budget in both generation modes.
+The reduced witness may use another input; see report.json for whether the
+supplied input had confirmed observations. This draft is separate from the
+JDK-only difference reproducer and does not change required tests or skip risk.
+'''
     write('README.md', readme.encode('utf-8'))
+    if expectation is not None:
+        # The assertion comes from a supplied requirement, never the old output.
+        draft = '''import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+// Review the supplied requirement before adding this draft to the project.
+// Run only with trusted project code and its JUnit 5 dependencies.
+public final class CodeDNAWitnessTest {
+  @Test void suppliedRequirement() throws Exception {
+    assertEquals(EXPECTED, TYPE.METHOD(INPUT), REQUIREMENT);
+  }
+}
+'''
+        replacements = {'EXPECTED': str(expectation['expected']), 'TYPE': class_name,
+                        'METHOD': method, 'INPUT': java_arguments(types, expectation['input']),
+                        'REQUIREMENT': json.dumps(expectation['requirement'], ensure_ascii=True)}
+        # Substitute the message last so its contents cannot become template code.
+        draft = re.sub(r'\b(EXPECTED|TYPE|METHOD|INPUT|REQUIREMENT)\b',
+                       lambda match: replacements[match.group()], draft)
+        write('CodeDNAWitnessTest.java', draft.encode('utf-8'))
+        write('SUPPLIED_EXPECTATION.json', (json.dumps(expectation, indent=2)+'\n').encode('utf-8'))
     return {'files_sha256': files, 'entrypoint': 'ReproduceDifference.java',
             'requires': 'JDK 17+; explicitly trusted selected source',
             'disclosure': 'Includes the entire chosen base/head source file. Review before sharing.'}

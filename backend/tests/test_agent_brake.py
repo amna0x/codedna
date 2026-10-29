@@ -17,6 +17,17 @@ FAKE = [sys.executable, str(Path(__file__).with_name("fake_mvn.py"))]
 CORE = "package a; public class Core { int value() { return 1; } }"
 
 
+def test_failure_outside_requested_selection_still_blocks():
+    from types import SimpleNamespace
+    run = SimpleNamespace(tests={
+        'a.ATest': SimpleNamespace(failed=False, status='passed'),
+        'a.ExtraTest': SimpleNamespace(failed=True, status='failed')},
+        exit_codes=[1], warnings=[])
+    result = brake._run_verdict(['a.ATest'], run)
+    assert result['verdict'] == 'blocked'
+    assert result['failed'] == ['a.ExtraTest']
+
+
 def junit_class(name):
     return f"package a; import org.junit.jupiter.api.Test; class {name} {{ @Test void x() {{}} }}"
 
@@ -91,6 +102,112 @@ def test_check_needs_explicit_build_consent(project):
     repo, _ = project
     with pytest.raises(ValueError, match="allow_build"):
         brake.check(repo.path, maven_command=FAKE)
+
+
+@pytest.mark.parametrize("outcome,verdict", [("failed", "blocked"), ("skipped", "incomplete"), ("passed", "passed")])
+def test_shadow_executes_skipped_recommendations_and_preserves_plan(project, monkeypatch, outcome, verdict):
+    repo, outcomes = project
+    original = brake.plan(repo.path)
+    selected = {**original, "must_run": ["a.ATest"], "skipped": ["a.BTest"]}
+    monkeypatch.setattr(brake, "plan", lambda *a, **k: selected)
+    outcomes(**{"a.ATest": "passed", "a.BTest": outcome})
+    result = brake.check(repo.path, maven_command=FAKE, allow_build=True, shadow=True)
+    assert result["verdict"] == verdict
+    assert result["plan"] == selected
+    evidence = result["shadow"]
+    assert evidence["expected_tests"] == ["a.ATest", "a.BTest"]
+    assert evidence["skipping_authorized"] is False
+    assert evidence["observed_failures_outside_recommendation"] == (["a.BTest"] if outcome == "failed" else [])
+    assert evidence["skipped_by_build"] == (["a.BTest"] if outcome == "skipped" else [])
+    assert evidence["total_seconds"] >= evidence["analysis_seconds"] + evidence["execution_seconds"] >= 0
+    assert result["recording"]["recorded"] is False  # WORKTREE is not training history
+
+
+def test_shadow_runs_even_when_recommendation_is_empty(project, monkeypatch):
+    repo, outcomes = project
+    original = brake.plan(repo.path)
+    monkeypatch.setattr(brake, "plan", lambda *a, **k: {
+        **original, "must_run": [], "skipped": ["a.ATest", "a.BTest"]})
+    outcomes(**{"a.ATest": "passed", "a.BTest": "failed"})
+    result = brake.check(repo.path, maven_command=FAKE, allow_build=True, shadow=True)
+    assert result["verdict"] == "blocked"
+    assert result["shadow"]["observed_failures_outside_recommendation"] == ["a.BTest"]
+
+
+def test_shadow_missing_results_remain_incomplete(project):
+    repo, outcomes = project
+    outcomes(**{"a.ATest": "passed"})
+    result = brake.check(repo.path, maven_command=FAKE, allow_build=True, shadow=True)
+    assert result["verdict"] == "incomplete"
+    assert result["shadow"]["missing_results"] == ["a.BTest"]
+
+
+def test_shadow_mcp_validates_type_and_execution_consent(project):
+    repo, _ = project
+    hidden = rpc(BrakeServer(repo=repo.path), "tools/call", {
+        "name": "codedna_check", "arguments": {"shadow": True}})
+    assert hidden["error"]["code"] == -32602
+    server = BrakeServer(repo=repo.path, allow_build=True, build_options={"maven_command": FAKE})
+    bad = rpc(server, "tools/call", {"name": "codedna_check", "arguments": {"shadow": "true"}})
+    assert bad["result"]["isError"] is True
+    good = rpc(server, "tools/call", {"name": "codedna_check", "arguments": {"shadow": True}})
+    assert good["result"]["structuredContent"]["shadow"]["mode"] == "full_suite_observation"
+
+
+@pytest.mark.parametrize('first,second', [('failed','passed'), ('passed','failed')])
+def test_repeated_failure_is_never_erased_or_recorded_as_stable_history(project, monkeypatch, first, second):
+    from codedna.plugins import languages
+    repo, outcomes = project
+    original = languages.run_tests
+    statuses = iter([first, second])
+    def execute(*args, **kwargs):
+        outcomes(**{'a.ATest': 'passed', 'a.BTest': next(statuses)})
+        return original(*args, **kwargs)
+    monkeypatch.setattr(languages, 'run_tests', execute)
+    result = brake.check(repo.path, maven_command=FAKE, allow_build=True, shadow=True, attempts=2)
+    assert result['verdict'] == 'blocked' and result['failed'] == ['a.BTest']
+    assert result['repeat_evidence']['unstable_observed'] is True
+    assert len(result['repeat_evidence']['attempts']) == 2
+    assert result['recording']['recorded'] is False
+    assert result['shadow']['observed_failures_outside_recommendation'] == []  # both were recommended
+
+
+def test_repeated_build_error_cannot_turn_into_a_pass(project, monkeypatch):
+    from codedna.plugins import languages
+    repo, outcomes = project
+    original = languages.run_tests
+    codes = iter([1, 0])
+    def execute(*args, **kwargs):
+        outcomes(exit_code=next(codes), **{'a.ATest': 'passed', 'a.BTest': 'passed'})
+        return original(*args, **kwargs)
+    monkeypatch.setattr(languages, 'run_tests', execute)
+    result = brake.check(repo.path, maven_command=FAKE, allow_build=True, attempts=2)
+    assert result['verdict'] == 'incomplete'
+    assert result['repeat_evidence']['unstable_observed'] is True
+    assert result['recording']['recorded'] is False
+    assert [a['verdict']['verdict'] for a in result['repeat_evidence']['attempts']] == ['incomplete', 'passed']
+
+
+@pytest.mark.parametrize('initial,expected', [('failed', 'blocked'), ('passed', 'incomplete')])
+def test_repeat_runner_failure_preserves_earlier_evidence(project, monkeypatch, initial, expected):
+    from codedna.plugins import languages
+    repo, outcomes = project
+    original = languages.run_tests
+    calls = []
+    def execute(*args, **kwargs):
+        calls.append(True)
+        if len(calls) > 1:
+            raise RuntimeError('Injected failure while starting the repeat')
+        outcomes(**{'a.ATest': 'passed', 'a.BTest': initial})
+        return original(*args, **kwargs)
+    monkeypatch.setattr(languages, 'run_tests', execute)
+    result = brake.check(repo.path, maven_command=FAKE, allow_build=True, attempts=2)
+    assert result['verdict'] == expected
+    assert result['repeat_evidence']['completed'] == 1
+    assert 'Injected failure' in result['repeat_evidence']['error']
+    assert result['recording']['recorded'] is False
+    if initial == 'failed':
+        assert result['failed'] == ['a.BTest']
 
 
 def test_validated_plan_without_tests_is_nothing_to_run(project, monkeypatch):
