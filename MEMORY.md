@@ -1063,3 +1063,17 @@ completion timing and gates; root only8available reports/7missing remains sparse
 Initial field-name error failed before output; corrected run finished.3offline
 research tests passed1.51s. App unchanged(a02d20f/780recordedpasses). No push/merge.
 See MODULE_COMPATIBILITY_D095_FINDINGS.md and D095JSONs. Graphify refreshed.
+
+## D096 historical readiness cap — 2026-10-30
+
+All12D095zero-skipped candidates x15retained builds=180targets checked. Only8
+complete-as-published root reports exist. Even optimistically assigning every
+completed available unique prior root outcome directly to audit with perfect
+source identity and onefailure/zeromisses, maxprior8 and0/180gate-feasible.
+Hypothetical perfect rows are bounds only, never real outcomes/training.12targets
+have available BASE root under this optimistic screen, not proven module/live
+eligibility. No models fitted or heavy historical discovery run: count cap makes
+it unproductive. Need longer complete sequential/prospective full-suite history;
+collector cannot restore expired reports or guarantee sufficient failing audits.
+7offline D095/D096checks passed1.69s. App/gates unchanged;780appvalidation separate.
+See MODULE_HISTORY_D096_FINDINGS.md. No push/merge/installer/website changes.

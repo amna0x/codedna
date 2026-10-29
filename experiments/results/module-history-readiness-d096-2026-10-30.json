@@ -1,0 +1,1831 @@
+{
+  "modules": [
+    "oak-api",
+    "oak-auth-external",
+    "oak-authorization-cug",
+    "oak-authorization-principalbased",
+    "oak-benchmarks",
+    "oak-benchmarks-lucene",
+    "oak-http",
+    "oak-jackrabbit-api",
+    "oak-query-spi",
+    "oak-run-elastic",
+    "oak-search",
+    "oak-security-spi"
+  ],
+  "targets": 180,
+  "available_root_reports": 8,
+  "optimistically_gate_feasible_targets": 0,
+  "targets_with_completed_base_root_report": 12,
+  "maximum_optimistic_prior": 8,
+  "decisions": [
+    {
+      "module": "oak-api",
+      "build": 1430,
+      "optimistic_prior_unique_commits": 0,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 1.0,
+      "optimistic_crc_resolution_floor": 1.0,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-api",
+      "build": 1510,
+      "optimistic_prior_unique_commits": 1,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.7301340512159458,
+      "optimistic_crc_resolution_floor": 0.5,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-api",
+      "build": 1685,
+      "optimistic_prior_unique_commits": 2,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.5749693909936536,
+      "optimistic_crc_resolution_floor": 0.3333333333333333,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-api",
+      "build": 2180,
+      "optimistic_prior_unique_commits": 3,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.4741955741575128,
+      "optimistic_crc_resolution_floor": 0.25,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-api",
+      "build": 2193,
+      "optimistic_prior_unique_commits": 4,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.4034786252027047,
+      "optimistic_crc_resolution_floor": 0.2,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-api",
+      "build": 2263,
+      "optimistic_prior_unique_commits": 5,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.3511165007651012,
+      "optimistic_crc_resolution_floor": 0.16666666666666666,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-api",
+      "build": 2808,
+      "optimistic_prior_unique_commits": 6,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.3107839813059142,
+      "optimistic_crc_resolution_floor": 0.14285714285714285,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-api",
+      "build": 3012,
+      "optimistic_prior_unique_commits": 7,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.27876269545254206,
+      "optimistic_crc_resolution_floor": 0.125,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-api",
+      "build": 3013,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": true,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-api",
+      "build": 3014,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-api",
+      "build": 3015,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-api",
+      "build": 3016,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-api",
+      "build": 3017,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-api",
+      "build": 3018,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-api",
+      "build": 3019,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-auth-external",
+      "build": 1430,
+      "optimistic_prior_unique_commits": 0,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 1.0,
+      "optimistic_crc_resolution_floor": 1.0,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-auth-external",
+      "build": 1510,
+      "optimistic_prior_unique_commits": 1,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.7301340512159458,
+      "optimistic_crc_resolution_floor": 0.5,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-auth-external",
+      "build": 1685,
+      "optimistic_prior_unique_commits": 2,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.5749693909936536,
+      "optimistic_crc_resolution_floor": 0.3333333333333333,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-auth-external",
+      "build": 2180,
+      "optimistic_prior_unique_commits": 3,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.4741955741575128,
+      "optimistic_crc_resolution_floor": 0.25,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-auth-external",
+      "build": 2193,
+      "optimistic_prior_unique_commits": 4,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.4034786252027047,
+      "optimistic_crc_resolution_floor": 0.2,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-auth-external",
+      "build": 2263,
+      "optimistic_prior_unique_commits": 5,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.3511165007651012,
+      "optimistic_crc_resolution_floor": 0.16666666666666666,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-auth-external",
+      "build": 2808,
+      "optimistic_prior_unique_commits": 6,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.3107839813059142,
+      "optimistic_crc_resolution_floor": 0.14285714285714285,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-auth-external",
+      "build": 3012,
+      "optimistic_prior_unique_commits": 7,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.27876269545254206,
+      "optimistic_crc_resolution_floor": 0.125,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-auth-external",
+      "build": 3013,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": true,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-auth-external",
+      "build": 3014,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-auth-external",
+      "build": 3015,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-auth-external",
+      "build": 3016,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-auth-external",
+      "build": 3017,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-auth-external",
+      "build": 3018,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-auth-external",
+      "build": 3019,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-authorization-cug",
+      "build": 1430,
+      "optimistic_prior_unique_commits": 0,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 1.0,
+      "optimistic_crc_resolution_floor": 1.0,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-authorization-cug",
+      "build": 1510,
+      "optimistic_prior_unique_commits": 1,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.7301340512159458,
+      "optimistic_crc_resolution_floor": 0.5,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-authorization-cug",
+      "build": 1685,
+      "optimistic_prior_unique_commits": 2,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.5749693909936536,
+      "optimistic_crc_resolution_floor": 0.3333333333333333,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-authorization-cug",
+      "build": 2180,
+      "optimistic_prior_unique_commits": 3,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.4741955741575128,
+      "optimistic_crc_resolution_floor": 0.25,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-authorization-cug",
+      "build": 2193,
+      "optimistic_prior_unique_commits": 4,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.4034786252027047,
+      "optimistic_crc_resolution_floor": 0.2,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-authorization-cug",
+      "build": 2263,
+      "optimistic_prior_unique_commits": 5,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.3511165007651012,
+      "optimistic_crc_resolution_floor": 0.16666666666666666,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-authorization-cug",
+      "build": 2808,
+      "optimistic_prior_unique_commits": 6,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.3107839813059142,
+      "optimistic_crc_resolution_floor": 0.14285714285714285,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-authorization-cug",
+      "build": 3012,
+      "optimistic_prior_unique_commits": 7,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.27876269545254206,
+      "optimistic_crc_resolution_floor": 0.125,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-authorization-cug",
+      "build": 3013,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": true,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-authorization-cug",
+      "build": 3014,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-authorization-cug",
+      "build": 3015,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-authorization-cug",
+      "build": 3016,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-authorization-cug",
+      "build": 3017,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-authorization-cug",
+      "build": 3018,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-authorization-cug",
+      "build": 3019,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-authorization-principalbased",
+      "build": 1430,
+      "optimistic_prior_unique_commits": 0,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 1.0,
+      "optimistic_crc_resolution_floor": 1.0,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-authorization-principalbased",
+      "build": 1510,
+      "optimistic_prior_unique_commits": 1,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.7301340512159458,
+      "optimistic_crc_resolution_floor": 0.5,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-authorization-principalbased",
+      "build": 1685,
+      "optimistic_prior_unique_commits": 2,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.5749693909936536,
+      "optimistic_crc_resolution_floor": 0.3333333333333333,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-authorization-principalbased",
+      "build": 2180,
+      "optimistic_prior_unique_commits": 3,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.4741955741575128,
+      "optimistic_crc_resolution_floor": 0.25,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-authorization-principalbased",
+      "build": 2193,
+      "optimistic_prior_unique_commits": 4,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.4034786252027047,
+      "optimistic_crc_resolution_floor": 0.2,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-authorization-principalbased",
+      "build": 2263,
+      "optimistic_prior_unique_commits": 5,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.3511165007651012,
+      "optimistic_crc_resolution_floor": 0.16666666666666666,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-authorization-principalbased",
+      "build": 2808,
+      "optimistic_prior_unique_commits": 6,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.3107839813059142,
+      "optimistic_crc_resolution_floor": 0.14285714285714285,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-authorization-principalbased",
+      "build": 3012,
+      "optimistic_prior_unique_commits": 7,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.27876269545254206,
+      "optimistic_crc_resolution_floor": 0.125,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-authorization-principalbased",
+      "build": 3013,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": true,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-authorization-principalbased",
+      "build": 3014,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-authorization-principalbased",
+      "build": 3015,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-authorization-principalbased",
+      "build": 3016,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-authorization-principalbased",
+      "build": 3017,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-authorization-principalbased",
+      "build": 3018,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-authorization-principalbased",
+      "build": 3019,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-benchmarks",
+      "build": 1430,
+      "optimistic_prior_unique_commits": 0,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 1.0,
+      "optimistic_crc_resolution_floor": 1.0,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-benchmarks",
+      "build": 1510,
+      "optimistic_prior_unique_commits": 1,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.7301340512159458,
+      "optimistic_crc_resolution_floor": 0.5,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-benchmarks",
+      "build": 1685,
+      "optimistic_prior_unique_commits": 2,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.5749693909936536,
+      "optimistic_crc_resolution_floor": 0.3333333333333333,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-benchmarks",
+      "build": 2180,
+      "optimistic_prior_unique_commits": 3,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.4741955741575128,
+      "optimistic_crc_resolution_floor": 0.25,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-benchmarks",
+      "build": 2193,
+      "optimistic_prior_unique_commits": 4,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.4034786252027047,
+      "optimistic_crc_resolution_floor": 0.2,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-benchmarks",
+      "build": 2263,
+      "optimistic_prior_unique_commits": 5,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.3511165007651012,
+      "optimistic_crc_resolution_floor": 0.16666666666666666,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-benchmarks",
+      "build": 2808,
+      "optimistic_prior_unique_commits": 6,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.3107839813059142,
+      "optimistic_crc_resolution_floor": 0.14285714285714285,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-benchmarks",
+      "build": 3012,
+      "optimistic_prior_unique_commits": 7,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.27876269545254206,
+      "optimistic_crc_resolution_floor": 0.125,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-benchmarks",
+      "build": 3013,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": true,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-benchmarks",
+      "build": 3014,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-benchmarks",
+      "build": 3015,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-benchmarks",
+      "build": 3016,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-benchmarks",
+      "build": 3017,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-benchmarks",
+      "build": 3018,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-benchmarks",
+      "build": 3019,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-benchmarks-lucene",
+      "build": 1430,
+      "optimistic_prior_unique_commits": 0,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 1.0,
+      "optimistic_crc_resolution_floor": 1.0,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-benchmarks-lucene",
+      "build": 1510,
+      "optimistic_prior_unique_commits": 1,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.7301340512159458,
+      "optimistic_crc_resolution_floor": 0.5,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-benchmarks-lucene",
+      "build": 1685,
+      "optimistic_prior_unique_commits": 2,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.5749693909936536,
+      "optimistic_crc_resolution_floor": 0.3333333333333333,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-benchmarks-lucene",
+      "build": 2180,
+      "optimistic_prior_unique_commits": 3,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.4741955741575128,
+      "optimistic_crc_resolution_floor": 0.25,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-benchmarks-lucene",
+      "build": 2193,
+      "optimistic_prior_unique_commits": 4,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.4034786252027047,
+      "optimistic_crc_resolution_floor": 0.2,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-benchmarks-lucene",
+      "build": 2263,
+      "optimistic_prior_unique_commits": 5,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.3511165007651012,
+      "optimistic_crc_resolution_floor": 0.16666666666666666,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-benchmarks-lucene",
+      "build": 2808,
+      "optimistic_prior_unique_commits": 6,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.3107839813059142,
+      "optimistic_crc_resolution_floor": 0.14285714285714285,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-benchmarks-lucene",
+      "build": 3012,
+      "optimistic_prior_unique_commits": 7,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.27876269545254206,
+      "optimistic_crc_resolution_floor": 0.125,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-benchmarks-lucene",
+      "build": 3013,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": true,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-benchmarks-lucene",
+      "build": 3014,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-benchmarks-lucene",
+      "build": 3015,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-benchmarks-lucene",
+      "build": 3016,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-benchmarks-lucene",
+      "build": 3017,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-benchmarks-lucene",
+      "build": 3018,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-benchmarks-lucene",
+      "build": 3019,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-http",
+      "build": 1430,
+      "optimistic_prior_unique_commits": 0,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 1.0,
+      "optimistic_crc_resolution_floor": 1.0,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-http",
+      "build": 1510,
+      "optimistic_prior_unique_commits": 1,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.7301340512159458,
+      "optimistic_crc_resolution_floor": 0.5,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-http",
+      "build": 1685,
+      "optimistic_prior_unique_commits": 2,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.5749693909936536,
+      "optimistic_crc_resolution_floor": 0.3333333333333333,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-http",
+      "build": 2180,
+      "optimistic_prior_unique_commits": 3,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.4741955741575128,
+      "optimistic_crc_resolution_floor": 0.25,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-http",
+      "build": 2193,
+      "optimistic_prior_unique_commits": 4,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.4034786252027047,
+      "optimistic_crc_resolution_floor": 0.2,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-http",
+      "build": 2263,
+      "optimistic_prior_unique_commits": 5,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.3511165007651012,
+      "optimistic_crc_resolution_floor": 0.16666666666666666,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-http",
+      "build": 2808,
+      "optimistic_prior_unique_commits": 6,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.3107839813059142,
+      "optimistic_crc_resolution_floor": 0.14285714285714285,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-http",
+      "build": 3012,
+      "optimistic_prior_unique_commits": 7,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.27876269545254206,
+      "optimistic_crc_resolution_floor": 0.125,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-http",
+      "build": 3013,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": true,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-http",
+      "build": 3014,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-http",
+      "build": 3015,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-http",
+      "build": 3016,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-http",
+      "build": 3017,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-http",
+      "build": 3018,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-http",
+      "build": 3019,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-jackrabbit-api",
+      "build": 1430,
+      "optimistic_prior_unique_commits": 0,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 1.0,
+      "optimistic_crc_resolution_floor": 1.0,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-jackrabbit-api",
+      "build": 1510,
+      "optimistic_prior_unique_commits": 1,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.7301340512159458,
+      "optimistic_crc_resolution_floor": 0.5,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-jackrabbit-api",
+      "build": 1685,
+      "optimistic_prior_unique_commits": 2,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.5749693909936536,
+      "optimistic_crc_resolution_floor": 0.3333333333333333,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-jackrabbit-api",
+      "build": 2180,
+      "optimistic_prior_unique_commits": 3,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.4741955741575128,
+      "optimistic_crc_resolution_floor": 0.25,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-jackrabbit-api",
+      "build": 2193,
+      "optimistic_prior_unique_commits": 4,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.4034786252027047,
+      "optimistic_crc_resolution_floor": 0.2,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-jackrabbit-api",
+      "build": 2263,
+      "optimistic_prior_unique_commits": 5,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.3511165007651012,
+      "optimistic_crc_resolution_floor": 0.16666666666666666,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-jackrabbit-api",
+      "build": 2808,
+      "optimistic_prior_unique_commits": 6,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.3107839813059142,
+      "optimistic_crc_resolution_floor": 0.14285714285714285,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-jackrabbit-api",
+      "build": 3012,
+      "optimistic_prior_unique_commits": 7,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.27876269545254206,
+      "optimistic_crc_resolution_floor": 0.125,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-jackrabbit-api",
+      "build": 3013,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": true,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-jackrabbit-api",
+      "build": 3014,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-jackrabbit-api",
+      "build": 3015,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-jackrabbit-api",
+      "build": 3016,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-jackrabbit-api",
+      "build": 3017,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-jackrabbit-api",
+      "build": 3018,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-jackrabbit-api",
+      "build": 3019,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-query-spi",
+      "build": 1430,
+      "optimistic_prior_unique_commits": 0,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 1.0,
+      "optimistic_crc_resolution_floor": 1.0,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-query-spi",
+      "build": 1510,
+      "optimistic_prior_unique_commits": 1,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.7301340512159458,
+      "optimistic_crc_resolution_floor": 0.5,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-query-spi",
+      "build": 1685,
+      "optimistic_prior_unique_commits": 2,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.5749693909936536,
+      "optimistic_crc_resolution_floor": 0.3333333333333333,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-query-spi",
+      "build": 2180,
+      "optimistic_prior_unique_commits": 3,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.4741955741575128,
+      "optimistic_crc_resolution_floor": 0.25,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-query-spi",
+      "build": 2193,
+      "optimistic_prior_unique_commits": 4,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.4034786252027047,
+      "optimistic_crc_resolution_floor": 0.2,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-query-spi",
+      "build": 2263,
+      "optimistic_prior_unique_commits": 5,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.3511165007651012,
+      "optimistic_crc_resolution_floor": 0.16666666666666666,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-query-spi",
+      "build": 2808,
+      "optimistic_prior_unique_commits": 6,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.3107839813059142,
+      "optimistic_crc_resolution_floor": 0.14285714285714285,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-query-spi",
+      "build": 3012,
+      "optimistic_prior_unique_commits": 7,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.27876269545254206,
+      "optimistic_crc_resolution_floor": 0.125,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-query-spi",
+      "build": 3013,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": true,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-query-spi",
+      "build": 3014,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-query-spi",
+      "build": 3015,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-query-spi",
+      "build": 3016,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-query-spi",
+      "build": 3017,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-query-spi",
+      "build": 3018,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-query-spi",
+      "build": 3019,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-run-elastic",
+      "build": 1430,
+      "optimistic_prior_unique_commits": 0,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 1.0,
+      "optimistic_crc_resolution_floor": 1.0,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-run-elastic",
+      "build": 1510,
+      "optimistic_prior_unique_commits": 1,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.7301340512159458,
+      "optimistic_crc_resolution_floor": 0.5,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-run-elastic",
+      "build": 1685,
+      "optimistic_prior_unique_commits": 2,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.5749693909936536,
+      "optimistic_crc_resolution_floor": 0.3333333333333333,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-run-elastic",
+      "build": 2180,
+      "optimistic_prior_unique_commits": 3,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.4741955741575128,
+      "optimistic_crc_resolution_floor": 0.25,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-run-elastic",
+      "build": 2193,
+      "optimistic_prior_unique_commits": 4,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.4034786252027047,
+      "optimistic_crc_resolution_floor": 0.2,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-run-elastic",
+      "build": 2263,
+      "optimistic_prior_unique_commits": 5,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.3511165007651012,
+      "optimistic_crc_resolution_floor": 0.16666666666666666,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-run-elastic",
+      "build": 2808,
+      "optimistic_prior_unique_commits": 6,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.3107839813059142,
+      "optimistic_crc_resolution_floor": 0.14285714285714285,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-run-elastic",
+      "build": 3012,
+      "optimistic_prior_unique_commits": 7,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.27876269545254206,
+      "optimistic_crc_resolution_floor": 0.125,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-run-elastic",
+      "build": 3013,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": true,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-run-elastic",
+      "build": 3014,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-run-elastic",
+      "build": 3015,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-run-elastic",
+      "build": 3016,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-run-elastic",
+      "build": 3017,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-run-elastic",
+      "build": 3018,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-run-elastic",
+      "build": 3019,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-search",
+      "build": 1430,
+      "optimistic_prior_unique_commits": 0,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 1.0,
+      "optimistic_crc_resolution_floor": 1.0,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-search",
+      "build": 1510,
+      "optimistic_prior_unique_commits": 1,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.7301340512159458,
+      "optimistic_crc_resolution_floor": 0.5,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-search",
+      "build": 1685,
+      "optimistic_prior_unique_commits": 2,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.5749693909936536,
+      "optimistic_crc_resolution_floor": 0.3333333333333333,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-search",
+      "build": 2180,
+      "optimistic_prior_unique_commits": 3,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.4741955741575128,
+      "optimistic_crc_resolution_floor": 0.25,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-search",
+      "build": 2193,
+      "optimistic_prior_unique_commits": 4,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.4034786252027047,
+      "optimistic_crc_resolution_floor": 0.2,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-search",
+      "build": 2263,
+      "optimistic_prior_unique_commits": 5,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.3511165007651012,
+      "optimistic_crc_resolution_floor": 0.16666666666666666,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-search",
+      "build": 2808,
+      "optimistic_prior_unique_commits": 6,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.3107839813059142,
+      "optimistic_crc_resolution_floor": 0.14285714285714285,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-search",
+      "build": 3012,
+      "optimistic_prior_unique_commits": 7,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.27876269545254206,
+      "optimistic_crc_resolution_floor": 0.125,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-search",
+      "build": 3013,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": true,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-search",
+      "build": 3014,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-search",
+      "build": 3015,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-search",
+      "build": 3016,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-search",
+      "build": 3017,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-search",
+      "build": 3018,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-search",
+      "build": 3019,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-security-spi",
+      "build": 1430,
+      "optimistic_prior_unique_commits": 0,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 1.0,
+      "optimistic_crc_resolution_floor": 1.0,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-security-spi",
+      "build": 1510,
+      "optimistic_prior_unique_commits": 1,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.7301340512159458,
+      "optimistic_crc_resolution_floor": 0.5,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-security-spi",
+      "build": 1685,
+      "optimistic_prior_unique_commits": 2,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.5749693909936536,
+      "optimistic_crc_resolution_floor": 0.3333333333333333,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-security-spi",
+      "build": 2180,
+      "optimistic_prior_unique_commits": 3,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.4741955741575128,
+      "optimistic_crc_resolution_floor": 0.25,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-security-spi",
+      "build": 2193,
+      "optimistic_prior_unique_commits": 4,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.4034786252027047,
+      "optimistic_crc_resolution_floor": 0.2,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-security-spi",
+      "build": 2263,
+      "optimistic_prior_unique_commits": 5,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.3511165007651012,
+      "optimistic_crc_resolution_floor": 0.16666666666666666,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-security-spi",
+      "build": 2808,
+      "optimistic_prior_unique_commits": 6,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.3107839813059142,
+      "optimistic_crc_resolution_floor": 0.14285714285714285,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-security-spi",
+      "build": 3012,
+      "optimistic_prior_unique_commits": 7,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.27876269545254206,
+      "optimistic_crc_resolution_floor": 0.125,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-security-spi",
+      "build": 3013,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": true,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-security-spi",
+      "build": 3014,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-security-spi",
+      "build": 3015,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-security-spi",
+      "build": 3016,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-security-spi",
+      "build": 3017,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-security-spi",
+      "build": 3018,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    },
+    {
+      "module": "oak-security-spi",
+      "build": 3019,
+      "optimistic_prior_unique_commits": 8,
+      "base_has_available_completed_root_report": false,
+      "optimistic_b10_zero_miss_bound": 0.25272359742376327,
+      "optimistic_crc_resolution_floor": 0.1111111111111111,
+      "can_meet_either_gate_even_optimistically": false,
+      "interpretation": "All prior root reports hypothetically assigned to audit with one failure and zero misses; not measured model outcomes"
+    }
+  ],
+  "source_history_analysis_performed": false,
+  "models_fitted": 0,
+  "reason": "Even the optimistic upper bound is insufficient; expensive source histories cannot change that fact.",
+  "limits": [
+    "Current module candidate availability was inspected; this is a feasibility screen, not prospective efficacy.",
+    "No hypothetical outcomes may be imported into training or presented as real failures.",
+    "Does not establish model performance, actual recall, missed failures or CI savings."
+  ]
+}
