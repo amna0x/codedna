@@ -1,0 +1,14 @@
+{
+  "source_commit": "a02d20f4d36b451dd80b2948d5bdcc0a6620ecd7",
+  "command": "python -m pytest --run-maven -q",
+  "passed": 780,
+  "failed": 0,
+  "skipped": 0,
+  "warnings": 1,
+  "seconds": 3919.8,
+  "log": "docs/validation-logs/d089-full-maven.log",
+  "log_sha256": "22b3ad85698befd3861b11af64c4cb3acafdf1ef99d381bd39c64cc17fb46b99",
+  "gradle_opts": "-Dorg.gradle.jvmargs= -Dorg.gradle.daemon=false",
+  "scope": "Complete source suite with Maven and real Gradle; no new frozen-executable/installer validation.",
+  "prior_d087": "Interrupted; never count as a completed pass"
+}

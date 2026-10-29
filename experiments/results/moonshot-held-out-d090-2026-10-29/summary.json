@@ -1,0 +1,13 @@
+{
+  "application_source": "a02d20f",
+  "held_out_cases": 12,
+  "cases_with_eligible_changed_method": 0,
+  "source_errors": 0,
+  "planned_trial_records": 72,
+  "executed_searches": 0,
+  "emitted_witnesses": 0,
+  "independently_replayed_witnesses": 0,
+  "bug_detection_sensitivity": null,
+  "guided_superiority": null,
+  "scope": "Held-out source-selection coverage evaluation; refused trials are not executed search failures. No search efficacy estimate can be made."
+}

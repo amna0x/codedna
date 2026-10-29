@@ -1,0 +1,16 @@
+{
+  "application_source": "a02d20f",
+  "risk_target": 0.05,
+  "evaluation_commits": 75,
+  "observed_failing_commits": 27,
+  "observed_failing_class_occurrences": 39,
+  "b10_proven_full_suite_fallbacks": 75,
+  "crc_proven_full_suite_fallbacks": 75,
+  "historical_full_class_duration_sum": 1469989.694,
+  "preflight_runner_seconds": 9.46115010001813,
+  "whole_runner_seconds": 12.849574399995618,
+  "scope": "Existing evidence-gate feasibility and recorded full-suite outcomes, not fitted-model predictions or new CI execution.",
+  "cost_note": "Class-duration sums are historical serial estimates, not wall time; timings measure this audit runner, not the live brake or counterfactual CI savings.",
+  "structural_and_simple_baselines": "not executed; no estimates invented",
+  "future_risk_guarantee": false
+}

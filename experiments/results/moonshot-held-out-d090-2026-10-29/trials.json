@@ -1,0 +1,722 @@
+[
+  {
+    "repository": "LMAX-Exchange/Simple-DSL",
+    "mode": "guided",
+    "seed": 7,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "LMAX-Exchange/Simple-DSL",
+    "mode": "simple",
+    "seed": 7,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "LMAX-Exchange/Simple-DSL",
+    "mode": "simple",
+    "seed": 19,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "LMAX-Exchange/Simple-DSL",
+    "mode": "guided",
+    "seed": 19,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "LMAX-Exchange/Simple-DSL",
+    "mode": "guided",
+    "seed": 41,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "LMAX-Exchange/Simple-DSL",
+    "mode": "simple",
+    "seed": 41,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "stellar/java-stellar-sdk",
+    "mode": "simple",
+    "seed": 7,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "stellar/java-stellar-sdk",
+    "mode": "guided",
+    "seed": 7,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "stellar/java-stellar-sdk",
+    "mode": "guided",
+    "seed": 19,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "stellar/java-stellar-sdk",
+    "mode": "simple",
+    "seed": 19,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "stellar/java-stellar-sdk",
+    "mode": "simple",
+    "seed": 41,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "stellar/java-stellar-sdk",
+    "mode": "guided",
+    "seed": 41,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "IBM/JSONata4Java",
+    "mode": "guided",
+    "seed": 7,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "IBM/JSONata4Java",
+    "mode": "simple",
+    "seed": 7,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "IBM/JSONata4Java",
+    "mode": "simple",
+    "seed": 19,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "IBM/JSONata4Java",
+    "mode": "guided",
+    "seed": 19,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "IBM/JSONata4Java",
+    "mode": "guided",
+    "seed": 41,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "IBM/JSONata4Java",
+    "mode": "simple",
+    "seed": 41,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "jitterted/ensembler",
+    "mode": "simple",
+    "seed": 7,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "jitterted/ensembler",
+    "mode": "guided",
+    "seed": 7,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "jitterted/ensembler",
+    "mode": "guided",
+    "seed": 19,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "jitterted/ensembler",
+    "mode": "simple",
+    "seed": 19,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "jitterted/ensembler",
+    "mode": "simple",
+    "seed": 41,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "jitterted/ensembler",
+    "mode": "guided",
+    "seed": 41,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "salesforce/grammaticus",
+    "mode": "guided",
+    "seed": 7,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "salesforce/grammaticus",
+    "mode": "simple",
+    "seed": 7,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "salesforce/grammaticus",
+    "mode": "simple",
+    "seed": 19,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "salesforce/grammaticus",
+    "mode": "guided",
+    "seed": 19,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "salesforce/grammaticus",
+    "mode": "guided",
+    "seed": 41,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "salesforce/grammaticus",
+    "mode": "simple",
+    "seed": 41,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "xtremexp/UT4X-Converter",
+    "mode": "simple",
+    "seed": 7,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "xtremexp/UT4X-Converter",
+    "mode": "guided",
+    "seed": 7,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "xtremexp/UT4X-Converter",
+    "mode": "guided",
+    "seed": 19,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "xtremexp/UT4X-Converter",
+    "mode": "simple",
+    "seed": 19,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "xtremexp/UT4X-Converter",
+    "mode": "simple",
+    "seed": 41,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "xtremexp/UT4X-Converter",
+    "mode": "guided",
+    "seed": 41,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "crawler-commons/crawler-commons",
+    "mode": "guided",
+    "seed": 7,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "crawler-commons/crawler-commons",
+    "mode": "simple",
+    "seed": 7,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "crawler-commons/crawler-commons",
+    "mode": "simple",
+    "seed": 19,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "crawler-commons/crawler-commons",
+    "mode": "guided",
+    "seed": 19,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "crawler-commons/crawler-commons",
+    "mode": "guided",
+    "seed": 41,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "crawler-commons/crawler-commons",
+    "mode": "simple",
+    "seed": 41,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "cloudsimplus/cloudsimplus",
+    "mode": "simple",
+    "seed": 7,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "cloudsimplus/cloudsimplus",
+    "mode": "guided",
+    "seed": 7,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "cloudsimplus/cloudsimplus",
+    "mode": "guided",
+    "seed": 19,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "cloudsimplus/cloudsimplus",
+    "mode": "simple",
+    "seed": 19,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "cloudsimplus/cloudsimplus",
+    "mode": "simple",
+    "seed": 41,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "cloudsimplus/cloudsimplus",
+    "mode": "guided",
+    "seed": 41,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "ezylang/EvalEx",
+    "mode": "guided",
+    "seed": 7,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "ezylang/EvalEx",
+    "mode": "simple",
+    "seed": 7,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "ezylang/EvalEx",
+    "mode": "simple",
+    "seed": 19,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "ezylang/EvalEx",
+    "mode": "guided",
+    "seed": 19,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "ezylang/EvalEx",
+    "mode": "guided",
+    "seed": 41,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "ezylang/EvalEx",
+    "mode": "simple",
+    "seed": 41,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "Netflix/frigga",
+    "mode": "simple",
+    "seed": 7,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "Netflix/frigga",
+    "mode": "guided",
+    "seed": 7,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "Netflix/frigga",
+    "mode": "guided",
+    "seed": 19,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "Netflix/frigga",
+    "mode": "simple",
+    "seed": 19,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "Netflix/frigga",
+    "mode": "simple",
+    "seed": 41,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "Netflix/frigga",
+    "mode": "guided",
+    "seed": 41,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "spring-projects/spring-guice",
+    "mode": "guided",
+    "seed": 7,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "spring-projects/spring-guice",
+    "mode": "simple",
+    "seed": 7,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "spring-projects/spring-guice",
+    "mode": "simple",
+    "seed": 19,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "spring-projects/spring-guice",
+    "mode": "guided",
+    "seed": 19,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "spring-projects/spring-guice",
+    "mode": "guided",
+    "seed": 41,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "spring-projects/spring-guice",
+    "mode": "simple",
+    "seed": 41,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "GoSimpleLLC/nbvcxz",
+    "mode": "simple",
+    "seed": 7,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "GoSimpleLLC/nbvcxz",
+    "mode": "guided",
+    "seed": 7,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "GoSimpleLLC/nbvcxz",
+    "mode": "guided",
+    "seed": 19,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "GoSimpleLLC/nbvcxz",
+    "mode": "simple",
+    "seed": 19,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "GoSimpleLLC/nbvcxz",
+    "mode": "simple",
+    "seed": 41,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  },
+  {
+    "repository": "GoSimpleLLC/nbvcxz",
+    "mode": "guided",
+    "seed": 41,
+    "status": "unsupported_at_frozen_source_selection",
+    "reason": "No changed same-identity method satisfies the frozen public bounded numeric/array contract",
+    "jvm_runs": 0,
+    "search_executed": false,
+    "search_seconds": null
+  }
+]

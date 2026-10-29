@@ -611,3 +611,8 @@ eight read-only viewer checks pass. See ENGINEERING_VALIDATION_D076_D078_2026-10
 This is source validation, not a new packaged release or a research verdict.
 The pilot saved 329 source mappings before one 90-second extraction timeout;
 a single unchanged-protocol retry resumed after the full suite finished.
+
+
+## D090 research evaluation findings
+
+D089 full source validation passed 780 tests, zero failures/skips. Held-out Moonshot source-selection coverage is 0/12; efficacy cannot be estimated. Both fixed brake policies require all suites on 75/75 evaluation heads, retaining 27 recorded failing commits but showing no selection saving. See EVALUATION_D090_FINDINGS.md for evidence and unperformed comparisons; no broad effectiveness or CI-speedup claim is supported.

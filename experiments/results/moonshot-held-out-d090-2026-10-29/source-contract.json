@@ -1,0 +1,451 @@
+[
+  {
+    "repository": "LMAX-Exchange/Simple-DSL",
+    "scope": "source contract only; no code execution",
+    "files": [
+      {
+        "file": "src/main/java/com/lmax/simpledsl/internal/DslParamsParser.java",
+        "source_sha256": [
+          "21b7bd0e22d8e705237505494d64677ea8394c7e0fe0cb21c62e250ea6876dcd",
+          "33e4ad25ad0ecad4848e821cddddee97e6176abfa471accf15d37579a9aad2ee"
+        ]
+      }
+    ],
+    "candidates": [],
+    "errors": [],
+    "refusals": [
+      {
+        "file": "src/main/java/com/lmax/simpledsl/internal/DslParamsParser.java",
+        "symbol": "com.lmax.simpledsl.internal.DslParamsParser.RepeatingGroupArgumentProcessor#consume(RepeatingArgGroup,Deque<NameValuePair>)",
+        "prefix": [
+          "void"
+        ],
+        "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+      }
+    ]
+  },
+  {
+    "repository": "stellar/java-stellar-sdk",
+    "scope": "source contract only; no code execution",
+    "files": [
+      {
+        "file": "src/main/java/org/stellar/sdk/KeyPair.java",
+        "source_sha256": [
+          "15f1eb79cbb47828dd5b064d03869a094bd80ce1e5bfaf3d9db2e56a1dc0a178",
+          "d800a05e1e49d3ac28ac825b0acb81835db1c2e73af331f6feb5b3c9b505146e"
+        ]
+      }
+    ],
+    "candidates": [],
+    "errors": [],
+    "refusals": [
+      {
+        "file": "src/main/java/org/stellar/sdk/KeyPair.java",
+        "symbol": "org.stellar.sdk.KeyPair#equals(Object)",
+        "prefix": [
+          "@",
+          "Override",
+          "public",
+          "boolean"
+        ],
+        "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+      }
+    ]
+  },
+  {
+    "repository": "IBM/JSONata4Java",
+    "scope": "source contract only; no code execution",
+    "files": [
+      {
+        "file": "src/main/java/com/api/jsonata4java/expressions/OrderByOperator.java",
+        "source_sha256": [
+          "7a1430508f77c643f1043cd9a33aba54adb44f10ceda4b86e5681fbc38d4d67b",
+          "ef5a1472cfbf072015820bf075fade0ea3583f1a207ddbc498660b265bfef461"
+        ]
+      }
+    ],
+    "candidates": [],
+    "errors": [],
+    "refusals": [
+      {
+        "file": "src/main/java/com/api/jsonata4java/expressions/OrderByOperator.java",
+        "symbol": "com.api.jsonata4java.expressions.OrderByOperator#orderBy(ArrayNode,List<OrderByField>)",
+        "prefix": [
+          "private",
+          "ArrayNode"
+        ],
+        "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+      }
+    ]
+  },
+  {
+    "repository": "jitterted/ensembler",
+    "scope": "source contract only; no code execution",
+    "files": [
+      {
+        "file": "src/main/java/com/jitterted/mobreg/domain/Ensemble.java",
+        "source_sha256": [
+          "f0a7dfdd4aafd0dd69849eb4cbd46c284c43a356fac98117b8921152485a9f8c",
+          "3ef98e048126046cd801406359aa4b9503fc38a0ab959f43d73a7881e6406131"
+        ]
+      }
+    ],
+    "candidates": [],
+    "errors": [],
+    "refusals": [
+      {
+        "file": "src/main/java/com/jitterted/mobreg/domain/Ensemble.java",
+        "symbol": "com.jitterted.mobreg.domain.Ensemble#joinAsSpectator(MemberId)",
+        "prefix": [
+          "public",
+          "void"
+        ],
+        "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+      }
+    ]
+  },
+  {
+    "repository": "salesforce/grammaticus",
+    "scope": "source contract only; no code execution",
+    "files": [
+      {
+        "file": "src/main/java/com/force/i18n/grammar/impl/GrammaticalTermMapImpl.java",
+        "source_sha256": [
+          "0c5982598a19289c0985949cc9104bf47f179b927ca13612b1c6a97300a18370",
+          "220a2bd46064c787d121f16f1ad95ad48affb96341c735a313a646e2697d6d75"
+        ]
+      }
+    ],
+    "candidates": [],
+    "errors": [],
+    "refusals": [
+      {
+        "file": "src/main/java/com/force/i18n/grammar/impl/GrammaticalTermMapImpl.java",
+        "symbol": "com.force.i18n.grammar.impl.GrammaticalTermMapImpl#equals(Object)",
+        "prefix": [
+          "@",
+          "Override",
+          "public",
+          "boolean"
+        ],
+        "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+      },
+      {
+        "file": "src/main/java/com/force/i18n/grammar/impl/GrammaticalTermMapImpl.java",
+        "symbol": "com.force.i18n.grammar.impl.GrammaticalTermMapImpl#makeSkinny()",
+        "prefix": [
+          "@",
+          "Override",
+          "public",
+          "GrammaticalTermMap",
+          "<",
+          "T",
+          ">"
+        ],
+        "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+      },
+      {
+        "file": "src/main/java/com/force/i18n/grammar/impl/GrammaticalTermMapImpl.java",
+        "symbol": "com.force.i18n.grammar.impl.GrammaticalTermMapImpl#readObject(ObjectInputStream)",
+        "prefix": [
+          "@",
+          "SuppressWarnings",
+          "(",
+          "\"",
+          "unchecked",
+          "\"",
+          ")",
+          "private",
+          "void"
+        ],
+        "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+      },
+      {
+        "file": "src/main/java/com/force/i18n/grammar/impl/GrammaticalTermMapImpl.java",
+        "symbol": "com.force.i18n.grammar.impl.GrammaticalTermMapImpl#writeJson(Appendable,RenamingProvider,LanguageDictionary,Collection<String>)",
+        "prefix": [
+          "@",
+          "Override",
+          "public",
+          "void"
+        ],
+        "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+      },
+      {
+        "file": "src/main/java/com/force/i18n/grammar/impl/GrammaticalTermMapImpl.java",
+        "symbol": "com.force.i18n.grammar.impl.GrammaticalTermMapImpl#writeObject(ObjectOutputStream)",
+        "prefix": [
+          "private",
+          "void"
+        ],
+        "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+      }
+    ]
+  },
+  {
+    "repository": "xtremexp/UT4X-Converter",
+    "scope": "source contract only; no code execution",
+    "files": [
+      {
+        "file": "src/main/java/org/xtx/ut4converter/t3d/T3DActor.java",
+        "source_sha256": [
+          "6a8bb47d56218e8998d1ea16f820860246bd7a8d8c9c034e18122cad37b37d8a",
+          "791dff303bc3a400924c6304349ce05de6038e48d87dcafe580d6fa878b228ff"
+        ]
+      }
+    ],
+    "candidates": [],
+    "errors": [],
+    "refusals": [
+      {
+        "file": "src/main/java/org/xtx/ut4converter/t3d/T3DActor.java",
+        "symbol": "org.xtx.ut4converter.t3d.T3DActor#convertScaleAndToT3D(double)",
+        "prefix": [
+          "protected",
+          "String"
+        ],
+        "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+      }
+    ]
+  },
+  {
+    "repository": "crawler-commons/crawler-commons",
+    "scope": "source contract only; no code execution",
+    "files": [
+      {
+        "file": "src/main/java/crawlercommons/robots/SimpleRobotRulesParser.java",
+        "source_sha256": [
+          "de5c605acaf29ba1a3089c84460a2002b86f1262bae43f352b73017a99a2c6dc",
+          "996fbca2b364088f75d82707b605daa7135f2781ec4f2ba68c3f597fadc7be5c"
+        ]
+      }
+    ],
+    "candidates": [],
+    "errors": [],
+    "refusals": [
+      {
+        "file": "src/main/java/crawlercommons/robots/SimpleRobotRulesParser.java",
+        "symbol": "crawlercommons.robots.SimpleRobotRulesParser#parseContent(String,byte[],String,Collection<String>,boolean)",
+        "prefix": [
+          "private",
+          "SimpleRobotRules"
+        ],
+        "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+      }
+    ]
+  },
+  {
+    "repository": "cloudsimplus/cloudsimplus",
+    "scope": "source contract only; no code execution",
+    "files": [
+      {
+        "file": "src/main/java/org/cloudsimplus/hosts/HostAbstract.java",
+        "source_sha256": [
+          "2838ab19661edd51cafd636bd32588f53dcfe1c73a1ca686c10b7ac8047109bb",
+          "b6de280f12e6c082b1d3343558d56654e4d8e85452573b063ef483fbe8412da8"
+        ]
+      }
+    ],
+    "candidates": [],
+    "errors": [],
+    "refusals": []
+  },
+  {
+    "repository": "ezylang/EvalEx",
+    "scope": "source contract only; no code execution",
+    "files": [
+      {
+        "file": "src/main/java/com/ezylang/evalex/parser/Tokenizer.java",
+        "source_sha256": [
+          "866d8e6abd4a3a6249fd6f9a2413bdddc7d1b22843e718463cdcbb91c4212ed4",
+          "fd674dcd20ed2d2723f75cd8a31a59008ea5270a69a217a8d85bfa23ea4fc62e"
+        ]
+      }
+    ],
+    "candidates": [],
+    "errors": [],
+    "refusals": [
+      {
+        "file": "src/main/java/com/ezylang/evalex/parser/Tokenizer.java",
+        "symbol": "com.ezylang.evalex.parser.Tokenizer#isAtNumberChar()",
+        "prefix": [
+          "private",
+          "boolean"
+        ],
+        "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+      },
+      {
+        "file": "src/main/java/com/ezylang/evalex/parser/Tokenizer.java",
+        "symbol": "com.ezylang.evalex.parser.Tokenizer#parseNumberLiteral()",
+        "prefix": [
+          "private",
+          "Token"
+        ],
+        "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+      },
+      {
+        "file": "src/main/java/com/ezylang/evalex/parser/Tokenizer.java",
+        "symbol": "com.ezylang.evalex.parser.Tokenizer#parseDecimalNumberLiteral()",
+        "reason": "Added, removed or changed signature; no identity mapping guessed"
+      },
+      {
+        "file": "src/main/java/com/ezylang/evalex/parser/Tokenizer.java",
+        "symbol": "com.ezylang.evalex.parser.Tokenizer#parseHexNumberLiteral()",
+        "reason": "Added, removed or changed signature; no identity mapping guessed"
+      }
+    ]
+  },
+  {
+    "repository": "Netflix/frigga",
+    "scope": "source contract only; no code execution",
+    "files": [
+      {
+        "file": "src/main/java/com/netflix/frigga/ami/AppVersion.java",
+        "source_sha256": [
+          "f8596329c0fa57ed9420a2e436899b28c68b8b99fbef0b470cb4064b9d68757e",
+          "7916163c15fbac9539b84ec189085cb3141db5b0df9783ce215ad9e47eaa0bd7"
+        ]
+      }
+    ],
+    "candidates": [],
+    "errors": [],
+    "refusals": []
+  },
+  {
+    "repository": "spring-projects/spring-guice",
+    "scope": "source contract only; no code execution",
+    "files": [
+      {
+        "file": "src/main/java/org/springframework/guice/module/SpringModule.java",
+        "source_sha256": [
+          "d49e241ac01556f9a01bbe94cd95d0b73fd0498bda60e1932537d2cba159a3b3",
+          "5946f117195721a90cc0b3559a4a8531bdc583cd1bbf5fbca89ae611e1fd11b5"
+        ]
+      }
+    ],
+    "candidates": [],
+    "errors": [],
+    "refusals": [
+      {
+        "file": "src/main/java/org/springframework/guice/module/SpringModule.java",
+        "symbol": "org.springframework.guice.module.SpringModule#bind(ConfigurableListableBeanFactory)",
+        "prefix": [
+          "private",
+          "void"
+        ],
+        "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+      },
+      {
+        "file": "src/main/java/org/springframework/guice/module/SpringModule.java",
+        "symbol": "org.springframework.guice.module.SpringModule.BeanFactoryProvider#get()",
+        "prefix": [
+          "@",
+          "Override",
+          "@",
+          "SuppressWarnings",
+          "(",
+          "\"",
+          "checkstyle:NestedIfDepth",
+          "\"",
+          ")",
+          "public",
+          "Object"
+        ],
+        "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+      },
+      {
+        "file": "src/main/java/org/springframework/guice/module/SpringModule.java",
+        "symbol": "org.springframework.guice.module.SpringModule#getAnnotationForBeanDefinition(BeanDefinition)",
+        "reason": "Added, removed or changed signature; no identity mapping guessed"
+      },
+      {
+        "file": "src/main/java/org/springframework/guice/module/SpringModule.java",
+        "symbol": "org.springframework.guice.module.SpringModule#getAnnotationForBeanDefinition(BeanDefinition,ConfigurableListableBeanFactory)",
+        "reason": "Added, removed or changed signature; no identity mapping guessed"
+      },
+      {
+        "file": "src/main/java/org/springframework/guice/module/SpringModule.java",
+        "symbol": "org.springframework.guice.module.SpringModule#getCandidateFactoryMethods(BeanDefinition,Class<?>)",
+        "reason": "Added, removed or changed signature; no identity mapping guessed"
+      },
+      {
+        "file": "src/main/java/org/springframework/guice/module/SpringModule.java",
+        "symbol": "org.springframework.guice.module.SpringModule#getFactoryMethod(BeanDefinition,Class<?>)",
+        "reason": "Added, removed or changed signature; no identity mapping guessed"
+      },
+      {
+        "file": "src/main/java/org/springframework/guice/module/SpringModule.java",
+        "symbol": "org.springframework.guice.module.SpringModule#getFactoryMethod(ConfigurableListableBeanFactory,BeanDefinition)",
+        "reason": "Added, removed or changed signature; no identity mapping guessed"
+      },
+      {
+        "file": "src/main/java/org/springframework/guice/module/SpringModule.java",
+        "symbol": "org.springframework.guice.module.SpringModule#hasMatchingParameterTypes(Method,Method)",
+        "reason": "Added, removed or changed signature; no identity mapping guessed"
+      },
+      {
+        "file": "src/main/java/org/springframework/guice/module/SpringModule.java",
+        "symbol": "org.springframework.guice.module.SpringModule#shouldConsiderNonPublicMethods(BeanDefinition)",
+        "reason": "Added, removed or changed signature; no identity mapping guessed"
+      }
+    ]
+  },
+  {
+    "repository": "GoSimpleLLC/nbvcxz",
+    "scope": "source contract only; no code execution",
+    "files": [
+      {
+        "file": "src/main/java/me/gosimple/nbvcxz/matching/DictionaryMatcher.java",
+        "source_sha256": [
+          "6b20faa1a969a3129f4dfa320d8e9a4eaf549fdd1987108134f198857ad3f9a8",
+          "e3fdb82a516583ff054665347dfcb50e1b0a14c2076a1a4852446fa2cc5d943e"
+        ]
+      },
+      {
+        "file": "src/main/java/me/gosimple/nbvcxz/resources/ConfigurationBuilder.java",
+        "source_sha256": [
+          "bf554df6465f88039349f5a7b74a8e32b31e8401d44f844dded9094b02b8af51",
+          "8125f8628a7a13cc79c63aabb706ff092d5ed0d3d1ed6e83001011e32f9e540e"
+        ]
+      },
+      {
+        "file": "src/main/java/me/gosimple/nbvcxz/resources/Dictionary.java",
+        "source_sha256": [
+          "cf45fee0ec405f51dc769b2497281524272386a5d6f4ebb6854a4bf578368d77",
+          "87adcce8b7e1df1ff04216fc0edad55b6e4733da0cf3878d6f4fe236cf53da92"
+        ]
+      }
+    ],
+    "candidates": [],
+    "errors": [],
+    "refusals": [
+      {
+        "file": "src/main/java/me/gosimple/nbvcxz/matching/DictionaryMatcher.java",
+        "symbol": "me.gosimple.nbvcxz.matching.DictionaryMatcher#match(Configuration,String)",
+        "prefix": [
+          "public",
+          "List",
+          "<",
+          "Match",
+          ">"
+        ],
+        "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+      },
+      {
+        "file": "src/main/java/me/gosimple/nbvcxz/resources/ConfigurationBuilder.java",
+        "symbol": "me.gosimple.nbvcxz.resources.ConfigurationBuilder#getDefaultMaxLength()",
+        "prefix": [
+          "public",
+          "static",
+          "int"
+        ],
+        "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+      },
+      {
+        "file": "src/main/java/me/gosimple/nbvcxz/resources/Dictionary.java",
+        "symbol": "me.gosimple.nbvcxz.resources.Dictionary#getMaxLength()",
+        "reason": "Added, removed or changed signature; no identity mapping guessed"
+      }
+    ]
+  }
+]

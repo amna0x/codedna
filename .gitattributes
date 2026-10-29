@@ -14,3 +14,9 @@ experiments/results/moonshot-engineering-pilot-d085-2026-10-28/** -text
 # Preserve frozen real-change feasibility artifact fingerprints.
 experiments/results/moonshot-real-feasibility-d086-2026-10-29/** -text
 experiments/results/stockspan-automatic-development-d089-2026-10-29/** -text
+experiments/brake-cohort-d089.json -text
+experiments/results/brake-ancestry-d089-2026-10-29.json -text
+experiments/results/brake-inventories-d089-2026-10-29.json -text
+experiments/results/brake-fixed-cohort-d090-2026-10-29/** -text
+experiments/results/moonshot-held-out-d090-2026-10-29/** -text
+docs/validation-logs/d089-full-maven.log -text

@@ -913,3 +913,33 @@ refusal/exception 19 passed (26 deselected,85.17s), cohort integrity 5 passed (4
 One final Maven-inclusive suite on the saved batch is next; do not run duplicates.
 See CORE_IMPROVEMENTS_D089.md and RESEARCH_EVALUATION_D089.md. Source/research
 preparation only; no installer replacement, push or merge authorized/performed.
+
+## D090 frozen evaluation executed — 2026-10-29
+
+D089 full Maven-inclusive source suite COMPLETED on a02d20f4d36b451dd80b2948d5bdcc0a6620ecd7:
+780 passed, zero failures/skips, one existing warning,3919.80s. Hashed retained log
+and ENGINEERING_VALIDATION_D089_2026-10-29.json record exact evidence. D087 remains
+interrupted, never a completed pass. No new installer/executable validation.
+
+Application source stayed frozen. Held-out audit inspected all twelve reserved
+GitBug cases, with zero source acquisition errors. None has an eligible changed
+same-identity method under the frozen numeric/array contract. All72 planned trials
+are retained as preflight refusals; zero searches/JVMs, no sensitivity/superiority
+estimate. These cases are now inspected; do not reuse as fresh confirmation.
+Keep the successful stock-span development example separate.
+
+Brake gate replay completed for all75 fixed evaluation heads. Only100-101 prior
+training/audit ancestors yield25-26 live audit commits, six failing. Even zero
+misses cannot pass B10's Wilson gate (9.43-9.77percent >5percent) and min10failing;
+CRC needs19failing but has6. Both require full suites for75/75 regardless of fitting.
+Raw evaluation ground truth:27failing commits,39failing-class occurrences, all
+retained by fallback. No test-selection saving. Zero misses by running everything
+is not predictive performance. Historical duration sum1469989.694seconds is not
+CI wall time. Fitted-model, structural/simple baseline and new-build/net-CI cost
+comparisons were not performed; do not say the whole planned study is complete.
+
+See docs/EVALUATION_D090_FINDINGS.md and both D090 result-folder FINDINGS.md files.
+No thresholds/features/case replacements were changed for positive remarks.
+No push/merge. Both stashes, original website worktree and release kits untouched.
+Next decision must use these negative applicability/evidence-floor findings;
+no re-evaluation on inspected data can become new independent confirmation.
