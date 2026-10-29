@@ -1,0 +1,361 @@
+[
+  {
+    "build": 1430,
+    "commit": "aed56e8022608d17251a4bd70c247ac0f20b7240",
+    "decision": {
+      "action": "run_full_suite",
+      "model_fitted": false,
+      "available_complete_unique_commits": 0,
+      "unstable_commits_excluded": [],
+      "reason": "No completed, complete result at BASE"
+    },
+    "visible_completed_builds": [],
+    "recorded_classes": 2133,
+    "recorded_failed_classes": 1,
+    "complete_as_published": true,
+    "report_limitation": null
+  },
+  {
+    "build": 1510,
+    "commit": "53fd887f886a96fb3b6122d10f5cab0b3c8d6683",
+    "decision": {
+      "action": "run_full_suite",
+      "model_fitted": false,
+      "available_complete_unique_commits": 0,
+      "unstable_commits_excluded": [],
+      "reason": "No completed, complete result at BASE"
+    },
+    "visible_completed_builds": [
+      1430
+    ],
+    "recorded_classes": 1086,
+    "recorded_failed_classes": 1,
+    "complete_as_published": true,
+    "report_limitation": null
+  },
+  {
+    "build": 1685,
+    "commit": "8c3d54e9bb8ed9fa3f06a50fc7d55a28db7ffe9b",
+    "decision": {
+      "action": "run_full_suite",
+      "model_fitted": false,
+      "available_complete_unique_commits": 0,
+      "unstable_commits_excluded": [],
+      "reason": "No completed, complete result at BASE"
+    },
+    "visible_completed_builds": [
+      1430,
+      1510
+    ],
+    "recorded_classes": 2146,
+    "recorded_failed_classes": 2,
+    "complete_as_published": true,
+    "report_limitation": null
+  },
+  {
+    "build": 2180,
+    "commit": "a4d4cefe2286b16234b5f7026afc5243e6ed59a0",
+    "decision": {
+      "action": "run_full_suite",
+      "model_fitted": false,
+      "available_complete_unique_commits": 0,
+      "unstable_commits_excluded": [],
+      "reason": "No completed, complete result at BASE"
+    },
+    "visible_completed_builds": [
+      1430,
+      1510,
+      1685
+    ],
+    "recorded_classes": 2220,
+    "recorded_failed_classes": 1,
+    "complete_as_published": true,
+    "report_limitation": null
+  },
+  {
+    "build": 2193,
+    "commit": "39f73d5d87ee1e507f3b8dbeb570244f1a1f4fa2",
+    "decision": {
+      "action": "run_full_suite",
+      "model_fitted": false,
+      "available_complete_unique_commits": 0,
+      "unstable_commits_excluded": [],
+      "reason": "No completed, complete result at BASE"
+    },
+    "visible_completed_builds": [
+      1430,
+      1510,
+      1685,
+      2180
+    ],
+    "recorded_classes": 2230,
+    "recorded_failed_classes": 1,
+    "complete_as_published": true,
+    "report_limitation": null
+  },
+  {
+    "build": 2263,
+    "commit": "55a8044b36f5ce96878753e73037af662e34e9a0",
+    "decision": {
+      "action": "run_full_suite",
+      "model_fitted": false,
+      "available_complete_unique_commits": 0,
+      "unstable_commits_excluded": [],
+      "reason": "No completed, complete result at BASE"
+    },
+    "visible_completed_builds": [
+      1430,
+      1510,
+      1685,
+      2180,
+      2193
+    ],
+    "recorded_classes": 2225,
+    "recorded_failed_classes": 1,
+    "complete_as_published": true,
+    "report_limitation": null
+  },
+  {
+    "build": 2808,
+    "commit": "b969bac98d262f83db23e8f1e2baa3ca8f28f6ec",
+    "decision": {
+      "action": "run_full_suite",
+      "model_fitted": false,
+      "available_complete_unique_commits": 0,
+      "unstable_commits_excluded": [],
+      "reason": "No completed, complete result at BASE"
+    },
+    "visible_completed_builds": [
+      1430,
+      1510,
+      1685,
+      2180,
+      2193,
+      2263
+    ],
+    "recorded_classes": 2313,
+    "recorded_failed_classes": 1,
+    "complete_as_published": true,
+    "report_limitation": null
+  },
+  {
+    "build": 3012,
+    "commit": "52f2591e8b6b7f75218ec153e52379b6046c49e8",
+    "decision": {
+      "action": "run_full_suite",
+      "model_fitted": false,
+      "available_complete_unique_commits": 0,
+      "unstable_commits_excluded": [],
+      "reason": "No completed, complete result at BASE"
+    },
+    "visible_completed_builds": [
+      1430,
+      1510,
+      1685,
+      2180,
+      2193,
+      2263,
+      2808
+    ],
+    "recorded_classes": 2363,
+    "recorded_failed_classes": 0,
+    "complete_as_published": true,
+    "report_limitation": null
+  },
+  {
+    "build": 3013,
+    "commit": "df38870d8b32a73ee99e84456e2a9434966cd4b1",
+    "decision": {
+      "action": "run_full_suite",
+      "model_fitted": false,
+      "available_complete_unique_commits": 0,
+      "unstable_commits_excluded": [],
+      "reason": "No completed, complete result at BASE"
+    },
+    "visible_completed_builds": [
+      1430,
+      1510,
+      1685,
+      2180,
+      2193,
+      2263,
+      2808,
+      3012
+    ],
+    "recorded_classes": 0,
+    "recorded_failed_classes": 0,
+    "complete_as_published": false,
+    "report_limitation": "Preserved initial report failure: HTTP Error 404: "
+  },
+  {
+    "build": 3014,
+    "commit": "b3ec55ceccae669576719fafb2417bcd16d9c4e7",
+    "decision": {
+      "action": "run_full_suite",
+      "model_fitted": false,
+      "available_complete_unique_commits": 0,
+      "unstable_commits_excluded": [],
+      "reason": "No completed, complete result at BASE"
+    },
+    "visible_completed_builds": [
+      1430,
+      1510,
+      1685,
+      2180,
+      2193,
+      2263,
+      2808,
+      3012,
+      3013
+    ],
+    "recorded_classes": 0,
+    "recorded_failed_classes": 0,
+    "complete_as_published": false,
+    "report_limitation": "Preserved initial report failure: HTTP Error 404: "
+  },
+  {
+    "build": 3015,
+    "commit": "33a32e5dea377b1951662841421ba86c2eb79a11",
+    "decision": {
+      "action": "run_full_suite",
+      "model_fitted": false,
+      "available_complete_unique_commits": 0,
+      "unstable_commits_excluded": [],
+      "reason": "No completed, complete result at BASE"
+    },
+    "visible_completed_builds": [
+      1430,
+      1510,
+      1685,
+      2180,
+      2193,
+      2263,
+      2808,
+      3012,
+      3013,
+      3014
+    ],
+    "recorded_classes": 0,
+    "recorded_failed_classes": 0,
+    "complete_as_published": false,
+    "report_limitation": "Preserved initial report failure: HTTP Error 404: "
+  },
+  {
+    "build": 3016,
+    "commit": "7206cac9427debadfa80d0bc8e134b52bf8464cc",
+    "decision": {
+      "action": "run_full_suite",
+      "model_fitted": false,
+      "available_complete_unique_commits": 0,
+      "unstable_commits_excluded": [],
+      "reason": "No completed, complete result at BASE"
+    },
+    "visible_completed_builds": [
+      1430,
+      1510,
+      1685,
+      2180,
+      2193,
+      2263,
+      2808,
+      3012,
+      3013,
+      3014,
+      3015
+    ],
+    "recorded_classes": 0,
+    "recorded_failed_classes": 0,
+    "complete_as_published": false,
+    "report_limitation": "Preserved initial report failure: HTTP Error 404: "
+  },
+  {
+    "build": 3017,
+    "commit": "aeff1ea56039f5bfca6ec74995427d8e4991b0df",
+    "decision": {
+      "action": "run_full_suite",
+      "model_fitted": false,
+      "available_complete_unique_commits": 0,
+      "unstable_commits_excluded": [],
+      "reason": "No completed, complete result at BASE"
+    },
+    "visible_completed_builds": [
+      1430,
+      1510,
+      1685,
+      2180,
+      2193,
+      2263,
+      2808,
+      3012,
+      3013,
+      3014,
+      3015,
+      3016
+    ],
+    "recorded_classes": 0,
+    "recorded_failed_classes": 0,
+    "complete_as_published": false,
+    "report_limitation": "Preserved initial report failure: HTTP Error 404: "
+  },
+  {
+    "build": 3018,
+    "commit": "adf70087b2d9c324996dbe15a48b52d37c3553f1",
+    "decision": {
+      "action": "run_full_suite",
+      "model_fitted": false,
+      "available_complete_unique_commits": 0,
+      "unstable_commits_excluded": [],
+      "reason": "No completed, complete result at BASE"
+    },
+    "visible_completed_builds": [
+      1430,
+      1510,
+      1685,
+      2180,
+      2193,
+      2263,
+      2808,
+      3012,
+      3013,
+      3014,
+      3015,
+      3016,
+      3017
+    ],
+    "recorded_classes": 0,
+    "recorded_failed_classes": 0,
+    "complete_as_published": false,
+    "report_limitation": "Preserved initial report failure: HTTP Error 404: "
+  },
+  {
+    "build": 3019,
+    "commit": "088ce69627895b252be4a7a3e676eb79290544fe",
+    "decision": {
+      "action": "run_full_suite",
+      "model_fitted": false,
+      "available_complete_unique_commits": 0,
+      "unstable_commits_excluded": [],
+      "reason": "No completed, complete result at BASE"
+    },
+    "visible_completed_builds": [
+      1430,
+      1510,
+      1685,
+      2180,
+      2193,
+      2263,
+      2808,
+      3012,
+      3013,
+      3014,
+      3015,
+      3016,
+      3017,
+      3018
+    ],
+    "recorded_classes": 0,
+    "recorded_failed_classes": 0,
+    "complete_as_published": false,
+    "report_limitation": "Preserved initial report failure: HTTP Error 404: "
+  }
+]

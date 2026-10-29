@@ -978,3 +978,39 @@ finished all1446Kafka evaluation job members (69,931,206new payload bytes plus
 Four research-only selection/lineage/floor tests passed in0.25s. No appfeatures,
 alpha/riskgates, old studies, stashes, installers, website changes, push or merge.
 See docs/EVALUATION_D091_FINDINGS.md and experiments/results/larger-history-d091-2026-10-29/FINDINGS.md.
+
+## D092 rolling main-branch research pipeline — 2026-10-29
+
+Implemented a research-only completion-aware event runner. Each decision is saved
+before current truth access; overlapping jobs become visible only after finish.
+Immutable observations preserve failed reruns, deduplicate commit evidence and
+exclude conflicts/incomplete records. No application/model/risk settings changed.
+
+Scanned 26 public Apache main/master/trunk CI jobs by availability only. No job
+met the fixed 240-completed-build criterion; Oak trunk retained 15 builds, sparse
+from April 2024 to October 2026. Initial discovery URL encoding errors are retained
+separately; corrected availability counts are authoritative. All 15 exact source
+revisions/branches were verified on pinned trunk first-parent lineage.
+
+Ran the decision-before-report pilot. Eight reports downloaded; seven were 404.
+Maven aggregate root lacks passCount; initial parser wrongly marked all incomplete.
+Fixed only the report adapter, cross-checking complete child totals against root
+fail/skip counts. Preserved initial run and replayed identical cached bytes into a
+new corrected folder: eight valid published reports, seven observed failing builds,
+seven still-unavailable reports. No failures erased; zero new report network bytes
+in correction. All decisions remain full-suite, no models fitted or test skipping.
+
+Seven offline research tests passed (5.20s): persistence/order, overlap completion,
+future-label invariance, failed-rerun preservation, duplicate IDs and aggregate
+count validation. Source default-test universe/features and selective live-model
+wiring are not validated by this underpowered engineering pilot. Do not call it
+an effectiveness study, measured CI saving or a continuous representative history.
+No genuinely complete long main-branch archive was available in inspected jobs.
+
+34 compressed SHA256-checked public report/availability inputs are preserved
+(1,664,862 bytes compressed); raw reports total25,546,933bytes. Original/raw copies
+ignored by Git; exact snapshots in corrected result inputs/. See
+ROLLING_CI_D092_FINDINGS.md and RESEARCH_EVALUATION_D092.md. Longer complete
+sequential main-branch data is still needed; do not retune inspected outcomes.
+App remains a02d20f with recorded780full-suite passes. No push/merge, installers,
+website changes, stashes applied, or background study left running.

@@ -51,3 +51,7 @@ node_modules/
 experiments/results/agent-brake-swebench-*/partial/
 # Generated standalone Python core for the Windows desktop installer
 ide/electron-app/resources/codedna-core/
+
+# Public CI raw reports are preserved as hashed, compressed D092 input snapshots.
+experiments/results/rolling-main-ci-d092-2026-10-29/report-*.json
+experiments/results/rolling-main-ci-d092-corrected-2026-10-29/report-*.json

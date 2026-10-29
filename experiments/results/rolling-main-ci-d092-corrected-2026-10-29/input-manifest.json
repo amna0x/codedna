@@ -1,0 +1,240 @@
+[
+  {
+    "role": "public_ci_report",
+    "original_name": "report-1430.json",
+    "compressed_file": "inputs/e0744efeaa48a4b7ad4e81b1bac535f5182ac96a901bbf7a4d78b59a2692cc2f.json.gz",
+    "raw_sha256": "e0744efeaa48a4b7ad4e81b1bac535f5182ac96a901bbf7a4d78b59a2692cc2f",
+    "raw_bytes": 3177802
+  },
+  {
+    "role": "public_ci_report",
+    "original_name": "report-1510.json",
+    "compressed_file": "inputs/57497d5f320eda1c920589fb146dce31e794ccb6dc6161f49067776e878d96aa.json.gz",
+    "raw_sha256": "57497d5f320eda1c920589fb146dce31e794ccb6dc6161f49067776e878d96aa",
+    "raw_bytes": 1730297
+  },
+  {
+    "role": "public_ci_report",
+    "original_name": "report-1685.json",
+    "compressed_file": "inputs/bb40bf65dfcb5ee77f5fc5240b9b416dfbc274d40e4b2ed648a13ebee0004089.json.gz",
+    "raw_sha256": "bb40bf65dfcb5ee77f5fc5240b9b416dfbc274d40e4b2ed648a13ebee0004089",
+    "raw_bytes": 3272256
+  },
+  {
+    "role": "public_ci_report",
+    "original_name": "report-2180.json",
+    "compressed_file": "inputs/2771b6b6db9bbd2cf4c12560c00aada9f3734fa8070af5d2eab3f2eb76c54c12.json.gz",
+    "raw_sha256": "2771b6b6db9bbd2cf4c12560c00aada9f3734fa8070af5d2eab3f2eb76c54c12",
+    "raw_bytes": 3427113
+  },
+  {
+    "role": "public_ci_report",
+    "original_name": "report-2193.json",
+    "compressed_file": "inputs/e38e65284f43cbfd9010416cba04a34291166aa5ed91ed177218e829767dd070.json.gz",
+    "raw_sha256": "e38e65284f43cbfd9010416cba04a34291166aa5ed91ed177218e829767dd070",
+    "raw_bytes": 3442239
+  },
+  {
+    "role": "public_ci_report",
+    "original_name": "report-2263.json",
+    "compressed_file": "inputs/7642aab6035012f1777b7e7573b2f459cfae809d22ae1d97fb86b4f23b282f7f.json.gz",
+    "raw_sha256": "7642aab6035012f1777b7e7573b2f459cfae809d22ae1d97fb86b4f23b282f7f",
+    "raw_bytes": 3413355
+  },
+  {
+    "role": "public_ci_report",
+    "original_name": "report-2808.json",
+    "compressed_file": "inputs/88b6c80fcb5a79b6622e9e8370d7df56ffc4d22cf6c0ae486414e8f839c35adc.json.gz",
+    "raw_sha256": "88b6c80fcb5a79b6622e9e8370d7df56ffc4d22cf6c0ae486414e8f839c35adc",
+    "raw_bytes": 3463292
+  },
+  {
+    "role": "public_ci_report",
+    "original_name": "report-3012.json",
+    "compressed_file": "inputs/692cb01e1f84588772bbea4ce60114ad00960f72e64467632f6f5bd90e68dd59.json.gz",
+    "raw_sha256": "692cb01e1f84588772bbea4ce60114ad00960f72e64467632f6f5bd90e68dd59",
+    "raw_bytes": 3620579
+  },
+  {
+    "role": "availability_metadata",
+    "url": "https://ci-builds.apache.org/job/Jackrabbit/job/filevault-package-maven-plugin/job/master/",
+    "compressed_file": "inputs/742a43cb245bf8b9cc52dd5737043d734b3c68b06ba2c8468c79f8c6e0fae721.json.gz",
+    "raw_sha256": "742a43cb245bf8b9cc52dd5737043d734b3c68b06ba2c8468c79f8c6e0fae721",
+    "raw_bytes": 1701
+  },
+  {
+    "role": "availability_metadata",
+    "url": "https://ci-builds.apache.org/job/Jackrabbit/job/filevault/job/master/",
+    "compressed_file": "inputs/6ff47c9213cfe03494d1944b311e8cc6f226bcde3338da7b361722864251bc4e.json.gz",
+    "raw_sha256": "6ff47c9213cfe03494d1944b311e8cc6f226bcde3338da7b361722864251bc4e",
+    "raw_bytes": 2731
+  },
+  {
+    "role": "availability_metadata",
+    "url": "https://ci-builds.apache.org/job/Jackrabbit/job/jackrabbit-oak-trunk-db2-java17/",
+    "compressed_file": "inputs/6b64fbd079d9d7374f41ee2f2172960c417555338e21314b251ede6f78a25d91.json.gz",
+    "raw_sha256": "6b64fbd079d9d7374f41ee2f2172960c417555338e21314b251ede6f78a25d91",
+    "raw_bytes": 3843
+  },
+  {
+    "role": "availability_metadata",
+    "url": "https://ci-builds.apache.org/job/Jackrabbit/job/jackrabbit-oak-trunk-derby-ibm-java21/",
+    "compressed_file": "inputs/fae5e5a7ec62866551e74cf4b09de8317f3d1f2377f7f14230fb43105d874c62.json.gz",
+    "raw_sha256": "fae5e5a7ec62866551e74cf4b09de8317f3d1f2377f7f14230fb43105d874c62",
+    "raw_bytes": 5485
+  },
+  {
+    "role": "availability_metadata",
+    "url": "https://ci-builds.apache.org/job/Jackrabbit/job/jackrabbit-oak-trunk-documentns/",
+    "compressed_file": "inputs/e62faadba9a27caff4600ab304c859a8b35f0621766dd9aba4ac8f6e173697df.json.gz",
+    "raw_sha256": "e62faadba9a27caff4600ab304c859a8b35f0621766dd9aba4ac8f6e173697df",
+    "raw_bytes": 5745
+  },
+  {
+    "role": "availability_metadata",
+    "url": "https://ci-builds.apache.org/job/Jackrabbit/job/jackrabbit-oak-trunk-java-latest/",
+    "compressed_file": "inputs/7998af1f4f825870d1a9ad00a2f7004ff2b50aa3cca7f3f5bcb0109f575da1ef.json.gz",
+    "raw_sha256": "7998af1f4f825870d1a9ad00a2f7004ff2b50aa3cca7f3f5bcb0109f575da1ef",
+    "raw_bytes": 6241
+  },
+  {
+    "role": "availability_metadata",
+    "url": "https://ci-builds.apache.org/job/Jackrabbit/job/jackrabbit-oak-trunk-java21/",
+    "compressed_file": "inputs/3ebcefcac9065daa4afa907fb6f78d0c9802fe9cbfad1f3038f79cd1db00d4db.json.gz",
+    "raw_sha256": "3ebcefcac9065daa4afa907fb6f78d0c9802fe9cbfad1f3038f79cd1db00d4db",
+    "raw_bytes": 3791
+  },
+  {
+    "role": "availability_metadata",
+    "url": "https://ci-builds.apache.org/job/Jackrabbit/job/jackrabbit-oak-trunk-java25/",
+    "compressed_file": "inputs/105e5beb83bf3baf86e0c8fcce0ba34b8c63e6c86c7fef98ee2027ceb747ad37.json.gz",
+    "raw_sha256": "105e5beb83bf3baf86e0c8fcce0ba34b8c63e6c86c7fef98ee2027ceb747ad37",
+    "raw_bytes": 3093
+  },
+  {
+    "role": "availability_metadata",
+    "url": "https://ci-builds.apache.org/job/Jackrabbit/job/jackrabbit-oak-trunk-mongo-java17/",
+    "compressed_file": "inputs/5b62862f3dfba0a08021564a9e1e63895501c82f18c63cd4cd9518f37006a30d.json.gz",
+    "raw_sha256": "5b62862f3dfba0a08021564a9e1e63895501c82f18c63cd4cd9518f37006a30d",
+    "raw_bytes": 3103
+  },
+  {
+    "role": "availability_metadata",
+    "url": "https://ci-builds.apache.org/job/Jackrabbit/job/jackrabbit-oak-trunk-mysql/",
+    "compressed_file": "inputs/bec53215b85d47dcd016bef25b7890a29f19a5606cf30fd4872918c0dff18849.json.gz",
+    "raw_sha256": "bec53215b85d47dcd016bef25b7890a29f19a5606cf30fd4872918c0dff18849",
+    "raw_bytes": 3031
+  },
+  {
+    "role": "availability_metadata",
+    "url": "https://ci-builds.apache.org/job/Jackrabbit/job/jackrabbit-oak-trunk-postgres-java25/",
+    "compressed_file": "inputs/188c298d9d7b255065f3f03712b2fe7e346ddf2cfb8a5e89c14f5fe80937bc75.json.gz",
+    "raw_sha256": "188c298d9d7b255065f3f03712b2fe7e346ddf2cfb8a5e89c14f5fe80937bc75",
+    "raw_bytes": 3039
+  },
+  {
+    "role": "availability_metadata",
+    "url": "https://ci-builds.apache.org/job/Jackrabbit/job/jackrabbit-oak-trunk-windows/",
+    "compressed_file": "inputs/a37edcf61ba36b2432fc9c568db576ea320b6fa97a543911fb914008fd8422d6.json.gz",
+    "raw_sha256": "a37edcf61ba36b2432fc9c568db576ea320b6fa97a543911fb914008fd8422d6",
+    "raw_bytes": 2910
+  },
+  {
+    "role": "availability_metadata",
+    "url": "https://ci-builds.apache.org/job/Jackrabbit/job/jackrabbit-oak-trunk/",
+    "compressed_file": "inputs/603e19597949a02c135e414b00d840fcbf0f52aaab6d76d170a249408f546a48.json.gz",
+    "raw_sha256": "603e19597949a02c135e414b00d840fcbf0f52aaab6d76d170a249408f546a48",
+    "raw_bytes": 10434
+  },
+  {
+    "role": "availability_metadata",
+    "url": "https://ci-builds.apache.org/job/Kafka/job/kafka/job/trunk/",
+    "compressed_file": "inputs/830222e201ff59edd23f5babbe7eeee8767f1fb1078af515465851cf900b8a62.json.gz",
+    "raw_sha256": "830222e201ff59edd23f5babbe7eeee8767f1fb1078af515465851cf900b8a62",
+    "raw_bytes": 2606
+  },
+  {
+    "role": "availability_metadata",
+    "url": "https://ci-builds.apache.org/job/Karaf/job/karaf-cave/job/main/",
+    "compressed_file": "inputs/26cbddb64b636d7749b73c90d791fa5f8efae0f2e3d63efdd9c8dddc05e290ae.json.gz",
+    "raw_sha256": "26cbddb64b636d7749b73c90d791fa5f8efae0f2e3d63efdd9c8dddc05e290ae",
+    "raw_bytes": 157
+  },
+  {
+    "role": "availability_metadata",
+    "url": "https://ci-builds.apache.org/job/Karaf/job/karaf-cave/job/master/",
+    "compressed_file": "inputs/be884633b18b72ee7591c0d3ea90d3ef2a9947b021dd40523560e9d2a1116979.json.gz",
+    "raw_sha256": "be884633b18b72ee7591c0d3ea90d3ef2a9947b021dd40523560e9d2a1116979",
+    "raw_bytes": 161
+  },
+  {
+    "role": "availability_metadata",
+    "url": "https://ci-builds.apache.org/job/Karaf/job/karaf-cellar/job/main/",
+    "compressed_file": "inputs/2fec7119ead65557d78c5ff3a2922c90857799805a26fab862af9d1565cf3779.json.gz",
+    "raw_sha256": "2fec7119ead65557d78c5ff3a2922c90857799805a26fab862af9d1565cf3779",
+    "raw_bytes": 1276
+  },
+  {
+    "role": "availability_metadata",
+    "url": "https://ci-builds.apache.org/job/Karaf/job/karaf-cellar/job/master/",
+    "compressed_file": "inputs/ac24519fd061eb681a320520254ea6324c96b80f80708f6cdcb23a2bfe869c5a.json.gz",
+    "raw_sha256": "ac24519fd061eb681a320520254ea6324c96b80f80708f6cdcb23a2bfe869c5a",
+    "raw_bytes": 163
+  },
+  {
+    "role": "availability_metadata",
+    "url": "https://ci-builds.apache.org/job/Karaf/job/karaf-decanter/job/main/",
+    "compressed_file": "inputs/9ee4cdaae537c0fe93ab6597eb7f13d5b00b9e9764acf1f2e6dd96ee3362b0b7.json.gz",
+    "raw_sha256": "9ee4cdaae537c0fe93ab6597eb7f13d5b00b9e9764acf1f2e6dd96ee3362b0b7",
+    "raw_bytes": 1427
+  },
+  {
+    "role": "availability_metadata",
+    "url": "https://ci-builds.apache.org/job/Karaf/job/karaf-decanter/job/master/",
+    "compressed_file": "inputs/5041445382cb91af932fab314eff0ff83ad7d45d38ee47daff61582fd7c3c903.json.gz",
+    "raw_sha256": "5041445382cb91af932fab314eff0ff83ad7d45d38ee47daff61582fd7c3c903",
+    "raw_bytes": 165
+  },
+  {
+    "role": "availability_metadata",
+    "url": "https://ci-builds.apache.org/job/Karaf/job/karaf-runtime/job/main/",
+    "compressed_file": "inputs/c1476375be4012e463c91c7ece0ad907262655a7f1c2db11ac2eb2005d7c7cd7.json.gz",
+    "raw_sha256": "c1476375be4012e463c91c7ece0ad907262655a7f1c2db11ac2eb2005d7c7cd7",
+    "raw_bytes": 1332
+  },
+  {
+    "role": "availability_metadata",
+    "url": "https://ci-builds.apache.org/job/james/job/Apache-James-JSIEVE/job/master/",
+    "compressed_file": "inputs/4f6cbce3212678c01881ba629d523bb2b89fa91b42dc3828c5f9b5f37ca4ede8.json.gz",
+    "raw_sha256": "4f6cbce3212678c01881ba629d523bb2b89fa91b42dc3828c5f9b5f37ca4ede8",
+    "raw_bytes": 1282
+  },
+  {
+    "role": "availability_metadata",
+    "url": "https://ci-builds.apache.org/job/james/job/ApacheJames-JDKIM/job/master/",
+    "compressed_file": "inputs/671e983f0b2310ca096819b6c611834dd6cec6f62074a2b3b2fa0cc2ee410ea5.json.gz",
+    "raw_sha256": "671e983f0b2310ca096819b6c611834dd6cec6f62074a2b3b2fa0cc2ee410ea5",
+    "raw_bytes": 1277
+  },
+  {
+    "role": "availability_metadata",
+    "url": "https://ci-builds.apache.org/job/james/job/ApacheJames-JSPF/job/master/",
+    "compressed_file": "inputs/38c4eebfbdea120f139624bfbafb7e38e2c674adb70692da3fb536544693916b.json.gz",
+    "raw_sha256": "38c4eebfbdea120f139624bfbafb7e38e2c674adb70692da3fb536544693916b",
+    "raw_bytes": 1276
+  },
+  {
+    "role": "availability_metadata",
+    "url": "https://ci-builds.apache.org/job/james/job/ApacheJames-Mime4J/job/master/",
+    "compressed_file": "inputs/72dab25e6feed564561d902fc581b933d82f0386e7e956268030ccd7ca819b4b.json.gz",
+    "raw_sha256": "72dab25e6feed564561d902fc581b933d82f0386e7e956268030ccd7ca819b4b",
+    "raw_bytes": 2407
+  },
+  {
+    "role": "availability_metadata",
+    "url": "https://ci-builds.apache.org/job/james/job/ApacheJames/job/master/",
+    "compressed_file": "inputs/8296674f4c13aed338303530cd013a877de0243b22b9906fad8f1dc5d0668e99.json.gz",
+    "raw_sha256": "8296674f4c13aed338303530cd013a877de0243b22b9906fad8f1dc5d0668e99",
+    "raw_bytes": 9026
+  }
+]

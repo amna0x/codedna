@@ -1,0 +1,17 @@
+{
+  "scope": "Genuine trunk CI engineering pilot, not independent effectiveness/net-CI savings",
+  "manifest_sha256": "b9f1a5b7ca49b7b2a978a2160dc19700a4f05dc536481a53421647c822fbdc9c",
+  "application_source": "a02d20f",
+  "builds": 15,
+  "source_verified_builds": 15,
+  "complete_published_reports": 8,
+  "recorded_failing_builds": 7,
+  "model_fits": 0,
+  "selective_decisions": 0,
+  "report_payload_bytes": 25546933,
+  "network_report_bytes": 0,
+  "replay_of_inspected_cached_reports": true,
+  "source_test_universe_verified": false,
+  "new_ci_execution": false,
+  "limitation": "None of 26 inspected jobs met 240 retained builds; existing evidence guards remain mandatory."
+}

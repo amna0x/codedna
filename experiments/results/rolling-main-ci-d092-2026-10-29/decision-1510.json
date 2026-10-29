@@ -1,0 +1,15 @@
+{
+  "build": 1510,
+  "commit": "53fd887f886a96fb3b6122d10f5cab0b3c8d6683",
+  "started": 1717072895.554,
+  "visible_completed_builds": [
+    1430
+  ],
+  "decision": {
+    "action": "run_full_suite",
+    "model_fitted": false,
+    "available_complete_unique_commits": 0,
+    "unstable_commits_excluded": [],
+    "reason": "No completed, complete result at BASE"
+  }
+}

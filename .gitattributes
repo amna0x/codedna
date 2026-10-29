@@ -22,3 +22,6 @@ experiments/results/moonshot-held-out-d090-2026-10-29/** -text
 docs/validation-logs/d089-full-maven.log -text
 experiments/d091-cohorts/** -text
 experiments/results/larger-history-d091-2026-10-29/** -text
+experiments/d092-*.json -text
+experiments/results/rolling-main-ci-d092-2026-10-29/** -text
+experiments/results/rolling-main-ci-d092-corrected-2026-10-29/** -text

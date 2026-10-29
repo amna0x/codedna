@@ -621,3 +621,8 @@ D089 full source validation passed 780 tests, zero failures/skips. Held-out Moon
 ## D091 larger-history eligibility result
 
 Four frozen cohorts contain 6726selected heads and1348evaluation targets. Exact live lineage/freshness and evidence gates authorize no skipping:1305missing current BASE,35insufficient audit,8source-blocked. All raw evaluation outcomes were acquired. This is a fixed-history compatibility result, not fitted-model accuracy or a rolling deployment/CI-speedup study. See EVALUATION_D091_FINDINGS.md; do not weaken gates or retune these now-inspected cases.
+
+
+## D092 completion-aware rolling pilot
+
+The research runner now persists each decision before truth and releases observations only on CI completion. Seven timing/parser/failure-preservation checks pass. A genuine 15-build Oak trunk pilot has eight valid published reports and seven unavailable reports; no inspected public job retained the prescribed 240 builds. Selective source-universe/model validation and a longer continuous main-branch archive remain required. See ROLLING_CI_D092_FINDINGS.md; no effectiveness or time-saving claim follows from this pilot.
