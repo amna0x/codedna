@@ -1037,3 +1037,15 @@ Needs laptop running; no Windows restart persistence, no AI calls. Instructions
 in docs/CI_EVIDENCE_COLLECTOR_D093.md. Ten offline research tests passed7.56s;
 separate app780validation unchanged. Graphify AST refreshed. No push/merge,
 installation/website changes or stash operations. See EVALUATION_D093_FINDINGS.md.
+
+## D094 CI-profile diagnosis — 2026-10-30
+
+Pinned Oak Jenkinsfile enables integrationTesting and archives Surefire+Failsafe.
+420report-only identities:134exact FQCN paths(97IT),286no exact path; external
+origin not inferred from path absence. oak-jcr declares jackrabbit-jcr-tests test
+dependency.28of29source-only identities are exercise module with explicit skip;
+RevisionGCTest parameterized absence unresolved. No mapping fabricated, outcomes
+removed, app/model/gates changed, build executed, push/merge or installer changes.
+Read-only script and original/v2 outputs preserve evidence. See
+CI_PROFILE_D094_FINDINGS.md. Need validated module-scoped pair or effective CI
+profile/external identity provenance before selective evaluation; no CI gain yet.

@@ -1,0 +1,2642 @@
+{
+  "commit": "52f2591e8b6b7f75218ec153e52379b6046c49e8",
+  "ci_build": 3012,
+  "reported_only": [
+    {
+      "class": "org.apache.jackrabbit.core.observation.MixinTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.core.observation.MoveInPlaceTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.core.observation.ReorderTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.core.observation.ShareableNodesTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.core.query.ChildAxisQueryTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.core.query.DerefTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.core.query.ExcerptTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.core.query.FnNameQueryTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.core.query.FulltextQueryTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.core.query.FulltextSQL2QueryTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.core.query.JoinTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.core.query.LimitAndOffsetTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.core.query.MixinTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.core.query.OrderByTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.core.query.ParentNodeTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.core.query.PathQueryNodeTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.core.query.QueryResultTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.core.query.SQL2NodeLocalNameTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.core.query.SQL2OffsetLimitTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.core.query.SQL2OrderByTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.core.query.SQL2OuterJoinTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.core.query.SQL2PathEscapingTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.core.query.SQL2QueryResultTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.core.query.SQLTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.core.query.SelectClauseTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.core.query.ShareableNodeTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.core.query.SimilarQueryTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.core.query.SimpleQueryTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.core.query.SkipDeletedNodesTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.core.query.UpperLowerCaseQueryTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.core.query.VersionStoreQueryTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.core.query.XPathAxisTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.core.value.BinaryValueTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.core.value.PathTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.blob.cloud.azure.blobstorage.AzureDataRecordAccessProviderIT",
+      "exact_fqcn_source_paths": [
+        "oak-blob-cloud-azure/src/test/java/org/apache/jackrabbit/oak/blob/cloud/azure/blobstorage/AzureDataRecordAccessProviderIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.blob.cloud.azure.blobstorage.AzureDataStoreRegistrarArchTest",
+      "exact_fqcn_source_paths": [
+        "oak-blob-cloud-azure/src/test/java/org/apache/jackrabbit/oak/blob/cloud/azure/blobstorage/AzureDataStoreRegistrarArchTest.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.blob.cloud.azure.blobstorage.AzureDataStoreRegistrarIT",
+      "exact_fqcn_source_paths": [
+        "oak-blob-cloud-azure/src/test/java/org/apache/jackrabbit/oak/blob/cloud/azure/blobstorage/AzureDataStoreRegistrarIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.blob.cloud.azure.blobstorage.v12.AzureBlobStoreBackendV12AuthIT",
+      "exact_fqcn_source_paths": [
+        "oak-blob-cloud-azure/src/test/java/org/apache/jackrabbit/oak/blob/cloud/azure/blobstorage/v12/AzureBlobStoreBackendV12AuthIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.blob.cloud.azure.blobstorage.v12.AzureBlobStoreBackendV12IT",
+      "exact_fqcn_source_paths": [
+        "oak-blob-cloud-azure/src/test/java/org/apache/jackrabbit/oak/blob/cloud/azure/blobstorage/v12/AzureBlobStoreBackendV12IT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.blob.cloud.azure.blobstorage.v12.AzureDataRecordAccessProviderV12IT",
+      "exact_fqcn_source_paths": [
+        "oak-blob-cloud-azure/src/test/java/org/apache/jackrabbit/oak/blob/cloud/azure/blobstorage/v12/AzureDataRecordAccessProviderV12IT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.blob.cloud.azure.blobstorage.v12.AzureDataStoreV12IT",
+      "exact_fqcn_source_paths": [
+        "oak-blob-cloud-azure/src/test/java/org/apache/jackrabbit/oak/blob/cloud/azure/blobstorage/v12/AzureDataStoreV12IT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.blob.cloud.s3.S3DataRecordAccessProviderIT",
+      "exact_fqcn_source_paths": [
+        "oak-blob-cloud/src/test/java/org/apache/jackrabbit/oak/blob/cloud/s3/S3DataRecordAccessProviderIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.commons.PerfLoggerIT",
+      "exact_fqcn_source_paths": [
+        "oak-commons/src/test/java/org/apache/jackrabbit/oak/commons/PerfLoggerIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.composite.it.BackwardCompatibleMountCompositeIT",
+      "exact_fqcn_source_paths": [
+        "oak-store-composite/src/test/java/org/apache/jackrabbit/oak/composite/it/BackwardCompatibleMountCompositeIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.composite.it.MultiMountCompositeIT",
+      "exact_fqcn_source_paths": [
+        "oak-store-composite/src/test/java/org/apache/jackrabbit/oak/composite/it/MultiMountCompositeIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.core.RootFuzzIT",
+      "exact_fqcn_source_paths": [
+        "oak-it/src/test/java/org/apache/jackrabbit/oak/core/RootFuzzIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.index.DocumentStoreIndexerIT",
+      "exact_fqcn_source_paths": [
+        "oak-run/src/test/java/org/apache/jackrabbit/oak/index/DocumentStoreIndexerIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.index.LuceneIndexCommandIT",
+      "exact_fqcn_source_paths": [
+        "oak-run/src/test/java/org/apache/jackrabbit/oak/index/LuceneIndexCommandIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.index.ReindexIT",
+      "exact_fqcn_source_paths": [
+        "oak-run/src/test/java/org/apache/jackrabbit/oak/index/ReindexIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.index.indexer.document.flatfile.pipelined.PipelinedIT",
+      "exact_fqcn_source_paths": [
+        "oak-run-commons/src/test/java/org/apache/jackrabbit/oak/index/indexer/document/flatfile/pipelined/PipelinedIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.index.indexer.document.flatfile.pipelined.PipelinedMongoConnectionFailureIT",
+      "exact_fqcn_source_paths": [
+        "oak-run-commons/src/test/java/org/apache/jackrabbit/oak/index/indexer/document/flatfile/pipelined/PipelinedMongoConnectionFailureIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.index.indexer.document.flatfile.pipelined.PipelinedParametrizedIT",
+      "exact_fqcn_source_paths": [
+        "oak-run-commons/src/test/java/org/apache/jackrabbit/oak/index/indexer/document/flatfile/pipelined/PipelinedParametrizedIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.index.indexer.document.flatfile.pipelined.PipelinedTreeStoreIT",
+      "exact_fqcn_source_paths": [
+        "oak-run-commons/src/test/java/org/apache/jackrabbit/oak/index/indexer/document/flatfile/pipelined/PipelinedTreeStoreIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.indexversion.PurgeOldIndexVersionIT",
+      "exact_fqcn_source_paths": [
+        "oak-run/src/test/java/org/apache/jackrabbit/oak/indexversion/PurgeOldIndexVersionIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.AsyncConflictsIT",
+      "exact_fqcn_source_paths": [
+        "oak-lucene/src/test/java/org/apache/jackrabbit/oak/jcr/AsyncConflictsIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.AtomicCounterClusterIT",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/AtomicCounterClusterIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.AtomicCounterIT",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/AtomicCounterIT.java",
+        "oak-lucene/src/test/java/org/apache/jackrabbit/oak/jcr/AtomicCounterIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.ConcurrentAddIT",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/ConcurrentAddIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.ConcurrentAddNodesClusterIT",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/ConcurrentAddNodesClusterIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.ConcurrentAddRemoveIT",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/ConcurrentAddRemoveIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.ConcurrentIndexUpdateIT",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/ConcurrentIndexUpdateIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.ConcurrentReadIT",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/ConcurrentReadIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.JackrabbitNodeTest",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/JackrabbitNodeTest.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.LargeOperationIT",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/LargeOperationIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.ManyChildrenIT",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/ManyChildrenIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.OperationLoggerTest",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/OperationLoggerTest.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.PackageImportIT",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/PackageImportIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.PropertyTest",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/PropertyTest.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.ReferenceBinaryIT",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/ReferenceBinaryIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.ReferencesTest",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/ReferencesTest.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.binary.BinaryAccessDSGCIT",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/binary/BinaryAccessDSGCIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.binary.BinaryAccessIT",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/binary/BinaryAccessIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.binary.BinaryAccessUnsupportedIT",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/binary/BinaryAccessUnsupportedIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.cluster.NonLocalObservationIT",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/cluster/NonLocalObservationIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.cluster.SimpleTestIT",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/cluster/SimpleTestIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.nodetype.MixinTest",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/nodetype/MixinTest.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.nodetype.NodeTypeDefinitionTest",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/nodetype/NodeTypeDefinitionTest.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.observation.SlowObservationIT",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/observation/SlowObservationIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.query.FacetTest",
+      "exact_fqcn_source_paths": [
+        "oak-lucene/src/test/java/org/apache/jackrabbit/oak/jcr/query/FacetTest.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.query.RemappingTest",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/query/RemappingTest.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.query.SpellcheckTest",
+      "exact_fqcn_source_paths": [
+        "oak-lucene/src/test/java/org/apache/jackrabbit/oak/jcr/query/SpellcheckTest.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.query.SuggestTest",
+      "exact_fqcn_source_paths": [
+        "oak-lucene/src/test/java/org/apache/jackrabbit/oak/jcr/query/SuggestTest.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.query.TextExtractionQueryTest",
+      "exact_fqcn_source_paths": [
+        "oak-lucene/src/test/java/org/apache/jackrabbit/oak/jcr/query/TextExtractionQueryTest.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.security.authorization.AccessControlImporterTest",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/security/authorization/AccessControlImporterTest.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.security.authorization.AccessControlWorkspaceImporterTest",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/security/authorization/AccessControlWorkspaceImporterTest.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.security.authorization.HasPermissionTest",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/security/authorization/HasPermissionTest.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.security.authorization.IndexManagementTest",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/security/authorization/IndexManagementTest.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.security.authorization.JackrabbitAccessControlManagerTest",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/security/authorization/JackrabbitAccessControlManagerTest.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.security.authorization.PrivilegeCollectionDefaultTest",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/security/authorization/PrivilegeCollectionDefaultTest.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.security.authorization.QueryTest",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/security/authorization/QueryTest.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.security.authorization.ReadNodeTypeTest",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/security/authorization/ReadNodeTypeTest.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.security.user.AuthorizableByTypeTestTest",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/security/user/AuthorizableByTypeTestTest.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.security.user.PrincipalLookupTest",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/security/user/PrincipalLookupTest.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.session.JackrabbitSessionTest",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/session/JackrabbitSessionTest.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.session.SessionLogoutTest",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/session/SessionLogoutTest.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.session.SessionStatsTest",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/session/SessionStatsTest.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.tck.TCKBase$Setup",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.tck.TCKBase$TearDown",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.version.OpvAbortTest",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/version/OpvAbortTest.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.version.OpvCopyTest",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/version/OpvCopyTest.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.version.OpvIgnoreTest",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/version/OpvIgnoreTest.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.version.OpvVersionTest",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/version/OpvVersionTest.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.version.RestoreTest",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/version/RestoreTest.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.version.VersionHistoryTest",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/version/VersionHistoryTest.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.version.VersionTest",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/version/VersionTest.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.version.VersionablePathsTest",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/version/VersionablePathsTest.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.version.VersionableTest",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/version/VersionableTest.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.xml.ImportMvPropertyTest",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/xml/ImportMvPropertyTest.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.jcr.xml.ImportTest",
+      "exact_fqcn_source_paths": [
+        "oak-jcr/src/test/java/org/apache/jackrabbit/oak/jcr/xml/ImportTest.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.osgi.IndexVersionSelectionIT",
+      "exact_fqcn_source_paths": [
+        "oak-it-osgi/src/test/java/org/apache/jackrabbit/oak/osgi/IndexVersionSelectionIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.osgi.OSGiIT",
+      "exact_fqcn_source_paths": [
+        "oak-it-osgi/src/test/java/org/apache/jackrabbit/oak/osgi/OSGiIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.osgi.TikaExtractionOsgiIT",
+      "exact_fqcn_source_paths": [
+        "oak-it-osgi/src/test/java/org/apache/jackrabbit/oak/osgi/TikaExtractionOsgiIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.plugins.blob.datastore.FSBackendIT",
+      "exact_fqcn_source_paths": [
+        "oak-blob-plugins/src/test/java/org/apache/jackrabbit/oak/plugins/blob/datastore/FSBackendIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.plugins.document.AbstractTwoNodeTest",
+      "exact_fqcn_source_paths": [
+        "oak-store-document/src/test/java/org/apache/jackrabbit/oak/plugins/document/AbstractTwoNodeTest.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.plugins.document.ConcurrentPrefetchAndUpdateIT",
+      "exact_fqcn_source_paths": [
+        "oak-store-document/src/test/java/org/apache/jackrabbit/oak/plugins/document/ConcurrentPrefetchAndUpdateIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.plugins.document.ConcurrentQueryAndInvalidateIT",
+      "exact_fqcn_source_paths": [
+        "oak-store-document/src/test/java/org/apache/jackrabbit/oak/plugins/document/ConcurrentQueryAndInvalidateIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.plugins.document.ConcurrentQueryAndUpdate2IT",
+      "exact_fqcn_source_paths": [
+        "oak-store-document/src/test/java/org/apache/jackrabbit/oak/plugins/document/ConcurrentQueryAndUpdate2IT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.plugins.document.ConcurrentQueryAndUpdateIT",
+      "exact_fqcn_source_paths": [
+        "oak-store-document/src/test/java/org/apache/jackrabbit/oak/plugins/document/ConcurrentQueryAndUpdateIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.plugins.document.DocumentDiscoveryLiteServiceIT",
+      "exact_fqcn_source_paths": [
+        "oak-store-document/src/test/java/org/apache/jackrabbit/oak/plugins/document/DocumentDiscoveryLiteServiceIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.plugins.document.DocumentNodeStoreIT",
+      "exact_fqcn_source_paths": [
+        "oak-store-document/src/test/java/org/apache/jackrabbit/oak/plugins/document/DocumentNodeStoreIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.plugins.document.DocumentNodeStoreStatsCollectorIT",
+      "exact_fqcn_source_paths": [
+        "oak-store-document/src/test/java/org/apache/jackrabbit/oak/plugins/document/DocumentNodeStoreStatsCollectorIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.plugins.document.DocumentNodeStoreSweepIT",
+      "exact_fqcn_source_paths": [
+        "oak-store-document/src/test/java/org/apache/jackrabbit/oak/plugins/document/DocumentNodeStoreSweepIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.plugins.document.DocumentStoreStatsIT",
+      "exact_fqcn_source_paths": [
+        "oak-store-document/src/test/java/org/apache/jackrabbit/oak/plugins/document/DocumentStoreStatsIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.plugins.document.LastRevRecoveryRandomizedIT",
+      "exact_fqcn_source_paths": [
+        "oak-store-document/src/test/java/org/apache/jackrabbit/oak/plugins/document/LastRevRecoveryRandomizedIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.plugins.document.MongoDocumentStoreIT",
+      "exact_fqcn_source_paths": [
+        "oak-store-document/src/test/java/org/apache/jackrabbit/oak/plugins/document/MongoDocumentStoreIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.plugins.document.NodeDocumentSweeperIT",
+      "exact_fqcn_source_paths": [
+        "oak-store-document/src/test/java/org/apache/jackrabbit/oak/plugins/document/NodeDocumentSweeperIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.plugins.document.VersionGarbageCollectorIT",
+      "exact_fqcn_source_paths": [
+        "oak-store-document/src/test/java/org/apache/jackrabbit/oak/plugins/document/VersionGarbageCollectorIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.plugins.document.mongo.CacheInvalidationIT",
+      "exact_fqcn_source_paths": [
+        "oak-store-document/src/test/java/org/apache/jackrabbit/oak/plugins/document/mongo/CacheInvalidationIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.plugins.document.mongo.JournalIT",
+      "exact_fqcn_source_paths": [
+        "oak-store-document/src/test/java/org/apache/jackrabbit/oak/plugins/document/mongo/JournalIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.plugins.document.mongo.LeaseUpdateSocketTimeoutIT",
+      "exact_fqcn_source_paths": [
+        "oak-store-document/src/test/java/org/apache/jackrabbit/oak/plugins/document/mongo/LeaseUpdateSocketTimeoutIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.plugins.document.mongo.ReadPreferenceIT",
+      "exact_fqcn_source_paths": [
+        "oak-store-document/src/test/java/org/apache/jackrabbit/oak/plugins/document/mongo/ReadPreferenceIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.plugins.document.mongo.ReplicaSetDefaultWriteConcernIT",
+      "exact_fqcn_source_paths": [
+        "oak-store-document/src/test/java/org/apache/jackrabbit/oak/plugins/document/mongo/ReplicaSetDefaultWriteConcernIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.plugins.document.mongo.ReplicaSetResilienceIT",
+      "exact_fqcn_source_paths": [
+        "oak-store-document/src/test/java/org/apache/jackrabbit/oak/plugins/document/mongo/ReplicaSetResilienceIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.plugins.document.mongo.RetryReadIT",
+      "exact_fqcn_source_paths": [
+        "oak-store-document/src/test/java/org/apache/jackrabbit/oak/plugins/document/mongo/RetryReadIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.plugins.index.AsyncIndexUpdateClusterTestIT",
+      "exact_fqcn_source_paths": [
+        "oak-it/src/test/java/org/apache/jackrabbit/oak/plugins/index/AsyncIndexUpdateClusterTestIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.plugins.index.lucene.directory.ActiveDeletedBlobCollectionIT",
+      "exact_fqcn_source_paths": [
+        "oak-lucene/src/test/java/org/apache/jackrabbit/oak/plugins/index/lucene/directory/ActiveDeletedBlobCollectionIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.plugins.index.lucene.hybrid.HybridIndexClusterIT",
+      "exact_fqcn_source_paths": [
+        "oak-lucene/src/test/java/org/apache/jackrabbit/oak/plugins/index/lucene/hybrid/HybridIndexClusterIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.plugins.index.lucene.hybrid.ReaderRefCountIT",
+      "exact_fqcn_source_paths": [
+        "oak-lucene/src/test/java/org/apache/jackrabbit/oak/plugins/index/lucene/hybrid/ReaderRefCountIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.run.osgi.SecondaryStoreConfigIT",
+      "exact_fqcn_source_paths": [
+        "oak-pojosr/src/test/java/org/apache/jackrabbit/oak/run/osgi/SecondaryStoreConfigIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.security.authorization.permission.DefaultPermissionRandomTestIT",
+      "exact_fqcn_source_paths": [
+        "oak-core/src/test/java/org/apache/jackrabbit/oak/security/authorization/permission/DefaultPermissionRandomTestIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.security.authorization.permission.MountPermissionProviderRandomTestIT",
+      "exact_fqcn_source_paths": [
+        "oak-core/src/test/java/org/apache/jackrabbit/oak/security/authorization/permission/MountPermissionProviderRandomTestIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.segment.BigInlinedBinaryIT",
+      "exact_fqcn_source_paths": [
+        "oak-segment-tar/src/test/java/org/apache/jackrabbit/oak/segment/BigInlinedBinaryIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.segment.BinariesInlineThresholdIT",
+      "exact_fqcn_source_paths": [
+        "oak-segment-tar/src/test/java/org/apache/jackrabbit/oak/segment/BinariesInlineThresholdIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.segment.CompactionAndCleanupIT",
+      "exact_fqcn_source_paths": [
+        "oak-segment-tar/src/test/java/org/apache/jackrabbit/oak/segment/CompactionAndCleanupIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.segment.ExternalBlobIT",
+      "exact_fqcn_source_paths": [
+        "oak-segment-tar/src/test/java/org/apache/jackrabbit/oak/segment/ExternalBlobIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.segment.HeavyWriteIT",
+      "exact_fqcn_source_paths": [
+        "oak-segment-tar/src/test/java/org/apache/jackrabbit/oak/segment/HeavyWriteIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.segment.ManyChildNodesIT",
+      "exact_fqcn_source_paths": [
+        "oak-segment-tar/src/test/java/org/apache/jackrabbit/oak/segment/ManyChildNodesIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.segment.SegmentAzureDataStoreBlobGCIT",
+      "exact_fqcn_source_paths": [
+        "oak-it/src/test/java/org/apache/jackrabbit/oak/segment/SegmentAzureDataStoreBlobGCIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.segment.SegmentCompactionIT",
+      "exact_fqcn_source_paths": [
+        "oak-segment-tar/src/test/java/org/apache/jackrabbit/oak/segment/SegmentCompactionIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.segment.SegmentDataStoreBlobGCIT",
+      "exact_fqcn_source_paths": [
+        "oak-segment-tar/src/test/java/org/apache/jackrabbit/oak/segment/SegmentDataStoreBlobGCIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.segment.SegmentOverflowExceptionIT",
+      "exact_fqcn_source_paths": [
+        "oak-segment-tar/src/test/java/org/apache/jackrabbit/oak/segment/SegmentOverflowExceptionIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.segment.SegmentS3DataStoreBlobGCIT",
+      "exact_fqcn_source_paths": [
+        "oak-it/src/test/java/org/apache/jackrabbit/oak/segment/SegmentS3DataStoreBlobGCIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.segment.aws.AwsJournalFileConcurrencyIT",
+      "exact_fqcn_source_paths": [
+        "oak-segment-aws/src/test/java/org/apache/jackrabbit/oak/segment/aws/AwsJournalFileConcurrencyIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.segment.azure.v8.AzureJournalFileV8ConcurrencyIT",
+      "exact_fqcn_source_paths": [
+        "oak-segment-azure/src/test/java/org/apache/jackrabbit/oak/segment/azure/v8/AzureJournalFileV8ConcurrencyIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.segment.file.FileStoreIT",
+      "exact_fqcn_source_paths": [
+        "oak-segment-tar/src/test/java/org/apache/jackrabbit/oak/segment/file/FileStoreIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.segment.file.LargeNumberOfChildNodeUpdatesIT",
+      "exact_fqcn_source_paths": [
+        "oak-segment-tar/src/test/java/org/apache/jackrabbit/oak/segment/file/LargeNumberOfChildNodeUpdatesIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.segment.file.LargeNumberOfPropertiesTestIT",
+      "exact_fqcn_source_paths": [
+        "oak-segment-tar/src/test/java/org/apache/jackrabbit/oak/segment/file/LargeNumberOfPropertiesTestIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.segment.file.SegmentReferenceLimitTestIT",
+      "exact_fqcn_source_paths": [
+        "oak-segment-tar/src/test/java/org/apache/jackrabbit/oak/segment/file/SegmentReferenceLimitTestIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.segment.standby.BrokenNetworkIT",
+      "exact_fqcn_source_paths": [
+        "oak-segment-tar/src/test/java/org/apache/jackrabbit/oak/segment/standby/BrokenNetworkIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.segment.standby.ExternalPrivateStoreIT",
+      "exact_fqcn_source_paths": [
+        "oak-segment-tar/src/test/java/org/apache/jackrabbit/oak/segment/standby/ExternalPrivateStoreIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.segment.standby.ExternalSharedStoreIT",
+      "exact_fqcn_source_paths": [
+        "oak-segment-tar/src/test/java/org/apache/jackrabbit/oak/segment/standby/ExternalSharedStoreIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.segment.standby.FailoverIPRangeIT",
+      "exact_fqcn_source_paths": [
+        "oak-segment-tar/src/test/java/org/apache/jackrabbit/oak/segment/standby/FailoverIPRangeIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.segment.standby.FailoverMultipleClientsTestIT",
+      "exact_fqcn_source_paths": [
+        "oak-segment-tar/src/test/java/org/apache/jackrabbit/oak/segment/standby/FailoverMultipleClientsTestIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.segment.standby.FailoverSslTestIT",
+      "exact_fqcn_source_paths": [
+        "oak-segment-tar/src/test/java/org/apache/jackrabbit/oak/segment/standby/FailoverSslTestIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.segment.standby.MBeanIT",
+      "exact_fqcn_source_paths": [
+        "oak-segment-tar/src/test/java/org/apache/jackrabbit/oak/segment/standby/MBeanIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.segment.standby.RecoverTestIT",
+      "exact_fqcn_source_paths": [
+        "oak-segment-tar/src/test/java/org/apache/jackrabbit/oak/segment/standby/RecoverTestIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.segment.standby.StandbySegmentBlobTestIT",
+      "exact_fqcn_source_paths": [
+        "oak-segment-tar/src/test/java/org/apache/jackrabbit/oak/segment/standby/StandbySegmentBlobTestIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.segment.standby.StandbyTestIT",
+      "exact_fqcn_source_paths": [
+        "oak-segment-tar/src/test/java/org/apache/jackrabbit/oak/segment/standby/StandbyTestIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.segment.standby.server.SlowServerIT",
+      "exact_fqcn_source_paths": [
+        "oak-segment-tar/src/test/java/org/apache/jackrabbit/oak/segment/standby/server/SlowServerIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.segment.upgrade.UpgradeIT",
+      "exact_fqcn_source_paths": [
+        "oak-segment-tar/src/test/java/org/apache/jackrabbit/oak/segment/upgrade/UpgradeIT.java"
+      ],
+      "interpretation": "Source path exists; discovery/runtime identity needs inspection"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.AddNodeTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.BinaryPropertyTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.BooleanPropertyTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.CheckPermissionTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.DatePropertyTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.DocumentViewImportTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.DoublePropertyTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.ExportDocViewTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.ExportSysViewTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.GetWeakReferencesTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.HasPermissionTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.ImpersonateTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.LifecycleTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.LongPropertyTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.NamePropertyTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.NameTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.NamespaceRegistryReadMethodsTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.NamespaceRegistryTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.NamespaceRemappingTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.NodeAddMixinTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.NodeCanAddMixinTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.NodeDiscoveringNodeTypesTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.NodeItemIsModifiedTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.NodeItemIsNewTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.NodeIteratorTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.NodeOrderableChildNodesTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.NodeReadMethodsTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.NodeRemoveMixinTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.NodeSetPrimaryTypeTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.NodeTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.NodeUUIDTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.PathPropertyTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.PathTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.PropertyItemIsModifiedTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.PropertyItemIsNewTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.PropertyReadMethodsTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.PropertyTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.PropertyTypeTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.ReferencePropertyTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.ReferenceableRootNodesTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.ReferencesTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.RepositoryDescriptorTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.RepositoryFactoryTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.RepositoryLoginTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.RootNodeTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.SerializationTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.SessionReadMethodsTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.SessionRemoveItemTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.SessionTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.SessionUUIDTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.SetPropertyAssumeTypeTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.SetPropertyBooleanTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.SetPropertyCalendarTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.SetPropertyConstraintViolationExceptionTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.SetPropertyDecimalTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.SetPropertyDoubleTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.SetPropertyInputStreamTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.SetPropertyLongTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.SetPropertyNodeTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.SetPropertyStringTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.SetPropertyValueTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.SetValueBinaryTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.SetValueBooleanTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.SetValueConstraintViolationExceptionTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.SetValueDateTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.SetValueDecimalTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.SetValueDoubleTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.SetValueLongTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.SetValueReferenceTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.SetValueStringTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.SetValueValueFormatExceptionTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.SetValueVersionExceptionTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.ShareableNodeTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.StringPropertyTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.UndefinedPropertyTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.ValueFactoryTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.WorkspaceCloneReferenceableTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.WorkspaceCloneSameNameSibsTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.WorkspaceCloneTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.WorkspaceCloneVersionableTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.WorkspaceCopyBetweenWorkspacesReferenceableTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.WorkspaceCopyBetweenWorkspacesSameNameSibsTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.WorkspaceCopyBetweenWorkspacesTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.WorkspaceCopyBetweenWorkspacesVersionableTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.WorkspaceCopyReferenceableTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.WorkspaceCopySameNameSibsTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.WorkspaceCopyTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.WorkspaceCopyVersionableTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.WorkspaceMoveReferenceableTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.WorkspaceMoveSameNameSibsTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.WorkspaceMoveTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.WorkspaceMoveVersionableTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.WorkspaceReadMethodsTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.WorkspaceTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.lock.DeepLockTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.lock.LockManagerTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.lock.LockTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.lock.OpenScopedLockTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.lock.SessionScopedLockTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.lock.SetValueLockExceptionTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.nodetype.CanAddChildNodeCallWithNodeTypeTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.nodetype.CanAddChildNodeCallWithoutNodeTypeTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.nodetype.CanRemoveItemTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.nodetype.CanSetPropertyBinaryTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.nodetype.CanSetPropertyBooleanTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.nodetype.CanSetPropertyDateTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.nodetype.CanSetPropertyDoubleTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.nodetype.CanSetPropertyLongTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.nodetype.CanSetPropertyMultipleTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.nodetype.CanSetPropertyNameTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.nodetype.CanSetPropertyPathTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.nodetype.CanSetPropertyStringTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.nodetype.CanSetPropertyTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.nodetype.NodeDefTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.nodetype.NodeTypeCreationTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.nodetype.NodeTypeManagerTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.nodetype.NodeTypeTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.nodetype.PredefinedNodeTypeTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.nodetype.PropertyDefTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.observation.AddEventListenerTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.observation.EventIteratorTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.observation.EventJournalTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.observation.EventTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.observation.GetDateTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.observation.GetIdentifierTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.observation.GetInfoTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.observation.GetRegisteredEventListenersTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.observation.GetUserDataTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.observation.LockingTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.observation.NodeAddedTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.observation.NodeMovedTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.observation.NodeRemovedTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.observation.NodeReorderTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.observation.PropertyAddedTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.observation.PropertyChangedTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.observation.PropertyRemovedTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.observation.WorkspaceOperationTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.CreateQueryTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.DerefQueryLevel1Test",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.ElementTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.GetLanguageTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.GetPersistentQueryPathLevel1Test",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.GetPersistentQueryPathTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.GetPropertyNamesTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.GetStatementTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.GetSupportedQueryLanguagesTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.OrderByDateTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.OrderByDecimalTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.OrderByDoubleTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.OrderByLengthTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.OrderByLocalNameTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.OrderByLongTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.OrderByLowerCaseTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.OrderByMultiTypeTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.OrderByNameTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.OrderByStringTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.OrderByURITest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.OrderByUpperCaseTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.PredicatesTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.QueryResultNodeIteratorTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.SQLJcrPathTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.SQLJoinTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.SQLOrderByTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.SQLPathTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.SQLQueryLevel2Test",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.SaveTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.SetLimitTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.SetOffsetTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.SimpleSelectionTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.TextNodeTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.XPathDocOrderTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.XPathJcrPathTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.XPathOrderByTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.XPathPosIndexTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.XPathQueryLevel2Test",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.qom.AndConstraintTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.qom.BindVariableValueTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.qom.ChildNodeJoinConditionTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.qom.ChildNodeTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.qom.ColumnTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.qom.DescendantNodeJoinConditionTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.qom.DescendantNodeTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.qom.EquiJoinConditionTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.qom.FullTextSearchScoreTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.qom.GetQueryTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.qom.LengthTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.qom.NodeLocalNameTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.qom.NodeNameTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.qom.NotConstraintTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.qom.OrConstraintTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.qom.OrderingTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.qom.PropertyExistenceTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.qom.PropertyValueTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.qom.QueryObjectModelFactoryTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.qom.RowTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.qom.SameNodeJoinConditionTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.qom.SameNodeTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.qom.SelectorTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.query.qom.UpperLowerCaseTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.retention.HoldEffectTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.retention.HoldTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.retention.RetentionPolicyEffectTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.retention.RetentionPolicyTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.security.AccessControlDiscoveryTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.security.AccessControlListTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.security.AccessControlPolicyIteratorTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.security.AccessControlPolicyTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.security.RSessionAccessControlDiscoveryTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.security.RSessionAccessControlPolicyTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.security.RSessionAccessControlTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.ActivitiesTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.CheckinTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.CheckoutTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.ConfigurationsTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.CopyTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.GetContainingHistoryTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.GetCreatedTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.GetPredecessorsTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.GetReferencesNodeTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.GetVersionableUUIDTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.MergeActivityTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.MergeCancelMergeTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.MergeCheckedoutSubNodeTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.MergeDoneMergeTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.MergeNodeIteratorTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.MergeNodeTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.MergeNonVersionableSubNodeTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.MergeShallowTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.MergeSubNodeTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.OnParentVersionAbortTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.OnParentVersionComputeTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.OnParentVersionCopyTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.OnParentVersionIgnoreTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.OnParentVersionInitializeTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.RemoveVersionTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.RestoreTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.SessionMoveVersionExceptionTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.VersionGraphTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.VersionHistoryTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.VersionLabelTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.VersionStorageTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.VersionTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.WorkspaceMoveVersionExceptionTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.WorkspaceRestoreTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.simple.BasicTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.simple.CheckinTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.simple.CheckoutTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.simple.CopyTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.simple.FrozenNodeTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    },
+    {
+      "class": "org.apache.jackrabbit.test.api.version.simple.RestoreTest",
+      "exact_fqcn_source_paths": [],
+      "interpretation": "No exact FQCN source path in this revision; external/generated origin not yet proven"
+    }
+  ],
+  "source_only": [
+    {
+      "class": "org.apache.jackrabbit.oak.exercise.security.authentication.L2_AuthInfoTest",
+      "exact_fqcn_source_paths": [
+        "oak-exercise/src/test/java/org/apache/jackrabbit/oak/exercise/security/authentication/L2_AuthInfoTest.java"
+      ]
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.exercise.security.authentication.L3_LoginModuleTest",
+      "exact_fqcn_source_paths": [
+        "oak-exercise/src/test/java/org/apache/jackrabbit/oak/exercise/security/authentication/L3_LoginModuleTest.java"
+      ]
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.exercise.security.authentication.L6_AnonymousIdTest",
+      "exact_fqcn_source_paths": [
+        "oak-exercise/src/test/java/org/apache/jackrabbit/oak/exercise/security/authentication/L6_AnonymousIdTest.java"
+      ]
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.exercise.security.authentication.L8_PreAuthTest",
+      "exact_fqcn_source_paths": [
+        "oak-exercise/src/test/java/org/apache/jackrabbit/oak/exercise/security/authentication/L8_PreAuthTest.java"
+      ]
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.exercise.security.authorization.accesscontrol.L8_GlobRestrictionTest",
+      "exact_fqcn_source_paths": [
+        "oak-exercise/src/test/java/org/apache/jackrabbit/oak/exercise/security/authorization/accesscontrol/L8_GlobRestrictionTest.java"
+      ]
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.exercise.security.authorization.advanced.L3_UnderstandAggregationTest",
+      "exact_fqcn_source_paths": [
+        "oak-exercise/src/test/java/org/apache/jackrabbit/oak/exercise/security/authorization/advanced/L3_UnderstandAggregationTest.java"
+      ]
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.exercise.security.authorization.advanced.L4_CustomAccessControlManagementTest",
+      "exact_fqcn_source_paths": [
+        "oak-exercise/src/test/java/org/apache/jackrabbit/oak/exercise/security/authorization/advanced/L4_CustomAccessControlManagementTest.java"
+      ]
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.exercise.security.authorization.advanced.L5_CustomPermissionEvaluationTest",
+      "exact_fqcn_source_paths": [
+        "oak-exercise/src/test/java/org/apache/jackrabbit/oak/exercise/security/authorization/advanced/L5_CustomPermissionEvaluationTest.java"
+      ]
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.exercise.security.authorization.permission.L1_IntroductionTest",
+      "exact_fqcn_source_paths": [
+        "oak-exercise/src/test/java/org/apache/jackrabbit/oak/exercise/security/authorization/permission/L1_IntroductionTest.java"
+      ]
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.exercise.security.authorization.permission.L5_SpecialPermissionsTest",
+      "exact_fqcn_source_paths": [
+        "oak-exercise/src/test/java/org/apache/jackrabbit/oak/exercise/security/authorization/permission/L5_SpecialPermissionsTest.java"
+      ]
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.exercise.security.authorization.permission.L6_AdministratativeAccessTest",
+      "exact_fqcn_source_paths": [
+        "oak-exercise/src/test/java/org/apache/jackrabbit/oak/exercise/security/authorization/permission/L6_AdministratativeAccessTest.java"
+      ]
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.exercise.security.authorization.permission.L7_PermissionContentTest",
+      "exact_fqcn_source_paths": [
+        "oak-exercise/src/test/java/org/apache/jackrabbit/oak/exercise/security/authorization/permission/L7_PermissionContentTest.java"
+      ]
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.exercise.security.authorization.principalbased.L1_IntroductionTest",
+      "exact_fqcn_source_paths": [
+        "oak-exercise/src/test/java/org/apache/jackrabbit/oak/exercise/security/authorization/principalbased/L1_IntroductionTest.java"
+      ]
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.exercise.security.authorization.principalbased.L2_AccessControlManagementTest",
+      "exact_fqcn_source_paths": [
+        "oak-exercise/src/test/java/org/apache/jackrabbit/oak/exercise/security/authorization/principalbased/L2_AccessControlManagementTest.java"
+      ]
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.exercise.security.authorization.principalbased.L3_PermissionEvaluationTest",
+      "exact_fqcn_source_paths": [
+        "oak-exercise/src/test/java/org/apache/jackrabbit/oak/exercise/security/authorization/principalbased/L3_PermissionEvaluationTest.java"
+      ]
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.exercise.security.authorization.principalbased.L4_DisabledAggregationFilterTest",
+      "exact_fqcn_source_paths": [
+        "oak-exercise/src/test/java/org/apache/jackrabbit/oak/exercise/security/authorization/principalbased/L4_DisabledAggregationFilterTest.java"
+      ]
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.exercise.security.principal.L4_PrincipalProviderTest",
+      "exact_fqcn_source_paths": [
+        "oak-exercise/src/test/java/org/apache/jackrabbit/oak/exercise/security/principal/L4_PrincipalProviderTest.java"
+      ]
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.exercise.security.privilege.L3_BuiltInPrivilegesTest",
+      "exact_fqcn_source_paths": [
+        "oak-exercise/src/test/java/org/apache/jackrabbit/oak/exercise/security/privilege/L3_BuiltInPrivilegesTest.java"
+      ]
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.exercise.security.privilege.L4_CustomPrivilegeTest",
+      "exact_fqcn_source_paths": [
+        "oak-exercise/src/test/java/org/apache/jackrabbit/oak/exercise/security/privilege/L4_CustomPrivilegeTest.java"
+      ]
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.exercise.security.privilege.L5_PrivilegeContentTest",
+      "exact_fqcn_source_paths": [
+        "oak-exercise/src/test/java/org/apache/jackrabbit/oak/exercise/security/privilege/L5_PrivilegeContentTest.java"
+      ]
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.exercise.security.privilege.L6_JcrAllTest",
+      "exact_fqcn_source_paths": [
+        "oak-exercise/src/test/java/org/apache/jackrabbit/oak/exercise/security/privilege/L6_JcrAllTest.java"
+      ]
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.exercise.security.user.L10_RemovalAndMembershipTest",
+      "exact_fqcn_source_paths": [
+        "oak-exercise/src/test/java/org/apache/jackrabbit/oak/exercise/security/user/L10_RemovalAndMembershipTest.java"
+      ]
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.exercise.security.user.L13_SystemUserTest",
+      "exact_fqcn_source_paths": [
+        "oak-exercise/src/test/java/org/apache/jackrabbit/oak/exercise/security/user/L13_SystemUserTest.java"
+      ]
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.exercise.security.user.L14_AuthorizableNodeNameTest",
+      "exact_fqcn_source_paths": [
+        "oak-exercise/src/test/java/org/apache/jackrabbit/oak/exercise/security/user/L14_AuthorizableNodeNameTest.java"
+      ]
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.exercise.security.user.L15_RepositoryWithoutAnonymousTest",
+      "exact_fqcn_source_paths": [
+        "oak-exercise/src/test/java/org/apache/jackrabbit/oak/exercise/security/user/L15_RepositoryWithoutAnonymousTest.java"
+      ]
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.exercise.security.user.L3_UserVsPrincipalTest",
+      "exact_fqcn_source_paths": [
+        "oak-exercise/src/test/java/org/apache/jackrabbit/oak/exercise/security/user/L3_UserVsPrincipalTest.java"
+      ]
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.exercise.security.user.L4_AuthorizableIdTest",
+      "exact_fqcn_source_paths": [
+        "oak-exercise/src/test/java/org/apache/jackrabbit/oak/exercise/security/user/L4_AuthorizableIdTest.java"
+      ]
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.exercise.security.user.L8_MembershipTest",
+      "exact_fqcn_source_paths": [
+        "oak-exercise/src/test/java/org/apache/jackrabbit/oak/exercise/security/user/L8_MembershipTest.java"
+      ]
+    },
+    {
+      "class": "org.apache.jackrabbit.oak.plugins.document.RevisionGCTest",
+      "exact_fqcn_source_paths": [
+        "oak-store-document/src/test/java/org/apache/jackrabbit/oak/plugins/document/RevisionGCTest.java"
+      ]
+    }
+  ],
+  "source_configuration": [
+    {
+      "path": "Jenkinsfile",
+      "decoded_text_sha256": "43a27922c4b18d606690d73801377cac7f7f7316a00aae2beed75d10766187e0",
+      "excerpts": [
+        {
+          "line": 29,
+          "text": "def buildModule(moduleSpec) {\n    def moduleName = ''\n    def testOptions = '-PintegrationTesting'\n    def idx = moduleSpec.indexOf(':') \n    if (idx == -1) {\n        moduleName = moduleSpec"
+        },
+        {
+          "line": 41,
+          "text": "        } else if (flags == 'it') {\n            // integration tests only\n            testOptions = '-PintegrationTesting -Dsurefire.skip.ut=true -Dskip.coverage=true' \n        }\n    }\n    stage(moduleSpec) {"
+        },
+        {
+          "line": 71,
+          "text": "                    } finally {\n                        archiveArtifacts(artifacts: '*/target/unit-tests.log', allowEmptyArchive: true)\n                        junit(testResults: '*/target/surefire-reports/*.xml,*/target/failsafe-reports/*.xml', allowEmptyResults: true)\n                    }\n                }\n            }"
+        }
+      ]
+    },
+    {
+      "path": "oak-parent/pom.xml",
+      "decoded_text_sha256": "dd297b1169d4511d70a3b98b236e08ce4ae1c8378a0dc5c63b608bcdf7346441",
+      "excerpts": [
+        {
+          "line": 303,
+          "text": "        </plugin>\n        <plugin>\n          <artifactId>maven-failsafe-plugin</artifactId>\n          <configuration>\n            <argLine>${test.opts} -javaagent:${org.mockito:mockito-core:jar}</argLine>\n            <trimStackTrace>false</trimStackTrace>"
+        },
+        {
+          "line": 969,
+          "text": "    <profile>\n      <!-- runs all the IT agains the default fixture. See <properties> section -->\n      <id>integrationTesting</id>\n      <activation>\n        <property>\n          <name>env.OAK_INTEGRATION_TESTING</name>"
+        },
+        {
+          "line": 984,
+          "text": "           </plugin>\n          <plugin>\n            <artifactId>maven-failsafe-plugin</artifactId>\n            <executions>\n              <execution>\n                <goals>"
+        },
+        {
+          "line": 1017,
+          "text": "            </plugin>\n             <plugin>\n               <artifactId>maven-failsafe-plugin</artifactId>\n               <executions>\n                  <execution>\n                     <goals>"
+        },
+        {
+          "line": 1061,
+          "text": "            </plugin>\n            <plugin>\n               <artifactId>maven-failsafe-plugin</artifactId>\n               <executions>\n                  <execution>\n                     <goals>"
+        },
+        {
+          "line": 1267,
+          "text": "            <plugin>\n              <groupId>org.apache.maven.plugins</groupId>\n              <artifactId>maven-failsafe-plugin</artifactId>\n              <configuration>\n                <skip>true</skip>\n              </configuration>"
+        }
+      ]
+    },
+    {
+      "path": "oak-exercise/pom.xml",
+      "decoded_text_sha256": "cf9abf2d6ca2013d88bc6108d503a1975cadf20c7fc383fd490fb3050cc1bbac",
+      "excerpts": [
+        {
+          "line": 42,
+          "text": "      <plugin>\n        <groupId>org.apache.maven.plugins</groupId>\n        <artifactId>maven-surefire-plugin</artifactId>\n        <configuration>\n          <skip>true</skip>\n        </configuration>"
+        },
+        {
+          "line": 44,
+          "text": "        <artifactId>maven-surefire-plugin</artifactId>\n        <configuration>\n          <skip>true</skip>\n        </configuration>\n      </plugin>\n      <plugin>"
+        }
+      ]
+    },
+    {
+      "path": "oak-jcr/pom.xml",
+      "decoded_text_sha256": "2b30822a949d9f62f67c57821a94ea34523a59d7b12351510e59cbd8e74f16bb",
+      "excerpts": [
+        {
+          "line": 415,
+          "text": "    <dependency>\n      <groupId>org.apache.jackrabbit</groupId>\n      <artifactId>jackrabbit-jcr-tests</artifactId>\n      <version>${jackrabbit.version}</version>\n      <scope>test</scope>\n      <optional>true</optional>"
+        }
+      ]
+    },
+    {
+      "path": "oak-store-document/src/test/java/org/apache/jackrabbit/oak/plugins/document/RevisionGCTest.java",
+      "decoded_text_sha256": "408ebc8475d8eef4947184c339d986097aba55907ed292567b0d5291dc2eb6f4",
+      "excerpts": [
+        {
+          "line": 37,
+          "text": " * OAK-3929\n */\n@RunWith(Parameterized.class)\npublic class RevisionGCTest {\n\n    private DocumentStoreFixture fixture;"
+        }
+      ]
+    }
+  ],
+  "exact_match": false,
+  "selective_replay_authorized": false,
+  "limitations": [
+    "Path matching does not verify runtime class identity or external dependency contents.",
+    "Parameterized report identity and effective CI profile remain unverified.",
+    "Do not remove unmatched tests, invent outcomes, or claim validated model efficacy."
+  ]
+}
