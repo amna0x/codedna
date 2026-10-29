@@ -2,6 +2,7 @@
 from concurrent.futures import ThreadPoolExecutor
 from hashlib import sha256
 import json
+import argparse
 from pathlib import Path
 from urllib.parse import quote, urlparse
 from urllib.request import urlopen
@@ -12,13 +13,16 @@ TREE='name,url,builds[number,url,timestamp,duration,building,actions[_class,last
 
 def get(url,tree):
     if urlparse(url).hostname!=HOST:raise ValueError('Unexpected CI host')
-    with urlopen(url+'api/json?tree='+quote(tree,safe=',[]{}'),timeout=30) as response:
+    with urlopen(url+'api/json?tree='+quote(tree,safe=',[]'),timeout=30) as response:
         raw=response.read(8*1024*1024+1)
     if len(raw)>8*1024*1024:raise ValueError('Metadata size limit')
     return raw,json.loads(raw)
 
 
 def main():
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--out',default='experiments/d092-ci-availability.json')
+    args=parser.parse_args()
     root=Path(__file__).resolve().parents[1];folder=root/'build/d092-main-ci'
     folder.mkdir(exist_ok=True)
     catalog=json.loads((folder/'root-jobs.json').read_text())['jobs']
@@ -51,7 +55,7 @@ def main():
             'candidates':records,'discovery_errors':errors,
             'selected':eligible[0] if eligible else None,
             'pilot':'https://ci-builds.apache.org/job/Jackrabbit/job/jackrabbit-oak-trunk/' if not eligible else None}
-    output=root/'experiments/d092-ci-availability.json'
+    output=root/args.out
     with output.open('x',encoding='utf-8',newline='\n') as stream:json.dump(result,stream,indent=2);stream.write('\n')
     print('Candidates:',len(records),'availability-qualified:',len(eligible))
     print([(r.get('name'),r.get('completed_builds'),r.get('scm_identified_builds')) for r in records])

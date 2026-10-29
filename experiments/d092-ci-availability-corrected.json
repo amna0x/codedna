@@ -1,0 +1,190 @@
+{
+  "scope": "Availability only; no build result/test outcome fields requested",
+  "candidates": [
+    {
+      "url": "https://ci-builds.apache.org/job/Jackrabbit/job/filevault-package-maven-plugin/job/master/",
+      "name": "master",
+      "completed_builds": 1,
+      "scm_identified_builds": 1,
+      "metadata_sha256": "742a43cb245bf8b9cc52dd5737043d734b3c68b06ba2c8468c79f8c6e0fae721"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Jackrabbit/job/filevault/job/master/",
+      "name": "master",
+      "completed_builds": 2,
+      "scm_identified_builds": 2,
+      "metadata_sha256": "6ff47c9213cfe03494d1944b311e8cc6f226bcde3338da7b361722864251bc4e"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Jackrabbit/job/jackrabbit-oak-trunk-db2-java17/",
+      "name": "jackrabbit-oak-trunk-db2-java17",
+      "completed_builds": 5,
+      "scm_identified_builds": 5,
+      "metadata_sha256": "6b64fbd079d9d7374f41ee2f2172960c417555338e21314b251ede6f78a25d91"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Jackrabbit/job/jackrabbit-oak-trunk-derby-ibm-java21/",
+      "name": "jackrabbit-oak-trunk-derby-ibm-java21",
+      "completed_builds": 7,
+      "scm_identified_builds": 7,
+      "metadata_sha256": "fae5e5a7ec62866551e74cf4b09de8317f3d1f2377f7f14230fb43105d874c62"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Jackrabbit/job/jackrabbit-oak-trunk-documentns/",
+      "name": "jackrabbit-oak-trunk-documentns",
+      "completed_builds": 9,
+      "scm_identified_builds": 9,
+      "metadata_sha256": "e62faadba9a27caff4600ab304c859a8b35f0621766dd9aba4ac8f6e173697df"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Jackrabbit/job/jackrabbit-oak-trunk-java-latest/",
+      "name": "jackrabbit-oak-trunk-java-latest",
+      "completed_builds": 8,
+      "scm_identified_builds": 8,
+      "metadata_sha256": "7998af1f4f825870d1a9ad00a2f7004ff2b50aa3cca7f3f5bcb0109f575da1ef"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Jackrabbit/job/jackrabbit-oak-trunk-java21/",
+      "name": "jackrabbit-oak-trunk-java21",
+      "completed_builds": 4,
+      "scm_identified_builds": 4,
+      "metadata_sha256": "3ebcefcac9065daa4afa907fb6f78d0c9802fe9cbfad1f3038f79cd1db00d4db"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Jackrabbit/job/jackrabbit-oak-trunk-java25/",
+      "name": "jackrabbit-oak-trunk-java25",
+      "completed_builds": 4,
+      "scm_identified_builds": 4,
+      "metadata_sha256": "105e5beb83bf3baf86e0c8fcce0ba34b8c63e6c86c7fef98ee2027ceb747ad37"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Jackrabbit/job/jackrabbit-oak-trunk-mongo-java17/",
+      "name": "jackrabbit-oak-trunk-mongo-java17",
+      "completed_builds": 4,
+      "scm_identified_builds": 4,
+      "metadata_sha256": "5b62862f3dfba0a08021564a9e1e63895501c82f18c63cd4cd9518f37006a30d"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Jackrabbit/job/jackrabbit-oak-trunk-mysql/",
+      "name": "jackrabbit-oak-trunk-mysql",
+      "completed_builds": 4,
+      "scm_identified_builds": 4,
+      "metadata_sha256": "bec53215b85d47dcd016bef25b7890a29f19a5606cf30fd4872918c0dff18849"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Jackrabbit/job/jackrabbit-oak-trunk-postgres-java25/",
+      "name": "jackrabbit-oak-trunk-postgres-java25",
+      "completed_builds": 4,
+      "scm_identified_builds": 4,
+      "metadata_sha256": "188c298d9d7b255065f3f03712b2fe7e346ddf2cfb8a5e89c14f5fe80937bc75"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Jackrabbit/job/jackrabbit-oak-trunk-windows/",
+      "name": "jackrabbit-oak-trunk-windows",
+      "completed_builds": 4,
+      "scm_identified_builds": 4,
+      "metadata_sha256": "a37edcf61ba36b2432fc9c568db576ea320b6fa97a543911fb914008fd8422d6"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Jackrabbit/job/jackrabbit-oak-trunk/",
+      "name": "jackrabbit-oak-trunk",
+      "completed_builds": 15,
+      "scm_identified_builds": 15,
+      "metadata_sha256": "603e19597949a02c135e414b00d840fcbf0f52aaab6d76d170a249408f546a48"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Kafka/job/kafka/job/trunk/",
+      "name": "trunk",
+      "completed_builds": 2,
+      "scm_identified_builds": 2,
+      "metadata_sha256": "830222e201ff59edd23f5babbe7eeee8767f1fb1078af515465851cf900b8a62"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Karaf/job/karaf-cave/job/main/",
+      "name": "main",
+      "completed_builds": 0,
+      "scm_identified_builds": 0,
+      "metadata_sha256": "26cbddb64b636d7749b73c90d791fa5f8efae0f2e3d63efdd9c8dddc05e290ae"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Karaf/job/karaf-cave/job/master/",
+      "name": "master",
+      "completed_builds": 0,
+      "scm_identified_builds": 0,
+      "metadata_sha256": "be884633b18b72ee7591c0d3ea90d3ef2a9947b021dd40523560e9d2a1116979"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Karaf/job/karaf-cellar/job/main/",
+      "name": "main",
+      "completed_builds": 1,
+      "scm_identified_builds": 1,
+      "metadata_sha256": "2fec7119ead65557d78c5ff3a2922c90857799805a26fab862af9d1565cf3779"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Karaf/job/karaf-cellar/job/master/",
+      "name": "master",
+      "completed_builds": 0,
+      "scm_identified_builds": 0,
+      "metadata_sha256": "ac24519fd061eb681a320520254ea6324c96b80f80708f6cdcb23a2bfe869c5a"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Karaf/job/karaf-decanter/job/main/",
+      "name": "main",
+      "completed_builds": 1,
+      "scm_identified_builds": 1,
+      "metadata_sha256": "9ee4cdaae537c0fe93ab6597eb7f13d5b00b9e9764acf1f2e6dd96ee3362b0b7"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Karaf/job/karaf-decanter/job/master/",
+      "name": "master",
+      "completed_builds": 0,
+      "scm_identified_builds": 0,
+      "metadata_sha256": "5041445382cb91af932fab314eff0ff83ad7d45d38ee47daff61582fd7c3c903"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Karaf/job/karaf-runtime/job/main/",
+      "name": "main",
+      "completed_builds": 1,
+      "scm_identified_builds": 1,
+      "metadata_sha256": "c1476375be4012e463c91c7ece0ad907262655a7f1c2db11ac2eb2005d7c7cd7"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/james/job/Apache-James-JSIEVE/job/master/",
+      "name": "master",
+      "completed_builds": 1,
+      "scm_identified_builds": 1,
+      "metadata_sha256": "4f6cbce3212678c01881ba629d523bb2b89fa91b42dc3828c5f9b5f37ca4ede8"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/james/job/ApacheJames-JDKIM/job/master/",
+      "name": "master",
+      "completed_builds": 1,
+      "scm_identified_builds": 1,
+      "metadata_sha256": "671e983f0b2310ca096819b6c611834dd6cec6f62074a2b3b2fa0cc2ee410ea5"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/james/job/ApacheJames-JSPF/job/master/",
+      "name": "master",
+      "completed_builds": 1,
+      "scm_identified_builds": 1,
+      "metadata_sha256": "38c4eebfbdea120f139624bfbafb7e38e2c674adb70692da3fb536544693916b"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/james/job/ApacheJames-Mime4J/job/master/",
+      "name": "master",
+      "completed_builds": 2,
+      "scm_identified_builds": 2,
+      "metadata_sha256": "72dab25e6feed564561d902fc581b933d82f0386e7e956268030ccd7ca819b4b"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/james/job/ApacheJames/job/master/",
+      "name": "master",
+      "completed_builds": 7,
+      "scm_identified_builds": 7,
+      "metadata_sha256": "8296674f4c13aed338303530cd013a877de0243b22b9906fad8f1dc5d0668e99"
+    }
+  ],
+  "discovery_errors": [],
+  "selected": null,
+  "pilot": "https://ci-builds.apache.org/job/Jackrabbit/job/jackrabbit-oak-trunk/"
+}

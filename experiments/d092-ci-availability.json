@@ -1,0 +1,112 @@
+{
+  "scope": "Availability only; no build result/test outcome fields requested",
+  "candidates": [
+    {
+      "url": "https://ci-builds.apache.org/job/Jackrabbit/job/filevault-package-maven-plugin/job/master/",
+      "error": "HTTP Error 400: "
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Jackrabbit/job/filevault/job/master/",
+      "error": "HTTP Error 400: "
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Jackrabbit/job/jackrabbit-oak-trunk-db2-java17/",
+      "error": "HTTP Error 400: "
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Jackrabbit/job/jackrabbit-oak-trunk-derby-ibm-java21/",
+      "error": "HTTP Error 400: "
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Jackrabbit/job/jackrabbit-oak-trunk-documentns/",
+      "error": "HTTP Error 400: "
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Jackrabbit/job/jackrabbit-oak-trunk-java-latest/",
+      "error": "HTTP Error 400: "
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Jackrabbit/job/jackrabbit-oak-trunk-java21/",
+      "error": "HTTP Error 400: "
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Jackrabbit/job/jackrabbit-oak-trunk-java25/",
+      "error": "HTTP Error 400: "
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Jackrabbit/job/jackrabbit-oak-trunk-mongo-java17/",
+      "error": "HTTP Error 400: "
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Jackrabbit/job/jackrabbit-oak-trunk-mysql/",
+      "error": "HTTP Error 400: "
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Jackrabbit/job/jackrabbit-oak-trunk-postgres-java25/",
+      "error": "HTTP Error 400: "
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Jackrabbit/job/jackrabbit-oak-trunk-windows/",
+      "error": "HTTP Error 400: "
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Jackrabbit/job/jackrabbit-oak-trunk/",
+      "error": "HTTP Error 400: "
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Kafka/job/kafka/job/trunk/",
+      "error": "HTTP Error 400: "
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Karaf/job/karaf-cave/job/main/",
+      "error": "HTTP Error 400: "
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Karaf/job/karaf-cave/job/master/",
+      "error": "HTTP Error 400: "
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Karaf/job/karaf-cellar/job/main/",
+      "error": "HTTP Error 400: "
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Karaf/job/karaf-cellar/job/master/",
+      "error": "HTTP Error 400: "
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Karaf/job/karaf-decanter/job/main/",
+      "error": "HTTP Error 400: "
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Karaf/job/karaf-decanter/job/master/",
+      "error": "HTTP Error 400: "
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Karaf/job/karaf-runtime/job/main/",
+      "error": "HTTP Error 400: "
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/james/job/Apache-James-JSIEVE/job/master/",
+      "error": "HTTP Error 400: "
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/james/job/ApacheJames-JDKIM/job/master/",
+      "error": "HTTP Error 400: "
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/james/job/ApacheJames-JSPF/job/master/",
+      "error": "HTTP Error 400: "
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/james/job/ApacheJames-Mime4J/job/master/",
+      "error": "HTTP Error 400: "
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/james/job/ApacheJames/job/master/",
+      "error": "HTTP Error 400: "
+    }
+  ],
+  "discovery_errors": [],
+  "selected": null,
+  "pilot": "https://ci-builds.apache.org/job/Jackrabbit/job/jackrabbit-oak-trunk/"
+}
