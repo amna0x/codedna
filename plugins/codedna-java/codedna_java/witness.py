@@ -377,7 +377,7 @@ def find_witness(request):
                     witness = item
             confirm(witness)
             report.update(status='difference', witness=witness, original_witness=original,
-                          reduction='Smallest absolute value for int, or summed magnitude/string-length complexity, among candidates actually tried; no global minimality claim.',
+                          reduction='Lowest numeric magnitude plus array element counts and string lengths among candidates actually tried; no global minimality claim.',
                           confirmation='Each accepted witness pair matched two further fresh-JVM pairs; general determinism is not proved.')
             from codedna_java.witness_export import export_reproducer
             report['reproducer'] = export_reproducer(Path(request['output_dir']), basename, sources,

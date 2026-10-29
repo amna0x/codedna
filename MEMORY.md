@@ -881,3 +881,35 @@ checks passed (35 deselected, 10.19s). Await original full trace/totals before
 calling it the only failure. Two research-harness checks passed in 0.12s.
 Application source remains a30ce70; new research scripts/test fixture are separate.
 Do not launch duplicate full tests, push, merge, or overwrite friend installers.
+
+## D089 implemented receiver/array support; brake cohort repaired — 2026-10-29
+
+Application extension committed at 2c54145 (later wording-only reduction description
+fix). Public no-argument fresh receivers and int-array results <=128 now work in
+Moonshot, report/export and supplied-requirement JUnit drafts. Input arrays remain
+<=8 elements. Preserve exceptional inputs; continue budgeted normal-return search,
+but report inconclusive if only exceptional/no witness results remain. No private
+access override, arbitrary objects, dates, callbacks or void-output inference.
+
+All six development refusals diagnosed. One now eligible; five remain unsupported.
+Published stock-span trigger reproduced three times/version: [10,10,10,10] gives
+[1,2,3,4] before and published expected [1,1,1,1] after. Automatic guided and simple
+searches independently found [0,0] without supplied oracle inputs; both exported
+JDK reproducers passed. This is one known development bug, not held-out superiority
+or automatic bug classification. Twelve reserved repositories remain untouched.
+
+ActiveMQ/main revised outcome-blind cohort: 223 train/74 audit/75 evaluation heads.
+All 75 evaluation heads have 62 known training and 38-39 known audit ancestors.
+All 372 raw inventories acquired; hash/CRC/structure/duration/executed-count checks
+pass. Published executed counts do not prove no skipped classes or risk acceptance.
+Risk targets, existing model/audit rules and mandatory tests remain unchanged.
+No new model-effectiveness, miss-rate or actual net-CI-time result is claimed.
+
+D087 full test run was intentionally stopped after stalled Gradle daemon handshake;
+partial log and obsolete long-return rejection failure preserved. Never call it
+completed/passed. Real Gradle prerequisite now passes with GRADLE_OPTS disabling
+forking: 1 pass/1 deselected,106.68s. Focused integration 12 passed (16.54s), numeric/
+refusal/exception 19 passed (26 deselected,85.17s), cohort integrity 5 passed (4.49s).
+One final Maven-inclusive suite on the saved batch is next; do not run duplicates.
+See CORE_IMPROVEMENTS_D089.md and RESEARCH_EVALUATION_D089.md. Source/research
+preparation only; no installer replacement, push or merge authorized/performed.

@@ -2082,3 +2082,8 @@ attempts. A generated test disappearing from another attempt makes that attempt
 incomplete, and the run cannot enter stable training history. Any observed failure
 still blocks. Risk targets, audit requirements and skip authority are unchanged.
 D087 is source development, not a new release or independent research result.
+
+
+## D089: repair support using development failures
+
+Keep D088 results and reserved repositories untouched. Add only bounded fresh-instance/array-result support justified by the stock-span development case. Preserve exceptional observations, object-lifetime bounds and full-suite fallback. Availability-only cohort revisions and positive ancestry checks do not establish risk acceptance. See CORE_IMPROVEMENTS_D089.md.

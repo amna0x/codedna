@@ -168,3 +168,8 @@ it. Every repeated failure still blocks; missing/skipped/build-error attempts
 cannot become a passing verdict. Unstable or incomplete repeats are not training
 history. Measured cost includes planning/execution/recording within the check,
 not server startup or counterfactual selected-test savings. Default attempts=1.
+
+
+## D089 source capability update
+
+Public instance methods can use a public no-argument receiver, fresh for each JVM invocation; constructor code executes. Normal results now include int arrays of at most 128 elements. Private constructors and general object graphs remain unsupported. Exceptional search inputs are retained and do not erase later normal witnesses. No witness remains insufficient for skipping tests. See CORE_IMPROVEMENTS_D089.md for development evidence; released installer claims retain their original source identities.

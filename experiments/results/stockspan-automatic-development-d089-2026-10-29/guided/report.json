@@ -1,0 +1,487 @@
+{
+  "status": "difference",
+  "observations": [
+    {
+      "phase": "search",
+      "input": [],
+      "base": {
+        "kind": "exception",
+        "type": "java.lang.ArrayIndexOutOfBoundsException"
+      },
+      "head": {
+        "kind": "exception",
+        "type": "java.lang.ArrayIndexOutOfBoundsException"
+      }
+    },
+    {
+      "phase": "search",
+      "input": [
+        0
+      ],
+      "base": {
+        "kind": "value",
+        "value": [
+          1
+        ]
+      },
+      "head": {
+        "kind": "value",
+        "value": [
+          1
+        ]
+      }
+    },
+    {
+      "phase": "search",
+      "input": [
+        1
+      ],
+      "base": {
+        "kind": "value",
+        "value": [
+          1
+        ]
+      },
+      "head": {
+        "kind": "value",
+        "value": [
+          1
+        ]
+      }
+    },
+    {
+      "phase": "search",
+      "input": [
+        -1
+      ],
+      "base": {
+        "kind": "value",
+        "value": [
+          1
+        ]
+      },
+      "head": {
+        "kind": "value",
+        "value": [
+          1
+        ]
+      }
+    },
+    {
+      "phase": "search",
+      "input": [
+        0,
+        0
+      ],
+      "base": {
+        "kind": "value",
+        "value": [
+          1,
+          2
+        ]
+      },
+      "head": {
+        "kind": "value",
+        "value": [
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "phase": "confirmation",
+      "input": [
+        0,
+        0
+      ],
+      "base": {
+        "kind": "value",
+        "value": [
+          1,
+          2
+        ]
+      },
+      "head": {
+        "kind": "value",
+        "value": [
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "phase": "confirmation",
+      "input": [
+        0,
+        0
+      ],
+      "base": {
+        "kind": "value",
+        "value": [
+          1,
+          2
+        ]
+      },
+      "head": {
+        "kind": "value",
+        "value": [
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "phase": "reduction",
+      "input": [],
+      "base": {
+        "kind": "exception",
+        "type": "java.lang.ArrayIndexOutOfBoundsException"
+      },
+      "head": {
+        "kind": "exception",
+        "type": "java.lang.ArrayIndexOutOfBoundsException"
+      }
+    },
+    {
+      "phase": "reduction",
+      "input": [
+        0
+      ],
+      "base": {
+        "kind": "value",
+        "value": [
+          1
+        ]
+      },
+      "head": {
+        "kind": "value",
+        "value": [
+          1
+        ]
+      }
+    },
+    {
+      "phase": "reduction",
+      "input": [
+        0
+      ],
+      "base": {
+        "kind": "value",
+        "value": [
+          1
+        ]
+      },
+      "head": {
+        "kind": "value",
+        "value": [
+          1
+        ]
+      }
+    },
+    {
+      "phase": "confirmation",
+      "input": [
+        0,
+        0
+      ],
+      "base": {
+        "kind": "value",
+        "value": [
+          1,
+          2
+        ]
+      },
+      "head": {
+        "kind": "value",
+        "value": [
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "phase": "confirmation",
+      "input": [
+        0,
+        0
+      ],
+      "base": {
+        "kind": "value",
+        "value": [
+          1,
+          2
+        ]
+      },
+      "head": {
+        "kind": "value",
+        "value": [
+          1,
+          1
+        ]
+      }
+    }
+  ],
+  "jvm_runs": 24,
+  "compilations": 2,
+  "search_inputs": 5,
+  "reduction_inputs": 3,
+  "source_encoding": "UTF-8",
+  "runtime_file_encoding": "UTF-8",
+  "budget": {
+    "max_inputs": 32,
+    "seed": 7,
+    "reduce_budget": 4,
+    "generation": "guided"
+  },
+  "guidance": "Edited integer literals first, then literal neighbors and fixed/seeded inputs from selected method syntax; no semantic or coverage guarantee.",
+  "input_types": [
+    "int[]"
+  ],
+  "receiver_semantics": "One invocation per fresh JVM; instance methods use a fresh public no-argument receiver. Constructor code executes.",
+  "source_sha256": {
+    "base": "8804a64e378661e9a4735ed15765dd907af9d20adad3bec95546d754e5bdc388",
+    "head": "9caf29080886dd2eafd8c5043fa2b41acf0c4f62d79e20528a0035297242bf39"
+  },
+  "selected_method_tokens_changed": true,
+  "java_version": "openjdk version \"17.0.20\" 2026-07-21\r\nOpenJDK Runtime Environment Temurin-17.0.20+8 (build 17.0.20+8)\r\nOpenJDK 64-Bit Server VM Temurin-17.0.20+8 (build 17.0.20+8, mixed mode, sharing)\r\n",
+  "javac_version": "javac 17.0.20\r\n",
+  "candidate_inputs": [
+    [],
+    [
+      0
+    ],
+    [
+      1
+    ],
+    [
+      -1
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      -1,
+      -1
+    ],
+    [
+      1,
+      -1
+    ],
+    [
+      -1,
+      1
+    ],
+    [
+      -2147483648
+    ],
+    [
+      2147483647
+    ],
+    [
+      -2147483648,
+      2147483647
+    ],
+    [
+      -62,
+      1,
+      66,
+      -88,
+      -82,
+      37
+    ],
+    [
+      -7,
+      49
+    ],
+    [
+      29
+    ],
+    [
+      -91,
+      -78,
+      11,
+      7
+    ],
+    [
+      -39,
+      -77
+    ],
+    [
+      -85,
+      44,
+      -69,
+      -43,
+      61,
+      60,
+      49
+    ],
+    [
+      47
+    ],
+    [
+      -88,
+      -44,
+      -89,
+      42,
+      -66,
+      -26,
+      7
+    ],
+    [
+      38,
+      -70,
+      46
+    ],
+    [
+      43,
+      74,
+      -54,
+      -74,
+      48
+    ],
+    [
+      -5,
+      -76,
+      40,
+      82
+    ],
+    [
+      44,
+      -85
+    ],
+    [
+      27,
+      74,
+      36,
+      9
+    ],
+    [
+      19,
+      49,
+      16,
+      -8,
+      -24,
+      -37
+    ],
+    [
+      78,
+      99,
+      -38
+    ],
+    [
+      47,
+      -24
+    ],
+    [
+      -13,
+      86,
+      14,
+      -27,
+      55,
+      -82,
+      -70,
+      31
+    ],
+    [
+      -58,
+      93,
+      -13,
+      -62,
+      25,
+      7,
+      -90
+    ],
+    [
+      95,
+      42
+    ],
+    [
+      -13,
+      77,
+      -11,
+      52,
+      27,
+      48
+    ]
+  ],
+  "non_normal_search_inputs": 1,
+  "witness": {
+    "phase": "search",
+    "input": [
+      0,
+      0
+    ],
+    "base": {
+      "kind": "value",
+      "value": [
+        1,
+        2
+      ]
+    },
+    "head": {
+      "kind": "value",
+      "value": [
+        1,
+        1
+      ]
+    }
+  },
+  "original_witness": {
+    "phase": "search",
+    "input": [
+      0,
+      0
+    ],
+    "base": {
+      "kind": "value",
+      "value": [
+        1,
+        2
+      ]
+    },
+    "head": {
+      "kind": "value",
+      "value": [
+        1,
+        1
+      ]
+    }
+  },
+  "reduction": "Smallest absolute value for int, or summed magnitude/string-length complexity, among candidates actually tried; no global minimality claim.",
+  "confirmation": "Each accepted witness pair matched two further fresh-JVM pairs; general determinism is not proved.",
+  "reproducer": {
+    "files_sha256": {
+      "base/OnlineStockSpan.java": "8804a64e378661e9a4735ed15765dd907af9d20adad3bec95546d754e5bdc388",
+      "head/OnlineStockSpan.java": "9caf29080886dd2eafd8c5043fa2b41acf0c4f62d79e20528a0035297242bf39",
+      "CodeDNABehaviorProbe.java": "aa85bf98eb72455f946d6b6b7d8bc024d2752481c37a099248b60068c84e03e7",
+      "ReproduceDifference.java": "9968873e1f077a15daeb0315d6362f8c00999f69fae94a63d7d1381c62f11f3e",
+      "README.md": "d8ca4d548f51dc280f1b55a60c1b13f01d2df750dccaf6495064532800932df4"
+    },
+    "entrypoint": "ReproduceDifference.java",
+    "requires": "JDK 17+; explicitly trusted selected source",
+    "disclosure": "Includes the entire chosen base/head source file. Review before sharing."
+  },
+  "schema_version": 1,
+  "kind": "codedna-behavioral-evidence",
+  "experimental": true,
+  "repository": "C:\\Users\\hp\\OneDrive\\Documents\\ChatGPT\\codedna\\.worktrees\\core-evidence\\build\\d089-stockspan-source.git",
+  "base_commit": "7a73ea56d05ff1f0fa085da259d02cb247b29db8",
+  "head_commit": "8d81307ea1651f3dffe2d9d620378c08f04463ee",
+  "language": "java",
+  "file": "src/main/java/leetcode/medium/OnlineStockSpan.java",
+  "symbol": "leetcode.medium.OnlineStockSpan#calculateSpans(int[])",
+  "support_files": [],
+  "regression_established": false,
+  "required_tests_removed": false,
+  "plugin_version": "0.1.0",
+  "plugin_api_version": "1.1",
+  "export_disclosure": "A confirmed export includes the entire selected base/head source file; compiler diagnostics may quote source. Review before sharing.",
+  "interpretation": "A stable observed difference needs an applicable expectation to be called a regression. No witness within a finite budget does not establish equivalence or validate skip risk.",
+  "further_execution_blocked": false,
+  "elapsed_seconds": 11.937
+}

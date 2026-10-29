@@ -1,0 +1,67 @@
+{
+  "repository": "nikoo28/java-solutions",
+  "input": [
+    10,
+    10,
+    10,
+    10
+  ],
+  "expected_from_published_test": [
+    1,
+    1,
+    1,
+    1
+  ],
+  "observations": [
+    {
+      "commit": "7a73ea56d05ff1f0fa085da259d02cb247b29db8",
+      "source_sha256": "8804a64e378661e9a4735ed15765dd907af9d20adad3bec95546d754e5bdc388",
+      "repeated_outputs": [
+        [
+          1,
+          2,
+          3,
+          4
+        ],
+        [
+          1,
+          2,
+          3,
+          4
+        ],
+        [
+          1,
+          2,
+          3,
+          4
+        ]
+      ]
+    },
+    {
+      "commit": "8d81307ea1651f3dffe2d9d620378c08f04463ee",
+      "source_sha256": "9caf29080886dd2eafd8c5043fa2b41acf0c4f62d79e20528a0035297242bf39",
+      "repeated_outputs": [
+        [
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1
+        ]
+      ]
+    }
+  ],
+  "confirmed_against_published_test": true,
+  "scope": "Known-trigger development probe; not automatic discovery, held-out evaluation or integrated Moonshot validation"
+}

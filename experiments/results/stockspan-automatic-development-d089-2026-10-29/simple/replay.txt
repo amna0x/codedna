@@ -1,0 +1,3 @@
+input=[0, 0] base=[1,2] head=[1,1]
+Recorded behavioral difference reproduced. Base is not an oracle.
+Temporary compiled files: C:\Users\hp\AppData\Local\Temp\codedna-reproduce-14384916356980222089

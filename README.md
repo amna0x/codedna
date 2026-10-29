@@ -576,7 +576,9 @@ earlier evidence remains tied to its preceding source checkpoint.
 ## Experimental Moonshot witness (D-085)
 
 An optional Java capability compares bounded inputs on two versions of one
-self-contained public static int(int) method. A confirmed difference exports
+self-contained public method with bounded numeric/boolean/String/array inputs
+and int/long/int-array results. Instance methods require a public no-argument
+constructor and receive a fresh object per JVM invocation. A confirmed difference exports
 source and a standalone JDK-only reproducer. It requires explicit project-code
 consent. It does not classify a regression automatically or change required tests.
 

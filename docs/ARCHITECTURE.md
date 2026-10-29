@@ -772,3 +772,8 @@ attempts. A generated test disappearing from another attempt makes that attempt
 incomplete, and the run cannot enter stable training history. Any observed failure
 still blocks. Risk targets, audit requirements and skip authority are unchanged.
 D087 is source development, not a new release or independent research result.
+
+
+## D089: bounded receiver/result extension
+
+See [D089 implementation and measured limits](CORE_IMPROVEMENTS_D089.md). Public no-argument receivers are constructed per fresh JVM; bounded int-array returns preserve normal-value evidence and standalone replay. No risk or mandatory-test authority changed.

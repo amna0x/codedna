@@ -26,6 +26,7 @@ class DownloadForm(HTMLParser):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--fetch-metadata', action='store_true')
+    parser.add_argument('--fetch-activemq-inventories', action='store_true')
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
     folder = root/'build/d088-inputs'
@@ -68,6 +69,32 @@ def main():
                 'scope': 'Downloaded metadata only; no CodeDNA evaluation'}
             (folder/'lrts-metadata-provenance.json').write_text(json.dumps(provenance, indent=2)+'\n')
             print('Metadata saved and CRC/SHA256 recorded. No full archive download.')
+        if args.fetch_activemq_inventories:
+            cohort = json.loads((root/'experiments/brake-cohort-d089.json').read_text())
+            names = sorted({'long_running_test_suites/processed_test_result/activemq/'+
+                job['pr_name']+'_build'+job['build_id']+'/stage_'+job['stage_id']+'/test_class.csv.zip'
+                for build in cohort['builds'] for job in build['jobs']},
+                key=lambda name: archive.getinfo(name).header_offset)
+            destination = folder/'lrts-inventories'
+            destination.mkdir(exist_ok=True)
+            records = []
+            for name in names:
+                info = archive.getinfo(name)
+                if info.file_size > 1024*1024:
+                    raise ValueError('Inventory member exceeds 1 MiB bound')
+                raw = archive.read(info)
+                digest = sha256(raw).hexdigest()
+                target = destination/(digest+'.zip')
+                if target.exists():
+                    if target.read_bytes() != raw:
+                        raise ValueError('Cached inventory fingerprint mismatch')
+                else:
+                    target.write_bytes(raw)
+                records.append({'member': name, 'sha256': digest, 'bytes': len(raw), 'crc32': info.CRC})
+            (folder/'lrts-inventory-manifest.json').write_text(json.dumps({
+                'scope': 'Uninterpreted raw inventory acquisition; evaluation outcomes not read',
+                'range_bytes': remote.downloaded, 'members': records}, indent=2)+'\n')
+            print('Pinned raw inventories:',len(records),'Range bytes:',remote.downloaded)
 
 
 if __name__ == '__main__':
