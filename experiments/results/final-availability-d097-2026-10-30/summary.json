@@ -1,0 +1,199 @@
+{
+  "roots": [
+    "ActiveMQ",
+    "Artemis",
+    "Commons",
+    "HttpComponents",
+    "Jena",
+    "PDFBox",
+    "POI",
+    "Tika"
+  ],
+  "request_limit": 100,
+  "requests": 20,
+  "nested_discovered": 3,
+  "nested_inspected": 3,
+  "candidate_jobs_discovered": 9,
+  "candidates": [
+    {
+      "url": "https://ci-builds.apache.org/job/ActiveMQ/job/ActiveMQ%20OpenWire/job/main/",
+      "completed": 0,
+      "scm_identified": 0,
+      "availability_qualified": false
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/ActiveMQ/job/ActiveMQ/job/main/",
+      "completed": 6,
+      "scm_identified": 6,
+      "availability_qualified": false
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Jena/job/Jena_Site2/job/main/",
+      "completed": 1,
+      "scm_identified": 1,
+      "availability_qualified": false
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/PDFBox/job/PDFBox-Trunk-jdk26/",
+      "completed": 3,
+      "scm_identified": 0,
+      "availability_qualified": false
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/PDFBox/job/PDFBox-Trunk-jdk27/",
+      "completed": 3,
+      "scm_identified": 0,
+      "availability_qualified": false
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/PDFBox/job/PDFBox-trunk/",
+      "completed": 7,
+      "scm_identified": 0,
+      "availability_qualified": false
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Tika/job/tika-main-jdk17/",
+      "completed": 4,
+      "scm_identified": 4,
+      "availability_qualified": false
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Tika/job/tika-main-jdk21/",
+      "completed": 4,
+      "scm_identified": 4,
+      "availability_qualified": false
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Tika/job/tika-main-jdk26/",
+      "completed": 4,
+      "scm_identified": 4,
+      "availability_qualified": false
+    }
+  ],
+  "errors": [],
+  "inputs": [
+    {
+      "url": "https://ci-builds.apache.org/job/ActiveMQ/api/json?tree=jobs[name,url,_class]",
+      "sha256": "78e63bc6a014b679664f4b08ad765ce088c57907b9c501015af3361352503134",
+      "bytes": 1080,
+      "file": "inputs/78e63bc6a014b679664f4b08ad765ce088c57907b9c501015af3361352503134.json.gz"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Artemis/api/json?tree=jobs[name,url,_class]",
+      "sha256": "01dc2523b29f05cbebcc28c3f180ccd7821d1d6651a4d6d70f5480dd348cb655",
+      "bytes": 516,
+      "file": "inputs/01dc2523b29f05cbebcc28c3f180ccd7821d1d6651a4d6d70f5480dd348cb655.json.gz"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Commons/api/json?tree=jobs[name,url,_class]",
+      "sha256": "5aac5cf6f173d5f2dcabdfb56a500f56ccdb9252945957b5bf582ce779bf2831",
+      "bytes": 4500,
+      "file": "inputs/5aac5cf6f173d5f2dcabdfb56a500f56ccdb9252945957b5bf582ce779bf2831.json.gz"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/HttpComponents/api/json?tree=jobs[name,url,_class]",
+      "sha256": "ca2d9b97f0d099c4f77ddb25ba54621f0101694f3fd64c7c3683b22631c94949",
+      "bytes": 2680,
+      "file": "inputs/ca2d9b97f0d099c4f77ddb25ba54621f0101694f3fd64c7c3683b22631c94949.json.gz"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Jena/api/json?tree=jobs[name,url,_class]",
+      "sha256": "42595025c8da91eb202dfba6f1b348684eb5023711dda59130248cebf9e3abac",
+      "bytes": 1107,
+      "file": "inputs/42595025c8da91eb202dfba6f1b348684eb5023711dda59130248cebf9e3abac.json.gz"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/PDFBox/api/json?tree=jobs[name,url,_class]",
+      "sha256": "76fec43fbdf1a89a361b613f288925e2b068899927f51e5fdc585c62e5ecd461",
+      "bytes": 1158,
+      "file": "inputs/76fec43fbdf1a89a361b613f288925e2b068899927f51e5fdc585c62e5ecd461.json.gz"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/POI/api/json?tree=jobs[name,url,_class]",
+      "sha256": "0883bee55058d12554d4bff8a5c8090331687554159725ffa26dab4e39042c95",
+      "bytes": 6246,
+      "file": "inputs/0883bee55058d12554d4bff8a5c8090331687554159725ffa26dab4e39042c95.json.gz"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Tika/api/json?tree=jobs[name,url,_class]",
+      "sha256": "bfb89b2de197d6ed34aae139f087072d339b39e8308fc52ba6c72b1f3ce47aec",
+      "bytes": 1033,
+      "file": "inputs/bfb89b2de197d6ed34aae139f087072d339b39e8308fc52ba6c72b1f3ce47aec.json.gz"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/ActiveMQ/job/ActiveMQ%20OpenWire/api/json?tree=jobs[name,url,_class]",
+      "sha256": "77b3ded470fb884070e723196139c38b48351e45712dabadd701b9a03c2dcfd1",
+      "bytes": 2921,
+      "file": "inputs/77b3ded470fb884070e723196139c38b48351e45712dabadd701b9a03c2dcfd1.json.gz"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/ActiveMQ/job/ActiveMQ/api/json?tree=jobs[name,url,_class]",
+      "sha256": "414b274da77fe8cf14377e68d45bdbe580598b5497a51a4dba7d5ec397c8a767",
+      "bytes": 21752,
+      "file": "inputs/414b274da77fe8cf14377e68d45bdbe580598b5497a51a4dba7d5ec397c8a767.json.gz"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Jena/job/Jena_Site2/api/json?tree=jobs[name,url,_class]",
+      "sha256": "7279749c54de888dbb9c2d9248e8f4f21f4d8ddc6a756980e2c39ee8480c08c6",
+      "bytes": 483,
+      "file": "inputs/7279749c54de888dbb9c2d9248e8f4f21f4d8ddc6a756980e2c39ee8480c08c6.json.gz"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/ActiveMQ/job/ActiveMQ%20OpenWire/job/main/api/json?tree=name,url,builds[number,url,timestamp,duration,building,actions[lastBuiltRevision[SHA1,branch[name]],revision[hash]]]%7B0,500%7D",
+      "sha256": "13b2a840fd226b5da6ace9a7194f8095b54ca300dcdf319cf69cc4c08db954ba",
+      "bytes": 169,
+      "file": "inputs/13b2a840fd226b5da6ace9a7194f8095b54ca300dcdf319cf69cc4c08db954ba.json.gz"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/ActiveMQ/job/ActiveMQ/job/main/api/json?tree=name,url,builds[number,url,timestamp,duration,building,actions[lastBuiltRevision[SHA1,branch[name]],revision[hash]]]%7B0,500%7D",
+      "sha256": "d6decb6d1546b75ea02daa14e05252adfc66d3c42051dcaf72aa3a3006b37e51",
+      "bytes": 7022,
+      "file": "inputs/d6decb6d1546b75ea02daa14e05252adfc66d3c42051dcaf72aa3a3006b37e51.json.gz"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Jena/job/Jena_Site2/job/main/api/json?tree=name,url,builds[number,url,timestamp,duration,building,actions[lastBuiltRevision[SHA1,branch[name]],revision[hash]]]%7B0,500%7D",
+      "sha256": "21823cef1ba9c70a4b5465b68660eb65fd106b7def92a380ee84983b4aaf6107",
+      "bytes": 1202,
+      "file": "inputs/21823cef1ba9c70a4b5465b68660eb65fd106b7def92a380ee84983b4aaf6107.json.gz"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/PDFBox/job/PDFBox-Trunk-jdk26/api/json?tree=name,url,builds[number,url,timestamp,duration,building,actions[lastBuiltRevision[SHA1,branch[name]],revision[hash]]]%7B0,500%7D",
+      "sha256": "aba9d18be0d7e4f4855b28ec38fbe97a5ad58bc69bb8ff4555594a710c150c6d",
+      "bytes": 1870,
+      "file": "inputs/aba9d18be0d7e4f4855b28ec38fbe97a5ad58bc69bb8ff4555594a710c150c6d.json.gz"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/PDFBox/job/PDFBox-Trunk-jdk27/api/json?tree=name,url,builds[number,url,timestamp,duration,building,actions[lastBuiltRevision[SHA1,branch[name]],revision[hash]]]%7B0,500%7D",
+      "sha256": "901299cc881b7a08d8c0f9532f25d8661bbb7edca70834c7a859319f0e01a408",
+      "bytes": 1870,
+      "file": "inputs/901299cc881b7a08d8c0f9532f25d8661bbb7edca70834c7a859319f0e01a408.json.gz"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/PDFBox/job/PDFBox-trunk/api/json?tree=name,url,builds[number,url,timestamp,duration,building,actions[lastBuiltRevision[SHA1,branch[name]],revision[hash]]]%7B0,500%7D",
+      "sha256": "de9dd03e30d5683b396daa160f3e918c31768f91d13b51f4e17c9b4be335c7e4",
+      "bytes": 4137,
+      "file": "inputs/de9dd03e30d5683b396daa160f3e918c31768f91d13b51f4e17c9b4be335c7e4.json.gz"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Tika/job/tika-main-jdk17/api/json?tree=name,url,builds[number,url,timestamp,duration,building,actions[lastBuiltRevision[SHA1,branch[name]],revision[hash]]]%7B0,500%7D",
+      "sha256": "aed05b97e458d03275ea19fcd1902f8d37f9ea98af7030b498bfc32cf491eab7",
+      "bytes": 3806,
+      "file": "inputs/aed05b97e458d03275ea19fcd1902f8d37f9ea98af7030b498bfc32cf491eab7.json.gz"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Tika/job/tika-main-jdk21/api/json?tree=name,url,builds[number,url,timestamp,duration,building,actions[lastBuiltRevision[SHA1,branch[name]],revision[hash]]]%7B0,500%7D",
+      "sha256": "13f3b01df8cb4842b5424d1c22056a95c6d75d3baf6c9cd01979fb75e8c3e6d6",
+      "bytes": 3610,
+      "file": "inputs/13f3b01df8cb4842b5424d1c22056a95c6d75d3baf6c9cd01979fb75e8c3e6d6.json.gz"
+    },
+    {
+      "url": "https://ci-builds.apache.org/job/Tika/job/tika-main-jdk26/api/json?tree=name,url,builds[number,url,timestamp,duration,building,actions[lastBuiltRevision[SHA1,branch[name]],revision[hash]]]%7B0,500%7D",
+      "sha256": "12a66d1950441896df72e6aeef07b3d415cbc210ab764031d70c3646ca454f55",
+      "bytes": 3610,
+      "file": "inputs/12a66d1950441896df72e6aeef07b3d415cbc210ab764031d70c3646ca454f55.json.gz"
+    }
+  ],
+  "availability_qualified": [],
+  "rule": "At least 240 completed SCM-identified builds; no outcomes requested. Qualification alone still needs report/source/lineage verification.",
+  "scope": "Finite public Apache search, not proof no suitable dataset exists elsewhere."
+}

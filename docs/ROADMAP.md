@@ -645,3 +645,11 @@ confirm module identities. Seven include skipped cases. Twelve zero-skipped
 candidates still require exact chronological source/report validation and enough
 completed history. No skipping or saving demonstrated. See
 MODULE_COMPATIBILITY_D095_FINDINGS.md. Do not claim the roadmap complete.
+
+## D097 stopping decision
+
+The owner-authorized final research search is complete:9additional jobs across
+8Apache groups, none meets fixed history availability. Research expansion is
+closed with honest limitations; no further feature or dataset expansion planned.
+See RESEARCH_CLOSURE_D097.md. Release remains open for current-source installer
+verification and friend clean-PC acceptance. Do not mark the whole roadmap done.

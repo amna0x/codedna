@@ -1077,3 +1077,16 @@ it unproductive. Need longer complete sequential/prospective full-suite history;
 collector cannot restore expired reports or guarantee sufficient failing audits.
 7offline D095/D096checks passed1.69s. App/gates unchanged;780appvalidation separate.
 See MODULE_HISTORY_D096_FINDINGS.md. No push/merge/installer/website changes.
+
+## D097 research expansion closed — 2026-10-30
+
+Owner authorized final bounded search then closure. Eight extra Apache roots,
+20requests/3multibranch containers/9jobs;0availability-qualified,0requesterrors,
+max7completedbuilds. Metadata snapshots/hashes retained. Finite search, not claim
+no dataset exists anywhere. Close research expansion with bounded Moonshot
+positive evidence and brake savings unproven; do not weaken gates or keep rerunning
+same data seeking positive numbers. Report updated; see RESEARCH_CLOSURE_D097.md.
+Verified local CI collector23452stopped; child20904exited with parent. Archive
+preserved; no ongoing collector promised. Remaining release work: current-source
+installer verification and friend clean-PC acceptance/smoke JSON/manual results.
+D085friend kit is older than current a02d20fsource. No push/merge/stash operations.

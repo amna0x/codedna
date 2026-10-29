@@ -743,3 +743,21 @@ Safety definitions also differ across prior work: CodeDNA counts a failing
 commit as safe only when no failing test was omitted. Build-escape measures
 count a miss only when no failure was caught. These numbers are not directly
 comparable. See NOVELTY_REVIEW_2026-10-27.md for the source comparison.
+
+## Final bounded research outcome (D089–D097, 2026-10-30)
+
+The final research expansion is closed under the stopping decision in
+RESEARCH_CLOSURE_D097.md. Moonshot reproduced differences in two of forty retained
+QuixBugs programs in both modes, with four independently replayed exports and
+separate published expectations confirming both corrections. Seven programs fit
+its source contract; thirty-three were unsupported. This is an adapted,
+single-seed educational benchmark, not an independent production superiority test.
+
+The live brake preserved all discovered tests when target evidence was missing.
+A public CI pilot and module compatibility checks did not establish safe time
+savings: available completed history was too sparse to pass unchanged evidence
+requirements. A final metadata-only search of nine additional jobs in eight
+Apache groups found no archive meeting the fixed availability criterion. This
+finite negative search does not prove suitable data exists nowhere. Earlier mixed
+and negative results remain part of the evidence. Engineering validation and
+research efficacy must not be conflated. Clean-PC release acceptance remains open.
