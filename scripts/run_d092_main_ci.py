@@ -5,6 +5,7 @@ from pathlib import Path
 from urllib.parse import quote, urlparse
 from urllib.request import urlopen
 import os
+import argparse
 
 from codedna.git_analysis.git import run_git
 from codedna.selection.validation import validate_outcomes
@@ -24,7 +25,17 @@ def parse_report(data):
                     known=False;continue
                 classes.add(name);states.setdefault(name,set()).add(status)
                 if status in ('FAILED','REGRESSION'):failed.add(name)
-    expected=[data.get(k) for k in ('passCount','failCount','skipCount')]
+    keys=('passCount','failCount','skipCount')
+    expected=[data.get(k) for k in keys]
+    if not all(type(x) is int and x>=0 for x in expected) and not data.get('suites') and reports:
+        # Maven's aggregated report exports fail/skip at the root, but its pass
+        # count is available only in child results. Check every child and every
+        # exposed root total; never fill an unknown count with zero.
+        child_counts=[[report.get(k) for k in keys] for report in reports]
+        if all(type(x) is int and x>=0 for row in child_counts for x in row):
+            totals=[sum(row[i] for row in child_counts) for i in range(3)]
+            if all(data.get(k) is None or data[k]==totals[i] for i,k in enumerate(keys)):
+                expected=totals
     complete=bool(classes) and known and all(type(x) is int and x>=0 for x in expected) and sum(expected)==count
     skipped=frozenset(name for name,statuses in states.items() if statuses=={'SKIPPED'})
     return Outcome(frozenset(classes),frozenset(failed),complete,
@@ -32,13 +43,20 @@ def parse_report(data):
 
 
 def main():
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--out',default='experiments/results/rolling-main-ci-d092-2026-10-29')
+    parser.add_argument('--cached-from',type=Path)
+    args=parser.parse_args()
     root=Path(__file__).resolve().parents[1]
     if run_git(root,'diff','a02d20f','--','backend/codedna','plugins/codedna-java').strip():raise ValueError('Application changed')
     manifest_path=root/'experiments/d092-main-ci-pilot.json'
     manifest=json.loads(manifest_path.read_text())
-    out=root/'experiments/results/rolling-main-ci-d092-2026-10-29'
+    out=root/args.out
     out.mkdir(exist_ok=False)
     metadata={b['number']:b for b in manifest['builds']}
+    cached=root/args.cached_from if args.cached_from else None
+    old_records={r['build']:r for r in json.loads((cached/'records.json').read_text())} if cached else {}
+    if cached and set(old_records)!=set(metadata):raise ValueError('Cached cohort mismatch')
     builds=[Build(b['number'],b['commit'],b['parent'],b['started'],b['finished'],b['source_verified']) for b in manifest['builds']]
     source=root/'build/d092-main-ci/source.git'
     chains={b.number:set(run_git(source,'rev-list','--first-parent',b.parent).splitlines()) if b.parent else set() for b in builds}
@@ -67,8 +85,13 @@ def main():
         url=metadata[build.number]['url']
         if urlparse(url).hostname!='ci-builds.apache.org' or not url.startswith(manifest['job']):raise ValueError('Unexpected report origin')
         try:
-            with urlopen(url+'testReport/api/json?tree='+quote(TREE,safe=',[]'),timeout=45) as response:
-                raw=response.read(32*1024*1024+1)
+            if cached:
+                old=cached/('report-'+str(build.number)+'.json')
+                if not old.exists():raise ValueError('Preserved initial report failure: '+str(old_records[build.number]['report_limitation']))
+                raw=old.read_bytes()
+            else:
+                with urlopen(url+'testReport/api/json?tree='+quote(TREE,safe=',[]'),timeout=45) as response:
+                    raw=response.read(32*1024*1024+1)
             if len(raw)>32*1024*1024:raise ValueError('Report size limit')
             payload_bytes+=len(raw)
             if payload_bytes>256*1024*1024:raise ValueError('Pilot download budget')
@@ -86,6 +109,8 @@ def main():
         'complete_published_reports':sum(r['complete_as_published'] for r in records),
         'recorded_failing_builds':sum(r['recorded_failed_classes']>0 for r in records),
         'model_fits':0,'selective_decisions':0,'report_payload_bytes':payload_bytes,
+        'network_report_bytes':0 if cached else payload_bytes,
+        'replay_of_inspected_cached_reports':bool(cached),
         'source_test_universe_verified':False,'new_ci_execution':False,
         'limitation':'None of 26 inspected jobs met 240 retained builds; existing evidence guards remain mandatory.'}
     (out/'records.json').write_bytes((json.dumps(records,indent=2)+'\n').encode())

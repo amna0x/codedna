@@ -66,3 +66,21 @@ def test_duplicate_build_identity_is_rejected_before_truth(repo,modules):
     module,_=modules;sequence=builds(repo,module)
     with pytest.raises(ValueError,match='Duplicate'):
         module.replay([sequence[0],sequence[0]],None,None,None)
+
+
+def test_maven_aggregate_requires_matching_child_counts(modules):
+    _,runner=modules
+    child={'passCount':1,'failCount':1,'skipCount':0,'suites':[{'cases':[
+        {'className':'Pass','status':'PASSED'},{'className':'Fail','status':'FAILED'}]}]}
+    data={'failCount':1,'skipCount':0,'childReports':[{'result':child}]}
+    outcome=runner.parse_report(data)
+    assert outcome.complete_as_published and outcome.failed==frozenset({'Fail'})
+    data['failCount']=0
+    assert not runner.parse_report(data).complete_as_published
+
+
+def test_missing_child_count_is_not_assumed_zero(modules):
+    _,runner=modules
+    data={'failCount':0,'skipCount':0,'childReports':[{'result':{
+        'suites':[{'cases':[{'className':'Test','status':'PASSED'}]}]}}]}
+    assert not runner.parse_report(data).complete_as_published
