@@ -19,6 +19,7 @@ from codedna.git_analysis.blobs import list_files, read_blobs
 from codedna.git_analysis.git import run_git
 from codedna_java.parser import parse_java
 from codedna_java.witness_inputs import parameter_types, encode, generate, complexity, reductions
+from codedna_java.witness_values import instance_array_probe, normal_value
 
 MIN_INT, MAX_INT = -(2**31), 2**31-1
 MAX_SOURCE = 256 * 1024
@@ -61,6 +62,9 @@ public final class CodeDNABehaviorProbe {
   }
 }
 '''
+
+
+HARNESS = instance_array_probe(HARNESS)
 
 
 class ToolFailure(RuntimeError):
@@ -160,10 +164,17 @@ def _method(source, symbol):
         raise ValueError('Pilot requires the same syntactically valid top-level class and method on both versions')
     method = methods[0]
     prefix = method.tokens[:method.tokens.index(method_name)]
-    if ('public' not in classes[0].tokens or 'public' not in prefix or 'static' not in prefix
-            or not prefix or prefix[-1] not in ('int','long') or '{' not in method.tokens
+    numeric_return = bool(prefix) and (prefix[-1] in ('int', 'long')
+                                       or tuple(prefix[-3:]) == ('int', '[', ']'))
+    if ('public' not in classes[0].tokens or 'public' not in prefix
+            or not numeric_return or '{' not in method.tokens
             or {'native', 'abstract', 'synchronized'}.intersection(prefix)):
-        raise ValueError('Pilot requires a public top-level class and a public static int/long-return method with a body')
+        raise ValueError('Pilot requires a public top-level class and a public int/long/int[]-return method with a body')
+    if 'static' not in prefix:
+        constructors = [d for d in parsed.declarations if d.kind == 'constructor' and d.parent == class_name]
+        if ('abstract' in classes[0].tokens or constructors and not any(
+                d.id == class_name+'#<init>()' and d.tokens[0] == 'public' for d in constructors)):
+            raise ValueError('Instance witness requires a concrete class with a public no-argument constructor')
     return class_name, method_name, method
 
 
@@ -252,6 +263,7 @@ def find_witness(request):
         class_name, method_name, _ = methods[0]
         types = parameter_types(request['symbol'])
         report['input_types'] = types
+        report['receiver_semantics'] = 'One invocation per fresh JVM; instance methods use a fresh public no-argument receiver. Constructor code executes.'
         if request.get('supplied_expectation') is not None:
             encode(types, request['supplied_expectation']['input'])
         basename = Path(request['file']).name
@@ -309,7 +321,7 @@ def find_witness(request):
                     if code or len(lines) != 1:
                         raise ToolFailure('Project execution returned no unique complete observation')
                     if lines[0].startswith('value:'):
-                        observed = {'kind': 'value', 'value': int(lines[0][6:])}
+                        observed = {'kind': 'value', 'value': normal_value(lines[0][6:])}
                     elif lines[0].startswith('throw:'):
                         observed = {'kind': 'exception', 'type': lines[0][6:]}
                     else:
@@ -317,8 +329,6 @@ def find_witness(request):
                     pair.append(observed)
                 item = {'phase': phase, 'input': value, 'base': pair[0], 'head': pair[1]}
                 report['observations'].append(item)
-                if any(o['kind'] != 'value' for o in pair):
-                    raise ToolFailure('Exception observed; the first pilot compares normal int return values only')
                 return item
 
             def confirm(item):
@@ -338,13 +348,20 @@ def find_witness(request):
                 report['candidate_inputs'] = values
                 report['supplied_input_counts_toward_search_budget'] = True
             witness = None
+            report['non_normal_search_inputs'] = 0
             for value in values:
                 report['search_inputs'] += 1
                 item = observe(value, 'search')
+                if any(item[label]['kind'] != 'value' for label in ('base', 'head')):
+                    report['non_normal_search_inputs'] += 1
+                    continue
                 if item['base'] != item['head']:
                     witness = item
                     break
             if witness is None:
+                if report['non_normal_search_inputs']:
+                    return {**report, 'status': 'inconclusive',
+                        'reason': 'Exception observed for some inputs; no confirmed normal-return difference within the remaining finite budget. All observations retained.'}
                 return {**report, 'status': 'no_difference_observed',
                         'reason': 'No normal-return difference observed within the finite input/time budget; equivalence is not established.'}
             confirm(witness)
@@ -354,6 +371,8 @@ def find_witness(request):
                     continue
                 report['reduction_inputs'] += 1
                 item = observe(value, 'reduction')
+                if any(item[label]['kind'] != 'value' for label in ('base', 'head')):
+                    continue
                 if item['base'] != item['head']:
                     witness = item
             confirm(witness)
@@ -363,7 +382,8 @@ def find_witness(request):
             from codedna_java.witness_export import export_reproducer
             report['reproducer'] = export_reproducer(Path(request['output_dir']), basename, sources,
                 request['symbol'], witness, report['source_sha256'], HARNESS,
-                expectation=expectation, support=support)
+                expectation=expectation, support=support,
+                instance='static' not in methods[1][2].tokens[:methods[1][2].tokens.index(method_name)])
             return report
         except (ToolFailure, OSError, ValueError) as exc:
             return {**report, 'status': 'inconclusive', 'reason': str(exc)[:1000]}

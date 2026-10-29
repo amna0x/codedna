@@ -3,6 +3,7 @@ from hashlib import sha256
 import json
 import re
 from codedna_java.witness_inputs import parameter_types, encode, java_arguments
+from codedna_java.witness_values import canonical
 
 REPRODUCER = r'''import java.nio.file.*;
 import java.nio.charset.StandardCharsets;
@@ -70,7 +71,7 @@ public final class ReproduceDifference {
 '''
 
 
-def export_reproducer(output, basename, sources, symbol, witness, hashes, harness, *, expectation=None, support=None):
+def export_reproducer(output, basename, sources, symbol, witness, hashes, harness, *, expectation=None, support=None, instance=False):
     class_name, method = symbol.split('#')
     method = method.split('(', 1)[0]
     types = parameter_types(symbol)
@@ -129,6 +130,17 @@ def export_reproducer(output, basename, sources, symbol, witness, hashes, harnes
     program = program.replace('static final int EXPECTED_BASE =', 'static final long EXPECTED_BASE =')
     program = program.replace('static int run(', 'static long run(').replace('return Integer.parseInt(values.get(0)', 'return Long.parseLong(values.get(0)')
     program = program.replace('int[] observed = new int[2]', 'long[] observed = new long[2]')
+    if any(isinstance(witness[label]['value'], list) for label in ('base', 'head')):
+        values['BASE'] = json.dumps(canonical(witness['base']['value']))
+        values['HEAD'] = json.dumps(canonical(witness['head']['value']))
+        program = program.replace('static final long EXPECTED_BASE =', 'static final String EXPECTED_BASE =')
+        program = program.replace('static long run(', 'static String run(')
+        program = program.replace('return Long.parseLong(values.get(0).substring((token+"value:").length()));',
+                                  'return values.get(0).substring((token+"value:").length());')
+        program = program.replace('long[] observed = new long[2]', 'String[] observed = new String[2]')
+        program = program.replace('base=%d head=%d', 'base=%s head=%s')
+        program = program.replace('observed[0]!=EXPECTED_BASE || observed[1]!=EXPECTED_HEAD || observed[0]==observed[1]',
+            '!observed[0].equals(EXPECTED_BASE) || !observed[1].equals(EXPECTED_HEAD) || observed[0].equals(observed[1])')
     # Substitute once: literal user inputs may themselves contain template markers.
     program = re.sub(r'@@([A-Z_]+)@@', substitute, program)
     write('ReproduceDifference.java', program.encode('utf-8'))
@@ -163,6 +175,7 @@ does not pass reproduction. Compiled class files are left in the reported OS
 temporary directory. This one reproduction run does not prove general determinism.
 '''
     if expectation is not None:
+        expected = expectation['expected']
         readme += '''
 ## Supplied expectation and JUnit draft
 
@@ -189,7 +202,12 @@ public final class CodeDNAWitnessTest {
   }
 }
 '''
-        replacements = {'EXPECTED': str(expectation['expected'])+('L' if not -(2**31)<=expectation['expected']<2**31 else ''), 'TYPE': class_name,
+        if isinstance(expected, list):
+            draft = draft.replace('assertEquals', 'assertArrayEquals')
+            expected_java = 'new int[]{'+','.join(map(str, expected))+'}'
+        else:
+            expected_java = str(expected)+('L' if not -(2**31)<=expected<2**31 else '')
+        replacements = {'EXPECTED': expected_java, 'TYPE': 'new '+class_name+'()' if instance else class_name,
                         'METHOD': method, 'INPUT': java_arguments(types, expectation['input']),
                         'REQUIREMENT': json.dumps(expectation['requirement'], ensure_ascii=True)}
         # Substitute the message last so its contents cannot become template code.

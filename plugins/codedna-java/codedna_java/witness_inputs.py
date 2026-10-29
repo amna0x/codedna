@@ -58,7 +58,7 @@ def generate(types, base_tokens, head_tokens, *, mode, seed, maximum, int_candid
             pool = int_candidates(base_tokens, head_tokens, mode=mode,
                                   seed=seed+position, maximum=maximum, bits=64)
         elif kind in ('int[]','int...'):
-            pool = [[],[0],[1],[-1],[1,-1],[-1,1],[-(2**31)],[2**31-1],[-(2**31),2**31-1]]
+            pool = [[],[0],[1],[-1],[0,0],[1,1],[-1,-1],[1,-1],[-1,1],[-(2**31)],[2**31-1],[-(2**31),2**31-1]]
             rng = random.Random(seed+position)
             while len(pool)<maximum:
                 value=[rng.randint(-100,100) for _ in range(rng.randrange(1,9))]

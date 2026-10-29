@@ -130,8 +130,10 @@ def find_difference(repo_path, base, head, *, file, symbol, output_dir,
         if not _bounded_input(expectation['input']):
             raise ValueError('expectation input must be a bounded JSON scalar or argument/array input with at most eight elements per level and two levels')
         value = expectation['expected']
-        if type(value) is not int or not -(2**63) <= value < 2**63:
-            raise ValueError('expectation expected result must be a signed integer64 value')
+        if not (type(value) is int and -(2**63) <= value < 2**63 or
+                isinstance(value, list) and len(value) <= 128 and all(
+                    type(item) is int and -(2**31) <= item < 2**31 for item in value)):
+            raise ValueError('expectation expected result must be signed int64 or an int32 array of at most 128 values')
         requirement = expectation['requirement']
         if not isinstance(requirement, str) or not requirement.strip() or len(requirement) > 2000 or not requirement.isprintable():
             raise ValueError('expectation requirement must be a printable nonempty line of at most 2000 characters')
