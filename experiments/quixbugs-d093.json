@@ -1,0 +1,824 @@
+{
+  "benchmark": "QuixBugs educational challenge programs; not production changes",
+  "upstream": "https://github.com/jkoppel/QuixBugs",
+  "upstream_commit": "4257f44b0ff1181dedaedee6a447e133219fcebf",
+  "application_source": "a02d20f",
+  "base": "68e496ebe132b6ae08a977f7f6eebbcf06a0193c",
+  "head": "afe407166866e1dc9a1a178942d3f00964b848a1",
+  "helpers": [
+    "Node.java",
+    "WeightedEdge.java"
+  ],
+  "seed": 7,
+  "max_inputs": 16,
+  "reduce_budget": 4,
+  "timeout_seconds": 60,
+  "adaptation": "Only corrected package declaration normalized; bodies unchanged",
+  "cases": [
+    {
+      "program": "BITCOUNT",
+      "file": "BITCOUNT.java",
+      "symbol": "java_programs.BITCOUNT#bitcount(int)",
+      "refusals": [],
+      "original_source_sha256": [
+        "0314f0a4609893fd9b509448f58b3a97843d007e85e1be560daea89e5437535b",
+        "57ea3039f7a1d79c7bd3008ab27100770232ba5a88898bbe298e98816233c397"
+      ],
+      "adapted_source_sha256": [
+        "0314f0a4609893fd9b509448f58b3a97843d007e85e1be560daea89e5437535b",
+        "a8b4b56bd6caa2d4c09b577cafec693e64583d545952ae59992e7f55b96cc5e1"
+      ],
+      "json_tests": "bitcount.json",
+      "status": "source_contract_eligible"
+    },
+    {
+      "program": "BREADTH_FIRST_SEARCH",
+      "file": "BREADTH_FIRST_SEARCH.java",
+      "symbol": null,
+      "refusals": [
+        {
+          "symbol": "java_programs.BREADTH_FIRST_SEARCH#breadth_first_search(Node,Node)",
+          "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+        }
+      ],
+      "original_source_sha256": [
+        "3db8d7a4bea14aa651a6e419a41f97dbcae63d6b8b77c1fa8b47a74daf07ed23",
+        "8434eaaa50b0960a2ea33310d19be08b605ead98f49b4107ad79994320be1491"
+      ],
+      "adapted_source_sha256": [
+        "3db8d7a4bea14aa651a6e419a41f97dbcae63d6b8b77c1fa8b47a74daf07ed23",
+        "54b2a5270ecb8c98bd44ec26e1c1335a754d372e1770b37b745e7adfe56690ee"
+      ],
+      "json_tests": "breadth_first_search.json",
+      "status": "unsupported_at_source_selection"
+    },
+    {
+      "program": "BUCKETSORT",
+      "file": "BUCKETSORT.java",
+      "symbol": null,
+      "refusals": [
+        {
+          "symbol": "java_programs.BUCKETSORT#bucketsort(ArrayList<Integer>,int)",
+          "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+        }
+      ],
+      "original_source_sha256": [
+        "e1c7d940f7142974eb432f4230c2dcd6f421adf2c2b07bdfca7781cb789979aa",
+        "4e0ab9e6f2b4acbd17c37c037faeed6860a3964fe82f83466b71f9bbea514a29"
+      ],
+      "adapted_source_sha256": [
+        "e1c7d940f7142974eb432f4230c2dcd6f421adf2c2b07bdfca7781cb789979aa",
+        "de2e7b937f80d0b5b854bd10422444022379ed34d62b147ee9e736e56b0293ab"
+      ],
+      "json_tests": "bucketsort.json",
+      "status": "unsupported_at_source_selection"
+    },
+    {
+      "program": "DEPTH_FIRST_SEARCH",
+      "file": "DEPTH_FIRST_SEARCH.java",
+      "symbol": null,
+      "refusals": [
+        {
+          "symbol": "java_programs.DEPTH_FIRST_SEARCH#depth_first_search(Node,Node)",
+          "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+        }
+      ],
+      "original_source_sha256": [
+        "f5f94dab28b081562139149e818ec81f829b80151d3725e91115777c9036be04",
+        "72d6ab9c02ae43c62132332579d955b6d19980ba702b0574d67064ca3170ff21"
+      ],
+      "adapted_source_sha256": [
+        "f5f94dab28b081562139149e818ec81f829b80151d3725e91115777c9036be04",
+        "328d5efe49e86bbace0f0839cddbea9b97b7ac9d630dc4ae1667d802ff094a68"
+      ],
+      "json_tests": "depth_first_search.json",
+      "status": "unsupported_at_source_selection"
+    },
+    {
+      "program": "DETECT_CYCLE",
+      "file": "DETECT_CYCLE.java",
+      "symbol": null,
+      "refusals": [
+        {
+          "symbol": "java_programs.DETECT_CYCLE#detect_cycle(Node)",
+          "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+        }
+      ],
+      "original_source_sha256": [
+        "a317633428e770c608a17131f248ef7efba7e7f16bbb2bcf3e4d3cfb17c6ced3",
+        "c7298663627ed1c89d14438b5c49dd1ea358c6cbd88904fee63c00aa11373fb0"
+      ],
+      "adapted_source_sha256": [
+        "a317633428e770c608a17131f248ef7efba7e7f16bbb2bcf3e4d3cfb17c6ced3",
+        "a10968afe2aff130bff580192b547a944484624e1373e219086282ac9dc85348"
+      ],
+      "json_tests": "detect_cycle.json",
+      "status": "unsupported_at_source_selection"
+    },
+    {
+      "program": "FIND_FIRST_IN_SORTED",
+      "file": "FIND_FIRST_IN_SORTED.java",
+      "symbol": "java_programs.FIND_FIRST_IN_SORTED#find_first_in_sorted(int[],int)",
+      "refusals": [],
+      "original_source_sha256": [
+        "d51626063f87b741a8a6e72ced9b23199c4beddee0783e149602342324f93164",
+        "8a1908f20599b2c1da081e9aec28a1c7dd475753c07298b7c206ef6ec9f6e71d"
+      ],
+      "adapted_source_sha256": [
+        "d51626063f87b741a8a6e72ced9b23199c4beddee0783e149602342324f93164",
+        "636f56f8fc362901401f057d4a9ea909fee73aef37c4e92c43812a5f90879c99"
+      ],
+      "json_tests": "find_first_in_sorted.json",
+      "status": "source_contract_eligible"
+    },
+    {
+      "program": "FIND_IN_SORTED",
+      "file": "FIND_IN_SORTED.java",
+      "symbol": null,
+      "refusals": [
+        {
+          "symbol": "java_programs.FIND_IN_SORTED#binsearch(int[],int,int,int)",
+          "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+        }
+      ],
+      "original_source_sha256": [
+        "ed63bce55dca6e6d9bf2abf6db950786bf502355b1bc645e9dfd8ffd5524b3a5",
+        "c084f0b85a6c23baeb357794656bba16f2da9b6833820bdbaaf89413ac5c1216"
+      ],
+      "adapted_source_sha256": [
+        "ed63bce55dca6e6d9bf2abf6db950786bf502355b1bc645e9dfd8ffd5524b3a5",
+        "fd37c3aac9608744ca99453eb1aa2b912211279a03043feb7160151fd2aadfd6"
+      ],
+      "json_tests": "find_in_sorted.json",
+      "status": "unsupported_at_source_selection"
+    },
+    {
+      "program": "FLATTEN",
+      "file": "FLATTEN.java",
+      "symbol": null,
+      "refusals": [
+        {
+          "symbol": "java_programs.FLATTEN#flatten(Object)",
+          "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+        }
+      ],
+      "original_source_sha256": [
+        "a5ccbfa24aa0ad24cabfdb3666a95097f3b8dc0b75d4236989cc3e6499dba58d",
+        "dd3d0850af348ba43ddde74b6b41cc16e6a1e60c9d4f37dbf78916d4d734645d"
+      ],
+      "adapted_source_sha256": [
+        "a5ccbfa24aa0ad24cabfdb3666a95097f3b8dc0b75d4236989cc3e6499dba58d",
+        "e7443fe0937407de2cf5bba09d43fd50fb93f3353570a92cbf604acfec55e05c"
+      ],
+      "json_tests": "flatten.json",
+      "status": "unsupported_at_source_selection"
+    },
+    {
+      "program": "GCD",
+      "file": "GCD.java",
+      "symbol": "java_programs.GCD#gcd(int,int)",
+      "refusals": [],
+      "original_source_sha256": [
+        "7a16a78bca6591de70eabaef9c612f8aded5f2f40ac67498466e4024f325491f",
+        "18d9f92ce68b1e5fc961175dbf7fa769b73fcd25a1a6c01ee6191051ed8570f0"
+      ],
+      "adapted_source_sha256": [
+        "7a16a78bca6591de70eabaef9c612f8aded5f2f40ac67498466e4024f325491f",
+        "f77c62e89b3f12259903f057107432c1679c07672d3ce084f7503b1c3cba7152"
+      ],
+      "json_tests": "gcd.json",
+      "status": "source_contract_eligible"
+    },
+    {
+      "program": "GET_FACTORS",
+      "file": "GET_FACTORS.java",
+      "symbol": null,
+      "refusals": [
+        {
+          "symbol": "java_programs.GET_FACTORS#get_factors(int)",
+          "reason": "Pilot requires a public top-level class and a public int/long/int[]-return method with a body"
+        }
+      ],
+      "original_source_sha256": [
+        "b7ef176e4d41ef36d12f79acaa1de7f17b378daa77065b0dfb6c08fcbb6c06db",
+        "507e0643adc91c13c88eaa814843987da14a1d2f20e6dbebf85da28acbcbb4fc"
+      ],
+      "adapted_source_sha256": [
+        "b7ef176e4d41ef36d12f79acaa1de7f17b378daa77065b0dfb6c08fcbb6c06db",
+        "94f4a5076aab7d693ad7064ebb2fc717905010946030cb26cd5c4eacf825b36c"
+      ],
+      "json_tests": "get_factors.json",
+      "status": "unsupported_at_source_selection"
+    },
+    {
+      "program": "HANOI",
+      "file": "HANOI.java",
+      "symbol": null,
+      "refusals": [
+        {
+          "symbol": "java_programs.HANOI#hanoi(int,int,int)",
+          "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+        }
+      ],
+      "original_source_sha256": [
+        "3567762c9c5c38416210b64310f3097e072743d618b4be1c2b50275bd32c660e",
+        "5ffcf9b610a6c7a9595b3e8a06df89ffe842c791988cd79954340a8365da6baa"
+      ],
+      "adapted_source_sha256": [
+        "3567762c9c5c38416210b64310f3097e072743d618b4be1c2b50275bd32c660e",
+        "4c96a2028c9e9281c1981394b988c0b834caecedda12fa2b08f51cff3ef20628"
+      ],
+      "json_tests": "hanoi.json",
+      "status": "unsupported_at_source_selection"
+    },
+    {
+      "program": "IS_VALID_PARENTHESIZATION",
+      "file": "IS_VALID_PARENTHESIZATION.java",
+      "symbol": null,
+      "refusals": [
+        {
+          "symbol": "java_programs.IS_VALID_PARENTHESIZATION#is_valid_parenthesization(String)",
+          "reason": "Pilot requires a public top-level class and a public int/long/int[]-return method with a body"
+        }
+      ],
+      "original_source_sha256": [
+        "cd51eef7398c1c0763c22928b2f5ff171714bbdd8ce0a270f03ec7bda898ba06",
+        "39c7fc146d0f1993805ac9f0fcc01a22e5a04511f8835af22fa66ccf4726d3c9"
+      ],
+      "adapted_source_sha256": [
+        "cd51eef7398c1c0763c22928b2f5ff171714bbdd8ce0a270f03ec7bda898ba06",
+        "8931d1fd650e52cf2e2e0323060209d91298449b42a6f80afb988946791c6db1"
+      ],
+      "json_tests": "is_valid_parenthesization.json",
+      "status": "unsupported_at_source_selection"
+    },
+    {
+      "program": "KHEAPSORT",
+      "file": "KHEAPSORT.java",
+      "symbol": null,
+      "refusals": [
+        {
+          "symbol": "java_programs.KHEAPSORT#kheapsort(ArrayList<Integer>,int)",
+          "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+        }
+      ],
+      "original_source_sha256": [
+        "eb39c5c1a98a130be9fe60510039fdcfa70d7f4879f8c7892fd1c13dac1f22e6",
+        "ae300f075fafecc29860bd0cf1da111a6ec284212cebfab537ecbe294ffd711c"
+      ],
+      "adapted_source_sha256": [
+        "eb39c5c1a98a130be9fe60510039fdcfa70d7f4879f8c7892fd1c13dac1f22e6",
+        "4ac1207024c5c5339835d596f8c7112c357d200a9397a51dcc5348c340a5529a"
+      ],
+      "json_tests": "kheapsort.json",
+      "status": "unsupported_at_source_selection"
+    },
+    {
+      "program": "KNAPSACK",
+      "file": "KNAPSACK.java",
+      "symbol": null,
+      "refusals": [
+        {
+          "symbol": "java_programs.KNAPSACK#knapsack(int,int[][])",
+          "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+        }
+      ],
+      "original_source_sha256": [
+        "a563510f46e6b155f66dddf89f7179e335467fee0fcab607ed83549909aa086b",
+        "b3bc8a2d3aac95c98548afe65ba65601b2a83b2da19cebcc44d3d84223f098d1"
+      ],
+      "adapted_source_sha256": [
+        "a563510f46e6b155f66dddf89f7179e335467fee0fcab607ed83549909aa086b",
+        "d5d113a9382a3b5e7becc2af6f50bfd3d4a2ae8a7b97bfb73e478fcbfb513005"
+      ],
+      "json_tests": "knapsack.json",
+      "status": "unsupported_at_source_selection"
+    },
+    {
+      "program": "KTH",
+      "file": "KTH.java",
+      "symbol": null,
+      "refusals": [
+        {
+          "symbol": "java_programs.KTH#kth(ArrayList<Integer>,int)",
+          "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+        }
+      ],
+      "original_source_sha256": [
+        "a5ae29968f763ca038511ea89b40787ea55756a0e94ac978ec8a6872fd99aab3",
+        "22c1095ddbb142003ebfc29d56b6345f1f18e80859d35cad9e51995c445665b9"
+      ],
+      "adapted_source_sha256": [
+        "a5ae29968f763ca038511ea89b40787ea55756a0e94ac978ec8a6872fd99aab3",
+        "64ee9452a95a3aa8b2b270bbaa965a2b8061d6b2ecd592ab49bf69b06b2f0eeb"
+      ],
+      "json_tests": "kth.json",
+      "status": "unsupported_at_source_selection"
+    },
+    {
+      "program": "LCS_LENGTH",
+      "file": "LCS_LENGTH.java",
+      "symbol": null,
+      "refusals": [
+        {
+          "symbol": "java_programs.LCS_LENGTH#lcs_length(String,String)",
+          "reason": "Pilot requires a public top-level class and a public int/long/int[]-return method with a body"
+        }
+      ],
+      "original_source_sha256": [
+        "e0892c283dd64e0ec169d2abd7923eb356c75d80bf7a2d67eef23f7dc3f17265",
+        "37e14c00b9643ac10cd9d1f838899ee498e1be84da2fd9a8cbfaebb730d64a75"
+      ],
+      "adapted_source_sha256": [
+        "e0892c283dd64e0ec169d2abd7923eb356c75d80bf7a2d67eef23f7dc3f17265",
+        "ea42595c678dbdc007c862fede66efb14323389a687bea10eca18958744aecc4"
+      ],
+      "json_tests": "lcs_length.json",
+      "status": "unsupported_at_source_selection"
+    },
+    {
+      "program": "LEVENSHTEIN",
+      "file": "LEVENSHTEIN.java",
+      "symbol": "java_programs.LEVENSHTEIN#levenshtein(String,String)",
+      "refusals": [],
+      "original_source_sha256": [
+        "ee1b7bc544156fbd475ea03e3b5e6b3e6edecae3f7de31e6ee0c647308f04ea0",
+        "ff24312219f1fbdb0f1a6103f11ac0cdcae0e03dc5f2c893d1d5d67d1fc0a9cd"
+      ],
+      "adapted_source_sha256": [
+        "ee1b7bc544156fbd475ea03e3b5e6b3e6edecae3f7de31e6ee0c647308f04ea0",
+        "694a68e7633c784d74871b5b9032b6bc093db285994a7df895474567b4b6175b"
+      ],
+      "json_tests": "levenshtein.json",
+      "status": "source_contract_eligible"
+    },
+    {
+      "program": "LIS",
+      "file": "LIS.java",
+      "symbol": "java_programs.LIS#lis(int[])",
+      "refusals": [],
+      "original_source_sha256": [
+        "32f27e94dbaf33c868380cd9c858e5fd684dd4ad78474cf77277362d03177037",
+        "0c7dbe673f5e129e7cc21fbb527c0688cd0bcde298b89b68461563cc2200a8e6"
+      ],
+      "adapted_source_sha256": [
+        "32f27e94dbaf33c868380cd9c858e5fd684dd4ad78474cf77277362d03177037",
+        "0ec249fe3e0b9546d225e94efbd5ca1be5cfc07ccfac5aa8154ce23e39d3fea1"
+      ],
+      "json_tests": "lis.json",
+      "status": "source_contract_eligible"
+    },
+    {
+      "program": "LONGEST_COMMON_SUBSEQUENCE",
+      "file": "LONGEST_COMMON_SUBSEQUENCE.java",
+      "symbol": null,
+      "refusals": [
+        {
+          "symbol": "java_programs.LONGEST_COMMON_SUBSEQUENCE#longest_common_subsequence(String,String)",
+          "reason": "Pilot requires a public top-level class and a public int/long/int[]-return method with a body"
+        }
+      ],
+      "original_source_sha256": [
+        "2746f75e2c6ff997660636a0e4de63a81f73d694eafcfbffd8f429fa8e3383fe",
+        "8412145bd80e61bd09ec07497e2421b577c8de27933560448a1dc86fc0ae5e9a"
+      ],
+      "adapted_source_sha256": [
+        "2746f75e2c6ff997660636a0e4de63a81f73d694eafcfbffd8f429fa8e3383fe",
+        "bdac3bdd0d0a686b57a6899d36e4dc5ffb32cca3f46230b54245486f4fef73dd"
+      ],
+      "json_tests": "longest_common_subsequence.json",
+      "status": "unsupported_at_source_selection"
+    },
+    {
+      "program": "MAX_SUBLIST_SUM",
+      "file": "MAX_SUBLIST_SUM.java",
+      "symbol": "java_programs.MAX_SUBLIST_SUM#max_sublist_sum(int[])",
+      "refusals": [],
+      "original_source_sha256": [
+        "23ae9caa4ea2f15a32b61ad7e3ee4b1b4d767fd0362bb137803fcad65aa5a118",
+        "a26278eb14d9663a7c8881144d62152168a7b9ea8de61eb7b954462599141f5f"
+      ],
+      "adapted_source_sha256": [
+        "23ae9caa4ea2f15a32b61ad7e3ee4b1b4d767fd0362bb137803fcad65aa5a118",
+        "1b322d17e9da7cc0bd6da2aca3105e46cfb0823bd2efa98ff0f10470c15937a9"
+      ],
+      "json_tests": "max_sublist_sum.json",
+      "status": "source_contract_eligible"
+    },
+    {
+      "program": "MERGESORT",
+      "file": "MERGESORT.java",
+      "symbol": null,
+      "refusals": [
+        {
+          "symbol": "java_programs.MERGESORT#mergesort(ArrayList<Integer>)",
+          "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+        }
+      ],
+      "original_source_sha256": [
+        "e3788f7319bb405ab5722b44d79021fe7e7f1e7e551470b8a8814332ce6b9987",
+        "25b8bba87c35de5cf2051cf6bd15b23640a1a93f748b2cb9ef3d9b8204b5cfda"
+      ],
+      "adapted_source_sha256": [
+        "e3788f7319bb405ab5722b44d79021fe7e7f1e7e551470b8a8814332ce6b9987",
+        "949752e0fb84d662d9349e941796549f2cb12c6180fe9151efdb9fbab1ca6740"
+      ],
+      "json_tests": "mergesort.json",
+      "status": "unsupported_at_source_selection"
+    },
+    {
+      "program": "MINIMUM_SPANNING_TREE",
+      "file": "MINIMUM_SPANNING_TREE.java",
+      "symbol": null,
+      "refusals": [
+        {
+          "symbol": "java_programs.MINIMUM_SPANNING_TREE#minimum_spanning_tree(List<WeightedEdge>)",
+          "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+        }
+      ],
+      "original_source_sha256": [
+        "343cd42542e306196cc8b029dbfb5bbd3e6cda195931005b24d0bab0ebb099a8",
+        "90483133605176f79926ba9c556111476aae7d44456b14d6bbdc6787a97cc186"
+      ],
+      "adapted_source_sha256": [
+        "343cd42542e306196cc8b029dbfb5bbd3e6cda195931005b24d0bab0ebb099a8",
+        "52ce203b813fcfdb2b7db649c1b8ffc0563e89da16ec6ce8e8c4c8e447857dff"
+      ],
+      "json_tests": "minimum_spanning_tree.json",
+      "status": "unsupported_at_source_selection"
+    },
+    {
+      "program": "NEXT_PALINDROME",
+      "file": "NEXT_PALINDROME.java",
+      "symbol": null,
+      "refusals": [
+        {
+          "symbol": "java_programs.NEXT_PALINDROME#next_palindrome(int[])",
+          "reason": "Pilot requires a public top-level class and a public int/long/int[]-return method with a body"
+        }
+      ],
+      "original_source_sha256": [
+        "aa84a4465f123d4ac86ab3b1e52218386fc114d3c674bbd085fec6be2bb504c8",
+        "0423673b7eade29fbcdfe9ad02ca7e3a00badf1da93a6970928dd2e19383b09d"
+      ],
+      "adapted_source_sha256": [
+        "aa84a4465f123d4ac86ab3b1e52218386fc114d3c674bbd085fec6be2bb504c8",
+        "0f2dfd5dedb921d5af2f48b0aa8080665b6066a841435b1ed129ff0aa9b8588b"
+      ],
+      "json_tests": "next_palindrome.json",
+      "status": "unsupported_at_source_selection"
+    },
+    {
+      "program": "NEXT_PERMUTATION",
+      "file": "NEXT_PERMUTATION.java",
+      "symbol": null,
+      "refusals": [
+        {
+          "symbol": "java_programs.NEXT_PERMUTATION#next_permutation(ArrayList<Integer>)",
+          "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+        }
+      ],
+      "original_source_sha256": [
+        "03abb2eda7be5c71d778c69bff3e121be20defc21862e07757c4894ac32c5e80",
+        "a12330f3f3e78eb4150e5c0bb237ed5aab20dc03ba8b351af77557c7eda35456"
+      ],
+      "adapted_source_sha256": [
+        "03abb2eda7be5c71d778c69bff3e121be20defc21862e07757c4894ac32c5e80",
+        "c5c3d9c926c1d74bc416caeb635d1a5587ec5ee193f95d15915149ecc58e2758"
+      ],
+      "json_tests": "next_permutation.json",
+      "status": "unsupported_at_source_selection"
+    },
+    {
+      "program": "PASCAL",
+      "file": "PASCAL.java",
+      "symbol": null,
+      "refusals": [
+        {
+          "symbol": "java_programs.PASCAL#pascal(int)",
+          "reason": "Pilot requires a public top-level class and a public int/long/int[]-return method with a body"
+        }
+      ],
+      "original_source_sha256": [
+        "096d88635b3ef5c11aeff8d53d1d106f9a1764d101ef18a6c926a075e17623ab",
+        "0575058435c6f893d1586167b4cae2ca490bb1502ec8c9f82738f11f8ad87c76"
+      ],
+      "adapted_source_sha256": [
+        "096d88635b3ef5c11aeff8d53d1d106f9a1764d101ef18a6c926a075e17623ab",
+        "aa2057bcbea94c9a3fbc047eae1484ee7501b2bcec5c4f6018ecb5ec7f1cf73d"
+      ],
+      "json_tests": "pascal.json",
+      "status": "unsupported_at_source_selection"
+    },
+    {
+      "program": "POSSIBLE_CHANGE",
+      "file": "POSSIBLE_CHANGE.java",
+      "symbol": "java_programs.POSSIBLE_CHANGE#possible_change(int[],int)",
+      "refusals": [],
+      "original_source_sha256": [
+        "dbcaaf9634c6a7f7caf972080fb7e666633e249c67a1f8b74bb0fc8332f31811",
+        "30cb5d24355a53ec410b25b27368ac002670d09d9604fa40ab81567a79ce2757"
+      ],
+      "adapted_source_sha256": [
+        "dbcaaf9634c6a7f7caf972080fb7e666633e249c67a1f8b74bb0fc8332f31811",
+        "38c77db1cf7ffa3c789a28c0bdca00f92a09f101e50dbb3f4f637ebc705b8f3c"
+      ],
+      "json_tests": "possible_change.json",
+      "status": "source_contract_eligible"
+    },
+    {
+      "program": "POWERSET",
+      "file": "POWERSET.java",
+      "symbol": null,
+      "refusals": [
+        {
+          "symbol": "java_programs.POWERSET#powerset(ArrayList)",
+          "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+        }
+      ],
+      "original_source_sha256": [
+        "22050d02a05a501f8487104ef453c2ff55a7373ee24a076af939d8f4d1de12ff",
+        "6296727ade25010421fbd7f1eb6839fcce7f0c8e8252db46acbeb129a9b6baaf"
+      ],
+      "adapted_source_sha256": [
+        "22050d02a05a501f8487104ef453c2ff55a7373ee24a076af939d8f4d1de12ff",
+        "50097f01976226f7eaa36aaaa1b71d60f2c057b37c22e790d71319816ad304f3"
+      ],
+      "json_tests": "powerset.json",
+      "status": "unsupported_at_source_selection"
+    },
+    {
+      "program": "QUICKSORT",
+      "file": "QUICKSORT.java",
+      "symbol": null,
+      "refusals": [
+        {
+          "symbol": "java_programs.QUICKSORT#quicksort(ArrayList<Integer>)",
+          "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+        }
+      ],
+      "original_source_sha256": [
+        "043cfaf6cbe3797eb2d4d21fa3cc96c6aff4cedd540275777cc5343ae765e333",
+        "742164f32efb08c7c50da64226635035a060ad8ca64d5963c11e44aa1e59ff3b"
+      ],
+      "adapted_source_sha256": [
+        "043cfaf6cbe3797eb2d4d21fa3cc96c6aff4cedd540275777cc5343ae765e333",
+        "5a8aae1e4091eada4db25d5060316adec0fa6b6b2f277bccbf7b6da81502ac9c"
+      ],
+      "json_tests": "quicksort.json",
+      "status": "unsupported_at_source_selection"
+    },
+    {
+      "program": "REVERSE_LINKED_LIST",
+      "file": "REVERSE_LINKED_LIST.java",
+      "symbol": null,
+      "refusals": [
+        {
+          "symbol": "java_programs.REVERSE_LINKED_LIST#reverse_linked_list(Node)",
+          "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+        }
+      ],
+      "original_source_sha256": [
+        "1021c6dd76526e1ef80e6721cdd1f359b0268fe990c220b9666c82b8977efc10",
+        "86290ae9844156986f141e5ea995b00668ae77f706d441410974c8435585d007"
+      ],
+      "adapted_source_sha256": [
+        "1021c6dd76526e1ef80e6721cdd1f359b0268fe990c220b9666c82b8977efc10",
+        "d96d216d6d91026cf7551d309c360bfd2f22477fedfb3d5bf70664bcad410d07"
+      ],
+      "json_tests": "reverse_linked_list.json",
+      "status": "unsupported_at_source_selection"
+    },
+    {
+      "program": "RPN_EVAL",
+      "file": "RPN_EVAL.java",
+      "symbol": null,
+      "refusals": [
+        {
+          "symbol": "java_programs.RPN_EVAL#rpn_eval(ArrayList)",
+          "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+        }
+      ],
+      "original_source_sha256": [
+        "df81f8473d000dacaa97d0e40bffe428285a2726f9affdebf0550107a07d734e",
+        "23b678d5b109c95bac989318f4043687cdeb80626bbce0d369a295a20048d945"
+      ],
+      "adapted_source_sha256": [
+        "df81f8473d000dacaa97d0e40bffe428285a2726f9affdebf0550107a07d734e",
+        "492b167686796e8c3f2572b17759de32afcedeaad1247d20c41f99c700d277fe"
+      ],
+      "json_tests": "rpn_eval.json",
+      "status": "unsupported_at_source_selection"
+    },
+    {
+      "program": "SHORTEST_PATHS",
+      "file": "SHORTEST_PATHS.java",
+      "symbol": null,
+      "refusals": [
+        {
+          "symbol": "java_programs.SHORTEST_PATHS#shortest_paths(String,Map<List<String>,Integer>)",
+          "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+        }
+      ],
+      "original_source_sha256": [
+        "9f7bce9dd1ae1f15d21db56b0dbabf7a1cc73ea4d7447aa0956d29eb205818d1",
+        "8ea30897fee7e2761a92953f2d288f19ad1bd4dd904bdd534ca04117e0a146fb"
+      ],
+      "adapted_source_sha256": [
+        "9f7bce9dd1ae1f15d21db56b0dbabf7a1cc73ea4d7447aa0956d29eb205818d1",
+        "1095d385898a059e54f3b4896edd4c53536e043cbb1638ab2b91874a26dff9a8"
+      ],
+      "json_tests": "shortest_paths.json",
+      "status": "unsupported_at_source_selection"
+    },
+    {
+      "program": "SHORTEST_PATH_LENGTH",
+      "file": "SHORTEST_PATH_LENGTH.java",
+      "symbol": null,
+      "refusals": [
+        {
+          "symbol": "java_programs.SHORTEST_PATH_LENGTH#shortest_path_length(Map<List<Node>,Integer>,Node,Node)",
+          "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+        }
+      ],
+      "original_source_sha256": [
+        "b4d3b481c7096461d429a5f0ac0b0378dc91b932bb52c02aebb48eceae931b06",
+        "213eacf1b44961e87c76ce86ffcc5f43b21a1c0fed016ceea5bd277304cf9de3"
+      ],
+      "adapted_source_sha256": [
+        "b4d3b481c7096461d429a5f0ac0b0378dc91b932bb52c02aebb48eceae931b06",
+        "9c27d619ee4a8f2e2719ba38a5457a22a019527f3baf8dbd5711e517a72a9001"
+      ],
+      "json_tests": "shortest_path_length.json",
+      "status": "unsupported_at_source_selection"
+    },
+    {
+      "program": "SHORTEST_PATH_LENGTHS",
+      "file": "SHORTEST_PATH_LENGTHS.java",
+      "symbol": null,
+      "refusals": [
+        {
+          "symbol": "java_programs.SHORTEST_PATH_LENGTHS#shortest_path_lengths(int,Map<List<Integer>,Integer>)",
+          "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+        }
+      ],
+      "original_source_sha256": [
+        "096035053ff989ea8c28bbea49ba899f109214ebd8e494ad46f5822b0823c8d4",
+        "42cd7fa8b2f944f5dfa7f6020e77e5530eac996896012d82bff37cbf24190fa1"
+      ],
+      "adapted_source_sha256": [
+        "096035053ff989ea8c28bbea49ba899f109214ebd8e494ad46f5822b0823c8d4",
+        "9078cbf65671c2083486dc3a12162eca086e8a0ae34e90003c9ac68bfadd9c2c"
+      ],
+      "json_tests": "shortest_path_lengths.json",
+      "status": "unsupported_at_source_selection"
+    },
+    {
+      "program": "SHUNTING_YARD",
+      "file": "SHUNTING_YARD.java",
+      "symbol": null,
+      "refusals": [
+        {
+          "symbol": "java_programs.SHUNTING_YARD#shunting_yard(ArrayList)",
+          "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+        }
+      ],
+      "original_source_sha256": [
+        "ac148b86f763ba58ed98cbeaae563f0eda89a9e5128e6c5446774bac8b08c537",
+        "feb6aaf3f185ed080c1575ae14268a686312068110b5d4449adf3235dcb14b21"
+      ],
+      "adapted_source_sha256": [
+        "ac148b86f763ba58ed98cbeaae563f0eda89a9e5128e6c5446774bac8b08c537",
+        "0418dcbc175e62c26f8b0798adaeaff460baacc2bc6c9db1013d2022e7fe78a0"
+      ],
+      "json_tests": "shunting_yard.json",
+      "status": "unsupported_at_source_selection"
+    },
+    {
+      "program": "SIEVE",
+      "file": "SIEVE.java",
+      "symbol": null,
+      "refusals": [
+        {
+          "symbol": "java_programs.SIEVE#sieve(Integer)",
+          "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+        }
+      ],
+      "original_source_sha256": [
+        "0ae365763ecc0c6dceb98443d59d4be81ffbc32c801930451c7b176ef1873162",
+        "e191713a025eceb06b262be584567d7893075c311f41142d5972b2f28ec5d299"
+      ],
+      "adapted_source_sha256": [
+        "0ae365763ecc0c6dceb98443d59d4be81ffbc32c801930451c7b176ef1873162",
+        "b5dc86743684a5b5138b218c5d9808b23c3d1f047aa967d623fa936c8decc17b"
+      ],
+      "json_tests": "sieve.json",
+      "status": "unsupported_at_source_selection"
+    },
+    {
+      "program": "SQRT",
+      "file": "SQRT.java",
+      "symbol": null,
+      "refusals": [
+        {
+          "symbol": "java_programs.SQRT#sqrt(double,double)",
+          "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+        }
+      ],
+      "original_source_sha256": [
+        "26cc4d8f7201c8ad9ecd62de4430b431b9e49d381f8c59ca0de443db7aadd25a",
+        "60776d00cf8d92e1cea8f2cde0d590ab2a070f6c4a5add929bc3963bae60e1e5"
+      ],
+      "adapted_source_sha256": [
+        "26cc4d8f7201c8ad9ecd62de4430b431b9e49d381f8c59ca0de443db7aadd25a",
+        "8a0dc351618712f6a7ba83bb8a0c0c07d55a1677b9b4c52f2fc98d25fb5c8004"
+      ],
+      "json_tests": "sqrt.json",
+      "status": "unsupported_at_source_selection"
+    },
+    {
+      "program": "SUBSEQUENCES",
+      "file": "SUBSEQUENCES.java",
+      "symbol": null,
+      "refusals": [
+        {
+          "symbol": "java_programs.SUBSEQUENCES#subsequences(int,int,int)",
+          "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+        }
+      ],
+      "original_source_sha256": [
+        "cd143db2046caf393b421cfd2f3eb88237d552abb1de4e01e44418851805a1c2",
+        "3858f83f52b4ab5cad8f4ef08a327a7328ec19334a1ecd9a8047585f79f6d43b"
+      ],
+      "adapted_source_sha256": [
+        "cd143db2046caf393b421cfd2f3eb88237d552abb1de4e01e44418851805a1c2",
+        "5d67c941d7a63f0ce97734dfe3930bd0357a39a28cc51dbe025a706bc4857e9c"
+      ],
+      "json_tests": "subsequences.json",
+      "status": "unsupported_at_source_selection"
+    },
+    {
+      "program": "TOPOLOGICAL_ORDERING",
+      "file": "TOPOLOGICAL_ORDERING.java",
+      "symbol": null,
+      "refusals": [
+        {
+          "symbol": "java_programs.TOPOLOGICAL_ORDERING#topological_ordering(List<Node>)",
+          "reason": "Pilot symbol must select one or two supported numeric/boolean/String arguments"
+        }
+      ],
+      "original_source_sha256": [
+        "42187d54a001e53bc32dda37e87fa4e5e8d7ea1a08bd888ff54ad717f7e1a710",
+        "678ceec626699d368e2826afc114efd281f13adf02186dcafeafdd8db3060959"
+      ],
+      "adapted_source_sha256": [
+        "42187d54a001e53bc32dda37e87fa4e5e8d7ea1a08bd888ff54ad717f7e1a710",
+        "6226b29ba30694ccbe42b17d401fc69848884ad7315197f7cc196acc4b471b48"
+      ],
+      "json_tests": "topological_ordering.json",
+      "status": "unsupported_at_source_selection"
+    },
+    {
+      "program": "TO_BASE",
+      "file": "TO_BASE.java",
+      "symbol": null,
+      "refusals": [
+        {
+          "symbol": "java_programs.TO_BASE#to_base(int,int)",
+          "reason": "Pilot requires a public top-level class and a public int/long/int[]-return method with a body"
+        }
+      ],
+      "original_source_sha256": [
+        "a0b417127fa442377ad823ec37750e16e64b9dad8fc730a5a90293b71cf2da0b",
+        "e3345a1e4a7ea5730b09dbe34f9aeee9989f4ba43428057a1251cffcca20df8a"
+      ],
+      "adapted_source_sha256": [
+        "a0b417127fa442377ad823ec37750e16e64b9dad8fc730a5a90293b71cf2da0b",
+        "b1362388c37a4295983b8c3ede44fd56df6c69f7c21d4ef0d18f5e7274a3d31e"
+      ],
+      "json_tests": "to_base.json",
+      "status": "unsupported_at_source_selection"
+    },
+    {
+      "program": "WRAP",
+      "file": "WRAP.java",
+      "symbol": null,
+      "refusals": [
+        {
+          "symbol": "java_programs.WRAP#wrap(String,int)",
+          "reason": "Pilot requires a public top-level class and a public int/long/int[]-return method with a body"
+        }
+      ],
+      "original_source_sha256": [
+        "76b8017bf8bf11e8300b89eb2b305ac962c834cba7c1494592e63fc0e71bb113",
+        "bee687a669b1ff8526306d6c5d0339a7bb7c923a4fa02396d975f979d1684aee"
+      ],
+      "adapted_source_sha256": [
+        "76b8017bf8bf11e8300b89eb2b305ac962c834cba7c1494592e63fc0e71bb113",
+        "0405dda8b45fbfbad5d9c0980223b11972330ea49288dfec4f814304c0f0f74c"
+      ],
+      "json_tests": "wrap.json",
+      "status": "unsupported_at_source_selection"
+    }
+  ]
+}
