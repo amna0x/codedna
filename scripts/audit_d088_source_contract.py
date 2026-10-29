@@ -1,6 +1,7 @@
 """Read pinned development sources and audit method contracts without compiling them."""
 from hashlib import sha256
 import json
+import argparse
 from pathlib import Path
 from urllib.parse import quote
 from urllib.request import urlopen
@@ -10,12 +11,16 @@ from codedna_java.witness import _method
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--split', choices=['development', 'held_out'], default='development')
+    parser.add_argument('--out', type=Path)
+    args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
     folder = root/'build/d088-inputs'
     cases = json.loads((root/'experiments/moonshot-real-bug-selection-d088.json').read_text())['cases']
     reports = []
     for case in cases:
-        if case['split'] != 'development':
+        if case['split'] != args.split:
             continue
         raw = (folder/'gitbug-java/data/bugs'/case['metadata_file']).read_bytes()
         if sha256(raw).hexdigest() != case['metadata_sha256']:
@@ -70,10 +75,11 @@ def main():
             except Exception as error:
                 report['errors'].append({'file': name, 'error': str(error)[:300]})
         reports.append(report)
-        (folder/'development-source-contract.json').write_text(json.dumps(reports, indent=2)+'\n')
+        target = args.out or folder/'development-source-contract.json'
+        target.write_text(json.dumps(reports, indent=2)+'\n')
         print(case['repository'], 'candidate methods:',len(report['candidates']),
               'source errors:',len(report['errors']), flush=True)
-    print('Development source audit complete. Held-out sources untouched.')
+    print(args.split, 'source-contract audit complete.')
 
 
 if __name__ == '__main__':
