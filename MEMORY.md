@@ -943,3 +943,38 @@ No thresholds/features/case replacements were changed for positive remarks.
 No push/merge. Both stashes, original website worktree and release kits untouched.
 Next decision must use these negative applicability/evidence-floor findings;
 no re-evaluation on inspected data can become new independent confirmation.
+
+## D091 larger evaluation completed to frozen-history eligibility scope — 2026-10-29
+
+Owner authorized larger study. Application unchanged at a02d20f (780 Maven-inclusive
+passes retained; do not rerun unchanged application suite for research scripts).
+Fixed larger cohorts before labels: Hadoop1793,Hive1485,JackrabbitOak1448,Kafka2000;
+6726total,1348evaluation. Earlier ActiveMQ/D090 findings unchanged.
+
+All1348fixed evaluation outcomes acquired/read:766failing commits,4502failing-class
+occurrences. Exact operational first-parent/latest-BASE check, not general DAG:
+1305missing latest BASE history;35BASE-current but only1-18audit commits, insufficient
+for B10/CRC even best case;8Kafka source identities unavailable. Thus1340full-suite
+recommendations,8source-blocked. No selection gain, fitted-model performance or
+measured net-CI-wall-time claim. Blocked cases are not successful test executions.
+
+Preliminary general-DAG screen made291Jackrabbit CRC cases look count-feasible;
+exact first-parent/freshness checks invalidate that apparent readiness. Preserve
+both files; operational-results are authoritative for application conclusions.
+The frozen outer history does NOT roll earlier evaluation outcomes forward.
+Therefore this is not a prequential deployment test and does not prove large
+projects or live models can never benefit. A faithful follow-up needs sequential
+main-branch CI and a prespecified rolling update rule with outcomes available at
+BASE. These evaluated cases are now inspected; do not retune and call fresh.
+
+Originalpublicrefs unavailable123Jackrabbit/12Kafka selected heads. Research helper
+Windows-long-command error fixed via stdin; cohort membership unchanged. Kafka
+coarse range reads hit acquisition budget; reports retained, stopped unnecessary
+training acquisition after exact gate proof, concurrent CRC/SHA256 range reader
+finished all1446Kafka evaluation job members (69,931,206new payload bytes plus
+64,497,939directory bytes). Interrupted attempt byte total not claimed. No whole
+3GB ZIP downloaded or whole-archive checksum verification. Raw failures retained.
+
+Four research-only selection/lineage/floor tests passed in0.25s. No appfeatures,
+alpha/riskgates, old studies, stashes, installers, website changes, push or merge.
+See docs/EVALUATION_D091_FINDINGS.md and experiments/results/larger-history-d091-2026-10-29/FINDINGS.md.

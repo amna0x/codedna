@@ -1,0 +1,84 @@
+{
+  "application_source": "a02d20f",
+  "selected_heads": 6726,
+  "evaluation_heads": 1348,
+  "recorded_failing_commits": 766,
+  "recorded_failing_class_occurrences": 4502,
+  "decisions": {
+    "full_suite_required_even_with_best_possible_audit": 35,
+    "full_suite_required_missing_latest_base_history": 1305,
+    "blocked_source_identity": 8
+  },
+  "projects": [
+    {
+      "project": "hadoop",
+      "application_source": "a02d20f",
+      "risk_target": 0.05,
+      "evaluation_commits": 360,
+      "decisions": {
+        "full_suite_required_even_with_best_possible_audit": 3,
+        "full_suite_required_missing_latest_base_history": 357
+      },
+      "recorded_outcomes_available": 360,
+      "recorded_failing_commits": 131,
+      "recorded_failing_class_occurrences": 475,
+      "selection_saving_on_full_suite_fallbacks": 0,
+      "new_ci_wall_time_measured": false,
+      "runner_seconds": 1.1892168000049423,
+      "scope": "Exact frozen-history operational eligibility and recorded CI outcomes; no model accuracy/CI speedup claim. Blocked source cases are not successful full-suite executions."
+    },
+    {
+      "project": "hive",
+      "application_source": "a02d20f",
+      "risk_target": 0.05,
+      "evaluation_commits": 297,
+      "decisions": {
+        "full_suite_required_even_with_best_possible_audit": 5,
+        "full_suite_required_missing_latest_base_history": 292
+      },
+      "recorded_outcomes_available": 297,
+      "recorded_failing_commits": 152,
+      "recorded_failing_class_occurrences": 1116,
+      "selection_saving_on_full_suite_fallbacks": 0,
+      "new_ci_wall_time_measured": false,
+      "runner_seconds": 1.806024499994237,
+      "scope": "Exact frozen-history operational eligibility and recorded CI outcomes; no model accuracy/CI speedup claim. Blocked source cases are not successful full-suite executions."
+    },
+    {
+      "project": "jackrabbit-oak",
+      "application_source": "a02d20f",
+      "risk_target": 0.05,
+      "evaluation_commits": 291,
+      "decisions": {
+        "full_suite_required_even_with_best_possible_audit": 4,
+        "full_suite_required_missing_latest_base_history": 287
+      },
+      "recorded_outcomes_available": 291,
+      "recorded_failing_commits": 132,
+      "recorded_failing_class_occurrences": 1523,
+      "selection_saving_on_full_suite_fallbacks": 0,
+      "new_ci_wall_time_measured": false,
+      "runner_seconds": 2.2659055999829434,
+      "scope": "Exact frozen-history operational eligibility and recorded CI outcomes; no model accuracy/CI speedup claim. Blocked source cases are not successful full-suite executions."
+    },
+    {
+      "project": "kafka",
+      "application_source": "a02d20f",
+      "risk_target": 0.05,
+      "evaluation_commits": 400,
+      "decisions": {
+        "blocked_source_identity": 8,
+        "full_suite_required_even_with_best_possible_audit": 23,
+        "full_suite_required_missing_latest_base_history": 369
+      },
+      "recorded_outcomes_available": 400,
+      "recorded_failing_commits": 351,
+      "recorded_failing_class_occurrences": 1388,
+      "selection_saving_on_full_suite_fallbacks": 0,
+      "new_ci_wall_time_measured": false,
+      "runner_seconds": 21.071263100020587,
+      "scope": "Exact frozen-history operational eligibility and recorded CI outcomes; no model accuracy/CI speedup claim. Blocked source cases are not successful full-suite executions."
+    }
+  ],
+  "scope": "Frozen-history operational eligibility and recorded outcomes, not model discrimination or net-CI wall time"
+}

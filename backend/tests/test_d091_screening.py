@@ -29,3 +29,19 @@ def test_ancestry_does_not_confuse_siblings_or_include_self(monkeypatch):
     graph={'a':[], 'b':['a'], 'c':['a'], 'd':['b','c']}
     assert prior(graph,'b',{'a','b','c'})=={'a'}
     assert prior(graph,'d',{'a','b','c','d'})=={'a','b','c'}
+
+
+def test_operational_gate_does_not_treat_dag_size_as_fresh_history(monkeypatch):
+    decide=load('finalize_d091_operational',monkeypatch).decision
+    assert decide({'status':'exact_source_unavailable'})=='blocked_source_identity'
+    assert decide({'status':'known','current_base_has_earlier_recorded_outcomes':False,
+                   'first_parent_history':list(range(1000))}).endswith('missing_latest_base_history')
+
+
+def test_evidence_floor_refuses_eighteen_but_does_not_invent_nineteen_case_predictions(monkeypatch):
+    decide=load('finalize_d091_operational',monkeypatch).decision
+    row={'status':'known','current_base_has_earlier_recorded_outcomes':True,
+         'first_parent_history':list(range(72))}
+    assert decide(row)=='full_suite_required_even_with_best_possible_audit'
+    row['first_parent_history']=list(range(76))
+    assert decide(row)=='requires_actual_fitted_model_and_remaining_eligibility_checks'

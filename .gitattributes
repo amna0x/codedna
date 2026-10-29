@@ -20,3 +20,5 @@ experiments/results/brake-inventories-d089-2026-10-29.json -text
 experiments/results/brake-fixed-cohort-d090-2026-10-29/** -text
 experiments/results/moonshot-held-out-d090-2026-10-29/** -text
 docs/validation-logs/d089-full-maven.log -text
+experiments/d091-cohorts/** -text
+experiments/results/larger-history-d091-2026-10-29/** -text

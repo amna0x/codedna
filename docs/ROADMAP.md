@@ -616,3 +616,8 @@ a single unchanged-protocol retry resumed after the full suite finished.
 ## D090 research evaluation findings
 
 D089 full source validation passed 780 tests, zero failures/skips. Held-out Moonshot source-selection coverage is 0/12; efficacy cannot be estimated. Both fixed brake policies require all suites on 75/75 evaluation heads, retaining 27 recorded failing commits but showing no selection saving. See EVALUATION_D090_FINDINGS.md for evidence and unperformed comparisons; no broad effectiveness or CI-speedup claim is supported.
+
+
+## D091 larger-history eligibility result
+
+Four frozen cohorts contain 6726selected heads and1348evaluation targets. Exact live lineage/freshness and evidence gates authorize no skipping:1305missing current BASE,35insufficient audit,8source-blocked. All raw evaluation outcomes were acquired. This is a fixed-history compatibility result, not fitted-model accuracy or a rolling deployment/CI-speedup study. See EVALUATION_D091_FINDINGS.md; do not weaken gates or retune these now-inspected cases.
