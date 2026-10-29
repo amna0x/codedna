@@ -1,0 +1,11 @@
+{
+  "source": "LRTS public processed archive",
+  "archive_bytes": 3016466104,
+  "member": "long_running_test_suites/dataset.csv",
+  "member_crc32": 302975975,
+  "sha256": "3453be7a458f21b1b294a20c87972774eddcd758f5aef86af6a709457156330a",
+  "bytes": 20592181,
+  "range_bytes": 68692243,
+  "whole_archive_checksum_verified": false,
+  "scope": "Downloaded metadata only; no CodeDNA evaluation"
+}

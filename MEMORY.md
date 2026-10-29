@@ -856,3 +856,28 @@ three checks in 89.26 seconds. Preserve separate invocation counts; do not sum
 these as unique tests or claim a full-suite pass. Graphify AST refreshed locally.
 D087 release rebuild, full-suite validation and independent research remain pending.
 No push or merge. D085/D086 installers unchanged. See CORE_IMPROVEMENTS_D087.md.
+
+## D088 independent research feasibility — 2026-10-29
+
+Owner authorized the real-bug/fresh-history evaluation. Pinned a GitBug-Java
+repository-level split (six development/twelve held-out); 85,611,832 bytes of
+metadata downloaded. All six development cases have published failing-to-passing
+evidence, but zero changed same-identity methods meet the current public static
+numeric contract. This is a source-coverage finding, not a bug-detection trial.
+Held-out sources/test outcomes remain unaudited. Do not replace refused cases.
+
+LRTS public archive inspected with byte ranges; only its 20,592,181-byte metadata
+CSV downloaded and CRC/SHA256 verified. ActiveMQ has 446 suite rows/391 distinct
+heads, insufficient for the predefined 1,500-build cohort. PR target branches do
+not establish ancestry. No model/risk replay/CI speedup claim. See
+experiments/results/research-feasibility-d088-2026-10-29/FINDINGS.md and
+RESEARCH_EVALUATION_D088.md. Development-source parser adapter error was fixed;
+initial diagnostic retained under build/d088-inputs (not a product refusal).
+
+D087 full validation session 21241 still running, log in pointer
+.diagnostics/d087-full-maven.log. It reported a failure at the obsolete long-return
+rejection fixture. Changed only that fixture to double; five corrected refusal
+checks passed (35 deselected, 10.19s). Await original full trace/totals before
+calling it the only failure. Two research-harness checks passed in 0.12s.
+Application source remains a30ce70; new research scripts/test fixture are separate.
+Do not launch duplicate full tests, push, merge, or overwrite friend installers.

@@ -1,0 +1,120 @@
+[
+  {
+    "repository": "nikoo28/java-solutions",
+    "scope": "source contract only; no code execution",
+    "files": [
+      {
+        "file": "src/main/java/leetcode/medium/OnlineStockSpan.java",
+        "source_sha256": [
+          "8804a64e378661e9a4735ed15765dd907af9d20adad3bec95546d754e5bdc388",
+          "9caf29080886dd2eafd8c5043fa2b41acf0c4f62d79e20528a0035297242bf39"
+        ]
+      }
+    ],
+    "candidates": [],
+    "errors": []
+  },
+  {
+    "repository": "Bindambc/whatsapp-business-java-api",
+    "scope": "source contract only; no code execution",
+    "files": [
+      {
+        "file": "src/main/java/com/whatsapp/api/domain/messages/Language.java",
+        "source_sha256": [
+          "376aa2c8c88bf53b24442a7ec792ec86e7e89b491f1ed5ea8755cc9d22d306c4",
+          "15534f37819bf92b74aa78f9ff423ab6b3441ad609009be528662b16735d4318"
+        ]
+      }
+    ],
+    "candidates": [],
+    "errors": []
+  },
+  {
+    "repository": "mthmulders/mcs",
+    "scope": "source contract only; no code execution",
+    "files": [
+      {
+        "file": "src/main/java/it/mulders/mcs/common/Result.java",
+        "source_sha256": [
+          "5d0a27496e8f955a583ad3b97c32b1e4a0b2b9450d2487039f438260f8252fd7",
+          "6d9b6dde97ed8622b36620e04803f7f9585c083ec3b311a76c41085cfea872a3"
+        ]
+      },
+      {
+        "file": "src/main/java/it/mulders/mcs/search/SearchCommandHandler.java",
+        "source_sha256": [
+          "d1d9ee9605645f3dd57e12374d8137c4d24639f97673aa2c0bcc019c36384c5b",
+          "5933a6664ed8e94558a189ec8fa50e6c44f775de3203cd1df91776bf247ebbbf"
+        ]
+      }
+    ],
+    "candidates": [],
+    "errors": []
+  },
+  {
+    "repository": "BrightSpots/rcv",
+    "scope": "source contract only; no code execution",
+    "files": [
+      {
+        "file": "src/main/java/network/brightspots/rcv/Logger.java",
+        "source_sha256": [
+          "ececafb917525d158c5d03eb4fcce200003ba37636a7e11968305adacbf1a9c7",
+          "7ca08c26feab05f1329d7678a70abe964628a073967e921138363efbfc662d1a"
+        ]
+      },
+      {
+        "file": "src/main/java/network/brightspots/rcv/ResultsWriter.java",
+        "source_sha256": [
+          "3bf17331c8f9598b0fadb58aaeea7f87ee2a0e5da0055440479df1764bcad177",
+          "9d4c3aeec089de271c4a0f6683fa8557ca8ab63e5f23b9e98e929615a1844d0d"
+        ]
+      }
+    ],
+    "candidates": [],
+    "errors": []
+  },
+  {
+    "repository": "klausbrunner/solarpositioning",
+    "scope": "source contract only; no code execution",
+    "files": [
+      {
+        "file": "src/main/java/net/e175/klaus/solarpositioning/Grena3.java",
+        "source_sha256": [
+          "3a8ffb8106a7a7bccef8e3c0ce174d2c6ea8e3baf3bcf0c2ae2aca6aa2630c61",
+          "465a83a76cb89a0c25acef7576aaed4ea221a86bb896e67af78d0153296d9475"
+        ]
+      },
+      {
+        "file": "src/main/java/net/e175/klaus/solarpositioning/SPA.java",
+        "source_sha256": [
+          "c368cfd93af8a1e84d55b1c8f2464e2e718fafee9f8a30c6908acc6e44577dba",
+          "766ab2b0ffb021814e1e29e91eae4c50014632ec4dc826a2bd6654d3341a3382"
+        ]
+      }
+    ],
+    "candidates": [],
+    "errors": []
+  },
+  {
+    "repository": "beanshell/beanshell",
+    "scope": "source contract only; no code execution",
+    "files": [
+      {
+        "file": "src/main/java/bsh/Reflect.java",
+        "source_sha256": [
+          "bb3683005c1e13f1115fb19bf4774b9799d776aa99841f82b3c4203e4968d4f9",
+          "2e9fa7bb183ff4df766a869d8559b654b19f70bc58814f705fb91ffeb49decb9"
+        ]
+      },
+      {
+        "file": "src/main/java/bsh/This.java",
+        "source_sha256": [
+          "b5dd374bac2db91fc97df64bb5affd46144ef791ca0aa536404a3ab07f971120",
+          "990c5a241370765965ef73eaa0faae5df9551bbf0ee8f2306d533f70e549d2af"
+        ]
+      }
+    ],
+    "candidates": [],
+    "errors": []
+  }
+]

@@ -190,7 +190,7 @@ def test_comment_only_change_is_finite_no_difference_not_equivalence(repo,tmp_pa
 @pytest.mark.maven
 @pytest.mark.parametrize('source',[
     'package example; public class Fee { public int fee(int x) { return x; } }',
-    'package example; public class Fee { public static long fee(int x) { return x; } }',
+    'package example; public class Fee { public static double fee(int x) { return x; } }',
     'package example; public class Fee { public static int fee(long x) { return 0; } }',
     'package example; class Fee { public static int fee(int x) { return x; } }',
     'package example; public class Fee { public static int fee(int x) { return Missing.apply(x); } }'])

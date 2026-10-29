@@ -1,0 +1,151 @@
+[
+  {
+    "repository": "nikoo28/java-solutions",
+    "fix": "8d81307ea1651f3dffe2d9d620378c08f04463ee",
+    "strategy": "PASS_PASS",
+    "published_failing_tests": 1,
+    "published_failing_to_passing_tests": [
+      "leetcode.medium.OnlineStockSpanTest#testCalculateSpans6"
+    ],
+    "source_changes": [
+      "diff --git a/src/main/java/leetcode/medium/OnlineStockSpan.java b/src/main/java/leetcode/medium/OnlineStockSpan.java"
+    ],
+    "scope": "Published test evidence only; no local reproduction or Moonshot detection claim"
+  },
+  {
+    "repository": "Bindambc/whatsapp-business-java-api",
+    "fix": "362caf5eb33c0f23bbb29ba689112dee3750b30c",
+    "strategy": "PASS_PASS",
+    "published_failing_tests": 1,
+    "published_failing_to_passing_tests": [
+      "com.whatsapp.api.impl.WhatsappBusinessCloudApiTest#testSendTemplateTextMessage"
+    ],
+    "source_changes": [
+      "diff --git a/src/main/java/com/whatsapp/api/domain/messages/Language.java b/src/main/java/com/whatsapp/api/domain/messages/Language.java"
+    ],
+    "scope": "Published test evidence only; no local reproduction or Moonshot detection claim"
+  },
+  {
+    "repository": "mthmulders/mcs",
+    "fix": "12a39786d7533a368462d3c46be77072948c6e48",
+    "strategy": "PASS_PASS",
+    "published_failing_tests": 2,
+    "published_failing_to_passing_tests": [
+      "it.mulders.mcs.search.SearchCommandHandlerTest$CoordinateSearchTest#should_propagate_tls_exception_to_runtime_exception",
+      "it.mulders.mcs.search.SearchCommandHandlerTest$WildcardSearchTest#should_propagate_tls_exception_to_runtime_exception"
+    ],
+    "source_changes": [
+      "diff --git a/src/main/java/it/mulders/mcs/common/Result.java b/src/main/java/it/mulders/mcs/common/Result.java",
+      "diff --git a/src/main/java/it/mulders/mcs/search/SearchCommandHandler.java b/src/main/java/it/mulders/mcs/search/SearchCommandHandler.java"
+    ],
+    "scope": "Published test evidence only; no local reproduction or Moonshot detection claim"
+  },
+  {
+    "repository": "BrightSpots/rcv",
+    "fix": "688920f277061ec880f3ed343a6d690dc98dd6de",
+    "strategy": "PASS_PASS",
+    "published_failing_tests": 65,
+    "published_failing_to_passing_tests": [
+      "network.brightspots.rcv.TabulatorTests#2013 Minneapolis Mayor",
+      "network.brightspots.rcv.TabulatorTests#2013 Minneapolis Mayor Scale",
+      "network.brightspots.rcv.TabulatorTests#2013 Minneapolis Park",
+      "network.brightspots.rcv.TabulatorTests#2015 Portland Mayor",
+      "network.brightspots.rcv.TabulatorTests#2015 Portland Mayor Candidate Codes",
+      "network.brightspots.rcv.TabulatorTests#2017 Minneapolis Mayor",
+      "network.brightspots.rcv.TabulatorTests#2018 Maine Governor Democratic Primary",
+      "network.brightspots.rcv.TabulatorTests#Clear Ballot - Kansas Primary",
+      "network.brightspots.rcv.TabulatorTests#Continue Until Two Candidates Remain",
+      "network.brightspots.rcv.TabulatorTests#Continue Until Two Candidates Remain with Batch Elimination",
+      "network.brightspots.rcv.TabulatorTests#Dominion - No Precinct Data",
+      "network.brightspots.rcv.TabulatorTests#Dominion test - Alaska test data",
+      "network.brightspots.rcv.TabulatorTests#Dominion test - Kansas test data",
+      "network.brightspots.rcv.TabulatorTests#Dominion test - Wyoming test data",
+      "network.brightspots.rcv.TabulatorTests#Hart - Cedar Park School Board",
+      "network.brightspots.rcv.TabulatorTests#Hart - Travis County Officers",
+      "network.brightspots.rcv.TabulatorTests#NIST XML CDF 2",
+      "network.brightspots.rcv.TabulatorTests#aliases (CDF JSON format)",
+      "network.brightspots.rcv.TabulatorTests#aliases (ES&S XLSX format)",
+      "network.brightspots.rcv.TabulatorTests#duplicate rank exhausts",
+      "network.brightspots.rcv.TabulatorTests#duplicate rank skips to next option",
+      "network.brightspots.rcv.TabulatorTests#exhaust at overvote rule",
+      "network.brightspots.rcv.TabulatorTests#first round determine threshold and tiebreaker runs test",
+      "network.brightspots.rcv.TabulatorTests#first round determine threshold test",
+      "network.brightspots.rcv.TabulatorTests#generic CSV test",
+      "network.brightspots.rcv.TabulatorTests#missing precinct example",
+      "network.brightspots.rcv.TabulatorTests#multi-cdf tabulation",
+      "network.brightspots.rcv.TabulatorTests#multi-cvr file dominion test",
+      "network.brightspots.rcv.TabulatorTests#multi-seat UWI test",
+      "network.brightspots.rcv.TabulatorTests#multi-seat fractional number threshold",
+      "network.brightspots.rcv.TabulatorTests#multi-seat whole number threshold",
+      "network.brightspots.rcv.TabulatorTests#overvote delimiter test",
+      "network.brightspots.rcv.TabulatorTests#overvote exhaust if multiple continuing test",
+      "network.brightspots.rcv.TabulatorTests#overvote skips to next rank",
+      "network.brightspots.rcv.TabulatorTests#precinct example",
+      "network.brightspots.rcv.TabulatorTests#sequential with batch elimination test",
+      "network.brightspots.rcv.TabulatorTests#sequential with continue until two test",
+      "network.brightspots.rcv.TabulatorTests#skipped choice exhausts option",
+      "network.brightspots.rcv.TabulatorTests#skipped choice next option",
+      "network.brightspots.rcv.TabulatorTests#skipped first choice",
+      "network.brightspots.rcv.TabulatorTests#test Hare quota",
+      "network.brightspots.rcv.TabulatorTests#test allow only one winner per round logic",
+      "network.brightspots.rcv.TabulatorTests#test bottoms-up multi-seat logic",
+      "network.brightspots.rcv.TabulatorTests#test bottoms-up multi-seat with threshold logic",
+      "network.brightspots.rcv.TabulatorTests#test excluding candidates in config file",
+      "network.brightspots.rcv.TabulatorTests#test for overvotes",
+      "network.brightspots.rcv.TabulatorTests#test minimum vote threshold setting",
+      "network.brightspots.rcv.TabulatorTests#test sequential multi-seat logic",
+      "network.brightspots.rcv.TabulatorTests#test skipping to next candidate after overvote",
+      "network.brightspots.rcv.TabulatorTests#test stopping tabulation early",
+      "network.brightspots.rcv.TabulatorTests#test tiebreak seed",
+      "network.brightspots.rcv.TabulatorTests#testMinneapolisMultiSeatThreshold",
+      "network.brightspots.rcv.TabulatorTests#tiebreak using generated permutation",
+      "network.brightspots.rcv.TabulatorTests#tiebreak using permutation in config",
+      "network.brightspots.rcv.TabulatorTests#tiebreak using previousRoundCountsThenRandom",
+      "network.brightspots.rcv.TabulatorTests#treat blank as undeclared write-in",
+      "network.brightspots.rcv.TabulatorTests#two skipped ranks exhausts option",
+      "network.brightspots.rcv.TabulatorTests#undeclared write-in (UWI) cannot win test",
+      "network.brightspots.rcv.TabulatorTests#unisyn_xml_cdf_city_chief_of_police",
+      "network.brightspots.rcv.TabulatorTests#unisyn_xml_cdf_city_coroner",
+      "network.brightspots.rcv.TabulatorTests#unisyn_xml_cdf_city_council_member",
+      "network.brightspots.rcv.TabulatorTests#unisyn_xml_cdf_city_mayor",
+      "network.brightspots.rcv.TabulatorTests#unisyn_xml_cdf_city_tax_collector",
+      "network.brightspots.rcv.TabulatorTests#unisyn_xml_cdf_county_coroner",
+      "network.brightspots.rcv.TabulatorTests#unisyn_xml_cdf_county_sheriff"
+    ],
+    "source_changes": [
+      "diff --git a/src/main/java/network/brightspots/rcv/Logger.java b/src/main/java/network/brightspots/rcv/Logger.java",
+      "diff --git a/src/main/java/network/brightspots/rcv/ResultsWriter.java b/src/main/java/network/brightspots/rcv/ResultsWriter.java"
+    ],
+    "scope": "Published test evidence only; no local reproduction or Moonshot detection claim"
+  },
+  {
+    "repository": "klausbrunner/solarpositioning",
+    "fix": "79c0044373b483e625b42fa8513000cb719651b9",
+    "strategy": "PASS_PASS",
+    "published_failing_tests": 3,
+    "published_failing_to_passing_tests": [
+      "net.e175.klaus.solarpositioning.Grena3Test#testSillyLatLon",
+      "net.e175.klaus.solarpositioning.SPASunriseTransitSetTest#testSillyLatLon",
+      "net.e175.klaus.solarpositioning.SPATest#testSillyLatLon"
+    ],
+    "source_changes": [
+      "diff --git a/src/main/java/net/e175/klaus/solarpositioning/Grena3.java b/src/main/java/net/e175/klaus/solarpositioning/Grena3.java",
+      "diff --git a/src/main/java/net/e175/klaus/solarpositioning/SPA.java b/src/main/java/net/e175/klaus/solarpositioning/SPA.java"
+    ],
+    "scope": "Published test evidence only; no local reproduction or Moonshot detection claim"
+  },
+  {
+    "repository": "beanshell/beanshell",
+    "fix": "7a60a06bb56774d1f6b1188ee66e712073b90a81",
+    "strategy": "PASS_PASS",
+    "published_failing_tests": 1,
+    "published_failing_to_passing_tests": [
+      "bsh.BshScriptTestCase#scripted_object.bsh"
+    ],
+    "source_changes": [
+      "diff --git a/src/main/java/bsh/Reflect.java b/src/main/java/bsh/Reflect.java",
+      "diff --git a/src/main/java/bsh/This.java b/src/main/java/bsh/This.java"
+    ],
+    "scope": "Published test evidence only; no local reproduction or Moonshot detection claim"
+  }
+]
