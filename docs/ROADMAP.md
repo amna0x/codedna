@@ -637,3 +637,11 @@ all1972discovered tests;2363CIreported classes do not match source defaults.
 A local six-hour immutable CI collector runs while the laptop is on. Profile/test
 identity validation and sufficient continuous completed history remain required
 before brake effectiveness/savings evaluation. See EVALUATION_D093_FINDINGS.md.
+
+## D095 module compatibility leads
+
+Nineteen of36Oak3012child reports match source-default module sets; Jenkins URLs
+confirm module identities. Seven include skipped cases. Twelve zero-skipped
+candidates still require exact chronological source/report validation and enough
+completed history. No skipping or saving demonstrated. See
+MODULE_COMPATIBILITY_D095_FINDINGS.md. Do not claim the roadmap complete.

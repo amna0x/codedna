@@ -1049,3 +1049,17 @@ removed, app/model/gates changed, build executed, push/merge or installer change
 Read-only script and original/v2 outputs preserve evidence. See
 CI_PROFILE_D094_FINDINGS.md. Need validated module-scoped pair or effective CI
 profile/external identity provenance before selective evaluation; no CI gain yet.
+
+## D095 module compatibility — 2026-10-30
+
+All36Oak3012children screened identity/completeness only:19exact single-module
+source-default matches(485module/class identities). Fresh public Jenkins child
+URLs confirm all19names; exposed totals match old reports, not proof historical
+availability.7matching modules contain skipped cases;12zero-skipped candidates
+cover269identities. No fitted model, history sufficiency, selective authorization
+or saving claim. Preserve all candidates; no outcome-based favorable selection.
+Need frozen module-scoped historical protocol, all12source/report histories,
+completion timing and gates; root only8available reports/7missing remains sparse.
+Initial field-name error failed before output; corrected run finished.3offline
+research tests passed1.51s. App unchanged(a02d20f/780recordedpasses). No push/merge.
+See MODULE_COMPATIBILITY_D095_FINDINGS.md and D095JSONs. Graphify refreshed.
