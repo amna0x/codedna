@@ -58,3 +58,25 @@ The initial 4 MiB HTTP cache overfetched scattered Kafka records and reached its
 members. Acquisition byte counts are reported by attempt, not mislabeled as one
 original-budget success. These repairs were made before interpreting new-project
 failure labels. Cohorts and the application remained frozen.
+
+## Exact operational eligibility and scope
+
+General DAG ancestry counts were a preliminary necessary-evidence screen only.
+The unchanged Java live brake also requires FIRST-PARENT history and recorded
+outcomes at the immediate BASE commit. Check those conditions before any model
+fit; they can invalidate a numerically large general-ancestry audit. Preserve
+preliminary files but use the operational-lineage/final-results files as the
+application-facing conclusion. No new application gate is added.
+
+This experiment uses the frozen outer train/audit history and does NOT roll
+previous evaluation outcomes into later training. It therefore assesses that
+fixed-history setting, not every prequential deployment. A missing latest BASE
+in this setting does not prove that a rolling deployment with additional valid
+main-branch CI history could never work. Shallow or unavailable source identities
+remain unresolved rather than asserted absent.
+
+Once exact operational evidence proves no skipping is possible, stop acquiring
+unneeded training records. Finish only the predetermined evaluation inventories;
+no cases are chosen by failure labels. Kafka's partially completed acquisition
+reports are preserved. A bounded eight-reader range pass finishes its fixed
+outcomes, reporting its bytes separately. No downloaded project code runs.
