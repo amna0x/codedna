@@ -1,5 +1,6 @@
 """Evaluate necessary fixed evidence gates on four frozen larger cohorts."""
 import csv
+import argparse
 from hashlib import sha256
 import io
 import json
@@ -39,11 +40,14 @@ def read_build(root,project,build,members):
 
 
 def main():
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--project',choices=['hadoop','hive','jackrabbit-oak','kafka'])
+    args=parser.parse_args()
     root=Path(__file__).resolve().parents[1]
     if run_git(root,'diff','a02d20f','--','backend/codedna','plugins/codedna-java').strip():
         raise ValueError('Frozen application changed')
     out=root/'experiments/results/larger-history-d091-2026-10-29'
-    for project in ['hadoop','hive','jackrabbit-oak','kafka']:
+    for project in ([args.project] if args.project else ['hadoop','hive','jackrabbit-oak','kafka']):
         target=out/(project+'-gate-results.json')
         if target.exists():raise ValueError('Retain prior results; do not overwrite '+project)
         started=perf_counter()
@@ -89,6 +93,7 @@ def main():
             except (OSError,ValueError,KeyError,zipfile.BadZipFile) as error:
                 decision['outcome_error']=str(error)[:400]
         summary={'project':project,'application_source':'a02d20f','risk_target':.05,
+            'cohort_sha256':ancestry['cohort_sha256'],
             'selected_heads':len(cohort['builds']),'evaluation_heads':len(decisions),
             'policies':{p:{s:sum(d[p]==s for d in decisions) for s in sorted({d[p] for d in decisions})} for p in ['b10','crc']},
             'outcomes_read':sum('recorded_full_suite' in d for d in decisions),
