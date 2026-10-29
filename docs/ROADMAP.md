@@ -626,3 +626,14 @@ Four frozen cohorts contain 6726selected heads and1348evaluation targets. Exact 
 ## D092 completion-aware rolling pilot
 
 The research runner now persists each decision before truth and releases observations only on CI completion. Seven timing/parser/failure-preservation checks pass. A genuine 15-build Oak trunk pilot has eight valid published reports and seven unavailable reports; no inspected public job retained the prescribed 240 builds. Selective source-universe/model validation and a longer continuous main-branch archive remain required. See ROLLING_CI_D092_FINDINGS.md; no effectiveness or time-saving claim follows from this pilot.
+
+## D093 controlled witnesses and live fallback
+
+All80planned QuixBugs records completed,7eligible programs,14actual searches.
+Both modes found the same2differences;4exports independently replayed and separate
+published expectations confirmed2corrections.33unsupported programs remain;
+no guided advantage or broad production claim. Actual Oak CRC fallback preserved
+all1972discovered tests;2363CIreported classes do not match source defaults.
+A local six-hour immutable CI collector runs while the laptop is on. Profile/test
+identity validation and sufficient continuous completed history remain required
+before brake effectiveness/savings evaluation. See EVALUATION_D093_FINDINGS.md.

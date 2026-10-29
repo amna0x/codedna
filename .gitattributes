@@ -25,3 +25,5 @@ experiments/results/larger-history-d091-2026-10-29/** -text
 experiments/d092-*.json -text
 experiments/results/rolling-main-ci-d092-2026-10-29/** -text
 experiments/results/rolling-main-ci-d092-corrected-2026-10-29/** -text
+experiments/results/quixbugs-controlled-d093-2026-10-29/** -text
+experiments/quixbugs-d093.json -text

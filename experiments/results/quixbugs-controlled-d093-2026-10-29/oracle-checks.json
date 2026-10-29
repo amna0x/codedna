@@ -1,0 +1,302 @@
+[
+  {
+    "program": "BITCOUNT",
+    "published_inputs_attempted": 4,
+    "confirmed_published_correction": false,
+    "details": [
+      {
+        "input": 127,
+        "expected": 7,
+        "status": "inconclusive",
+        "confirmed_correction": false
+      },
+      {
+        "input": 128,
+        "expected": 1,
+        "status": "inconclusive",
+        "confirmed_correction": false
+      },
+      {
+        "input": 3005,
+        "expected": 9,
+        "status": "inconclusive",
+        "confirmed_correction": false
+      },
+      {
+        "input": 13,
+        "expected": 3,
+        "status": "inconclusive",
+        "confirmed_correction": false
+      }
+    ],
+    "note": "Separate known-trigger validation, not automatic-search success or witness-specific oracle proof"
+  },
+  {
+    "program": "FIND_FIRST_IN_SORTED",
+    "published_inputs_attempted": 4,
+    "confirmed_published_correction": false,
+    "details": [
+      {
+        "input": [
+          [
+            3,
+            4,
+            5,
+            5,
+            5,
+            5,
+            6
+          ],
+          5
+        ],
+        "expected": 2,
+        "status": "no_difference_observed",
+        "confirmed_correction": false
+      },
+      {
+        "input": [
+          [
+            3,
+            4,
+            5,
+            5,
+            5,
+            5,
+            6
+          ],
+          7
+        ],
+        "expected": -1,
+        "status": "inconclusive",
+        "confirmed_correction": false
+      },
+      {
+        "input": [
+          [
+            3,
+            4,
+            5,
+            5,
+            5,
+            5,
+            6
+          ],
+          2
+        ],
+        "expected": -1,
+        "status": "inconclusive",
+        "confirmed_correction": false
+      },
+      {
+        "input": [
+          [
+            3,
+            6,
+            7,
+            9,
+            9,
+            10,
+            14,
+            27
+          ],
+          14
+        ],
+        "expected": 6,
+        "status": "no_difference_observed",
+        "confirmed_correction": false
+      }
+    ],
+    "note": "Separate known-trigger validation, not automatic-search success or witness-specific oracle proof"
+  },
+  {
+    "program": "GCD",
+    "published_inputs_attempted": 4,
+    "confirmed_published_correction": false,
+    "details": [
+      {
+        "input": [
+          17,
+          0
+        ],
+        "expected": 17,
+        "status": "no_difference_observed",
+        "confirmed_correction": false
+      },
+      {
+        "input": [
+          13,
+          13
+        ],
+        "expected": 13,
+        "status": "inconclusive",
+        "confirmed_correction": false
+      },
+      {
+        "input": [
+          37,
+          600
+        ],
+        "expected": 1,
+        "status": "inconclusive",
+        "confirmed_correction": false
+      },
+      {
+        "input": [
+          20,
+          100
+        ],
+        "expected": 20,
+        "status": "inconclusive",
+        "confirmed_correction": false
+      }
+    ],
+    "note": "Separate known-trigger validation, not automatic-search success or witness-specific oracle proof"
+  },
+  {
+    "program": "LEVENSHTEIN",
+    "published_inputs_attempted": 1,
+    "confirmed_published_correction": true,
+    "details": [
+      {
+        "input": [
+          "electron",
+          "neutron"
+        ],
+        "expected": 3,
+        "status": "difference",
+        "confirmed_correction": true
+      }
+    ],
+    "note": "Separate known-trigger validation, not automatic-search success or witness-specific oracle proof"
+  },
+  {
+    "program": "LIS",
+    "published_inputs_attempted": 4,
+    "confirmed_published_correction": false,
+    "details": [
+      {
+        "input": [],
+        "expected": 0,
+        "status": "no_difference_observed",
+        "confirmed_correction": false
+      },
+      {
+        "input": [
+          3
+        ],
+        "expected": 1,
+        "status": "no_difference_observed",
+        "confirmed_correction": false
+      },
+      {
+        "input": [
+          10,
+          20,
+          11,
+          32,
+          22,
+          48,
+          43
+        ],
+        "expected": 4,
+        "status": "no_difference_observed",
+        "confirmed_correction": false
+      },
+      {
+        "input": [
+          4,
+          2,
+          1
+        ],
+        "expected": 1,
+        "status": "no_difference_observed",
+        "confirmed_correction": false
+      }
+    ],
+    "note": "Separate known-trigger validation, not automatic-search success or witness-specific oracle proof"
+  },
+  {
+    "program": "MAX_SUBLIST_SUM",
+    "published_inputs_attempted": 1,
+    "confirmed_published_correction": true,
+    "details": [
+      {
+        "input": [
+          4,
+          -5,
+          2,
+          1,
+          -1,
+          3
+        ],
+        "expected": 5,
+        "status": "difference",
+        "confirmed_correction": true
+      }
+    ],
+    "note": "Separate known-trigger validation, not automatic-search success or witness-specific oracle proof"
+  },
+  {
+    "program": "POSSIBLE_CHANGE",
+    "published_inputs_attempted": 4,
+    "confirmed_published_correction": false,
+    "details": [
+      {
+        "input": [
+          [
+            1,
+            4,
+            2
+          ],
+          -7
+        ],
+        "expected": 0,
+        "status": "no_difference_observed",
+        "confirmed_correction": false
+      },
+      {
+        "input": [
+          [
+            1,
+            5,
+            10,
+            25
+          ],
+          11
+        ],
+        "expected": 4,
+        "status": "inconclusive",
+        "confirmed_correction": false
+      },
+      {
+        "input": [
+          [
+            1,
+            5,
+            10,
+            25
+          ],
+          75
+        ],
+        "expected": 121,
+        "status": "inconclusive",
+        "confirmed_correction": false
+      },
+      {
+        "input": [
+          [
+            1,
+            5,
+            10,
+            25
+          ],
+          34
+        ],
+        "expected": 18,
+        "status": "inconclusive",
+        "confirmed_correction": false
+      }
+    ],
+    "note": "Separate known-trigger validation, not automatic-search success or witness-specific oracle proof"
+  }
+]

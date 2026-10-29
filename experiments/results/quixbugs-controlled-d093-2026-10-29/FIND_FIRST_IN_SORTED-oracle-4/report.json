@@ -1,0 +1,115 @@
+{
+  "status": "no_difference_observed",
+  "observations": [
+    {
+      "phase": "search",
+      "input": [
+        [
+          3,
+          6,
+          7,
+          9,
+          9,
+          10,
+          14,
+          27
+        ],
+        14
+      ],
+      "base": {
+        "kind": "value",
+        "value": 6
+      },
+      "head": {
+        "kind": "value",
+        "value": 6
+      }
+    }
+  ],
+  "jvm_runs": 2,
+  "compilations": 2,
+  "search_inputs": 1,
+  "reduction_inputs": 0,
+  "source_encoding": "UTF-8",
+  "runtime_file_encoding": "UTF-8",
+  "budget": {
+    "max_inputs": 1,
+    "seed": 7,
+    "reduce_budget": 0,
+    "generation": "simple"
+  },
+  "guidance": "Edited integer literals first, then literal neighbors and fixed/seeded inputs from selected method syntax; no semantic or coverage guarantee.",
+  "input_types": [
+    "int[]",
+    "int"
+  ],
+  "receiver_semantics": "One invocation per fresh JVM; instance methods use a fresh public no-argument receiver. Constructor code executes.",
+  "source_sha256": {
+    "base": "d51626063f87b741a8a6e72ced9b23199c4beddee0783e149602342324f93164",
+    "head": "636f56f8fc362901401f057d4a9ea909fee73aef37c4e92c43812a5f90879c99"
+  },
+  "selected_method_tokens_changed": true,
+  "java_version": "openjdk version \"17.0.20\" 2026-07-21\r\nOpenJDK Runtime Environment Temurin-17.0.20+8 (build 17.0.20+8)\r\nOpenJDK 64-Bit Server VM Temurin-17.0.20+8 (build 17.0.20+8, mixed mode, sharing)\r\n",
+  "javac_version": "javac 17.0.20\r\n",
+  "candidate_inputs": [
+    [
+      [
+        3,
+        6,
+        7,
+        9,
+        9,
+        10,
+        14,
+        27
+      ],
+      14
+    ]
+  ],
+  "supplied_input_counts_toward_search_budget": true,
+  "non_normal_search_inputs": 0,
+  "reason": "No normal-return difference observed within the finite input/time budget; equivalence is not established.",
+  "schema_version": 1,
+  "kind": "codedna-behavioral-evidence",
+  "experimental": true,
+  "repository": "C:\\Users\\hp\\OneDrive\\Documents\\ChatGPT\\codedna\\.worktrees\\core-evidence\\build\\d093-quixbugs-snapshots",
+  "base_commit": "68e496ebe132b6ae08a977f7f6eebbcf06a0193c",
+  "head_commit": "afe407166866e1dc9a1a178942d3f00964b848a1",
+  "language": "java",
+  "file": "FIND_FIRST_IN_SORTED.java",
+  "symbol": "java_programs.FIND_FIRST_IN_SORTED#find_first_in_sorted(int[],int)",
+  "support_files": [
+    "Node.java",
+    "WeightedEdge.java"
+  ],
+  "regression_established": false,
+  "required_tests_removed": false,
+  "plugin_version": "0.1.0",
+  "plugin_api_version": "1.1",
+  "supplied_expectation": {
+    "input": [
+      [
+        3,
+        6,
+        7,
+        9,
+        9,
+        10,
+        14,
+        27
+      ],
+      14
+    ],
+    "expected": 6,
+    "requirement": "Published QuixBugs testcase expectation"
+  },
+  "export_disclosure": "A confirmed export includes the entire selected base/head source file; compiler diagnostics may quote source. Review before sharing.",
+  "interpretation": "A stable observed difference needs an applicable expectation to be called a regression. No witness within a finite budget does not establish equivalence or validate skip risk.",
+  "further_execution_blocked": false,
+  "elapsed_seconds": 19.469,
+  "expectation_assessment": {
+    "status": "not_confirmed_at_supplied_input",
+    "requirement_source": "user_supplied_not_independently_verified",
+    "regression_against_supplied_requirement": false
+  }
+}

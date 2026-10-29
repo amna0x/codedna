@@ -1,0 +1,8 @@
+{
+  "input": [
+    "electron",
+    "neutron"
+  ],
+  "expected": 3,
+  "requirement": "Published QuixBugs testcase expectation"
+}

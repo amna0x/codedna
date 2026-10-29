@@ -1,0 +1,25 @@
+{
+  "programs": 40,
+  "eligible_programs": 7,
+  "planned_trials": 80,
+  "completed_trials": 80,
+  "executed_searches": 14,
+  "modes": {
+    "guided": {
+      "inconclusive": 4,
+      "unsupported_at_source_selection": 33,
+      "difference": 2,
+      "no_difference_observed": 1
+    },
+    "simple": {
+      "inconclusive": 4,
+      "unsupported_at_source_selection": 33,
+      "difference": 2,
+      "no_difference_observed": 1
+    }
+  },
+  "exported_witnesses": 4,
+  "independently_replayed": 4,
+  "programs_with_confirmed_published_correction": 2,
+  "scope": "Controlled educational benchmark; unsupported cases retained; one seed, no broad superiority or CI-savings claim"
+}

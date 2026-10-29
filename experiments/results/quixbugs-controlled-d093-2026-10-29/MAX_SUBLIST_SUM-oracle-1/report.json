@@ -1,0 +1,234 @@
+{
+  "status": "difference",
+  "observations": [
+    {
+      "phase": "search",
+      "input": [
+        4,
+        -5,
+        2,
+        1,
+        -1,
+        3
+      ],
+      "base": {
+        "kind": "value",
+        "value": 4
+      },
+      "head": {
+        "kind": "value",
+        "value": 5
+      }
+    },
+    {
+      "phase": "confirmation",
+      "input": [
+        4,
+        -5,
+        2,
+        1,
+        -1,
+        3
+      ],
+      "base": {
+        "kind": "value",
+        "value": 4
+      },
+      "head": {
+        "kind": "value",
+        "value": 5
+      }
+    },
+    {
+      "phase": "confirmation",
+      "input": [
+        4,
+        -5,
+        2,
+        1,
+        -1,
+        3
+      ],
+      "base": {
+        "kind": "value",
+        "value": 4
+      },
+      "head": {
+        "kind": "value",
+        "value": 5
+      }
+    },
+    {
+      "phase": "confirmation",
+      "input": [
+        4,
+        -5,
+        2,
+        1,
+        -1,
+        3
+      ],
+      "base": {
+        "kind": "value",
+        "value": 4
+      },
+      "head": {
+        "kind": "value",
+        "value": 5
+      }
+    },
+    {
+      "phase": "confirmation",
+      "input": [
+        4,
+        -5,
+        2,
+        1,
+        -1,
+        3
+      ],
+      "base": {
+        "kind": "value",
+        "value": 4
+      },
+      "head": {
+        "kind": "value",
+        "value": 5
+      }
+    }
+  ],
+  "jvm_runs": 10,
+  "compilations": 2,
+  "search_inputs": 1,
+  "reduction_inputs": 0,
+  "source_encoding": "UTF-8",
+  "runtime_file_encoding": "UTF-8",
+  "budget": {
+    "max_inputs": 1,
+    "seed": 7,
+    "reduce_budget": 0,
+    "generation": "simple"
+  },
+  "guidance": "Edited integer literals first, then literal neighbors and fixed/seeded inputs from selected method syntax; no semantic or coverage guarantee.",
+  "input_types": [
+    "int[]"
+  ],
+  "receiver_semantics": "One invocation per fresh JVM; instance methods use a fresh public no-argument receiver. Constructor code executes.",
+  "source_sha256": {
+    "base": "23ae9caa4ea2f15a32b61ad7e3ee4b1b4d767fd0362bb137803fcad65aa5a118",
+    "head": "1b322d17e9da7cc0bd6da2aca3105e46cfb0823bd2efa98ff0f10470c15937a9"
+  },
+  "selected_method_tokens_changed": true,
+  "java_version": "openjdk version \"17.0.20\" 2026-07-21\r\nOpenJDK Runtime Environment Temurin-17.0.20+8 (build 17.0.20+8)\r\nOpenJDK 64-Bit Server VM Temurin-17.0.20+8 (build 17.0.20+8, mixed mode, sharing)\r\n",
+  "javac_version": "javac 17.0.20\r\n",
+  "candidate_inputs": [
+    [
+      4,
+      -5,
+      2,
+      1,
+      -1,
+      3
+    ]
+  ],
+  "supplied_input_counts_toward_search_budget": true,
+  "non_normal_search_inputs": 0,
+  "witness": {
+    "phase": "search",
+    "input": [
+      4,
+      -5,
+      2,
+      1,
+      -1,
+      3
+    ],
+    "base": {
+      "kind": "value",
+      "value": 4
+    },
+    "head": {
+      "kind": "value",
+      "value": 5
+    }
+  },
+  "original_witness": {
+    "phase": "search",
+    "input": [
+      4,
+      -5,
+      2,
+      1,
+      -1,
+      3
+    ],
+    "base": {
+      "kind": "value",
+      "value": 4
+    },
+    "head": {
+      "kind": "value",
+      "value": 5
+    }
+  },
+  "reduction": "Lowest numeric magnitude plus array element counts and string lengths among candidates actually tried; no global minimality claim.",
+  "confirmation": "Each accepted witness pair matched two further fresh-JVM pairs; general determinism is not proved.",
+  "reproducer": {
+    "files_sha256": {
+      "base/MAX_SUBLIST_SUM.java": "23ae9caa4ea2f15a32b61ad7e3ee4b1b4d767fd0362bb137803fcad65aa5a118",
+      "head/MAX_SUBLIST_SUM.java": "1b322d17e9da7cc0bd6da2aca3105e46cfb0823bd2efa98ff0f10470c15937a9",
+      "CodeDNABehaviorProbe.java": "aa85bf98eb72455f946d6b6b7d8bc024d2752481c37a099248b60068c84e03e7",
+      "base/support/Node.java": "f6c623fd51166f7a65f9691716e2f576b246a7b846415e3234e62904bf5b0c67",
+      "base/support/WeightedEdge.java": "eef70c3a26f05fbee735183154f41f751313155eb16d4980ba7589acacbcbb04",
+      "head/support/Node.java": "f6c623fd51166f7a65f9691716e2f576b246a7b846415e3234e62904bf5b0c67",
+      "head/support/WeightedEdge.java": "eef70c3a26f05fbee735183154f41f751313155eb16d4980ba7589acacbcbb04",
+      "ReproduceDifference.java": "d659bcfeacf66c4bf9c14b10161b650896a3f1ecc1fa810cac3d13c5dc3ec533",
+      "README.md": "9348a25e60d277aa3303d0ede22686af265e429d282a9ccf5b78191403ca796c",
+      "CodeDNAWitnessTest.java": "ad827e44649494c02abe264361b5de46c4c00734e300c1951114f517c2d88e80",
+      "SUPPLIED_EXPECTATION.json": "8cb655206319b0a49b650996854127f3ece5e20cd8f9c1b95d43e1b10449b824"
+    },
+    "entrypoint": "ReproduceDifference.java",
+    "requires": "JDK 17+; explicitly trusted selected source",
+    "disclosure": "Includes the entire chosen base/head source file. Review before sharing."
+  },
+  "schema_version": 1,
+  "kind": "codedna-behavioral-evidence",
+  "experimental": true,
+  "repository": "C:\\Users\\hp\\OneDrive\\Documents\\ChatGPT\\codedna\\.worktrees\\core-evidence\\build\\d093-quixbugs-snapshots",
+  "base_commit": "68e496ebe132b6ae08a977f7f6eebbcf06a0193c",
+  "head_commit": "afe407166866e1dc9a1a178942d3f00964b848a1",
+  "language": "java",
+  "file": "MAX_SUBLIST_SUM.java",
+  "symbol": "java_programs.MAX_SUBLIST_SUM#max_sublist_sum(int[])",
+  "support_files": [
+    "Node.java",
+    "WeightedEdge.java"
+  ],
+  "regression_established": false,
+  "required_tests_removed": false,
+  "plugin_version": "0.1.0",
+  "plugin_api_version": "1.1",
+  "supplied_expectation": {
+    "input": [
+      4,
+      -5,
+      2,
+      1,
+      -1,
+      3
+    ],
+    "expected": 5,
+    "requirement": "Published QuixBugs testcase expectation"
+  },
+  "export_disclosure": "A confirmed export includes the entire selected base/head source file; compiler diagnostics may quote source. Review before sharing.",
+  "interpretation": "A stable observed difference needs an applicable expectation to be called a regression. No witness within a finite budget does not establish equivalence or validate skip risk.",
+  "further_execution_blocked": false,
+  "elapsed_seconds": 7.703,
+  "expectation_assessment": {
+    "status": "confirmed_at_supplied_input",
+    "requirement_source": "user_supplied_not_independently_verified",
+    "regression_against_supplied_requirement": false,
+    "base_satisfies": false,
+    "head_satisfies": true
+  }
+}

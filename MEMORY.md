@@ -1014,3 +1014,26 @@ ROLLING_CI_D092_FINDINGS.md and RESEARCH_EVALUATION_D092.md. Longer complete
 sequential main-branch data is still needed; do not retune inspected outcomes.
 App remains a02d20f with recorded780full-suite passes. No push/merge, installers,
 website changes, stashes applied, or background study left running.
+
+## D093 controlled benchmark and live-source audit — 2026-10-29
+
+Completed all80QuixBugs planned records:7eligible programs/14actual searches,
+33unsupported programs retained. Both modes found Levenshtein and MAX_SUBLIST_SUM;
+4exports independently compiled/replayed. Separate published expectations confirmed
+2corrections. Both modes:2differences,1no-difference,4inconclusive,33unsupported.
+Single seed, adapted educational benchmark; no production superiority or guided
+advantage. Application stayed a02d20f. Existing negative studies unchanged.
+
+Oak3012 source/default1972tests vs2363CIclasses, sets mismatch. Actual CRC live
+fallback preserved every discovered test with missing history. Selective replay
+not validated. Do not invent mappings or weaken gates. Need verified CI profile
+mapping or genuinely matching complete sequential evidence before savings study.
+
+Immutable CI archive seeded15report observations(8available/7missing); no new
+reports found. Local hidden6hour collector started, PID23452(wrapper)20904(child)
+at inspection; pointer .diagnostics/d093-ci-collector.pid/log/err. Verify command
+before stopping because PIDs can be reused. Store build/d093-ci-archive ignored.
+Needs laptop running; no Windows restart persistence, no AI calls. Instructions
+in docs/CI_EVIDENCE_COLLECTOR_D093.md. Ten offline research tests passed7.56s;
+separate app780validation unchanged. Graphify AST refreshed. No push/merge,
+installation/website changes or stash operations. See EVALUATION_D093_FINDINGS.md.

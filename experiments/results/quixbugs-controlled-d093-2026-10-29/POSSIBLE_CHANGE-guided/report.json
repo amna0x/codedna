@@ -1,0 +1,401 @@
+{
+  "status": "inconclusive",
+  "observations": [
+    {
+      "phase": "search",
+      "input": [
+        [],
+        0
+      ],
+      "base": {
+        "kind": "value",
+        "value": 1
+      },
+      "head": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "phase": "search",
+      "input": [
+        [],
+        -1
+      ],
+      "base": {
+        "kind": "value",
+        "value": 0
+      },
+      "head": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "phase": "search",
+      "input": [
+        [
+          0
+        ],
+        0
+      ],
+      "base": {
+        "kind": "value",
+        "value": 1
+      },
+      "head": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "phase": "search",
+      "input": [
+        [],
+        1
+      ],
+      "base": {
+        "kind": "exception",
+        "type": "java.lang.ArrayIndexOutOfBoundsException"
+      },
+      "head": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "phase": "search",
+      "input": [
+        [
+          0
+        ],
+        -1
+      ],
+      "base": {
+        "kind": "value",
+        "value": 0
+      },
+      "head": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "phase": "search",
+      "input": [
+        [
+          1
+        ],
+        0
+      ],
+      "base": {
+        "kind": "value",
+        "value": 1
+      },
+      "head": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "phase": "search",
+      "input": [
+        [],
+        2
+      ],
+      "base": {
+        "kind": "exception",
+        "type": "java.lang.ArrayIndexOutOfBoundsException"
+      },
+      "head": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "phase": "search",
+      "input": [
+        [
+          0
+        ],
+        1
+      ],
+      "base": {
+        "kind": "exception",
+        "type": "java.lang.StackOverflowError"
+      },
+      "head": {
+        "kind": "exception",
+        "type": "java.lang.StackOverflowError"
+      }
+    },
+    {
+      "phase": "search",
+      "input": [
+        [
+          1
+        ],
+        -1
+      ],
+      "base": {
+        "kind": "value",
+        "value": 0
+      },
+      "head": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "phase": "search",
+      "input": [
+        [
+          -1
+        ],
+        0
+      ],
+      "base": {
+        "kind": "value",
+        "value": 1
+      },
+      "head": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "phase": "search",
+      "input": [
+        [],
+        -2
+      ],
+      "base": {
+        "kind": "value",
+        "value": 0
+      },
+      "head": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "phase": "search",
+      "input": [
+        [
+          0
+        ],
+        2
+      ],
+      "base": {
+        "kind": "exception",
+        "type": "java.lang.StackOverflowError"
+      },
+      "head": {
+        "kind": "exception",
+        "type": "java.lang.StackOverflowError"
+      }
+    },
+    {
+      "phase": "search",
+      "input": [
+        [
+          1
+        ],
+        1
+      ],
+      "base": {
+        "kind": "exception",
+        "type": "java.lang.ArrayIndexOutOfBoundsException"
+      },
+      "head": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "phase": "search",
+      "input": [
+        [
+          -1
+        ],
+        -1
+      ],
+      "base": {
+        "kind": "value",
+        "value": 0
+      },
+      "head": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "phase": "search",
+      "input": [
+        [
+          0,
+          0
+        ],
+        0
+      ],
+      "base": {
+        "kind": "value",
+        "value": 1
+      },
+      "head": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "phase": "search",
+      "input": [
+        [],
+        -2147483648
+      ],
+      "base": {
+        "kind": "value",
+        "value": 0
+      },
+      "head": {
+        "kind": "value",
+        "value": 0
+      }
+    }
+  ],
+  "jvm_runs": 32,
+  "compilations": 2,
+  "search_inputs": 16,
+  "reduction_inputs": 0,
+  "source_encoding": "UTF-8",
+  "runtime_file_encoding": "UTF-8",
+  "budget": {
+    "max_inputs": 16,
+    "seed": 7,
+    "reduce_budget": 4,
+    "generation": "guided"
+  },
+  "guidance": "Edited integer literals first, then literal neighbors and fixed/seeded inputs from selected method syntax; no semantic or coverage guarantee.",
+  "input_types": [
+    "int[]",
+    "int"
+  ],
+  "receiver_semantics": "One invocation per fresh JVM; instance methods use a fresh public no-argument receiver. Constructor code executes.",
+  "source_sha256": {
+    "base": "dbcaaf9634c6a7f7caf972080fb7e666633e249c67a1f8b74bb0fc8332f31811",
+    "head": "38c77db1cf7ffa3c789a28c0bdca00f92a09f101e50dbb3f4f637ebc705b8f3c"
+  },
+  "selected_method_tokens_changed": true,
+  "java_version": "openjdk version \"17.0.20\" 2026-07-21\r\nOpenJDK Runtime Environment Temurin-17.0.20+8 (build 17.0.20+8)\r\nOpenJDK 64-Bit Server VM Temurin-17.0.20+8 (build 17.0.20+8, mixed mode, sharing)\r\n",
+  "javac_version": "javac 17.0.20\r\n",
+  "candidate_inputs": [
+    [
+      [],
+      0
+    ],
+    [
+      [],
+      -1
+    ],
+    [
+      [
+        0
+      ],
+      0
+    ],
+    [
+      [],
+      1
+    ],
+    [
+      [
+        0
+      ],
+      -1
+    ],
+    [
+      [
+        1
+      ],
+      0
+    ],
+    [
+      [],
+      2
+    ],
+    [
+      [
+        0
+      ],
+      1
+    ],
+    [
+      [
+        1
+      ],
+      -1
+    ],
+    [
+      [
+        -1
+      ],
+      0
+    ],
+    [
+      [],
+      -2
+    ],
+    [
+      [
+        0
+      ],
+      2
+    ],
+    [
+      [
+        1
+      ],
+      1
+    ],
+    [
+      [
+        -1
+      ],
+      -1
+    ],
+    [
+      [
+        0,
+        0
+      ],
+      0
+    ],
+    [
+      [],
+      -2147483648
+    ]
+  ],
+  "non_normal_search_inputs": 5,
+  "reason": "Exception observed for some inputs; no confirmed normal-return difference within the remaining finite budget. All observations retained.",
+  "schema_version": 1,
+  "kind": "codedna-behavioral-evidence",
+  "experimental": true,
+  "repository": "C:\\Users\\hp\\OneDrive\\Documents\\ChatGPT\\codedna\\.worktrees\\core-evidence\\build\\d093-quixbugs-snapshots",
+  "base_commit": "68e496ebe132b6ae08a977f7f6eebbcf06a0193c",
+  "head_commit": "afe407166866e1dc9a1a178942d3f00964b848a1",
+  "language": "java",
+  "file": "POSSIBLE_CHANGE.java",
+  "symbol": "java_programs.POSSIBLE_CHANGE#possible_change(int[],int)",
+  "support_files": [
+    "Node.java",
+    "WeightedEdge.java"
+  ],
+  "regression_established": false,
+  "required_tests_removed": false,
+  "plugin_version": "0.1.0",
+  "plugin_api_version": "1.1",
+  "export_disclosure": "A confirmed export includes the entire selected base/head source file; compiler diagnostics may quote source. Review before sharing.",
+  "interpretation": "A stable observed difference needs an applicable expectation to be called a regression. No witness within a finite budget does not establish equivalence or validate skip risk.",
+  "further_execution_blocked": false,
+  "elapsed_seconds": 11.766
+}

@@ -1,0 +1,10 @@
+{
+  "job": "https://ci-builds.apache.org/job/Jackrabbit/job/jackrabbit-oak-trunk/",
+  "event_count": 18,
+  "report_events": 15,
+  "objects": 10,
+  "six_hour_collector_started": true,
+  "pid_at_start": 23452,
+  "tests": "10 passed in 7.56s; offline research-only",
+  "note": "Imported D092 reports are already inspected evidence; observation times do not establish historical publication availability."
+}

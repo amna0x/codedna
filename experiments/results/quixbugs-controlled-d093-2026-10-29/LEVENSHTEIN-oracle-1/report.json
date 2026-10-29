@@ -1,0 +1,199 @@
+{
+  "status": "difference",
+  "observations": [
+    {
+      "phase": "search",
+      "input": [
+        "electron",
+        "neutron"
+      ],
+      "base": {
+        "kind": "value",
+        "value": 8
+      },
+      "head": {
+        "kind": "value",
+        "value": 3
+      }
+    },
+    {
+      "phase": "confirmation",
+      "input": [
+        "electron",
+        "neutron"
+      ],
+      "base": {
+        "kind": "value",
+        "value": 8
+      },
+      "head": {
+        "kind": "value",
+        "value": 3
+      }
+    },
+    {
+      "phase": "confirmation",
+      "input": [
+        "electron",
+        "neutron"
+      ],
+      "base": {
+        "kind": "value",
+        "value": 8
+      },
+      "head": {
+        "kind": "value",
+        "value": 3
+      }
+    },
+    {
+      "phase": "confirmation",
+      "input": [
+        "electron",
+        "neutron"
+      ],
+      "base": {
+        "kind": "value",
+        "value": 8
+      },
+      "head": {
+        "kind": "value",
+        "value": 3
+      }
+    },
+    {
+      "phase": "confirmation",
+      "input": [
+        "electron",
+        "neutron"
+      ],
+      "base": {
+        "kind": "value",
+        "value": 8
+      },
+      "head": {
+        "kind": "value",
+        "value": 3
+      }
+    }
+  ],
+  "jvm_runs": 10,
+  "compilations": 2,
+  "search_inputs": 1,
+  "reduction_inputs": 0,
+  "source_encoding": "UTF-8",
+  "runtime_file_encoding": "UTF-8",
+  "budget": {
+    "max_inputs": 1,
+    "seed": 7,
+    "reduce_budget": 0,
+    "generation": "simple"
+  },
+  "guidance": "Edited integer literals first, then literal neighbors and fixed/seeded inputs from selected method syntax; no semantic or coverage guarantee.",
+  "input_types": [
+    "String",
+    "String"
+  ],
+  "receiver_semantics": "One invocation per fresh JVM; instance methods use a fresh public no-argument receiver. Constructor code executes.",
+  "source_sha256": {
+    "base": "ee1b7bc544156fbd475ea03e3b5e6b3e6edecae3f7de31e6ee0c647308f04ea0",
+    "head": "694a68e7633c784d74871b5b9032b6bc093db285994a7df895474567b4b6175b"
+  },
+  "selected_method_tokens_changed": true,
+  "java_version": "openjdk version \"17.0.20\" 2026-07-21\r\nOpenJDK Runtime Environment Temurin-17.0.20+8 (build 17.0.20+8)\r\nOpenJDK 64-Bit Server VM Temurin-17.0.20+8 (build 17.0.20+8, mixed mode, sharing)\r\n",
+  "javac_version": "javac 17.0.20\r\n",
+  "candidate_inputs": [
+    [
+      "electron",
+      "neutron"
+    ]
+  ],
+  "supplied_input_counts_toward_search_budget": true,
+  "non_normal_search_inputs": 0,
+  "witness": {
+    "phase": "search",
+    "input": [
+      "electron",
+      "neutron"
+    ],
+    "base": {
+      "kind": "value",
+      "value": 8
+    },
+    "head": {
+      "kind": "value",
+      "value": 3
+    }
+  },
+  "original_witness": {
+    "phase": "search",
+    "input": [
+      "electron",
+      "neutron"
+    ],
+    "base": {
+      "kind": "value",
+      "value": 8
+    },
+    "head": {
+      "kind": "value",
+      "value": 3
+    }
+  },
+  "reduction": "Lowest numeric magnitude plus array element counts and string lengths among candidates actually tried; no global minimality claim.",
+  "confirmation": "Each accepted witness pair matched two further fresh-JVM pairs; general determinism is not proved.",
+  "reproducer": {
+    "files_sha256": {
+      "base/LEVENSHTEIN.java": "ee1b7bc544156fbd475ea03e3b5e6b3e6edecae3f7de31e6ee0c647308f04ea0",
+      "head/LEVENSHTEIN.java": "694a68e7633c784d74871b5b9032b6bc093db285994a7df895474567b4b6175b",
+      "CodeDNABehaviorProbe.java": "aa85bf98eb72455f946d6b6b7d8bc024d2752481c37a099248b60068c84e03e7",
+      "base/support/Node.java": "f6c623fd51166f7a65f9691716e2f576b246a7b846415e3234e62904bf5b0c67",
+      "base/support/WeightedEdge.java": "eef70c3a26f05fbee735183154f41f751313155eb16d4980ba7589acacbcbb04",
+      "head/support/Node.java": "f6c623fd51166f7a65f9691716e2f576b246a7b846415e3234e62904bf5b0c67",
+      "head/support/WeightedEdge.java": "eef70c3a26f05fbee735183154f41f751313155eb16d4980ba7589acacbcbb04",
+      "ReproduceDifference.java": "3b807048879b1d87628501d6992a24a41922e0a2e6f4c7352c0d8f78766a7715",
+      "README.md": "d2575eee54145e5bf28a171e68bd65b19844274e9996deae49029c53130ecd38",
+      "CodeDNAWitnessTest.java": "6da4cac7b9a9e63aa3cb7f6cfee232d5f4c478a30fccddb07feebd687cfa0866",
+      "SUPPLIED_EXPECTATION.json": "b204304559f2a90743e23e9db0e864d2ae96dd7f81b5f662094c5e246f57412d"
+    },
+    "entrypoint": "ReproduceDifference.java",
+    "requires": "JDK 17+; explicitly trusted selected source",
+    "disclosure": "Includes the entire chosen base/head source file. Review before sharing."
+  },
+  "schema_version": 1,
+  "kind": "codedna-behavioral-evidence",
+  "experimental": true,
+  "repository": "C:\\Users\\hp\\OneDrive\\Documents\\ChatGPT\\codedna\\.worktrees\\core-evidence\\build\\d093-quixbugs-snapshots",
+  "base_commit": "68e496ebe132b6ae08a977f7f6eebbcf06a0193c",
+  "head_commit": "afe407166866e1dc9a1a178942d3f00964b848a1",
+  "language": "java",
+  "file": "LEVENSHTEIN.java",
+  "symbol": "java_programs.LEVENSHTEIN#levenshtein(String,String)",
+  "support_files": [
+    "Node.java",
+    "WeightedEdge.java"
+  ],
+  "regression_established": false,
+  "required_tests_removed": false,
+  "plugin_version": "0.1.0",
+  "plugin_api_version": "1.1",
+  "supplied_expectation": {
+    "input": [
+      "electron",
+      "neutron"
+    ],
+    "expected": 3,
+    "requirement": "Published QuixBugs testcase expectation"
+  },
+  "export_disclosure": "A confirmed export includes the entire selected base/head source file; compiler diagnostics may quote source. Review before sharing.",
+  "interpretation": "A stable observed difference needs an applicable expectation to be called a regression. No witness within a finite budget does not establish equivalence or validate skip risk.",
+  "further_execution_blocked": false,
+  "elapsed_seconds": 10.156,
+  "expectation_assessment": {
+    "status": "confirmed_at_supplied_input",
+    "requirement_source": "user_supplied_not_independently_verified",
+    "regression_against_supplied_requirement": false,
+    "base_satisfies": false,
+    "head_satisfies": true
+  }
+}
