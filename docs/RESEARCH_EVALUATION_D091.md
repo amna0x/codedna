@@ -43,3 +43,18 @@ builds require verified source/toolchain/build feasibility; do not run multi-hou
 suites simply to decorate a result. Historical durations cannot establish elapsed
 CI savings. Measure analysis/startup/audit cost when actually executed and disclose
 unperformed comparisons. No favorable-result claim before evidence supports it.
+
+## Acquisition-only execution notes, before outcome labels were opened
+
+Large Git revision lists exceeded Windows' command-line limit; the research
+helper now passes them through stdin. Exact public commits that cannot be
+fetched remain unavailable, with no replacements. The resumed missing-ref
+screen has a 512-request budget; cases beyond it remain explicitly unresolved.
+This changes acquisition bounds, not cohort membership or risk settings.
+
+The initial 4 MiB HTTP cache overfetched scattered Kafka records and reached its
+256 MiB budget. Its partial report is preserved. A second acquisition pass uses
+256 KiB blocks and a separate 256 MiB/project limit, reusing verified cached
+members. Acquisition byte counts are reported by attempt, not mislabeled as one
+original-budget success. These repairs were made before interpreting new-project
+failure labels. Cohorts and the application remained frozen.
