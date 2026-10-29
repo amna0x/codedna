@@ -265,7 +265,10 @@ def test_real_jvm_and_descendant_end_on_timeout_or_ctrl_c(repo,tmp_path,control)
     if thread:thread.start()
     try:
         result=find_difference(repo.path,*shas,file='src/main/java/example/Fee.java',symbol='example.Fee#fee(int)',
-            output_dir=tmp_path/'out',allow_build=True,max_inputs=1,timeout=12 if control=='timeout' else 30)
+            # The cleanup test must reach the long-running JVM/child, not expire
+            # during two compilations and startup on a loaded Windows machine.
+            # The unchanged per-invocation execution limit still times it out.
+            output_dir=tmp_path/'out',allow_build=True,max_inputs=1,timeout=60 if control=='timeout' else 30)
     finally:
         stop.set()
         if thread:thread.join(timeout=2)

@@ -1,0 +1,153 @@
+{
+  "status": "no_difference_observed",
+  "observations": [
+    {
+      "phase": "search",
+      "input": 0,
+      "base": {
+        "kind": "value",
+        "value": 0
+      },
+      "head": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "phase": "search",
+      "input": -1,
+      "base": {
+        "kind": "value",
+        "value": 1
+      },
+      "head": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "phase": "search",
+      "input": 1,
+      "base": {
+        "kind": "value",
+        "value": 1
+      },
+      "head": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "phase": "search",
+      "input": 2,
+      "base": {
+        "kind": "value",
+        "value": 2
+      },
+      "head": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    {
+      "phase": "search",
+      "input": -2,
+      "base": {
+        "kind": "value",
+        "value": 2
+      },
+      "head": {
+        "kind": "value",
+        "value": 2
+      }
+    },
+    {
+      "phase": "search",
+      "input": -2147483648,
+      "base": {
+        "kind": "value",
+        "value": -2147483648
+      },
+      "head": {
+        "kind": "value",
+        "value": -2147483648
+      }
+    },
+    {
+      "phase": "search",
+      "input": 2147483647,
+      "base": {
+        "kind": "value",
+        "value": 2147483647
+      },
+      "head": {
+        "kind": "value",
+        "value": 2147483647
+      }
+    },
+    {
+      "phase": "search",
+      "input": -1499591369,
+      "base": {
+        "kind": "value",
+        "value": 1499591369
+      },
+      "head": {
+        "kind": "value",
+        "value": 1499591369
+      }
+    }
+  ],
+  "jvm_runs": 16,
+  "compilations": 2,
+  "search_inputs": 8,
+  "reduction_inputs": 0,
+  "source_encoding": "UTF-8",
+  "runtime_file_encoding": "UTF-8",
+  "budget": {
+    "max_inputs": 8,
+    "seed": 7,
+    "reduce_budget": 4,
+    "generation": "guided"
+  },
+  "guidance": "Edited integer literals first, then literal neighbors and fixed/seeded inputs from selected method syntax; no semantic or coverage guarantee.",
+  "input_types": [
+    "int"
+  ],
+  "source_sha256": {
+    "base": "04db1b27831cb7257480b23dfed6952a9fe818433f08904fb04543c4afd4e733",
+    "head": "b74bd3660b5f6afb5060f7b307ebed524a8c802d433c1cff67800ec38f1226da"
+  },
+  "selected_method_tokens_changed": true,
+  "java_version": "openjdk version \"17.0.20\" 2026-07-21\r\nOpenJDK Runtime Environment Temurin-17.0.20+8 (build 17.0.20+8)\r\nOpenJDK 64-Bit Server VM Temurin-17.0.20+8 (build 17.0.20+8, mixed mode, sharing)\r\n",
+  "javac_version": "javac 17.0.20\r\n",
+  "candidate_inputs": [
+    0,
+    -1,
+    1,
+    2,
+    -2,
+    -2147483648,
+    2147483647,
+    -1499591369
+  ],
+  "reason": "No normal-return difference observed within the finite input/time budget; equivalence is not established.",
+  "schema_version": 1,
+  "kind": "codedna-behavioral-evidence",
+  "experimental": true,
+  "repository": "C:\\Users\\hp\\OneDrive\\Documents\\ChatGPT\\codedna\\.worktrees\\core-evidence\\build\\d086-real-inputs\\TheAlgorithms-Java",
+  "base_commit": "0c79d33eb591842c8cc809f02a9303ab843a1c37",
+  "head_commit": "504b5283eb75f9416693740eba48c5cea9eb28bd",
+  "language": "java",
+  "file": "src/main/java/com/thealgorithms/maths/AbsoluteValue.java",
+  "symbol": "com.thealgorithms.maths.AbsoluteValue#getAbsValue(int)",
+  "support_files": [],
+  "regression_established": false,
+  "required_tests_removed": false,
+  "plugin_version": "0.1.0",
+  "plugin_api_version": "1.1",
+  "export_disclosure": "A confirmed export includes the entire selected base/head source file; compiler diagnostics may quote source. Review before sharing.",
+  "interpretation": "A stable observed difference needs an applicable expectation to be called a regression. No witness within a finite budget does not establish equivalence or validate skip risk.",
+  "further_execution_blocked": false,
+  "elapsed_seconds": 14.25
+}

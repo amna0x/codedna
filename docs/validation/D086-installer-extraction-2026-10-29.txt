@@ -1,0 +1,33 @@
+
+7-Zip (a) 21.07 (x64) : Copyright (c) 1999-2021 Igor Pavlov : 2021-12-26
+
+Scanning the drive for archives:
+1 file, 317727783 bytes (304 MiB)
+
+Extracting archive: C:\Users\hp\OneDrive\Documents\ChatGPT\codedna\.worktrees\core-evidence\build\desktop-D086-2026-10-29\installer\CodeDNA IDE D086 0.1.0 Setup.exe
+
+WARNINGS:
+There are data after the end of archive
+
+--
+Path = C:\Users\hp\OneDrive\Documents\ChatGPT\codedna\.worktrees\core-evidence\build\desktop-D086-2026-10-29\installer\CodeDNA IDE D086 0.1.0 Setup.exe
+Type = 7z
+WARNINGS:
+There are data after the end of archive
+Offset = 177424
+Physical Size = 317161491
+Tail Size = 388868
+Headers Size = 200250
+Method = LZMA2:20 LZMA:20 BCJ2
+Solid = -
+Blocks = 15047
+
+Everything is Ok
+
+Archives with Warnings: 1
+
+Warnings: 1
+Folders: 192
+Files: 1464
+Size:       161628837
+Compressed: 317727783

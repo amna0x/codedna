@@ -1,0 +1,5 @@
+{
+  "status": "unsupported",
+  "reason": "Selected Java source is missing or not a regular file on one version",
+  "source_contract_audit_only": true
+}

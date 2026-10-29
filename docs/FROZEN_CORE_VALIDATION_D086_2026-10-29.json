@@ -1,0 +1,89 @@
+{
+  "date": "2026-10-29",
+  "source_commit": "0bdee655f2944283e3c61ef1106d26429e73d36c",
+  "core": "C:\\Users\\hp\\OneDrive\\Documents\\ChatGPT\\codedna\\.worktrees\\core-evidence\\build\\desktop-D086-2026-10-29\\core\\dist\\codedna-core\\codedna-core.exe",
+  "core_sha256": "059c3f5bdca2c3e183c26d03159a5595b4be6dbef5e7c0f45929b82a8dc433df",
+  "manifest_files_verified": 1463,
+  "checks": {
+    "plugins": {
+      "scope": "production frozen core, restricted PATH, isolated per-user store; not clean-PC acceptance",
+      "checks": {
+        "install_and_cold_restart": "passed",
+        "damaged_optional_uses_bundled_fallback": "passed",
+        "broken_update_preserves_working_version": "passed",
+        "missing_dependency_preserves_working_version": "passed",
+        "checksum_refusal": "passed",
+        "remove_and_restore_bundled_python": "passed",
+        "bundled_removal_refused": "passed"
+      },
+      "bundle_files_verified": 1463
+    },
+    "jobs": {
+      "scope": "actual frozen executable, isolated offline fixtures; not clean-PC/installed IDE acceptance",
+      "core": "C:\\Users\\hp\\OneDrive\\Documents\\ChatGPT\\codedna\\.worktrees\\core-evidence\\build\\desktop-D086-2026-10-29\\core\\dist\\codedna-core\\codedna-core.exe",
+      "checks": {
+        "worker_and_descendant_cancelled": "passed",
+        "unrelated_process_survived": "passed",
+        "real_frozen_profile_metrics_without_project_source": "passed",
+        "analysis_recovers_after_cancel": "passed",
+        "replacement_worker_keeps_parent_plugin": "passed",
+        "consented_api_restart_keeps_plugin_snapshot": "passed",
+        "application_restart_activates_pending_update": "passed",
+        "analysis_preserves_project_and_history": "passed"
+      },
+      "cancellation_confirmed_seconds": 0.031
+    },
+    "brake": {
+      "scope": "actual frozen MCP and real Maven, isolated synthetic history; engineering evidence only",
+      "core": "C:\\Users\\hp\\OneDrive\\Documents\\ChatGPT\\codedna\\.worktrees\\core-evidence\\build\\desktop-D086-2026-10-29\\core\\dist\\codedna-core\\codedna-core.exe",
+      "checks": {
+        "cold_history_requires_full_suite": "passed",
+        "build_consent_enforced": "passed",
+        "crc_plan_with_synthetic_history": "passed",
+        "frozen_model_reuse_still_runs_fresh_audit_and_real_tests": "passed",
+        "frozen_mcp_profile_scope_preserves_build_consent": "passed",
+        "real_failing_required_tests_block": "passed",
+        "real_passing_required_tests_pass": "passed",
+        "real_skipped_required_test_is_incomplete": "passed"
+      },
+      "verdicts": {
+        "breaking": "blocked",
+        "harmless": "passed",
+        "skipped": "incomplete"
+      }
+    },
+    "witness": {
+      "scope": "actual frozen D086 executable; isolated synthetic Java, not independent accuracy/clean-PC evidence",
+      "core": "C:\\Users\\hp\\OneDrive\\Documents\\ChatGPT\\codedna\\.worktrees\\core-evidence\\build\\desktop-D086-2026-10-29\\core\\dist\\codedna-core\\codedna-core.exe",
+      "core_sha256": "059c3f5bdca2c3e183c26d03159a5595b4be6dbef5e7c0f45929b82a8dc433df",
+      "checks": {
+        "moonshot_without_execution_consent_refused": "passed",
+        "default_mcp_tools_unchanged": "passed",
+        "opt_in_frozen_mcp_executes_contained_witness": "passed",
+        "frozen_unicode_observations_use_declared_utf8": "passed",
+        "witness_is_not_a_regression_or_skip_risk_verdict": "passed",
+        "independent_jdk_only_reproducer_matches_frozen_pair": "passed",
+        "original_repository_preserved": "passed",
+        "frozen_timeout_stops_jvm_and_descendant": "passed",
+        "terminating_frozen_parent_stops_jvm_and_descendant": "passed"
+      }
+    },
+    "new-evidence": {
+      "scope": "actual frozen D086 new evidence contracts; isolated fixtures, not research or clean-PC acceptance",
+      "checks": {
+        "typed_helper_expectation_and_junit_draft": "passed",
+        "frozen_export_independently_reproduces": "passed",
+        "frozen_shadow_repeat_failure_and_cost": "passed"
+      }
+    }
+  },
+  "logs_sha256": {
+    "docs/validation/D086-frozen-plugins-2026-10-29.txt": "57d8e3918386a5c8e6239198a4be0e648ce3fa86e85af70a348fffba035ac36d",
+    "docs/validation/D086-frozen-jobs-2026-10-29.txt": "23ca747e11338283599bc400713eeb351d83f894107b3160a63cb18baccc1dbd",
+    "docs/validation/D086-frozen-brake-2026-10-29.txt": "a7b810e74d7e22cb74f62af008c66e8857389807a94dc439e72e81c120c422e9",
+    "docs/validation/D086-frozen-witness-2026-10-29.txt": "27f494d3f9f5db99e011df60d1da74aacf5802bebffcc2f203be3941440cd7eb",
+    "docs/validation/D086-frozen-new-evidence-2026-10-29.txt": "924b38f156e65d554468e76554c8e85377943bce21e5f87662fe1cf2a8b421b0"
+  },
+  "scope": "actual isolated executable, not installation/clean-PC or research superiority",
+  "checks_passed": 35
+}

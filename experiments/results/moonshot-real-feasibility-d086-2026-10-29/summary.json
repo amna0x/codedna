@@ -1,0 +1,17 @@
+{
+  "planned": 48,
+  "completed": 48,
+  "scope": "feasibility only; differences are not automatically regressions",
+  "modes": {
+    "guided": {
+      "no_difference_observed": 5,
+      "unsupported": 19
+    },
+    "simple": {
+      "no_difference_observed": 5,
+      "unsupported": 19
+    }
+  },
+  "witnesses": 0,
+  "independently_reproduced": 0
+}

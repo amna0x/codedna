@@ -1,0 +1,153 @@
+{
+  "status": "no_difference_observed",
+  "observations": [
+    {
+      "phase": "search",
+      "input": 0,
+      "base": {
+        "kind": "value",
+        "value": 0
+      },
+      "head": {
+        "kind": "value",
+        "value": 0
+      }
+    },
+    {
+      "phase": "search",
+      "input": 1,
+      "base": {
+        "kind": "value",
+        "value": -2147483648
+      },
+      "head": {
+        "kind": "value",
+        "value": -2147483648
+      }
+    },
+    {
+      "phase": "search",
+      "input": -1,
+      "base": {
+        "kind": "value",
+        "value": -1
+      },
+      "head": {
+        "kind": "value",
+        "value": -1
+      }
+    },
+    {
+      "phase": "search",
+      "input": 2,
+      "base": {
+        "kind": "value",
+        "value": 1073741824
+      },
+      "head": {
+        "kind": "value",
+        "value": 1073741824
+      }
+    },
+    {
+      "phase": "search",
+      "input": -2,
+      "base": {
+        "kind": "value",
+        "value": 2147483647
+      },
+      "head": {
+        "kind": "value",
+        "value": 2147483647
+      }
+    },
+    {
+      "phase": "search",
+      "input": -2147483648,
+      "base": {
+        "kind": "value",
+        "value": 1
+      },
+      "head": {
+        "kind": "value",
+        "value": 1
+      }
+    },
+    {
+      "phase": "search",
+      "input": 2147483647,
+      "base": {
+        "kind": "value",
+        "value": -2
+      },
+      "head": {
+        "kind": "value",
+        "value": -2
+      }
+    },
+    {
+      "phase": "search",
+      "input": -1499591369,
+      "base": {
+        "kind": "value",
+        "value": -323978907
+      },
+      "head": {
+        "kind": "value",
+        "value": -323978907
+      }
+    }
+  ],
+  "jvm_runs": 16,
+  "compilations": 2,
+  "search_inputs": 8,
+  "reduction_inputs": 0,
+  "source_encoding": "UTF-8",
+  "runtime_file_encoding": "UTF-8",
+  "budget": {
+    "max_inputs": 8,
+    "seed": 7,
+    "reduce_budget": 4,
+    "generation": "simple"
+  },
+  "guidance": "Edited integer literals first, then literal neighbors and fixed/seeded inputs from selected method syntax; no semantic or coverage guarantee.",
+  "input_types": [
+    "int"
+  ],
+  "source_sha256": {
+    "base": "c6e6b10f59a369dcd27c157123d67eb06d98695572f8bf36368af65a5a866409",
+    "head": "66bd27ccaef0645aa233eba3f1cefc4dfc839eeb86189777c03d49b5a901497c"
+  },
+  "selected_method_tokens_changed": false,
+  "java_version": "openjdk version \"17.0.20\" 2026-07-21\r\nOpenJDK Runtime Environment Temurin-17.0.20+8 (build 17.0.20+8)\r\nOpenJDK 64-Bit Server VM Temurin-17.0.20+8 (build 17.0.20+8, mixed mode, sharing)\r\n",
+  "javac_version": "javac 17.0.20\r\n",
+  "candidate_inputs": [
+    0,
+    1,
+    -1,
+    2,
+    -2,
+    -2147483648,
+    2147483647,
+    -1499591369
+  ],
+  "reason": "No normal-return difference observed within the finite input/time budget; equivalence is not established.",
+  "schema_version": 1,
+  "kind": "codedna-behavioral-evidence",
+  "experimental": true,
+  "repository": "C:\\Users\\hp\\OneDrive\\Documents\\ChatGPT\\codedna\\.worktrees\\core-evidence\\build\\d086-real-inputs\\TheAlgorithms-Java",
+  "base_commit": "54567e2ed3d0e7181b7b454fc028d6a72f6e8183",
+  "head_commit": "fd14016c8659c8b2b8220325a77178876f8c5c1d",
+  "language": "java",
+  "file": "src/main/java/com/thealgorithms/bitmanipulation/ReverseBits.java",
+  "symbol": "com.thealgorithms.bitmanipulation.ReverseBits#reverseBits(int)",
+  "support_files": [],
+  "regression_established": false,
+  "required_tests_removed": false,
+  "plugin_version": "0.1.0",
+  "plugin_api_version": "1.1",
+  "export_disclosure": "A confirmed export includes the entire selected base/head source file; compiler diagnostics may quote source. Review before sharing.",
+  "interpretation": "A stable observed difference needs an applicable expectation to be called a regression. No witness within a finite budget does not establish equivalence or validate skip risk.",
+  "further_execution_blocked": false,
+  "elapsed_seconds": 13.734
+}

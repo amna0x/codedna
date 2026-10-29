@@ -1,5 +1,38 @@
 # Blueprint completion ledger - 2026-10-27
 
+## D086 engineering release candidate verified — 2026-10-29
+
+Source frozen at 0bdee655f2944283e3c61ef1106d26429e73d36c. Full Maven-inclusive
+run: 754 passed, one timeout cleanup fixture failed before readiness, zero skips,
+one existing warning. Only fixture setup allowance changed; actual timeout and
+cancellation descendant checks then both passed. All application hashes stayed
+unchanged. Do not relabel this as a clean single 755-pass run.
+
+All 35 actual frozen executable checks passed; all 1463 bundle hashes verified.
+Separate D086 installer built. Its embedded core was extracted and all hashes
+matched; restricted-PATH unpacked smoke passed without external Python and with
+both bundled languages. No D086 GUI/full installation/clean-PC claim.
+See ENGINEERING_VALIDATION_D086_2026-10-29.json,
+FROZEN_CORE_VALIDATION_D086_2026-10-29.json and
+RELEASE_VALIDATION_D086_2026-10-29.json for exact commands, hashes and limitations.
+
+Installer: build/desktop-D086-2026-10-29/installer/CodeDNA IDE D086 0.1.0 Setup.exe
+SHA-256: a8a000c926a7f7f89171a886550f27b998294efc6b86bd12e5d4377bd7bb669e
+Bytes: 317727783. Signature: NotSigned.
+D085 friend kit is unchanged. No push, merge or public publication performed.
+
+Implemented method improvements: full-suite shadow evidence; bounded repeated
+checks preserving every failure/incomplete outcome; measured check cost; edited
+numeric-boundary priority; one/two int/boolean/bounded-String arguments; structured
+input reduction; explicit small helper sources; expectation-backed JUnit drafts
+and independently hash-checked reproduction. Risk thresholds/fallbacks unchanged.
+
+Pinned real-change feasibility completed all 48 entries: each mode had five
+no-difference results and 19 unsupported cases; zero witnesses. Preserve these
+results. They do not demonstrate improved real-change detection, safety or speed.
+Fresh-project brake reliability/net-CI superiority remains unestablished. More
+research needs its own fixed protocol, not retuning this sample for positives.
+
 ## D086 engineering batch in progress — 2026-10-29
 
 Continue on codex/core-evidence-improvements in the isolated core worktree.

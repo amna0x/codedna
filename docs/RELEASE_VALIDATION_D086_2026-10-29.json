@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-29",
+  "source_commit": "0bdee655f2944283e3c61ef1106d26429e73d36c",
+  "installer": {
+    "scope": "embedded installer core extracted and verified; no installation/registry change or clean-PC claim",
+    "installer": "C:\\Users\\hp\\OneDrive\\Documents\\ChatGPT\\codedna\\.worktrees\\core-evidence\\build\\desktop-D086-2026-10-29\\installer\\CodeDNA IDE D086 0.1.0 Setup.exe",
+    "installer_sha256": "a8a000c926a7f7f89171a886550f27b998294efc6b86bd12e5d4377bd7bb669e",
+    "installer_bytes": 317727783,
+    "core_sha256": "059c3f5bdca2c3e183c26d03159a5595b4be6dbef5e7c0f45929b82a8dc433df",
+    "manifest_files_verified": 1463,
+    "extraction_exit_code": 0,
+    "archive_warning": "7-Zip reports NSIS data after the embedded archive; all extracted core hashes match."
+  },
+  "restricted_path_unpacked_smoke": {
+    "checked_at_utc": "2026-10-29T09:00:38.0128399Z",
+    "scope": "Installed payload smoke; GUI/build acceptance and clean-machine provenance require human confirmation.",
+    "status": "automated_smoke_passed_manual_pending",
+    "os": "Microsoft Windows NT 10.0.26200.0",
+    "core_version": "codedna 0.1.0",
+    "verified_files": 1463,
+    "plugins": [
+      "java",
+      "python"
+    ],
+    "git_available": true,
+    "external_python_on_path": false,
+    "manual_checks": [
+      "Fresh Windows provenance",
+      "IDE launch",
+      "Extensions/Language plugins",
+      "Open project and analyse change",
+      "Test execution with prerequisites",
+      "Uninstall"
+    ]
+  },
+  "signature": {
+    "Status": "NotSigned",
+    "StatusMessage": "The file C:\\Users\\hp\\OneDrive\\Documents\\ChatGPT\\codedna\\.worktrees\\core-evidence\\build\\desktop-D086-2026-10-29\\installer\\CodeDNA IDE D086 0.1.0 Setup.exe is not digitally signed. You cannot run this script on the current system. For more information about running scripts and setting execution policy, see about_Execution_Policies at https://go.microsoft.com/fwlink/?LinkID=135170"
+  },
+  "frozen_checks": 35,
+  "logs_sha256": {
+    "docs/validation/D086-package-2026-10-29.txt": "eba2fbe3bf35c0c81b7fb1a283e58aab3dab0defccfe1d9c7a829ff95021f50a",
+    "docs/validation/D086-installer-extraction-2026-10-29.txt": "346044fa4bf93ce494ecd16833d310b1814fc71c84a1181a520dfac8a4cc8a86"
+  },
+  "limits": [
+    "Initial full source run: 754 pass/one setup-timeout fixture failure/zero skips; fixture-only correction then both cleanup cases pass. Not a clean single full-run pass.",
+    "No D086 installation, clean-PC acceptance or new full GUI workflow test. Unchanged frontend reused.",
+    "Pinned real-change feasibility: each mode five no-difference observations/19 unsupported. No witness or superiority evidence.",
+    "No new fresh-project brake reliability/net-CI superiority evaluation completed.",
+    "D085 friend kit and independent website work preserved; no push, merge or public release performed."
+  ]
+}

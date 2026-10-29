@@ -1,0 +1,16 @@
+{
+  "scope": "actual frozen D086 executable; isolated synthetic Java, not independent accuracy/clean-PC evidence",
+  "core": "C:\\Users\\hp\\OneDrive\\Documents\\ChatGPT\\codedna\\.worktrees\\core-evidence\\build\\desktop-D086-2026-10-29\\core\\dist\\codedna-core\\codedna-core.exe",
+  "core_sha256": "059c3f5bdca2c3e183c26d03159a5595b4be6dbef5e7c0f45929b82a8dc433df",
+  "checks": {
+    "moonshot_without_execution_consent_refused": "passed",
+    "default_mcp_tools_unchanged": "passed",
+    "opt_in_frozen_mcp_executes_contained_witness": "passed",
+    "frozen_unicode_observations_use_declared_utf8": "passed",
+    "witness_is_not_a_regression_or_skip_risk_verdict": "passed",
+    "independent_jdk_only_reproducer_matches_frozen_pair": "passed",
+    "original_repository_preserved": "passed",
+    "frozen_timeout_stops_jvm_and_descendant": "passed",
+    "terminating_frozen_parent_stops_jvm_and_descendant": "passed"
+  }
+}

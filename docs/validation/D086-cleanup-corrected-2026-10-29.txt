@@ -1,0 +1,12 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.14, pytest-9.1.1, pluggy-1.7.0 -- C:\Users\hp\OneDrive\Documents\GitHub\codedna\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\hp\OneDrive\Documents\ChatGPT\codedna\.worktrees\core-evidence
+configfile: pyproject.toml
+plugins: anyio-4.15.1
+collecting ... collected 40 items / 38 deselected / 2 selected
+
+backend/tests/test_behavior.py::test_real_jvm_and_descendant_end_on_timeout_or_ctrl_c[timeout] PASSED [ 50%]
+backend/tests/test_behavior.py::test_real_jvm_and_descendant_end_on_timeout_or_ctrl_c[cancel] PASSED [100%]
+
+====================== 2 passed, 38 deselected in 26.43s ======================

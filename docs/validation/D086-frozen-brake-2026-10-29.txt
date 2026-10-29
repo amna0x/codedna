@@ -1,0 +1,34 @@
+warning: codedna_check will run the build of C:\Users\hp\AppData\Local\Temp\codedna-frozen-brake-6u8q22v6\validated-synthetic-history when an agent asks; only use this on projects you trust
+warning: codedna_check will run the build of C:\Users\hp\AppData\Local\Temp\codedna-frozen-brake-6u8q22v6\validated-synthetic-history when an agent asks; only use this on projects you trust
+demo repository: C:\Users\hp\AppData\Local\Temp\codedna-frozen-brake-6u8q22v6\validated-synthetic-history (240 synthetic commits plus setup; SYNTHETIC history)
+
+[wrong discount formula] plan (validated_history, method crc): Run 2 of 3 test classes. Conformal stop: at most 5% of this project's 37 past failing commits would have missed a failure (corrected bound 2.6%); conservative model skip-risk bound 0.0%.
+  run  example.PriceCalculatorTest
+  run  example.OrderServiceTest
+  skip example.IndependentTest
+[wrong discount formula] check: blocked: 1 observed test class(es) failed
+
+[harmless comment] plan (validated_history, method crc): Run 1 of 3 test classes. Conformal stop: at most 5% of this project's 37 past failing commits would have missed a failure (corrected bound 2.6%); estimated skip risk 0.0%.
+  run  example.PriceCalculatorTest
+  skip example.IndependentTest
+  skip example.OrderServiceTest
+[harmless comment] check: passed: all 1 required test class(es) or module(s) passed
+{
+  "scope": "actual frozen MCP and real Maven, isolated synthetic history; engineering evidence only",
+  "core": "C:\\Users\\hp\\OneDrive\\Documents\\ChatGPT\\codedna\\.worktrees\\core-evidence\\build\\desktop-D086-2026-10-29\\core\\dist\\codedna-core\\codedna-core.exe",
+  "checks": {
+    "cold_history_requires_full_suite": "passed",
+    "build_consent_enforced": "passed",
+    "crc_plan_with_synthetic_history": "passed",
+    "frozen_model_reuse_still_runs_fresh_audit_and_real_tests": "passed",
+    "frozen_mcp_profile_scope_preserves_build_consent": "passed",
+    "real_failing_required_tests_block": "passed",
+    "real_passing_required_tests_pass": "passed",
+    "real_skipped_required_test_is_incomplete": "passed"
+  },
+  "verdicts": {
+    "breaking": "blocked",
+    "harmless": "passed",
+    "skipped": "incomplete"
+  }
+}

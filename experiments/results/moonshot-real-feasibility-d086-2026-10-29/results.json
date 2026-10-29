@@ -1,0 +1,386 @@
+[
+  {
+    "case": "ReverseBits-1",
+    "generation": "guided",
+    "status": "no_difference_observed",
+    "seconds": 12.833684899989748,
+    "report": "ReverseBits-1-guided/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "ReverseBits-1",
+    "generation": "simple",
+    "status": "no_difference_observed",
+    "seconds": 13.724141300001065,
+    "report": "ReverseBits-1-simple/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "ReverseBits-2",
+    "generation": "simple",
+    "status": "no_difference_observed",
+    "seconds": 11.462210800003959,
+    "report": "ReverseBits-2-simple/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "ReverseBits-2",
+    "generation": "guided",
+    "status": "no_difference_observed",
+    "seconds": 13.631191599997692,
+    "report": "ReverseBits-2-guided/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "ReverseBits-3",
+    "generation": "guided",
+    "status": "no_difference_observed",
+    "seconds": 15.014781300007598,
+    "report": "ReverseBits-3-guided/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "ReverseBits-3",
+    "generation": "simple",
+    "status": "no_difference_observed",
+    "seconds": 15.237076300007175,
+    "report": "ReverseBits-3-simple/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "ReverseBits-4",
+    "generation": "simple",
+    "status": "unsupported",
+    "seconds": 0.002601400003186427,
+    "report": "ReverseBits-4-simple/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "ReverseBits-4",
+    "generation": "guided",
+    "status": "unsupported",
+    "seconds": 0.007082199997967109,
+    "report": "ReverseBits-4-guided/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "BinaryToDecimal-1",
+    "generation": "guided",
+    "status": "unsupported",
+    "seconds": 0.002143300007446669,
+    "report": "BinaryToDecimal-1-guided/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "BinaryToDecimal-1",
+    "generation": "simple",
+    "status": "unsupported",
+    "seconds": 0.002544100003433414,
+    "report": "BinaryToDecimal-1-simple/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "BinaryToDecimal-2",
+    "generation": "simple",
+    "status": "unsupported",
+    "seconds": 0.0030247999966377392,
+    "report": "BinaryToDecimal-2-simple/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "BinaryToDecimal-2",
+    "generation": "guided",
+    "status": "unsupported",
+    "seconds": 0.00312320000375621,
+    "report": "BinaryToDecimal-2-guided/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "BinaryToDecimal-3",
+    "generation": "guided",
+    "status": "unsupported",
+    "seconds": 0.002246399992145598,
+    "report": "BinaryToDecimal-3-guided/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "BinaryToDecimal-3",
+    "generation": "simple",
+    "status": "unsupported",
+    "seconds": 0.0035422000073594972,
+    "report": "BinaryToDecimal-3-simple/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "BinaryToDecimal-4",
+    "generation": "simple",
+    "status": "unsupported",
+    "seconds": 0.003190800009178929,
+    "report": "BinaryToDecimal-4-simple/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "BinaryToDecimal-4",
+    "generation": "guided",
+    "status": "unsupported",
+    "seconds": 0.012133699987316504,
+    "report": "BinaryToDecimal-4-guided/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "AbsoluteMax-1",
+    "generation": "guided",
+    "status": "unsupported",
+    "seconds": 0.002445199992507696,
+    "report": "AbsoluteMax-1-guided/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "AbsoluteMax-1",
+    "generation": "simple",
+    "status": "unsupported",
+    "seconds": 0.0027682000072672963,
+    "report": "AbsoluteMax-1-simple/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "AbsoluteMax-2",
+    "generation": "simple",
+    "status": "unsupported",
+    "seconds": 0.00249430000258144,
+    "report": "AbsoluteMax-2-simple/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "AbsoluteMax-2",
+    "generation": "guided",
+    "status": "unsupported",
+    "seconds": 0.003031200001714751,
+    "report": "AbsoluteMax-2-guided/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "AbsoluteMax-3",
+    "generation": "guided",
+    "status": "unsupported",
+    "seconds": 0.0023450000007869676,
+    "report": "AbsoluteMax-3-guided/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "AbsoluteMax-3",
+    "generation": "simple",
+    "status": "unsupported",
+    "seconds": 0.002639300000737421,
+    "report": "AbsoluteMax-3-simple/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "AbsoluteMax-4",
+    "generation": "simple",
+    "status": "unsupported",
+    "seconds": 0.0035520999954314902,
+    "report": "AbsoluteMax-4-simple/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "AbsoluteMax-4",
+    "generation": "guided",
+    "status": "unsupported",
+    "seconds": 0.003216099998098798,
+    "report": "AbsoluteMax-4-guided/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "AbsoluteMin-1",
+    "generation": "guided",
+    "status": "unsupported",
+    "seconds": 0.012966399997822009,
+    "report": "AbsoluteMin-1-guided/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "AbsoluteMin-1",
+    "generation": "simple",
+    "status": "unsupported",
+    "seconds": 0.0020899999944958836,
+    "report": "AbsoluteMin-1-simple/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "AbsoluteMin-2",
+    "generation": "simple",
+    "status": "unsupported",
+    "seconds": 0.002246600008220412,
+    "report": "AbsoluteMin-2-simple/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "AbsoluteMin-2",
+    "generation": "guided",
+    "status": "unsupported",
+    "seconds": 0.002650599999469705,
+    "report": "AbsoluteMin-2-guided/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "AbsoluteMin-3",
+    "generation": "guided",
+    "status": "unsupported",
+    "seconds": 0.0023714999988442287,
+    "report": "AbsoluteMin-3-guided/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "AbsoluteMin-3",
+    "generation": "simple",
+    "status": "unsupported",
+    "seconds": 0.0026262000028509647,
+    "report": "AbsoluteMin-3-simple/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "AbsoluteMin-4",
+    "generation": "simple",
+    "status": "unsupported",
+    "seconds": 0.0022282999998424202,
+    "report": "AbsoluteMin-4-simple/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "AbsoluteMin-4",
+    "generation": "guided",
+    "status": "unsupported",
+    "seconds": 0.0031439000013051555,
+    "report": "AbsoluteMin-4-guided/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "AbsoluteValue-1",
+    "generation": "guided",
+    "status": "unsupported",
+    "seconds": 0.01310409999859985,
+    "report": "AbsoluteValue-1-guided/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "AbsoluteValue-1",
+    "generation": "simple",
+    "status": "unsupported",
+    "seconds": 0.0024280000070575625,
+    "report": "AbsoluteValue-1-simple/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "AbsoluteValue-2",
+    "generation": "simple",
+    "status": "no_difference_observed",
+    "seconds": 14.692887299999711,
+    "report": "AbsoluteValue-2-simple/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "AbsoluteValue-2",
+    "generation": "guided",
+    "status": "no_difference_observed",
+    "seconds": 14.253587499988498,
+    "report": "AbsoluteValue-2-guided/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "AbsoluteValue-3",
+    "generation": "guided",
+    "status": "no_difference_observed",
+    "seconds": 13.941784099995857,
+    "report": "AbsoluteValue-3-guided/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "AbsoluteValue-3",
+    "generation": "simple",
+    "status": "no_difference_observed",
+    "seconds": 14.010803800003487,
+    "report": "AbsoluteValue-3-simple/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "AbsoluteValue-4",
+    "generation": "simple",
+    "status": "unsupported",
+    "seconds": 0.002271800010930747,
+    "report": "AbsoluteValue-4-simple/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "AbsoluteValue-4",
+    "generation": "guided",
+    "status": "unsupported",
+    "seconds": 0.002493099993444048,
+    "report": "AbsoluteValue-4-guided/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "NumberOfDigits-1",
+    "generation": "guided",
+    "status": "unsupported",
+    "seconds": 0.002334000004339032,
+    "report": "NumberOfDigits-1-guided/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "NumberOfDigits-1",
+    "generation": "simple",
+    "status": "unsupported",
+    "seconds": 0.0021863000001758337,
+    "report": "NumberOfDigits-1-simple/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "NumberOfDigits-2",
+    "generation": "simple",
+    "status": "unsupported",
+    "seconds": 0.0026357999886386096,
+    "report": "NumberOfDigits-2-simple/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "NumberOfDigits-2",
+    "generation": "guided",
+    "status": "unsupported",
+    "seconds": 0.003027800004929304,
+    "report": "NumberOfDigits-2-guided/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "NumberOfDigits-3",
+    "generation": "guided",
+    "status": "unsupported",
+    "seconds": 0.0022252000053413212,
+    "report": "NumberOfDigits-3-guided/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "NumberOfDigits-3",
+    "generation": "simple",
+    "status": "unsupported",
+    "seconds": 0.0021838000102434307,
+    "report": "NumberOfDigits-3-simple/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "NumberOfDigits-4",
+    "generation": "simple",
+    "status": "unsupported",
+    "seconds": 0.0025745000020833686,
+    "report": "NumberOfDigits-4-simple/report.json",
+    "reproduction": null
+  },
+  {
+    "case": "NumberOfDigits-4",
+    "generation": "guided",
+    "status": "unsupported",
+    "seconds": 0.0024618000024929643,
+    "report": "NumberOfDigits-4-guided/report.json",
+    "reproduction": null
+  }
+]

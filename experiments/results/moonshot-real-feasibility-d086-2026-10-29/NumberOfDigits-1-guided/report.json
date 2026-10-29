@@ -1,0 +1,5 @@
+{
+  "status": "unsupported",
+  "reason": "no common public static int(int) method on both snapshots",
+  "source_contract_audit_only": true
+}

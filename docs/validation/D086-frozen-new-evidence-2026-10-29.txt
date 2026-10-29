@@ -1,0 +1,2 @@
+warning: codedna_check will run the build of C:\Users\hp\AppData\Local\Temp\codedna-d086-evidence-pha181dn\cold when an agent asks; only use this on projects you trust
+{"scope": "actual frozen D086 new evidence contracts; isolated fixtures, not research or clean-PC acceptance", "checks": {"typed_helper_expectation_and_junit_draft": "passed", "frozen_export_independently_reproduces": "passed", "frozen_shadow_repeat_failure_and_cost": "passed"}}
