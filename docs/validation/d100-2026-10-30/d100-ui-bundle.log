@@ -1,0 +1,18 @@
+Found cached ffmpeg library.
+Hashes are equal, not replacing the ffmpeg library.
+"C:\Users\hp\OneDrive\Documents\GitHub\codedna\ide\node_modules\electron\dist\ffmpeg.dll" does not contain proprietary codecs (13 found).
+Could not resolve optional peer dependency '@types/react-dom'. Skipping...
+[build/browser] Build started
+
+[build/browser] Finished with 0 errors in 55570ms.
+
+[build/node] Build started
+
+@vscode/windows-ca-certs is not installed; leaving it out of the bundle
+
+[build/node] Finished with 0 errors in 23352ms.
+
+[build/electron] Build started
+
+[build/electron] Finished with 0 errors in 341ms.
+

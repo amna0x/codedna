@@ -230,6 +230,41 @@ export class CodeDnaThemeContribution implements FrontendApplicationContribution
 
     protected register(): void {
         this.theming.registerParsedTheme({
+            id: 'codedna-ocean', label: 'CodeDNA Ocean', uiTheme: 'vs-dark',
+            description: 'Deep blue surfaces with readable cool accents.',
+            json: { type: 'dark', colors: { ...COLORS,
+                'editor.background': '#101C2C', 'sideBar.background': '#142338', 'activityBar.background': '#0D1726',
+                'titleBar.activeBackground': '#0D1726', 'statusBar.background': '#0D1726',
+                'editor.selectionBackground': '#397DB766', 'focusBorder': '#79BEED',
+                'button.background': '#9BD5FF', 'button.foreground': '#102033' }, tokenColors: TOKEN_COLORS }
+        });
+        this.theming.registerParsedTheme({
+            id: 'codedna-light', label: 'CodeDNA Clear Light', uiTheme: 'vs',
+            description: 'Bright surfaces, dark text and visible boundaries.',
+            json: { type: 'light', colors: {
+                'foreground': '#202B3B', 'descriptionForeground': '#4F6075', 'focusBorder': '#1765BE',
+                'editor.background': '#FFFFFF', 'editor.foreground': '#202B3B',
+                'editor.selectionBackground': '#B8D9FA', 'editor.lineHighlightBackground': '#EAF2FB',
+                'sideBar.background': '#F1F5FA', 'sideBar.foreground': '#202B3B',
+                'activityBar.background': '#E7EDF6', 'activityBar.foreground': '#1A4E85',
+                'titleBar.activeBackground': '#E7EDF6', 'titleBar.activeForeground': '#202B3B',
+                'statusBar.background': '#E7EDF6', 'statusBar.foreground': '#32475F',
+                'input.background': '#FFFFFF', 'input.foreground': '#202B3B', 'input.border': '#879BB3',
+                'dropdown.background': '#FFFFFF', 'dropdown.foreground': '#202B3B', 'dropdown.border': '#879BB3',
+                'button.background': '#175FA8', 'button.foreground': '#FFFFFF', 'button.hoverBackground': '#104A87',
+                'widget.border': '#B1C0D1', 'list.hoverBackground': '#DCE9F8',
+                'gitDecoration.addedResourceForeground': '#216534', 'gitDecoration.modifiedResourceForeground': '#855500',
+                'gitDecoration.deletedResourceForeground': '#B32828' }, tokenColors: [] }
+        });
+        this.theming.registerParsedTheme({
+            id: 'codedna-contrast', label: 'CodeDNA High Contrast', uiTheme: 'hc-black',
+            description: 'Strong boundaries and high contrast for easier reading.',
+            json: { type: 'hc', colors: { ...COLORS, 'editor.background': '#000000',
+                'sideBar.background': '#000000', 'foreground': '#FFFFFF', 'descriptionForeground': '#E2E2E2',
+                'widget.border': '#FFFFFF', 'input.border': '#FFFFFF', 'focusBorder': '#FFFF00',
+                'editor.selectionBackground': '#264F78', 'editor.foreground': '#FFFFFF' }, tokenColors: TOKEN_COLORS }
+        });
+        this.theming.registerParsedTheme({
             id: CODEDNA_THEME_ID,
             label: 'CodeDNA Dark',
             uiTheme: 'vs-dark',

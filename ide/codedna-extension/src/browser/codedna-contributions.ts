@@ -20,6 +20,12 @@ export class ChangeViewContribution extends AbstractViewContribution<ChangeViewW
             toggleKeybinding: 'ctrlcmd+shift+alt+d'
         });
     }
+    override registerCommands(commands: CommandRegistry): void {
+        super.registerCommands(commands);
+        commands.registerCommand({ id: 'codedna.changes.open', label: 'Open changes', category: 'CodeDNA' },
+            { execute: () => this.openView({ activate: true, reveal: true }) });
+    }
+
 }
 
 @injectable()
@@ -33,6 +39,12 @@ export class TestsViewContribution extends AbstractViewContribution<TestsViewWid
             toggleKeybinding: 'ctrlcmd+shift+alt+t'
         });
     }
+    override registerCommands(commands: CommandRegistry): void {
+        super.registerCommands(commands);
+        commands.registerCommand({ id: 'codedna.tests.open', label: 'Open tests', category: 'CodeDNA' },
+            { execute: () => this.openView({ activate: true, reveal: true }) });
+    }
+
 }
 
 @injectable()
@@ -46,6 +58,12 @@ export class GraphViewContribution extends AbstractViewContribution<GraphViewWid
             toggleKeybinding: 'ctrlcmd+shift+alt+g'
         });
     }
+    override registerCommands(commands: CommandRegistry): void {
+        super.registerCommands(commands);
+        commands.registerCommand({ id: 'codedna.graph.open', label: 'Open graph', category: 'CodeDNA' },
+            { execute: () => this.openView({ activate: true, reveal: true }) });
+    }
+
 }
 
 @injectable()
@@ -81,6 +99,9 @@ export class PluginsViewContribution extends AbstractViewContribution<PluginsVie
 
     registerCommands(commands: CommandRegistry): void {
         super.registerCommands(commands);
+        commands.registerCommand({ id: 'codedna.plugins.open', label: 'CodeDNA: Language plugins' }, {
+            execute: () => this.openView({ activate: true, reveal: true })
+        });
         commands.registerCommand({ id: 'codedna.extensions.open', label: 'CodeDNA: Open Extensions' }, {
             execute: () => this.openView({ activate: true, reveal: true })
         });

@@ -1,0 +1,19 @@
+warning: in the working copy of 'Price.java', LF will be replaced by CRLF the next time Git touches it
+✔ snapshot comparison reads committed content despite later working edits (157.0297ms)
+✔ snapshot reader rejects revisions and paths outside its immutable contract (3.6589ms)
+✔ snapshot missing files remain errors instead of invented empty content (156.6608ms)
+✔ all four themes register with distinct selectable identities (61.1464ms)
+✔ workflow navigation uses stable open commands and does not toggle panels shut (70.9232ms)
+✔ comparison handles modified files without reading a nonexistent side (136.1956ms)
+✔ comparison handles added files without reading a nonexistent side (94.1538ms)
+✔ comparison handles deleted files without reading a nonexistent side (81.0673ms)
+✔ comparison handles renamed files without reading a nonexistent side (103.1769ms)
+✔ a comparison finishing after the user changes selection does not open stale code (97.2864ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2846.923

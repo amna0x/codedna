@@ -1,3 +1,4 @@
+import { WorkflowNav } from './ui';
 import * as React from '@theia/core/shared/react';
 import { inject, injectable, postConstruct } from '@theia/core/shared/inversify';
 import { ProgressService } from '@theia/core/lib/common/progress-service';
@@ -111,6 +112,7 @@ export class HistoryViewWidget extends ReactWidget {
     protected render(): React.ReactNode {
         const history = this.history;
         return <div>
+            <WorkflowNav workspace={this.workspace} current='history' />
             <header className='cd-header'>
                 <h2>Project history</h2>
                 <p className='cd-subtitle'>Saved test runs of this project. Complete ones become the history CodeDNA needs before it trusts its risk estimates.</p>

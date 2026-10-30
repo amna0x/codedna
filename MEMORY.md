@@ -1117,3 +1117,16 @@ branchfix; finalUIpackage/coremustincludeit(D098candidatepredatesit). No new780
 fullsuite/32frozenclaim fornewURL. CodeDNAChangesopenedandShowchangesworked4files
 6parts2affectedclasses; earlierblankwasSourceControlview. Friendshoulddistinguish
 theseviews. See CATALOGUE_ENDPOINT_D099.md. NoUIfileedit/testexecutionperformed.
+
+## D100 UI improvements — 2026-10-30
+
+User nowexplicitlyasksusUIimprovement(theearlierfriendonlyplanissuperseded).
+AddedCodechangeslabel,sharedlabellednavigation/stableopencommands,4themeselector,
+first-runguidanceandreadonlyBefore/Afterdiffwithseparatecurrentfileaction.
+GittextreadNodeRPCvalidatesSHA/path,1MB/15slimits,noshell/extdiff/textconv.
+48existing+10newUIchecks/typecheckpass;actualoriginalappTheiabrowser/node/electron
+build0errors. GUIvisualacceptance NOTdone:appclosed,CUArelaunchdidnotsucceed.
+OriginalcheckoutUIwasclean;15authoredfilescopiedwithbackupinto.diagnostics;
+noworiginalhasuncommittedUI+cataloguefix,donotdiscard. HandoffbranchcontainsUI.
+Newtesthelperextra5casesonlyinworktree,copyifneeded. No installer/core rebuild,
+research/gatechanges/projectfileedits/testbuilds. See UI_IMPROVEMENTS_D100.md.

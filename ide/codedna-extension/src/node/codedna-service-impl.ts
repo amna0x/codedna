@@ -1,4 +1,4 @@
-import { ChildProcess, spawn } from 'child_process';
+import { execFile, ChildProcess, spawn } from 'child_process';
 import { randomBytes } from 'crypto';
 import { createServer } from 'net';
 import { delimiter } from 'path';
@@ -44,6 +44,21 @@ export class CodeDnaServiceImpl implements CodeDnaService, BackendApplicationCon
     onStop(): void {
         this.process?.kill();
         this.process = undefined;
+    }
+
+    /** Read immutable text only: no project build, external diff, or textconv. */
+    snapshotFile(repository: string, revision: string, path: string): Promise<string> {
+        if (!/^[0-9a-f]{40}$/.test(revision) || !path || path.startsWith('/') || path.includes('\\') ||
+            path.split('/').some(part => part === '..' || part === '.') || /^[a-z]:/i.test(path)) {
+            return Promise.reject(new Error('Invalid snapshot revision or relative file path.'));
+        }
+        return new Promise((resolve, reject) => execFile('git', ['-c', 'core.fsmonitor=false', '-C', repository,
+            'show', '--no-ext-diff', '--no-textconv', `${revision}:${path}`],
+        { encoding: 'utf8', maxBuffer: 1024 * 1024, timeout: 15000, windowsHide: true }, (error, stdout) => {
+            if (error) { reject(new Error('Could not read this snapshot. The file may be unavailable or larger than 1 MB.')); }
+            else if (stdout.includes('\0')) { reject(new Error('Binary files cannot be displayed as a code comparison.')); }
+            else { resolve(stdout); }
+        }));
     }
 
     async status(): Promise<CodeDnaStatus> {

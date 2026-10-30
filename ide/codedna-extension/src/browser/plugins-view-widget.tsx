@@ -1,3 +1,5 @@
+import { CodeDnaWorkspace } from './codedna-workspace';
+import { WorkflowNav } from './ui';
 import * as React from '@theia/core/shared/react';
 import { inject, injectable, postConstruct } from '@theia/core/shared/inversify';
 import { ConfirmDialog } from '@theia/core/lib/browser/dialogs';
@@ -21,6 +23,7 @@ export class PluginsViewWidget extends ReactWidget {
     static readonly ID = 'codedna.plugins';
     static readonly LABEL = 'Language plugins';
 
+    @inject(CodeDnaWorkspace) protected readonly workspace: CodeDnaWorkspace;
     @inject(CodeDnaService) protected readonly codedna: CodeDnaService;
     @inject(ProgressService) protected readonly progress: ProgressService;
 
@@ -110,6 +113,7 @@ export class PluginsViewWidget extends ReactWidget {
 
     protected render(): React.ReactNode {
         return <div>
+            <WorkflowNav workspace={this.workspace} current='plugins' />
             <header className='cd-header'>
                 <h2>Language plugins</h2>
                 <p className='cd-subtitle'>Each language CodeDNA understands comes from a plugin. Java and Python are bundled.</p>
