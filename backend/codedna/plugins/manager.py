@@ -25,7 +25,7 @@ from pathlib import Path, PurePosixPath
 
 from codedna.plugins.catalogue import CatalogueError, PluginVersion, validate_catalogue
 
-OFFICIAL_CATALOGUE = "https://mohibk0004-del.github.io/codedna/catalogue/index.json"
+OFFICIAL_CATALOGUE = "https://mohibk0004-del.github.io/codedna/website/catalogue/index.json"
 _MAX_BYTES = 50 * 1024 * 1024
 
 Download = Callable[[str], bytes]

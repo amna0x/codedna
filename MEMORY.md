@@ -1105,3 +1105,15 @@ thenpackaging/extraction/hashchecks. OlderD085/D086kitsunchanged,notcurrentrelea
 Clean-PCfriendacceptance stillrequired. NoGUI/installation/registry/publication,
 push/merge/researchchange orstashop. Newcandidatepath:
 build/desktop-D098-2026-10-30/core/dist/codedna-core/.
+
+## D099 catalogue path and demo navigation — 2026-10-30
+
+Old official URL/codedna/catalogue/index.json404; published/codedna/website/catalogue/index.json200.
+Fixed manager.OFFICIAL_CATALOGUE only, verifiedproductionfetchvalidatesJava/Python.
+18plugin-manager tests passed146.51s,1Starlette/httpxwarning. Officialdownloadallowlist
+/checksum/consentunchanged; indexonlybundledversions,notnewdownloadablelanguages.
+RunningIDEstilloriginalcheckout; restartoldbinaryalonewon'tfixURL. Friendmustpull
+branchfix; finalUIpackage/coremustincludeit(D098candidatepredatesit). No new780
+fullsuite/32frozenclaim fornewURL. CodeDNAChangesopenedandShowchangesworked4files
+6parts2affectedclasses; earlierblankwasSourceControlview. Friendshoulddistinguish
+theseviews. See CATALOGUE_ENDPOINT_D099.md. NoUIfileedit/testexecutionperformed.
