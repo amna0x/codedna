@@ -1,5 +1,11 @@
 # CodeDNA IDE
 
+New to the project? Follow the [five-minute demo guide](../docs/DEMO_GUIDE.md).
+Tests to run starts with the comparison and one **Suggest tests** action.
+**Recommendation settings** holds the selection method and optional history file;
+the active method remains visible. Results lead with the test count and fallback
+status. Audit details and decision exports remain available in expandable sections.
+
 A desktop IDE built on [Eclipse Theia](https://theia-ide.org) 1.76.0
 (Electron 42) with CodeDNA views. Theia provides the editor, file explorer,
 terminal and preferences; the `codedna-extension` package adds:
@@ -63,6 +69,11 @@ Node and Python; end users still need Git and any project build tools they use.
 
 ## Build and run
 
+CodeDNA offers a walkthrough on first launch. It guides you through opening a
+Git project, viewing changes, and reviewing recommended tests. Use **Help →
+CodeDNA Walkthrough** or search for **CodeDNA Walkthrough** in the Command
+Palette to replay it.
+
 On Windows, `start.bat` in the repository root does all of this: it builds
 the IDE if needed, sets `CODEDNA_EXECUTABLE` to `.venv\Scripts\codedna.exe`
 and `JAVA_HOME` to the portable JDK when one is recorded, and opens a demo
@@ -122,6 +133,14 @@ On a checkout inside OneDrive, stage the installer outside the synced tree:
 This changes the generated output location, not the checkout or project data.
 
 ### Troubleshooting
+
+- `Cannot read file ... @vscode/windows-ca-certs/.../crypt32.node`: an optional
+  package can have its package.json installed without its compiled native entry
+  (for example after installing with scripts disabled). The bundler checks entry
+  resolution from the importing package and leaves the optional import external
+  when unavailable. Update source and rebuild. A warning about the unavailable
+  native entry is expected; certificate verification is not disabled. A compiled
+  addon still uses normal native bundling.
 
 - `[build/node] Finished with 1 errors` / `esbuild exited with an unexpected
   code: 1`: usually a native module (`keymapping.node`, `pty.node`, …) was

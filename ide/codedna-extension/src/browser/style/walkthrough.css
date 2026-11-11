@@ -1,0 +1,70 @@
+.cd-tour {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.cd-tour-spotlight {
+  position: absolute;
+  border-radius: 8px;
+  outline: 2px solid var(--theia-focusBorder);
+  box-shadow: 0 0 0 200vmax rgb(0 0 0 / 54%);
+}
+
+.cd-tour-dim {
+  inset: 0;
+  width: auto !important;
+  height: auto !important;
+  left: 0 !important;
+  top: 0 !important;
+  background: rgb(0 0 0 / 46%);
+  box-shadow: none;
+  outline: none;
+}
+
+.cd-tour-card {
+  position: absolute;
+  box-sizing: border-box;
+  width: min(340px, calc(100vw - 24px));
+  max-height: calc(100vh - 24px);
+  overflow: auto;
+  padding: 18px;
+  border: 1px solid var(--theia-widget-border, transparent);
+  border-radius: 10px;
+  box-shadow: 0 8px 30px rgb(0 0 0 / 32%);
+  background: var(--theia-editorWidget-background, var(--theia-editor-background));
+  color: var(--theia-editorWidget-foreground, var(--theia-foreground));
+  font-family: var(--theia-ui-font-family);
+  font-size: 13px;
+  line-height: 1.5;
+  pointer-events: auto;
+}
+
+.cd-tour-card:focus-visible,
+.cd-tour-card button:focus-visible {
+  outline: 2px solid var(--theia-focusBorder);
+  outline-offset: -2px;
+}
+
+.cd-tour-card h2 { margin: 2px 0 8px; font-size: 18px; }
+.cd-tour-card p { margin: 0; }
+.cd-tour-count { color: var(--theia-descriptionForeground); font-size: 12px; }
+.cd-tour-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+.cd-tour-card button[hidden] { display: none; }
+.cd-tour-card .theia-button {
+  min-width: 0;
+  min-height: 29px;
+  margin: 0;
+  padding-inline: 10px;
+  border-radius: 7px;
+  transition: transform 130ms ease-out;
+}
+.cd-tour-card .theia-button.main { margin-inline-start: auto; }
+.cd-tour-card .theia-button:active { transform: scale(0.98); }
+
+@media (prefers-reduced-motion: reduce) {
+  .cd-tour-card .theia-button { transition: none; }
+  .cd-tour-card .theia-button:active { transform: none; }
+}

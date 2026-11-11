@@ -6,22 +6,20 @@ import { MonacoThemingService } from '@theia/monaco/lib/browser/monaco-theming-s
 export const CODEDNA_THEME_ID = 'codedna-dark';
 
 /**
- * CodeDNA Dark (D-031): neutral graphite surfaces, warm off-white text, no
- * accent hue. Colour is reserved for meaning — new (green), changed (amber),
- * removed / error (red) — so nothing on screen competes with the code or with
- * those signals. No glows, gradients or translucency.
+ * CodeDNA Dark uses graphite surfaces and warm off-white text. Semantic
+ * colours distinguish additions, changes, and removals.
  */
 const C = {
-    canvas: '#0C0C0D',     // gaps between panels
-    surface: '#151516',    // side panels
-    editor: '#121213',     // main stage
-    raised: '#1C1C1E',     // menus, popovers, inputs
-    line: '#FFFFFF12',
-    lineSoft: '#FFFFFF0A',
-    text: '#ECECE8',
-    muted: '#9C9C96',
-    faint: '#66665F',
-    ink: '#111112',        // text on the light primary button
+    canvas: '#292827',     // title bar and activity rail
+    surface: '#232220',    // side panels
+    editor: '#191817',     // main stage
+    raised: '#2E2D2B',     // menus, popovers, inputs
+    line: '#FFFFFF1A',
+    lineSoft: '#FFFFFF10',
+    text: '#F1EEE8',
+    muted: '#B3AEA5',
+    faint: '#8C877F',
+    ink: '#211F1C',        // text on the light primary button
     green: '#86B38A',
     amber: '#D8A657',
     red: '#D8675F',

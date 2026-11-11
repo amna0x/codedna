@@ -16,9 +16,9 @@ import { breakable, friendlyReason, friendlyWarning, packageName, plural, simple
 import { Chip, ComparePicker, ErrorNotice, FirstRun, Spinner } from './ui';
 
 const STRATEGIES: { value: SelectionStrategy; label: string }[] = [
-    { value: 'risk', label: 'Validated risk stopping' },
-    { value: 'dependency', label: 'Affected tests only' },
-    { value: 'all', label: 'All discovered tests' }
+    { value: 'risk', label: 'Use checked project history (recommended)' },
+    { value: 'dependency', label: 'Follow code links only' },
+    { value: 'all', label: 'Include every test' }
 ];
 
 /**
@@ -246,12 +246,16 @@ export class TestsViewWidget extends ReactWidget {
         return <div>
             <header className='cd-header'>
                 <h2>Tests to run</h2>
-                <p className='cd-subtitle'>Run the tests your change can break — and see why each one is needed.</p>
+                <p className='cd-subtitle'>Find existing tests to check your change. Review the list, then choose whether to run them.</p>
             </header>
             <form className='cd-controls' onSubmit={e => { e.preventDefault(); this.suggest(); }}>
                 <ComparePicker comparison={this.comparison} disabled={this.loading} />
+                <p className='cd-help'>Method: {STRATEGIES.find(s => s.value === this.strategy)?.label}.
+                    {' '}Suggesting tests does not run project code.</p>
+                <details>
+                    <summary>Recommendation settings</summary>
                 <label className='cd-field'>
-                    <span className='cd-field-label'>Which tests</span>
+                    <span className='cd-field-label'>How to choose tests</span>
                     <select value={this.strategy} disabled={this.loading}
                         onChange={e => { this.strategy = e.target.value as SelectionStrategy; this.invalidate(); }}>
                         {STRATEGIES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
@@ -263,11 +267,15 @@ export class TestsViewWidget extends ReactWidget {
                         placeholder='Use this project’s saved history'
                         onChange={e => { this.historyCsv = e.target.value; this.invalidate(); }} />
                 </label>}
-                <button className='cd-button' type='submit'  disabled={this.loading} aria-busy={this.loading}>
+                    <p className='cd-help'>Leave the history file empty to use this project’s saved runs.
+                        If history cannot justify skipping tests, the recommended method keeps the full suite.
+                        Following code links alone has no validated failure-risk estimate.</p>
+                    <button className='cd-button' type='button' onClick={() => this.commands.executeCommand('codedna.history.open')}>
+                        Open project history
+                    </button>
+                </details>
+                <button className='cd-button' data-codedna-tour='suggest' type='submit' disabled={this.loading} aria-busy={this.loading}>
                     {this.loading ? <><Spinner /> Finding tests…</> : 'Suggest tests'}
-                </button>
-                <button className='cd-button' type='button' onClick={() => this.commands.executeCommand('codedna.history.open')}>
-                    Open project history
                 </button>
             </form>
             {this.loading && this.analysisJob && <div className='cd-notice' role='status' aria-live='polite'>
@@ -291,8 +299,17 @@ export class TestsViewWidget extends ReactWidget {
         const everything = report.selected.length === report.total_tests && report.total_tests > 0;
         const mandatoryFull = everything && report.policy?.pinned.length === report.total_tests;
         return <div className='cd-results'>
+            <div data-codedna-tour='review'>
+            <p className='cd-lede'>
+                {report.total_tests === 0
+                    ? 'No JUnit or pytest tests were found in this project.'
+                    : report.selected.length === 0
+                        ? 'No tests are recommended by the current selection policy.'
+                        : <>Run {report.selected.length} of {plural(report.total_tests, 'test class or module', 'test classes or modules')}.
+                            {everything ? ' That’s the full suite.' : ` ${report.skipped.length} not selected.`}</>}
+            </p>
             <section className='cd-notice' aria-label='Risk evidence'>
-                <h3>{mandatoryFull ? 'Full suite required by policy' : risk?.status === 'validated_history' ? 'Validated on earlier project history' : 'Risk unvalidated'}</h3>
+                <h3>{mandatoryFull ? 'Project rules require every test' : risk?.status === 'validated_history' ? 'Earlier project history supports this recommendation' : 'Skipping tests has not been validated'}</h3>
                 {mandatoryFull ? <p>Every discovered test is mandatory. Model fitting cannot shorten this plan.</p> : risk?.status === 'validated_history'
                     ? risk.method === 'crc' ? <>
                         <p>Conformal stopping target: {(risk.target * 100).toFixed(0)}% missed-failure rate among failing commits.
@@ -302,6 +319,7 @@ export class TestsViewWidget extends ReactWidget {
                         Target: {(risk.target * 100).toFixed(0)}%. This is an estimate, not a guarantee.</p>
                     : <p>{risk ? 'Run the full suite because the evidence does not justify risk-based skipping.'
                         : 'This structural selection has no validated probability of missing failures.'}</p>}
+                <details><summary>Why this recommendation? Technical evidence</summary>
                 {risk?.validation && <p>Model audit (all audit commits): {risk.validation.commits} commits,
                     {' '}{risk.validation.failing_commits} with failures. All-commit miss-rate upper bound:
                     {' '}{percent(risk.validation.miss_upper_bound)}.</p>}
@@ -319,7 +337,7 @@ export class TestsViewWidget extends ReactWidget {
                         use HEAD to WORKTREE for a new uncommitted change, or supply history from before the comparison base.
                         The earlier history must still pass its audit.</p>}
                 {!!risk?.reasons.length && <ul>{risk.reasons.map(reason => <li key={reason}>{reason}</li>)}</ul>}
-                <details><summary>Evidence health and next steps</summary>
+                <h4>Evidence health and next steps</h4>
                     <p>Project: <code>{report.repository}</code></p>
                     <p>Evidence must precede base <code>{report.base_commit}</code>. Target: <code>{report.head_commit}</code>.</p>
                     {risk?.provenance?.history_sha256 && <p>History fingerprint: <code>{risk.provenance.history_sha256}</code></p>}
@@ -328,9 +346,8 @@ export class TestsViewWidget extends ReactWidget {
                     {risk?.conformal?.note && <p>{risk.conformal.note}</p>}
                 </details>
             </section>
-            <button className='cd-button' onClick={() => this.exportEvidence(report)}>Export decision evidence</button>
-            <p className='cd-help'>The export includes local paths, test names and risk evidence. It excludes source code and raw build logs.</p>
-            <button className='cd-button' disabled={this.loading || !report.total_tests}
+            </div>
+            <button className='cd-button cd-primary' disabled={this.loading || !report.selected.length}
                 onClick={() => this.runSelected()}>
                 {this.loading ? 'Running…' : `Run ${report.selected.length} recommended tests`}
             </button>
@@ -349,15 +366,6 @@ export class TestsViewWidget extends ReactWidget {
                     : `Not saved as history: ${this.execution.recording.reason}`}</p>}
                 <p className='cd-footnote'>Logs and reports: {this.execution.output_dir}</p>
             </section>}
-            <p className='cd-meta'>Compared commits: {report.base_commit.slice(0, 8)} → {report.head_commit.slice(0, 8)}</p>
-            <p className='cd-lede'>
-                {report.total_tests === 0
-                    ? 'No JUnit or pytest tests were found in this project.'
-                    : report.selected.length === 0
-                        ? 'No tests are recommended by the current selection policy.'
-                        : <>Run {report.selected.length} of {plural(report.total_tests, 'test', 'tests')}.
-                            {everything ? ' That’s all of them.' : ` You can skip ${report.skipped.length}.`}</>}
-            </p>
             <p className='cd-help'>
                 {mandatoryFull ? 'No test-time savings are proposed: policy requires every test.' : time
                     ? `That saves about ${Math.round(time.saved_ratio * 100)}% of test time.`
@@ -416,6 +424,15 @@ export class TestsViewWidget extends ReactWidget {
             <p className='cd-footnote'>
                 Risk-based skipping requires a separate prior audit. Refresh evidence with full-suite runs; selected-only results cannot reveal missed failures.
             </p>
+            <details>
+                <summary>Saved runs and decision report</summary>
+                <p className='cd-meta'>Compared commits: {report.base_commit.slice(0, 8)} → {report.head_commit.slice(0, 8)}</p>
+                <button className='cd-button' type='button' onClick={() => this.commands.executeCommand('codedna.history.open')}>
+                    Open project history
+                </button>
+                <button className='cd-button' onClick={() => this.exportEvidence(report)}>Export decision evidence</button>
+                <p className='cd-help'>The export includes local paths, test names and risk evidence. It excludes source code and raw build logs.</p>
+            </details>
         </div>;
     }
 }

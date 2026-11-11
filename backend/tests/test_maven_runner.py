@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import sys
+from types import SimpleNamespace
 from pathlib import Path
 
 import pytest
@@ -32,6 +33,22 @@ SPEC = {"tests": {
     "a.HalfTest": {"status": "failed", "time": 0.25, "cases": ["half"],
                    "classes": ["a/Price"], "lines": {"a/Price.java": [8]}},
 }}
+
+
+@pytest.mark.parametrize('platform,tool,expected', [
+    ('win32', 'maven', 'mvn.cmd'), ('linux', 'maven', 'mvn'),
+    ('win32', 'gradle', 'gradle.bat'), ('linux', 'gradle', 'gradle'),
+])
+def test_discovery_prefers_platform_launcher_when_both_scripts_exist(repo, monkeypatch, platform, tool, expected):
+    from codedna_java import maven
+    names = ('mvn', 'mvn.cmd') if tool == 'maven' else ('gradle', 'gradle.bat')
+    for name in names:
+        repo.write(f'bin/{name}', 'launcher fixture\n')
+    repo.commit('both platform launchers')
+    monkeypatch.setattr(maven, 'sys', SimpleNamespace(platform=platform))
+    monkeypatch.setattr(maven.shutil, 'which', lambda name: str(repo.path / 'bin' / name) if name in names else None)
+    discover = maven.find_maven if tool == 'maven' else maven.find_gradle
+    assert discover() == [str(repo.path / 'bin' / expected)]
 
 
 @pytest.fixture

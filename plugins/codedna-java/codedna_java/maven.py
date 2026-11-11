@@ -17,6 +17,7 @@ from __future__ import annotations
 import re
 import shutil
 import subprocess
+import sys
 import time
 from pathlib import Path
 
@@ -59,7 +60,10 @@ class BuildError(CodeDNAGitError):
 
 
 def find_maven() -> list[str]:
-    executable = shutil.which("mvn") or shutil.which("mvn.cmd")
+    # Windows distributions also ship an extensionless POSIX script. Python
+    # 3.12 can resolve that before mvn.cmd, but CreateProcess cannot execute it.
+    names = ("mvn.cmd", "mvn") if sys.platform == "win32" else ("mvn", "mvn.cmd")
+    executable = next((path for name in names if (path := shutil.which(name))), None)
     if executable is None:
         raise BuildError("Maven (mvn) not found on PATH; install Maven 3.9+ or pass --mvn")
     return [executable]
@@ -67,7 +71,8 @@ def find_maven() -> list[str]:
 
 def find_gradle() -> list[str]:
     # The system Gradle, never the repository's own wrapper script.
-    executable = shutil.which("gradle") or shutil.which("gradle.bat")
+    names = ("gradle.bat", "gradle") if sys.platform == "win32" else ("gradle", "gradle.bat")
+    executable = next((path for name in names if (path := shutil.which(name))), None)
     if executable is None:
         raise BuildError("Gradle not found on PATH; install Gradle 8+ or pass --gradle")
     return [executable]

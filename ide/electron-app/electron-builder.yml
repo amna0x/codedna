@@ -12,6 +12,7 @@ files:
   - scripts/**
   - "!scripts/**/*.test.cjs"
   - plugins/**
+  - resources/codedna.png
   - package.json
   - "!**/*.map"
 # Extensions run from disk, not from an asar archive.
@@ -26,10 +27,13 @@ extraResources:
 npmRebuild: false
 win:
   target: nsis
+  icon: resources/codedna.ico
 nsis:
   oneClick: false
   perMachine: false
   allowToChangeInstallationDirectory: true
   createDesktopShortcut: true
   shortcutName: CodeDNA IDE
+  installerIcon: resources/codedna.ico
+  uninstallerIcon: resources/codedna.ico
 publish: null

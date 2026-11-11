@@ -116,7 +116,7 @@ export class HistoryViewWidget extends ReactWidget {
                 <p className='cd-subtitle'>Saved test runs of this project. Complete ones become the history CodeDNA needs before it trusts its risk estimates.</p>
             </header>
             <form className='cd-controls' onSubmit={e => { e.preventDefault(); this.refresh(); }}>
-                <button className='cd-button' disabled={this.loading} aria-busy={this.loading}>
+                <button className='cd-button' type='submit' disabled={this.loading} aria-busy={this.loading}>
                     {this.loading ? <><Spinner /> Working…</> : 'Refresh saved runs'}
                 </button>
             </form>
@@ -126,7 +126,7 @@ export class HistoryViewWidget extends ReactWidget {
                     <input value={this.source} disabled={this.loading} placeholder='Full path to results.json'
                         onChange={e => { this.source = e.currentTarget.value; this.update(); }} />
                 </label>
-                <button className='cd-button' disabled={this.loading || !this.source.trim()}>Import results</button>
+                <button className='cd-button' type='submit' disabled={this.loading || !this.source.trim()}>Import results</button>
                 <p className='cd-help'>Reads a saved CodeDNA results.json. Importing and adding history never execute project code.</p>
             </form>
             {this.error && <ErrorNotice message={this.error} />}

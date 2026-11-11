@@ -34,7 +34,7 @@
     "download:plugins": "theia download:plugins --rate-limit=15 --parallel=false",
     "package": "npm run build:core && npm run build --workspace codedna-extension && npm run rebuild && npm run download:plugins && theia build --mode production && electron-builder --win",
     "build:core": "node scripts/build-core.cjs",
-    "test:runtime": "node --test scripts/desktop-runtime.test.cjs"
+    "test:runtime": "node --test scripts/desktop-runtime.test.cjs scripts/optional-windows-certs.test.mjs"
   },
   "theia": {
     "target": "electron",
@@ -44,8 +44,9 @@
         "reloadOnReconnect": true,
         "defaultTheme": "codedna-dark",
         "electron": {
+          "appUserModelId": "org.codedna.ide",
           "windowOptions": {
-            "backgroundColor": "#07090D"
+            "backgroundColor": "#191817"
           }
         },
         "preferences": {

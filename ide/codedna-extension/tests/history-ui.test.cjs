@@ -95,7 +95,7 @@ test('unvalidated risk remains unvalidated, retains core reason and full-suite r
     const report = { base_commit: 'a'.repeat(40), head_commit: 'b'.repeat(40), warnings: [], total_tests: 1,
         selected: [{ test: 'example.Test', reasons: [] }], skipped: [], risk: { status: 'unvalidated', reasons: [reason] } };
     const before = JSON.stringify(report); const content = text(view.renderReport(report));
-    assert.match(content, /Risk unvalidated/); assert.match(content, /Run the full suite/);
+    assert.match(content, /Skipping tests has not been validated/); assert.match(content, /Run the full suite/);
     assert.ok(content.includes(reason)); assert.match(content, /already contains results/);
     assert.equal(JSON.stringify(report), before);
 });
@@ -219,7 +219,7 @@ test('a fully mandatory suite explains the policy without promising savings from
         skipped: [], warnings: [], policy: { pinned: ['ATest'] },
         risk: { status: 'unvalidated', reasons: ['All discovered tests are required by the must-run policy; model fitting cannot reduce this suite.'] } };
     const content = text(view.renderReport(report));
-    assert.match(content, /Full suite required by policy/);
+    assert.match(content, /Project rules require every test/);
     assert.match(content, /Model fitting cannot shorten this plan/);
     assert.ok(!content.includes('Risk unvalidated') && !content.includes('after your tests have been run once'));
 });

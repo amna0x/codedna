@@ -1,5 +1,45 @@
 # CodeDNA — Decision Log
 
+## D-089 — CodeDNA icon and desktop appearance
+
+The app uses an ivory DNA helix and code brackets on a flat charcoal tile.
+The PNG appears in the workbench and is loaded by the Electron launcher.
+Windows packaging uses the matching multi-size ICO for the executable and
+installer. The dark workbench uses continuous panels, system typography,
+quiet secondary controls, and translucent Command Palette chrome with a
+solid fallback for reduced transparency and increased contrast.
+
+## D-088 — First-run walkthrough in the desktop workbench
+
+The first-run walkthrough teaches the Changes and Tests to run workflow using
+the user's Git project. A versioned Theia profile key remembers progress and
+dismissal. Help and the Command Palette can replay the tour. The walkthrough
+uses workbench controls and keeps explicit confirmation for test execution.
+
+## D-087 — Prefer Windows build-tool launchers on Windows
+
+2026-11-02: full local validation with the owner's Maven 3.10.0 distribution
+exposed Python 3.12 resolving its extensionless POSIX `mvn` script ahead of
+`mvn.cmd`. Windows CreateProcess then failed with WinError 193. Java plugin
+discovery now checks `mvn.cmd` first on Windows and `mvn` first elsewhere;
+Gradle follows the equivalent `gradle.bat`/`gradle` ordering. No shell=True,
+repository wrapper execution or execution-consent changes. Four offline
+regressions use temporary Git repositories with both launchers present.
+
+Initial full run: 698 passed, 14 failed, 2 skipped. Three failures exercised
+Maven launch; eleven needed the existing declared `installer` dependency.
+Focused follow-up: 21 passed (including real Maven integration and four new
+discovery regressions), 11 installer-related failures, one absent-Gradle skip.
+`installer==0.7.0` and the existing optional plotting dependency were then
+installed. Final full validation is recorded separately; these failed runs
+are retained under build/, not counted as passing.
+
+Final validation after both fixes: 717 passed, one absent-Gradle skip, one existing
+Starlette deprecation warning in 586.82s. Full command used `python -u -m pytest
+--run-maven -q --junitxml=build/maven-verified-20261102.xml`; matching `.log`
+records console output. Maven/JaCoCo and multi-module Maven ran successfully.
+No original study was rerun or research claim changed.
+
 Short records of important choices. Add a new entry instead of editing old
 ones when a decision changes.
 
@@ -2042,3 +2082,21 @@ cases, with boundaries favoring guidance, are not independent real bugs or a
 net-CI speedup. A difference is not necessarily a regression; no witness does
 not validate skipping. The risk policy and original mixed findings are unchanged.
 See the D085 source/frozen/release/pilot evidence JSONs and pilot FINDINGS.md.
+
+## D-086 — Beginner demo: progressive disclosure in Tests to run
+
+2026-11-01: owner requested a teachable demo and simpler UI for starter users.
+Keep the existing D-031 visual style. Show the active selection method and one
+Suggest tests action; put method controls and optional history CSV under
+Recommendation settings. Lead results with selected/total test classes/modules
+and an explicit fallback/risk status. Keep audit evidence one expansion away;
+put history/report actions below results. Disable execution for an empty plan.
+Explain committed versus saved uncommitted edits in the shared comparison picker.
+
+The Python selection policy, risk numbers, history eligibility and execution
+consent are unchanged. This is Milestone 6 presentation work. The prepared demo
+and teaching script are in DEMO_GUIDE.md. TypeScript compilation and all 51 IDE
+workflow tests pass. Full backend validation is incomplete; a dedicated real
+Maven integration check failed because Maven is absent from PATH. No packaged
+installer or live GUI acceptance is claimed for these edits. Local Graphify AST
+navigation was refreshed; document semantic extraction was not rerun.

@@ -4,6 +4,9 @@
 Java projects in continuous integration.** A Software Engineering Final Year
 Project.
 
+For a beginner walkthrough and call rehearsal, see the
+[five-minute demo guide](docs/DEMO_GUIDE.md).
+
 Given a Git repository and two commits, CodeDNA reports changed code, follows
 its potential dependencies and recommends regression tests with reasons. Its
 Java risk-stopping path requires prior target-project evidence; insufficient

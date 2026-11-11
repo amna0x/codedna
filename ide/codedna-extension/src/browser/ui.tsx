@@ -11,6 +11,11 @@ export function ComparePicker({ comparison, disabled }: { comparison: CodeDnaCom
                 {PRESETS.map(p => <option key={p.value} value={p.value}>{p.label}</option>)}
             </select>
         </label>
+        <p className='cd-help'>{comparison.preset === 'uncommitted'
+            ? 'Save your files first. CodeDNA compares them with your latest commit.'
+            : comparison.preset === 'custom'
+                ? 'Compare two saved versions using commit IDs or branch names.'
+                : 'Compares saved Git commits. Uncommitted edits are excluded.'}</p>
         {comparison.preset === 'custom' && <div className='cd-custom-range'>
             <label className='cd-field'>
                 <span className='cd-field-label'>From</span>
@@ -44,7 +49,7 @@ export function ErrorNotice({ message }: { message: string }): React.ReactElemen
 export function FirstRun({ action }: { action: string }): React.ReactElement {
     return <ol className='cd-steps'>
         <li><span>Open your project folder</span> <span className='cd-meta'>File → Open Folder…</span></li>
-        <li><span>Pick what to compare</span> <span className='cd-meta'>your last commit is a good start</span></li>
+        <li><span>Pick what to compare</span> <span className='cd-meta'>Choose My uncommitted changes for saved edits, or My last commit for a committed change.</span></li>
         <li><span>Press {action}</span></li>
     </ol>;
 }

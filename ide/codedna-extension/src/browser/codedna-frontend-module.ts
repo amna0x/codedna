@@ -1,4 +1,6 @@
 import { ContainerModule } from '@theia/core/shared/inversify';
+import { CommandContribution } from '@theia/core/lib/common/command';
+import { MenuContribution } from '@theia/core/lib/common/menu';
 import { FrontendApplicationContribution, WidgetFactory, bindViewContribution } from '@theia/core/lib/browser';
 import { ApplicationShellOptions } from '@theia/core/lib/browser/shell/application-shell';
 import { ServiceConnectionProvider } from '@theia/core/lib/browser/messaging/service-connection-provider';
@@ -16,12 +18,14 @@ import { PluginsViewWidget } from './plugins-view-widget';
 import { ReplayViewWidget } from './replay-view-widget';
 import { TestsViewWidget } from './tests-view-widget';
 import { CodeDnaThemeContribution } from './theme/codedna-theme';
+import { CodeDnaWalkthrough } from './walkthrough';
 // Geist / Geist Mono (SIL OFL 1.1), bundled so the UI looks the same on every machine.
 import '@fontsource-variable/geist';
 import '@fontsource-variable/geist-mono';
 // tsc does not copy CSS into lib/, so the bundle imports it from src (Theia convention).
 import '../../src/browser/style/codedna.css';
 import '../../src/browser/style/codedna-shell.css';
+import '../../src/browser/style/walkthrough.css';
 
 export default new ContainerModule((bind, _unbind, _isBound, rebind) => {
     // Side panels start a little wider (Theia default: 19 % of the window) so
@@ -33,6 +37,10 @@ export default new ContainerModule((bind, _unbind, _isBound, rebind) => {
 
     bind(CodeDnaThemeContribution).toSelf().inSingletonScope();
     bind(FrontendApplicationContribution).toService(CodeDnaThemeContribution);
+    bind(CodeDnaWalkthrough).toSelf().inSingletonScope();
+    bind(FrontendApplicationContribution).toService(CodeDnaWalkthrough);
+    bind(CommandContribution).toService(CodeDnaWalkthrough);
+    bind(MenuContribution).toService(CodeDnaWalkthrough);
 
     bind(CodeDnaService).toDynamicValue(ctx =>
         ServiceConnectionProvider.createProxy<CodeDnaService>(ctx.container, CODEDNA_SERVICE_PATH)

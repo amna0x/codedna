@@ -394,6 +394,12 @@ codedna-extension/src
 electron-app/package.json           product config: Theia packages, default theme
 ```
 
+The desktop walkthrough is a Theia frontend contribution. It waits for the
+workbench to be ready, opens the existing views, and positions its instructions
+beside their controls. Theia profile storage tracks whether the tour has started,
+finished, or been skipped. The existing analysis buttons and test confirmation
+remain the entry points for their respective actions.
+
 ## Known limitations (current)
 
 - IDE: compares commits only (no uncommitted changes yet); opens test files by

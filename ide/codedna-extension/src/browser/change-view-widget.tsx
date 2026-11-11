@@ -147,7 +147,7 @@ export class ChangeViewWidget extends ReactWidget {
                 <h2>Changes</h2>
                 <p className='cd-subtitle'>See what changed in your code and what else it might affect.</p>
             </header>
-            <form className='cd-controls' onSubmit={e => { e.preventDefault(); this.analyze(); }}>
+            <form className='cd-controls' data-codedna-tour='changes' onSubmit={e => { e.preventDefault(); this.analyze(); }}>
                 <ComparePicker comparison={this.comparison} disabled={this.loading} />
                 <button className='cd-button' type='submit' disabled={this.loading} aria-busy={this.loading}>
                     {this.loading ? <><Spinner /> Looking at your changes…</> : 'Show changes'}

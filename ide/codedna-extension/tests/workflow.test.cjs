@@ -29,6 +29,165 @@ const code = ts.transpileModule(source, { compilerOptions: {
 } }).outputText;
 const deferred = () => { let resolve, reject; const promise = new Promise((a, b) => { resolve = a; reject = b; }); return { promise, resolve, reject }; };
 const tick = () => new Promise(resolve => setImmediate(resolve));
+
+function walkthrough(saved, initialRoots = []) {
+    const source = fs.readFileSync(path.join(__dirname, '../src/browser/walkthrough.ts'), 'utf8');
+    const code = ts.transpileModule(source, { compilerOptions: {
+        module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, experimentalDecorators: true
+    } }).outputText;
+    const module = { exports: {} };
+    const frames = new Map();
+    let nextFrame = 0;
+    let roots = initialRoots;
+    let workspaceChanged;
+    let anchor;
+    const writes = [];
+    const reveals = [];
+    class Element {
+        children = [];
+        style = {};
+        listeners = {};
+        attributes = {};
+        classList = { toggle: (name, value) => { this[name] = value; } };
+        get lastElementChild() { return this.children.at(-1); }
+        get isConnected() { return this === document.body || !!this.parent?.isConnected; }
+        append(...nodes) { for (const node of nodes) { node.parent = this; this.children.push(node); } }
+        replaceChildren(...nodes) { this.children = []; this.append(...nodes); }
+        remove() { this.parent.children = this.parent.children.filter(node => node !== this); this.parent = undefined; }
+        focus() { document.activeElement = this; }
+        setAttribute(name, value) { this.attributes[name] = value; }
+        addEventListener(name, fn) { this.listeners[name] = fn; }
+        getBoundingClientRect() { return { left: 20, top: 100, right: 300, bottom: 260, width: 280, height: 160 }; }
+        closest() { return null; }
+        matches() { return this.tagName === 'button' && !this.disabled; }
+        querySelector(selector) {
+            for (const child of this.children) {
+                if ((selector === '[data-tour-focus]' && 'data-tour-focus' in child.attributes)
+                    || (selector === '[role=status]' && child.attributes.role === 'status')
+                    || (selector.includes('button:not') && child.matches())) { return child; }
+                const nested = child.querySelector(selector);
+                if (nested) { return nested; }
+            }
+            return null;
+        }
+    }
+    const document = {
+        body: new Element(), createElement(tagName) { return Object.assign(new Element(), { tagName }); },
+        querySelector: () => anchor
+    };
+    const editor = document.createElement('textarea');
+    document.body.append(editor);
+    editor.focus();
+    const window = {
+        innerWidth: 1000, innerHeight: 700, addEventListener() {}, removeEventListener() {},
+        requestAnimationFrame(fn) { frames.set(++nextFrame, fn); return nextFrame; },
+        cancelAnimationFrame(id) { frames.delete(id); }
+    };
+    class Observer { observe() {} unobserve() {} disconnect() {} }
+    vm.runInNewContext(code, { module, exports: module.exports, document, window, HTMLElement: Element,
+        MutationObserver: Observer, ResizeObserver: Observer,
+        require(id) {
+            if (id.endsWith('inversify')) { return { injectable: () => target => target, inject: () => () => {} }; }
+            if (id.endsWith('common-menus')) { return { CommonMenus: { HELP: ['menubar', '9_help'] } }; }
+            if (id.endsWith('workspace-commands')) { return { WorkspaceCommands: { OPEN_FOLDER: { id: 'workspace:openFolder' } } }; }
+            return {};
+        }
+    });
+    const tour = new module.exports.CodeDnaWalkthrough();
+    const ready = deferred();
+    tour.state = { reachedState: () => ready.promise };
+    tour.storage = { getData: async () => saved, setData: async (key, value) => writes.push([key, value]) };
+    tour.workspace = {
+        get roots() { return Promise.resolve(roots); },
+        onWorkspaceChanged(fn) { workspaceChanged = fn; return { dispose() { workspaceChanged = undefined; } }; }
+    };
+    let pickerCount = 0;
+    tour.commands = { executeCommand: async () => { pickerCount++; } };
+    tour.changes = { openView: async () => reveals.push('changes') };
+    tour.tests = { openView: async () => reveals.push('tests') };
+    let replay;
+    tour.registerCommands({ registerCommand(command, handler) { assert.equal(command.label, 'CodeDNA Walkthrough'); replay = handler.execute; } });
+    tour.registerMenus({ registerMenuAction(menu, action) {
+        assert.equal(menu.at(-1), '9_help');
+        assert.equal(action.commandId, 'codedna.walkthrough.open');
+    } });
+    tour.onDidInitializeLayout();
+    const card = () => document.body.children[1]?.children[1];
+    return {
+        tour, ready, writes, reveals, replay, document, editor, card, get pickerCount() { return pickerCount; },
+        title: () => card()?.children[1].textContent,
+        click: async label => {
+            const button = card().lastElementChild.children.find(node => node.textContent === label);
+            assert.ok(button, `Missing button ${label}`);
+            button.listeners.click();
+            await tick();
+        },
+        openProject: () => { roots = [{ path: root }]; workspaceChanged(roots); },
+        showAnchor: () => { anchor = document.createElement('button'); document.body.append(anchor); return anchor; },
+        position: () => { for (const [id, fn] of [...frames]) { frames.delete(id); fn(); } }
+    };
+}
+
+test('walkthrough waits for ready, handles folder cancellation and completes using an opened project', async () => {
+    const app = walkthrough();
+    assert.equal(app.card(), undefined);
+    app.ready.resolve();
+    await tick();
+    assert.equal(app.title(), 'Welcome to CodeDNA');
+    await app.click('Start walkthrough');
+    await app.click('Open Folder');
+    assert.equal(app.pickerCount, 1);
+    assert.equal(app.title(), 'Open a project');
+    assert.equal(app.writes.at(-1)[1], 'started');
+    app.openProject();
+    await tick();
+    assert.equal(app.title(), 'Show changes');
+    await app.click('Next');
+    assert.equal(app.title(), 'Suggest tests');
+    await app.click('Next');
+    assert.equal(app.title(), 'Review the recommendation');
+    await app.click('Finish');
+    assert.equal(app.card(), undefined);
+    assert.equal(app.document.activeElement, app.editor);
+    assert.equal(app.writes.at(-1)[1], 'completed');
+    assert.deepEqual(app.reveals, ['changes', 'tests', 'tests']);
+});
+
+test('walkthrough resumes after reload, centers without an anchor and focuses an available control', async () => {
+    const app = walkthrough('started', [{ path: root }]);
+    app.ready.resolve();
+    await tick();
+    assert.equal(app.title(), 'Show changes');
+    app.position();
+    assert.equal(app.card().style.left, '360px');
+    assert.equal(app.card().querySelector('[data-tour-focus]').hidden, true);
+    await app.click('Next');
+    const button = app.showAnchor();
+    app.position();
+    assert.equal(app.card().querySelector('[data-tour-focus]').hidden, false);
+    await app.click('Focus control');
+    assert.equal(app.document.activeElement, button);
+    await app.click('Skip');
+    assert.equal(app.writes.at(-1)[1], 'skipped');
+});
+
+for (const saved of ['completed', 'skipped']) {
+    test(`walkthrough stays dismissed for ${saved} profiles and can replay on demand`, async () => {
+        const app = walkthrough(saved, [{ path: root }]);
+        app.ready.resolve();
+        await tick();
+        assert.equal(app.card(), undefined);
+        await app.replay();
+        assert.equal(app.title(), 'Welcome to CodeDNA');
+        await app.click('Start walkthrough');
+        assert.equal(app.title(), 'Show changes');
+        app.card().listeners.keydown({ key: 'Escape', preventDefault() {}, stopPropagation() {} });
+        await tick();
+        assert.equal(app.card(), undefined);
+        assert.equal(app.writes.at(-1)[1], 'skipped');
+    });
+}
+
 const report = () => ({ repository: root, base_commit: 'a'.repeat(40), head_commit: head,
     selected: [{ test: 'example.ExampleTest', reasons: [] }], skipped: [], total_tests: 1, warnings: [] });
 const jobSource = fs.readFileSync(path.join(__dirname, '../src/browser/analysis-jobs-ui.ts'), 'utf8');
@@ -50,6 +209,13 @@ function widget() {
     class ConfirmDialog { open() { return state.confirm(); } }
     const module = { exports: {} };
     vm.runInNewContext(code, { exports: module.exports, module, require(id) {
+        if (id.endsWith('/react')) return { createElement: (type, props, ...children) => ({ type, props: props ?? {}, children }) };
+        if (id === './plain-language') return {
+            plural: (n, one, many) => `${n} ${n === 1 ? one : many}`,
+            simpleName: value => value, packageName: () => '', breakable: value => value,
+            friendlyReason: value => value, friendlyWarning: value => value
+        };
+        if (id === './decision-evidence') return { recoverySteps: () => ['Keep full-suite history.'] };
         if (id.endsWith('/inversify')) return { injectable: () => target => target, inject: () => () => {}, postConstruct: () => {} };
         if (id.endsWith('/react-widget')) return { ReactWidget };
         if (id.endsWith('/dialogs')) return { ConfirmDialog };
@@ -379,6 +545,57 @@ test('a late Changes file-open error cannot overwrite a newer comparison', async
 
 const sampleMetrics = () => ({ schema_version: 1, total_seconds: .5,
     stages: { git: { calls: 3, seconds: .1, self_seconds: .1 } }, counters: { 'fit_cache.hit': 1 } });
+
+// Inspect actual rendered controls without Electron. Existing fixture above
+// creates a temporary Git repository; no build or network is needed.
+function elements(tree) {
+    if (Array.isArray(tree)) return tree.flatMap(elements);
+    if (!tree || typeof tree !== 'object') return [];
+    return [tree, ...elements(tree.children)];
+}
+function words(tree) {
+    if (Array.isArray(tree)) return tree.map(words).join('');
+    return tree && typeof tree === 'object' ? words(tree.children) : String(tree ?? '');
+}
+
+test('beginner controls keep selection settings collapsed and disclose active method', () => {
+    const { view } = widget();
+    const tree = view.render(), nodes = elements(tree);
+    const settings = nodes.find(node => node.type === 'details' && words(node).includes('Recommendation settings'));
+    assert.ok(settings); assert.ok(!settings.props.open);
+    const select = elements(settings).find(node => node.type === 'select');
+    assert.equal(select.props.value, 'risk');
+    assert.match(words(tree), /Method: Use checked project history/);
+    assert.match(words(tree), /Suggesting tests does not run project code/);
+    view.report = report();
+    select.props.onChange({ target: { value: 'dependency' } });
+    assert.equal(view.strategy, 'dependency'); assert.equal(view.report, undefined);
+    assert.match(words(view.render()), /Method: Follow code links only/);
+});
+
+test('cold-history recommendation leads with test count and retains expandable evidence', () => {
+    const { view } = widget(), selected = report();
+    selected.risk = { status: 'unvalidated', reasons: ['Not enough earlier commits.'], target: .05 };
+    const tree = view.renderReport(selected), nodes = elements(tree);
+    const summary = tree.children[0];
+    assert.equal(summary.props['data-codedna-tour'], 'review');
+    assert.equal(summary.children[0].props.className, 'cd-lede');
+    assert.match(words(summary.children[0]), /Run 1 of 1 test class or module/);
+    assert.match(words(tree), /Skipping tests has not been validated/);
+    assert.match(words(tree), /Run the full suite because/);
+    const evidence = nodes.find(node => node.type === 'details' && words(node).includes('Why this recommendation?'));
+    assert.ok(evidence && !evidence.props.open);
+    assert.match(words(evidence), /Not enough earlier commits/);
+    const exported = nodes.find(node => node.type === 'details' && words(node).includes('Saved runs and decision report'));
+    assert.match(words(exported), /Export decision evidence/);
+});
+
+test('run action is disabled when no tests are selected even if project has tests', () => {
+    const { view } = widget(), selected = report();
+    selected.selected = []; selected.skipped = ['example.ExampleTest'];
+    const button = elements(view.renderReport(selected)).find(node => node.type === 'button' && words(node) === 'Run 0 recommended tests');
+    assert.ok(button); assert.equal(button.props.disabled, true);
+});
 
 test('recommendation retains real timing data and comparison changes clear it', async () => {
     const { view, change } = widget(), metrics = sampleMetrics();
