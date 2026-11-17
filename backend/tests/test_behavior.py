@@ -224,6 +224,10 @@ def test_real_jvm_and_descendant_end_on_timeout_or_ctrl_c(repo,tmp_path,control)
     assert result['status']==('cancelled' if control=='cancel' else 'inconclusive'),result
     assert ready.exists(),result
     java_pid,child_pid=map(int,ready.read_text().split(','))
+    # SIGKILL to the owned group is asynchronous; allow the kernel to finish it.
+    end=time.monotonic()+10
+    while (alive(java_pid) or alive(child_pid)) and time.monotonic()<end:
+        time.sleep(.02)
     assert not alive(java_pid) and not alive(child_pid)
     assert not (tmp_path/'out/base').exists()
 
