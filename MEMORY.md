@@ -1,5 +1,19 @@
 # MEMORY.md: handoff notes for the next agent
 
+## Owner keyword: previous improvement ideas — 2026-10-29
+
+The owner chose "previous improvement ideas" to recall the agreed improvement
+list. Moonshot: evaluate real changes; gradually support booleans/bounded strings/
+two arguments and small helper dependencies; clearer witness presentation; explicit
+expected-behaviour evidence before calling a difference a regression. AI brake:
+explicit unstable/flaky outcomes without erasing failures; measure analysis plus
+execution/audit cost; fresh-project reliability evaluation with fixed thresholds;
+keep witness evidence separate from permission to skip tests. These are agreed
+priorities/proposals, not claims that all were implemented or instructions to start
+every feature now. Website is being built separately; do not duplicate that work.
+The owner asks for additional engineering ideas before selecting implementation.
+
+
 ## GitHub private-email push repair — 2026-10-28
 
 Owner authorized repairing unpublished commit identities. Saved local-only backup
@@ -789,3 +803,30 @@ Proof: .diagnostics/website-redesign-2026-10-28.json. Backend validation was
 not rerun per current instruction; no backend/research/policy changes. No
 commit, push, public deployment or installer rebuild. Local checkout preview
 was served on 127.0.0.1:8772; it is not public hosting.
+
+
+## Website React + GSAP update — 2026-10-29
+
+Owner requested React, GSAP scroll and a simpler, friendlier website. The
+existing four routes are pre-rendered React and hydrate with a local bundle.
+Shortened homepage copy and removed repeated sections. Native-scroll
+ScrollTrigger motion honors reduced motion with cleanup. Catalogue logic/data
+remain unchanged. npm run build and 22 website tests pass; Chrome checks pass
+at 375/768/1440, including filters, menu, offline/no-JS and zero page errors.
+91 local references resolve; GSAP scroll and live reduced-motion toggles pass.
+Proof: .diagnostics/website-react-2026-10-29.json. See website/README.md for
+source/build instructions and original backup. No backend, policy, installer,
+push, merge or publication changes. Local preview: 127.0.0.1:8772.
+
+
+## Website Lenis + Anime.js — 2026-10-29
+
+Owner explicitly requested Lenis/Anime and publishing to the io page. Website-only
+commit fa336e2 was pushed to codex/website-react-gsap, the verified Pages source.
+Lenis 1.3.27 uses GSAP ticker/ScrollTrigger; Anime.js 4.5.0 owns heading/node
+entrances and click feedback. Native touch/nested scroll and live reduced-motion
+cleanup remain. Built asset URLs include a content version to avoid stale JS.
+Build/22 tests and 12 viewport cases pass; real browser checks prove interpolated
+wheel movement, anchors, Anime completion and media cleanup. See website README
+and .diagnostics/website-lenis-anime-2026-10-29.json. Local Graphify refreshed.
+No backend, risk policy, main-branch merge or installer changes.

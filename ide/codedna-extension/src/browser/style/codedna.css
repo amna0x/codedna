@@ -381,3 +381,15 @@
 .codedna-view .cd-plugin-list { list-style: none; margin: 4px 0 12px; padding: 0; }
 .codedna-view .cd-plugin-list > li { padding: 8px 0; border-top: 1px solid var(--cd-line); }
 .codedna-view .cd-plugin-list p { margin: 2px 0; }
+
+/* Always-visible workflow navigation and accessible first-use guidance. */
+.codedna-view .cd-workflow { border-bottom: 1px solid var(--cd-line); padding-bottom: 14px; margin-bottom: 18px; }
+.codedna-view .cd-workflow-links { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.codedna-view .cd-workflow-links button { font: inherit; cursor: pointer; border: 1px solid var(--cd-line);
+  border-radius: 6px; padding: 7px 9px; color: var(--cd-text); background: var(--cd-field); }
+.codedna-view .cd-workflow-links button[aria-current='page'] { opacity: 1; font-weight: 650;
+  border-color: var(--theia-focusBorder, var(--cd-text)); cursor: default; }
+.codedna-view .cd-workflow-links button:focus-visible, .codedna-view select:focus-visible {
+  outline: 2px solid var(--theia-focusBorder, var(--cd-text)); outline-offset: 2px; }
+.codedna-view .cd-theme-choice { display: grid; gap: 5px; color: var(--cd-muted); font-size: 12px; }
+.codedna-view .cd-getting-started { border: 1px solid var(--cd-line); border-radius: 10px; padding: 14px; margin-top: 16px; }

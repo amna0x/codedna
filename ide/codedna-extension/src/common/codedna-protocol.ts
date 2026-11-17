@@ -18,6 +18,7 @@ export interface CodeDnaStatus {
 }
 
 export interface CodeDnaService {
+    snapshotFile(repository: string, revision: string, path: string): Promise<string>;
     status(): Promise<CodeDnaStatus>;
     /** Capability-gated: older packaged cores keep the synchronous path. */
     analysisJobs(): Promise<boolean>;

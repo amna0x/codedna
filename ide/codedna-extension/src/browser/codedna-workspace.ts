@@ -1,4 +1,7 @@
 import { inject, injectable } from '@theia/core/shared/inversify';
+import { CommandService } from '@theia/core/lib/common/command';
+import { ThemeService } from '@theia/core/lib/browser/theming';
+import { DiffUris } from '@theia/core/lib/browser/diff-uris';
 import URI from '@theia/core/lib/common/uri';
 import { FileUri } from '@theia/core/lib/common/file-uri';
 import { WorkspaceService } from '@theia/workspace/lib/browser';
@@ -16,6 +19,18 @@ export class CodeDnaWorkspace {
     @inject(FileService) protected readonly files: FileService;
     @inject(FileDialogService) protected readonly dialogs: FileDialogService;
 
+    @inject(CommandService) protected readonly commands: CommandService;
+    @inject(ThemeService) protected readonly themes: ThemeService;
+    navigate(view: string): Promise<unknown> { return this.commands.executeCommand(`codedna.${view}.open`); }
+    get theme(): string { return this.themes.getCurrentTheme().id; }
+    setTheme(id: string): void { this.themes.setCurrentTheme(id); }
+    async openComparison(path: string, before: string, after: string, line?: number): Promise<void> {
+        const left = new URI(`mem-txt-readonly:/before/${path}`).withQuery(before);
+        const right = new URI(`mem-txt-readonly:/after/${path}`).withQuery(after);
+        const position = { line: Math.max((line ?? 1) - 1, 0), character: 0 };
+        await this.editors.open(DiffUris.encode(left, right, `Before / After - ${path}`),
+            { selection: { start: position, end: { line: position.line + 1, character: 0 } } });
+    }
     async saveDecisionEvidence(content: string): Promise<boolean> {
         const target = await this.dialogs.showSaveDialog({
             title: 'Save CodeDNA decision evidence', saveLabel: 'Save evidence',

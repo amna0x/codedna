@@ -13,7 +13,7 @@ import { AnalysisTimingDetails } from './analysis-timings';
 import {
     breakable, changeLabel, confidenceLabel, fileStatusLabel, friendlyWarning, kindLabel, plural, readableName, simpleName
 } from './plain-language';
-import { Chip, ComparePicker, ErrorNotice, FirstRun, Spinner } from './ui';
+import { WorkflowNav, Chip, ComparePicker, ErrorNotice, FirstRun, Spinner } from './ui';
 
 /**
  * "Changes": what changed between two commits and what else it may affect,
@@ -24,7 +24,7 @@ import { Chip, ComparePicker, ErrorNotice, FirstRun, Spinner } from './ui';
 export class ChangeViewWidget extends ReactWidget {
 
     static readonly ID = 'codedna.changes';
-    static readonly LABEL = 'Changes';
+    static readonly LABEL = 'Code changes';
 
     @inject(CodeDnaService) protected readonly codedna: CodeDnaService;
     @inject(CodeDnaWorkspace) protected readonly workspace: CodeDnaWorkspace;
@@ -143,9 +143,10 @@ export class ChangeViewWidget extends ReactWidget {
 
     protected render(): React.ReactNode {
         return <div>
+            <WorkflowNav workspace={this.workspace} current='changes' />
             <header className='cd-header'>
-                <h2>Changes</h2>
-                <p className='cd-subtitle'>See what changed in your code and what else it might affect.</p>
+                <h2>What changed?</h2>
+                <p className='cd-subtitle'>Choose a saved change, inspect the code, then check whether related tests still pass.</p>
             </header>
             <form className='cd-controls' onSubmit={e => { e.preventDefault(); this.analyze(); }}>
                 <ComparePicker comparison={this.comparison} disabled={this.loading} />
@@ -180,6 +181,20 @@ export class ChangeViewWidget extends ReactWidget {
         }
     }
 
+    protected async showDifference(file: ChangedFile, line?: number): Promise<void> {
+        const report = this.changes;
+        if (!report || file.is_binary) { return; }
+        try {
+            const [before, after] = await Promise.all([
+                file.status === 'added' ? Promise.resolve('') : this.codedna.snapshotFile(report.repository, report.base_commit, file.old_path || file.path),
+                file.status === 'deleted' ? Promise.resolve('') : this.codedna.snapshotFile(report.repository, report.head_commit, file.path)
+            ]);
+            if (this.changes === report) { await this.workspace.openComparison(file.path, before, after, line); }
+        } catch (error) {
+            if (this.changes === report) { this.error = `Could not show before and after: ${String(error)}`; this.update(); }
+        }
+    }
+
     protected renderResults(changes: AnalyzeReport): React.ReactNode {
         const declarations = changes.changed_files.flatMap(f => mappingOf(f)?.declarations ?? []);
         const codeChanges = declarations.filter(d => d.code_changed !== false);
@@ -188,7 +203,7 @@ export class ChangeViewWidget extends ReactWidget {
             .map(friendlyWarning).filter((w): w is string => !!w));
         return <div className='cd-results'>
             <p className='cd-meta'>Compared snapshots {changes.base_commit.slice(0, 12)} and {changes.head_commit.slice(0, 12)}.
-                File links open current working files; line numbers may differ.</p>
+                Click a method for Before / After. Red marks removed code; green marks added code. Open current file is separate and may contain newer edits.</p>
             <p className='cd-lede'>
                 {changes.changed_files.length === 0
                     ? 'No differences between these commits.'
@@ -227,6 +242,8 @@ export class ChangeViewWidget extends ReactWidget {
                     </span>}
                 </span>
             </div>
+            {!file.is_binary && <button className='cd-button' type='button' onClick={() => this.showDifference(file)}>Compare before / after</button>}
+            {file.status !== 'deleted' && <button className='cd-button' type='button' onClick={() => this.openResultFile(file.path)}>Open current file</button>}
             {!file.language && <p className='cd-row-note'>No installed language plugin reads this file, so CodeDNA doesn’t look inside it.</p>}
             {declarations.map(d => this.renderDeclaration(file, d))}
             {mapping?.outside_declarations.some(o => o.code_changed !== false) &&
@@ -242,9 +259,9 @@ export class ChangeViewWidget extends ReactWidget {
         const line = d.head_lines?.[0] ?? d.base_lines?.[0];
         const label = changeLabel(d.change, d.code_changed === false);
         const removed = d.change === 'deleted';
-        return <button className='cd-row' key={d.id} disabled={removed}
-            title={removed ? `${d.id} (removed)` : `Open working file at line ${line} · ${d.id}`}
-            onClick={() => this.openResultFile(file.path, line)}>
+        return <button className='cd-row' key={d.id}
+            title={`Compare before and after - ${d.id}`}
+            onClick={() => this.showDifference(file, line)}>
             <span className='cd-code'>{breakable(readableName(d.id))}</span>
             <span className='cd-row-meta'>
                 <Chip tone={label.tone}>{label.text}</Chip>

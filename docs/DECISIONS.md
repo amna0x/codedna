@@ -2042,3 +2042,16 @@ cases, with boundaries favoring guidance, are not independent real bugs or a
 net-CI speedup. A difference is not necessarily a regression; no witness does
 not validate skipping. The risk policy and original mixed findings are unchanged.
 See the D085 source/frozen/release/pilot evidence JSONs and pilot FINDINGS.md.
+
+
+## Website React and GSAP presentation update — 2026-10-29
+
+Owner explicitly requested React, GSAP scrolling, less copy and a friendlier
+website. Use React/React DOM 19.3.1 and GSAP 3.15.0, pinned with a lockfile;
+esbuild 0.28.2 is build-only. Pre-render the existing four HTML routes and
+hydrate them, retaining a static host and readable no-JS content. React owns
+menu/filter state; the existing validated catalogue renderer is wrapped without
+changing its validation/download rules. GSAP ScrollTrigger uses native scroll,
+no pinning or scroll hijacking, and media/context cleanup for reduced motion.
+Shorten the overview and remove repeated statement/support copy. No core
+analysis, risk policy, installer or publication changes. See website/README.md.

@@ -13,7 +13,7 @@ import { AnalysisTimingDetails } from './analysis-timings';
 import { decisionRecord, recoverySteps } from './decision-evidence';
 import { TestOutcomes } from './test-outcomes';
 import { breakable, friendlyReason, friendlyWarning, packageName, plural, simpleName } from './plain-language';
-import { Chip, ComparePicker, ErrorNotice, FirstRun, Spinner } from './ui';
+import { WorkflowNav, Chip, ComparePicker, ErrorNotice, FirstRun, Spinner } from './ui';
 
 const STRATEGIES: { value: SelectionStrategy; label: string }[] = [
     { value: 'risk', label: 'Validated risk stopping' },
@@ -244,6 +244,7 @@ export class TestsViewWidget extends ReactWidget {
 
     protected render(): React.ReactNode {
         return <div>
+            <WorkflowNav workspace={this.workspace} current='tests' />
             <header className='cd-header'>
                 <h2>Tests to run</h2>
                 <p className='cd-subtitle'>Run the tests your change can break — and see why each one is needed.</p>

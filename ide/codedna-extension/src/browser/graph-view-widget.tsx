@@ -1,3 +1,4 @@
+import { WorkflowNav } from './ui';
 import * as React from '@theia/core/shared/react';
 import { inject, injectable, postConstruct } from '@theia/core/shared/inversify';
 import { ProgressService } from '@theia/core/lib/common/progress-service';
@@ -219,6 +220,7 @@ export class GraphViewWidget extends ReactWidget {
     protected render(): React.ReactNode {
         const graph = this.graph;
         return <div className='cd-graph-layout'>
+            <WorkflowNav workspace={this.workspace} current='graph' />
             <header className='cd-header'>
                 <h2>Impact graph</h2>
                 <p className='cd-subtitle'>Follow your change to the code and tests it may affect. Click a dot to see why.</p>

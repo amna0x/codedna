@@ -1,0 +1,116 @@
+{
+  "records": [
+    {
+      "file": "index.html",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "title": "CodeDNA \u00e2\u20ac\u201d A clearer picture of every change",
+      "h1": 1,
+      "nav": true
+    },
+    {
+      "file": "docs.html",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "title": "Documentation \u00e2\u20ac\u201d CodeDNA",
+      "h1": 1,
+      "nav": true
+    },
+    {
+      "file": "plugins.html",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "title": "Language plugins \u00e2\u20ac\u201d CodeDNA",
+      "h1": 1,
+      "nav": true
+    },
+    {
+      "file": "downloads.html",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "title": "Get CodeDNA \u00e2\u20ac\u201d Availability and setup",
+      "h1": 1,
+      "nav": true
+    },
+    {
+      "file": "index.html",
+      "width": 768,
+      "scrollWidth": 768,
+      "title": "CodeDNA \u00e2\u20ac\u201d A clearer picture of every change",
+      "h1": 1,
+      "nav": true
+    },
+    {
+      "file": "docs.html",
+      "width": 768,
+      "scrollWidth": 768,
+      "title": "Documentation \u00e2\u20ac\u201d CodeDNA",
+      "h1": 1,
+      "nav": true
+    },
+    {
+      "file": "plugins.html",
+      "width": 768,
+      "scrollWidth": 768,
+      "title": "Language plugins \u00e2\u20ac\u201d CodeDNA",
+      "h1": 1,
+      "nav": true
+    },
+    {
+      "file": "downloads.html",
+      "width": 768,
+      "scrollWidth": 768,
+      "title": "Get CodeDNA \u00e2\u20ac\u201d Availability and setup",
+      "h1": 1,
+      "nav": true
+    },
+    {
+      "file": "index.html",
+      "width": 375,
+      "scrollWidth": 375,
+      "title": "CodeDNA \u00e2\u20ac\u201d A clearer picture of every change",
+      "h1": 1,
+      "nav": true
+    },
+    {
+      "file": "docs.html",
+      "width": 375,
+      "scrollWidth": 375,
+      "title": "Documentation \u00e2\u20ac\u201d CodeDNA",
+      "h1": 1,
+      "nav": true
+    },
+    {
+      "file": "plugins.html",
+      "width": 375,
+      "scrollWidth": 375,
+      "title": "Language plugins \u00e2\u20ac\u201d CodeDNA",
+      "h1": 1,
+      "nav": true
+    },
+    {
+      "file": "downloads.html",
+      "width": 375,
+      "scrollWidth": 375,
+      "title": "Get CodeDNA \u00e2\u20ac\u201d Availability and setup",
+      "h1": 1,
+      "nav": true
+    }
+  ],
+  "errors": [],
+  "checks": [
+    "12 page/viewport combinations without page overflow",
+    "catalogue loaded at all widths",
+    "workflow filters with shared-language cards",
+    "mobile menu Escape and focus restoration",
+    "offline catalogue failure",
+    "no-JavaScript navigation and plugin fallback",
+    "reduced-motion screenshots"
+  ],
+  "date": "2026-10-29",
+  "website_tests_passed": 22,
+  "local_links": 91,
+  "motion": "Native-scroll response, reduced-motion cleanup and re-enable verified",
+  "backend_tests": "Not rerun; website-only update",
+  "backup": "C:\\Users\\hp\\OneDrive\\Documents\\ChatGPT\\codedna\\website-before-react-20261029.zip"
+}

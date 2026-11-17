@@ -1,3 +1,5 @@
+import { CodeDnaWorkspace } from './codedna-workspace';
+import { WorkflowNav } from './ui';
 import * as React from '@theia/core/shared/react';
 import { inject, injectable, postConstruct } from '@theia/core/shared/inversify';
 import { FileDialogService } from '@theia/filesystem/lib/browser/file-dialog/file-dialog-service';
@@ -34,6 +36,7 @@ export class ReplayViewWidget extends ReactWidget {
     static readonly ID = 'codedna.replay';
     static readonly LABEL = 'History replay';
 
+    @inject(CodeDnaWorkspace) protected readonly workspace: CodeDnaWorkspace;
     @inject(CodeDnaService) protected readonly codedna: CodeDnaService;
     @inject(ProgressService) protected readonly progress: ProgressService;
 
@@ -196,6 +199,7 @@ export class ReplayViewWidget extends ReactWidget {
 
     protected render(): React.ReactNode {
         return <div className='cd-replay-layout'>
+            <WorkflowNav workspace={this.workspace} current='replay' />
             <header className='cd-header'>
                 <h2>History replay</h2>
                 <p className='cd-subtitle'>Replay a real project's history commit by commit: what CodeDNA would have run,

@@ -1,5 +1,6 @@
 import * as React from '@theia/core/shared/react';
 import { CodeDnaComparison, ComparisonPreset, PRESETS } from './comparison';
+import { CodeDnaWorkspace } from './codedna-workspace';
 import { friendlyError } from './plain-language';
 
 export function ComparePicker({ comparison, disabled }: { comparison: CodeDnaComparison; disabled: boolean }): React.ReactElement {
@@ -42,11 +43,11 @@ export function ErrorNotice({ message }: { message: string }): React.ReactElemen
 }
 
 export function FirstRun({ action }: { action: string }): React.ReactElement {
-    return <ol className='cd-steps'>
+    return <div className='cd-getting-started'><strong>Start here — no tests run until you confirm.</strong><ol className='cd-steps'>
         <li><span>Open your project folder</span> <span className='cd-meta'>File → Open Folder…</span></li>
         <li><span>Pick what to compare</span> <span className='cd-meta'>your last commit is a good start</span></li>
-        <li><span>Press {action}</span></li>
-    </ol>;
+        <li><span>Press {action}</span> <span className='cd-meta'>Results appear below. Click a code item to open its highlighted line.</span></li>
+    </ol><p className='cd-help'>A test is an automatic check of your code’s answer. Start with reviewing a change, then choose Check tests above.</p></div>;
 }
 
 export function Chip({ tone, children, title }: { tone: string; children: React.ReactNode; title?: string }): React.ReactElement {
@@ -55,4 +56,25 @@ export function Chip({ tone, children, title }: { tone: string; children: React.
 
 export function Spinner(): React.ReactElement {
     return <span className='cd-spinner' aria-hidden='true' />;
+}
+
+/** Persistent, labelled navigation instead of requiring keyboard shortcuts. */
+export function WorkflowNav({ workspace, current }: { workspace: CodeDnaWorkspace; current: string }): React.ReactElement {
+    const [theme, setTheme] = React.useState(workspace.theme);
+    const [error, setError] = React.useState('');
+    const destinations = [ ['changes', '1 · Review changes'], ['tests', '2 · Check tests'],
+        ['graph', 'Impact map'], ['history', 'Past runs'], ['plugins', 'Languages'] ];
+    return <div className='cd-workflow'>
+        <nav aria-label='CodeDNA workflow' className='cd-workflow-links'>
+            {destinations.map(([id, label]) => <button key={id} type='button' aria-current={id === current ? 'page' : undefined}
+                disabled={id === current} onClick={() => { setError(''); workspace.navigate(id).catch(e => setError(String(e))); }}>{label}</button>)}
+        </nav>
+        <label className='cd-theme-choice'>Appearance <select aria-label='CodeDNA colour theme' value={theme}
+            onChange={e => { workspace.setTheme(e.target.value); setTheme(e.target.value); }}>
+            <option value='codedna-dark'>Graphite dark</option><option value='codedna-ocean'>Ocean dark</option>
+            <option value='codedna-light'>Clear light</option><option value='codedna-contrast'>High contrast</option>
+            {!['codedna-dark', 'codedna-ocean', 'codedna-light', 'codedna-contrast'].includes(theme) && <option value={theme}>Current editor theme</option>}
+        </select></label>
+        {error && <p role='alert'>{error}</p>}
+    </div>;
 }

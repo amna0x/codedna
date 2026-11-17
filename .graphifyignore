@@ -1,0 +1,5 @@
+# Generated website runtime artifacts; index the React sources instead.
+website/assets/app.js
+website/.render.mjs
+website/node_modules/
+website/src/catalogue-adapter.js

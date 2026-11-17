@@ -1,0 +1,21 @@
+{
+  "base": "http://127.0.0.1:8772/",
+  "wheel": {
+    "early": 237,
+    "late": 700
+  },
+  "checks": [
+    "Lenis wheel interpolation",
+    "Anime diagram reveal",
+    "back-to-top anchor",
+    "workflow anchor",
+    "live reduced-motion cleanup and re-enable",
+    "React filters with Anime click feedback",
+    "mobile touch menu and reduced-motion native scroll"
+  ],
+  "errors": [],
+  "commit": "fa336e279f742c42b141cf40b2c465fe5a4feca0",
+  "date": "2026-10-29",
+  "website_tests": 22,
+  "viewport_checks": 12
+}
